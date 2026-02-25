@@ -2,7 +2,7 @@
 Script to collect Art. 6 decisions and judgments through the HUDOC Rest API
 
 Last Updated:
-16.02.26
+17.02.26
 
 History:
 v1_0 - retrieves and sorts the cases into judgments/decisions
@@ -12,6 +12,8 @@ import pandas as pd
 import requests
 import time
 import re
+from bs4 import BeautifulSoup
+import os
 
 def collect_cases(length:int=1000,article:str='6',start_year:int=1955,end_year:int=2026):
     """Queries the HUDOC rest api and collects the metadata storing it in a dataframe
@@ -79,8 +81,10 @@ def collect_cases(length:int=1000,article:str='6',start_year:int=1955,end_year:i
     else:
         print("No records found.")
     
-def process_cases(data):
-    
+def process_cases(data:pd.DataFrame):
+    """sorts the cases into decisions/judgments and others
+    for art.6 others are screening panel cases
+    """
     #regex patterns
     is_judgment = re.compile(r'.*JUD', re.IGNORECASE)
     is_decision = re.compile(r'.*DEC', re.IGNORECASE)
@@ -107,12 +111,111 @@ def process_cases(data):
 
     return judgments, decisions, other
 
+def appno_mapping(df:pd.DataFrame):
+    """
+    creates a mapping of all appnos to relevant ecli and itemids for later use
+    """
+
+    def clean_appnos(text):
+        """
+        clean the appnos column with different appnos linked to a judgment
+        """
+        cleaned = re.sub(r'[^0-9/ ;]', ';', text)
+        cleaned = cleaned.replace(" ", ";")
+        cleaned = re.sub(r';+', ';', cleaned).strip(';')
+        return cleaned
+
+    df['appno_clean'] = df['appno'].apply(clean_appnos)
+
+    #create list of appnos
+    df['appno_clean'] = df['appno_clean'].str.split(';')
+
+    #explode list with row for each app no and link to ecli/itemid for easier tetx extraction
+    mapping_df = df.explode('appno_clean')[['appno_clean', 'ecli', 'itemid']]
+    mapping_df.columns = ['individual_appno', 'ecli', 'itemid']
+
+    #remove empty results
+    mapping_df = mapping_df[mapping_df['individual_appno'] != ""]
+
+    #save mapping
+    mapping_df.to_csv('./data/echr_appno_mapping.csv', index=False)
+
+def sort_language(df: pd.DataFrame):
+
+    print(f"Current size of dataset: {len(df)}")
+    
+    df = df[df['languageisocode'].isin(['ENG', 'FRE'])]
+    
+    print(f"Size of dataset after filtering to ENG/FRE languages: {len(df)}")
+    
+    #order by ECLI and language, ENG first
+    df = df.sort_values(by=['languageisocode','ecli'])
+
+    print(f"Size of dataset after sorting: {len(df)} with {(df['languageisocode'] == 'ENG').sum()} English cases and {(df['languageisocode'] == 'FRE').sum()} French cases.")
+    
+    return df
+
+def retrieve_text(data):
+    out_dir = "./data/case_text/"
+    os.makedirs(out_dir, exist_ok=True)
+    extracted_eclis = set()
+    for _, row in data.iterrows():
+        ecli = row['ecli']
+        id = row['itemid']
+        lang = row['languageisocode']
+        out_path = os.path.join(out_dir, f"{id}.html")
+        # Skip if already extracted for this ECLI
+        if ecli in extracted_eclis:
+            continue
+        # Skip if file already exists
+        if os.path.isfile(out_path):
+            print(f"Already exists, skipping: {out_path}")
+            extracted_eclis.add(ecli)
+            continue
+        url = "https://hudoc.echr.coe.int/app/conversion/docx/html/body?library=ECHR&id=" + str(id)
+        try:
+            page = requests.get(url, timeout=30)
+            if page.status_code == 200:
+                soup = BeautifulSoup(page.content, 'html.parser')
+                with open(out_path, "w", encoding="utf-8") as f:
+                    f.write(soup.prettify())
+                print(f"Saved: {out_path} for ECLI {ecli} ({lang})")
+                extracted_eclis.add(ecli)
+            else:
+                print(f"Failed to fetch {id}: HTTP {page.status_code}")
+        except Exception as e:
+            print(f"Error fetching {id}: {e}")
+        time.sleep(0.5)
+        
+def check_retrieval():
+    """checks all cases have text retrieved. if they have not then filters df to only those cases which have and exports it"""
+    
+    #print covergage of text 
+    
+    pass
+
 if __name__ == '__main__':
     #recommended running of the functions within this script
     
     #raw_df = collect_cases()
     raw_df = pd.read_json("./data/hudoc_art6_raw_metadata.json",lines=True)
     judgments, _, _ = process_cases(raw_df)
+    data = pd.DataFrame(judgments)
     
+    #appno_mapping(data)
     
+    data_no_dupe = sort_language(data)
+    
+    pd.set_option('display.max_columns', None)
+    print(data_no_dupe.head(40))
+    print(data_no_dupe.columns)
+    
+    #data_no_dupe.to_json("./data/hudoc_art_6_judgments_metadata.json", orient="records", lines=True)
+    #print(f"Saved {len(data_no_dupe)} records to ./data/hudoc_art_6_judgments_metadata.json")
+    
+    #retrieve_text(data_no_dupe)
+
+
+
+
 

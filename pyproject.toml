@@ -6,8 +6,17 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "bs4>=0.0.2",
+    "ipykernel>=7.2.0",
     "matplotlib>=3.10.8",
+    "ontocast",
+    "openai>=2.24.0",
     "pandas>=3.0.0",
+    "pip>=26.0.1",
+    "pycountry>=26.2.16",
+    "python-dotenv>=1.2.1",
     "requests>=2.32.5",
     "seaborn>=0.13.2",
 ]
+
+[tool.uv.sources]
+ontocast = { path = "../ontocast", editable = true }

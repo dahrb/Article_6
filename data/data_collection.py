@@ -2,10 +2,14 @@
 Script to collect Art. 6 decisions and judgments through the HUDOC Rest API
 
 Last Updated:
-17.02.26
+05.03.26
+
+Status:
+Completed
 
 History:
 v1_0 - retrieves and sorts the cases into judgments/decisions
+v1_1 - smart case retrieval - checks if cases have already been downloaded
 """
 
 import pandas as pd
@@ -130,7 +134,7 @@ def appno_mapping(df:pd.DataFrame):
     #create list of appnos
     df['appno_clean'] = df['appno_clean'].str.split(';')
 
-    #explode list with row for each app no and link to ecli/itemid for easier tetx extraction
+    #explode list with row for each app no and link to ecli/itemid for easier txt extraction
     mapping_df = df.explode('appno_clean')[['appno_clean', 'ecli', 'itemid']]
     mapping_df.columns = ['individual_appno', 'ecli', 'itemid']
 
@@ -141,7 +145,9 @@ def appno_mapping(df:pd.DataFrame):
     mapping_df.to_csv('./data/echr_appno_mapping.csv', index=False)
 
 def sort_language(df: pd.DataFrame):
-
+    """
+    sorts the language of the case texts - prioritising English lang with French as a secondary language (these are the 2 official languages of the court)
+    """
     print(f"Current size of dataset: {len(df)}")
     
     df = df[df['languageisocode'].isin(['ENG', 'FRE'])]
@@ -155,23 +161,34 @@ def sort_language(df: pd.DataFrame):
     
     return df
 
-def retrieve_text(data):
-    out_dir = "./data/case_text/"
+def retrieve_text(data, out_dir = "./data/case_text/"):
+    """
+    downloads and stores the .html files for each case in the selection
+    """
+    
+    #set case text output 
     os.makedirs(out_dir, exist_ok=True)
+    
     extracted_eclis = set()
+    
     for _, row in data.iterrows():
+        
         ecli = row['ecli']
         id = row['itemid']
         lang = row['languageisocode']
         out_path = os.path.join(out_dir, f"{id}.html")
-        # Skip if already extracted for this ECLI
+        
+        #skip if already extracted for this ECLI
         if ecli in extracted_eclis:
             continue
-        # Skip if file already exists
+        
+        #skip if file already exists
         if os.path.isfile(out_path):
             print(f"Already exists, skipping: {out_path}")
             extracted_eclis.add(ecli)
             continue
+        
+        #request the page and download the .html
         url = "https://hudoc.echr.coe.int/app/conversion/docx/html/body?library=ECHR&id=" + str(id)
         try:
             page = requests.get(url, timeout=30)
@@ -181,40 +198,120 @@ def retrieve_text(data):
                     f.write(soup.prettify())
                 print(f"Saved: {out_path} for ECLI {ecli} ({lang})")
                 extracted_eclis.add(ecli)
+
+                time.sleep(0.5)
             else:
                 print(f"Failed to fetch {id}: HTTP {page.status_code}")
         except Exception as e:
             print(f"Error fetching {id}: {e}")
-        time.sleep(0.5)
         
-def check_retrieval():
-    """checks all cases have text retrieved. if they have not then filters df to only those cases which have and exports it"""
+def check_retrieval(data: pd.DataFrame, case_text_dir: str = "./data/case_text/"):
+    """
+    validates that case text has been retrieved for each ECLI in the dataset checking
+    that for each unique ECLI, there is a corresponding .html file in the case_text directory.
+    """
     
-    #print covergage of text 
+    #get unique ECLIs from the dataset
+    unique_eclis = data['ecli'].unique()
+    print(f"Total unique ECLIs in dataset: {len(unique_eclis)}")
     
-    pass
+    #get list of downloaded files
+    downloaded_files = set()
+    if os.path.exists(case_text_dir):
+        downloaded_files = {f.replace('.html', '') for f in os.listdir(case_text_dir) if f.endswith('.html')}
+    
+    print(f"Total case text files downloaded: {len(downloaded_files)}")
+    
+    #map itemid to ecli for checking
+    itemid_to_ecli = dict(zip(data['itemid'].astype(str), data['ecli']))
+    
+    #find which ECLIs have retrieved text
+    eclis_with_text = {itemid_to_ecli[itemid] for itemid in downloaded_files if itemid in itemid_to_ecli}
+    missing_eclis = [ecli for ecli in unique_eclis if ecli not in eclis_with_text]
+    
+    print(f"\nRetrieval Summary:")
+    print(f"ECLIs with retrieved text: {len(eclis_with_text)}")
+    print(f"ECLIs missing text: {len(missing_eclis)}")
+    print(f"Coverage: {len(eclis_with_text) / len(unique_eclis) * 100:.2f}%")
+    
+    if missing_eclis:
+        print(f"\nFirst 10 missing ECLIs:")
+        for ecli in missing_eclis[:10]:
+            print(f"  - {ecli}")
+    
+    #filter data to only include cases with retrieved text
+    valid_data = data[data['ecli'].isin(eclis_with_text)].copy()
+    print(f"\nFiltered dataset size: {len(valid_data)} rows (from {len(data)} original rows)")
+    
+    return valid_data, missing_eclis
+
+def data_no_dupe(data: pd.DataFrame, case_text_dir: str = "./data/case_text/"):
+    """
+    removes duplicates from the dataset, keeping only cases with retrieved text.
+    prioritizes English versions over French, but only if case text exists.
+    links to the path of the case text file in the df.
+    """
+    
+    # Add case_text_path column first
+    data['case_text_path'] = data['itemid'].astype(str).apply(
+        lambda itemid: os.path.join(case_text_dir, f"{itemid}.html")
+    )
+    
+    # Filter to only cases where case text file exists
+    data_with_text = data[data['case_text_path'].apply(os.path.isfile)].copy()
+    print(f"Cases with retrieved text: {len(data_with_text)} (from {len(data)} original rows)")
+    
+    # Sort by ECLI and language (ENG first), then keep first occurrence per ECLI
+    data_sorted = data_with_text.sort_values(
+        by=['ecli', 'languageisocode'], 
+        key=lambda x: (x if x.name != 'languageisocode' else x.map({'ENG': 0, 'FRE': 1})) if x.name == 'languageisocode' else x
+    )
+    
+    # Keep only the first occurrence of each ECLI (will be ENG if available, otherwise FRE)
+    deduped = data_sorted.drop_duplicates(subset=['ecli'], keep='first').copy()
+    
+    # Verify language codes are correct
+    print(f"\nLanguage distribution after deduplication:")
+    print(deduped['languageisocode'].value_counts())
+    
+    print(f"\nFinal deduplicated dataset: {len(deduped)} rows")
+    
+    return deduped
 
 if __name__ == '__main__':
     #recommended running of the functions within this script
     
-    #raw_df = collect_cases()
+    #scrape the case metadata
+    raw_df = collect_cases()
+    
+    #process the cases into their primary case types
     raw_df = pd.read_json("./data/hudoc_art6_raw_metadata.json",lines=True)
-    judgments, _, _ = process_cases(raw_df)
-    data = pd.DataFrame(judgments)
     
-    #appno_mapping(data)
-    
-    data_no_dupe = sort_language(data)
-    
-    pd.set_option('display.max_columns', None)
-    print(data_no_dupe.head(40))
-    print(data_no_dupe.columns)
-    
-    #data_no_dupe.to_json("./data/hudoc_art_6_judgments_metadata.json", orient="records", lines=True)
-    #print(f"Saved {len(data_no_dupe)} records to ./data/hudoc_art_6_judgments_metadata.json")
-    
-    #retrieve_text(data_no_dupe)
+    #create an appno -> ECLI mapping
+    appno_mapping(raw_df)
 
+    judgments, decisions, _ = process_cases(raw_df)
+    
+    judgments_data = pd.DataFrame(judgments)
+    decisions_data = pd.DataFrame(decisions)
+    
+    judgments_lang = sort_language(judgments_data)
+    decisions_lang = sort_language(decisions_data)
+
+    retrieve_text(judgments_lang, out_dir="./data/judgment_text/")
+    valid_judgments, _ = check_retrieval(judgments_lang, case_text_dir="./data/judgment_text/")
+
+    retrieve_text(decisions_lang, out_dir="./data/decision_text/")
+    valid_decisions, _ = check_retrieval(decisions_lang, case_text_dir="./data/decision_text/")
+    
+    judgments_final = data_no_dupe(valid_judgments, case_text_dir="./data/judgment_text/")
+    decisions_final = data_no_dupe(valid_decisions, case_text_dir="./data/decision_text/")   
+    
+    judgments_final.to_json("./data/art_6_judgments_metadata.json", orient="records", lines=True)
+    decisions_final.to_json("./data/art_6_decisions_metadata.json", orient="records", lines=True)
+    
+    
+    
 
 
 

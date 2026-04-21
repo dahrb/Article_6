@@ -1,28 +1,26 @@
 ---
 title: "Article 6 ECHR Analysis"
+engine: jupyter
 format:
   html:
     code-fold: true
-jupyter:
-  kernelspec:
-    name: python3
-    language: python
-    display_name: Python 3
+    toc: true
+    toc-depth: 4
+    toc-expand: 1
 ---
 
 # Preliminary Analysis 
 
-This section 
+This section provides some descriptive statistics and information on the data collected for this project.
 
 ## Metadata Analysis
 
 
 
 
-
 ## Text Analysis 
 
-A few charts and tables providing some descriptive data on the textual corpus extracted
+A few charts and tables providing some analysis on the textual corpus extracted.
 
 ```{python}
 #load corpora and filter to olny use cases present in processed metadata
@@ -32,7 +30,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 from pathlib import Path
 
-DATA  = Path("../data")
+DATA  = Path("../../data")
 PROC  = DATA / "processed_json"
 THRESHOLD = 15  # chars; section present if length > THRESHOLD
 
@@ -217,9 +215,11 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Additional Data Linking
 
 
+## Data Linking
+
+Judges
 
 ## Full data schema
 

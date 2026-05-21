@@ -1,0 +1,468 @@
+﻿@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix echr: <http://example.com/art_6#> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+
+<http://example.com/art_6> a owl:Ontology ;
+    rdfs:label "ECHR Art. 6 Ontology" ;
+    owl:versionInfo "3.0" ;
+    dcterms:created "2026-05-05T00:00:00+00:00"^^xsd:dateTime ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:description "An ontology for Art.6 Cases heard at the ECHR" .
+
+# Classes
+echr:Application a rdfs:Class ;
+    rdfs:label "Application" ;
+    rdfs:comment "Class in ECHR metadata schema. Appears as object class for metadata column 'secondary_appno'. Appears as object class for metadata column 'cited_appno'. Appears as object class for metadata column 'case_appno'. Appears as subject class for metadata column 'application_number_normalized'." .
+
+echr:Article6Limb a rdfs:Class ;
+    rdfs:label "Article 6 Limb" ;
+    rdfs:comment "Class in ECHR metadata schema. Appears as object class for metadata column 'article_6_limb'." .
+
+echr:CaseDocument a rdfs:Class ;
+    rdfs:label "Case Document" ;
+    rdfs:comment "Class in ECHR metadata schema. Appears as subject class for metadata column 'conclusion'. Appears as subject class for metadata column 'violation'. Appears as subject class for metadata column 'languageisocode'. Appears as subject class for metadata column 'originatingbody'. Appears as subject class for metadata column 'itemid'. Appears as subject class for metadata column 'secondary_appno'. Appears as subject class for metadata column 'importance'. Appears as subject class for metadata column 'judgementdate'. Appears as subject class for metadata column 'case_name'. Appears as subject class for metadata column 'ecli'. Appears as subject class for metadata column 'judges'. Appears as subject class for metadata column 'nonviolation'. Appears as subject class for metadata column 'judgment_type'. Appears as subject class for metadata column 'separateopinion'. Appears as subject class for metadata column 'respondent'. Appears as subject class for metadata column 'cited_appno'. Appears as subject class for metadata column 'kpthesaurus'. Appears as subject class for metadata column 'court_level'. Appears as subject class for metadata column 'article'. Appears as subject class for metadata column 'case_appno'. Appears as subject class for metadata column 'case_text_path'. Appears as subject class for metadata column 'appellant'. Appears as subject class for metadata column 'country_name'. Appears as subject class for metadata column 'kpthesaurus_labels'. Appears as subject class for metadata column 'article_6_limb'. Appears as subject class for metadata column 'law_system'. Appears as subject class for metadata column 'source'. Appears as subject class for metadata column 'year'. Appears as subject class for metadata column 'cited_appno_resolved'. Appears as object class for metadata column 'cited_appno_resolved'." .
+
+echr:ConventionArticle a rdfs:Class ;
+    rdfs:label "Convention Article" ;
+    rdfs:comment "Class in ECHR metadata schema. Appears as object class for metadata column 'conclusion'. Appears as object class for metadata column 'article'." .
+
+echr:CourtFormation a rdfs:Class ;
+    rdfs:label "Court Formation" ;
+    rdfs:comment "Class in ECHR metadata schema. Appears as object class for metadata column 'originatingbody'." .
+
+echr:CourtLevel a rdfs:Class ;
+    rdfs:label "Court Level" ;
+    rdfs:comment "Class in ECHR metadata schema. Appears as object class for metadata column 'court_level'." .
+
+echr:Decision a rdfs:Class ;
+    rdfs:label "Decision" ;
+    rdfs:comment "Class in ECHR metadata schema. Appears as object class for metadata column 'source'." .
+
+echr:DocumentType a rdfs:Class ;
+    rdfs:label "Document Type" ;
+    rdfs:comment "Class in ECHR metadata schema. Appears as object class for metadata column 'judgment_type'." .
+
+echr:Finding a rdfs:Class ;
+    rdfs:label "Finding" ;
+    rdfs:comment "Class in ECHR metadata schema. Appears as object class for metadata column 'violation'. Appears as object class for metadata column 'nonviolation'." .
+
+echr:ImportanceLevel a rdfs:Class ;
+    rdfs:label "Importance Level" ;
+    rdfs:comment "Class in ECHR metadata schema. Appears as object class for metadata column 'importance'." .
+
+echr:Judge a rdfs:Class ;
+    rdfs:label "Judge" ;
+    rdfs:comment "Class in ECHR metadata schema. Appears as object class for metadata column 'judges'. Appears as subject class for metadata column 'judges_id'." .
+
+echr:Judgment a rdfs:Class ;
+    rdfs:label "Judgment" ;
+    rdfs:comment "Class in ECHR metadata schema. Appears as object class for metadata column 'source'." .
+
+echr:LawSystem a rdfs:Class ;
+    rdfs:label "Law System" ;
+    rdfs:comment "Class in ECHR metadata schema. Appears as object class for metadata column 'law_system'." .
+
+echr:SeparateOpinionIndicator a rdfs:Class ;
+    rdfs:label "Separate Opinion Indicator" ;
+    rdfs:comment "Class in ECHR metadata schema. Appears as object class for metadata column 'separateopinion'." .
+
+
+# Datatype properties
+echr:applicationNumberLiteral a rdf:Property ;
+    rdfs:label "application Number Literal" ;
+    rdfs:domain echr:Application ;
+    rdfs:range xsd:string ;
+    rdfs:comment "source column=application_number_normalized; cardinality=1..1; transform=Store canonical normalized application number on Application node; notes=Derived during export from case_appno and cited_appno" .
+
+echr:hasApplicantName a rdf:Property ;
+    rdfs:label "has Applicant Name" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:comment "source column=appellant; cardinality=0..1; transform=Keep raw name string when applicant entity resolution is not available" .
+
+echr:hasCaseName a rdf:Property ;
+    rdfs:label "has Case Name" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:comment "source column=case_name; cardinality=0..1; transform=Trim whitespace and preserve capitalization" .
+
+echr:hasCaseTextPath a rdf:Property ;
+    rdfs:label "has Case Text Path" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:comment "source column=case_text_path; cardinality=0..1; transform=Preserve relative path for provenance" .
+
+echr:hasEcli a rdf:Property ;
+    rdfs:label "has Ecli" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:comment "source column=ecli; cardinality=0..1; transform=Keep as canonical citation identifier" .
+
+echr:hasItemId a rdf:Property ;
+    rdfs:label "has Item Id" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:comment "source column=itemid; cardinality=1..1; transform=Primary external identifier as-is; notes=Use for IRI minting key" .
+
+echr:hasJudgeId a rdf:Property ;
+    rdfs:label "has Judge Id" ;
+    rdfs:domain echr:Judge ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "source column=judges_id; cardinality=0..n; transform=Attach each id to linked Judge node; notes=Best key for deduplication" .
+
+echr:hasJudgmentDate a rdf:Property ;
+    rdfs:label "has Judgment Date" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:date ;
+    rdfs:comment "source column=judgementdate; cardinality=0..1; transform=Parse to xsd:date when possible else xsd:string" .
+
+echr:hasKeywordCode a rdf:Property ;
+    rdfs:label "has Keyword Code" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:comment "source column=kpthesaurus; cardinality=0..1; transform=Store raw coded string as provenance field; notes=Keep as auxiliary raw code" .
+
+echr:hasKeywordLabel a rdf:Property ;
+    rdfs:label "has Keyword Label" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:comment "source column=kpthesaurus_labels; cardinality=0..n; transform=Store normalized thesaurus labels as literals for direct search/filtering" .
+
+echr:hasLanguageCode a rdf:Property ;
+    rdfs:label "has Language Code" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:comment "source column=languageisocode; cardinality=0..1; transform=Normalize to lowercase ISO code" .
+
+echr:hasYear a rdf:Property ;
+    rdfs:label "has Year" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:gYear ;
+    rdfs:comment "source column=year; cardinality=0..1; transform=Cast to gYear when valid" .
+
+# Object properties
+echr:citesApplication a rdf:Property ;
+    rdfs:label "cites Application" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Application ;
+    rdfs:comment "source column=cited_appno; cardinality=0..n; transform=Normalize appno and link to Application IRI; notes=Supports citation graph at application level" .
+
+echr:citesCase a rdf:Property ;
+    rdfs:label "cites Case" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:CaseDocument ;
+    rdfs:comment "source column=cited_appno_resolved; cardinality=0..n; transform=Create case-to-case citation edge only when cited appno resolves to known CaseDocument; notes=Derived mapping for resolved citation graph" .
+
+echr:concernsArticle a rdf:Property ;
+    rdfs:label "concerns Article" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:ConventionArticle ;
+    rdfs:comment "source column=article; cardinality=0..n; transform=Create or reuse ConventionArticle nodes from tokens" .
+
+echr:hasApplication a rdf:Property ;
+    rdfs:label "has Application" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Application ;
+    rdfs:comment "source column=case_appno; cardinality=0..n; transform=Normalize appno and link to Application IRI; notes=Prefer object links over literals for shared identifiers" .
+
+echr:hasArticle6Limb a rdf:Property ;
+    rdfs:label "has Article 6 Limb" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Article6Limb ;
+    rdfs:comment "source column=article_6_limb; cardinality=0..1; transform=Map to controlled limb concepts civil criminal mixed constitutional unspecified" .
+
+echr:hasConclusionReference a rdf:Property ;
+    rdfs:label "has Conclusion Reference" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:ConventionArticle ;
+    rdfs:comment "source column=conclusion; cardinality=0..n; transform=Parse conclusion items and normalize legal references like Art. 35 into ConventionArticle IRIs; notes=Keep raw conclusion text outside KG if needed" .
+
+echr:hasCountryContext a rdf:Property ;
+    rdfs:label "has Country Context" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range wd:Q6256 ;
+    rdfs:comment "source column=country_name; cardinality=0..n; transform=Normalize country names and link to Wikidata country IRIs; notes=Potentially redundant with respondent; deprecate if equivalent" .
+
+echr:hasCourtFormation a rdf:Property ;
+    rdfs:label "has Court Formation" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:CourtFormation ;
+    rdfs:comment "source column=originatingbody; cardinality=0..1; transform=Normalize label and reuse canonical CourtFormation nodes" .
+
+echr:hasCourtLevel a rdf:Property ;
+    rdfs:label "has Court Level" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:CourtLevel ;
+    rdfs:comment "source column=court_level; cardinality=0..1; transform=Map to controlled level concept" .
+
+echr:hasDocumentType a rdf:Property ;
+    rdfs:label "has Document Type" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:DocumentType ;
+    rdfs:comment "source column=judgment_type; cardinality=0..1; transform=Map to controlled DocumentType concept; notes=Could also map to class typing if only two values" .
+
+echr:hasImportanceLevel a rdf:Property ;
+    rdfs:label "has Importance Level" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:ImportanceLevel ;
+    rdfs:comment "source column=importance; cardinality=0..1; transform=Map numeric importance score to a controlled ImportanceLevel IRI" .
+
+echr:hasJudge a rdf:Property ;
+    rdfs:label "has Judge" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Judge ;
+    rdfs:comment "source column=judges; cardinality=0..n; transform=Create or reuse Judge nodes by normalized name; notes=Prefer judges_id for stable merge when present" .
+
+echr:hasLawSystem a rdf:Property ;
+    rdfs:label "has Law System" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:LawSystem ;
+    rdfs:comment "source column=law_system; cardinality=0..1; transform=Map to controlled concept node" .
+
+echr:hasNonViolationFinding a rdf:Property ;
+    rdfs:label "has Non Violation Finding" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Finding ;
+    rdfs:comment "source column=nonviolation; cardinality=0..n; transform=Create Finding nodes typed as non-violation" .
+
+echr:hasRespondentState a rdf:Property ;
+    rdfs:label "has Respondent State" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range wd:Q6256 ;
+    rdfs:comment "source column=respondent; cardinality=0..n; transform=Normalize respondent country and link to Wikidata country IRIs; notes=Prefer this as canonical state field" .
+
+echr:hasSeparateOpinion a rdf:Property ;
+    rdfs:label "has Separate Opinion" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:SeparateOpinionIndicator ;
+    rdfs:comment "source column=separateopinion; cardinality=0..1; transform=Map to controlled indicator IRIs such as separate_opinion_present or separate_opinion_absent" .
+
+echr:hasViolationFinding a rdf:Property ;
+    rdfs:label "has Violation Finding" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Finding ;
+    rdfs:comment "source column=violation; cardinality=0..n; transform=Create Finding nodes typed as violation; notes=Can also align to Article nodes when parseable" .
+
+echr:referencesSecondaryApplication a rdf:Property ;
+    rdfs:label "references Secondary Application" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Application ;
+    rdfs:comment "source column=secondary_appno; cardinality=0..n; transform=Normalize each secondary_appno and mint/link Application IRIs; notes=Behavior: for case A each secondary_appno B is modeled as relation A references B (Application)" .
+
+# Manual extensions
+
+echr:Party a rdfs:Class ;
+    rdfs:label "Party" ;
+    rdfs:comment "The entity involved in the case (Appellant/Applicant)." .
+
+echr:LegalStatus a rdfs:Class ;
+    rdfs:label "Legal Status" ;
+    rdfs:comment "Classification: Individual, NGO, or Company." .
+
+echr:Gender a rdfs:Class ;
+    rdfs:label "Gender" ;
+    rdfs:comment "Controlled gender vocabulary used for party-level gender assertions." .
+
+echr:VulnerabilityStatus a rdfs:Class ;
+    rdfs:label "Vulnerability Status" ;
+    rdfs:comment "Specific vulnerabilities identified in the facts (e.g., Minor, Asylum Seeker)." .
+
+echr:EconomicStatus a rdfs:Class ;
+    rdfs:label "Economic Status" ;
+    rdfs:comment "Indicators of financial standing, such as 'Legal Aid' or 'Poverty'." .
+
+echr:LawSource a rdfs:Class ;
+    rdfs:label "Law Source" .
+
+echr:DomesticLaw a rdfs:Class ;
+    rdfs:label "Domestic Law" ;
+    rdfs:subClassOf echr:LawSource .
+
+echr:InternationalLaw a rdfs:Class ;
+    rdfs:label "International Law" ;
+    rdfs:subClassOf echr:LawSource .
+
+echr:OperativeProvision a rdfs:Class ;
+    rdfs:label "Operative Provision" ;
+    rdfs:comment "The legally binding 'Holds that...' section of the judgment." .
+
+echr:ChamberType a rdfs:Class ;
+    rdfs:label "Chamber Type" ;
+    rdfs:comment "Controlled grouping for court-level procedural formations (e.g., Committee, Chamber, Grand Chamber, Commission)." .
+
+echr:hasParty a rdf:Property ;
+    rdfs:label "has Party" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Party .
+
+echr:hasLegalStatus a rdf:Property ;
+    rdfs:label "has Legal Status" ;
+    rdfs:domain echr:Party ;
+    rdfs:range echr:LegalStatus .
+
+echr:hasVulnerability a rdf:Property ;
+    rdfs:label "has Vulnerability" ;
+    rdfs:domain echr:Party ;
+    rdfs:range echr:VulnerabilityStatus .
+
+echr:hasGender a rdf:Property ;
+    rdfs:label "has Gender" ;
+    rdfs:domain echr:Party ;
+    rdfs:range echr:Gender ;
+    rdfs:comment "IRI-based controlled gender value inferred from explicit evidence when available." .
+
+echr:hasNationality a rdf:Property ;
+    rdfs:label "has Nationality" ;
+    rdfs:domain echr:Party ;
+    rdfs:range wd:Q6256 ;
+    rdfs:comment "Uses Wikidata IRIs for countries (wd:Q6256 = country)." .
+
+echr:citesLaw a rdf:Property ;
+    rdfs:label "cites Law" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:LawSource .
+
+echr:hasChamberType a rdf:Property ;
+    rdfs:label "has Chamber Type" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:ChamberType ;
+    rdfs:comment "Normalized chamber grouping derived from court_level values using a maintained mapping table in the pipeline." .
+
+echr:hasOperativeProvision a rdf:Property ;
+    rdfs:label "has Operative Provision" ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:OperativeProvision .
+
+echr:provisionRefersToArticle a rdf:Property ;
+    rdfs:label "provision Refers To Article" ;
+    rdfs:domain echr:OperativeProvision ;
+    rdfs:range echr:ConventionArticle .
+
+echr:provisionHasFinding a rdf:Property ;
+    rdfs:label "provision Has Finding" ;
+    rdfs:domain echr:OperativeProvision ;
+    rdfs:range echr:Finding .
+
+echr:hasViolationGrounds a rdf:Property ;
+    rdfs:label "has Violation Grounds" ;
+    rdfs:domain echr:OperativeProvision ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Example: 'lack of an independent and impartial tribunal'." .
+
+# Judge metadata (sourced from judges_processed.json, not metadata mapping CSV)
+echr:Country a rdfs:Class ;
+    rdfs:label "Country" ;
+    rdfs:comment "A country associated with an ECHR judge's nationality." .
+
+echr:judge_country a rdf:Property ;
+    rdfs:label "judge country" ;
+    rdfs:domain echr:Judge ;
+    rdfs:range echr:Country ;
+    rdfs:comment "Links a judge to their country of origin." .
+
+echr:judge_begin_tenure a rdf:Property ;
+    rdfs:label "judge begin tenure" ;
+    rdfs:domain echr:Judge ;
+    rdfs:range xsd:gYear ;
+    rdfs:comment "Year the judge's tenure on the Court began." .
+
+echr:judge_end_tenure a rdf:Property ;
+    rdfs:label "judge end tenure" ;
+    rdfs:domain echr:Judge ;
+    rdfs:range xsd:gYear ;
+    rdfs:comment "Year the judge's tenure on the Court ended." .
+
+echr:judge_president a rdf:Property ;
+    rdfs:label "judge president" ;
+    rdfs:domain echr:Judge ;
+    rdfs:range xsd:boolean ;
+    rdfs:comment "True if the judge served as Section President at any point." .
+
+echr:judge_president_begin a rdf:Property ;
+    rdfs:label "judge president begin" ;
+    rdfs:domain echr:Judge ;
+    rdfs:range xsd:gYear ;
+    rdfs:comment "Year the judge's presidency began (only present when judge_president is true)." .
+
+echr:judge_president_end a rdf:Property ;
+    rdfs:label "judge president end" ;
+    rdfs:domain echr:Judge ;
+    rdfs:range xsd:gYear ;
+    rdfs:comment "Year the judge's presidency ended (only present when judge_president is true)." .
+
+# Document type class hierarchy and disjointness
+echr:Judgment rdfs:subClassOf echr:CaseDocument .
+echr:Decision rdfs:subClassOf echr:CaseDocument .
+echr:Judgment owl:disjointWith echr:Decision .
+
+# Controlled vocabulary instances
+
+# Article 6 procedural limb
+echr:Limb_Civil a echr:Article6Limb ;
+    rdfs:label "Civil"@en .
+
+echr:Limb_Criminal a echr:Article6Limb ;
+    rdfs:label "Criminal"@en .
+
+echr:Limb_Mixed a echr:Article6Limb ;
+    rdfs:label "Mixed"@en .
+
+echr:Limb_Constitutional a echr:Article6Limb ;
+    rdfs:label "Constitutional"@en .
+
+echr:Limb_Unspecified a echr:Article6Limb ;
+    rdfs:label "Unspecified"@en .
+
+# Separate opinion indicator
+echr:SeparateOpinion_Present a echr:SeparateOpinionIndicator ;
+    rdfs:label "Separate Opinion Present"@en .
+
+echr:SeparateOpinion_Absent a echr:SeparateOpinionIndicator ;
+    rdfs:label "No Separate Opinion"@en .
+
+# ECHR case importance levels (1=Key Cases, 2=Important, 3=Case Reports, 4=Minor)
+echr:Importance_1 a echr:ImportanceLevel ;
+    rdfs:label "Key Case"@en .
+
+echr:Importance_2 a echr:ImportanceLevel ;
+    rdfs:label "Important Case"@en .
+
+echr:Importance_3 a echr:ImportanceLevel ;
+    rdfs:label "Case Report"@en .
+
+echr:Importance_4 a echr:ImportanceLevel ;
+    rdfs:label "Case of Little Interest"@en .
+
+# Chamber type vocabulary (for normalized court_level grouping)
+echr:GrandChamber a echr:ChamberType ;
+    rdfs:label "Grand Chamber"@en .
+
+echr:Chamber a echr:ChamberType ;
+    rdfs:label "Chamber"@en .
+
+echr:Committee a echr:ChamberType ;
+    rdfs:label "Committee"@en .
+
+echr:Commission a echr:ChamberType ;
+    rdfs:label "Commission"@en .
+
+# Gender vocabulary (IRI-based)
+echr:Gender_Female a echr:Gender ;
+    rdfs:label "Female"@en .
+
+echr:Gender_Male a echr:Gender ;
+    rdfs:label "Male"@en .
+
+echr:Gender_NonBinary a echr:Gender ;
+    rdfs:label "Non-binary"@en .
+
+echr:Gender_Unknown a echr:Gender ;
+    rdfs:label "Unknown"@en .
+
+echr:Gender_NotStated a echr:Gender ;
+    rdfs:label "Not stated"@en .
+

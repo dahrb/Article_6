@@ -1,0 +1,85 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix echr: <http://example.org/echr/ontology#> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+
+
+# ---------------------------------------------------------
+# Ontology Declaration
+# ---------------------------------------------------------
+<http://example.org/echr/ontology> rdf:type owl:Ontology ;
+    rdfs:label "HUDOC ECHR Seed Ontology" ;
+    rdfs:comment "A foundational T-Box ontology for ECHR HUDOC metadata ingestion and OntoCast reasoning." .
+
+# ---------------------------------------------------------
+# Classes (Core Entities)
+# ---------------------------------------------------------
+
+echr:Case rdf:type owl:Class ;
+    rdfs:label "Case" ;
+    rdfs:comment "A legal case brought before the European Court of Human Rights." .
+
+echr:Judge rdf:type owl:Class ;
+    rdfs:label "Judge" ;
+    rdfs:comment "A judge who participated in hearing or deciding the case." .
+
+echr:Article rdf:type owl:Class ;
+    rdfs:label "Convention Article" ;
+    rdfs:comment "An article of the European Convention on Human Rights invoked in the case." .
+
+echr:Conclusion rdf:type owl:Class ;
+    rdfs:label "Conclusion" ;
+    rdfs:comment "The legal outcome or finding of the case (e.g., Violation, No Violation)." .
+
+# ---------------------------------------------------------
+# Object Properties (Relationships / Graph Edges)
+# ---------------------------------------------------------
+
+echr:heardBy rdf:type owl:ObjectProperty ;
+    rdfs:label "heard by" ;
+    rdfs:comment "Links a Case to the Judges who presided over it." ;
+    rdfs:domain echr:Case ;
+    rdfs:range echr:Judge .
+
+echr:invokesArticle rdf:type owl:ObjectProperty ;
+    rdfs:label "invokes article" ;
+    rdfs:comment "Links a Case to the specific Convention Articles it addresses." ;
+    rdfs:domain echr:Case ;
+    rdfs:range echr:Article .
+
+echr:hasConclusion rdf:type owl:ObjectProperty ;
+    rdfs:label "has conclusion" ;
+    rdfs:comment "Links a Case to its final judicial outcome." ;
+    rdfs:domain echr:Case ;
+    rdfs:range echr:Conclusion .
+
+# ---------------------------------------------------------
+# Data Properties (Node Attributes / Literal Values)
+# ---------------------------------------------------------
+
+echr:applicationNumber rdf:type owl:DatatypeProperty ;
+    rdfs:label "application number" ;
+    rdfs:comment "The official application number assigned to the case (e.g., '12345/06')." ;
+    rdfs:domain echr:Case ;
+    rdfs:range xsd:string .
+
+echr:documentName rdf:type owl:DatatypeProperty ;
+    rdfs:label "document name" ;
+    rdfs:comment "The formal title of the judgment or decision." ;
+    rdfs:domain echr:Case ;
+    rdfs:range xsd:string .
+
+echr:judgmentDate rdf:type owl:DatatypeProperty ;
+    rdfs:label "judgment date" ;
+    rdfs:comment "The date the judgment was delivered." ;
+    rdfs:domain echr:Case ;
+    rdfs:range xsd:date .
+
+echr:articleNumber rdf:type owl:DatatypeProperty ;
+    rdfs:label "article number" ;
+    rdfs:comment "The specific number or designation of the Convention article." ;
+    rdfs:domain echr:Article ;
+    rdfs:range xsd:string .

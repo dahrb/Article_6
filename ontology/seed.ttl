@@ -1,0 +1,582 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix echr: <https://github.com/dahrb/Art_6/tree/main/ontology/seed.ttl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://github.com/dahrb/Art_6/tree/main/ontology/seed.ttl> a owl:Ontology ;
+    rdfs:label "ECHR Art. 6 Ontology"@en ;
+    dcterms:created "2026-05-20T00:00:00+00:00"^^xsd:dateTime ;
+    dcterms:description "An ontology for Art.6 Cases heard at the ECHR"@en ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    owl:versionInfo "3.0" .
+
+echr:Chamber a owl:NamedIndividual,
+        echr:ChamberType ;
+    rdfs:label "Chamber"@en ;
+    rdfs:comment "Court handling most merits cases."@en .
+
+echr:Commission a owl:NamedIndividual,
+        echr:ChamberType ;
+    rdfs:label "Commission"@en ;
+    rdfs:comment "Legacy Commission formation used in pre-Court procedural contexts."@en .
+
+echr:Committee a owl:NamedIndividual,
+        echr:ChamberType ;
+    rdfs:label "Committee"@en ;
+    rdfs:comment "Smaller formation generally used for filtering or repetitive-case handling, also admissibility."@en .
+
+echr:DomesticLaw a owl:Class ;
+    rdfs:label "Domestic Law"^^xsd:string ;
+    rdfs:comment "Aligned to wd:Q1668641 (national law)."^^xsd:string ;
+    rdfs:subClassOf wd:Q1668641,
+        echr:Law .
+
+echr:EconomicStatus a owl:Class ;
+    rdfs:label "Economic Status"^^xsd:string ;
+    rdfs:comment "Indicators of the applicant's financial standing."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        wd:Q88483334 .
+
+echr:Gender_Female a owl:NamedIndividual,
+        echr:Gender ;
+    rdfs:label "Female"@en ;
+    rdfs:comment "Gender value indicating female identity."@en ;
+    owl:sameAs wd:Q6581072 .
+
+echr:Gender_Male a owl:NamedIndividual,
+        echr:Gender ;
+    rdfs:label "Male"@en ;
+    rdfs:comment "Gender value indicating male identity."@en ;
+    owl:sameAs wd:Q6581097 .
+
+echr:Gender_NonBinary a owl:NamedIndividual,
+        echr:Gender ;
+    rdfs:label "Non-binary"@en ;
+    rdfs:comment "Gender value indicating non-binary identity."@en ;
+    owl:sameAs wd:Q48270 .
+
+echr:Gender_NotStated a owl:NamedIndividual,
+        echr:Gender ;
+    rdfs:label "Not stated"@en ;
+    rdfs:comment "Gender value used when the source does not explicitly state gender."@en .
+
+echr:Gender_Unknown a owl:NamedIndividual,
+        echr:Gender ;
+    rdfs:label "Unknown"@en ;
+    rdfs:comment "Gender value used when gender cannot be inferred from available data."@en .
+
+echr:GrandChamber a owl:NamedIndividual,
+        echr:ChamberType ;
+    rdfs:label "Grand Chamber"@en ;
+    rdfs:comment "Highest court level"@en ;
+    owl:sameAs wd:Q108704123 .
+
+echr:Importance_1 a owl:NamedIndividual,
+        echr:ImportanceLevel ;
+    rdfs:label "Key Case"@en ;
+    rdfs:comment "Judgments that make a significant contribution to the development, clarification or modification of ECtHR case-law."@en .
+
+echr:Importance_2 a owl:NamedIndividual,
+        echr:ImportanceLevel ;
+    rdfs:label "Important Case"@en ;
+    rdfs:comment "Judgments that do not make a significant contribution to case-law but nevertheless do not merely apply existing case-law."@en .
+
+echr:Importance_3 a owl:NamedIndividual,
+        echr:ImportanceLevel ;
+    rdfs:label "Case Report"@en ;
+    rdfs:comment "Judgments that simply apply existing case-law."@en .
+
+echr:Importance_4 a owl:NamedIndividual,
+        echr:ImportanceLevel ;
+    rdfs:label "Case of Little Interest"@en ;
+    rdfs:comment "Judgments of little legal interest, often repetitive."@en .
+
+echr:InternationalLaw a owl:Class ;
+    rdfs:label "International Law"^^xsd:string ;
+    rdfs:comment "Aligned to wd:Q47659 (international law)."^^xsd:string ;
+    rdfs:subClassOf wd:Q4394526,
+        echr:Law .
+
+echr:Judgment a owl:Class ;
+    rdfs:label "Judgment"^^xsd:string ;
+    rdfs:comment "Metadata-derived case subtype for rows where source indicates a judgment document."^^xsd:string ;
+    rdfs:subClassOf wd:Q3769186,
+        echr:CaseDocument ;
+    owl:disjointWith echr:Decision .
+
+echr:LawSystem_Civil a owl:NamedIndividual,
+        echr:LawSystem ;
+    rdfs:label "Civic code jurisdiction"@en ;
+    rdfs:comment "Law-system category for primarily civil-law/codified legal traditions."@en ;
+    owl:sameAs wd:Q5950118 .
+
+echr:LawSystem_Common a owl:NamedIndividual,
+        echr:LawSystem ;
+    rdfs:label "Common Law jurisdiction"@en ;
+    rdfs:comment "Law-system category for precedent-driven common-law traditions."@en ;
+    owl:sameAs wd:Q30216 .
+
+echr:LawSystem_Mixed a owl:NamedIndividual,
+        echr:LawSystem ;
+    rdfs:label "Mixed jurisdiction"@en ;
+    rdfs:comment "Law-system category for jurisdictions combining civil and common-law elements."@en .
+
+echr:Limb_Civil a owl:NamedIndividual,
+        echr:Article6Limb ;
+    rdfs:label "Civil"@en ;
+    rdfs:comment "Article 6 limb indicating civil rights and obligations proceedings."@en .
+
+echr:Limb_Constitutional a owl:NamedIndividual,
+        echr:Article6Limb ;
+    rdfs:label "Constitutional"@en ;
+    rdfs:comment "Article 6 limb indicating constitutional court review or constitutional adjudication context."@en .
+
+echr:Limb_Criminal a owl:NamedIndividual,
+        echr:Article6Limb ;
+    rdfs:label "Criminal"@en ;
+    rdfs:comment "Article 6 limb indicating criminal charge proceedings."@en .
+
+echr:Limb_Mixed a owl:NamedIndividual,
+        echr:Article6Limb ;
+    rdfs:label "Mixed"@en ;
+    rdfs:comment "Article 6 limb used when both civil and criminal dimensions are present."@en .
+
+echr:Limb_Unspecified a owl:NamedIndividual,
+        echr:Article6Limb ;
+    rdfs:label "Unspecified"@en ;
+    rdfs:comment "Article 6 limb used when the source metadata does not clearly distinguish a procedural limb."@en .
+
+echr:NonViolation a owl:Class ;
+    rdfs:label "Non-Violation"^^xsd:string ;
+    rdfs:comment "A judicial finding that no violation of a Convention Article occurred."^^xsd:string ;
+    rdfs:subClassOf echr:LegalFinding .
+
+echr:SeparateOpinion_Absent a owl:NamedIndividual,
+        echr:SeparateOpinionIndicator ;
+    rdfs:label "No Separate Opinion"@en ;
+    rdfs:comment "Indicates that no separate opinions were appended to the judgment."@en .
+
+echr:SeparateOpinion_Present a owl:NamedIndividual,
+        echr:SeparateOpinionIndicator ;
+    rdfs:label "Separate Opinion Present"@en ;
+    rdfs:comment "Indicates that one or more judges appended a concurring or dissenting opinion to the judgment."@en .
+
+echr:Violation a owl:Class ;
+    rdfs:label "Violation"^^xsd:string ;
+    rdfs:comment "A judicial finding that a violation of a Convention Article occurred."^^xsd:string ;
+    rdfs:subClassOf echr:LegalFinding .
+
+echr:citesApplication a owl:ObjectProperty ;
+    rdfs:label "cites Application"^^xsd:string ;
+    rdfs:comment "Metadata-derived citation edge from cited_appno to normalized Application entities for application-level citation graphs."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Application .
+
+echr:citesCase a owl:ObjectProperty ;
+    rdfs:label "cites Case"^^xsd:string ;
+    rdfs:comment "Resolved citation edge between case documents when cited application numbers map to known CaseDocument entities."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:CaseDocument ;
+    rdfs:subPropertyOf dcterms:references .
+
+echr:citesLaw a owl:ObjectProperty ;
+    rdfs:label "cites Law"^^xsd:string ;
+    rdfs:comment "Legal-source citation relation aligned to dcterms:references."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Law ;
+    rdfs:subPropertyOf dcterms:references .
+
+echr:concernsArticle a owl:ObjectProperty ;
+    rdfs:label "concerns Article"^^xsd:string ;
+    rdfs:comment "Metadata-derived article relation from article tokens (e.g., 6, 6-1, P1-1), linked to ConventionArticle concepts."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:ConventionArticle .
+
+echr:findingRefersToArticle a owl:ObjectProperty ;
+    rdfs:label "finding refers to Article"^^xsd:string ;
+    rdfs:comment "Connects a legal finding to the specific Convention article it evaluates."^^xsd:string ;
+    rdfs:domain echr:LegalFinding ;
+    rdfs:range echr:ConventionArticle .
+
+echr:hasApplicantName a owl:DatatypeProperty ;
+    rdfs:label "has Applicant Name"^^xsd:string ;
+    rdfs:comment "Metadata-derived applicant/appellant name from appellant; preserved as raw text when entity resolution is incomplete."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf foaf:name .
+
+echr:hasApplication a owl:ObjectProperty ;
+    rdfs:label "has Application"^^xsd:string ;
+    rdfs:comment "Metadata-derived relation from case_appno linking a case to one or more normalized Application entities."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Application .
+
+echr:hasApplicationNumber a owl:DatatypeProperty ;
+    rdfs:label "application number"^^xsd:string ;
+    rdfs:comment "Metadata-derived canonical application number literal on Application. Built from normalized values extracted from case_appno/cited_appno/secondary_appno."^^xsd:string ;
+    rdfs:domain echr:Application ;
+    rdfs:range xsd:string .
+
+echr:hasArticle6Limb a owl:ObjectProperty ;
+    rdfs:label "has Article 6 Limb"^^xsd:string ;
+    rdfs:comment "Metadata-derived mapping from article_6_limb to controlled limb concepts (Civil, Criminal, Mixed, Constitutional, Unspecified)."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Article6Limb .
+
+echr:hasCaseName a owl:DatatypeProperty ;
+    rdfs:label "has Case Name"^^xsd:string ;
+    rdfs:comment "Metadata-derived case title from case_name; stored as the primary human-readable label for the case."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf dcterms:title .
+
+echr:hasCaseTextPath a owl:DatatypeProperty ;
+    rdfs:label "has Case Text Path"^^xsd:string ;
+    rdfs:comment "Metadata-derived relative file path to the source case text artifact, retained for provenance and reproducibility."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf dcterms:source .
+
+echr:hasChamberType a owl:ObjectProperty ;
+    rdfs:label "has Chamber Type"^^xsd:string ;
+    rdfs:comment "Metadata-derived normalized chamber type from court_level values via controlled mapping."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:ChamberType .
+
+echr:hasConclusionReference a owl:ObjectProperty ;
+    rdfs:label "has Conclusion Reference"^^xsd:string ;
+    rdfs:comment "Metadata-derived legal-reference links extracted from conclusion text (e.g., Art. 35, Art. 6-1, P1-1) and normalized to ConventionArticle entities."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:ConventionArticle .
+
+echr:hasCourtFormation a owl:ObjectProperty ;
+    rdfs:label "has Court Formation"^^xsd:string ;
+    rdfs:comment "Metadata-derived court formation from originatingbody, normalized into reusable CourtFormation entities."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:CourtFormation .
+
+echr:hasEcli a owl:DatatypeProperty ;
+    rdfs:label "has Ecli"^^xsd:string ;
+    rdfs:comment "Metadata-derived ECLI citation identifier for legal reference and cross-system interoperability."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf dcterms:isVersionOf .
+
+echr:hasFinding a owl:ObjectProperty ;
+    rdfs:label "has Finding"^^xsd:string ;
+    rdfs:comment "Links a case to structured legal outcome nodes (Violation/NonViolation and related findings)."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:LegalFinding .
+
+echr:hasGender a owl:ObjectProperty ;
+    rdfs:label "has Gender"^^xsd:string ;
+    rdfs:comment "IRI-based controlled gender value inferred from explicit evidence when available."^^xsd:string ;
+    rdfs:domain echr:Party ;
+    rdfs:range echr:Gender .
+
+echr:hasImportanceLevel a owl:ObjectProperty ;
+    rdfs:label "has Importance Level"^^xsd:string ;
+    rdfs:comment "Metadata-derived link from a case to its ECtHR importance level concept (1-4)."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:ImportanceLevel .
+
+echr:hasItemId a owl:DatatypeProperty ;
+    rdfs:label "has Item Id"^^xsd:string ;
+    rdfs:comment "Metadata-derived HUDOC item identifier (itemid); canonical external key used for record identity and IRI minting."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string .
+
+echr:hasJudge a owl:ObjectProperty ;
+    rdfs:label "has Judge"^^xsd:string ;
+    rdfs:comment "Metadata-derived judge linkage from judges, normalized to shared Judge entities and stabilized with judges_id when present."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Judge .
+
+echr:hasJudgeCountry a owl:ObjectProperty ;
+    rdfs:label "has judge country"^^xsd:string ;
+    rdfs:comment "Links a judge to country metadata (typically from judge authority records), normalized to Country entities."^^xsd:string ;
+    rdfs:domain echr:Judge ;
+    rdfs:range echr:Country .
+
+echr:hasJudgeId a owl:DatatypeProperty ;
+    rdfs:label "has Judge Id"^^xsd:string ;
+    rdfs:comment "Metadata-derived stable judge identifier from judges_id; preferred key for deduplicating judge entities across rows."^^xsd:string ;
+    rdfs:domain echr:Judge ;
+    rdfs:range xsd:integer .
+
+echr:hasJudgmentDate a owl:DatatypeProperty ;
+    rdfs:label "has Judgment Date"^^xsd:string ;
+    rdfs:comment "Metadata-derived date from judgementdate; expected to parse to xsd:date when valid."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range dcterms:date ;
+    rdfs:subPropertyOf dcterms:date .
+
+echr:hasJudgmentType a owl:ObjectProperty ;
+    rdfs:label "has Document Type"^^xsd:string ;
+    rdfs:comment "Metadata-derived document type from judgment_type, represented as a controlled concept for filtering and grouping."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:JudgmentType ;
+    rdfs:subPropertyOf dcterms:type .
+
+echr:hasKeyword a owl:ObjectProperty ;
+    rdfs:label "has Keyword Label"^^xsd:string ;
+    rdfs:comment "Metadata-derived normalized thesaurus labels from kpthesaurus_labels for searchable topical indexing."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Keyword ;
+    rdfs:subPropertyOf dcterms:subject .
+
+echr:hasKeywordCode a owl:DatatypeProperty ;
+    rdfs:label "has Keyword Code"^^xsd:string ;
+    rdfs:comment "Metadata-derived raw thesaurus code string from kpthesaurus, retained as provenance for downstream mapping checks."^^xsd:string ;
+    rdfs:domain echr:Keyword ;
+    rdfs:range xsd:string .
+
+echr:hasLanguageCode a owl:DatatypeProperty ;
+    rdfs:label "has Language Code"^^xsd:string ;
+    rdfs:comment "Metadata-derived language ISO code from languageisocode (observed ENG/FRE in current sample)."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf dcterms:language .
+
+echr:hasLawSystem a owl:ObjectProperty ;
+    rdfs:label "has Law System"^^xsd:string ;
+    rdfs:comment "Metadata-derived legal system classification from law_system (e.g., Common, Civil, Mixed)."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:LawSystem .
+
+echr:hasLegalRepresentative a owl:ObjectProperty ;
+    rdfs:label "has Legal Representative"^^xsd:string ;
+    rdfs:comment "Links a case to its legal representative entity when representative information is available in metadata/enrichment inputs."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:LegalRepresentative ;
+    rdfs:subPropertyOf dcterms:contributor .
+
+echr:hasLegalStatus a owl:ObjectProperty ;
+    rdfs:label "has Legal Status"^^xsd:string ;
+    rdfs:domain echr:Party ;
+    rdfs:range echr:LegalStatus .
+
+echr:hasNationality a owl:ObjectProperty ;
+    rdfs:label "has Nationality"^^xsd:string ;
+    rdfs:comment "Country nationality relation for Party, aligned to country entities (Wikidata-backed where resolvable)."^^xsd:string ;
+    rdfs:domain echr:Party ;
+    rdfs:range echr:Country .
+
+echr:hasOperativeProvision a owl:ObjectProperty ;
+    rdfs:label "has Operative Provision"^^xsd:string ;
+    rdfs:comment "Links a case to operative, legally binding outcome clauses extracted/structured for reasoning."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:OperativeProvision .
+
+echr:hasPresidencyBeginYear a owl:DatatypeProperty ;
+    rdfs:label "has presidency begin year"^^xsd:string ;
+    rdfs:comment "Judge leadership metadata: presidency start year (expected only when isSectionPresident is true)."^^xsd:string ;
+    rdfs:domain echr:Judge ;
+    rdfs:range xsd:gYear .
+
+echr:hasPresidencyEndYear a owl:DatatypeProperty ;
+    rdfs:label "has presidency end year"^^xsd:string ;
+    rdfs:comment "Judge leadership metadata: presidency end year (expected only when isSectionPresident is true)."^^xsd:string ;
+    rdfs:domain echr:Judge ;
+    rdfs:range xsd:gYear .
+
+echr:hasRepresentativeName a owl:DatatypeProperty ;
+    rdfs:label "has representative name"^^xsd:string ;
+    rdfs:comment "Metadata-derived legal representative name string; used when a dedicated representative identifier is unavailable."^^xsd:string ;
+    rdfs:domain echr:LegalRepresentative ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf foaf:name .
+
+echr:hasRespondentState a owl:ObjectProperty ;
+    rdfs:label "has Respondent State"^^xsd:string ;
+    rdfs:comment "Metadata-derived respondent state link from respondent, normalized to country entities and aligned to Wikidata where available."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Country .
+
+echr:hasSeparateOpinion a owl:ObjectProperty ;
+    rdfs:label "has Separate Opinion"^^xsd:string ;
+    rdfs:comment "Metadata-derived separate-opinion flag from separateopinion, mapped to controlled indicator individuals."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:SeparateOpinionIndicator .
+
+echr:hasTenureBeginYear a owl:DatatypeProperty ;
+    rdfs:label "has tenure begin year"^^xsd:string ;
+    rdfs:comment "Judge career metadata: year in which Court tenure began."^^xsd:string ;
+    rdfs:domain echr:Judge ;
+    rdfs:range xsd:gYear .
+
+echr:hasTenureEndYear a owl:DatatypeProperty ;
+    rdfs:label "has tenure end year"^^xsd:string ;
+    rdfs:comment "Judge career metadata: year in which Court tenure ended."^^xsd:string ;
+    rdfs:domain echr:Judge ;
+    rdfs:range xsd:gYear .
+
+echr:hasViolationGrounds a owl:DatatypeProperty ;
+    rdfs:label "has Violation Grounds"^^xsd:string ;
+    rdfs:comment "Textual rationale describing why a violation was found (e.g., lack of an independent and impartial tribunal)."^^xsd:string ;
+    rdfs:domain echr:OperativeProvision ;
+    rdfs:range xsd:string .
+
+echr:hasVulnerability a owl:ObjectProperty ;
+    rdfs:label "has Vulnerability"^^xsd:string ;
+    rdfs:domain echr:Party ;
+    rdfs:range echr:VulnerabilityStatus .
+
+echr:hasYear a owl:DatatypeProperty ;
+    rdfs:label "has Year"^^xsd:string ;
+    rdfs:comment "Metadata-derived case year value from year, modeled as a gYear-compatible literal."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:gYear .
+
+echr:isSectionPresident a owl:DatatypeProperty ;
+    rdfs:label "is section president"^^xsd:string ;
+    rdfs:comment "Judge profile metadata flag indicating whether the person served as Section President."^^xsd:string ;
+    rdfs:domain echr:Judge ;
+    rdfs:range xsd:boolean .
+
+echr:provisionRefersToArticle a owl:ObjectProperty ;
+    rdfs:label "provision Refers To Article"^^xsd:string ;
+    rdfs:domain echr:OperativeProvision ;
+    rdfs:range echr:ConventionArticle .
+
+echr:referencesSecondaryApplication a owl:ObjectProperty ;
+    rdfs:label "references Secondary Application"^^xsd:string ;
+    rdfs:comment "Metadata-derived cross-reference from secondary_appno linking the case to additional normalized Application entities."^^xsd:string ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Application .
+
+echr:CourtFormation a owl:Class ;
+    rdfs:label "Court Formation"^^xsd:string ;
+    rdfs:comment "Metadata-derived court body from originatingbody (e.g., Court (Grand Chamber), Court (First Section), Commission). Aligned to foaf:Organization."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        foaf:Organization .
+
+echr:Decision a owl:Class ;
+    rdfs:label "Decision"^^xsd:string ;
+    rdfs:comment "Metadata-derived case subtype for rows where source indicates a decision document."^^xsd:string ;
+    rdfs:subClassOf wd:Q327000,
+        echr:CaseDocument .
+
+echr:JudgmentType a owl:Class ;
+    rdfs:label "Judgment Type"^^xsd:string ;
+    rdfs:comment "Metadata-derived controlled document type from judgment_type values (observed as a small closed set)."^^xsd:string ;
+    rdfs:subClassOf owl:Thing .
+
+echr:LegalStatus a owl:Class ;
+    rdfs:label "Legal Status"^^xsd:string ;
+    rdfs:comment "Classification of the applicant entity."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        wd:Q2628882 .
+
+echr:VulnerabilityStatus a owl:Class ;
+    rdfs:label "Vulnerability Status"^^xsd:string ;
+    rdfs:comment "Specific vulnerabilities identified in the case facts."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        wd:Q581445 .
+
+echr:Keyword a owl:Class ;
+    rdfs:label "Thesaurus Keyword"^^xsd:string ;
+    rdfs:comment "A controlled HUDOC thesaurus concept. Aligned to skos:Concept."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        skos:Concept .
+
+echr:LegalRepresentative a owl:Class ;
+    rdfs:label "Legal Representative"^^xsd:string ;
+    rdfs:comment "Person acting as legal counsel for an applicant or party (lawyer-aligned entity)."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        wd:Q40348,
+        foaf:Person .
+
+echr:Country a owl:Class ;
+    rdfs:label "Country"^^xsd:string ;
+    rdfs:comment "Country concept primarily metadata-derived from respondent and country_name values, plus judge authority data, and aligned to Wikidata when available."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        wd:Q3624078 .
+
+echr:Law a owl:Class ;
+    rdfs:label "Law Source"^^xsd:string ;
+    rdfs:comment "General legal source class aligned to wd:Q7748 (law); used as a target for legal citation assertions."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        wd:Q7748 .
+
+echr:OperativeProvision a owl:Class ;
+    rdfs:label "Operative Provision"^^xsd:string ;
+    rdfs:comment "The legally binding 'Holds that...' section of the judgment. Contains the final judicial voting outcomes."^^xsd:string ;
+    rdfs:subClassOf owl:Thing .
+
+echr:SeparateOpinionIndicator a owl:Class ;
+    rdfs:label "Separate Opinion Indicator"^^xsd:string ;
+    rdfs:comment "Metadata-derived indicator from separateopinion showing whether a separate opinion is present."^^xsd:string ;
+    rdfs:subClassOf owl:Thing .
+
+echr:Application a owl:Class ;
+    rdfs:label "Application"^^xsd:string ;
+    rdfs:comment "Metadata-derived identifier node for application numbers. Primarily populated from case_appno, cited_appno, and secondary_appno; canonical values are attached via application_number_normalized."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        wd:Q56759633 .
+
+echr:ConventionArticle a owl:Class ;
+    rdfs:label "Convention Article"^^xsd:string ;
+    rdfs:comment "Convention article concept aligned to wd:Q712597. Primarily metadata-derived from article and conclusion references (e.g., 6, 6-1, P1-1)."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        wd:Q712597 .
+
+echr:LawSystem a owl:Class ;
+    rdfs:label "Law System"^^xsd:string ;
+    rdfs:comment "Metadata-derived legal tradition from law_system (observed values include Civil, Common, and Mixed)."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        wd:Q2478386 .
+
+echr:LegalFinding a owl:Class ;
+    rdfs:label "Legal Finding"^^xsd:string ;
+    rdfs:comment "Structured legal conclusion class capturing result statements (violation/non-violation) derived from decision outcomes."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        prov:Entity .
+
+echr:Party a owl:Class ;
+    rdfs:label "Party"^^xsd:string ;
+    rdfs:comment "Applicant/appellant party entity for a case, typically inferred from metadata-derived appellant information. Aligned to foaf:Agent."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        wd:Q12648988,
+        foaf:Agent .
+
+echr:ChamberType a owl:Class ;
+    rdfs:label "Chamber Type"^^xsd:string ;
+    rdfs:comment "Metadata-driven normalized grouping from court_level values (e.g., Committee, Chamber, Grand Chamber, Commission)."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        wd:Q357147 .
+
+echr:ImportanceLevel a owl:Class ;
+    rdfs:label "Importance Level"^^xsd:string ;
+    rdfs:comment "Metadata-derived controlled importance score from the importance field (values observed: 1-4)."^^xsd:string ;
+    rdfs:subClassOf owl:Thing .
+
+echr:Article6Limb a owl:Class ;
+    rdfs:label "Article 6 Limb"^^xsd:string ;
+    rdfs:comment "Metadata-derived controlled concept from article_6_limb (e.g., Civil, Criminal, Mixed, Constitutional, Unspecified)."^^xsd:string ;
+    rdfs:subClassOf owl:Thing .
+
+echr:Gender a owl:Class ;
+    rdfs:label "Gender"^^xsd:string ;
+    rdfs:comment "Controlled gender vocabulary used for party-level gender assertions."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        wd:Q48277 .
+
+echr:Judge a owl:Class ;
+    rdfs:label "Judge"^^xsd:string ;
+    rdfs:comment "Judge entity primarily metadata-derived from judges and judges_id, then normalized for reuse across cases. Aligned to foaf:Person."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        wd:Q16533,
+        foaf:Person .
+
+echr:CaseDocument a owl:Class ;
+    rdfs:label "Case"^^xsd:string ;
+    rdfs:comment "Primary case record class. Most case-level assertions are metadata-derived from one row in the processed Art. 6 dataset."^^xsd:string ;
+    rdfs:subClassOf owl:Thing,
+        wd:Q2334719 .
+

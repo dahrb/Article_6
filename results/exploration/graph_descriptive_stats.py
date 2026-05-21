@@ -13,11 +13,14 @@ from __future__ import annotations
 
 from collections import Counter
 from pathlib import Path
+import re
 from typing import Any
 
 import matplotlib.pyplot as plt
 import networkx as nx
+import pydotplus
 from rdflib import BNode, Graph, Literal, Namespace, RDF, RDFS, URIRef
+from rdflib.namespace import OWL
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -27,6 +30,7 @@ METADATA_TTL = ROOT / "ontology" / "metadata.ttl"
 REPORT_PATH = OUT_DIR / "graph_descriptive_report.txt"
 
 ECHR = Namespace("https://github.com/dahrb/Art_6/tree/main/ontology/seed.ttl#")
+ECHR_PREFIX = str(ECHR)
 
 
 def load_graph(path: Path) -> Graph:
@@ -48,6 +52,21 @@ def qname(g: Graph, term: Any) -> str:
     if isinstance(term, BNode):
         return f"_:{term}"
     return str(term)
+
+
+def humanize_term(term: URIRef | str) -> str:
+    value = str(term)
+    if "#" in value:
+        value = value.rsplit("#", 1)[-1]
+    elif "/" in value:
+        value = value.rsplit("/", 1)[-1]
+    value = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", value)
+    value = value.replace("_", " ")
+    return value.strip()
+
+
+def is_echr_term(term: Any) -> bool:
+    return isinstance(term, URIRef) and str(term).startswith(ECHR_PREFIX)
 
 
 def collect_basic_stats(g: Graph) -> dict[str, Any]:
@@ -126,33 +145,6 @@ def plot_case_triple_distribution(case_triple_counts: list[int], output_path: Pa
     plt.close()
 
 
-def build_seed_structure_graph(seed: Graph) -> nx.DiGraph:
-    dg = nx.DiGraph()
-
-    for child, _, parent in seed.triples((None, RDFS.subClassOf, None)):
-        if isinstance(child, URIRef) and isinstance(parent, URIRef):
-            c = qname(seed, child)
-            p = qname(seed, parent)
-            dg.add_node(c)
-            dg.add_node(p)
-            dg.add_edge(c, p)
-
-    # Add domain->range skeleton for object properties where both are URI terms.
-    for prop in seed.subjects(RDF.type, URIRef("http://www.w3.org/2002/07/owl#ObjectProperty")):
-        domains = list(seed.objects(prop, RDFS.domain))
-        ranges = list(seed.objects(prop, RDFS.range))
-        for d in domains:
-            for r in ranges:
-                if isinstance(d, URIRef) and isinstance(r, URIRef):
-                    dn = qname(seed, d)
-                    rn = qname(seed, r)
-                    dg.add_node(dn)
-                    dg.add_node(rn)
-                    dg.add_edge(dn, rn)
-
-    return dg
-
-
 def draw_nx_graph(graph: nx.DiGraph, title: str, output_path: Path, max_nodes: int | None = None) -> None:
     g = graph.copy()
     if max_nodes is not None and g.number_of_nodes() > max_nodes:
@@ -170,6 +162,85 @@ def draw_nx_graph(graph: nx.DiGraph, title: str, output_path: Path, max_nodes: i
     plt.tight_layout()
     plt.savefig(output_path, dpi=180)
     plt.close()
+
+
+def build_seed_structure_dot(seed: Graph) -> pydotplus.Dot:
+    dot = pydotplus.Dot(graph_type="digraph", rankdir="LR", splines="spline", concentrate=True)
+    dot.set_node_defaults(shape="box", style="rounded,filled", fillcolor="#edf6ff", color="#4a6fa5", fontname="Arial", fontsize="10")
+    dot.set_edge_defaults(color="#57606a", fontname="Arial", fontsize="9", arrowsize="0.7")
+
+    class_nodes = {s for s in seed.subjects(RDF.type, OWL.Class) if is_echr_term(s)}
+    object_properties = {s for s in seed.subjects(RDF.type, OWL.ObjectProperty) if is_echr_term(s)}
+
+    node_added: set[str] = set()
+
+    def add_node(term: URIRef, *, shape: str = "box", fillcolor: str = "#edf6ff", color: str = "#4a6fa5") -> str:
+        node_id = qname(seed, term)
+        if node_id in node_added:
+            return node_id
+        node_added.add(node_id)
+        dot.add_node(
+            pydotplus.Node(
+                node_id,
+                label=humanize_term(term),
+                shape=shape,
+                style="rounded,filled",
+                fillcolor=fillcolor,
+                color=color,
+                fontname="Arial",
+                fontsize="10",
+            )
+        )
+        return node_id
+
+    edge_labels: dict[tuple[str, str], set[str]] = {}
+    edge_attrs: dict[tuple[str, str], dict[str, str]] = {}
+
+    def remember_edge(src: URIRef, dst: URIRef, label: str, *, color: str = "#57606a", style: str = "solid") -> None:
+        src_id = add_node(src)
+        dst_id = add_node(dst)
+        key = (src_id, dst_id)
+        edge_labels.setdefault(key, set()).add(label)
+        edge_attrs[key] = {"color": color, "style": style}
+
+    for cls in sorted(class_nodes, key=str):
+        add_node(cls)
+
+    for prop in sorted(object_properties, key=str):
+        prop_name = humanize_term(prop)
+        domains = [d for d in seed.objects(prop, RDFS.domain) if is_echr_term(d)]
+        ranges = [r for r in seed.objects(prop, RDFS.range) if is_echr_term(r)]
+        for domain in domains:
+            for range_term in ranges:
+                remember_edge(domain, range_term, prop_name, color="#3a5a7a")
+
+    for child, _, parent in seed.triples((None, RDFS.subClassOf, None)):
+        if is_echr_term(child) and is_echr_term(parent):
+            remember_edge(child, parent, "subClassOf", color="#9aa0a6", style="dashed")
+
+    for (src_id, dst_id), labels in sorted(edge_labels.items()):
+        attrs = edge_attrs[(src_id, dst_id)]
+        label_text = "\n".join(sorted(labels))
+        dot.add_edge(
+            pydotplus.Edge(
+                src_id,
+                dst_id,
+                label=label_text,
+                color=attrs["color"],
+                style=attrs["style"],
+                fontname="Arial",
+                fontsize="9",
+                arrowhead="normal",
+            )
+        )
+
+    return dot
+
+
+def render_seed_structure(seed: Graph, output_path: Path) -> None:
+    dot = build_seed_structure_dot(seed)
+    png_bytes = dot.create_png()
+    output_path.write_bytes(png_bytes)
 
 
 def build_metadata_sample_graph(metadata: Graph, max_cases: int = 40) -> nx.DiGraph:
@@ -272,13 +343,7 @@ def main() -> None:
     report = render_report(seed_graph, metadata_graph)
     REPORT_PATH.write_text(report, encoding="utf-8")
 
-    seed_structure = build_seed_structure_graph(seed_graph)
-    draw_nx_graph(
-        seed_structure,
-        title="Seed Ontology Structure (Subclass + Domain/Range Skeleton)",
-        output_path=OUT_DIR / "seed_structure.png",
-        max_nodes=140,
-    )
+    render_seed_structure(seed_graph, OUT_DIR / "seed_structure.png")
 
     meta_stats = collect_basic_stats(metadata_graph)
     plot_bar_from_counter(

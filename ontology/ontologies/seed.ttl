@@ -1,0 +1,200 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix echr: <http://example.com/art_6#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.com/art_6> a owl:Ontology ;
+    rdfs:label "ECHR Art. 6 Seed Ontology" ;
+    dcterms:created "2026-05-19T14:39:57+00:00"^^xsd:dateTime ;
+    dcterms:description "Simplified owlready2 schema for ECHR Art. 6 metadata seeding and later OntoCast augmentation." ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:title "ECHR Art. 6 Seed Ontology" ;
+    owl:versionInfo "1.0" .
+
+echr:Decision a owl:Class ;
+    rdfs:label "Decision"^^xsd:string ;
+    rdfs:comment "Decision subclass of Case."^^xsd:string ;
+    rdfs:subClassOf echr:Case .
+
+echr:Judgment a owl:Class ;
+    rdfs:label "Judgment"^^xsd:string ;
+    rdfs:comment "Judgment subclass of Case."^^xsd:string ;
+    rdfs:subClassOf echr:Case .
+
+echr:applicationNumberLiteral a owl:DatatypeProperty ;
+    rdfs:domain echr:Application ;
+    rdfs:range xsd:string .
+
+echr:articleNumberLiteral a owl:DatatypeProperty ;
+    rdfs:domain echr:Article ;
+    rdfs:range xsd:string .
+
+echr:citesCase a owl:ObjectProperty ;
+    rdfs:label "cites Case"^^xsd:string ;
+    rdfs:comment "Links a case to another cited case when resolved."^^xsd:string ;
+    rdfs:domain echr:Case ;
+    rdfs:range echr:Case .
+
+echr:concernsArticle a owl:ObjectProperty ;
+    rdfs:subPropertyOf echr:invokesArticle .
+
+echr:factText a owl:DatatypeProperty ;
+    rdfs:domain echr:LegalFact ;
+    rdfs:range xsd:string .
+
+echr:findingKind a owl:DatatypeProperty ;
+    rdfs:domain echr:ViolationFinding ;
+    rdfs:range xsd:string .
+
+echr:findingSourceField a owl:DatatypeProperty ;
+    rdfs:domain echr:ViolationFinding ;
+    rdfs:range xsd:string .
+
+echr:hasApplicantName a owl:DatatypeProperty ;
+    rdfs:domain echr:Case ;
+    rdfs:range xsd:string .
+
+echr:hasApplication a owl:ObjectProperty ;
+    rdfs:label "has Application"^^xsd:string ;
+    rdfs:comment "Links a case to one or more application identifiers."^^xsd:string ;
+    rdfs:domain echr:Case ;
+    rdfs:range echr:Application .
+
+echr:hasArgument a owl:ObjectProperty ;
+    rdfs:label "has Argument"^^xsd:string ;
+    rdfs:comment "Links a case to extracted argument instances."^^xsd:string ;
+    rdfs:domain echr:Case ;
+    rdfs:range echr:Argument .
+
+echr:hasCaseName a owl:DatatypeProperty ;
+    rdfs:domain echr:Case ;
+    rdfs:range xsd:string .
+
+echr:hasCaseTextPath a owl:DatatypeProperty ;
+    rdfs:domain echr:Case ;
+    rdfs:range xsd:string .
+
+echr:hasDocumentTypeLabel a owl:DatatypeProperty ;
+    rdfs:domain echr:Case ;
+    rdfs:range xsd:string .
+
+echr:hasEcli a owl:DatatypeProperty ;
+    rdfs:domain echr:Case ;
+    rdfs:range xsd:string .
+
+echr:hasItemId a owl:DatatypeProperty ;
+    rdfs:domain echr:Case ;
+    rdfs:range xsd:string .
+
+echr:hasJudge a owl:ObjectProperty ;
+    rdfs:subPropertyOf echr:heardBy .
+
+echr:hasJudgeCountry a owl:DatatypeProperty ;
+    rdfs:domain echr:Judge ;
+    rdfs:range xsd:string .
+
+echr:hasJudgeId a owl:DatatypeProperty ;
+    rdfs:domain echr:Judge ;
+    rdfs:range xsd:integer .
+
+echr:hasJudgmentDate a owl:DatatypeProperty ;
+    rdfs:domain echr:Case ;
+    rdfs:range xsd:date .
+
+echr:hasLanguageCode a owl:DatatypeProperty ;
+    rdfs:domain echr:Case ;
+    rdfs:range xsd:string .
+
+echr:hasLegalFact a owl:ObjectProperty ;
+    rdfs:label "has Legal Fact"^^xsd:string ;
+    rdfs:comment "Links a case to extracted or seeded legal facts."^^xsd:string ;
+    rdfs:domain echr:Case ;
+    rdfs:range echr:LegalFact .
+
+echr:hasParty a owl:ObjectProperty ;
+    rdfs:domain echr:Case ;
+    rdfs:range echr:Party .
+
+echr:hasRespondentCode a owl:DatatypeProperty ;
+    rdfs:domain echr:Case ;
+    rdfs:range xsd:string .
+
+echr:hasViolationFinding a owl:ObjectProperty ;
+    rdfs:label "has Violation Finding"^^xsd:string ;
+    rdfs:comment "Links a case to violation or non-violation findings."^^xsd:string ;
+    rdfs:domain echr:Case ;
+    rdfs:range echr:ViolationFinding .
+
+echr:hasYear a owl:DatatypeProperty ;
+    rdfs:domain echr:Case ;
+    rdfs:range xsd:string .
+
+echr:refersToArticle a owl:ObjectProperty ;
+    rdfs:label "refers To Article"^^xsd:string ;
+    rdfs:comment "Links a legal fact to the article it concerns."^^xsd:string ;
+    rdfs:domain echr:LegalFact ;
+    rdfs:range echr:Article .
+
+echr:Argument a owl:Class ;
+    rdfs:label "Argument"^^xsd:string ;
+    rdfs:comment "Extractable argument target class for later augmentation."^^xsd:string ;
+    rdfs:subClassOf echr:LegalFact .
+
+echr:CaseDocument a owl:Class ;
+    rdfs:label "Case Document"^^xsd:string ;
+    rdfs:comment "Base class for ECHR case records in the seed metadata graph."^^xsd:string ;
+    rdfs:subClassOf owl:Thing .
+
+echr:ConventionArticle a owl:Class ;
+    rdfs:label "Convention Article"^^xsd:string ;
+    rdfs:comment "Convention article concept referenced by a case or finding."^^xsd:string ;
+    rdfs:subClassOf owl:Thing .
+
+echr:Party a owl:Class ;
+    rdfs:label "Party"^^xsd:string ;
+    rdfs:comment "Case party retained for future enrichment."^^xsd:string ;
+    rdfs:subClassOf owl:Thing .
+
+echr:heardBy a owl:ObjectProperty ;
+    rdfs:label "heard By"^^xsd:string ;
+    rdfs:comment "Links a case to the judges who heard it."^^xsd:string ;
+    rdfs:domain echr:Case ;
+    rdfs:range echr:Judge .
+
+echr:invokesArticle a owl:ObjectProperty ;
+    rdfs:label "invokes Article"^^xsd:string ;
+    rdfs:comment "Links a case to referenced Convention articles."^^xsd:string ;
+    rdfs:domain echr:Case ;
+    rdfs:range echr:Article .
+
+echr:Application a owl:Class ;
+    rdfs:label "Application"^^xsd:string ;
+    rdfs:comment "Application number entity linked to a case."^^xsd:string ;
+    rdfs:subClassOf owl:Thing .
+
+echr:Article a owl:Class ;
+    rdfs:label "Article"^^xsd:string ;
+    rdfs:comment "Simplified article class for referenced Convention provisions."^^xsd:string ;
+    rdfs:subClassOf echr:ConventionArticle .
+
+echr:Judge a owl:Class ;
+    rdfs:label "Judge"^^xsd:string ;
+    rdfs:comment "Judge participating in a case."^^xsd:string ;
+    rdfs:subClassOf owl:Thing .
+
+echr:ViolationFinding a owl:Class ;
+    rdfs:label "Violation Finding"^^xsd:string ;
+    rdfs:comment "Structured finding node for violation or non-violation outcomes."^^xsd:string ;
+    rdfs:subClassOf echr:LegalFact .
+
+echr:LegalFact a owl:Class ;
+    rdfs:label "Legal Fact"^^xsd:string ;
+    rdfs:comment "Extractable legal fact target class for later augmentation."^^xsd:string ;
+    rdfs:subClassOf owl:Thing .
+
+echr:Case a owl:Class ;
+    rdfs:label "Case"^^xsd:string ;
+    rdfs:comment "Primary metadata class for judgments and decisions ingested from HUDOC metadata."^^xsd:string ;
+    rdfs:subClassOf echr:CaseDocument .
+

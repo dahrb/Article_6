@@ -5,7 +5,7 @@ Last Updated:
 05.03.26
 
 Status:
-Completed
+Done
 
 History:
 v1_0 - cleans data and combines with judge data and legal systems 
@@ -368,8 +368,8 @@ def map_kpthesaurus(kp_value, key_labels):
 
 def classify_art6_limb(thesaurus_labels):
     """
-    Rreads HUDOC kpthesaurus text and classifies the case into
-    Civil, Criminal, Both, or Unspecified.
+    Reads mapped HUDOC kpthesaurus labels and classifies the case into
+    Civil, Criminal, Constitutional, Both, or Unspecified.
     """
     if thesaurus_labels is None or (isinstance(thesaurus_labels, float) and pd.isna(thesaurus_labels)):
         return "Unspecified"
@@ -382,26 +382,44 @@ def classify_art6_limb(thesaurus_labels):
         return "Unspecified"
 
     normalized = " ".join(labels).lower()
+    normalized = re.sub(r"\s+", " ", normalized).strip()
 
     criminal_keywords = [
+        "criminal charge",
         "criminal proceedings",
+        "penal",
         "extradition",
         "expulsion",
+        "deportation",
+        "criminal offence"
     ]
+
+    constitutional_keywords = [
+        "constitutional proceedings",
+        "constitutional court",
+    ]
+
     civil_keywords = [
+        "civil rights and obligations",
         "civil proceedings",
         "administrative proceedings",
         "disciplinary proceedings",
         "enforcement proceedings",
+        "labour dispute",
+        "employment dispute",
+        "social security",
     ]
 
     is_criminal = any(keyword in normalized for keyword in criminal_keywords)
+    is_constitutional = any(keyword in normalized for keyword in constitutional_keywords)
     is_civil = any(keyword in normalized for keyword in civil_keywords)
 
-    if is_criminal and is_civil:
-        return "Both"
+    if is_criminal and (is_civil or is_constitutional):
+        return "Mixed"
     if is_criminal:
         return "Criminal"
+    if is_constitutional:
+        return "Constitutional"
     if is_civil:
         return "Civil"
     
@@ -529,8 +547,8 @@ def main(args):
 
     print("Converted article, violation, nonviolation, and conclusion to Python lists")
 
-    #classify between civil and criminal cases
-    df["article_6_limb"] = df["kpthesaurus"].apply(classify_art6_limb)
+    #classify between civil and criminal cases using mapped thesaurus labels
+    df["article_6_limb"] = df["kpthesaurus_labels"].apply(classify_art6_limb)
     print("Added article_6_limb classification column")
 
     #map the legal systems affecting the cases

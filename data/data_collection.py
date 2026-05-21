@@ -5,7 +5,7 @@ Last Updated:
 05.03.26
 
 Status:
-Completed
+Done
 
 History:
 v1_0 - retrieves and sorts the cases into judgments/decisions

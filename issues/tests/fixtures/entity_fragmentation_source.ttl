@@ -1,0 +1,49 @@
+# entity_fragmentation_source.ttl
+# ---------------------------------------------------------------------------
+# FIXTURE: Entity fragmentation bug
+#
+# Minimal extract from the Gemini Flash Lite run on case 001-102617
+# (Paksas v. Lithuania), captured 2026-06-09T13:51:16Z.
+#
+# Reification/prov triples stripped — plain Turtle only, sufficient to
+# demonstrate the fragmentation pattern.
+#
+# Rolandas Paksas (sole applicant) was minted as FOUR distinct IRIs by
+# different chunks, with no owl:sameAs links between them:
+#
+#   doc1:applicant_001             chunk 86e9972d6204 + a2abc30ec4bd
+#   doc1:applicant_1               chunk 02a4aa08c35c
+#   doc1:applicant_paksas          chunk 78f449ee7c84
+#   doc1:applicant_rolandas_paksas chunk eef3687856ce
+#
+# Additionally doc1:applicant_001 itself has two labels from two chunks
+# (compounding the multi-label bug on a fragmented IRI).
+# ---------------------------------------------------------------------------
+
+@prefix doc1: <https://github.com/dahrb/Art_6/tree/main/facts/001-102617#> .
+@prefix seed: <https://github.com/dahrb/Art_6/tree/main/ontology/seed.ttl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <https://schema.org/> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+# IRI 1: doc1:applicant_001  (chunks 86e9972d6204 + a2abc30ec4bd)
+# Compound bug: two labels from two different chunks
+doc1:applicant_001 a schema:Person ;
+    rdfs:label "Applicant" ;                      # chunk 86e9972d6204
+    rdfs:label "Former President of Lithuania" .  # chunk a2abc30ec4bd — different chunk
+
+# IRI 2: doc1:applicant_1  (chunk 02a4aa08c35c) — separate entity, same person
+doc1:applicant_1
+    rdfs:label "Applicant" .
+
+# IRI 3: doc1:applicant_paksas  (chunk 78f449ee7c84)
+doc1:applicant_paksas a seed:Party ;
+    rdfs:label "Rolandas Paksas" .
+
+# IRI 4: doc1:applicant_rolandas_paksas  (chunk eef3687856ce)
+doc1:applicant_rolandas_paksas a seed:Party , schema:Person ;
+    rdfs:label "Rolandas Paksas" .
+
+# NOTE: none of the four IRIs above are linked with owl:sameAs.
+# A SPARQL query on any single IRI will miss facts under the other three.

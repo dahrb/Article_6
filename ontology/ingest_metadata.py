@@ -92,8 +92,6 @@ class IngestionContext:
     formation_nodes: dict[str, URIRef] = field(default_factory=dict)
     judgment_type_nodes: dict[str, URIRef] = field(default_factory=dict)
     keyword_nodes: dict[str, URIRef] = field(default_factory=dict)
-    application_to_cases: dict[str, set[URIRef]] = field(default_factory=dict)
-    cited_applications_by_case: dict[URIRef, list[str]] = field(default_factory=dict)
     finding_counter: int = 0
 
 
@@ -106,6 +104,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--judges-json", type=Path, default=DEFAULT_JUDGES_JSON)
     parser.add_argument("--output-ttl", type=Path, default=DEFAULT_METADATA_TTL)
     parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument(
+        "--no-fuseki",
+        dest="push_fuseki",
+        action="store_false",
+        default=True,
+        help="Skip pushing the output Turtle to Fuseki after writing.",
+    )
+    parser.add_argument(
+        "--fuseki-dataset",
+        dest="fuseki_dataset",
+        default=None,
+        help="Override the Fuseki dataset name (default: FUSEKI_DATASET from ontology.env).",
+    )
     return parser.parse_args()
 
 
@@ -615,7 +626,6 @@ def map_case_applications(ctx: IngestionContext, record: dict[str, Any], case_ur
     for app_number in case_app_numbers:
         app_uri = ensure_application(ctx, app_number)
         ctx.graph.add((case_uri, ctx.schema_ns.hasApplication, app_uri))
-        ctx.application_to_cases.setdefault(app_number, set()).add(case_uri)
         audit.related_nodes.add(app_uri)
     if case_app_numbers:
         add_audit_value(audit, "case_appno", case_app_numbers)
@@ -623,7 +633,6 @@ def map_case_applications(ctx: IngestionContext, record: dict[str, Any], case_ur
     for app_number in cited_app_numbers:
         app_uri = ensure_application(ctx, app_number)
         ctx.graph.add((case_uri, ctx.schema_ns.citesApplication, app_uri))
-        ctx.cited_applications_by_case.setdefault(case_uri, []).append(app_number)
         audit.related_nodes.add(app_uri)
     if cited_app_numbers:
         add_audit_value(audit, "cited_appno", cited_app_numbers)
@@ -739,18 +748,6 @@ def ingest_record(ctx: IngestionContext, record: dict[str, Any]) -> None:
     map_case_judges(ctx, record, case_uri, audit)
 
 
-def add_case_citation_links(ctx: IngestionContext) -> None:
-    for case_uri, app_numbers in ctx.cited_applications_by_case.items():
-        for app_number in unique_preserving_order(app_numbers):
-            for cited_case_uri in sorted(ctx.application_to_cases.get(app_number, set()), key=str):
-                if cited_case_uri != case_uri:
-                    ctx.graph.add((case_uri, ctx.schema_ns.citesCase, cited_case_uri))
-                    for audit in ctx.audits.values():
-                        if audit.case_uri == case_uri:
-                            audit.related_nodes.add(cited_case_uri)
-                            break
-
-
 def build_metadata_graph(args: argparse.Namespace) -> tuple[Graph, list[CaseAudit]]:
     if not args.schema_ttl.exists():
         raise FileNotFoundError(f"Schema file not found: {args.schema_ttl}")
@@ -774,7 +771,6 @@ def build_metadata_graph(args: argparse.Namespace) -> tuple[Graph, list[CaseAudi
     for record in frame.to_dict(orient="records"):
         ingest_record(ctx, record)
 
-    add_case_citation_links(ctx)
     audits = sorted(ctx.audits.values(), key=lambda audit: audit.itemid)
     return graph, audits
 
@@ -782,6 +778,53 @@ def build_metadata_graph(args: argparse.Namespace) -> tuple[Graph, list[CaseAudi
 def write_graph(graph: Graph, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     graph.serialize(destination=output_path, format="turtle")
+
+
+# ---
+# Fuseki upload
+# ---
+
+def _load_fuseki_config() -> dict[str, str]:
+    """Read FUSEKI_* variables from ontology.env next to this script."""
+    config: dict[str, str] = {}
+    env_path = SCRIPT_DIR / "ontology.env"
+    if not env_path.exists():
+        return config
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        if key.strip().startswith("FUSEKI_"):
+            config[key.strip()] = value.strip()
+    return config
+
+
+def push_to_fuseki(ttl_path: Path, graph_iri: str, dataset_override: str | None = None) -> None:
+    """Upload a Turtle file to a Fuseki named graph via the Graph Store Protocol (PUT)."""
+    import requests
+
+    cfg = _load_fuseki_config()
+    base_uri = cfg.get("FUSEKI_URI", "").rstrip("/")
+    dataset = dataset_override or cfg.get("FUSEKI_DATASET", "")
+    auth_raw = cfg.get("FUSEKI_AUTH", "")
+
+    if not base_uri or not dataset:
+        raise RuntimeError("FUSEKI_URI and FUSEKI_DATASET must be set in ontology.env")
+
+    user, _, password = auth_raw.partition("/")
+    endpoint = f"{base_uri}/{dataset}/data"
+
+    response = requests.put(
+        endpoint,
+        params={"graph": graph_iri},
+        data=ttl_path.read_bytes(),
+        headers={"Content-Type": "text/turtle"},
+        auth=(user, password),
+        timeout=600,
+    )
+    response.raise_for_status()
+    print(f"Pushed {ttl_path.name} to Fuseki graph <{graph_iri}>: HTTP {response.status_code}")
 
 
 def main() -> None:
@@ -792,6 +835,9 @@ def main() -> None:
     case_count = sum(1 for _ in graph.subjects(RDF.type, Namespace(SCHEMA_BASE_IRI).CaseDocument))
     print(f"Wrote metadata Turtle to {args.output_ttl}")
     print(f"Cases ingested: {case_count}")
+
+    if args.push_fuseki:
+        push_to_fuseki(args.output_ttl, DATA_ONTOLOGY_IRI, dataset_override=args.fuseki_dataset)
 
 
 if __name__ == "__main__":

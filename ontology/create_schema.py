@@ -6,7 +6,10 @@ Last Updated:
 20.05.26
 
 Status:
-Done
+Need to update and fix
+- 1. ensure namespace is seed not echr
+- 2. ensure correct datatypes
+- 3. expand with ontocast suggestions potentially 
 
 History:
 v1_0 - simplified schema generation
@@ -109,6 +112,12 @@ with wd_onto:
     class Q88483334(Thing): #financial status
         pass
     class Q40348(Thing):  # "lawyer"
+        pass
+    class Q329777(Thing):  # appeal
+        pass
+    class Q190752(Thing):  # cassation / supreme court appeal
+        pass
+    class Q707748(Thing):  # legal aid
         pass
 
 # Reference Dublin Core properties
@@ -305,7 +314,55 @@ with onto:
     Keyword.is_a.append(skos_onto.Concept)
     Keyword.label = ["Thesaurus Keyword"]
     Keyword.comment = ["A controlled HUDOC thesaurus concept. Aligned to skos:Concept."]
-    
+
+    class DomesticProceeding(Thing):
+        pass
+    DomesticProceeding.label = ["Domestic Proceeding"]
+    DomesticProceeding.comment = ["An individual legal event in the domestic lifecycle of the case."]
+
+    class Claim(Thing):
+        pass
+    Claim.label = ["Claim"]
+    Claim.comment = ["Substantive relief or demand asserted by a party in domestic proceedings."]
+
+    class AssessmentCriterion(Thing):
+        pass
+    AssessmentCriterion.label = ["Assessment Criterion"]
+    AssessmentCriterion.comment = ["Criterion used in legal assessment, including reasonable-time analysis under Article 6."]
+
+    class Appeal(Application):
+        pass
+    Appeal.is_a.append(wd_onto.Q329777)
+    Appeal.label = ["Appeal"]
+    Appeal.comment = ["A procedural filing seeking review of a lower decision in domestic proceedings."]
+
+    class SupremeCourtAppeal(Appeal):
+        pass
+    SupremeCourtAppeal.is_a.append(wd_onto.Q190752)
+    SupremeCourtAppeal.label = ["Supreme Court Appeal"]
+    SupremeCourtAppeal.comment = ["A cassation appeal in domestic proceedings which have gone to the highest court."]
+
+    class LegalAidApplication(Application):
+        pass
+    LegalAidApplication.is_a.append(wd_onto.Q707748)
+    LegalAidApplication.label = ["Legal Aid Application"]
+    LegalAidApplication.comment = ["An application requesting legal aid or court-appointed representation in domestic proceedings."]
+
+    class ReasonableTimeAssessment(LegalFinding):
+        pass
+    ReasonableTimeAssessment.label = ["Reasonable Time Assessment"]
+    ReasonableTimeAssessment.comment = ["Assessment finding for whether proceedings were completed within a reasonable time under Article 6."]
+
+    class ExcessiveLengthClaim(LegalFinding):
+        pass
+    ExcessiveLengthClaim.label = ["Excessive Length Claim"]
+    ExcessiveLengthClaim.comment = ["A legal finding or claim asserting that the length of proceedings was excessive."]
+
+    class InterlocutoryDecision(Decision):
+        pass
+    InterlocutoryDecision.label = ["Interlocutory Decision"]
+    InterlocutoryDecision.comment = ["A decision made during ongoing domestic proceedings on an interim procedural matter."]
+
     # Disjoint constraint
     AllDisjoint([Judgment, Decision])
 
@@ -432,6 +489,37 @@ with onto:
         range = [str]
     hasConclusionText.label = ["has Conclusion Text"]
     hasConclusionText.comment = ["Raw, disorganized conclusion text from the metadata, preserved as a literal string to capture exact translations and nuances."]
+
+    class hasDecisionDate(DataProperty):
+        domain = [DomesticProceeding]
+        range = [date]
+    hasDecisionDate.label = ["has decision date"]
+    hasDecisionDate.comment = ["Date of the decision issued by the domestic court or authority in this proceeding."]
+
+    class legalAidRequestedOn(DataProperty):
+        domain = [LegalAidApplication]
+        range = [date]
+    legalAidRequestedOn.label = ["legal Aid Requested On"]
+    legalAidRequestedOn.comment = ["Date on which a LegalAidApplication was filed."]
+
+    class legalAidGrantedOn(DataProperty):
+        domain = [LegalAidApplication]
+        range = [date]
+    legalAidGrantedOn.label = ["legal Aid Granted On"]
+    legalAidGrantedOn.comment = ["Date on which legal aid was granted for a LegalAidApplication."]
+
+    class lawyerAppointedOn(DataProperty):
+        domain = [LegalAidApplication]
+        range = [date]
+    lawyerAppointedOn.label = ["lawyer Appointed On"]
+    lawyerAppointedOn.comment = ["Date on which counsel was appointed following a LegalAidApplication."]
+
+    class supremeCourtAppealLodgedOn(DataProperty):
+        domain = [SupremeCourtAppeal]
+        range = [date]
+    supremeCourtAppealLodgedOn.label = ["supreme Court Appeal Lodged On"]
+    supremeCourtAppealLodgedOn.comment = ["Date on which a SupremeCourtAppeal was lodged with the highest domestic court."]
+
 # ---------------------------------------------------------------------------
 # Schema Definition - Object Properties
 # ---------------------------------------------------------------------------
@@ -486,7 +574,7 @@ with onto:
 
     class hasGender(ObjectProperty):
         pass
-    hasGender.domain = [Party]
+    hasGender.domain = [Party, Judge]
     hasGender.range = [Gender]
     hasGender.label = ["has Gender"]
     hasGender.comment = ["IRI-based controlled gender value inferred from explicit evidence when available."]
@@ -599,6 +687,48 @@ with onto:
     hasKeyword.label = ["has Keyword Label"]
     hasKeyword.comment = ["Metadata-derived normalized thesaurus labels from kpthesaurus_labels for searchable topical indexing."]
 
+    class followsProceeding(ObjectProperty):
+        domain = [DomesticProceeding]
+        range = [DomesticProceeding]
+    followsProceeding.label = ["follows proceeding"]
+    followsProceeding.comment = ["Links a proceeding to the one that chronologically preceded it."]
+
+    class hasCourt(ObjectProperty):
+        domain = [DomesticProceeding]
+        range = [foaf_onto.Organization]
+    hasCourt.label = ["has court"]
+    hasCourt.comment = ["Links a domestic proceeding to the court or authority that issued the decision."]
+
+    class appealFiledBy(ObjectProperty):
+        domain = [Appeal]
+        range = [Party]
+    appealFiledBy.label = ["appeal Filed By"]
+    appealFiledBy.comment = ["Links an Appeal to the Party that filed it."]
+
+    class failedToConsiderLegalAid(ObjectProperty):
+        domain = [Decision]
+        range = [LegalAidApplication]
+    failedToConsiderLegalAid.label = ["failed To Consider Legal Aid"]
+    failedToConsiderLegalAid.comment = ["Links a Decision to a pending LegalAidApplication that was not considered."]
+
+    class complainedAboutLength(ObjectProperty):
+        domain = [Party]
+        range = [ExcessiveLengthClaim]
+    complainedAboutLength.label = ["complained About Length"]
+    complainedAboutLength.comment = ["Links a Party to an ExcessiveLengthClaim alleging excessive proceedings duration."]
+
+    class usesAssessmentCriterion(ObjectProperty):
+        domain = [ReasonableTimeAssessment]
+        range = [AssessmentCriterion]
+    usesAssessmentCriterion.label = ["uses Assessment Criterion"]
+    usesAssessmentCriterion.comment = ["Links a ReasonableTimeAssessment to one or more criteria used in the analysis."]
+
+    class securesClaim(ObjectProperty):
+        domain = [InterlocutoryDecision]
+        range = [Claim]
+    securesClaim.label = ["secures Claim"]
+    securesClaim.comment = ["Links an InterlocutoryDecision to the Claim secured by that interim measure."]
+
 
 # ---------------------------------------------------------------------------
 # Controlled Vocabulary Individuals
@@ -629,7 +759,6 @@ CONTROLLED_VOCAB: list[tuple[str, str, str, str | None]] = [
     ("Gender_Male", "Gender", "Male", "Gender value indicating male identity."),
     ("Gender_NonBinary", "Gender", "Non-binary", "Gender value indicating non-binary identity."),
     ("Gender_Unknown", "Gender", "Unknown", "Gender value used when gender cannot be inferred from available data."),
-    ("Gender_NotStated", "Gender", "Not stated", "Gender value used when the source does not explicitly state gender."),
 
     # --- Law System ---
     ("LawSystem_Civil", "LawSystem", "Civic code jurisdiction", "Law-system category for primarily civil-law/codified legal traditions."),

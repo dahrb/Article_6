@@ -1,59 +1,28 @@
 """
-Script to build the sampled metadata parquet used by initial OntoCast runs.
+Build a full judgments parquet (no decisions, no language filter).
 
-Last Updated:
-19.05.26
-
-Status:
-Done
-
-History:
-v1_0 - extract notebook sampling and text-join logic into standalone script
+Behavioral note (important):
+- Every judgments row is included from data/art_6_judgments_metadata_processed.json.
+- No English-only filter is applied.
+- For rows where full_text is longer than 40,000 characters, full_text is replaced
+    with the extracted "facts" section. The replacement status is recorded in
+    full_text_fallback_applied.
 """
 
 from pathlib import Path
 import json
 import re
 
-import numpy as np
 import polars as pl
 
-SEED = 42
-TARGET_PER_LEVEL = 50
+MAX_FULL_TEXT_CHARS = 40_000
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = REPO_ROOT / "data"
 TEXT_DIR = DATA_DIR / "processed_json"
-OUTPUT_PATH = DATA_DIR / "sample_metadata.parquet"
+OUTPUT_PATH = DATA_DIR / "judgments_metadata_full.parquet"
 
-itemid_pattern = re.compile(r'"itemid"\s*:\s*"([^"]+)"')
 invalid_escape_re = re.compile(r"\\(?![\"\\/bfnrtu])")
-
-
-def load_text_itemids(jsonl_path: Path) -> set[str]:
-    itemids = set()
-    with jsonl_path.open("r", encoding="utf-8", errors="replace") as handle:
-        for line in handle:
-            match = itemid_pattern.search(line)
-            if match:
-                itemids.add(match.group(1))
-    return itemids
-
-
-def temporal_spread_sample(group_df: pl.DataFrame, target_n: int) -> pl.DataFrame:
-    n = group_df.height
-    if n <= target_n:
-        return group_df
-
-    sorted_df = group_df.sort("year")
-    idx = np.linspace(0, n - 1, num=target_n, dtype=int)
-
-    return (
-        sorted_df.with_row_index("_row_idx")
-        .filter(pl.col("_row_idx").is_in(idx.tolist()))
-        .drop("_row_idx")
-    )
-
 
 def _safe_json_load(line: str) -> dict | None:
     line = line.strip()
@@ -144,14 +113,16 @@ def load_text_rows(file_path: Path, source_label: str, keep_ids: set[str]) -> li
 
     return rows
 
-def build_sample_dataframe() -> pl.DataFrame:
-    """Build the sampled metadata dataframe with full text and labeled sections."""
-    np.random.seed(SEED)
+def _facts_fallback_expr(df: pl.DataFrame) -> pl.Expr:
+    candidates = ["facts", "the_facts", "statement_of_facts"]
+    available = [c for c in candidates if c in df.columns]
+    if not available:
+        return pl.lit(None, dtype=pl.Utf8)
+    return pl.coalesce([pl.col(c).cast(pl.Utf8, strict=False) for c in available])
 
-    judgment_text_itemids = sorted(load_text_itemids(TEXT_DIR / "echr_corpus.jsonl"))
-    decision_text_itemids = sorted(load_text_itemids(TEXT_DIR / "echr_decisions_corpus.jsonl"))
-
-    judgments_metadata_raw = pl.read_ndjson(
+def build_judgments_dataframe() -> pl.DataFrame:
+    """Build the full judgments metadata dataframe with text and fallback handling."""
+    judgments_metadata = pl.read_ndjson(
         DATA_DIR / "art_6_judgments_metadata_processed.json",
         infer_schema_length=None,
     ).with_columns(
@@ -159,102 +130,83 @@ def build_sample_dataframe() -> pl.DataFrame:
         pl.col("itemid").cast(pl.Utf8),
     )
 
-    decisions_metadata_raw = pl.read_ndjson(
-        DATA_DIR / "art_6_decisions_metadata_processed.json",
-        infer_schema_length=None,
-    ).with_columns(
-        pl.lit("decisions").alias("source"),
-        pl.col("itemid").cast(pl.Utf8),
-    )
-
-    judgments_metadata = judgments_metadata_raw.filter(pl.col("itemid").is_in(judgment_text_itemids))
-    decisions_metadata = decisions_metadata_raw.filter(pl.col("itemid").is_in(decision_text_itemids))
-
-    metadata = pl.concat([judgments_metadata, decisions_metadata], how="diagonal_relaxed")
-
-    metadata = metadata.with_columns(
-        pl.coalesce(
-            [
-                pl.col("judgementdate").cast(pl.Utf8).str.slice(0, 4).cast(pl.Int32, strict=False),
-                pl.col("ecli").cast(pl.Utf8).str.extract(r":(\d{4}):", 1).cast(pl.Int32, strict=False),
-            ]
-        ).alias("year")
-    )
-
-    metadata_for_sampling = metadata.filter(pl.col("court_level").is_not_null() & pl.col("year").is_not_null())
-
-    sampled_groups = []
-    for level in sorted(metadata_for_sampling["court_level"].unique().to_list()):
-        level_df = metadata_for_sampling.filter(pl.col("court_level") == level)
-        sampled_groups.append(temporal_spread_sample(level_df, TARGET_PER_LEVEL))
-
-    sampled_metadata = pl.concat(sampled_groups, how="diagonal_relaxed")
-
     required_cols = {"itemid", "source"}
-    missing_cols = required_cols - set(sampled_metadata.columns)
+    missing_cols = required_cols - set(judgments_metadata.columns)
     if missing_cols:
-        raise ValueError(f"sampled_metadata is missing required columns: {sorted(missing_cols)}")
+        raise ValueError(f"judgments_metadata is missing required columns: {sorted(missing_cols)}")
 
-    sample_ids_by_source = {
-        "judgments": set(
-            sampled_metadata
-            .filter(pl.col("source") == "judgments")["itemid"]
-            .cast(pl.Utf8)
-            .to_list()
-        ),
-        "decisions": set(
-            sampled_metadata
-            .filter(pl.col("source") == "decisions")["itemid"]
-            .cast(pl.Utf8)
-            .to_list()
-        ),
-    }
+    judgment_ids = set(judgments_metadata["itemid"].cast(pl.Utf8).to_list())
 
     text_rows = []
     text_rows.extend(
         load_text_rows(
             TEXT_DIR / "echr_corpus.jsonl",
             "judgments",
-            sample_ids_by_source["judgments"],
-        )
-    )
-    text_rows.extend(
-        load_text_rows(
-            TEXT_DIR / "echr_decisions_corpus.jsonl",
-            "decisions",
-            sample_ids_by_source["decisions"],
+            judgment_ids,
         )
     )
 
-    text_lookup = (
-        pl.from_dicts(text_rows)
-        .with_columns(
-            pl.col("itemid").cast(pl.Utf8),
-            pl.col("source").cast(pl.Utf8),
+    if text_rows:
+        text_lookup = (
+            pl.from_dicts(text_rows)
+            .with_columns(
+                pl.col("itemid").cast(pl.Utf8),
+                pl.col("source").cast(pl.Utf8),
+            )
+            .unique(subset=["itemid", "source"], keep="first")
         )
-        .unique(subset=["itemid", "source"], keep="first")
-    )
+    else:
+        text_lookup = pl.DataFrame(
+            {
+                "itemid": [],
+                "source": [],
+                "full_text": [],
+                "text_sections": [],
+            },
+            schema={
+                "itemid": pl.Utf8,
+                "source": pl.Utf8,
+                "full_text": pl.Utf8,
+                "text_sections": pl.Null,
+            },
+        )
 
-    base_cols = [c for c in sampled_metadata.columns if c in metadata_for_sampling.columns]
-    sampled_metadata = sampled_metadata.select(base_cols)
-
-    sampled_metadata = (
-        sampled_metadata
+    judgments_metadata = (
+        judgments_metadata
         .with_columns(pl.col("itemid").cast(pl.Utf8))
         .join(text_lookup, on=["itemid", "source"], how="left")
     )
 
-    sampled_metadata = sampled_metadata.drop(["text_sections"], strict=False)
-    return sampled_metadata
+    facts_expr = _facts_fallback_expr(judgments_metadata)
+    fallback_applied_expr = (
+        pl.col("full_text").cast(pl.Utf8, strict=False).str.len_chars() > MAX_FULL_TEXT_CHARS
+    )
+
+    judgments_metadata = judgments_metadata.with_columns(
+        fallback_applied_expr.alias("full_text_fallback_applied"),
+        pl.when(fallback_applied_expr)
+        .then(facts_expr)
+        .otherwise(pl.col("full_text").cast(pl.Utf8, strict=False))
+        .alias("full_text"),
+    )
+
+    judgments_metadata = judgments_metadata.drop(["text_sections"], strict=False)
+    return judgments_metadata
 
 def main() -> None:
-    # Build and persist the new sample parquet used by OntoCast runner scripts.
-    sampled_metadata = build_sample_dataframe()
-    sampled_metadata.write_parquet(OUTPUT_PATH)
+    # Build and persist the full judgments parquet used by OntoCast runner scripts.
+    judgments_metadata = build_judgments_dataframe()
+    judgments_metadata.write_parquet(OUTPUT_PATH)
 
     print(f"Wrote: {OUTPUT_PATH}")
-    print(f"Rows: {sampled_metadata.height}")
-    print(f"Columns: {len(sampled_metadata.columns)}")
+    print(f"Rows: {judgments_metadata.height}")
+    print(f"Columns: {len(judgments_metadata.columns)}")
+    fallback_count = (
+        judgments_metadata
+        .select(pl.col("full_text_fallback_applied").sum().alias("fallback_count"))
+        .item()
+    )
+    print(f"Rows with full_text replaced by facts (>40k chars): {fallback_count}")
 
 if __name__ == "__main__":
     main()

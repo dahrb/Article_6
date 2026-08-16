@@ -1,12 +1,10 @@
-# Pre-commit hooks for article_6.
+# Pre-commit hooks for domestic_proceedings.
 # This file must stay at the git root - pre-commit resolves it from there.
 # Run on all files:  pre-commit run --all-files
 # Update hook revs:  pre-commit autoupdate
 
 # Generated artifacts, vendored web assets and large data files are excluded:
 # formatting them is noise, and some are far too big to rewrite on every commit.
-# Patterns are unanchored so they hold regardless of which top-level project
-# directory (domestic_proceedings/, demographics/, ...) a file sits under.
 exclude: |
   (?x)(
     (^|/)_book/|

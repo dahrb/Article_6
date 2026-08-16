@@ -1,0 +1,53 @@
+# Pre-commit hooks for article_6.
+# This file must stay at the git root - pre-commit resolves it from there.
+# Run on all files:  pre-commit run --all-files
+# Update hook revs:  pre-commit autoupdate
+
+# Generated artifacts, vendored web assets and large data files are excluded:
+# formatting them is noise, and some are far too big to rewrite on every commit.
+# Patterns are unanchored so they hold regardless of which top-level project
+# directory (domestic_proceedings/, demographics/, ...) a file sits under.
+exclude: |
+  (?x)(
+    (^|/)_book/|
+    (^|/)quarto/[^/]*_files/|
+    (^|/)tests/fixtures/|
+    (^|/)old/|
+    (^|/)mappings/[^/]*\.csv$|
+    (^|/)uv\.lock$|
+    \.ttl$|
+    \.parquet$
+  )
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      # Stop another 52 MB file entering history by accident.
+      - id: check-added-large-files
+        args: [--maxkb=5000]
+      # Catches an accidentally committed SSH/PEM key.
+      - id: detect-private-key
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  # Secret scanning. This repo is public and has leaked a credential before,
+  # so scan staged changes on every commit.
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.0
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.3
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+      - id: ruff-format

@@ -22,6 +22,17 @@ from pathlib import Path
 import pandas as pd
 import pycountry
 
+from art6.paths import (
+    JUDGES_CSV,
+    JUDGES_PROCESSED_JSON,
+    JUDGMENTS_METADATA_JSON,
+    JUDGMENTS_METADATA_PROCESSED_JSON,
+    KEY_LABELS_JSON,
+    LAW_SYSTEM_MAPPING_JSON,
+    UNMATCHED_JUDGES_TXT,
+)
+from art6.utils.appno import clean_appnos
+
 # -----------------------------
 # Setup
 # -----------------------------
@@ -93,17 +104,19 @@ TYPE_DESCRIPTION_MAPPING = {
 SIMILARITY_THRESHOLD = 0.7
 
 
-def parse_args():
+def parse_args(argv=None):
     parser = argparse.ArgumentParser(description="process ECHR metadata.")
     parser.add_argument(
         "--input-json",
-        default="data/art_6_judgments_metadata.json",
-        help="Input JSONL metadata file.",
+        type=Path,
+        default=JUDGMENTS_METADATA_JSON,
+        help="Input JSONL metadata file (default: the judgments metadata).",
     )
     parser.add_argument(
         "--output-json",
-        default="data/art_6_judgments_metadata_processed.json",
-        help="Output processed JSONL file.",
+        type=Path,
+        default=JUDGMENTS_METADATA_PROCESSED_JSON,
+        help="Output processed JSONL file (default: the processed judgments metadata).",
     )
     parser.add_argument(
         "--similarity-threshold",
@@ -111,7 +124,7 @@ def parse_args():
         default=SIMILARITY_THRESHOLD,
         help="Fuzzy matching threshold for judges (0-1).",
     )
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
 # -----------------------------
@@ -147,15 +160,6 @@ def process_appno_columns(df):
     removes appnos for that case i.e. appellants from the extracted and sclappnos to differentiate them
     as being citations or referenced cases
     """
-
-    def clean_appnos(text):
-        """
-        clean the appnos column with different appnos linked to a judgment
-        """
-        cleaned = re.sub(r"[^0-9/ ;]", ";", text)
-        cleaned = cleaned.replace(" ", ";")
-        cleaned = re.sub(r";+", ";", cleaned).strip(";")
-        return cleaned
 
     # clean appnos
     df["appno_clean"] = df["appno"].apply(clean_appnos)
@@ -486,25 +490,6 @@ def get_law_system(country_list, law_system_mapping):
     return "Mixed"
 
 
-def resolve_path(path_str, cwd, base_dir, output=False):
-    """resolve input/output paths using cwd first and script dir fallback for inputs."""
-
-    path = Path(path_str)
-    if path.is_absolute():
-        return path
-
-    cwd_candidate = cwd / path
-    if output:
-        return cwd_candidate
-
-    base_candidate = base_dir / path
-    if cwd_candidate.exists():
-        return cwd_candidate
-    if base_candidate.exists():
-        return base_candidate
-    return cwd_candidate
-
-
 def save_processed_dataset(df, output_json_path):
     """saves data"""
     df.to_json(output_json_path, orient="records", lines=True, date_format="iso")
@@ -517,34 +502,18 @@ def save_processed_dataset(df, output_json_path):
 
 
 def main(args):
-    base_dir = Path(__file__).resolve().parent
-    cwd = Path.cwd()
+    # reference data lives at fixed repo locations; only the in/out metadata
+    # files are caller-configurable
+    input_json_path = args.input_json
+    output_json_path = args.output_json
+    judges_csv_path = JUDGES_CSV
+    key_labels_path = KEY_LABELS_JSON
+    law_system_path = LAW_SYSTEM_MAPPING_JSON
+    judges_output_path = JUDGES_PROCESSED_JSON
+    unmatched_path = UNMATCHED_JUDGES_TXT
 
-    input_json_path = resolve_path(args.input_json, cwd=cwd, base_dir=base_dir)
-    output_json_path = resolve_path(
-        args.output_json, cwd=cwd, base_dir=base_dir, output=True
-    )
-    judges_csv_path = resolve_path(
-        "data/additional_data/judges.csv", cwd=cwd, base_dir=base_dir
-    )
-    key_labels_path = resolve_path(
-        "data/mappings/key_labels.json", cwd=cwd, base_dir=base_dir
-    )
-    law_system_path = resolve_path(
-        "data/mappings/law_system_mapping.json", cwd=cwd, base_dir=base_dir
-    )
-    judges_output_path = resolve_path(
-        "data/additional_data/judges_processed.json",
-        cwd=cwd,
-        base_dir=base_dir,
-        output=True,
-    )
-    unmatched_path = resolve_path(
-        "data/additional_data/unmatched_judges.txt",
-        cwd=cwd,
-        base_dir=base_dir,
-        output=True,
-    )
+    output_json_path.parent.mkdir(parents=True, exist_ok=True)
+    unmatched_path.parent.mkdir(parents=True, exist_ok=True)
 
     if not 0.0 <= args.similarity_threshold <= 1.0:
         raise ValueError("--similarity-threshold must be between 0 and 1.")

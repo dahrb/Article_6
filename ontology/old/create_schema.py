@@ -29,7 +29,7 @@ from rdflib import Graph, Literal, Namespace, OWL, RDF, RDFS, URIRef, XSD, FOAF
 from rdflib.namespace import DCTERMS, PROV
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
-REPO_ROOT = SCRIPT_DIR.parent
+REPO_ROOT = SCRIPT_DIR.parent.parent  # ontology/old/ -> repo root
 
 # ---------------------------------------------------------------------------
 # Defaults

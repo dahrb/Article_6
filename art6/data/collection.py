@@ -20,6 +20,17 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
+from art6.paths import (
+    APPNO_MAPPING_CSV,
+    DATA_DIR,
+    DECISION_TEXT_DIR,
+    DECISIONS_METADATA_JSON,
+    JUDGMENT_TEXT_DIR,
+    JUDGMENTS_METADATA_JSON,
+    RAW_METADATA_JSON,
+)
+from art6.utils.appno import clean_appnos
+
 
 def collect_cases(
     length: int = 1000, article: str = "6", start_year: int = 1955, end_year: int = 2026
@@ -80,9 +91,10 @@ def collect_cases(
         # save as a raw json
         df = pd.DataFrame(raw_jsons)
 
-        # uncomment if you want to save full unprocessed metadata
-        # df.to_json("./data/hudoc_art6_raw_metadata.json", orient="records", lines=True)
-        # print(f"Saved {len(df)} records to ./data/hudoc_art6_raw_metadata.json")
+        # save full unprocessed metadata
+        RAW_METADATA_JSON.parent.mkdir(parents=True, exist_ok=True)
+        df.to_json(RAW_METADATA_JSON, orient="records", lines=True)
+        print(f"Saved {len(df)} records to {RAW_METADATA_JSON}")
 
         return df
 
@@ -127,15 +139,6 @@ def appno_mapping(df: pd.DataFrame):
     creates a mapping of all appnos to relevant ecli and itemids for later use
     """
 
-    def clean_appnos(text):
-        """
-        clean the appnos column with different appnos linked to a judgment
-        """
-        cleaned = re.sub(r"[^0-9/ ;]", ";", text)
-        cleaned = cleaned.replace(" ", ";")
-        cleaned = re.sub(r";+", ";", cleaned).strip(";")
-        return cleaned
-
     df["appno_clean"] = df["appno"].apply(clean_appnos)
 
     # create list of appnos
@@ -148,8 +151,10 @@ def appno_mapping(df: pd.DataFrame):
     # remove empty results
     mapping_df = mapping_df[mapping_df["individual_appno"] != ""]
 
-    # save mapping
-    mapping_df.to_csv("./data/echr_appno_mapping.csv", index=False)
+    # save mapping alongside the other tracked mappings
+    APPNO_MAPPING_CSV.parent.mkdir(parents=True, exist_ok=True)
+    mapping_df.to_csv(APPNO_MAPPING_CSV, index=False)
+    print(f"Saved {len(mapping_df)} appno rows to {APPNO_MAPPING_CSV}")
 
 
 def sort_language(df: pd.DataFrame):
@@ -172,7 +177,7 @@ def sort_language(df: pd.DataFrame):
     return df
 
 
-def retrieve_text(data, out_dir="./data/case_text/"):
+def retrieve_text(data, out_dir=DATA_DIR / "case_text"):
     """
     downloads and stores the .html files for each case in the selection
     """
@@ -219,7 +224,7 @@ def retrieve_text(data, out_dir="./data/case_text/"):
             print(f"Error fetching {id}: {e}")
 
 
-def check_retrieval(data: pd.DataFrame, case_text_dir: str = "./data/case_text/"):
+def check_retrieval(data: pd.DataFrame, case_text_dir=DATA_DIR / "case_text"):
     """
     validates that case text has been retrieved for each ECLI in the dataset checking
     that for each unique ECLI, there is a corresponding .html file in the case_text directory.
@@ -270,7 +275,7 @@ def check_retrieval(data: pd.DataFrame, case_text_dir: str = "./data/case_text/"
     return valid_data, missing_eclis
 
 
-def data_no_dupe(data: pd.DataFrame, case_text_dir: str = "./data/case_text/"):
+def data_no_dupe(data: pd.DataFrame, case_text_dir=DATA_DIR / "case_text"):
     """
     removes duplicates from the dataset, keeping only cases with retrieved text.
     prioritizes English versions over French, but only if case text exists.
@@ -312,14 +317,13 @@ def data_no_dupe(data: pd.DataFrame, case_text_dir: str = "./data/case_text/"):
     return deduped
 
 
-if __name__ == "__main__":
-    # recommended running of the functions within this script
+def main():
+    """recommended running of the functions within this module"""
 
     # scrape the case metadata
     raw_df = collect_cases()
-
-    # process the cases into their primary case types
-    raw_df = pd.read_json("./data/hudoc_art6_raw_metadata.json", lines=True)
+    if raw_df is None:
+        raise SystemExit("HUDOC returned no records - nothing to process.")
 
     # create an appno -> ECLI mapping
     appno_mapping(raw_df)
@@ -332,26 +336,23 @@ if __name__ == "__main__":
     judgments_lang = sort_language(judgments_data)
     decisions_lang = sort_language(decisions_data)
 
-    retrieve_text(judgments_lang, out_dir="./data/judgment_text/")
+    retrieve_text(judgments_lang, out_dir=JUDGMENT_TEXT_DIR)
     valid_judgments, _ = check_retrieval(
-        judgments_lang, case_text_dir="./data/judgment_text/"
+        judgments_lang, case_text_dir=JUDGMENT_TEXT_DIR
     )
 
-    retrieve_text(decisions_lang, out_dir="./data/decision_text/")
+    retrieve_text(decisions_lang, out_dir=DECISION_TEXT_DIR)
     valid_decisions, _ = check_retrieval(
-        decisions_lang, case_text_dir="./data/decision_text/"
+        decisions_lang, case_text_dir=DECISION_TEXT_DIR
     )
 
-    judgments_final = data_no_dupe(
-        valid_judgments, case_text_dir="./data/judgment_text/"
-    )
-    decisions_final = data_no_dupe(
-        valid_decisions, case_text_dir="./data/decision_text/"
-    )
+    judgments_final = data_no_dupe(valid_judgments, case_text_dir=JUDGMENT_TEXT_DIR)
+    decisions_final = data_no_dupe(valid_decisions, case_text_dir=DECISION_TEXT_DIR)
 
-    judgments_final.to_json(
-        "./data/art_6_judgments_metadata.json", orient="records", lines=True
-    )
-    decisions_final.to_json(
-        "./data/art_6_decisions_metadata.json", orient="records", lines=True
-    )
+    JUDGMENTS_METADATA_JSON.parent.mkdir(parents=True, exist_ok=True)
+    judgments_final.to_json(JUDGMENTS_METADATA_JSON, orient="records", lines=True)
+    decisions_final.to_json(DECISIONS_METADATA_JSON, orient="records", lines=True)
+
+
+if __name__ == "__main__":
+    main()

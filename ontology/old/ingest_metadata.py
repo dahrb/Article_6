@@ -30,7 +30,7 @@ from rdflib.namespace import DCTERMS
 
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
-REPO_ROOT = SCRIPT_DIR.parent
+REPO_ROOT = SCRIPT_DIR.parent.parent  # ontology/old/ -> repo root
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
@@ -264,7 +264,7 @@ _COUNTRY_TOOLS: tuple[Any, Any] | None = None
 def get_country_tools() -> tuple[Any, Any]:
     global _COUNTRY_TOOLS
     if _COUNTRY_TOOLS is None:
-        from utils.wikidata_query import get_canonical_country_name, get_country_identifier
+        from art6.utils.wikidata_query import get_canonical_country_name, get_country_identifier
 
         _COUNTRY_TOOLS = (get_canonical_country_name, get_country_identifier)
     return _COUNTRY_TOOLS

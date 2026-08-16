@@ -19,13 +19,22 @@ import polars as pl
 import requests
 
 SERVER = "http://localhost:8999"
-PARQUET = Path("C:/Postdoc/Article_6/data/judgments_metadata_full.parquet")
+# this script lives in ontology/old/, so the repo root is two levels up
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+PARQUET = Path(
+    os.getenv("ONTOCAST_PARQUET", REPO_ROOT / "data" / "judgments_metadata_full.parquet")
+)
 N_CASES = None          # None = full dataset
 PARALLEL_WORKERS = int(os.getenv("ONTOCAST_PARALLEL_WORKERS", "8"))
 REQUEST_TIMEOUT_S = int(os.getenv("ONTOCAST_REQUEST_TIMEOUT_S", "1800"))
 MAX_RETRIES = int(os.getenv("ONTOCAST_MAX_RETRIES", "2"))
 RETRY_BACKOFF_S = float(os.getenv("ONTOCAST_RETRY_BACKOFF_S", "20"))
-PROGRESS_FILE = Path(os.getenv("ONTOCAST_PROGRESS_FILE", "C:/Postdoc/Article_6/results/facts_extract/submit_cases_progress.jsonl"))
+PROGRESS_FILE = Path(
+    os.getenv(
+        "ONTOCAST_PROGRESS_FILE",
+        REPO_ROOT / "results" / "facts_extract" / "submit_cases_progress.jsonl",
+    )
+)
 RESUME = os.getenv("ONTOCAST_RESUME", "1").strip().lower() not in {"0", "false", "no"}
 
 # Columns (in priority order) that contain the facts section.

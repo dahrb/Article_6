@@ -35,7 +35,7 @@ CASE_INDEX: int  = 121    # HARUTYUNYAN AND HAKOBYAN v. ARMENIA (001-229423) —
 # ───────────────────────────────────────────────────────────────────────────
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
-REPO_ROOT  = SCRIPT_DIR.parent
+REPO_ROOT  = SCRIPT_DIR.parent.parent  # ontology/old/ -> repo root
 
 # ── Load environment ────────────────────────────────────────────────────────
 for _env_path in (REPO_ROOT / "keys.env", SCRIPT_DIR / "ontology.env"):

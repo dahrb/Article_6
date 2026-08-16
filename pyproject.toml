@@ -1,31 +1,38 @@
 [project]
 name = "art-6"
 version = "0.1.0"
-description = "Add your description here"
+description = "Collection and processing pipeline for ECHR Art. 6 case metadata and text"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "bs4>=0.0.2",
-    "docling>=2.92.0",
-    "graflo[dev,docs,plot]>=1.7.26",
     "ipykernel>=7.2.0",
-    "matplotlib>=3.10.8",
-    "ontocast",
-    "openai>=2.24.0",
-    "owlready2>=0.50",
+    "lxml>=5.3.0",
     "pandas>=3.0.0",
-    "pip>=26.0.1",
     "polars>=1.40.1",
-    "pyarrow>=24.0.0",
     "pycountry>=26.2.16",
-    "python-dotenv>=1.2.1",
     "requests>=2.32.5",
-    "seaborn>=0.13.2",
+]
+
+# Dependencies of the archived ontology/old/ code, kept out of the default
+# install:  uv sync --extra ontology
+# Note: those scripts also import `ontocast`, which is not published and was
+# previously wired to a local ../../ontocast checkout. Re-add it as a
+# [tool.uv.sources] path entry if you resurrect that code.
+[project.optional-dependencies]
+ontology = [
+    "matplotlib>=3.10.8",
+    "owlready2>=0.50",
+    "python-dotenv>=1.2.1",
     "sentence-transformers>=5.4.1",
 ]
 
-[tool.uv.sources]
-ontocast = { path = "../../ontocast", editable = true }
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["art6"]
 
 [dependency-groups]
 dev = [

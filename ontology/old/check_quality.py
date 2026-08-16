@@ -28,7 +28,7 @@ from dotenv import load_dotenv
 
 # ── Bootstrap env ────────────────────────────────────────────────────────────
 SCRIPT_DIR = Path(__file__).parent.resolve()
-REPO_ROOT  = SCRIPT_DIR.parent
+REPO_ROOT  = SCRIPT_DIR.parent.parent  # ontology/old/ -> repo root
 
 for _env in (REPO_ROOT / "keys.env", SCRIPT_DIR / "ontology.env"):
     if _env.exists():

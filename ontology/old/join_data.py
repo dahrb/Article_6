@@ -46,7 +46,7 @@ from rdflib.namespace import DCTERMS
 # Paths
 # ---
 SCRIPT_DIR = Path(__file__).parent.resolve()
-REPO_ROOT = SCRIPT_DIR.parent
+REPO_ROOT = SCRIPT_DIR.parent.parent  # ontology/old/ -> repo root
 
 DEFAULT_ENV_FILE = SCRIPT_DIR / "ontology.env"
 DEFAULT_METADATA_TTL = SCRIPT_DIR / "metadata.ttl"

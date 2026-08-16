@@ -4,32 +4,27 @@ build_ontocast_test_set.py
 Selects 10 English-language Art. 6 cases spanning every court level in the sample
 (Grand Chamber, Chamber, Committee, and the admissibility/decision formations) and
 covering violation, non-violation and inadmissibility outcomes, then writes the
-summary + facts sections only to JSON for OntoCast extraction runs against
-issues/ontologies/art6_domestic_extraction.ttl.
+summary + facts sections only to JSON for OntoCast extraction runs.
 
 Only the narrative sections are exported: the Court's own reasoning (law, reasons)
 is withheld so the extraction is scored on what the facts actually state about the
 domestic proceedings.
 
 Output:
-  issues/ontocast_test_set/art6_domestic_test_set.json
+  data/art6_domestic_test_set.json
       - a JSON array of {"case_id", "text"}, one entry per case
 
 Usage:
-  uv run python issues/build_ontocast_test_set.py
+  uv run python -m art6.ontology.build_ontocast_test_set
 """
 
 from __future__ import annotations
 
 import json
-from pathlib import Path
 
 import polars as pl
 
-SCRIPT_DIR = Path(__file__).parent.resolve()
-REPO_ROOT = SCRIPT_DIR.parent
-PARQUET_PATH = SCRIPT_DIR / "sample_metadata.parquet"
-OUT_DIR = SCRIPT_DIR / "ontocast_test_set"
+from art6.paths import ONTOCAST_TEST_SET_JSON, SAMPLE_METADATA_PARQUET, relative
 
 # Keep texts in a band that chunks sanely at CHUNK_MIN_SIZE=10000 / MAX=30000
 MIN_FACTS_CHARS = 2_500
@@ -67,7 +62,7 @@ def build_text(row: dict) -> str:
 
 
 def main() -> None:
-    df = pl.read_parquet(PARQUET_PATH)
+    df = pl.read_parquet(SAMPLE_METADATA_PARQUET)
 
     pool = df.filter(
         (pl.col("languageisocode").cast(pl.Utf8).str.to_uppercase() == "ENG")
@@ -110,18 +105,17 @@ def main() -> None:
         used_states.add(pick["respondent"])
         selected.append({"slot": label, "row": pick})
 
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-
     manifest = [
         {"case_id": entry["row"]["itemid"], "text": build_text(entry["row"])}
         for entry in selected
     ]
 
-    (OUT_DIR / "art6_domestic_test_set.json").write_text(
+    ONTOCAST_TEST_SET_JSON.parent.mkdir(parents=True, exist_ok=True)
+    ONTOCAST_TEST_SET_JSON.write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
     )
 
-    print(f"{len(manifest)} cases -> {OUT_DIR.relative_to(REPO_ROOT)}\n")
+    print(f"{len(manifest)} cases -> {relative(ONTOCAST_TEST_SET_JSON)}\n")
     for entry, case in zip(selected, manifest):
         row = entry["row"]
         print(

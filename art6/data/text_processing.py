@@ -20,8 +20,15 @@ from pathlib import Path
 import pandas as pd
 from bs4 import BeautifulSoup
 
+from art6.paths import (
+    DECISION_TEXT_DIR,
+    DECISIONS_CORPUS_JSONL,
+    JUDGMENT_TEXT_DIR,
+    JUDGMENTS_CORPUS_JSONL,
+)
 
-def parse_args():
+
+def parse_args(argv=None):
     parser = argparse.ArgumentParser(
         description="Process ECHR HTML corpus into structured JSONL."
     )
@@ -52,19 +59,17 @@ def parse_args():
         default=None,
         help="Optional max number of HTML files to process.",
     )
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
 def resolve_defaults(args):
     if args.corpus == "judgments":
-        input_dir = args.input_dir or "data/judgment_text"
-        output_jsonl = args.output_jsonl or "data/processed_json/echr_corpus.jsonl"
+        input_dir = args.input_dir or JUDGMENT_TEXT_DIR
+        output_jsonl = args.output_jsonl or JUDGMENTS_CORPUS_JSONL
         skip_empty_text = args.skip_empty_text
     else:
-        input_dir = args.input_dir or "data/decision_text"
-        output_jsonl = (
-            args.output_jsonl or "data/processed_json/echr_decisions_corpus.jsonl"
-        )
+        input_dir = args.input_dir or DECISION_TEXT_DIR
+        output_jsonl = args.output_jsonl or DECISIONS_CORPUS_JSONL
         # Decisions include many historical conversion shells; skip by default for cleaner corpus.
         skip_empty_text = True
 
@@ -280,8 +285,8 @@ def process_corpus(
     print(f"Errors: {error_count}")
 
 
-def main():
-    args = parse_args()
+def main(args=None):
+    args = args or parse_args()
     cfg = resolve_defaults(args)
 
     print("Running case text processing with configuration:")

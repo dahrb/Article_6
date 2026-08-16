@@ -17,7 +17,8 @@ import polars as pl
 
 MAX_FULL_TEXT_CHARS = 40_000
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+# this script lives in ontology/old/, so the repo root is two levels up
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 DATA_DIR = REPO_ROOT / "data"
 TEXT_DIR = DATA_DIR / "processed_json"
 OUTPUT_PATH = DATA_DIR / "judgments_metadata_full.parquet"

@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 # Paths (adjust if running from a different working directory)
 # ---------------------------------------------------------------------------
 SCRIPT_DIR = Path(__file__).parent.resolve()
-REPO_ROOT = SCRIPT_DIR.parent
+REPO_ROOT = SCRIPT_DIR.parent.parent  # ontology/old/ -> repo root
 PARQUET_PATH = REPO_ROOT / "data" / "sampled_metadata_with_text.parquet"
 
 # ---------------------------------------------------------------------------

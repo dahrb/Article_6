@@ -42,7 +42,7 @@ if hasattr(sys.stderr, "reconfigure"):
 
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
-REPO_ROOT = SCRIPT_DIR.parent
+REPO_ROOT = SCRIPT_DIR.parent.parent  # ontology/old/ -> repo root
 
 DEFAULT_ENV_FILE = "ontology"
 MAX_PARALLEL = 10

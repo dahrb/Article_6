@@ -1,0 +1,165 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/950baeec8e6d/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/950baeec8e6d> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:6"^^xsd:string .
+
+doc:court_of_cassation_appeal_on_points_of_law_2009_08_04 a echr:DomesticProceeding ;
+    rdfs:label "the applicant company lodged an appeal on points of law"@en ;
+    echr:followsProceeding doc:civil_court_of_appeal_appeal_2009_06_25 ;
+    echr:hasCourt doc:authorityCourtOfCassation ;
+    echr:hasDecisionDate "2009-09-23"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible ;
+    echr:hasProceedingStartDate "2009-08-04"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "37"^^xsd:string,
+        "38"^^xsd:string ;
+    echr:hasSupportingQuote "On 23 September 2009 the Court of Cassation declared the applicant company’s appeal on points of law inadmissible."^^xsd:string,
+        "On 4 August 2009 the applicant company lodged an appeal on points of law."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:domestic_proceeding_commercial_court_2007 a echr:DomesticProceeding ;
+    rdfs:label "Claim lodged with the Commercial Court"^^xsd:string ;
+    echr:hasCourt doc:authorityCommercialCourt ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasProceedingStartDate "2007-01-15"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "14"^^xsd:string,
+        "15"^^xsd:string ;
+    echr:hasSupportingQuote "On 15 January 2007 the applicant company lodged a claim with the Commercial Court against the LLC, seeking to recover USD 10,000 from the initial debt of USD 1,213,824."^^xsd:string,
+        "On 2 October 2007 the applicant company amended its initial claim, seeking to recover a total of USD 1,516,442 and EUR 116,600 from the LLC, including the principal debt, the loan and interest on both."^^xsd:string ;
+    echr:isProceedingInCase doc:caseScholzAgVArmenia .
+
+doc:proc_arbitration_tribunal_2008 a echr:DomesticProceeding ;
+    rdfs:label "applicant company lodged a claim with the Arbitration Tribunal"^^xsd:string ;
+    echr:hasCourt doc:authorityArbitrationTribunal ;
+    echr:hasProceedingStartDate "2008-09-17"^^xsd:date ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "25"^^xsd:string ;
+    echr:hasSupportingQuote "On 17 September 2008 the applicant company lodged a claim with the Arbitration Tribunal, seeking to recover EUR 116,600, the amount of the loan and interest."^^xsd:string ;
+    echr:isProceedingInCase doc:caseDocumentUntyped .
+
+doc:proc_commercial_court_appeal_2007 a echr:DomesticProceeding ;
+    rdfs:label "three-judge bench of the Commercial Court rejected the complaint submitted by the applicant company"^^xsd:string ;
+    echr:followsProceeding doc:proc_commercial_court_first_instance_2007 ;
+    echr:hasCourt doc:authorityCommercialCourt ;
+    echr:hasDecisionDate "2007-12-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingStartDate "2007-11-23"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "20"^^xsd:string,
+        "21"^^xsd:string ;
+    echr:hasSupportingQuote "On 10 December 2007 a three-judge bench of the Commercial Court rejected the complaint submitted by the applicant company."^^xsd:string,
+        "On 23 November 2007 the applicant company lodged a complaint concerning the decision to leave the claim and counterclaim unexamined."^^xsd:string ;
+    echr:isProceedingInCase doc:caseDocumentUntyped .
+
+doc:arbitration_refusal_2008 a echr:DomesticProceeding ;
+    rdfs:label "the President of the Arbitration Tribunal informed the applicant company that its request to start arbitration proceedings would not be granted."@en ;
+    echr:hasCourt doc:authorityArbitrationTribunal ;
+    echr:hasDecisionDate "2008-10-07"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelUnknown ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "26"^^xsd:string ;
+    echr:hasSupportingQuote "Consequently, in the absence of an arbitration agreement between the parties, the [Arbitration Tribunal] cannot start arbitration proceedings."^^xsd:string .
+
+doc:authorityCivilCourtOfAppeal a echr:DomesticAuthority ;
+    rdfs:label "Civil Court of Appeal"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Civil Court of Appeal"@en .
+
+doc:authorityCourtOfCassation a echr:DomesticAuthority ;
+    rdfs:label "Court of Cassation"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Court of Cassation"@en .
+
+doc:authorityDistrictCourt a echr:DomesticAuthority ;
+    rdfs:label "Kentron and Nork-Marash District Court of Yerevan"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Kentron and Nork-Marash District Court of Yerevan"@en .
+
+doc:authorityYerevanCivilCourt a echr:DomesticAuthority ;
+    rdfs:label "Yerevan Civil Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Yerevan Civil Court"@en .
+
+doc:caseScholzAgVArmenia a echr:CaseDocument ;
+    rdfs:label "Scholz AG v. Armenia (Application no. 16528/10)"^^xsd:string .
+
+doc:civil_court_of_appeal_appeal_2009_06_25 a echr:DomesticProceeding ;
+    rdfs:label "the applicant company lodged an appeal"@en ;
+    echr:followsProceeding doc:district_court_2009_03_13 ;
+    echr:hasCourt doc:authorityCivilCourtOfAppeal ;
+    echr:hasDecisionDate "2009-07-21"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasProceedingStartDate "2009-06-25"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "34"^^xsd:string,
+        "36"^^xsd:string ;
+    echr:hasSupportingQuote "On 21 July 2009 the Civil Court of Appeal upheld the decision of 16 June 2009."^^xsd:string,
+        "On 25 June 2009 the applicant company lodged an appeal."^^xsd:string .
+
+doc:district_court_2009_03_13 a echr:DomesticProceeding ;
+    rdfs:label "On 13 March 2009 the District Court accepted the case for examination."@en ;
+    echr:followsProceeding doc:yerevan_civil_court_claim_2008_10_17 ;
+    echr:hasCourt doc:authorityDistrictCourt ;
+    echr:hasDecisionDate "2009-06-16"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasProceedingStartDate "2009-03-13"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "30"^^xsd:string,
+        "33"^^xsd:string ;
+    echr:hasSupportingQuote "On 13 March 2009 the District Court accepted the case for examination."^^xsd:string,
+        "On 16 June 2009 the District Court decided to leave the claim lodged by the applicant company unexamined"^^xsd:string .
+
+doc:proc_commercial_court_first_instance_2007 a echr:DomesticProceeding ;
+    rdfs:label "Commercial Court decision to leave the applicant company’s claim and the counterclaim unexamined"^^xsd:string ;
+    echr:hasCourt doc:authorityCommercialCourt ;
+    echr:hasDecisionDate "2007-11-16"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "16"^^xsd:string,
+        "18"^^xsd:string,
+        "19"^^xsd:string ;
+    echr:hasSupportingQuote "On 16 November 2007 the Commercial Court granted the request and decided to leave the applicant company’s claim and the counterclaim lodged by the LLC unexamined."^^xsd:string,
+        "On 4 October 2007 the LLC filed a counterclaim, contesting the applicant company’s claims."^^xsd:string,
+        "On 7 November 2007 the LLC requested the Commercial Court to leave the applicant company’s claim unexamined on the grounds that the contracts of 8 February 1999, 10 April 2000 and 2 April 2003 contained a dispute resolution clause whereby disputes concerning their performance would be resolved by the Arbitration Tribunal of the Chamber of Commerce of the country of the respondent."^^xsd:string ;
+    echr:isProceedingInCase doc:caseDocumentUntyped .
+
+doc:yerevan_civil_court_claim_2008_10_17 a echr:DomesticProceeding ;
+    rdfs:label "the applicant company lodged a claim with the Yerevan Civil Court"@en ;
+    echr:followsProceeding doc:arbitration_refusal_2008 ;
+    echr:hasCourt doc:authorityYerevanCivilCourt ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasProceedingStartDate "2008-10-17"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "27"^^xsd:string ;
+    echr:hasSupportingQuote "on 17 October 2008 the applicant company lodged a claim with the Yerevan Civil Court, seeking to recover EUR 116,600 from the LLC"^^xsd:string .
+
+doc:authorityArbitrationTribunal a echr:DomesticAuthority ;
+    rdfs:label "Arbitration Tribunal of the Chamber of Commerce and Industry of Armenia"^^xsd:string,
+        "Arbitration Tribunal of the Chamber of Commerce and Industry of Armenia"@en ;
+    echr:hasAuthorityKind echr:AuthorityUnknown ;
+    echr:hasAuthorityName "the Arbitration Tribunal of the Chamber of Commerce and Industry of Armenia"^^xsd:string,
+        "Arbitration Tribunal of the Chamber of Commerce and Industry of Armenia"@en .
+
+doc:authorityCommercialCourt a echr:DomesticAuthority ;
+    rdfs:label "Commercial Court"^^xsd:string ;
+    echr:hasAuthorityName "Commercial Court"^^xsd:string,
+        "the Commercial Court"^^xsd:string .
+
+doc:caseDocumentUntyped a echr:CaseDocument ;
+    rdfs:label "case document (source text)"^^xsd:string .
+

@@ -1,0 +1,156 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/7fe8a388ef72/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/7fe8a388ef72> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:8"^^xsd:string .
+
+doc:appeal_1 a echr:DomesticProceeding ;
+    rdfs:label "appeal to the Supreme Court"^^xsd:string ;
+    echr:followsProceeding doc:trial_1 ;
+    echr:hasCourt doc:supremeCourtRf ;
+    echr:hasDecisionDate "1998-08-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "4"^^xsd:string ;
+    echr:hasSupportingQuote "On 10 August 1998 the Supreme Court confirmed the judgment of the Nizhniy Novgorod Regional Court"^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:detention_1 a echr:PreTrialDetention ;
+    rdfs:label "Initial pre-trial detention"^^xsd:string ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:klimentyev ;
+    echr:hasSourceParagraph "The facts of the case, as submitted by the applicant, may be summarised as follows. Arrest and trial"^^xsd:string ;
+    echr:hasSupportingQuote "the time he had already spent in pre-trial detention"^^xsd:string .
+
+doc:issueImpartiality a echr:Article6Issue ;
+    rdfs:label "impartiality of regional court and prosecutor"^^xsd:string ;
+    echr:hasSourceParagraph "2"^^xsd:string ;
+    echr:hasSupportingQuote "questioned the Regional Court's and the Regional Prosecutor's impartiality"^^xsd:string ;
+    echr:issueArisesIn doc:trial_1 .
+
+doc:issueRepresentation a echr:Article6Issue ;
+    rdfs:label "inadequate representation issue"^^xsd:string ;
+    echr:hasSourceParagraph "2"^^xsd:string ;
+    echr:hasSupportingQuote "the applicant's representation was inadequate"^^xsd:string ;
+    echr:issueArisesIn doc:trial_1 .
+
+doc:lawyerK a echr:LegalRepresentative ;
+    rdfs:label "Mr. K."^^xsd:string ;
+    echr:hasPersonName "Mr. K."^^xsd:string .
+
+doc:lawyerMoskalenko a echr:LegalRepresentative ;
+    rdfs:label "Mrs Moskalenko"^^xsd:string ;
+    echr:hasPersonName "Mrs Moskalenko"^^xsd:string .
+
+doc:lawyerO a echr:LegalRepresentative ;
+    rdfs:label "Mr. O."^^xsd:string ;
+    echr:hasPersonName "Mr. O."^^xsd:string .
+
+doc:participationApplicantAppeal a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participationApplicantTrial a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant .
+
+doc:proceeding_4 a echr:DomesticProceeding ;
+    rdfs:label "Appeal against detention order of 2 April"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_3 ;
+    echr:hasCourt doc:supremeCourtRf ;
+    echr:hasDecisionDate "1998-05-19"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "The facts of the case, as submitted by the applicant, may be summarised as follows. Arrest and trial"^^xsd:string ;
+    echr:hasSupportingQuote "lodged with the Supreme Court an appeal against the court order of 2 April to detain the applicant... The reply from the Supreme Court, dated 19 May 1998, stated that the national law did not allow appeals against that type of trial court orders separately"^^xsd:string .
+
+doc:prosecutorNn a echr:DomesticAuthority ;
+    rdfs:label "Nizhniy Novgorod prosecutor's office"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial .
+
+doc:adjournment_1 a echr:Adjournment ;
+    rdfs:label "request for adjournment by Mrs Moskalenko"^^xsd:string ;
+    echr:hasAdjournmentDate "1998-08-10"^^xsd:date ;
+    echr:hasSourceParagraph "3"^^xsd:string ;
+    echr:hasSupportingQuote "requested an adjournment of the hearing to give her time to study the case materials"^^xsd:string .
+
+doc:detention_2 a echr:PreTrialDetention ;
+    rdfs:label "Second pre-trial detention"^^xsd:string ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:klimentyev ;
+    echr:hasDetentionStartDate "1998-04-02"^^xsd:date ;
+    echr:hasSourceParagraph "The facts of the case, as submitted by the applicant, may be summarised as follows. Arrest and trial"^^xsd:string ;
+    echr:hasSupportingQuote "On 2 April 1998 the Nizhniy Novgorod Regional Court granted the prosecutor’s renewed motion for detention... and the applicant was arrested"^^xsd:string .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "First trial of Andrey Klimentyev"^^xsd:string ;
+    echr:hasCourt doc:regionalCourtNn ;
+    echr:hasDecisionDate "1997-04-21"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "The facts of the case, as submitted by the applicant, may be summarised as follows. Arrest and trial"^^xsd:string ;
+    echr:hasSupportingQuote "On 21 April 1997 the Nizhniy Novgorod Regional Court found the applicant guilty on some of the charges"^^xsd:string .
+
+doc:proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "Appeal to the Supreme Court"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:supremeCourtRf ;
+    echr:hasDecisionDate "1997-07"^^xsd:gYearMonth ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "The facts of the case, as submitted by the applicant, may be summarised as follows. Arrest and trial"^^xsd:string ;
+    echr:hasSupportingQuote "In July 1997 the Supreme Court quashed the conviction on the applicant’s appeal and remitted the case to the Nizhniy Novgorod Regional Court"^^xsd:string .
+
+doc:proceeding_3 a echr:DomesticProceeding ;
+    rdfs:label "Retrial of Andrey Klimentyev"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_2 ;
+    echr:hasCourt doc:regionalCourtNn ;
+    echr:hasInstanceLevel echr:LevelReopening ;
+    echr:hasPreTrialDetention doc:detention_2 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "The facts of the case, as submitted by the applicant, may be summarised as follows. Arrest and trial"^^xsd:string ;
+    echr:hasSupportingQuote "during the new trial"^^xsd:string .
+
+doc:applicant a echr:NaturalPerson ;
+    rdfs:label "the applicant"^^xsd:string .
+
+doc:klimentyev a echr:NaturalPerson ;
+    rdfs:label "Andrey Anatolyevich Klimentyev"^^xsd:string ;
+    echr:hasBirthYear "1954"^^xsd:gYear ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasHonorific "Mr"^^xsd:string .
+
+doc:regionalCourtNn a echr:DomesticAuthority ;
+    rdfs:label "Nizhniy Novgorod Regional Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial .
+
+doc:supremeCourtRf a echr:DomesticAuthority ;
+    rdfs:label "Supreme Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial .
+
+doc:trial_1 a echr:DomesticProceeding ;
+    rdfs:label "trial court proceeding"^^xsd:string ;
+    echr:hasAdjournment doc:adjournment_1 ;
+    echr:hasCourt doc:regionalCourtNn ;
+    echr:hasDecisionDate "1998-05-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "16"^^xsd:string ;
+    echr:hasSupportingQuote "the applicant was ordered by the Nizhniy Novgorod Court to pay damages to 'Oka'"^^xsd:string .
+

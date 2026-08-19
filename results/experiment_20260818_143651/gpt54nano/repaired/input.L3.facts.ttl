@@ -1,0 +1,127 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/02ca139066cf/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ns1: <https://growgraph.dev/ontology/echr/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/base/cd.domestic_proceeding_1> a doc:DomesticProceeding ;
+    rdfs:label "proceedings initiated by the applicant to annul decisions related to the valuation, tender invitation and subsequent sale of a television channel and radio station"@en ;
+    doc:hasSourceParagraph "5"^^xsd:string ;
+    doc:hasSupportingQuote "On 19 February 2001, the Turkish government declared a state of economic crisis."^^xsd:string .
+
+<https://growgraph.dev/doc/02ca139066cf> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:3"^^xsd:string .
+
+doc:domestic_proceeding_6 a doc:DomesticProceeding ;
+    rdfs:label "constitutional court finding violation based on failure to enforce annulment decisions"^^xsd:string ;
+    doc:followsProceeding doc:domestic_proceeding_5 ;
+    doc:hasSourceParagraph 55 ;
+    doc:hasSupportingQuote "The Constitutional Court held that the completion of the sale did not constitute a legal or practical barrier to enforcing the judgment. It noted that, since the tendering process and related decisions had been the subject of ongoing judicial proceedings at the time, the successful bidder should have anticipated the possibility of the sale being annulled. The Constitutional Court concluded that the administration’s failure to enforce the annulment decisions amounted to a violation of the applicant’s property rights under Article 35 of the Constitution."^^xsd:string .
+
+doc:domestic_proceeding_8 a doc:DomesticProceeding ;
+    rdfs:label "constitutional court decision of 23 may 2018 serving on applicant on 7 june 2018"^^xsd:string ;
+    doc:followsProceeding doc:domestic_proceeding_1 ;
+    doc:hasSourceParagraph 42 ;
+    doc:hasSupportingQuote "In a decision of 23 May 2018, the Constitutional Court observed that the final annulment judgment of the 13th Chamber of the Supreme Administrative Court had been served on the applicant on 28 July 2017 and determined that the thirty-day time-limit for lodging an individual application had commenced on that date. Noting that the applicant’s application had been submitted on 11 September 2017, after the expiry of the time-limit, the Constitutional Court declared the application inadmissible. The decision was served on the applicant on 7 June 2018."^^xsd:string .
+
+doc:fund_enforcement_decision_2015_10_27_not_practicable a doc:DomesticProceeding ;
+    rdfs:label "Fund decision of 27 October 2015 that enforcement of the annulment decision was not practicable"^^xsd:string ;
+    doc:hasSourceParagraph 32 ;
+    doc:hasSupportingQuote "On 18 April 2016, the Fund notified the applicant of a decision taken on 27 October 2015 regarding the impossibility of enforcing the judgment."^^xsd:string ;
+    ns1:hasProceedingDate "2015-10-27"^^xsd:date .
+
+doc:fund_response_enforcement_2017_09_05_already_decided_2017_08_11 a doc:DomesticProceeding ;
+    rdfs:label "Fund response on 5 September 2017 stating enforcement decision already made on 11 August 2017"^^xsd:string ;
+    doc:hasSourceParagraph 40 ;
+    doc:hasSupportingQuote "On 5 September 2017, the Fund responded, stating that a decision had already been made on 11 August 2017 regarding the enforcement of the relevant judgment."^^xsd:string ;
+    ns1:followsProceeding doc:annulment_enforced_request_2017_08_07 ;
+    ns1:hasProceedingDate "2017-09-05"^^xsd:date .
+
+doc:administrative_court_proceedings_2011_02_24 a doc:DomesticProceeding ;
+    rdfs:label "administrative court proceedings initiated on 24 February 2011 seeking annulment of the sale of Viva TV-Radio Viva"^^xsd:string ;
+    doc:hasSourceParagraph 33 ;
+    doc:hasSupportingQuote "On 24 February 2011, the applicant initiated proceedings before the administrative court, seeking the annulment of the sale of Viva TV-Radio Viva."^^xsd:string ;
+    ns1:hasProceedingDate "2011-02-24"^^xsd:date .
+
+doc:annulment_enforced_request_2017_08_07 a doc:DomesticProceeding ;
+    rdfs:label "request to Fund to enforce the annulment judgment on 7 August 2017"^^xsd:string ;
+    doc:hasSourceParagraph 39 ;
+    doc:hasSupportingQuote "In a letter dated 7 August 2017, the applicant requested the Fund to enforce the annulment judgment."^^xsd:string ;
+    ns1:followsProceeding doc:supreme_administrative_court_rectification_2017_06_30 ;
+    ns1:hasProceedingDate "2017-08-07"^^xsd:date .
+
+doc:domestic_proceeding_4 a doc:DomesticProceeding ;
+    rdfs:label "constitutional court continuing-violation reasoning and exhaustion of remedies (non-enforcement of annulment decisions)"^^xsd:string,
+        "rejection of rectification request by Supreme Administrative Court on 25 January 2016"^^xsd:string ;
+    doc:followsProceeding doc:domestic_proceeding_2,
+        doc:domestic_proceeding_3 ;
+    doc:hasSourceParagraph 30,
+        52 ;
+    doc:hasSupportingQuote "Accordingly, the Constitutional Court concluded that the applicant had exhausted all available remedies."^^xsd:string,
+        "On 25 January 2016, the Supreme Administrative Court rejected the Fund’s request for rectification"^^xsd:string .
+
+doc:domestic_proceeding_5 a doc:DomesticProceeding ;
+    rdfs:label "constitutional court observation on time-limit for continuing violation"^^xsd:string ;
+    doc:followsProceeding doc:domestic_proceeding_4 ;
+    doc:hasSourceParagraph 53 ;
+    doc:hasSupportingQuote "The Constitutional Court further noted that the applicant’s claim concerned a continuing violation and, as such, considered that the application had been lodged within the time-limit."^^xsd:string .
+
+doc:istanbul_administrative_court_dismissal_2014_03_19 a doc:DomesticProceeding ;
+    rdfs:label "İstanbul Administrative Court dismissal on 19 March 2014 of the applicant’s claim"^^xsd:string ;
+    doc:hasSourceParagraph 35 ;
+    doc:hasSupportingQuote "On 19 March 2014, the 6th Chamber of the İstanbul Administrative Court dismissed the applicant’s claim, concluding that no legal irregularities had occurred in the tendering and sale procedures."^^xsd:string ;
+    ns1:followsProceeding doc:administrative_court_proceedings_2011_02_24 ;
+    ns1:hasProceedingDate "2014-03-19"^^xsd:date .
+
+doc:supreme_administrative_court_rectification_2017_06_30 a doc:DomesticProceeding ;
+    rdfs:label "Supreme Administrative Court granted request for rectification on 30 June 2017 and annulled the sale"^^xsd:string ;
+    doc:hasSourceParagraph 37 ;
+    doc:hasSupportingQuote "37 . Following this decision, the applicant lodged a request for rectification. On 30 June 2017, the 13 th Chamber of the Supreme Administrative Court granted the request, referring to the ruling of the General Assembly of 7 July 2015 which had annulled the Fund’s decision of 13 January 2011 concerning the valuation of Viva TV-Radio Viva (see paragraph 29 above). The court held that the annulment in that judgment necessitated a fresh judicial review of the case."^^xsd:string ;
+    ns1:followsProceeding doc:supreme_administrative_court_upheld_2014_12_09 ;
+    ns1:hasProceedingDate "2017-06-30"^^xsd:date .
+
+doc:supreme_administrative_court_upheld_2014_12_09 a doc:DomesticProceeding ;
+    rdfs:label "Supreme Administrative Court upheld decision on appeal on 9 December 2014"^^xsd:string ;
+    doc:hasSourceParagraph 35 ;
+    doc:hasSupportingQuote "On an appeal by the applicant, the 13th Chamber of the Supreme Administrative Court upheld that decision on 9 December 2014."^^xsd:string ;
+    ns1:followsProceeding doc:istanbul_administrative_court_dismissal_2014_03_19 ;
+    ns1:hasProceedingDate "2014-12-09"^^xsd:date .
+
+doc:domestic_proceeding_1 a doc:DomesticProceeding ;
+    rdfs:label "administrative court proceedings initiated on 7 February 2011"^^xsd:string,
+        "constitutional court individual application lodged on 11 september 2017"^^xsd:string,
+        "non-enforcement of Supreme Administrative Court judgments"^^xsd:string,
+        "non-enforcement of Supreme Administrative Court judgments"@en ;
+    doc:hasSourceParagraph 27,
+        41,
+        "1"^^xsd:string ;
+    doc:hasSupportingQuote "On 11 September 2017, the applicant lodged an individual application with the Constitutional Court, alleging violations of his right to property and his right to a fair trial due to the non-enforcement of the final judgment annulling the sale of Viva TV-Radio Viva."^^xsd:string,
+        "On 7 February 2011, the applicant initiated proceedings before the administrative court"^^xsd:string,
+        "The case concerns the non-enforcement of judgments delivered by the Supreme Administrative Court following proceedings initiated by the applicant"^^xsd:string .
+
+doc:domestic_proceeding_2 a doc:DomesticProceeding ;
+    rdfs:label "constitutional court decision of 23 may 2018 declaring the application inadmissible"^^xsd:string,
+        "dismissal by 13th Chamber of the Supreme Administrative Court on 9 December 2014"^^xsd:string,
+        "proceedings initiated by the applicant to annul decisions related to the valuation, tender invitation and subsequent sale of a television channel and radio station"^^xsd:string ;
+    doc:followsProceeding doc:domestic_proceeding_1,
+        doc:domestic_proceeding_3 ;
+    doc:hasSourceParagraph 28,
+        42,
+        "1"^^xsd:string ;
+    doc:hasSupportingQuote "In a decision of 23 May 2018, the Constitutional Court observed that the final annulment judgment of the 13th Chamber of the Supreme Administrative Court had been served on the applicant on 28 July 2017 and determined that the thirty-day time-limit for lodging an individual application had commenced on that date. Noting that the applicant’s application had been submitted on 11 September 2017, after the expiry of the time-limit, the Constitutional Court declared the application inadmissible. The decision was served on the applicant on 7 June 2018."^^xsd:string,
+        "On 9 December 2014, the 13th Chamber of the Supreme Administrative Court dismissed the applicant’s case."^^xsd:string,
+        "proceedings initiated by the applicant to annul decisions related to the valuation, tender invitation and subsequent sale of a television channel and radio station"^^xsd:string .
+
+doc:domestic_proceeding_3 a doc:DomesticProceeding ;
+    rdfs:label "annulment by General Assembly of the Administrative Proceedings Divisions on 29 July 2015"^^xsd:string,
+        "supreme administrative court judgment of 20 july 2006 finding legal interest in enforcement proceedings under law no. 6183"^^xsd:string,
+        "supreme administrative court unanimous judgment of 20 july 2006 finding applicant standing under law no. 6183"^^xsd:string ;
+    doc:followsProceeding doc:domestic_proceeding_2 ;
+    doc:hasSourceParagraph 29,
+        47 ;
+    doc:hasSupportingQuote "On 20 July 2006, the Supreme Administrative Court, ruling unanimously, found that the applicant had a legal interest in the enforcement proceedings initiated under Law no. 6183, as he was the majority shareholder of İktisat Bank, which had been transferred to the Fund. The court held that the applicant had standing to challenge the transaction and quashed the administrative court’s earlier decision."^^xsd:string,
+        "On 7 July 2015, following an appeal by the applicant, the General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court"^^xsd:string .
+

@@ -1,0 +1,53 @@
+{
+  "source": "results/experiment_20260818_143651/qwen3/repaired/input.L8.facts.ttl",
+  "operations": [
+    {
+      "finding": "flagged_isFinalDomesticDecision_conflict",
+      "rationale": "The facts explicitly describe two distinct domestic avenues: (1) the criminal case (proceedings 1, 2, 3) and (2) the closure of the 1982 conviction file by the prosecutor\u2019s office (proceeding 4). The applicant\u2019s application to Strasbourg arises from the criminal prosecution and related property measures, not from the 1982 conviction. The Supreme Court\u2019s 1998 decision (proceeding 2) is the final decision on the criminal charges, including sentencing and evidence rulings \u2014 and the judgment treats this as the last domestic step before the Strasbourg application. The prosecutor\u2019s closure of the unrelated 1982 file in 1999 (proceeding 4) is a separate, collateral matter with no bearing on the Article 6 grievance. Thus, marking proceeding 4 as final violates the rule that only one proceeding per case may be isFinalDomesticDecision true \u2014 and proceeding 2 already correctly holds this flag. Proceeding 4 must be unmarked.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_4",
+      "predicate": "echr:isFinalDomesticDecision",
+      "object": "true",
+      "object_is_literal": true,
+      "datatype": "xsd:boolean",
+      "lang": null,
+      "status": "skipped: triple not present"
+    },
+    {
+      "finding": "flagged_missing_followsProceeding_for",
+      "rationale": "The 1998 Regional Court order (proceeding 3) quashed the 1997 Regional Court judgment (proceeding 1) and ordered new proceedings \u2014 this is a direct appellate review that quashes and remits. The facts state: 'By a judgment of the Nizhniy Novgorod Regional Court of 21 April 1997, later quashed by the Supreme Court...' and 'In February 1999 the applicant\u2019s first (1982) conviction was quashed...' \u2014 this is not referring to proceeding 3. But proceeding 3\u2019s own quote says: 'During the second trial, on 27 May 1998 [...] the applicant was ordered [...] to pay damages to \"Oka\".' and the Supreme Court's 1998 confirmation (proceeding 2) refers to 'the judgment of the Nizhniy Novgorod Regional Court' \u2014 which is the 27 May 1998 order (proceeding 3). Therefore, proceeding 3 is the decision that replaced the 1997 judgment. Since proceeding 2 is the Supreme Court\u2019s review of proceeding 3, and proceeding 3 itself is a new trial ordered after quashing proceeding 1, proceeding 3 must follow proceeding 1. But the chain is: proceeding 1 \u2192 proceeding 3 \u2192 proceeding 2. The current graph has proceeding 2 following proceeding 1 directly, skipping proceeding 3. This is structurally incorrect. The Supreme Court (proceeding 2) reviewed the 27 May 1998 Regional Court order (proceeding 3), not the 1997 judgment (proceeding 1). The 1997 judgment was already quashed by the Supreme Court in 1997 (as per quote: 'In July 1997 the Supreme Court quashed the conviction...'), and proceeding 3 is the outcome of the retrial. So: proceeding 1 was quashed in July 1997 \u2192 proceeding 3 is the retrial resulting from that quashing \u2192 proceeding 2 is the Supreme Court\u2019s review of proceeding 3. Therefore, proceeding 3 must follow proceeding 1, and proceeding 2 must follow proceeding 3. Currently, proceeding 3 has no followsProceeding, and proceeding 2 follows proceeding 1 directly \u2014 both are wrong. The chain must be: doc:domestic_proceeding_1 \u2192 doc:domestic_proceeding_3 \u2192 doc:domestic_proceeding_2.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_3",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:domestic_proceeding_1",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "flagged_missing_followsProceeding_for",
+      "rationale": "The 1998 Regional Court order (proceeding 3) quashed the 1997 Regional Court judgment (proceeding 1) and ordered new proceedings \u2014 this is a direct appellate review that quashes and remits. The facts state: 'By a judgment of the Nizhniy Novgorod Regional Court of 21 April 1997, later quashed by the Supreme Court...' and 'In February 1999 the applicant\u2019s first (1982) conviction was quashed...' \u2014 this is not referring to proceeding 3. But proceeding 3\u2019s own quote says: 'During the second trial, on 27 May 1998 [...] the applicant was ordered [...] to pay damages to \"Oka\".' and the Supreme Court's 1998 confirmation (proceeding 2) refers to 'the judgment of the Nizhniy Novgorod Regional Court' \u2014 which is the 27 May 1998 order (proceeding 3). Therefore, proceeding 3 is the decision that replaced the 1997 judgment. Since proceeding 2 is the Supreme Court\u2019s review of proceeding 3, and proceeding 3 itself is a new trial ordered after quashing proceeding 1, proceeding 3 must follow proceeding 1. But the chain is: proceeding 1 \u2192 proceeding 3 \u2192 proceeding 2. The current graph has proceeding 2 following proceeding 1 directly, skipping proceeding 3. This is structurally incorrect. The Supreme Court (proceeding 2) reviewed the 27 May 1998 Regional Court order (proceeding 3), not the 1997 judgment (proceeding 1). The 1997 judgment was already quashed by the Supreme Court in 1997 (as per quote: 'In July 1997 the Supreme Court quashed the conviction...'), and proceeding 3 is the outcome of the retrial. So: proceeding 1 was quashed in July 1997 \u2192 proceeding 3 is the retrial resulting from that quashing \u2192 proceeding 2 is the Supreme Court\u2019s review of proceeding 3. Therefore, proceeding 3 must follow proceeding 1, and proceeding 2 must follow proceeding 3. Currently, proceeding 3 has no followsProceeding, and proceeding 2 follows proceeding 1 directly \u2014 both are wrong. The chain must be: doc:domestic_proceeding_1 \u2192 doc:domestic_proceeding_3 \u2192 doc:domestic_proceeding_2.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_2",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:domestic_proceeding_1",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "flagged_missing_followsProceeding_for",
+      "rationale": "The 1998 Regional Court order (proceeding 3) quashed the 1997 Regional Court judgment (proceeding 1) and ordered new proceedings \u2014 this is a direct appellate review that quashes and remits. The facts state: 'By a judgment of the Nizhniy Novgorod Regional Court of 21 April 1997, later quashed by the Supreme Court...' and 'In February 1999 the applicant\u2019s first (1982) conviction was quashed...' \u2014 this is not referring to proceeding 3. But proceeding 3\u2019s own quote says: 'During the second trial, on 27 May 1998 [...] the applicant was ordered [...] to pay damages to \"Oka\".' and the Supreme Court's 1998 confirmation (proceeding 2) refers to 'the judgment of the Nizhniy Novgorod Regional Court' \u2014 which is the 27 May 1998 order (proceeding 3). Therefore, proceeding 3 is the decision that replaced the 1997 judgment. Since proceeding 2 is the Supreme Court\u2019s review of proceeding 3, and proceeding 3 itself is a new trial ordered after quashing proceeding 1, proceeding 3 must follow proceeding 1. But the chain is: proceeding 1 \u2192 proceeding 3 \u2192 proceeding 2. The current graph has proceeding 2 following proceeding 1 directly, skipping proceeding 3. This is structurally incorrect. The Supreme Court (proceeding 2) reviewed the 27 May 1998 Regional Court order (proceeding 3), not the 1997 judgment (proceeding 1). The 1997 judgment was already quashed by the Supreme Court in 1997 (as per quote: 'In July 1997 the Supreme Court quashed the conviction...'), and proceeding 3 is the outcome of the retrial. So: proceeding 1 was quashed in July 1997 \u2192 proceeding 3 is the retrial resulting from that quashing \u2192 proceeding 2 is the Supreme Court\u2019s review of proceeding 3. Therefore, proceeding 3 must follow proceeding 1, and proceeding 2 must follow proceeding 3. Currently, proceeding 3 has no followsProceeding, and proceeding 2 follows proceeding 1 directly \u2014 both are wrong. The chain must be: doc:domestic_proceeding_1 \u2192 doc:domestic_proceeding_3 \u2192 doc:domestic_proceeding_2.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_2",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:domestic_proceeding_3",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    }
+  ]
+}

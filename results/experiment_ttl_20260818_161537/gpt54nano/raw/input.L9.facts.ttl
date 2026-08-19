@@ -1,0 +1,140 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/32eb3924058b/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/32eb3924058b> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:9"^^xsd:string .
+
+doc:appeal_1 a echr:DomesticProceeding ;
+    rdfs:label "the applicant appealed"@en ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "24"^^xsd:string ;
+    echr:hasSupportingQuote "The applicant appealed, arguing that there was insufficient evidence to convict him."@en .
+
+doc:appellate_chain_anchor_1 a echr:DomesticProceeding ;
+    rdfs:label "domestic chain"@en ;
+    echr:hasSourceParagraph "22"^^xsd:string ;
+    echr:hasSupportingQuote "On 8 December 2006 the court of first instance convicted the applicant"@en .
+
+doc:cassation_1 a echr:DomesticProceeding ;
+    rdfs:label "on 20 February 2008"@en ;
+    echr:followsProceeding doc:appeal_upheld_1 ;
+    echr:hasDecisionDate "2008-02-20"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "26"^^xsd:string ;
+    echr:hasSupportingQuote "On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant inadmissible."@en .
+
+doc:domesticProceedingInvestigationFinalOutcomeUnk a echr:DomesticProceeding ;
+    rdfs:label "Neither the Government nor the applicant updated the Court on the final outcome of that investigation"@en ;
+    echr:hasSourceParagraph "47"^^xsd:string ;
+    echr:hasSupportingQuote "Neither the Government nor the applicant updated the Court on the final outcome of that investigation."^^xsd:string ;
+    echr:isPending true .
+
+doc:domestic_proceeding_forensic_medical_exam_2010_08_31 a echr:DomesticProceeding ;
+    rdfs:label "On 31 August 2010 the investigator commissioned a forensic medical examination"@en ;
+    echr:hasProceedingStartDate "2010-08-31"^^xsd:date ;
+    echr:hasSourceParagraph "31"^^xsd:string ;
+    echr:hasSupportingQuote "On the same day the investigator commissioned a forensic medical examination to determine if there were any injuries on the applicant’s body and, if so, where they had come from."^^xsd:string .
+
+doc:domestic_proceeding_governor_and_security_inspector_questioned_2010_12_25 a echr:DomesticProceeding ;
+    rdfs:label "The prison governor and the chief inspector of the prison’s security unit, who were questioned as part of the investigation"@en ;
+    echr:hasSourceParagraph "44"^^xsd:string ;
+    echr:hasSupportingQuote "The prison governor and the chief inspector of the prison’s security unit, who were questioned as part of the investigation, denied that the applicant had been taken to the governor’s office on 12 August or physically assaulted on 19 August 2010."^^xsd:string .
+
+doc:domestic_proceeding_investigation_2010_08_31 a echr:DomesticProceeding ;
+    rdfs:label "On 31 August 2010 an investigation was opened into the applicant’s allegations"@en ;
+    echr:followsProceeding doc:domestic_proceeding_forensic_medical_exam_conclusion_2010_09_03 ;
+    echr:hasProceedingStartDate "2010-08-31"^^xsd:date ;
+    echr:hasSourceParagraph "31"^^xsd:string ;
+    echr:hasSupportingQuote "On 31 August 2010 an investigation was opened into the applicant’s allegations."^^xsd:string .
+
+doc:domestic_proceeding_medical_review_on_admission_kutaisi_prison_2010_11_25 a echr:DomesticProceeding ;
+    rdfs:label "On 25 November 2010 the doctor who had examined the applicant upon his admission to Kutaisi Prison no. 2"@en ;
+    echr:hasProceedingStartDate "2010-11-25"^^xsd:date ;
+    echr:hasSourceParagraph "45"^^xsd:string ;
+    echr:hasSupportingQuote "On 25 November 2010 the doctor who had examined the applicant upon his admission to Kutaisi Prison no. 2 on 19 August 2010 noted that no signs of ill-treatment had been observed on the applicant’s body and that he had not complained in this regard."^^xsd:string .
+
+doc:domestic_proceeding_questioning_on_27_04_2011 a echr:DomesticProceeding ;
+    rdfs:label "On 27 April 2011 the doctor, nurse and duty officer who had examined the applicant"@en ;
+    echr:hasProceedingStartDate "2011-04-27"^^xsd:date ;
+    echr:hasSourceParagraph "46"^^xsd:string ;
+    echr:hasSupportingQuote "On 27 April 2011 the doctor, nurse and duty officer who had examined the applicant upon his admission to the prison hospital on 27 August 2010 were questioned as part of the investigation into his allegations."^^xsd:string .
+
+doc:investigation_phase_1 a echr:DomesticProceeding ;
+    rdfs:label "investigation"@en ;
+    echr:followsProceeding doc:criminal_proceedings_against_applicant_1 ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasProceedingStartDate "2005-07-10"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "4"^^xsd:string ;
+    echr:hasSupportingQuote "At about 2 p.m. on 10 July 2005"@en .
+
+doc:appeal_upheld_1 a echr:DomesticProceeding ;
+    rdfs:label "on 27 June 2007"@en ;
+    echr:followsProceeding doc:pre_trial_statements_application_1 ;
+    echr:hasDecisionDate "2007-06-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "25"^^xsd:string ;
+    echr:hasSupportingQuote "On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction."@en .
+
+doc:applicant_detained_1 a echr:DomesticProceeding ;
+    rdfs:label "the applicant"@en ;
+    echr:hasSourceParagraph "28"^^xsd:string ;
+    echr:hasSupportingQuote "The applicant was released from prison on 26 April 2018."@en .
+
+doc:criminal_proceedings_against_applicant_1 a echr:DomesticProceeding ;
+    rdfs:label "criminal proceedings against the applicant"@en ;
+    echr:followsProceeding doc:trial_phase_at_first_instance_court_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "4"^^xsd:string ;
+    echr:hasSupportingQuote "Criminal proceedings against the applicant"@en .
+
+doc:domestic_proceeding_forensic_medical_exam_conclusion_2010_09_03 a echr:DomesticProceeding ;
+    rdfs:label "On 3 September 2010 the forensic medical examination was concluded"@en ;
+    echr:hasProceedingStartDate "2010-09-03"^^xsd:date ;
+    echr:hasSourceParagraph "43"^^xsd:string ;
+    echr:hasSupportingQuote "On 3 September 2010 the forensic medical examination was concluded."^^xsd:string .
+
+doc:first_instance_conviction_1 a echr:DomesticProceeding ;
+    rdfs:label "on 8 December 2006"@en ;
+    echr:followsProceeding doc:applicant_detained_1 ;
+    echr:hasDecisionDate "2006-12-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "22"^^xsd:string ;
+    echr:hasSupportingQuote "On 8 December 2006 the court of first instance convicted the applicant of aggravated murder and the illegal acquisition, possession and carrying of firearms, and sentenced him to 17 years’ imprisonment."@en .
+
+doc:pre_trial_statements_application_1 a echr:DomesticProceeding ;
+    rdfs:label "an application by the applicant for pre-trial statements"@en ;
+    echr:followsProceeding doc:first_instance_conviction_1 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "23"^^xsd:string ;
+    echr:hasSupportingQuote "The court dismissed an application by the applicant for pre-trial statements given by M.T. and Z.T. to be declared inadmissible on the grounds that they had been obtained under duress."@en .
+
+doc:trial_phase_at_first_instance_court_1 a echr:DomesticProceeding ;
+    rdfs:label "trial at the first-instance court"@en ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasProceedingStartDate "2006-07-17"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "15"^^xsd:string ;
+    echr:hasSupportingQuote "during the trial at the first ‐ instance court"@en .
+

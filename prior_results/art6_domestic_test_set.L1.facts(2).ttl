@@ -1,0 +1,297 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/c5e5e550c928/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <https://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/c5e5e550c928> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "art6_domestic_test_set.jsonl:1"^^xsd:string .
+
+doc:appointment_2002_guardian a echr:DomesticProceeding ;
+    rdfs:label "appointment of guardian 23 May 2002 (Ruse Municipal Council)"@en ;
+    echr:hasCourt doc:ruseMunicipalCouncil ;
+    echr:hasDecisionDate "2002-05-23"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeOther ;
+    schema:agent doc:guardianMsRp .
+
+doc:case_36760_06 a echr:CaseDocument ;
+    rdfs:label "Application no. 36760/06"@en ;
+    dcterms:created "2006-09-08"^^xsd:date ;
+    echr:hasApplicant doc:rusiKosevStanev ;
+    echr:hasApplicationNumber "36760/06"^^xsd:string ;
+    echr:hasRespondentState "Republic of Bulgaria"@en ;
+    schema:event doc:hearing_2011_02_09 .
+
+doc:case_stanev_v_bulgaria_36760_06 a echr:CaseDocument ;
+    rdfs:label "CASE OF STANEV v. BULGARIA"@en ;
+    prov:wasGeneratedBy doc:deliberation_2011_12_07 ;
+    echr:hasApplicationNumber "36760/06"^^xsd:string ;
+    echr:hasCaseName "Stanev v. Bulgaria"@en ;
+    echr:hasExtractionNote "Deliberated in private on 9 February 2011 and 7 December 2011; judgment delivered 17 January 2012 and adopted on 7 December 2011."@en ;
+    echr:hasJudgmentDate "2012-01-17"^^xsd:date ;
+    schema:location "Strasbourg"@en .
+
+doc:deliberation_2011_02_09 a prov:Activity ;
+    rdfs:label "deliberation in private on 9 February 2011"@en ;
+    prov:startedAtTime "2011-02-09"^^xsd:date .
+
+doc:diagnosis_schizophrenia_1975 a schema:MedicalCondition ;
+    rdfs:label "diagnosed with schizophrenia in 1975"@en ;
+    schema:dateCreated "1975"^^xsd:gYear ;
+    schema:description "The applicant was diagnosed with schizophrenia in 1975 (referenced by the domestic findings and medical reports)."@en ;
+    schema:patient doc:applicant_1 .
+
+doc:grandChamber a schema:Organization ;
+    rdfs:label "Grand Chamber"@en ;
+    schema:member doc:angelikaNussberger,
+        doc:deanSpielmann,
+        doc:egbertMyjer,
+        doc:francoiseTulkens,
+        doc:gannaYudkivska,
+        doc:isabelleBerroLefevre,
+        doc:jeanPaulCosta,
+        doc:josepCasadevall,
+        doc:juliaLaffranque,
+        doc:khanlarHajiyev,
+        doc:lechGarlicki,
+        doc:luisLopezGuerra,
+        doc:mirjanaLazarovaTrajkovska,
+        doc:nicolasBratza,
+        doc:ninaVajic,
+        doc:vincentADeGaetano,
+        doc:vincentBerger,
+        doc:zdravkaKalaydjieva .
+
+doc:partyGovernmentBulgaria a echr:Party ;
+    rdfs:label "the Government"@en ;
+    echr:hasPartyName "the Government"@en ;
+    echr:isRepresentedBy doc:govAgentNNikolova,
+        doc:govAgentRNikolova .
+
+doc:placement_agreement_2002 a schema:Agreement ;
+    rdfs:label "welfare-placement agreement signed 10 December 2002"@en ;
+    schema:agent doc:guardianMsRp ;
+    schema:dateCreated "2002-12-10"^^xsd:date ;
+    schema:description "Welfare-placement agreement between the guardian and the Pastra social care home; the agreement did not mention the applicant's name and stipulated payment arrangements."@en ;
+    schema:provider doc:pastraSocialCareHome .
+
+doc:proceeding_veliko_2001 a echr:DomesticProceeding ;
+    rdfs:label "judgment of 12 April 2001 (Veliko Tarnovo Court of Appeal)"@en ;
+    echr:followsProceeding doc:proceeding_ruse_2000 ;
+    echr:hasCourt doc:velikoTarnovoCourtOfAppeal ;
+    echr:hasDecisionDate "2001-04-12"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasProceedingType echr:TypeGuardianship .
+
+doc:transfer_2002_12_10 a schema:Event ;
+    rdfs:label "transfer to Pastra social care home by ambulance on 10 December 2002"@en ;
+    schema:description "The applicant was taken by ambulance to the Pastra social care home and was not informed of the agreement or the reasons/length of placement."@en ;
+    schema:location doc:pastraSocialCareHome ;
+    schema:participant doc:applicant_1 ;
+    schema:startDate "2002-12-10"^^xsd:date .
+
+doc:angelikaNussberger a echr:JudicialOfficer ;
+    rdfs:label "Angelika Nußberger"@en ;
+    echr:hasPersonName "Angelika Nußberger"@en .
+
+doc:deanSpielmann a echr:JudicialOfficer ;
+    rdfs:label "Dean Spielmann"@en ;
+    echr:hasPersonName "Dean Spielmann"@en .
+
+doc:deliberation_2011_12_07 a prov:Activity ;
+    rdfs:label "deliberation in private on 7 December 2011"@en ;
+    prov:startedAtTime "2011-12-07"^^xsd:date .
+
+doc:egbertMyjer a echr:JudicialOfficer ;
+    rdfs:label "Egbert Myjer"@en ;
+    echr:hasPersonName "Egbert Myjer"@en .
+
+doc:francoiseTulkens a echr:JudicialOfficer ;
+    rdfs:label "Françoise Tulkens"@en ;
+    echr:hasPersonName "Françoise Tulkens"@en .
+
+doc:gannaYudkivska a echr:JudicialOfficer ;
+    rdfs:label "Ganna Yudkivska"@en ;
+    echr:hasPersonName "Ganna Yudkivska"@en .
+
+doc:hearing_2011_02_09 a schema:Event ;
+    rdfs:label "hearing on 9 February 2011"@en ;
+    schema:attendee doc:govAgentNNikolova,
+        doc:govAgentRNikolova,
+        doc:repAGenova,
+        doc:repLNelson,
+        doc:repVLee,
+        doc:rusiKosevStanev ;
+    schema:location "Human Rights Building, Strasbourg"@en ;
+    schema:startDate "2011-02-09"^^xsd:date .
+
+doc:isabelleBerroLefevre a echr:JudicialOfficer ;
+    rdfs:label "Isabelle Berro-Lefèvre"@en ;
+    echr:hasPersonName "Isabelle Berro-Lefèvre"@en .
+
+doc:jeanPaulCosta a echr:JudicialOfficer ;
+    rdfs:label "Jean-Paul Costa"@en ;
+    echr:hasPersonName "Jean-Paul Costa"@en .
+
+doc:josepCasadevall a echr:JudicialOfficer ;
+    rdfs:label "Josep Casadevall"@en ;
+    echr:hasPersonName "Josep Casadevall"@en .
+
+doc:juliaLaffranque a echr:JudicialOfficer ;
+    rdfs:label "Julia Laffranque"@en ;
+    echr:hasPersonName "Julia Laffranque"@en .
+
+doc:khanlarHajiyev a echr:JudicialOfficer ;
+    rdfs:label "Khanlar Hajiyev"@en ;
+    echr:hasPersonName "Khanlar Hajiyev"@en .
+
+doc:lechGarlicki a echr:JudicialOfficer ;
+    rdfs:label "Lech Garlicki"@en ;
+    echr:hasPersonName "Lech Garlicki"@en .
+
+doc:luisLopezGuerra a echr:JudicialOfficer ;
+    rdfs:label "Luis López Guerra"@en ;
+    echr:hasPersonName "Luis López Guerra"@en .
+
+doc:mirjanaLazarovaTrajkovska a echr:JudicialOfficer ;
+    rdfs:label "Mirjana Lazarova Trajkovska"@en ;
+    echr:hasPersonName "Mirjana Lazarova Trajkovska"@en .
+
+doc:nicolasBratza a echr:JudicialOfficer ;
+    rdfs:label "Nicolas Bratza"@en ;
+    echr:hasPersonName "Nicolas Bratza"@en ;
+    schema:jobTitle "President"@en .
+
+doc:ninaVajic a echr:JudicialOfficer ;
+    rdfs:label "Nina Vajić"@en ;
+    echr:hasPersonName "Nina Vajić"@en .
+
+doc:proceeding_ruse_2000 a echr:DomesticProceeding ;
+    rdfs:label "judgment of 20 November 2000 (Ruse Regional Court)"@en ;
+    echr:hasCourt doc:ruseRegionalCourt ;
+    echr:hasDecisionDate "2000-11-20"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasProceedingType echr:TypeGuardianship .
+
+doc:ruseMunicipalCouncil a echr:DomesticAuthority ;
+    rdfs:label "Ruse Municipal Council"@en ;
+    echr:hasAuthorityName "Ruse Municipal Council"@en ;
+    echr:hasJurisdictionState "Bulgaria"^^xsd:string .
+
+doc:ruseRegionalCourt a echr:DomesticAuthority ;
+    rdfs:label "Ruse Regional Court ( Окръжен съд )"@en ;
+    echr:hasAuthorityName "Ruse Regional Court"@en ;
+    echr:hasJurisdictionState "Bulgaria"^^xsd:string .
+
+doc:velikoTarnovoCourtOfAppeal a echr:DomesticAuthority ;
+    rdfs:label "Veliko Tarnovo Court of Appeal ( Апелативен съд )"@en ;
+    echr:hasAuthorityName "Veliko Tarnovo Court of Appeal"@en ;
+    echr:hasJurisdictionState "Bulgaria"^^xsd:string .
+
+doc:vincentADeGaetano a echr:JudicialOfficer ;
+    rdfs:label "Vincent A. De Gaetano"@en ;
+    echr:hasPersonName "Vincent A. De Gaetano"@en .
+
+doc:vincentBerger a echr:NaturalPerson,
+        schema:Person ;
+    rdfs:label "Vincent Berger"@en ;
+    echr:hasPersonName "Vincent Berger"@en ;
+    schema:jobTitle "Jurisconsult"@en .
+
+doc:zdravkaKalaydjieva a echr:JudicialOfficer ;
+    rdfs:label "Zdravka Kalaydjieva"@en ;
+    echr:hasPersonName "Zdravka Kalaydjieva"@en .
+
+doc:applicant_1 a echr:NaturalPerson ;
+    rdfs:label "the applicant"@en ;
+    echr:hasBirthYear "1956"^^xsd:gYear ;
+    echr:hasPersonName "the applicant"@en .
+
+doc:govAgentNNikolova a echr:LegalRepresentative,
+        echr:NaturalPerson ;
+    rdfs:label "Ms N. Nikolova"@en ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasGenderCue echr:GenderCueHonorific ;
+    echr:hasGenderCueText "Ms N. Nikolova"@en ;
+    echr:hasGivenName "N."@en ;
+    echr:hasHonorific "Ms"@en ;
+    echr:hasPersonName "Ms N. Nikolova"@en ;
+    schema:worksFor "Ministry of Justice"@en .
+
+doc:govAgentRNikolova a echr:LegalRepresentative,
+        echr:NaturalPerson ;
+    rdfs:label "Ms R. Nikolova"@en ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasGenderCue echr:GenderCueHonorific ;
+    echr:hasGenderCueText "Ms R. Nikolova"@en ;
+    echr:hasGivenName "R."@en ;
+    echr:hasHonorific "Ms"@en ;
+    echr:hasPersonName "Ms R. Nikolova"@en ;
+    schema:worksFor "Ministry of Justice"@en .
+
+doc:guardianMsRp a echr:NaturalPerson ;
+    rdfs:label "Ms R.P."@en ;
+    echr:hasPersonName "Ms R.P."@en .
+
+doc:orgMdac a schema:Organization ;
+    rdfs:label "Mental Disability Advocacy Center"@en ;
+    schema:location "Budapest"@en .
+
+doc:pastraSocialCareHome a echr:DomesticAuthority ;
+    rdfs:label "Pastra social care home"@en ;
+    echr:hasAuthorityName "Pastra social care home"@en ;
+    echr:hasJurisdictionState "Bulgaria"^^xsd:string .
+
+doc:repAGenova a echr:LegalRepresentative,
+        echr:NaturalPerson ;
+    rdfs:label "Ms A. Genova"@en ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasGenderCue echr:GenderCueHonorific ;
+    echr:hasGenderCueText "Ms A. Genova"@en ;
+    echr:hasGivenName "A."@en ;
+    echr:hasHonorific "Ms"@en ;
+    echr:hasPersonName "Ms A. Genova"@en ;
+    schema:jobTitle "lawyer"@en ;
+    schema:location "Sofia"@en .
+
+doc:repLNelson a echr:LegalRepresentative,
+        echr:NaturalPerson ;
+    rdfs:label "Ms L. Nelson"@en ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasGenderCue echr:GenderCueHonorific ;
+    echr:hasGenderCueText "Ms L. Nelson"@en ;
+    echr:hasGivenName "L."@en ;
+    echr:hasHonorific "Ms"@en ;
+    echr:hasPersonName "Ms L. Nelson"@en ;
+    schema:jobTitle "lawyer"@en ;
+    schema:worksFor doc:orgMdac .
+
+doc:repVLee a echr:LegalRepresentative,
+        echr:NaturalPerson ;
+    rdfs:label "Ms V. Lee"@en ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasGenderCue echr:GenderCueHonorific ;
+    echr:hasGenderCueText "Ms V. Lee"@en ;
+    echr:hasGivenName "V."@en ;
+    echr:hasHonorific "Ms"@en ;
+    echr:hasPersonName "Ms V. Lee"@en ;
+    schema:jobTitle "lawyer"@en ;
+    schema:worksFor doc:orgMdac .
+
+doc:rusiKosevStanev a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Rusi Kosev Stanev"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue echr:GenderCueHonorific ;
+    echr:hasGenderCueText "Mr Rusi Kosev Stanev"@en ;
+    echr:hasGivenName "Rusi"@en ;
+    echr:hasHonorific "Mr"@en ;
+    echr:hasPersonName "Mr Rusi Kosev Stanev"@en ;
+    echr:isRepresentedBy doc:repAGenova,
+        doc:repLNelson,
+        doc:repVLee .
+

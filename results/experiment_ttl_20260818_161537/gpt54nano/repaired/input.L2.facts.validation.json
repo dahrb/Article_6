@@ -1,0 +1,40 @@
+{
+  "source": "input.jsonl",
+  "conformance": {
+    "shacl_evaluated": null,
+    "conforms": null,
+    "findings": 2,
+    "errors": 0,
+    "warnings": 2,
+    "by_kind": {
+      "dangling_reference": 2
+    },
+    "shacl_violations": 0,
+    "shacl_by_constraint": {},
+    "shacl_by_shape": {},
+    "repairs_applied": {}
+  },
+  "gate_repairs": [],
+  "findings": [
+    {
+      "kind": "dangling_reference",
+      "severity": "warning",
+      "message": "<https://growgraph.dev/doc/cebabe078128/domestic_proceeding_darmstadt_labour_court_oct_nov_1993_applicant_1_case> is referenced via https://growgraph.dev/echr#isProceedingInCase but is never described (no triples as subject, no rdf:type or rdfs:label) \u2014 likely a hallucinated or renamed node.",
+      "subject": "https://growgraph.dev/doc/cebabe078128/domestic_proceeding_darmstadt_labour_court_oct_nov_1993_applicant_1_case",
+      "predicate": "https://growgraph.dev/echr#isProceedingInCase",
+      "values": [],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "dangling_reference",
+      "severity": "warning",
+      "message": "<https://growgraph.dev/doc/cebabe078128/domestic_proceeding_darmstadt_labour_court_oct_nov_1993_applicant_2_case> is referenced via https://growgraph.dev/echr#followsProceeding, https://growgraph.dev/echr#isProceedingInCase but is never described (no triples as subject, no rdf:type or rdfs:label) \u2014 likely a hallucinated or renamed node.",
+      "subject": "https://growgraph.dev/doc/cebabe078128/domestic_proceeding_darmstadt_labour_court_oct_nov_1993_applicant_2_case",
+      "predicate": "https://growgraph.dev/echr#followsProceeding, https://growgraph.dev/echr#isProceedingInCase",
+      "values": [],
+      "component": "",
+      "source_shape": ""
+    }
+  ]
+}

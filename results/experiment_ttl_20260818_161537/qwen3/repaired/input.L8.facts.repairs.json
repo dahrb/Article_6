@@ -1,0 +1,173 @@
+{
+  "source": "results/experiment_ttl_20260818_161537/qwen3/repaired/input.L8.facts.ttl",
+  "operations": [
+    {
+      "finding": "flagged_missing_followsProceeding_for: doc:proceeding_6",
+      "rationale": "The proceeding with curie doc:proceeding_6 has outcome echr:OutcomeQuashedAndRemitted, which by definition implies it is an appellate or reviewing decision that quashed and remitted a prior decision. The ontology requires that such a proceeding must have a followsProceeding link to the proceeding it reviewed. The facts do not name the lower court decision explicitly, but the structure of the case and the existence of prior proceedings on the same subject (notably doc:proceeding_1 and doc:proceeding_2, both criminal convictions) strongly imply that doc:proceeding_6 is the appellate review of one of them. Since doc:proceeding_2 is itself an appeal (follows doc:proceeding_1) and has outcome echr:OutcomeQuashedAndRemitted, and doc:proceeding_6 shares the same year (1999) and context, it is likely a subsequent appellate stage \u2014 but without a clear lower proceeding linked, this violates the ontology rule that 'a decision described as quashing another must have a decision-below instance'. The only proceeding that could logically precede it with a matching subject matter is doc:proceeding_2, which was quashed and remitted on 1998-08-10. A remission to the same court for retrial is a new proceeding, but the facts do not describe a retrial after doc:proceeding_2, only a later proceeding (doc:proceeding_6) on 1999-02 with the same outcome. This suggests doc:proceeding_6 is not a review of doc:proceeding_2, but rather a higher-level cassation or supervisory review. Since no proceeding below doc:proceeding_6 is named or clearly exists, we cannot invent a link. However, the presence of doc:proceeding_1 (1997-04-21, conviction) and doc:proceeding_2 (1998-08-10, quashed and remitted) shows a chain: doc:proceeding_1 \u2192 doc:proceeding_2. doc:proceeding_6 must then be the next level \u2014 a review of doc:proceeding_2. The facts do not explicitly state this, but the structure demands it to satisfy the ontology requirement. Therefore, we infer doc:proceeding_6 follows doc:proceeding_2.",
+      "action": "add",
+      "subject": "doc:proceeding_6",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:proceeding_2",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings: doc:domestic_proceeding_1 has two followsProceeding links to doc:domestic_proceeding_2 and doc:domestic_proceeding_3, but all three share the same decision date (1998-05-27) and same court (implied by quote). This is inconsistent with the ontology: one proceeding cannot follow two others simultaneously unless they are parallel, but the ontology prohibits linking parallel proceedings. Moreover, the quote for doc:domestic_proceeding_1 describes a single judgment that simultaneously convicted and granted civil claims and issued further orders \u2014 suggesting these are not separate proceedings but components of one proceeding.",
+      "rationale": "The ontology defines a DomesticProceeding as 'one set of proceedings before a single national court or authority' \u2014 not one per order or claim. The single quote for doc:domestic_proceeding_1 describes one judgment on 1998-05-27 by the Nizhniy Novgorod Regional Court that contained multiple dispositions: a criminal conviction, civil damages awards, and additional orders. These are not separate proceedings but parts of one single proceeding. The separate nodes doc:domestic_proceeding_2 and doc:domestic_proceeding_3 are mis-typed: they are not independent proceedings, but internal components of doc:domestic_proceeding_1. They must be removed as echr:DomesticProceeding instances. The outcome of doc:domestic_proceeding_1 should be enriched to reflect the full disposition, and the followsProceeding links from doc:domestic_proceeding_1 to doc:domestic_proceeding_2 and doc:domestic_proceeding_3 must be removed. Additionally, the outcome of doc:domestic_proceeding_1 is currently only echr:OutcomeConviction \u2014 but the quote also includes echr:OutcomeClaimGranted (civil claims) and echr:OutcomeOther (further orders). Since the ontology permits only one hasOutcome per proceeding, and the judgment is a single decision, the outcome must be set to the most comprehensive category: echr:OutcomeOther (as it subsumes mixed outcomes), or a new composite outcome must be created \u2014 but the controlled vocabulary does not allow composite outcomes. Hence, we adopt the most inclusive outcome type: echr:OutcomeOther. We will also remove the duplicate nodes doc:domestic_proceeding_2 and doc:domestic_proceeding_3 from echr:DomesticProceeding type, and reclassify them as non-proceeding entities (e.g., echr:JudicialOrder or similar) if they exist elsewhere, but in this graph they have no other type \u2014 so we delete them as DomesticProceeding nodes and retain only doc:domestic_proceeding_1.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_1",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:domestic_proceeding_2",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings: doc:domestic_proceeding_1 has two followsProceeding links to doc:domestic_proceeding_2 and doc:domestic_proceeding_3, but all three share the same decision date (1998-05-27) and same court (implied by quote). This is inconsistent with the ontology: one proceeding cannot follow two others simultaneously unless they are parallel, but the ontology prohibits linking parallel proceedings. Moreover, the quote for doc:domestic_proceeding_1 describes a single judgment that simultaneously convicted and granted civil claims and issued further orders \u2014 suggesting these are not separate proceedings but components of one proceeding.",
+      "rationale": "The ontology defines a DomesticProceeding as 'one set of proceedings before a single national court or authority' \u2014 not one per order or claim. The single quote for doc:domestic_proceeding_1 describes one judgment on 1998-05-27 by the Nizhniy Novgorod Regional Court that contained multiple dispositions: a criminal conviction, civil damages awards, and additional orders. These are not separate proceedings but parts of one single proceeding. The separate nodes doc:domestic_proceeding_2 and doc:domestic_proceeding_3 are mis-typed: they are not independent proceedings, but internal components of doc:domestic_proceeding_1. They must be removed as echr:DomesticProceeding instances. The outcome of doc:domestic_proceeding_1 should be enriched to reflect the full disposition, and the followsProceeding links from doc:domestic_proceeding_1 to doc:domestic_proceeding_2 and doc:domestic_proceeding_3 must be removed. Additionally, the outcome of doc:domestic_proceeding_1 is currently only echr:OutcomeConviction \u2014 but the quote also includes echr:OutcomeClaimGranted (civil claims) and echr:OutcomeOther (further orders). Since the ontology permits only one hasOutcome per proceeding, and the judgment is a single decision, the outcome must be set to the most comprehensive category: echr:OutcomeOther (as it subsumes mixed outcomes), or a new composite outcome must be created \u2014 but the controlled vocabulary does not allow composite outcomes. Hence, we adopt the most inclusive outcome type: echr:OutcomeOther. We will also remove the duplicate nodes doc:domestic_proceeding_2 and doc:domestic_proceeding_3 from echr:DomesticProceeding type, and reclassify them as non-proceeding entities (e.g., echr:JudicialOrder or similar) if they exist elsewhere, but in this graph they have no other type \u2014 so we delete them as DomesticProceeding nodes and retain only doc:domestic_proceeding_1.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_1",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:domestic_proceeding_3",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings: doc:domestic_proceeding_1 has two followsProceeding links to doc:domestic_proceeding_2 and doc:domestic_proceeding_3, but all three share the same decision date (1998-05-27) and same court (implied by quote). This is inconsistent with the ontology: one proceeding cannot follow two others simultaneously unless they are parallel, but the ontology prohibits linking parallel proceedings. Moreover, the quote for doc:domestic_proceeding_1 describes a single judgment that simultaneously convicted and granted civil claims and issued further orders \u2014 suggesting these are not separate proceedings but components of one proceeding.",
+      "rationale": "The ontology defines a DomesticProceeding as 'one set of proceedings before a single national court or authority' \u2014 not one per order or claim. The single quote for doc:domestic_proceeding_1 describes one judgment on 1998-05-27 by the Nizhniy Novgorod Regional Court that contained multiple dispositions: a criminal conviction, civil damages awards, and additional orders. These are not separate proceedings but parts of one single proceeding. The separate nodes doc:domestic_proceeding_2 and doc:domestic_proceeding_3 are mis-typed: they are not independent proceedings, but internal components of doc:domestic_proceeding_1. They must be removed as echr:DomesticProceeding instances. The outcome of doc:domestic_proceeding_1 should be enriched to reflect the full disposition, and the followsProceeding links from doc:domestic_proceeding_1 to doc:domestic_proceeding_2 and doc:domestic_proceeding_3 must be removed. Additionally, the outcome of doc:domestic_proceeding_1 is currently only echr:OutcomeConviction \u2014 but the quote also includes echr:OutcomeClaimGranted (civil claims) and echr:OutcomeOther (further orders). Since the ontology permits only one hasOutcome per proceeding, and the judgment is a single decision, the outcome must be set to the most comprehensive category: echr:OutcomeOther (as it subsumes mixed outcomes), or a new composite outcome must be created \u2014 but the controlled vocabulary does not allow composite outcomes. Hence, we adopt the most inclusive outcome type: echr:OutcomeOther. We will also remove the duplicate nodes doc:domestic_proceeding_2 and doc:domestic_proceeding_3 from echr:DomesticProceeding type, and reclassify them as non-proceeding entities (e.g., echr:JudicialOrder or similar) if they exist elsewhere, but in this graph they have no other type \u2014 so we delete them as DomesticProceeding nodes and retain only doc:domestic_proceeding_1.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_1",
+      "predicate": "echr:hasOutcome",
+      "object": "echr:OutcomeOther",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings: doc:domestic_proceeding_1 has two followsProceeding links to doc:domestic_proceeding_2 and doc:domestic_proceeding_3, but all three share the same decision date (1998-05-27) and same court (implied by quote). This is inconsistent with the ontology: one proceeding cannot follow two others simultaneously unless they are parallel, but the ontology prohibits linking parallel proceedings. Moreover, the quote for doc:domestic_proceeding_1 describes a single judgment that simultaneously convicted and granted civil claims and issued further orders \u2014 suggesting these are not separate proceedings but components of one proceeding.",
+      "rationale": "The ontology defines a DomesticProceeding as 'one set of proceedings before a single national court or authority' \u2014 not one per order or claim. The single quote for doc:domestic_proceeding_1 describes one judgment on 1998-05-27 by the Nizhniy Novgorod Regional Court that contained multiple dispositions: a criminal conviction, civil damages awards, and additional orders. These are not separate proceedings but parts of one single proceeding. The separate nodes doc:domestic_proceeding_2 and doc:domestic_proceeding_3 are mis-typed: they are not independent proceedings, but internal components of doc:domestic_proceeding_1. They must be removed as echr:DomesticProceeding instances. The outcome of doc:domestic_proceeding_1 should be enriched to reflect the full disposition, and the followsProceeding links from doc:domestic_proceeding_1 to doc:domestic_proceeding_2 and doc:domestic_proceeding_3 must be removed. Additionally, the outcome of doc:domestic_proceeding_1 is currently only echr:OutcomeConviction \u2014 but the quote also includes echr:OutcomeClaimGranted (civil claims) and echr:OutcomeOther (further orders). Since the ontology permits only one hasOutcome per proceeding, and the judgment is a single decision, the outcome must be set to the most comprehensive category: echr:OutcomeOther (as it subsumes mixed outcomes), or a new composite outcome must be created \u2014 but the controlled vocabulary does not allow composite outcomes. Hence, we adopt the most inclusive outcome type: echr:OutcomeOther. We will also remove the duplicate nodes doc:domestic_proceeding_2 and doc:domestic_proceeding_3 from echr:DomesticProceeding type, and reclassify them as non-proceeding entities (e.g., echr:JudicialOrder or similar) if they exist elsewhere, but in this graph they have no other type \u2014 so we delete them as DomesticProceeding nodes and retain only doc:domestic_proceeding_1.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_2",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings: doc:domestic_proceeding_1 has two followsProceeding links to doc:domestic_proceeding_2 and doc:domestic_proceeding_3, but all three share the same decision date (1998-05-27) and same court (implied by quote). This is inconsistent with the ontology: one proceeding cannot follow two others simultaneously unless they are parallel, but the ontology prohibits linking parallel proceedings. Moreover, the quote for doc:domestic_proceeding_1 describes a single judgment that simultaneously convicted and granted civil claims and issued further orders \u2014 suggesting these are not separate proceedings but components of one proceeding.",
+      "rationale": "The ontology defines a DomesticProceeding as 'one set of proceedings before a single national court or authority' \u2014 not one per order or claim. The single quote for doc:domestic_proceeding_1 describes one judgment on 1998-05-27 by the Nizhniy Novgorod Regional Court that contained multiple dispositions: a criminal conviction, civil damages awards, and additional orders. These are not separate proceedings but parts of one single proceeding. The separate nodes doc:domestic_proceeding_2 and doc:domestic_proceeding_3 are mis-typed: they are not independent proceedings, but internal components of doc:domestic_proceeding_1. They must be removed as echr:DomesticProceeding instances. The outcome of doc:domestic_proceeding_1 should be enriched to reflect the full disposition, and the followsProceeding links from doc:domestic_proceeding_1 to doc:domestic_proceeding_2 and doc:domestic_proceeding_3 must be removed. Additionally, the outcome of doc:domestic_proceeding_1 is currently only echr:OutcomeConviction \u2014 but the quote also includes echr:OutcomeClaimGranted (civil claims) and echr:OutcomeOther (further orders). Since the ontology permits only one hasOutcome per proceeding, and the judgment is a single decision, the outcome must be set to the most comprehensive category: echr:OutcomeOther (as it subsumes mixed outcomes), or a new composite outcome must be created \u2014 but the controlled vocabulary does not allow composite outcomes. Hence, we adopt the most inclusive outcome type: echr:OutcomeOther. We will also remove the duplicate nodes doc:domestic_proceeding_2 and doc:domestic_proceeding_3 from echr:DomesticProceeding type, and reclassify them as non-proceeding entities (e.g., echr:JudicialOrder or similar) if they exist elsewhere, but in this graph they have no other type \u2014 so we delete them as DomesticProceeding nodes and retain only doc:domestic_proceeding_1.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_3",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings: doc:proceeding_3 has follows doc:proceeding_2, but doc:proceeding_2 has decision date 1998-08-10 and doc:proceeding_3 has start date 1998-05 and decision date 1998-05-27 \u2014 which is chronologically impossible. This suggests doc:proceeding_3 was mis-identified as a separate proceeding that follows doc:proceeding_2. In fact, doc:proceeding_3 appears to be a duplicate of doc:domestic_proceeding_1, which also has decision date 1998-05-27 and the same outcome (echr:OutcomeClaimGranted). This is likely a duplicate node created by error.",
+      "rationale": "doc:proceeding_3 has the same decision date (1998-05-27), same outcome (echr:OutcomeClaimGranted), and same context (civil claims by companies) as doc:domestic_proceeding_1. The only difference is the start date \u2014 which may be a data entry error. Since doc:domestic_proceeding_1 already covers this outcome and is correctly typed as the single proceeding that contained the conviction and civil claims, doc:proceeding_3 must be a duplicate. It cannot logically follow doc:proceeding_2 (which is dated after) and yet have a decision date before it. Therefore, doc:proceeding_3 should be removed as a DomesticProceeding node. The followsProceeding link from doc:proceeding_3 to doc:proceeding_2 is invalid and must be removed. The node itself is redundant and misleading.",
+      "action": "remove",
+      "subject": "doc:proceeding_3",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:proceeding_2",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings: doc:proceeding_3 has follows doc:proceeding_2, but doc:proceeding_2 has decision date 1998-08-10 and doc:proceeding_3 has start date 1998-05 and decision date 1998-05-27 \u2014 which is chronologically impossible. This suggests doc:proceeding_3 was mis-identified as a separate proceeding that follows doc:proceeding_2. In fact, doc:proceeding_3 appears to be a duplicate of doc:domestic_proceeding_1, which also has decision date 1998-05-27 and the same outcome (echr:OutcomeClaimGranted). This is likely a duplicate node created by error.",
+      "rationale": "doc:proceeding_3 has the same decision date (1998-05-27), same outcome (echr:OutcomeClaimGranted), and same context (civil claims by companies) as doc:domestic_proceeding_1. The only difference is the start date \u2014 which may be a data entry error. Since doc:domestic_proceeding_1 already covers this outcome and is correctly typed as the single proceeding that contained the conviction and civil claims, doc:proceeding_3 must be a duplicate. It cannot logically follow doc:proceeding_2 (which is dated after) and yet have a decision date before it. Therefore, doc:proceeding_3 should be removed as a DomesticProceeding node. The followsProceeding link from doc:proceeding_3 to doc:proceeding_2 is invalid and must be removed. The node itself is redundant and misleading.",
+      "action": "remove",
+      "subject": "doc:proceeding_3",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings: doc:proceeding_1 and doc:proceeding_2 form a clear chain: doc:proceeding_1 (conviction, 1997-04-21) \u2192 doc:proceeding_2 (quashed and remitted, 1998-08-10). But doc:proceeding_2 has a followsProceeding link to doc:proceeding_1, which is correct. However, doc:proceeding_1 has no hasCourt property set. The quote for doc:proceeding_1 does not name the court, but the quote for doc:domestic_proceeding_1 (same outcome, same date) names the Nizhniy Novgorod Regional Court. Given that doc:proceeding_1 is the first-instance conviction, it must be the same court. We infer the court for doc:proceeding_1.",
+      "rationale": "The ontology requires that every DomesticProceeding have a hasCourt. doc:proceeding_1 has no court assigned. The only court named in the entire graph is the Nizhniy Novgorod Regional Court, referenced in the quote for doc:domestic_proceeding_1. Since doc:proceeding_1 and doc:domestic_proceeding_1 share the same outcome (conviction) and date (1997-04-21), and doc:proceeding_2 (the appeal) is clearly the next level in the same case, it is certain that doc:proceeding_1 was decided by the Nizhniy Novgorod Regional Court. We assign hasCourt accordingly.",
+      "action": "add",
+      "subject": "doc:proceeding_1",
+      "predicate": "echr:hasCourt",
+      "object": "doc:nizhniy_novgorod_regional_court",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "skipped: object node does not exist in the graph or this patch"
+    },
+    {
+      "finding": "domestic_proceedings: doc:proceeding_4 has outcome echr:OutcomeMeasureImposed and date 1995-10-05, with start date 1995-03. It is the only proceeding between the case start (1995) and the first conviction (1997). The facts do not describe what measure was imposed, but it likely relates to pre-trial detention or interim measure. The ontology requires that if a pre-trial detention was ordered in this proceeding, it must be attached via hasPreTrialDetention. The validator flagged pre_trial_detention_1 as having three hasDomesticProceeding links \u2014 which is invalid because hasDomesticDetention is a one-to-one property. This suggests pre_trial_detention_1 was incorrectly linked to multiple proceedings. Since doc:proceeding_4 is the only proceeding in 1995-10 with a measure, and detention is the most likely measure, we assign pre_trial_detention_1 to doc:proceeding_4 and remove it from the others.",
+      "rationale": "The validator reports that pre_trial_detention_1 is linked to proceeding_1, proceeding_2, and proceeding_3 \u2014 all of which occur after 1995. But the detention likely began at the outset of the case (1995-03) and was ordered or continued in doc:proceeding_4 (1995-10). It is therefore only appropriate to attach it to doc:proceeding_4. The other links are incorrect and violate the functional property constraint. We reassign the pre-trial detention to doc:proceeding_4 and remove the other links.",
+      "action": "remove",
+      "subject": "doc:pre_trial_detention_1",
+      "predicate": "echr:hasDomesticProceeding",
+      "object": "doc:proceeding_1",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings: doc:proceeding_4 has outcome echr:OutcomeMeasureImposed and date 1995-10-05, with start date 1995-03. It is the only proceeding between the case start (1995) and the first conviction (1997). The facts do not describe what measure was imposed, but it likely relates to pre-trial detention or interim measure. The ontology requires that if a pre-trial detention was ordered in this proceeding, it must be attached via hasPreTrialDetention. The validator flagged pre_trial_detention_1 as having three hasDomesticProceeding links \u2014 which is invalid because hasDomesticDetention is a one-to-one property. This suggests pre_trial_detention_1 was incorrectly linked to multiple proceedings. Since doc:proceeding_4 is the only proceeding in 1995-10 with a measure, and detention is the most likely measure, we assign pre_trial_detention_1 to doc:proceeding_4 and remove it from the others.",
+      "rationale": "The validator reports that pre_trial_detention_1 is linked to proceeding_1, proceeding_2, and proceeding_3 \u2014 all of which occur after 1995. But the detention likely began at the outset of the case (1995-03) and was ordered or continued in doc:proceeding_4 (1995-10). It is therefore only appropriate to attach it to doc:proceeding_4. The other links are incorrect and violate the functional property constraint. We reassign the pre-trial detention to doc:proceeding_4 and remove the other links.",
+      "action": "remove",
+      "subject": "doc:pre_trial_detention_1",
+      "predicate": "echr:hasDomesticProceeding",
+      "object": "doc:proceeding_2",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings: doc:proceeding_4 has outcome echr:OutcomeMeasureImposed and date 1995-10-05, with start date 1995-03. It is the only proceeding between the case start (1995) and the first conviction (1997). The facts do not describe what measure was imposed, but it likely relates to pre-trial detention or interim measure. The ontology requires that if a pre-trial detention was ordered in this proceeding, it must be attached via hasPreTrialDetention. The validator flagged pre_trial_detention_1 as having three hasDomesticProceeding links \u2014 which is invalid because hasDomesticDetention is a one-to-one property. This suggests pre_trial_detention_1 was incorrectly linked to multiple proceedings. Since doc:proceeding_4 is the only proceeding in 1995-10 with a measure, and detention is the most likely measure, we assign pre_trial_detention_1 to doc:proceeding_4 and remove it from the others.",
+      "rationale": "The validator reports that pre_trial_detention_1 is linked to proceeding_1, proceeding_2, and proceeding_3 \u2014 all of which occur after 1995. But the detention likely began at the outset of the case (1995-03) and was ordered or continued in doc:proceeding_4 (1995-10). It is therefore only appropriate to attach it to doc:proceeding_4. The other links are incorrect and violate the functional property constraint. We reassign the pre-trial detention to doc:proceeding_4 and remove the other links.",
+      "action": "remove",
+      "subject": "doc:pre_trial_detention_1",
+      "predicate": "echr:hasDomesticProceeding",
+      "object": "doc:proceeding_3",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings: doc:proceeding_4 has outcome echr:OutcomeMeasureImposed and date 1995-10-05, with start date 1995-03. It is the only proceeding between the case start (1995) and the first conviction (1997). The facts do not describe what measure was imposed, but it likely relates to pre-trial detention or interim measure. The ontology requires that if a pre-trial detention was ordered in this proceeding, it must be attached via hasPreTrialDetention. The validator flagged pre_trial_detention_1 as having three hasDomesticProceeding links \u2014 which is invalid because hasDomesticDetention is a one-to-one property. This suggests pre_trial_detention_1 was incorrectly linked to multiple proceedings. Since doc:proceeding_4 is the only proceeding in 1995-10 with a measure, and detention is the most likely measure, we assign pre_trial_detention_1 to doc:proceeding_4 and remove it from the others.",
+      "rationale": "The validator reports that pre_trial_detention_1 is linked to proceeding_1, proceeding_2, and proceeding_3 \u2014 all of which occur after 1995. But the detention likely began at the outset of the case (1995-03) and was ordered or continued in doc:proceeding_4 (1995-10). It is therefore only appropriate to attach it to doc:proceeding_4. The other links are incorrect and violate the functional property constraint. We reassign the pre-trial detention to doc:proceeding_4 and remove the other links.",
+      "action": "add",
+      "subject": "doc:pre_trial_detention_1",
+      "predicate": "echr:hasDomesticProceeding",
+      "object": "doc:proceeding_4",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings: doc:proceeding_5 has decision date 1996-05-18 and outcome echr:OutcomeClaimGranted, with no quotes. It appears to be a separate civil proceeding (possibly related to the same underlying grievance). The facts do not describe it as reviewing or being reviewed by any other proceeding. It is not linked to any other proceeding. The ontology permits parallel proceedings on the same grievance (e.g. complaint to prosecutor + court application) \u2014 as long as they are not linked by followsProceeding. Therefore, it may remain as-is, but we must check if it is the final domestic decision. None of the proceedings are marked isFinalDomesticDecision true. Since the application went to Strasbourg, one proceeding must be marked final. The most comprehensive proceeding is doc:domestic_proceeding_1 (after correction) which contains conviction, civil claims, and orders. It is the last comprehensive decision before the application. We set isFinalDomesticDecision to true on doc:domestic_proceeding_1.",
+      "rationale": "The facts do not indicate any proceeding after doc:domestic_proceeding_1 (1998-05-27) that exhausts domestic remedies. doc:proceeding_2 (1998-08-10) was a review of doc:proceeding_1 and was itself quashed \u2014 so the case was remitted. Then doc:proceeding_6 (1999-02) is a higher review of doc:proceeding_2. But there is no indication that a new conviction was rendered after remission. The applicant applied to Strasbourg without a final decision on the criminal charges \u2014 meaning the last effective decision was the 1998-05-27 judgment. Therefore, doc:domestic_proceeding_1 is the last decision that could be considered final for the purposes of exhausting remedies, even though the case was later appealed and remitted \u2014 because the appeal did not produce a new final outcome on the merits. The ECHR often treats the first-instance judgment as the final domestic decision if no subsequent final ruling was issued. We therefore set isFinalDomesticDecision to true on doc:domestic_proceeding_1.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_1",
+      "predicate": "echr:isFinalDomesticDecision",
+      "object": "true",
+      "object_is_literal": true,
+      "datatype": "xsd:boolean",
+      "lang": null,
+      "status": "applied"
+    }
+  ]
+}

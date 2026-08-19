@@ -1,0 +1,65 @@
+{
+  "source": "results/experiment_20260818_143651/gpt5mini/repaired/input.L5.facts.ttl",
+  "operations": [
+    {
+      "finding": "duplicate_domestic_proceeding",
+      "rationale": "The node doc:appeal_against_decision_of_22_december_2016 appears to duplicate the Kyiv Administrative Court of Appeal decision already represented by doc:proc_kyiv_admin_appeal_2017. Both carry the same decision date (2017-03-06) and refer to the appeal against the decision of 22 December 2016. The more specific node doc:proc_kyiv_admin_appeal_2017 is typed with a court and an explicit quote: \"On 6 March 2017 the Kyiv Administrative Court of Appeal quashed the decision of 22 December 2016.\" The generic node's quote \"the applicant\u2019s appeal against the decision of 22 December 2016 had been rejected.\" is inconsistent with and redundant given the detailed proc_kyiv_admin_appeal_2017 entry. Remove the extraneous triples that identify doc:appeal_against_decision_of_22_december_2016 as a separate DomesticProceeding.",
+      "action": "remove",
+      "subject": "doc:appeal_against_decision_of_22_december_2016",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "duplicate_domestic_proceeding",
+      "rationale": "The node doc:appeal_against_decision_of_22_december_2016 appears to duplicate the Kyiv Administrative Court of Appeal decision already represented by doc:proc_kyiv_admin_appeal_2017. Both carry the same decision date (2017-03-06) and refer to the appeal against the decision of 22 December 2016. The more specific node doc:proc_kyiv_admin_appeal_2017 is typed with a court and an explicit quote: \"On 6 March 2017 the Kyiv Administrative Court of Appeal quashed the decision of 22 December 2016.\" The generic node's quote \"the applicant\u2019s appeal against the decision of 22 December 2016 had been rejected.\" is inconsistent with and redundant given the detailed proc_kyiv_admin_appeal_2017 entry. Remove the extraneous triples that identify doc:appeal_against_decision_of_22_december_2016 as a separate DomesticProceeding.",
+      "action": "remove",
+      "subject": "doc:appeal_against_decision_of_22_december_2016",
+      "predicate": "echr:hasDecisionDate",
+      "object": "2017-03-06",
+      "object_is_literal": true,
+      "datatype": "xsd:date",
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "duplicate_domestic_proceeding",
+      "rationale": "The node doc:appeal_against_decision_of_22_december_2016 appears to duplicate the Kyiv Administrative Court of Appeal decision already represented by doc:proc_kyiv_admin_appeal_2017. Both carry the same decision date (2017-03-06) and refer to the appeal against the decision of 22 December 2016. The more specific node doc:proc_kyiv_admin_appeal_2017 is typed with a court and an explicit quote: \"On 6 March 2017 the Kyiv Administrative Court of Appeal quashed the decision of 22 December 2016.\" The generic node's quote \"the applicant\u2019s appeal against the decision of 22 December 2016 had been rejected.\" is inconsistent with and redundant given the detailed proc_kyiv_admin_appeal_2017 entry. Remove the extraneous triples that identify doc:appeal_against_decision_of_22_december_2016 as a separate DomesticProceeding.",
+      "action": "remove",
+      "subject": "doc:appeal_against_decision_of_22_december_2016",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:decision_of_22_december_2016",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "duplicate_domestic_proceeding",
+      "rationale": "The node doc:decision_of_22_december_2016 duplicates the Podilskyy District Court decision recorded as doc:proc_podilskyy_2016 (which contains the explicit date 2016-12-22, court label and the quote: \"On 22 December 2016 the Podilskyy District Court decided not to examine the applicant\u2019s appeal.\"). The facts therefore support treating the Podilskyy District Court entry (doc:proc_podilskyy_2016) as the canonical proceeding and not doc:decision_of_22_december_2016. Remove the triple typing doc:decision_of_22_december_2016 as an echr:DomesticProceeding.",
+      "action": "remove",
+      "subject": "doc:decision_of_22_december_2016",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "duplicate_domestic_proceeding",
+      "rationale": "The node doc:procQdcZakarpattya (label: \"the QDC of Zakarpattya had examined the applicant\u2019s case\") appears to be a terse duplicate of doc:proceeding_qdc_zakarpattya_investigation_2013_01_24_2013_04_17, which contains the full dates and outcome for the QDC of Zakarpattya (transfer on 24 January 2013 and the 17 April 2013 suspension). The detailed node documents the same event (quote: \"On 17 April 2013, in the applicant\u2019s absence, the Disciplinary Chamber of the QDC of Zakarpattya suspended the applicant\u2019s licence...\"). Remove the simple/duplicative typing on doc:procQdcZakarpattya so only the detailed proceeding remains typed as the DomesticProceeding.",
+      "action": "remove",
+      "subject": "doc:procQdcZakarpattya",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    }
+  ]
+}

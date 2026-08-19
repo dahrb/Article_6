@@ -1,0 +1,101 @@
+{
+  "source": "results/experiment_20260818_143651/gpt5mini/repaired/input.L2.facts.ttl",
+  "operations": [
+    {
+      "finding": "incorrect_follows_to_precedent",
+      "rationale": "The Darmstadt Labour Court merely \"referred to the decision of the Federal Labour Court in the case of Mr Waite and Mr Kennedy\" (quote on the Federal Labour Court node). That language indicates the Federal Labour Court decision is cited as precedent, not a decision in the applicants' own domestic chain. Therefore the echr:followsProceeding link from the Darmstadt node to the Federal Labour Court node is not a domestic-chain link and should be removed.",
+      "action": "remove",
+      "subject": "doc:darmstadtProceeding",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:federalLabourCourtDecision",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "precedent_nodes_mistyped_as_domestic_proceedings",
+      "rationale": "The nodes labelled as Federal Labour Court decisions are cited by the Darmstadt Labour Court as precedent: \"The Labour Court further referred to the decision of the Federal Labour Court in the case of Mr Waite and Mr Kennedy.\" That indicates these are external/cited case-law, not proceedings in the applicants' domestic case, so they should not be typed as echr:DomesticProceeding in this case.",
+      "action": "remove",
+      "subject": "doc:federalLabourCourtDecision",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "precedent_nodes_mistyped_as_domestic_proceedings",
+      "rationale": "The nodes labelled as Federal Labour Court decisions are cited by the Darmstadt Labour Court as precedent: \"The Labour Court further referred to the decision of the Federal Labour Court in the case of Mr Waite and Mr Kennedy.\" That indicates these are external/cited case-law, not proceedings in the applicants' domestic case, so they should not be typed as echr:DomesticProceeding in this case.",
+      "action": "remove",
+      "subject": "doc:federal_labour_court_decision_10_nov_1993",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "duplicate_nodes_describing_same_darmstadt_proceeding",
+      "rationale": "Multiple nodes describe the same Darmstadt Labour Court proceedings. For example: doc:proceeding_applicants_vs_esa_1993 states \"On 21 March 1995 the Darmstadt Labour Court... declared the applicants\u2019 respective actions inadmissible.\" doc:darmstadtProceeding likewise records the Darmstadt Labour Court finding the applicants' action inadmissible. These are not distinct proceedings; keep the dated node (doc:proceeding_applicants_vs_esa_1993) as the domestic proceeding and remove the redundant echr:DomesticProceeding typing from the duplicate/summary nodes so they do not create spurious separate proceedings.",
+      "action": "remove",
+      "subject": "doc:darmstadtProceeding",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "duplicate_nodes_describing_same_darmstadt_proceeding",
+      "rationale": "Multiple nodes describe the same Darmstadt Labour Court proceedings. For example: doc:proceeding_applicants_vs_esa_1993 states \"On 21 March 1995 the Darmstadt Labour Court... declared the applicants\u2019 respective actions inadmissible.\" doc:darmstadtProceeding likewise records the Darmstadt Labour Court finding the applicants' action inadmissible. These are not distinct proceedings; keep the dated node (doc:proceeding_applicants_vs_esa_1993) as the domestic proceeding and remove the redundant echr:DomesticProceeding typing from the duplicate/summary nodes so they do not create spurious separate proceedings.",
+      "action": "remove",
+      "subject": "doc:domesticProceedingLabourCourtInstitutedByApplicants",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "summary_node_mistyped_as_final_domestic_decision",
+      "rationale": "The node doc:germanCourtsImmunityDecision contains general statements about how \"the German courts applied immunity from jurisdiction to ESA\" and the Court's assessment that \"in giving effect to the immunity from jurisdiction of ESA ... the German courts did not exceed their margin of appreciation.\" This reads as a summary/statement of domestic practice and the Court's assessment, not as a specific, dated domestic decision in this applicant's case. It therefore should not be typed as an echr:DomesticProceeding and must not carry isFinalDomesticDecision=true or an echr:followsProceeding link into the applicants' proceedings.",
+      "action": "remove",
+      "subject": "doc:germanCourtsImmunityDecision",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "summary_node_mistyped_as_final_domestic_decision",
+      "rationale": "The node doc:germanCourtsImmunityDecision contains general statements about how \"the German courts applied immunity from jurisdiction to ESA\" and the Court's assessment that \"in giving effect to the immunity from jurisdiction of ESA ... the German courts did not exceed their margin of appreciation.\" This reads as a summary/statement of domestic practice and the Court's assessment, not as a specific, dated domestic decision in this applicant's case. It therefore should not be typed as an echr:DomesticProceeding and must not carry isFinalDomesticDecision=true or an echr:followsProceeding link into the applicants' proceedings.",
+      "action": "remove",
+      "subject": "doc:germanCourtsImmunityDecision",
+      "predicate": "echr:isFinalDomesticDecision",
+      "object": "true",
+      "object_is_literal": true,
+      "datatype": "xsd:boolean",
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "summary_node_mistyped_as_final_domestic_decision",
+      "rationale": "The node doc:germanCourtsImmunityDecision contains general statements about how \"the German courts applied immunity from jurisdiction to ESA\" and the Court's assessment that \"in giving effect to the immunity from jurisdiction of ESA ... the German courts did not exceed their margin of appreciation.\" This reads as a summary/statement of domestic practice and the Court's assessment, not as a specific, dated domestic decision in this applicant's case. It therefore should not be typed as an echr:DomesticProceeding and must not carry isFinalDomesticDecision=true or an echr:followsProceeding link into the applicants' proceedings.",
+      "action": "remove",
+      "subject": "doc:germanCourtsImmunityDecision",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:applicantsAttemptRecognitionOfEmployment",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    }
+  ]
+}

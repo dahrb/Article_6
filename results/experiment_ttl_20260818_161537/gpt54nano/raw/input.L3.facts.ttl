@@ -1,0 +1,270 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/3b626fe59823/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/3b626fe59823> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:3"^^xsd:string .
+
+doc:administrative_court_2006_07_20 a echr:DomesticProceeding ;
+    rdfs:label "Supreme Administrative Court"@en ;
+    echr:followsProceeding doc:administrative_enforcement_initiated_law_6183_first_instance ;
+    echr:hasCourt doc:supremeAdministrativeCourtAuthority ;
+    echr:hasDecisionDate "2006-07-20"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "47"^^xsd:string ;
+    echr:hasSupportingQuote "On 20 July 2006, the Supreme Administrative Court, ruling unanimously, found that the applicant had a legal interest in the enforcement proceedings initiated under Law no. 6183"@en,
+        "quashed the administrative court’s earlier decision"@en .
+
+doc:constitutional_court_decision_2018_05_23 a echr:DomesticProceeding ;
+    rdfs:label "decision of 23 May 2018"@en ;
+    echr:followsProceeding doc:individual_application_constitutional_court_2017_09_11 ;
+    echr:hasCourt doc:constitutionalCourtAuthority ;
+    echr:hasDecisionDate "2018-05-23"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "42"^^xsd:string ;
+    echr:hasSupportingQuote "In a decision of 23 May 2018, the Constitutional Court observed"@en .
+
+doc:domestic_proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "non-enforcement of judgments delivered by the Supreme Administrative Court following proceedings initiated by the applicant"@en ;
+    echr:followsProceeding doc:domestic_proceeding_1 ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "the non-enforcement of judgments delivered by the Supreme Administrative Court following proceedings initiated by the applicant"^^xsd:string .
+
+doc:domestic_proceeding_consolidate_radio_viva_assets_2007_07_19 a echr:DomesticProceeding ;
+    rdfs:label "consolidation of seized assets for radio viva into a single economic and commercial unit"@en ;
+    echr:hasSourceParagraph "18"^^xsd:string ;
+    echr:hasSupportingQuote "This consolidation included the following companies: Aks Radyo ve Yayıncılık Sanayi ve Ticaret A.Ş., Medya İletişim Hizmetleri Sanayi A.Ş., Anadolu Radyo ve Görüntü Hizmetleri A.Ş., and Erdem Radyo Televizyon Yayıncılığı ve Reklamcılık A.Ş."^^xsd:string .
+
+doc:domestic_proceeding_consolidate_viva_tv_assets_2007_07_19 a echr:DomesticProceeding ;
+    rdfs:label "consolidation of seized assets for viva tv into a single economic and commercial unit"@en ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:hasSupportingQuote "With respect to Viva TV, the Fund resolved to consolidate all seized assets, rights, properties and associated components, such as contracts and the rights arising therefrom, belonging to debtor companies within the Erol Aksoy Group and effectively used by Viva TV into a single economic and commercial unit"^^xsd:string .
+
+doc:domestic_proceeding_decision_initiate_legal_proceedings_2008_04_03 a echr:DomesticProceeding ;
+    rdfs:label "fund decided to initiate legal proceedings"@en ;
+    echr:followsProceeding doc:domestic_proceeding_liquidation_protocol_signed_2006_05_09 ;
+    echr:hasProceedingStartDate "2008-04-03"^^echr:PartialDate ;
+    echr:hasSourceParagraph "13"^^xsd:string ;
+    echr:hasSupportingQuote "On 3 April 2008, the Fund concluded that the Erol Aksoy Group had failed to fulfil several commitments and obligations set out in the Liquidation Protocol, rendering the Protocol no longer effective for the recovery of public receivables. Consequently, the Fund decided to rely on its provisions concerning default. It resolved to initiate legal proceedings against all natural and legal person debtors within the Erol Aksoy Group"^^xsd:string .
+
+doc:domestic_proceeding_enforcement_23_mar_2016 a echr:DomesticProceeding ;
+    rdfs:label "a letter dated 23 March 2016"@en ;
+    echr:followsProceeding doc:domestic_proceeding_supreme_admin_rectification_25_jan_2016 ;
+    echr:hasInstanceLevel echr:LevelEnforcement ;
+    echr:hasProceedingStartDate "2016-03"^^echr:PartialDate ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "31"^^xsd:string ;
+    echr:hasSupportingQuote "In a letter dated 23 March 2016, the applicant communicated with the Fund, requesting the enforcement of the annulment judgment."^^xsd:string ;
+    echr:isPending true .
+
+doc:domestic_proceeding_establish_economic_units_2007_07_19 a echr:DomesticProceeding ;
+    rdfs:label "fund decided to establish two economic and commercial units"@en ;
+    echr:hasProceedingStartDate "2007-07-19"^^echr:PartialDate ;
+    echr:hasSourceParagraph "16"^^xsd:string ;
+    echr:hasSupportingQuote "On 19 July 2007, the Fund decided to establish two economic and commercial units: one for Viva TV and the other for Radio Viva"^^xsd:string .
+
+doc:domestic_proceeding_merge_units_2009_07_09 a echr:DomesticProceeding ;
+    rdfs:label "fund decided to merge the two economic and commercial units"@en ;
+    echr:hasProceedingStartDate "2009-07-09"^^echr:PartialDate ;
+    echr:hasSourceParagraph "22"^^xsd:string ;
+    echr:hasSupportingQuote "On 9 July 2009, the Fund decided to merge the two economic and commercial units, thereby creating the Viva TV-Radio Viva Economic and Commercial Unit"^^xsd:string .
+
+doc:domestic_proceeding_offer_both_units_for_sale_2007_08_29 a echr:DomesticProceeding ;
+    rdfs:label "fund offered viva tv and radio viva for sale in a single tendering process"@en ;
+    echr:hasProceedingStartDate "2007-08-29"^^echr:PartialDate ;
+    echr:hasSourceParagraph "20"^^xsd:string ;
+    echr:hasSupportingQuote "On 29 August 2007, the Fund resolved to offer both Viva TV and Radio Viva for sale together in a single tendering process, setting a reserve price of USD 8,000,000. However, as no bids were received, the tendering process could not proceed"^^xsd:string .
+
+doc:domestic_proceeding_offer_merged_unit_for_sale_2009_11_05 a echr:DomesticProceeding ;
+    rdfs:label "fund resolved to offer viva tv-radio viva for sale with reserve price and postponed tendering"@en ;
+    echr:hasProceedingStartDate "2009-11-05"^^echr:PartialDate ;
+    echr:hasSourceParagraph "23"^^xsd:string ;
+    echr:hasSupportingQuote "On 5 November 2009, the Fund resolved to offer Viva TV-Radio Viva for sale, establishing a reserve price of USD 6,000,000. Although a company, P. A.Ş., obtained the tender documents with the intention of submitting a bid, the tendering process was subsequently postponed"^^xsd:string .
+
+doc:domestic_proceeding_offer_merged_unit_for_sale_2011_01_13 a echr:DomesticProceeding ;
+    rdfs:label "fund decided to offer viva tv-radio viva for sale again and set reserve price"@en ;
+    echr:hasProceedingStartDate "2011-01-13"^^echr:PartialDate ;
+    echr:hasSourceParagraph "24"^^xsd:string ;
+    echr:hasSupportingQuote "On 13 January 2011, the Fund decided to offer Viva TV-Radio Viva for sale again, setting the reserve price at USD 6,000,000. Three companies acquired the tender documents. However, only company A. participated in the auction held on 8 February 2011"^^xsd:string .
+
+doc:domestic_proceeding_transfer_management_control_2008_09_18 a echr:DomesticProceeding ;
+    rdfs:label "fund resolved to transfer management and control of companies"@en ;
+    echr:hasProceedingStartDate "2008-09-18"^^echr:PartialDate ;
+    echr:hasSourceParagraph "14"^^xsd:string ;
+    echr:hasSupportingQuote "On 18 September 2008, the Fund further resolved to transfer the management and control of all companies within the Erol Aksoy Group to itself, along with the rights of their shareholders, except for the entitlement to dividends"^^xsd:string .
+
+doc:domestic_proceeding_valuation_report_2009_06_30 a echr:DomesticProceeding ;
+    rdfs:label "valuation report determined updated values of radio viva and viva tv"@en ;
+    echr:hasProceedingStartDate "2009-06-30"^^echr:PartialDate ;
+    echr:hasSourceParagraph "21"^^xsd:string ;
+    echr:hasSupportingQuote "On 30 June 2009, a valuation report issued by TSKB determined that the value of Radio Viva was USD 5,782,000 and the value of Viva TV was USD 132,000"^^xsd:string .
+
+doc:domestic_proceeding_value_report_radio_viva_viva_tv_2007_08_01 a echr:DomesticProceeding ;
+    rdfs:label "tskb issued report determining values of radio viva and viva tv economic and commercial units"@en ;
+    echr:hasProceedingStartDate "2007-08-01"^^echr:PartialDate ;
+    echr:hasSourceParagraph "19"^^xsd:string ;
+    echr:hasSupportingQuote "On 1 August 2007, the Industrial Development Bank of Türkiye ( Türkiye Sınaî Kalkınma Bankası A.Ş ., hereinafter referred to as “TSKB”) issued a report and determined that the value of the Radio Viva Economic and Commercial Unit (hereinafter referred to as “Radio Viva”) was 4,258,000 United States dollars (USD), while the value of the Viva TV Economic and Commercial Unit (hereinafter referred to as “Viva TV”) was USD 373,400"^^xsd:string .
+
+doc:impossibility_of_enforcement_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "On 27 October 2015, the Fund took a decision regarding the impossibility of enforcing the judgment"@en ;
+    echr:followsProceeding doc:enforcement_decision_proceeding_1 ;
+    echr:hasDecisionDate "2015-10-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelEnforcement ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "33"^^xsd:string ;
+    echr:hasSupportingQuote "On 27 October 2015, the Fund notified the applicant of a decision taken on 27 October 2015 regarding the impossibility of enforcing the judgment."^^xsd:string .
+
+doc:administrative_court_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "On 19 March 2014, the 6th Chamber of the İstanbul Administrative Court dismissed the applicant’s claim"@en ;
+    echr:followsProceeding doc:rectification_proceeding_1 ;
+    echr:hasDecisionDate "2014-03-19"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "35"^^xsd:string ;
+    echr:hasSupportingQuote "On 19 March 2014, the 6th Chamber of the İstanbul Administrative Court dismissed the applicant’s claim, concluding that no legal irregularities had occurred in the tendering and sale procedures."^^xsd:string .
+
+doc:administrative_enforcement_initiated_law_6183_first_instance a echr:DomesticProceeding ;
+    rdfs:label "enforcement proceedings initiated under Law no. 6183"@en ;
+    echr:hasCourt doc:firstInstanceAdministrativeCourtAuthority ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "46"^^xsd:string ;
+    echr:hasSupportingQuote "the first-instance administrative court, which had dismissed the case on the grounds of his lack of standing"@en .
+
+doc:domestic_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "proceedings initiated by the applicant to annul decisions related to the valuation, tender invitation and subsequent sale"@en ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "proceedings initiated by the applicant to annul decisions related to the valuation, tender invitation and subsequent sale of a television channel and radio station"^^xsd:string .
+
+doc:domestic_proceeding_app_admin_court_7_feb_2011 a echr:DomesticProceeding ;
+    rdfs:label "on 7 February 2011"@en ;
+    echr:followsProceeding doc:domestic_proceeding_supreme_admin_general_assembly_7_jul_2015 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasProceedingStartDate "2011-02"^^echr:PartialDate ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "27"^^xsd:string ;
+    echr:hasSupportingQuote "On 7 February 2011, the applicant initiated proceedings before the administrative court, contesting the actions of the Fund concerning the tendering of Viva TV-Radio Viva"^^xsd:string .
+
+doc:domestic_proceeding_liquidation_protocol_signed_2006_05_09 a echr:DomesticProceeding ;
+    rdfs:label "debt liquidation protocol signed"@en ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "On 9 May 2006, a debt liquidation protocol ( Borç Tasfiye Protokolü , hereinafter referred to as “the Liquidation Protocol”) was signed between the Fund (as creditor) and the Erol Aksoy Group (as debtor)"^^xsd:string .
+
+doc:domestic_proceeding_supreme_admin_court_9_dec_2014 a echr:DomesticProceeding ;
+    rdfs:label "on 9 December 2014"@en ;
+    echr:followsProceeding doc:domestic_proceeding_app_admin_court_7_feb_2011 ;
+    echr:hasDecisionDate "2014-12"^^echr:PartialDate ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "28"^^xsd:string ;
+    echr:hasSupportingQuote "On 9 December 2014, the 13th Chamber of the Supreme Administrative Court dismissed the applicant’s case."^^xsd:string .
+
+doc:domestic_proceeding_supreme_admin_rectification_25_jan_2016 a echr:DomesticProceeding ;
+    rdfs:label "on 25 January 2016"@en ;
+    echr:followsProceeding doc:domestic_proceeding_supreme_admin_general_assembly_7_jul_2015 ;
+    echr:hasDecisionDate "2016-01"^^echr:PartialDate ;
+    echr:hasInstanceLevel echr:LevelReopening ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "30"^^xsd:string ;
+    echr:hasSupportingQuote "On 25 January 2016, the Supreme Administrative Court rejected the Fund’s request for rectification"^^xsd:string .
+
+doc:enforcement_decision_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "On 11 August 2017, the Fund made a decision regarding the enforcement of the relevant judgment"@en ;
+    echr:followsProceeding doc:enforcement_proceeding_1 ;
+    echr:hasDecisionDate "2017-08-11"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelEnforcement ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "40"^^xsd:string ;
+    echr:hasSupportingQuote "On 5 September 2017, the Fund responded, stating that a decision had already been made on 11 August 2017 regarding the enforcement of the relevant judgment."^^xsd:string .
+
+doc:enforcement_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "On 7 August 2017, the applicant requested the Fund to enforce the annulment judgment"@en ;
+    echr:followsProceeding doc:supreme_administrative_court_annulment_enforcement_chain_1 ;
+    echr:hasInstanceLevel echr:LevelEnforcement ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "39"^^xsd:string ;
+    echr:hasSupportingQuote "In a letter dated 7 August 2017, the applicant requested the Fund to enforce the annulment judgment."^^xsd:string .
+
+doc:firstInstanceAdministrativeCourtAuthority a echr:DomesticAuthority ;
+    rdfs:label "first-instance administrative court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "first-instance administrative court"@en .
+
+doc:individual_application_constitutional_court_2017_09_11 a echr:DomesticProceeding ;
+    rdfs:label "individual application"@en ;
+    echr:hasCourt doc:constitutionalCourtAuthority ;
+    echr:hasProceedingStartDate "2017-09-11"^^xsd:date ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "41"^^xsd:string ;
+    echr:hasSupportingQuote "On 11 September 2017, the applicant lodged an individual application with the Constitutional Court, alleging violations of his right to property and his right to a fair trial"@en .
+
+doc:supremeAdministrativeCourtAuthority a echr:DomesticAuthority ;
+    rdfs:label "Supreme Administrative Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Supreme Administrative Court"@en .
+
+doc:supreme_administrative_court_annulment_enforcement_chain_1 a echr:DomesticProceeding ;
+    rdfs:label "The court overturned the judgment of the 6th Chamber of the Istanbul Administrative Court dated 19 March 2014 and annulled the sale"@en ;
+    echr:followsProceeding doc:rectification_proceeding_1 ;
+    echr:hasInstanceLevel echr:LevelUnknown ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "38"^^xsd:string ;
+    echr:hasSupportingQuote "As a result, the court overturned the judgment of the 6th Chamber of the Istanbul Administrative Court dated 19 March 2014 and annulled the sale in question."^^xsd:string .
+
+doc:supreme_administrative_court_appeal_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "On 9 December 2014, the 13th Chamber of the Supreme Administrative Court upheld that decision"@en ;
+    echr:followsProceeding doc:administrative_court_proceeding_1 ;
+    echr:hasDecisionDate "2014-12-09"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "35"^^xsd:string ;
+    echr:hasSupportingQuote "On an appeal by the applicant, the 13th Chamber of the Supreme Administrative Court upheld that decision on 9 December 2014."^^xsd:string .
+
+doc:constitutionalCourtAuthority a echr:DomesticAuthority ;
+    rdfs:label "Constitutional Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Constitutional Court"@en .
+
+doc:domestic_proceeding_supreme_admin_general_assembly_7_jul_2015 a echr:DomesticProceeding ;
+    rdfs:label "on 7 July 2015"@en ;
+    echr:followsProceeding doc:domestic_proceeding_supreme_admin_court_9_dec_2014 ;
+    echr:hasDecisionDate "2015-07"^^echr:PartialDate ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "29"^^xsd:string ;
+    echr:hasSupportingQuote "On 7 July 2015, following an appeal by the applicant, the General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court ( Danıştay İdari Dava Daireleri Genel Kurulu – hereinafter “the General Assembly”), in line with the dissenting opinion, ruled that the estimated value of USD 6,000,000"^^xsd:string .
+
+doc:rectification_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "On 30 June 2017, the 13th Chamber of the Supreme Administrative Court granted the request for rectification"@en ;
+    echr:followsProceeding doc:supreme_administrative_court_appeal_proceeding_1 ;
+    echr:hasDecisionDate "2017-06-30"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelUnknown ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "37"^^xsd:string ;
+    echr:hasSupportingQuote "On 30 June 2017, the 13 th Chamber of the Supreme Administrative Court granted the request"^^xsd:string .
+

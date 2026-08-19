@@ -1,0 +1,41 @@
+{
+  "source": "results/experiment_20260818_143651/gemma4/repaired/input.L7.facts.ttl",
+  "operations": [
+    {
+      "finding": "The trial proceeding doc:trial_proceeding_1 is incorrectly modeled as a single proceeding with contradictory outcomes (acquittal and conviction). The facts describe a trial resulting in conviction on counts 1 and 3, while the judge acquitted on counts 2 and 4. In the echr: ontology, a single proceeding has one disposition. Because the acquittal on counts 2 and 4 was a specific ruling by the judge as part of the trial's outcome, and there is already a separate node doc:acquittal_decision_1 for it, doc:trial_proceeding_1 should be corrected to reflect the primary result (conviction), and the acquittal should be linked as a proceeding that occurred during/as part of the trial sequence or, more accurately, the trial node should reflect the finality of the conviction since that is what was appealed. However, the validator specifically flags the multi-value outcome. I will correct doc:trial_proceeding_1 to OutcomeConviction and ensure doc:acquittal_decision_1 is correctly linked or treated as a component. Actually, the most consistent reading is that the 'trial' resulted in a mixed verdict; since the appeal was against the conviction, the outcome of the trial proceeding for the purposes of the chain is the conviction.",
+      "rationale": "The trial resulted in conviction on counts 1 and 3 and acquittal on 2 and 4. Since only the convictions were appealed, the 'OutcomeConviction' is the relevant disposition for the chain of proceedings. The separate node doc:acquittal_decision_1 already captures the acquittal.",
+      "action": "remove",
+      "subject": "doc:trial_proceeding_1",
+      "predicate": "echr:hasOutcome",
+      "object": "echr:OutcomeAcquittal",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "The trial proceeding doc:trial_proceeding_1 is incorrectly modeled as a single proceeding with contradictory outcomes (acquittal and conviction). The facts describe a trial resulting in conviction on counts 1 and 3, while the judge acquitted on counts 2 and 4. In the echr: ontology, a single proceeding has one disposition. Because the acquittal on counts 2 and 4 was a specific ruling by the judge as part of the trial's outcome, and there is already a separate node doc:acquittal_decision_1 for it, doc:trial_proceeding_1 should be corrected to reflect the primary result (conviction), and the acquittal should be linked as a proceeding that occurred during/as part of the trial sequence or, more accurately, the trial node should reflect the finality of the conviction since that is what was appealed. However, the validator specifically flags the multi-value outcome. I will correct doc:trial_proceeding_1 to OutcomeConviction and ensure doc:acquittal_decision_1 is correctly linked or treated as a component. Actually, the most consistent reading is that the 'trial' resulted in a mixed verdict; since the appeal was against the conviction, the outcome of the trial proceeding for the purposes of the chain is the conviction.",
+      "rationale": "The trial resulted in conviction on counts 1 and 3 and acquittal on 2 and 4. Since only the convictions were appealed, the 'OutcomeConviction' is the relevant disposition for the chain of proceedings. The separate node doc:acquittal_decision_1 already captures the acquittal.",
+      "action": "remove",
+      "subject": "doc:trial_proceeding_1",
+      "predicate": "echr:hasOutcomeDirection",
+      "object": "echr:DirectionFavourableToApplicant",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "The trial proceeding doc:trial_proceeding_1 is incorrectly modeled as a single proceeding with contradictory outcomes (acquittal and conviction). The facts describe a trial resulting in conviction on counts 1 and 3, while the judge acquitted on counts 2 and 4. In the echr: ontology, a single proceeding has one disposition. Because the acquittal on counts 2 and 4 was a specific ruling by the judge as part of the trial's outcome, and there is already a separate node doc:acquittal_decision_1 for it, doc:trial_proceeding_1 should be corrected to reflect the primary result (conviction), and the acquittal should be linked as a proceeding that occurred during/as part of the trial sequence or, more accurately, the trial node should reflect the finality of the conviction since that is what was appealed. However, the validator specifically flags the multi-value outcome. I will correct doc:trial_proceeding_1 to OutcomeConviction and ensure doc:acquittal_decision_1 is correctly linked or treated as a component. Actually, the most consistent reading is that the 'trial' resulted in a mixed verdict; since the appeal was against the conviction, the outcome of the trial proceeding for the purposes of the chain is the conviction.",
+      "rationale": "The trial resulted in conviction on counts 1 and 3 and acquittal on 2 and 4. Since only the convictions were appealed, the 'OutcomeConviction' is the relevant disposition for the chain of proceedings. The separate node doc:acquittal_decision_1 already captures the acquittal.",
+      "action": "add",
+      "subject": "doc:acquittal_decision_1",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:trial_proceeding_1",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    }
+  ]
+}

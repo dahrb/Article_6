@@ -1,0 +1,616 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/5b2bcf1fb21f/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix schema: <https://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/5b2bcf1fb21f> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:1"^^xsd:string .
+
+doc:adjournment_1 a echr:Adjournment ;
+    echr:hasAdjournmentCause echr:DelayAttributedToAuthorities ;
+    echr:hasAdjournmentDate "2002-12-10"^^xsd:date ;
+    echr:hasDomesticProceeding doc:proceeding_5 ;
+    echr:hasResumptionDate "2002-12-10"^^xsd:date ;
+    echr:hasSourceParagraph "14"^^xsd:string ;
+    echr:hasSupportingQuote "On 10 December 2002 a welfare-placement agreement was signed between R.P. and the social care home for adults with mental disorders near the village of Pastra in the municipality of Rila (\"the Pastra social care home\"), an institution under the responsibility of the Ministry of Labour and Social Policy. The applicant was not informed of the agreement."^^xsd:string .
+
+doc:adjournment_2 a echr:Adjournment ;
+    echr:hasAdjournmentCause echr:DelayAttributedToAuthorities ;
+    echr:hasAdjournmentDate "2002-12-14"^^xsd:date ;
+    echr:hasDomesticProceeding doc:proceeding_6 ;
+    echr:hasResumptionDate "2002-12-14"^^xsd:date ;
+    echr:hasSourceParagraph "16"^^xsd:string ;
+    echr:hasSupportingQuote "On 14 December 2002, at the request of the Director of the Pastra social care home, the applicant was registered as having his home address in the municipality of Rila. The residence certificate stated that his address had been changed for the purpose of his \"permanent supervision\""^^xsd:string .
+
+doc:adjournment_3 a echr:Adjournment ;
+    echr:hasAdjournmentCause echr:DelayAttributedToAuthorities ;
+    echr:hasAdjournmentDate "2005-02-02"^^xsd:date ;
+    echr:hasDomesticProceeding doc:proceeding_7 ;
+    echr:hasResumptionDate "2005-02-02"^^xsd:date ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:hasSupportingQuote "In a letter dated 16 September 2005, she was informed that the Municipal Council had decided on 2 February 2005 to appoint the Director of the Pastra social care home as the applicant’s guardian"^^xsd:string .
+
+doc:case_document_1 a echr:CaseDocument ;
+    echr:hasApplicant doc:natural_person_1,
+        doc:party_1 ;
+    echr:hasDomesticProceeding doc:domestic_proceeding_1,
+        doc:proceeding_1,
+        doc:proceeding_2,
+        doc:proceeding_3,
+        doc:proceeding_4,
+        doc:proceeding_5,
+        doc:proceeding_6,
+        doc:proceeding_7 ;
+    echr:hasSourceParagraph "1"^^xsd:string .
+
+doc:domestic_proceeding_2 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:domestic_proceeding_1 ;
+    echr:hasCourt doc:domestic_authority_1 ;
+    echr:hasDecisionDate "2007-02-07"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasOutcome echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_2 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "34"^^xsd:string ;
+    echr:hasSupportingQuote "On 7 February 2007 the municipal social assistance department granted the applicant a monthly allowance of BGN 16.50 (approximately EUR 8)."^^xsd:string .
+
+doc:domestic_proceeding_3 a echr:DomesticProceeding ;
+    echr:hasCourt doc:domestic_authority_2 ;
+    echr:hasDecisionDate "2006-10-13"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_2 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "28"^^xsd:string ;
+    echr:hasSupportingQuote "After the applicant failed to return on the scheduled date, the Director of the home wrote to the Ruse municipal police on 13 October 2006, asking them to search for the applicant and transfer him to Sofia, where employees of the home would be able to collect him and take him back to Pastra."^^xsd:string .
+
+doc:domestic_proceeding_4 a echr:DomesticProceeding ;
+    echr:hasCourt doc:domestic_authority_2 ;
+    echr:hasDecisionDate "2006-10-19"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_4 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "28"^^xsd:string ;
+    echr:hasSupportingQuote "On 19 October 2006 the Ruse police informed the Director that the applicant’s whereabouts had been discovered but that the police could not transfer him because he was not the subject of a wanted notice."^^xsd:string .
+
+doc:domestic_proceeding_5 a echr:DomesticProceeding ;
+    echr:hasCourt doc:domestic_authority_4 ;
+    echr:hasDecisionDate "2006-10-31"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_4 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "28"^^xsd:string ;
+    echr:hasSupportingQuote "He was driven back to the social care home on 31 October 2006, apparently by staff of the home."^^xsd:string .
+
+doc:domestic_proceeding_6 a echr:DomesticProceeding ;
+    echr:hasCourt doc:domestic_authority_5 ;
+    echr:hasDecisionDate "2005-06-15"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasOutcome echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_6 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "31"^^xsd:string ;
+    echr:hasSupportingQuote "It appears from a medical certificate of 15 June 2005 (see paragraph 37 below) that, following his placement in the home in 2002, the applicant was given anti-psychotic medication (carbamazepine (600 mg)) under the monthly supervision of a psychiatrist."^^xsd:string .
+
+doc:domestic_proceeding_7 a echr:DomesticProceeding ;
+    echr:hasCourt doc:domestic_authority_6 ;
+    echr:hasDecisionDate "2005"^^xsd:gYear ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnknown ;
+    echr:hasParticipation doc:participation_7 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "33"^^xsd:string ;
+    echr:hasSupportingQuote "Once a year, the Director of the social care home and the home’s social worker drew up evaluation reports on the applicant’s behaviour and social skills. The reports indicated that the applicant was uncommunicative, preferred to stay on his own rather than join in group activities, refused to take his medication and had no close relatives to visit while on leave of absence. He was not on good terms with his half-sister and nobody was sure whether he had anywhere to live outside the social care home. The reports concluded that it was impossible for the applicant to reintegrate into society, and set the objective of ensuring that he acquired the necessary skills and knowledge for social resettlement and, in the long term, reintegration into his family. It appears that he was never offered any therapy to that end."^^xsd:string .
+
+doc:inactivity_period_1 a echr:InactivityPeriod ;
+    echr:hasDomesticProceeding doc:proceeding_3 ;
+    echr:hasInactivityCause echr:DelayAttributedToAuthorities ;
+    echr:hasInactivityEndDate "2002-05-23"^^xsd:date ;
+    echr:hasInactivityStartDate "2001-06-07"^^xsd:date ;
+    echr:hasSourceParagraph "11-12"^^xsd:string ;
+    echr:hasSupportingQuote "and was subsequently transmitted to the Ruse Municipal Council on 7 June 2001 for the appointment of a guardian. Since the applicant’s family members had refused to take on any guardianship responsibilities, on 23 May 2002 the Municipal Council appointed Ms R.P."^^xsd:string .
+
+doc:inactivity_period_2 a echr:InactivityPeriod ;
+    echr:hasDomesticProceeding doc:proceeding_5 ;
+    echr:hasInactivityCause echr:DelayAttributedToAuthorities ;
+    echr:hasInactivityEndDate "2002-12-10"^^xsd:date ;
+    echr:hasInactivityStartDate "2002-07-23"^^xsd:date ;
+    echr:hasSourceParagraph "13-14"^^xsd:string ;
+    echr:hasSupportingQuote "Social services drew up a welfare report on the applicant, noting on 23 July 2002 that he was suffering from schizophrenia, that he lived alone in a small, run-down annexe to his half-sister’s house and that his half-sister and his father’s second wife had stated that they did not wish to act as his guardian. The requirements for placement in a social care home were therefore deemed to be fulfilled. On 10 December 2002 a welfare-placement agreement was signed between R.P. and the social care home for adults with mental disorders near the village of Pastra in the municipality of Rila (\"the Pastra social care home\"), an institution under the responsibility of the Ministry of Labour and Social Policy"^^xsd:string .
+
+doc:judicial_officer_1 a echr:JudicialOfficer ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue "Dr V.S."^^xsd:string ;
+    echr:hasGenderCueText "Dr V.S."^^xsd:string ;
+    echr:hasName "Dr V.S."^^xsd:string ;
+    echr:hasPersonName "Dr V.S."^^xsd:string,
+        "the Director of the Pastra social care home"^^xsd:string ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:hasSupportingQuote "In a letter dated 16 September 2005, she was informed that the Municipal Council had decided on 2 February 2005 to appoint the Director of the Pastra social care home as the applicant’s guardian"^^xsd:string .
+
+doc:judicial_officer_2 a echr:JudicialOfficer ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasGenderCue "Ms I.A."^^xsd:string ;
+    echr:hasGenderCueText "Ms I.A."^^xsd:string ;
+    echr:hasName "Ms I.A."^^xsd:string ;
+    echr:hasPersonName "Ms I.A."^^xsd:string .
+
+doc:legal_rep_1 a echr:LegalRepresentative ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasGenderCue "her client"^^xsd:string ;
+    echr:hasGenderCueText "her client"^^xsd:string ;
+    echr:hasName "the applicant’s lawyer"^^xsd:string ;
+    echr:hasPersonName "the applicant’s lawyer"^^xsd:string ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:hasSupportingQuote "On 9 September 2005 the applicant’s lawyer requested the Rila Municipal Council to appoint a guardian for her client"^^xsd:string .
+
+doc:natural_person_2 a echr:NaturalPerson ;
+    echr:hasHonorific "Ms"^^xsd:string ;
+    echr:hasPersonName "Ms R.P."^^xsd:string ;
+    echr:hasSourceParagraph "12"^^xsd:string ;
+    echr:hasSupportingQuote "on 23 May 2002 the Municipal Council appointed Ms R.P., a council officer, as the applicant’s guardian until 31 December 2002"^^xsd:string .
+
+doc:natural_person_3 a echr:NaturalPerson ;
+    echr:hasPersonName "the Director of the Pastra social care home"^^xsd:string ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:hasSupportingQuote "In a letter dated 16 September 2005, she was informed that the Municipal Council had decided on 2 February 2005 to appoint the Director of the Pastra social care home as the applicant’s guardian"^^xsd:string .
+
+doc:participation_8 a echr:Participation ;
+    echr:hasDomesticProceeding doc:proceeding_7 ;
+    echr:hasPartySide echr:SideInitiating,
+        echr:SideResponding ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:hasSupportingQuote "In a letter dated 16 September 2005, she was informed that the Municipal Council had decided on 2 February 2005 to appoint the Director of the Pastra social care home as the applicant’s guardian"^^xsd:string ;
+    echr:participatingParty doc:party_1,
+        doc:party_3 .
+
+doc:quant_1 a schema:QuantitativeValue ;
+    echr:hasSourceParagraph "20"^^xsd:string ;
+    echr:hasSupportingQuote "According to a report produced by the Social Assistance Agency in April 2009, there were seventy-three people living in the home, one was in hospital and two had absconded."^^xsd:string ;
+    schema:value 1 .
+
+doc:quant_130 a schema:MonetaryAmount ;
+    echr:hasSourceParagraph "18"^^xsd:string ;
+    echr:hasSupportingQuote "The applicant’s invalidity pension, as updated in 2008, amounted to 130 Bulgarian levs (BGN – approximately 65 euros (EUR))"^^xsd:string ;
+    schema:amount "130"^^xsd:decimal ;
+    schema:currency "BGN"^^xsd:string .
+
+doc:quant_2 a schema:QuantitativeValue ;
+    echr:hasSourceParagraph "20"^^xsd:string ;
+    echr:hasSupportingQuote "According to a report produced by the Social Assistance Agency in April 2009, there were seventy-three people living in the home, one was in hospital and two had absconded."^^xsd:string ;
+    schema:value 2 .
+
+doc:quant_23 a schema:QuantitativeValue ;
+    echr:hasSourceParagraph "20"^^xsd:string ;
+    echr:hasSupportingQuote "Among the residents, twenty-three were entirely lacking legal capacity, two were partially lacking capacity and the others enjoyed full legal capacity."^^xsd:string ;
+    schema:value 23 .
+
+doc:quant_2_2 a schema:QuantitativeValue ;
+    echr:hasSourceParagraph "20"^^xsd:string ;
+    echr:hasSupportingQuote "Among the residents, twenty-three were entirely lacking legal capacity, two were partially lacking capacity and the others enjoyed full legal capacity."^^xsd:string ;
+    schema:value 2 .
+
+doc:quant_3 a schema:QuantitativeValue ;
+    echr:hasSourceParagraph "20"^^xsd:string ;
+    echr:hasSupportingQuote "The home, built in the 1920s, comprises three buildings, where its residents, all male, are housed according to the state of their mental health."^^xsd:string ;
+    schema:value 3 .
+
+doc:quant_400 a schema:Distance ;
+    echr:hasSourceParagraph "15"^^xsd:string ;
+    echr:hasSupportingQuote "Later that day, the applicant was taken by ambulance to the Pastra social care home, some 400 km from Ruse."^^xsd:string ;
+    schema:distance 400 ;
+    schema:unitCode "km"^^xsd:string .
+
+doc:quant_65 a schema:MonetaryAmount ;
+    echr:hasSourceParagraph "18"^^xsd:string ;
+    echr:hasSupportingQuote "The applicant’s invalidity pension, as updated in 2008, amounted to 130 Bulgarian levs (BGN – approximately 65 euros (EUR))"^^xsd:string ;
+    schema:amount "65"^^xsd:decimal ;
+    schema:currency "EUR"^^xsd:string .
+
+doc:quant_73 a schema:QuantitativeValue ;
+    echr:hasSourceParagraph "20"^^xsd:string ;
+    echr:hasSupportingQuote "According to a report produced by the Social Assistance Agency in April 2009, there were seventy-three people living in the home, one was in hospital and two had absconded."^^xsd:string ;
+    schema:value 73 .
+
+doc:quant_8 a schema:Distance ;
+    echr:hasSourceParagraph "19"^^xsd:string ;
+    echr:hasSupportingQuote "It is accessible via a dirt track from the village of Pastra, the nearest locality 8 km away."^^xsd:string ;
+    schema:distance 8 ;
+    schema:unitCode "km"^^xsd:string .
+
+doc:quant_80 a schema:MonetaryAmount ;
+    echr:hasSourceParagraph "18"^^xsd:string ;
+    echr:hasSupportingQuote "The agreement stipulated that 80% of the sum was to be used as payment for the services provided and the remaining 20% put aside for personal expenses."^^xsd:string ;
+    schema:amount "80"^^xsd:decimal ;
+    schema:currency "PERCENT"^^xsd:string .
+
+doc:article6_issue_1 a echr:Article6Issue ;
+    echr:affectsParty doc:party_1 ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasExtractionNote "Detention spans multiple proceedings; attributed to authorities due to systemic institutionalization without judicial oversight."^^xsd:string ;
+    echr:hasSourceParagraph "10"^^xsd:string,
+        "3"^^xsd:string ;
+    echr:hasSupportingQuote "He also submitted that he had no access to a court to seek release from partial guardianship (Article 6 of the Convention)."^^xsd:string,
+        "during the period from 1975 to 2000 he had been admitted to a psychiatric hospital on several occasions"^^xsd:string .
+
+doc:authority_1 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial,
+        echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Veliko Tarnovo Court of Appeal ( Апелативен съд )"^^xsd:string,
+        "public prosecutor’s office"^^xsd:string ;
+    echr:hasName "public prosecutor’s office"^^xsd:string ;
+    echr:hasSourceParagraph "11"^^xsd:string .
+
+doc:authority_6 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Dupnitsa District Court"^^xsd:string ;
+    echr:hasName "Dupnitsa District Court"^^xsd:string .
+
+doc:domestic_authority_4 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "staff of the home"^^xsd:string ;
+    echr:hasName "staff of the home"^^xsd:string .
+
+doc:domestic_authority_5 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "psychiatrist"^^xsd:string ;
+    echr:hasName "psychiatrist"^^xsd:string .
+
+doc:domestic_authority_6 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Director of the social care home"^^xsd:string ;
+    echr:hasName "Director of the social care home"^^xsd:string .
+
+doc:guardian_1 a echr:NaturalPerson ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue "he"^^xsd:string ;
+    echr:hasGenderCueText "he"^^xsd:string ;
+    echr:hasHonorific "the"^^xsd:string ;
+    echr:hasName "the guardian"^^xsd:string ;
+    echr:hasPartyName "the guardian"^^xsd:string ;
+    echr:hasPersonName "the guardian"^^xsd:string ;
+    echr:isAnonymised false .
+
+doc:authority_2 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative,
+        echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Ruse Municipal Council"^^xsd:string,
+        "regional prosecutor"^^xsd:string ;
+    echr:hasName "regional prosecutor"^^xsd:string ;
+    echr:hasSourceParagraph "11"^^xsd:string .
+
+doc:authority_3 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative,
+        echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Ruse social services"^^xsd:string,
+        "appellate prosecutor"^^xsd:string ;
+    echr:hasName "appellate prosecutor"^^xsd:string ;
+    echr:hasSourceParagraph "13"^^xsd:string .
+
+doc:authority_4 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative,
+        echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Chief Public Prosecutor’s Office at the Supreme Court of Cassation"^^xsd:string,
+        "Pastra social care home"^^xsd:string ;
+    echr:hasName "Chief Public Prosecutor’s Office at the Supreme Court of Cassation"^^xsd:string ;
+    echr:hasSourceParagraph "14"^^xsd:string .
+
+doc:domestic_authority_1 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative,
+        echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Ruse Regional Court ( Окръжен съд )"^^xsd:string,
+        "municipal social assistance department"^^xsd:string ;
+    echr:hasName "Ruse Regional Court ( Окръжен съд )"^^xsd:string,
+        "municipal social assistance department"^^xsd:string .
+
+doc:domestic_authority_2 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Ruse municipal police"^^xsd:string,
+        "Ruse police"^^xsd:string ;
+    echr:hasName "Ruse municipal police"^^xsd:string,
+        "Ruse police"^^xsd:string .
+
+doc:domestic_proceeding_1 a echr:DomesticProceeding ;
+    echr:hasCourt doc:domestic_authority_1 ;
+    echr:hasDecisionDate "2000-11-20"^^xsd:date,
+        "2005-12-30"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview,
+        echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant,
+        echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasProceedingStartDate "2000"^^xsd:gYear ;
+    echr:hasProceedingType echr:TypeAdministrative,
+        echr:TypeCivil ;
+    echr:hasSourceParagraph "10"^^xsd:string,
+        "34"^^xsd:string ;
+    echr:hasSupportingQuote "In a judgment of 20 November 2000, the court declared the applicant to be partially incapacitated on the grounds that he had been suffering from simple schizophrenia since 1975, and that his ability to manage his own affairs and interests and to realise the consequences of his own acts had been impaired. The court found that the applicant's condition was not so serious as to warrant a declaration of total incapacity."^^xsd:string,
+        "on 30 December 2005 the municipal social assistance department carried out a \"social assessment\" ( социална оценка ) of the applicant, which concluded that he was incapable of working, even in a sheltered environment, and had no need for training or retraining, and that in those circumstances he was entitled to a social allowance to cover the costs of his transport, subsistence and medication."^^xsd:string ;
+    echr:raisesArticle6Issue doc:article6_issue_1 .
+
+doc:natural_person_1 a echr:NaturalPerson ;
+    echr:hasBirthYear "1956"^^xsd:gYear ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue "Mr"^^xsd:string ;
+    echr:hasGenderCueText "Mr Rusi Kosev Stanev"^^xsd:string ;
+    echr:hasHonorific "Mr"^^xsd:string,
+        "the"^^xsd:string ;
+    echr:hasPersonName "Mr Rusi Kosev Stanev"^^xsd:string,
+        "the applicant"^^xsd:string ;
+    echr:hasSourceParagraph "11"^^xsd:string,
+        "9"^^xsd:string ;
+    echr:hasSupportingQuote "That judgment was upheld in a judgment of 12 April 2001 by the Veliko Tarnovo Court of Appeal ( Апелативен съд ) on an appeal by the applicant"^^xsd:string ;
+    echr:isAnonymised false .
+
+doc:participation_1 a echr:Participation ;
+    echr:hasDomesticProceeding doc:proceeding_1 ;
+    echr:hasPartySide echr:SideInitiating,
+        echr:SideResponding ;
+    echr:hasSourceParagraph "11"^^xsd:string,
+        "34"^^xsd:string ;
+    echr:hasSupportingQuote "That judgment was upheld in a judgment of 12 April 2001 by the Veliko Tarnovo Court of Appeal ( Апелативен съд ) on an appeal by the applicant"^^xsd:string,
+        "the applicant’s guardian asked the Municipal Council to grant a social allowance to facilitate his reintegration into the community"^^xsd:string ;
+    echr:participatingParty doc:party_1 .
+
+doc:participation_6 a echr:Participation ;
+    echr:hasDomesticProceeding doc:proceeding_6 ;
+    echr:hasPartySide echr:SideInitiating,
+        echr:SideResponding ;
+    echr:hasSourceParagraph "16"^^xsd:string,
+        "31"^^xsd:string ;
+    echr:hasSupportingQuote "It appears from a medical certificate of 15 June 2005 (see paragraph 37 below) that, following his placement in the home in 2002, the applicant was given anti-psychotic medication (carbamazepine (600 mg)) under the monthly supervision of a psychiatrist."^^xsd:string,
+        "On 14 December 2002, at the request of the Director of the Pastra social care home, the applicant was registered as having his home address in the municipality of Rila. The residence certificate stated that his address had been changed for the purpose of his \"permanent supervision\""^^xsd:string ;
+    echr:participatingParty doc:party_1 .
+
+doc:participation_7 a echr:Participation ;
+    echr:hasDomesticProceeding doc:proceeding_6 ;
+    echr:hasPartySide echr:SideInitiating,
+        echr:SideResponding ;
+    echr:hasSourceParagraph "16"^^xsd:string,
+        "33"^^xsd:string ;
+    echr:hasSupportingQuote "On 14 December 2002, at the request of the Director of the Pastra social care home, the applicant was registered as having his home address in the municipality of Rila. The residence certificate stated that his address had been changed for the purpose of his \"permanent supervision\""^^xsd:string,
+        "Once a year, the Director of the social care home and the home’s social worker drew up evaluation reports on the applicant’s behaviour and social skills. The reports indicated that the applicant was uncommunicative, preferred to stay on his own rather than join in group activities, refused to take his medication and had no close relatives to visit while on leave of absence. He was not on good terms with his half-sister and nobody was sure whether he had anywhere to live outside the social care home. The reports concluded that it was impossible for the applicant to reintegrate into society, and set the objective of ensuring that he acquired the necessary skills and knowledge for social resettlement and, in the long term, reintegration into his family. It appears that he was never offered any therapy to that end."^^xsd:string ;
+    echr:participatingParty doc:guardian_1,
+        doc:party_1,
+        doc:party_3 .
+
+doc:party_2 a echr:Party ;
+    echr:hasPartyName "Ms R.P."^^xsd:string ;
+    echr:hasPersonName "Ms R.P."^^xsd:string ;
+    echr:hasSourceParagraph "12"^^xsd:string ;
+    echr:hasSupportingQuote "on 23 May 2002 the Municipal Council appointed Ms R.P., a council officer, as the applicant’s guardian until 31 December 2002"^^xsd:string .
+
+doc:party_3 a echr:Party ;
+    echr:hasPartyName "the Director of the Pastra social care home"^^xsd:string ;
+    echr:hasPersonName "the Director of the Pastra social care home"^^xsd:string ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:hasSupportingQuote "In a letter dated 16 September 2005, she was informed that the Municipal Council had decided on 2 February 2005 to appoint the Director of the Pastra social care home as the applicant’s guardian"^^xsd:string .
+
+doc:proceeding_4 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:proceeding_3,
+        doc:proceeding_5 ;
+    echr:hasCourt doc:authority_3,
+        doc:authority_4 ;
+    echr:hasDecisionDate "2002-07-23"^^xsd:date,
+        "2005-11-29"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview,
+        echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeasureImposed,
+        echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_4 ;
+    echr:hasPreTrialDetention doc:pre_trial_detention_1 ;
+    echr:hasProceedingStartDate "2005-10-11"^^xsd:date ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "13"^^xsd:string,
+        "38"^^xsd:string ;
+    echr:hasStatedDuration "P49D"^^xsd:duration ;
+    echr:hasSupportingQuote "Social services drew up a welfare report on the applicant, noting on 23 July 2002 that he was suffering from schizophrenia, that he lived alone in a small, run-down annexe to his half-sister’s house and that his half-sister and his father’s second wife had stated that they did not wish to act as his guardian. The requirements for placement in a social care home were therefore deemed to be fulfilled"^^xsd:string,
+        "and subsequently on 29 November 2005 by the Chief Public Prosecutor’s Office at the Supreme Court of Cassation."^^xsd:string ;
+    echr:raisesArticle6Issue doc:issue_1 .
+
+doc:authority_5 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Rila Municipal Council"^^xsd:string,
+        "mayor of Rila"^^xsd:string ;
+    echr:hasName "mayor of Rila"^^xsd:string ;
+    echr:hasSourceParagraph "16"^^xsd:string .
+
+doc:proceeding_2 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:proceeding_1,
+        doc:proceeding_3 ;
+    echr:hasCourt doc:authority_2 ;
+    echr:hasDecisionDate "2001-06-07"^^xsd:date,
+        "2005-08-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview,
+        echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeasureImposed,
+        echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_2 ;
+    echr:hasPreTrialDetention doc:pre_trial_detention_1 ;
+    echr:hasProceedingStartDate "2005-03-02"^^xsd:date ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "11"^^xsd:string,
+        "38"^^xsd:string ;
+    echr:hasStatedDuration "P160D"^^xsd:duration ;
+    echr:hasSupportingQuote "On 10 August 2005 the regional prosecutor refused to bring an action for restoration of the applicant’s legal capacity on the grounds that, in the opinion of the doctors, the Director of the Pastra social care home and the home’s social worker, the applicant was unable to cope on his own, and that the home, where he could undergo medical treatment, was the most suitable place for him to live."^^xsd:string,
+        "and was subsequently transmitted to the Ruse Municipal Council on 7 June 2001 for the appointment of a guardian"^^xsd:string ;
+    echr:raisesArticle6Issue doc:issue_1 .
+
+doc:participation_2 a echr:Participation ;
+    echr:hasDomesticProceeding doc:proceeding_3 ;
+    echr:hasPartySide echr:SideInitiating,
+        echr:SideResponding ;
+    echr:hasSourceParagraph "12"^^xsd:string,
+        "28"^^xsd:string,
+        "34"^^xsd:string ;
+    echr:hasSupportingQuote "After the applicant failed to return on the scheduled date, the Director of the home wrote to the Ruse municipal police on 13 October 2006, asking them to search for the applicant and transfer him to Sofia, where employees of the home would be able to collect him and take him back to Pastra."^^xsd:string,
+        "On 7 February 2007 the municipal social assistance department granted the applicant a monthly allowance of BGN 16.50 (approximately EUR 8)."^^xsd:string,
+        "on 23 May 2002 the Municipal Council appointed Ms R.P., a council officer, as the applicant’s guardian until 31 December 2002"^^xsd:string ;
+    echr:participatingParty doc:party_1,
+        doc:party_2 .
+
+doc:participation_4 a echr:Participation ;
+    echr:hasDomesticProceeding doc:proceeding_5 ;
+    echr:hasPartySide echr:SideInitiating,
+        echr:SideResponding ;
+    echr:hasSourceParagraph "14"^^xsd:string,
+        "28"^^xsd:string ;
+    echr:hasSupportingQuote "He was driven back to the social care home on 31 October 2006, apparently by staff of the home."^^xsd:string,
+        "On 10 December 2002 a welfare-placement agreement was signed between R.P. and the social care home for adults with mental disorders near the village of Pastra in the municipality of Rila (\"the Pastra social care home\"), an institution under the responsibility of the Ministry of Labour and Social Policy"^^xsd:string,
+        "On 19 October 2006 the Ruse police informed the Director that the applicant’s whereabouts had been discovered but that the police could not transfer him because he was not the subject of a wanted notice."^^xsd:string ;
+    echr:participatingParty doc:party_1,
+        doc:party_2 .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:proceeding_2 ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasDecisionDate "2001-04-12"^^xsd:date,
+        "2005-03-02"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal,
+        echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeRefusedExamination,
+        echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasPreTrialDetention doc:pre_trial_detention_1 ;
+    echr:hasProceedingStartDate "2004-11-25"^^xsd:date ;
+    echr:hasProceedingType echr:TypeAdministrative,
+        echr:TypeCivil ;
+    echr:hasSourceParagraph "11"^^xsd:string,
+        "37"^^xsd:string ;
+    echr:hasStatedDuration "P315D"^^xsd:duration ;
+    echr:hasSupportingQuote "On 25 November 2004 the applicant, through his lawyer, asked the public prosecutor’s office to apply to the Regional Court to have his legal capacity restored."^^xsd:string,
+        "On 25 November 2004 the applicant, through his lawyer, asked the public prosecutor’s office to apply to the Regional Court to have his legal capacity restored. On 2 March 2005 the public prosecutor requested the Pastra social care home to send him a doctor’s opinion and other medical certificates concerning the applicant’s disorders in preparation for a possible application to the courts for restoration of his legal capacity. Further to that request, the applicant was admitted to a psychiatric hospital from 31 May to 15 June 2005 for a medical assessment."^^xsd:string,
+        "That judgment was upheld in a judgment of 12 April 2001 by the Veliko Tarnovo Court of Appeal ( Апелативен съд ) on an appeal by the applicant"^^xsd:string ;
+    echr:raisesArticle6Issue doc:issue_1 .
+
+doc:proceeding_7 a echr:DomesticProceeding ;
+    echr:hasCourt doc:authority_5 ;
+    echr:hasDecisionDate "2005-02-02"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasOutcome echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:hasSupportingQuote "In a letter dated 16 September 2005, she was informed that the Municipal Council had decided on 2 February 2005 to appoint the Director of the Pastra social care home as the applicant’s guardian"^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:proceeding_3 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:proceeding_2,
+        doc:proceeding_4 ;
+    echr:hasCourt doc:authority_2,
+        doc:authority_3 ;
+    echr:hasDecisionDate "2002-05-23"^^xsd:date,
+        "2005-10-11"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview,
+        echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeasureImposed,
+        echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_2 ;
+    echr:hasPreTrialDetention doc:pre_trial_detention_1 ;
+    echr:hasProceedingStartDate "2005-08-10"^^xsd:date ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "12"^^xsd:string,
+        "38"^^xsd:string ;
+    echr:hasStatedDuration "P81D"^^xsd:duration ;
+    echr:hasSupportingQuote "Despite those objections, the regional prosecutor’s refusal was upheld on 11 October 2005 by the appellate prosecutor,"^^xsd:string,
+        "on 23 May 2002 the Municipal Council appointed Ms R.P., a council officer, as the applicant’s guardian until 31 December 2002"^^xsd:string ;
+    echr:raisesArticle6Issue doc:issue_1 .
+
+doc:proceeding_6 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:proceeding_5,
+        doc:proceeding_7 ;
+    echr:hasCourt doc:authority_5,
+        doc:authority_6 ;
+    echr:hasDecisionDate "2002-12-14"^^xsd:date,
+        "2006-03-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasOutcome echr:OutcomeClaimDismissed,
+        echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_6,
+        doc:participation_7 ;
+    echr:hasPreTrialDetention doc:pre_trial_detention_1 ;
+    echr:hasProceedingStartDate "2005-09-28"^^xsd:date ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "16"^^xsd:string,
+        "40"^^xsd:string ;
+    echr:hasStatedDuration "P163D"^^xsd:duration ;
+    echr:hasSupportingQuote "On 14 December 2002, at the request of the Director of the Pastra social care home, the applicant was registered as having his home address in the municipality of Rila. The residence certificate stated that his address had been changed for the purpose of his \"permanent supervision\""^^xsd:string,
+        "On 28 September 2005 the applicant’s lawyer applied to the Dupnitsa District Court for judicial review of the mayor’s decision, under Article 115 of the Family Code (\"the FC\") ... The Dupnitsa District Court gave judgment on 10 March 2006. As to the admissibility of the application for judicial review, it held that, although the applicant had instructed his lawyer to represent him, she was not entitled to act on his behalf since the guardian had not signed the form of authority. However, it held that the guardian’s endorsement of the application at the public hearing had validated all the procedural steps taken by the lawyer, and that the application was therefore admissible. As to the merits, the court dismissed the application, finding that the guardian had no legitimate interest in contesting the mayor’s refusal, given that he could apply independently and directly for the applicant to be released from partial guardianship. Since the judgment was not subject to appeal, it became final."^^xsd:string ;
+    echr:isFinalDomesticDecision true ;
+    echr:isPending false ;
+    echr:raisesArticle6Issue doc:issue_1 .
+
+doc:issue_1 a echr:Article6Issue ;
+    echr:affectsParty doc:party_1 ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasSourceParagraph "38"^^xsd:string ;
+    echr:hasSupportingQuote "the applicant’s lawyer challenged the refusal to bring the action, arguing that her client should have the opportunity to assess by himself whether or not, having regard to the living conditions at the home, it was in his interests to remain there. She pointed out that the enforced continuation of his stay in the home, on the pretext of providing him with treatment in his own interests, amounted in practice to a deprivation of liberty, a situation that was unacceptable. A person could not be placed in an institution without his or her consent. In accordance with the legislation in force, anyone under partial guardianship was free to choose his or her place of residence, with the guardian’s agreement. The choice of residence was therefore not a matter within the competence of the prosecution service."^^xsd:string .
+
+doc:pre_trial_detention_1 a echr:PreTrialDetention ;
+    echr:hasCustodialMeasure echr:MeasurePsychiatricConfinement ;
+    echr:hasDetainee doc:natural_person_1,
+        doc:party_1 ;
+    echr:hasDetentionEndDate "2002-12-10"^^xsd:date ;
+    echr:hasDetentionStartDate "1975-01-01"^^xsd:date,
+        "2002-01-01"^^xsd:date ;
+    echr:hasDomesticProceeding doc:proceeding_1 ;
+    echr:hasSourceParagraph "10"^^xsd:string ;
+    echr:hasStatedDetentionDuration "P1518D"^^xsd:duration,
+        "P25Y"^^xsd:duration ;
+    echr:hasSupportingQuote "He had been on maintenance medication since 2002 under the monthly supervision of a psychiatrist."^^xsd:string,
+        "during the period from 1975 to 2000 he had been admitted to a psychiatric hospital on several occasions"^^xsd:string .
+
+doc:proceeding_5 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:proceeding_6 ;
+    echr:hasCourt doc:authority_4,
+        doc:authority_5 ;
+    echr:hasDecisionDate "2002-12-10"^^xsd:date,
+        "2005-09-16"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview,
+        echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeasureImposed,
+        echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_4 ;
+    echr:hasPreTrialDetention doc:pre_trial_detention_1 ;
+    echr:hasProceedingStartDate "2005-09-09"^^xsd:date ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "14"^^xsd:string,
+        "39"^^xsd:string ;
+    echr:hasStatedDuration "P37D"^^xsd:duration ;
+    echr:hasSupportingQuote "On 10 December 2002 a welfare-placement agreement was signed between R.P. and the social care home for adults with mental disorders near the village of Pastra in the municipality of Rila (\"the Pastra social care home\"), an institution under the responsibility of the Ministry of Labour and Social Policy"^^xsd:string,
+        "On 9 September 2005 the applicant, through his lawyer, asked the mayor of Rila to bring a court action for his release from partial guardianship. In a letter of 16 September 2005, the mayor of Rila refused his request, stating that there was no basis for such an action in view of the medical certificate of 15 June 2005, the opinions of the Director and the social worker, and the conclusions reached by the public prosecutor’s office."^^xsd:string ;
+    echr:raisesArticle6Issue doc:issue_1 .
+
+doc:party_1 a echr:NaturalPerson,
+        echr:Party ;
+    echr:hasBirthYear "1954"^^xsd:gYear ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue "the applicant"^^xsd:string ;
+    echr:hasGenderCueText "the applicant"^^xsd:string ;
+    echr:hasHonorific "the"^^xsd:string ;
+    echr:hasName "the applicant"^^xsd:string ;
+    echr:hasPartyName "the applicant"^^xsd:string ;
+    echr:hasPersonName "the applicant"^^xsd:string ;
+    echr:hasSourceParagraph "11"^^xsd:string ;
+    echr:hasSupportingQuote "That judgment was upheld in a judgment of 12 April 2001 by the Veliko Tarnovo Court of Appeal ( Апелативен съд ) on an appeal by the applicant"^^xsd:string ;
+    echr:isAnonymised false .
+

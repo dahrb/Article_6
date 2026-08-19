@@ -1,0 +1,166 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/120d2c56a436/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/120d2c56a436> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:9"^^xsd:string .
+
+doc:investigation_inspection_2005_09_20 a echr:DomesticProceeding ;
+    rdfs:label "On 20 September 2005 he participated in the inspection of the crime scene and showed the investigator the exact place where the victim had been sitting."@en ;
+    echr:hasCourt doc:investigatorAuthority ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:hasSupportingQuote "On 20 September 2005 he participated in the inspection of the crime scene and showed the investigator the exact place where the victim had been sitting."^^xsd:string .
+
+doc:investigation_opened_2010_08_31 a echr:DomesticProceeding ;
+    rdfs:label "On 31 August 2010 an investigation was opened into the applicant’s allegations."@en ;
+    echr:followsProceeding doc:complaint_to_chief_prosecutor_2010_08_25 ;
+    echr:hasCourt doc:investigatorAuthority ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasProceedingStartDate "2010-08-31"^^xsd:date ;
+    echr:hasSourceParagraph "40"^^xsd:string ;
+    echr:hasSupportingQuote "On 31 August 2010 an investigation was opened into the applicant’s allegations."@en .
+
+doc:mt_first_instance_2006_12_26 a echr:DomesticProceeding ;
+    rdfs:label "criminal proceedings against M.T. – convicted at first instance on 26 December 2006"@en ;
+    echr:hasDecisionDate "2006-12-26"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "27"^^xsd:string ;
+    echr:hasSupportingQuote "On an unspecified date separate criminal proceedings were opened against M.T. and Z.T. On 26 December 2006 and 23 January 2007 respectively they were convicted at first instance of obstructing justice by giving false testimony."^^xsd:string .
+
+doc:proceeding_first_instance_trial_2006 a echr:DomesticProceeding ;
+    rdfs:label "Trial at the first ‐ instance court (17 July 2006; 21 August 2006)"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_investigation_2005 ;
+    echr:hasCourt doc:courtOfFirstInstance ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasProceedingStartDate "2006-07-17"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "15"^^xsd:string ;
+    echr:hasSupportingQuote "On 17 July 2006 and 21 August 2006, during the trial at the first ‐ instance court, M.T. and Z.T. changed their testimony."^^xsd:string .
+
+doc:proceeding_prosecutor_appeal_2005 a echr:DomesticProceeding ;
+    rdfs:label "Appeal to the regional prosecutor’s office (M.T., 3 November 2005)"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_investigation_2005 ;
+    echr:hasCourt doc:authorityRegionalProsecutorOffice ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasProceedingStartDate "2005-11-03"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "13"^^xsd:string ;
+    echr:hasSupportingQuote "On 3 November 2005 M.T. appealed to the regional prosecutor’s office against the investigator’s refusal to question him again."^^xsd:string .
+
+doc:supreme_court_inadmissible_2008_02_20 a echr:DomesticProceeding ;
+    rdfs:label "On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant inadmissible."@en ;
+    echr:followsProceeding doc:appeal_tbilisi_2007_06_27 ;
+    echr:hasCourt doc:supremeCourt ;
+    echr:hasDecisionDate "2008-02-20"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "26"^^xsd:string ;
+    echr:hasSupportingQuote "On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant inadmissible."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:zt_first_instance_2007_01_23 a echr:DomesticProceeding ;
+    rdfs:label "criminal proceedings against Z.T. – convicted at first instance on 23 January 2007"@en ;
+    echr:hasDecisionDate "2007-01-23"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "27"^^xsd:string ;
+    echr:hasSupportingQuote "On an unspecified date separate criminal proceedings were opened against M.T. and Z.T. On 26 December 2006 and 23 January 2007 respectively they were convicted at first instance of obstructing justice by giving false testimony."^^xsd:string .
+
+doc:appeal_tbilisi_2007_06_27 a echr:DomesticProceeding ;
+    rdfs:label "On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction."@en ;
+    echr:followsProceeding doc:first_instance_conviction_applicant_2006_12_08 ;
+    echr:hasCourt doc:tbilisiCourtOfAppeal ;
+    echr:hasDecisionDate "2007-06-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "25"^^xsd:string ;
+    echr:hasSupportingQuote "On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction."^^xsd:string .
+
+doc:authorityInvestigatingAuthorities a echr:DomesticAuthority ;
+    rdfs:label "the investigating authorities"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "the investigating authorities"^^xsd:string .
+
+doc:authorityRegionalProsecutorOffice a echr:DomesticAuthority ;
+    rdfs:label "regional prosecutor’s office"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "regional prosecutor’s office"^^xsd:string .
+
+doc:complaint_to_chief_prosecutor_2010_08_25 a echr:DomesticProceeding ;
+    rdfs:label "On 25 and 26 August 2010 the applicant complained to the Chief Prosecutor that on 19 August 2010, directly before being transferred to Kutaisi Prison no. 2, he had been severely beaten by the governor of Rustavi Prison no. 6 and had sustained serious injuries to his ribs, head and backbone."@en ;
+    echr:hasCourt doc:domesticAuthorityChiefProsecutor ;
+    echr:hasProceedingStartDate "2010-08-25"^^xsd:date ;
+    echr:hasSourceParagraph "38"^^xsd:string ;
+    echr:hasSupportingQuote "On 25 and 26 August 2010 the applicant complained to the Chief Prosecutor that on 19 August 2010, directly before being transferred to Kutaisi Prison no. 2, he had been severely beaten by the governor of Rustavi Prison no. 6 and had sustained serious injuries to his ribs, head and backbone."@en .
+
+doc:detention_2005_07_27 a echr:PreTrialDetention ;
+    rdfs:label "Remand in custody starting 27 July 2005"^^xsd:string ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:personMalkhazBaduashvili ;
+    echr:hasDetentionStartDate "2005-07-27"^^xsd:date ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "He was arrested and remanded in custody on 27 July 2005."^^xsd:string .
+
+doc:domesticAuthorityChiefProsecutor a echr:DomesticAuthority ;
+    rdfs:label "Chief Prosecutor"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Chief Prosecutor"@en .
+
+doc:first_instance_conviction_applicant_2006_12_08 a echr:DomesticProceeding ;
+    rdfs:label "On 8 December 2006 the court of first instance convicted the applicant of aggravated murder and the illegal acquisition, possession and carrying of firearms, and sentenced him to 17 years’ imprisonment."@en ;
+    echr:hasCourt doc:courtOfFirstInstance ;
+    echr:hasDecisionDate "2006-12-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "22"^^xsd:string ;
+    echr:hasSupportingQuote "On 8 December 2006 the court of first instance convicted the applicant of aggravated murder and the illegal acquisition, possession and carrying of firearms, and sentenced him to 17 years’ imprisonment."^^xsd:string .
+
+doc:personMalkhazBaduashvili a echr:NaturalPerson ;
+    rdfs:label "Mr Malkhaz Baduashvili"^^xsd:string ;
+    echr:hasBirthYear "1979"^^xsd:gYear ;
+    echr:hasPersonName "Mr Malkhaz Baduashvili"^^xsd:string ;
+    echr:isAnonymised false .
+
+doc:supremeCourt a echr:DomesticAuthority ;
+    rdfs:label "the Supreme Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial .
+
+doc:tbilisiCourtOfAppeal a echr:DomesticAuthority ;
+    rdfs:label "Tbilisi Court of Appeal"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial .
+
+doc:courtOfFirstInstance a echr:DomesticAuthority ;
+    rdfs:label "first ‐ instance court"^^xsd:string,
+        "the court of first instance"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "first ‐ instance court"^^xsd:string .
+
+doc:investigatorAuthority a echr:DomesticAuthority ;
+    rdfs:label "the investigator"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "the investigator"@en .
+
+doc:proceeding_investigation_2005 a echr:DomesticProceeding ;
+    rdfs:label "Investigation"^^xsd:string ;
+    echr:hasCourt doc:authorityInvestigatingAuthorities ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasPreTrialDetention doc:detention_2005_07_27 ;
+    echr:hasProceedingStartDate "2005-07-10"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "He was arrested and remanded in custody on 27 July 2005."^^xsd:string,
+        "On 20 September 2005 the investigating authorities carried out an inspection of the crime scene"^^xsd:string .
+

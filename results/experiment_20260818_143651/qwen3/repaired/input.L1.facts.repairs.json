@@ -1,0 +1,125 @@
+{
+  "source": "results/experiment_20260818_143651/qwen3/repaired/input.L1.facts.ttl",
+  "operations": [
+    {
+      "finding": "flagged_isFinalDomesticDecision_conflict",
+      "rationale": "The facts describe three proceedings marked as isFinalDomesticDecision true: doc:domestic_proceeding_1 (Court of Appeal, 2001), doc:domestic_proceeding_3 (Social services report, 2002), and doc:domestic_proceeding_5 (Municipal Council appointment of new guardian, 2005). However, only one domestic proceeding can be the final decision before the Strasbourg application. The most recent decision \u2014 the 2 February 2005 appointment of the Director of the Pastra social care home as guardian \u2014 is the last authoritative domestic act affecting the applicant\u2019s guardianship status, as explicitly stated to have been made 'on 2 February 2005' and confirmed by the letter of 16 September 2005. The earlier decisions (2001, 2002) are interim steps in the same chain of guardianship proceedings, not final exhaustion points. The 2001 judgment was appealed and superseded; the 2002 welfare report was an assessment, not a final decision on guardianship; only the 2005 appointment is presented as the conclusive domestic act. Therefore, only doc:domestic_proceeding_5 may retain isFinalDomesticDecision true. The others must be set to false.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_1",
+      "predicate": "echr:isFinalDomesticDecision",
+      "object": "true",
+      "object_is_literal": true,
+      "datatype": "xsd:boolean",
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "flagged_isFinalDomesticDecision_conflict",
+      "rationale": "The facts describe three proceedings marked as isFinalDomesticDecision true: doc:domestic_proceeding_1 (Court of Appeal, 2001), doc:domestic_proceeding_3 (Social services report, 2002), and doc:domestic_proceeding_5 (Municipal Council appointment of new guardian, 2005). However, only one domestic proceeding can be the final decision before the Strasbourg application. The most recent decision \u2014 the 2 February 2005 appointment of the Director of the Pastra social care home as guardian \u2014 is the last authoritative domestic act affecting the applicant\u2019s guardianship status, as explicitly stated to have been made 'on 2 February 2005' and confirmed by the letter of 16 September 2005. The earlier decisions (2001, 2002) are interim steps in the same chain of guardianship proceedings, not final exhaustion points. The 2001 judgment was appealed and superseded; the 2002 welfare report was an assessment, not a final decision on guardianship; only the 2005 appointment is presented as the conclusive domestic act. Therefore, only doc:domestic_proceeding_5 may retain isFinalDomesticDecision true. The others must be set to false.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_1",
+      "predicate": "echr:isFinalDomesticDecision",
+      "object": "false",
+      "object_is_literal": true,
+      "datatype": "xsd:boolean",
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "flagged_isFinalDomesticDecision_conflict",
+      "rationale": "The facts describe three proceedings marked as isFinalDomesticDecision true: doc:domestic_proceeding_1 (Court of Appeal, 2001), doc:domestic_proceeding_3 (Social services report, 2002), and doc:domestic_proceeding_5 (Municipal Council appointment of new guardian, 2005). However, only one domestic proceeding can be the final decision before the Strasbourg application. The most recent decision \u2014 the 2 February 2005 appointment of the Director of the Pastra social care home as guardian \u2014 is the last authoritative domestic act affecting the applicant\u2019s guardianship status, as explicitly stated to have been made 'on 2 February 2005' and confirmed by the letter of 16 September 2005. The earlier decisions (2001, 2002) are interim steps in the same chain of guardianship proceedings, not final exhaustion points. The 2001 judgment was appealed and superseded; the 2002 welfare report was an assessment, not a final decision on guardianship; only the 2005 appointment is presented as the conclusive domestic act. Therefore, only doc:domestic_proceeding_5 may retain isFinalDomesticDecision true. The others must be set to false.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_3",
+      "predicate": "echr:isFinalDomesticDecision",
+      "object": "true",
+      "object_is_literal": true,
+      "datatype": "xsd:boolean",
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "flagged_isFinalDomesticDecision_conflict",
+      "rationale": "The facts describe three proceedings marked as isFinalDomesticDecision true: doc:domestic_proceeding_1 (Court of Appeal, 2001), doc:domestic_proceeding_3 (Social services report, 2002), and doc:domestic_proceeding_5 (Municipal Council appointment of new guardian, 2005). However, only one domestic proceeding can be the final decision before the Strasbourg application. The most recent decision \u2014 the 2 February 2005 appointment of the Director of the Pastra social care home as guardian \u2014 is the last authoritative domestic act affecting the applicant\u2019s guardianship status, as explicitly stated to have been made 'on 2 February 2005' and confirmed by the letter of 16 September 2005. The earlier decisions (2001, 2002) are interim steps in the same chain of guardianship proceedings, not final exhaustion points. The 2001 judgment was appealed and superseded; the 2002 welfare report was an assessment, not a final decision on guardianship; only the 2005 appointment is presented as the conclusive domestic act. Therefore, only doc:domestic_proceeding_5 may retain isFinalDomesticDecision true. The others must be set to false.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_3",
+      "predicate": "echr:isFinalDomesticDecision",
+      "object": "false",
+      "object_is_literal": true,
+      "datatype": "xsd:boolean",
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings_with_missing_followsProceeding",
+      "rationale": "The facts explicitly frame a chain of decisions: (1) the 2000-11-20 judgment (doc:domestic_proceeding_1) was upheld by the Veliko Tarnovo Court of Appeal on 12 April 2001 \u2014 meaning the Court of Appeal\u2019s 2001 decision reviews and affirms the prior judgment. However, the Court of Appeal\u2019s decision is not yet represented as a separate proceeding node. The 2001 decision must be modeled as an echr:DomesticProceeding with hasDecisionDate 2001-04-12, hasCourt 'Veliko Tarnovo Court of Appeal', hasOutcome echr:OutcomeUpheldOnAppeal, and followsProceeding pointing to doc:domestic_proceeding_1. Additionally, the 2002 Municipal Council appointment of Ms R.P. as guardian (doc:domestic_proceeding_2) and the 2005 replacement appointment (doc:domestic_proceeding_5) are both administrative guardianship decisions made by the same authority (Municipal Council) and are sequential. The 2005 decision replaces the 2002 appointment, so doc:domestic_proceeding_5 must follow doc:domestic_proceeding_2. The 2002 welfare report (doc:domestic_proceeding_3) and 2002 placement agreement (doc:domestic_proceeding_4) are assessments and administrative acts, not decisions on guardianship per se, and do not trigger a followsProceeding link to the 2002 or 2005 appointments \u2014 they inform them but are not reviewed by them. Only decisions that explicitly review or replace a prior guardianship decision form a followsProceeding chain.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_6",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings_with_missing_followsProceeding",
+      "rationale": "The facts explicitly frame a chain of decisions: (1) the 2000-11-20 judgment (doc:domestic_proceeding_1) was upheld by the Veliko Tarnovo Court of Appeal on 12 April 2001 \u2014 meaning the Court of Appeal\u2019s 2001 decision reviews and affirms the prior judgment. However, the Court of Appeal\u2019s decision is not yet represented as a separate proceeding node. The 2001 decision must be modeled as an echr:DomesticProceeding with hasDecisionDate 2001-04-12, hasCourt 'Veliko Tarnovo Court of Appeal', hasOutcome echr:OutcomeUpheldOnAppeal, and followsProceeding pointing to doc:domestic_proceeding_1. Additionally, the 2002 Municipal Council appointment of Ms R.P. as guardian (doc:domestic_proceeding_2) and the 2005 replacement appointment (doc:domestic_proceeding_5) are both administrative guardianship decisions made by the same authority (Municipal Council) and are sequential. The 2005 decision replaces the 2002 appointment, so doc:domestic_proceeding_5 must follow doc:domestic_proceeding_2. The 2002 welfare report (doc:domestic_proceeding_3) and 2002 placement agreement (doc:domestic_proceeding_4) are assessments and administrative acts, not decisions on guardianship per se, and do not trigger a followsProceeding link to the 2002 or 2005 appointments \u2014 they inform them but are not reviewed by them. Only decisions that explicitly review or replace a prior guardianship decision form a followsProceeding chain.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_6",
+      "predicate": "echr:hasCourt",
+      "object": "doc:veliko_tarnovo_court_of_appeal",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "skipped: object node does not exist in the graph or this patch"
+    },
+    {
+      "finding": "domestic_proceedings_with_missing_followsProceeding",
+      "rationale": "The facts explicitly frame a chain of decisions: (1) the 2000-11-20 judgment (doc:domestic_proceeding_1) was upheld by the Veliko Tarnovo Court of Appeal on 12 April 2001 \u2014 meaning the Court of Appeal\u2019s 2001 decision reviews and affirms the prior judgment. However, the Court of Appeal\u2019s decision is not yet represented as a separate proceeding node. The 2001 decision must be modeled as an echr:DomesticProceeding with hasDecisionDate 2001-04-12, hasCourt 'Veliko Tarnovo Court of Appeal', hasOutcome echr:OutcomeUpheldOnAppeal, and followsProceeding pointing to doc:domestic_proceeding_1. Additionally, the 2002 Municipal Council appointment of Ms R.P. as guardian (doc:domestic_proceeding_2) and the 2005 replacement appointment (doc:domestic_proceeding_5) are both administrative guardianship decisions made by the same authority (Municipal Council) and are sequential. The 2005 decision replaces the 2002 appointment, so doc:domestic_proceeding_5 must follow doc:domestic_proceeding_2. The 2002 welfare report (doc:domestic_proceeding_3) and 2002 placement agreement (doc:domestic_proceeding_4) are assessments and administrative acts, not decisions on guardianship per se, and do not trigger a followsProceeding link to the 2002 or 2005 appointments \u2014 they inform them but are not reviewed by them. Only decisions that explicitly review or replace a prior guardianship decision form a followsProceeding chain.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_6",
+      "predicate": "echr:hasDecisionDate",
+      "object": "2001-04-12",
+      "object_is_literal": true,
+      "datatype": "xsd:date",
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings_with_missing_followsProceeding",
+      "rationale": "The facts explicitly frame a chain of decisions: (1) the 2000-11-20 judgment (doc:domestic_proceeding_1) was upheld by the Veliko Tarnovo Court of Appeal on 12 April 2001 \u2014 meaning the Court of Appeal\u2019s 2001 decision reviews and affirms the prior judgment. However, the Court of Appeal\u2019s decision is not yet represented as a separate proceeding node. The 2001 decision must be modeled as an echr:DomesticProceeding with hasDecisionDate 2001-04-12, hasCourt 'Veliko Tarnovo Court of Appeal', hasOutcome echr:OutcomeUpheldOnAppeal, and followsProceeding pointing to doc:domestic_proceeding_1. Additionally, the 2002 Municipal Council appointment of Ms R.P. as guardian (doc:domestic_proceeding_2) and the 2005 replacement appointment (doc:domestic_proceeding_5) are both administrative guardianship decisions made by the same authority (Municipal Council) and are sequential. The 2005 decision replaces the 2002 appointment, so doc:domestic_proceeding_5 must follow doc:domestic_proceeding_2. The 2002 welfare report (doc:domestic_proceeding_3) and 2002 placement agreement (doc:domestic_proceeding_4) are assessments and administrative acts, not decisions on guardianship per se, and do not trigger a followsProceeding link to the 2002 or 2005 appointments \u2014 they inform them but are not reviewed by them. Only decisions that explicitly review or replace a prior guardianship decision form a followsProceeding chain.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_6",
+      "predicate": "echr:hasOutcome",
+      "object": "echr:OutcomeUpheldOnAppeal",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings_with_missing_followsProceeding",
+      "rationale": "The facts explicitly frame a chain of decisions: (1) the 2000-11-20 judgment (doc:domestic_proceeding_1) was upheld by the Veliko Tarnovo Court of Appeal on 12 April 2001 \u2014 meaning the Court of Appeal\u2019s 2001 decision reviews and affirms the prior judgment. However, the Court of Appeal\u2019s decision is not yet represented as a separate proceeding node. The 2001 decision must be modeled as an echr:DomesticProceeding with hasDecisionDate 2001-04-12, hasCourt 'Veliko Tarnovo Court of Appeal', hasOutcome echr:OutcomeUpheldOnAppeal, and followsProceeding pointing to doc:domestic_proceeding_1. Additionally, the 2002 Municipal Council appointment of Ms R.P. as guardian (doc:domestic_proceeding_2) and the 2005 replacement appointment (doc:domestic_proceeding_5) are both administrative guardianship decisions made by the same authority (Municipal Council) and are sequential. The 2005 decision replaces the 2002 appointment, so doc:domestic_proceeding_5 must follow doc:domestic_proceeding_2. The 2002 welfare report (doc:domestic_proceeding_3) and 2002 placement agreement (doc:domestic_proceeding_4) are assessments and administrative acts, not decisions on guardianship per se, and do not trigger a followsProceeding link to the 2002 or 2005 appointments \u2014 they inform them but are not reviewed by them. Only decisions that explicitly review or replace a prior guardianship decision form a followsProceeding chain.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_6",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:domestic_proceeding_1",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings_with_missing_followsProceeding",
+      "rationale": "The facts explicitly frame a chain of decisions: (1) the 2000-11-20 judgment (doc:domestic_proceeding_1) was upheld by the Veliko Tarnovo Court of Appeal on 12 April 2001 \u2014 meaning the Court of Appeal\u2019s 2001 decision reviews and affirms the prior judgment. However, the Court of Appeal\u2019s decision is not yet represented as a separate proceeding node. The 2001 decision must be modeled as an echr:DomesticProceeding with hasDecisionDate 2001-04-12, hasCourt 'Veliko Tarnovo Court of Appeal', hasOutcome echr:OutcomeUpheldOnAppeal, and followsProceeding pointing to doc:domestic_proceeding_1. Additionally, the 2002 Municipal Council appointment of Ms R.P. as guardian (doc:domestic_proceeding_2) and the 2005 replacement appointment (doc:domestic_proceeding_5) are both administrative guardianship decisions made by the same authority (Municipal Council) and are sequential. The 2005 decision replaces the 2002 appointment, so doc:domestic_proceeding_5 must follow doc:domestic_proceeding_2. The 2002 welfare report (doc:domestic_proceeding_3) and 2002 placement agreement (doc:domestic_proceeding_4) are assessments and administrative acts, not decisions on guardianship per se, and do not trigger a followsProceeding link to the 2002 or 2005 appointments \u2014 they inform them but are not reviewed by them. Only decisions that explicitly review or replace a prior guardianship decision form a followsProceeding chain.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_5",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:domestic_proceeding_2",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    }
+  ]
+}

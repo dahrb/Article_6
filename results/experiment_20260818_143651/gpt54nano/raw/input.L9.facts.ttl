@@ -1,0 +1,26 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ns1: <echr:> .
+@prefix ns2: <rdfs:> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<cd:criminal_trial_first_instance_1> a ns1:DomesticProceeding ;
+    ns1:followsProceeding <cd:criminal_investigation_1> ;
+    ns1:hasInstanceLevel ns1:LevelFirstInstance ;
+    ns1:hasProceedingType ns1:TypeCriminal ;
+    ns1:hasSourceParagraph "15"^^<xsd:string> ;
+    ns1:hasSupportingQuote "during the trial at the first ‑ instance court, M.T. and Z.T. changed their testimony"^^xsd:string ;
+    ns2:label "trial at the first ‑ instance court"@en .
+
+<https://growgraph.dev/doc/f7b35a529fbb> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:9"^^xsd:string .
+
+<cd:criminal_investigation_1> a ns1:DomesticProceeding ;
+    ns1:hasInstanceLevel ns1:LevelInvestigative ;
+    ns1:hasProceedingType ns1:TypeCriminal ;
+    ns1:hasSourceParagraph "4"^^<xsd:string> ;
+    ns1:hasSupportingQuote "Criminal proceedings against the applicant"^^xsd:string ;
+    ns2:label "Investigation"@en .
+

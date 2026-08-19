@@ -1,0 +1,41 @@
+/home/dahrb/Projects/article_6/domestic_proceedings/.venv/lib/python3.12/site-packages/rdflib/term.py:1862: UserWarning: Parsing weird boolean, 'true^^xsd:boolean' does not map to True or False
+  warnings.warn(
+/home/dahrb/Projects/article_6/domestic_proceedings/.venv/lib/python3.12/site-packages/rdflib/term.py:1862: UserWarning: Parsing weird boolean, 'false^^xsd:boolean' does not map to True or False
+  warnings.warn(
+repairing 10 file(s) under results/experiment_20260818_143651/qwen3/repaired
+  model: Qwen-3-80B @ http://localhost:8003/v1 (temperature 1.0, timeout 300.0s)
+  results/experiment_20260818_143651/qwen3/repaired/input.L1.facts.ttl: model proposed 2 group(s), 10 op(s)
+    applied 9, skipped 1
+    SKIPPED [domestic_proceedings_with_missing_followsProceeding] add doc:domestic_proceeding_6 echr:hasCourt doc:veliko_tarnovo_court_of_appeal: skipped: object node does not exist in the graph or this patch
+    wrote results/experiment_20260818_143651/qwen3/repaired/input.L1.facts.ttl (backup at results/experiment_20260818_143651/qwen3/repaired/backup/input.L1.facts.ttl)
+  clean results/experiment_20260818_143651/qwen3/repaired/input.L10.facts.ttl: nothing flagged
+  clean results/experiment_20260818_143651/qwen3/repaired/input.L2.facts.ttl: nothing flagged
+  results/experiment_20260818_143651/qwen3/repaired/input.L3.facts.ttl: model proposed 3 group(s), 40 op(s)
+    applied 38, skipped 2
+    SKIPPED [flagged_isFinalDomesticDecision_conflict] remove doc:domestic_proceeding_1 echr:isFinalDomesticDecision true: skipped: triple not present
+    SKIPPED [flagged_isFinalDomesticDecision_conflict] remove doc:domestic_proceeding_4 echr:isFinalDomesticDecision true: skipped: triple not present
+    wrote results/experiment_20260818_143651/qwen3/repaired/input.L3.facts.ttl (backup at results/experiment_20260818_143651/qwen3/repaired/backup/input.L3.facts.ttl)
+  results/experiment_20260818_143651/qwen3/repaired/input.L4.facts.ttl: model proposed 5 group(s), 16 op(s)
+    applied 15, skipped 1
+    SKIPPED [doc:domestic_proceeding_3 (criminal complaint) is the first formal proceeding in the applicant’s own case; its outcome is 'Refused Examination', and it is followed by doc:domestic_proceeding_2, which is chronologically earlier but logically a preliminary police step — reverse the followsProceeding link to reflect actual chain] remove doc:domestic_proceeding_3 echr:followsProceeding doc:domestic_proceeding_2: skipped: triple not present
+    wrote results/experiment_20260818_143651/qwen3/repaired/input.L4.facts.ttl (backup at results/experiment_20260818_143651/qwen3/repaired/backup/input.L4.facts.ttl)
+  clean results/experiment_20260818_143651/qwen3/repaired/input.L5.facts.ttl: nothing flagged
+  results/experiment_20260818_143651/qwen3/repaired/input.L6.facts.ttl: model proposed 4 group(s), 16 op(s)
+    applied 15, skipped 1
+    SKIPPED [conflicting isFinalDomesticDecision flags on doc:domestic_proceeding_5 and doc:domestic_proceeding_6] remove doc:domestic_proceeding_6 echr:isFinalDomesticDecision true^^xsd:boolean: skipped: triple not present
+    wrote results/experiment_20260818_143651/qwen3/repaired/input.L6.facts.ttl (backup at results/experiment_20260818_143651/qwen3/repaired/backup/input.L6.facts.ttl)
+  results/experiment_20260818_143651/qwen3/repaired/input.L7.facts.ttl: model proposed 1 group(s), 20 op(s)
+    applied 17, skipped 3
+    SKIPPED [The facts clearly describe a sequential domestic chain: (1) trial leading to conviction on 1 April 1999; (2) appeal to the Court of Appeal, decided 10 February 2000; (3) petition for leave to appeal to the House of Lords, decided 15 June 2000. The trial (doc:domestic_proceeding_1) is correctly marked isFinalDomesticDecision=true, but this is incorrect — the House of Lords decision is the final domestic step before the Strasbourg application, even though it denied leave. The facts present it as the last domestic authority to consider the case.] add doc:domestic_proceeding_1 echr:hasCourt doc:court_high_court: skipped: object node does not exist in the graph or this patch
+    SKIPPED [The facts clearly describe a sequential domestic chain: (1) trial leading to conviction on 1 April 1999; (2) appeal to the Court of Appeal, decided 10 February 2000; (3) petition for leave to appeal to the House of Lords, decided 15 June 2000. The trial (doc:domestic_proceeding_1) is correctly marked isFinalDomesticDecision=true, but this is incorrect — the House of Lords decision is the final domestic step before the Strasbourg application, even though it denied leave. The facts present it as the last domestic authority to consider the case.] add doc:domestic_proceeding_2 echr:hasCourt doc:court_court_of_appeal: skipped: object node does not exist in the graph or this patch
+    SKIPPED [The facts clearly describe a sequential domestic chain: (1) trial leading to conviction on 1 April 1999; (2) appeal to the Court of Appeal, decided 10 February 2000; (3) petition for leave to appeal to the House of Lords, decided 15 June 2000. The trial (doc:domestic_proceeding_1) is correctly marked isFinalDomesticDecision=true, but this is incorrect — the House of Lords decision is the final domestic step before the Strasbourg application, even though it denied leave. The facts present it as the last domestic authority to consider the case.] add doc:domestic_proceeding_3 echr:hasCourt doc:court_house_of_lords: skipped: object node does not exist in the graph or this patch
+    wrote results/experiment_20260818_143651/qwen3/repaired/input.L7.facts.ttl (backup at results/experiment_20260818_143651/qwen3/repaired/backup/input.L7.facts.ttl)
+  results/experiment_20260818_143651/qwen3/repaired/input.L8.facts.ttl: model proposed 3 group(s), 4 op(s)
+    applied 3, skipped 1
+    SKIPPED [flagged_isFinalDomesticDecision_conflict] remove doc:domestic_proceeding_4 echr:isFinalDomesticDecision true: skipped: triple not present
+    wrote results/experiment_20260818_143651/qwen3/repaired/input.L8.facts.ttl (backup at results/experiment_20260818_143651/qwen3/repaired/backup/input.L8.facts.ttl)
+  results/experiment_20260818_143651/qwen3/repaired/input.L9.facts.ttl: model proposed 4 group(s), 33 op(s)
+    applied 31, skipped 2
+    SKIPPED [followsProceeding_inconsistency] remove doc:domestic_proceeding_1 echr:hasCourt investigating authorities: skipped: triple not present
+    SKIPPED [followsProceeding_inconsistency] remove doc:domestic_proceeding_2 echr:hasCourt first-instance court: skipped: triple not present
+    wrote results/experiment_20260818_143651/qwen3/repaired/input.L9.facts.ttl (backup at results/experiment_20260818_143651/qwen3/repaired/backup/input.L9.facts.ttl)

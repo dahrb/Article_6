@@ -1,0 +1,122 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/ed4beaa288fe/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/ed4beaa288fe> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:10"^^xsd:string .
+
+doc:article_6_issue_1 a echr:Article6Issue ;
+    echr:hasSourceParagraph "75"^^xsd:string ;
+    echr:hasSupportingQuote "it was impossible for them to pursue the execution of the Brussels Court of Appeal’s judgment of 7 December 2016"^^xsd:string .
+
+doc:case_document_1 a echr:CaseDocument .
+
+doc:domestic_proceeding_3 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:domestic_proceeding_2 ;
+    echr:hasCourt doc:domestic_authority_3 ;
+    echr:hasDecisionDate "2016-12-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasProceedingStartDate "2016-12-08"^^xsd:date ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "54"^^xsd:string,
+        "71"^^xsd:string ;
+    echr:hasSupportingQuote "Under section 39/67 of the Aliens Act, an appeal on points of law against the decisions of the Aliens Appeals Board lies to the Conseil d’État ."^^xsd:string,
+        "a judgment delivered by the general assembly of the Aliens Appeals Board on 8 December 2016"^^xsd:string .
+
+doc:domestic_proceeding_4 a echr:DomesticProceeding ;
+    echr:hasCourt doc:domestic_authority_4 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "56"^^xsd:string ;
+    echr:hasSupportingQuote "Article 584 of the Judicial Code provides for the possibility of applying to the president of the court of first instance by means of an urgent application or by an ex parte application:"^^xsd:string .
+
+doc:participation_1 a echr:Participation ;
+    echr:hasSourceParagraph "74"^^xsd:string ;
+    echr:hasSupportingQuote "The applicants complained"^^xsd:string .
+
+doc:participation_2 a echr:Participation ;
+    echr:hasSourceParagraph "75"^^xsd:string ;
+    echr:hasSupportingQuote "The applicants further alleged"^^xsd:string .
+
+doc:party_1 a echr:Party ;
+    echr:hasPartyName "the applicants"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string,
+        "74"^^xsd:string ;
+    echr:hasSupportingQuote "The applicants complained"^^xsd:string,
+        "the applicants"^^xsd:string .
+
+doc:party_2 a echr:Party ;
+    echr:hasPartyName "the Belgian State"^^xsd:string ;
+    echr:hasSourceParagraph "8"^^xsd:string ;
+    echr:hasSupportingQuote "the Belgian State"^^xsd:string .
+
+doc:domestic_authority_1 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Aliens Appeals Board"^^xsd:string,
+        "Aliens Office"^^xsd:string ;
+    echr:hasName "Aliens Office"^^xsd:string ;
+    echr:hasSourceParagraph "45"^^xsd:string,
+        "75"^^xsd:string ;
+    echr:hasSupportingQuote "The Aliens Office is the administrative body, under the supervision of the minister, which has responsibility in practice for all decisions concerning the entry, residence, settlement and expulsion of aliens."^^xsd:string,
+        "the Aliens Appeals Board’s judgment of 20 October 2016"^^xsd:string .
+
+doc:domestic_authority_2 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Aliens Appeals Board"^^xsd:string,
+        "Brussels Court of Appeal"^^xsd:string,
+        "administrative courts"^^xsd:string ;
+    echr:hasName "administrative courts"^^xsd:string ;
+    echr:hasSourceParagraph "52"^^xsd:string,
+        "75"^^xsd:string ;
+    echr:hasSupportingQuote "The Aliens Appeals Board is an administrative court which rules in a collegial formation or as a single judge."^^xsd:string,
+        "the Brussels Court of Appeal’s judgment of 7 December 2016"^^xsd:string .
+
+doc:domestic_authority_3 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Aliens Appeals Board"^^xsd:string,
+        "Conseil d’État"^^xsd:string ;
+    echr:hasSourceParagraph "54"^^xsd:string,
+        "71"^^xsd:string ;
+    echr:hasSupportingQuote "Under section 39/67 of the Aliens Act, an appeal on points of law against the decisions of the Aliens Appeals Board lies to the Conseil d’État ."^^xsd:string,
+        "the general assembly of the Aliens Appeals Board on 8 December 2016"^^xsd:string .
+
+doc:domestic_authority_4 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Court of First Instance"^^xsd:string ;
+    echr:hasSourceParagraph "56"^^xsd:string ;
+    echr:hasSupportingQuote "Article 584 of the Judicial Code provides for the possibility of applying to the president of the court of first instance by means of an urgent application or by an ex parte application:"^^xsd:string .
+
+doc:domestic_proceeding_1 a echr:DomesticProceeding ;
+    echr:hasCourt doc:domestic_authority_1 ;
+    echr:hasDecisionDate "2016-10-20"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasProceedingStartDate "2016-08-22"^^xsd:date,
+        "2016-10-20"^^xsd:date,
+        "1990-01-01"^^echr:PartialDate ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "45"^^xsd:string,
+        "75"^^xsd:string,
+        "9"^^xsd:string ;
+    echr:hasSupportingQuote "On 22 August 2016 the applicant couple, accompanied by one of their children, travelled to the Belgian embassy in Beirut to submit visa applications for themselves and their two children."^^xsd:string,
+        "The decision on whether or not to grant a visa falls within the discretionary powers of the Minister (at the relevant time, the State Secretary with responsibility for asylum and migration), and his or her representative, an authorised civil servant from the Aliens Office."^^xsd:string,
+        "the Aliens Appeals Board’s judgment of 20 October 2016, which had instructed the Belgian authorities to issue them with the visas they had requested under Article 3 of the Convention"^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:domestic_proceeding_2 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:domestic_proceeding_1 ;
+    echr:hasCourt doc:domestic_authority_2 ;
+    echr:hasDecisionDate "2016-12-07"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasProceedingStartDate "2016-12-07"^^xsd:date ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "52"^^xsd:string,
+        "75"^^xsd:string,
+        "8"^^xsd:string ;
+    echr:hasSupportingQuote "If the Aliens Office refuses to issue a visa, the requesting party may apply to the Aliens Appeals Board to have the Aliens Office’s decision set aside."^^xsd:string,
+        "secondly, they brought proceedings before the administrative courts to challenge the refusal by the Aliens Office to issue them with visas."^^xsd:string,
+        "the execution of the Brussels Court of Appeal’s judgment of 7 December 2016 ordering the Belgian State to execute the Aliens Appeals Board’s judgment of 20 October 2016"^^xsd:string .
+

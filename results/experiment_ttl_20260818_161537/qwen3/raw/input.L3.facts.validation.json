@@ -1,0 +1,114 @@
+{
+  "source": "input.jsonl",
+  "conformance": {
+    "shacl_evaluated": null,
+    "conforms": null,
+    "findings": 7,
+    "errors": 7,
+    "warnings": 0,
+    "by_kind": {
+      "suspect_multi_value": 7
+    },
+    "shacl_violations": 0,
+    "shacl_by_constraint": {},
+    "shacl_by_shape": {},
+    "repairs_applied": {}
+  },
+  "gate_repairs": [],
+  "findings": [
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/8ee9e5d9a705/applicant_1> carries 5 distinct numeric values on <https://growgraph.dev/echr#hasShareholdingPercentage> \u2014 the signature of distinct quantities collapsed into one node.",
+      "subject": "https://growgraph.dev/doc/8ee9e5d9a705/applicant_1",
+      "predicate": "https://growgraph.dev/echr#hasShareholdingPercentage",
+      "values": [
+        "1.01",
+        "37.76",
+        "61.8",
+        "95.19",
+        "99.6"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/8ee9e5d9a705/domestic_proceeding_3> points at 2 objects via <https://growgraph.dev/echr#hasProceedingType>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/8ee9e5d9a705/domestic_proceeding_3",
+      "predicate": "https://growgraph.dev/echr#hasProceedingType",
+      "values": [
+        "https://growgraph.dev/echr#TypeAdministrative",
+        "https://growgraph.dev/echr#TypeConstitutional"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/8ee9e5d9a705/proceeding_1> points at 2 objects via <https://growgraph.dev/echr#raisesArticle6Issue>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/8ee9e5d9a705/proceeding_1",
+      "predicate": "https://growgraph.dev/echr#raisesArticle6Issue",
+      "values": [
+        "https://growgraph.dev/doc/8ee9e5d9a705/article6_issue_1",
+        "https://growgraph.dev/doc/8ee9e5d9a705/issue_1"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/8ee9e5d9a705/proceeding_2> points at 2 objects via <https://growgraph.dev/echr#hasOutcomeDirection>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/8ee9e5d9a705/proceeding_2",
+      "predicate": "https://growgraph.dev/echr#hasOutcomeDirection",
+      "values": [
+        "https://growgraph.dev/echr#DirectionFavourableToApplicant",
+        "https://growgraph.dev/echr#DirectionUnfavourableToApplicant"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/8ee9e5d9a705/proceeding_2> points at 2 objects via <https://growgraph.dev/echr#raisesArticle6Issue>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/8ee9e5d9a705/proceeding_2",
+      "predicate": "https://growgraph.dev/echr#raisesArticle6Issue",
+      "values": [
+        "https://growgraph.dev/doc/8ee9e5d9a705/article6_issue_1",
+        "https://growgraph.dev/doc/8ee9e5d9a705/issue_1"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/8ee9e5d9a705/proceeding_3> points at 2 objects via <https://growgraph.dev/echr#hasOutcomeDirection>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/8ee9e5d9a705/proceeding_3",
+      "predicate": "https://growgraph.dev/echr#hasOutcomeDirection",
+      "values": [
+        "https://growgraph.dev/echr#DirectionFavourableToApplicant",
+        "https://growgraph.dev/echr#DirectionUnfavourableToApplicant"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/8ee9e5d9a705/valuation_1> points at 2 objects via <https://growgraph.dev/echr#hasOutcomeDirection>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/8ee9e5d9a705/valuation_1",
+      "predicate": "https://growgraph.dev/echr#hasOutcomeDirection",
+      "values": [
+        "https://growgraph.dev/echr#DirectionFavourableToApplicant",
+        "https://growgraph.dev/echr#DirectionUnfavourableToApplicant"
+      ],
+      "component": "",
+      "source_shape": ""
+    }
+  ]
+}

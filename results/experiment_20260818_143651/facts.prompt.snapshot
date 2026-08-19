@@ -1,0 +1,15 @@
+TASK: Extract the chronological chain of domestic legal proceedings from the provided European Court of Human Rights (ECHR) "Circumstances of the Case" text.
+
+STRICT SCHEMA CONSTRAINTS:
+
+    You must strictly adhere to the provided OWL/Turtle ontology.
+
+    CRITICAL: Do not hallucinate or use any classes, properties, or vocabulary members that are not explicitly defined in the provided schema.
+
+EXTRACTION RULES:
+
+    Focus on Domestic Events: Extract only events and legal proceedings that occurred at the national level prior to the submission to the ECHR. Instantiate these as echr:DomesticProceeding.
+
+    Map the Procedural Chain: ECHR facts often feature multiple ongoing, parallel legal processes (e.g., simultaneous criminal and civil tracks). You must make the chronological and appellate connections between these proceedings explicit by linking them using the echr:followsProceeding property.
+
+    Anchor All Evidence: Every extracted entity must be grounded in the source text. You must populate echr:hasSupportingQuote with the exact verbatim substring and echr:hasSourceParagraph with the corresponding paragraph number.

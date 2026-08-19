@@ -1,0 +1,33 @@
+{
+  "source": "art6_domestic_test_set.jsonl",
+  "conformance": {
+    "shacl_evaluated": null,
+    "conforms": null,
+    "findings": 1,
+    "errors": 1,
+    "warnings": 0,
+    "by_kind": {
+      "suspect_multi_value": 1
+    },
+    "shacl_violations": 0,
+    "shacl_by_constraint": {},
+    "shacl_by_shape": {},
+    "repairs_applied": {}
+  },
+  "gate_repairs": [],
+  "findings": [
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/374a77632880/refusal_2005_08_10> points at 2 objects via <https://schema.org/about>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/374a77632880/refusal_2005_08_10",
+      "predicate": "https://schema.org/about",
+      "values": [
+        "https://growgraph.dev/doc/374a77632880/certificate_2005_06_15",
+        "https://growgraph.dev/doc/374a77632880/placement_in_home_2002"
+      ],
+      "component": "",
+      "source_shape": ""
+    }
+  ]
+}

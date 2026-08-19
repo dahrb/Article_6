@@ -1,0 +1,109 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/7184c200e58b/> .
+@prefix echr: <http://example.org/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ns1: <eCHR:> .
+@prefix ns2: <https://growgraph.dev/echr#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/7184c200e58b> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:2"^^xsd:string .
+
+doc:domestic_proceeding_2 a doc:DomesticProceeding ;
+    rdfs:label "the Darmstadt Labour Court concluded that the conditions for finding the applicants’ action was inadmissible were fulfilled"@en ;
+    doc:followsProceeding doc:domestic_proceeding_1 ;
+    doc:hasSourceParagraph "46"^^xsd:string ;
+    doc:hasSupportingQuote "In its view, ESA had been established as a new and independent organisation and was therefore not bound by Article 6 § 2 of the Agreement concerning ESOC"@en,
+        "In the instant case the Darmstadt Labour Court concluded that the conditions under section 20(2) of the German Courts Act for finding that the applicants’ action was inadmissible were fulfilled."@en,
+        "The Labour Court considered that ESA enjoyed immunity from jurisdiction according to the ESA Convention and its Annex I."@en ;
+    ns2:hasCourt doc:authority_1 .
+
+doc:domestic_proceeding_3 a doc:DomesticProceeding ;
+    rdfs:label "the Federal Labour Court in the case of Mr Waite and Mr Kennedy"@en ;
+    doc:hasSourceParagraph "46"^^xsd:string ;
+    doc:hasSupportingQuote "The Labour Court further referred to the decision of the Federal Labour Court in the case of Mr Waite and Mr Kennedy"@en ;
+    ns2:hasCourt doc:authority_1 .
+
+doc:domestic_proceeding_agreement_20_june_1995_first_applicant_termination_and_lawyer_fees a ns1:DomesticProceeding ;
+    rdfs:label "agreement of 20 June 1995 terminating the first applicant’s employment and providing compensation"@en ;
+    ns1:followsProceeding doc:domestic_proceeding_darmstadt_labour_court_decisions_21_march_1995 ;
+    ns1:hasSourceParagraph 18 ;
+    ns1:hasSupportingQuote "Under the terms of an agreement concluded on 20 June 1995 with the first applicant, terminating his contract of employment on 30 June 1995, the company T. undertook to pay to the first applicant the sum of DEM 14,000 for lawyer’s fees incurred in labour court proceedings concerning his dismissal and DEM 305,000 for the loss of his job."@en .
+
+doc:domestic_proceeding_german_labour_courts_argument_4 a doc:DomesticProceeding ;
+    rdfs:label "Applicants’ memorial and hearing argument that ESA wrongfully pleaded immunity"^^xsd:string ;
+    doc:followsProceeding doc:domestic_proceeding_german_labour_court_track_3 ;
+    doc:hasSourceParagraph 42 ;
+    doc:hasSupportingQuote "In their memorial and at the hearing before the Court, the applicants maintained their argument that ESA had wrongfully pleaded immunity before the German labour courts."^^xsd:string,
+        "In their memorial and at the hearing before the Court, the applicants maintained their argument that ESA had wrongfully pleaded immunity before the German labour courts."@en .
+
+doc:domestic_proceeding_labour_court_barred_by_operation_of_law_5 a doc:DomesticProceeding ;
+    rdfs:label "Darmstadt Labour Court action barred by operation of law"^^xsd:string ;
+    doc:followsProceeding doc:domestic_proceeding_darmstadt_labour_court_1 ;
+    doc:hasSourceParagraph 41 ;
+    doc:hasSupportingQuote "only to be told that their action was barred by operation of law"@en .
+
+doc:domestic_proceeding_settlement_6_september_1994_second_applicant a ns1:DomesticProceeding ;
+    rdfs:label "settlement in the Darmstadt Labour Court on 6 September 1994 for the second applicant’s dismissal claim against T.I."@en ;
+    ns1:followsProceeding doc:domestic_proceeding_arbeitsgericht_second_applicant_1993 ;
+    ns1:hasSourceParagraph 17 ;
+    ns1:hasSupportingQuote "In the proceedings instituted by the second applicant against his dismissal by the company T.I. (see paragraph 13 above), a settlement had been reached in the Darmstadt Labour Court on 6 September 1994."@en .
+
+doc:domestic_proceeding_waite_kennedy_case_reference_7 a doc:DomesticProceeding ;
+    rdfs:label "Waite and Kennedy (Federal Labour Court decision referenced)"^^xsd:string ;
+    doc:followsProceeding doc:domestic_proceeding_federal_labour_court_2 ;
+    doc:hasSourceParagraph 41 ;
+    doc:hasSupportingQuote "in the case concerning Mr Waite and Mr Kennedy"@en .
+
+doc:domestic_proceeding_1 a doc:DomesticProceeding ;
+    rdfs:label "application lodged with the Commission under former Article 25 by Mr Karlheinz Beer and Mr Philip Regan on 13 September 1995"^^xsd:string,
+        "the German labour court regarded the applicants’ action under the German Provision of Labour (Temporary Staff) Act inadmissible"@en ;
+    echr:hasSupportingQuote "lodged with the Commission under former Article 25 by a German national, Mr Karlheinz Beer, and by a British national, Mr Philip Regan, on 13 September 1995"^^xsd:string ;
+    doc:hasSourceParagraph 1,
+        "45"^^xsd:string ;
+    doc:hasSupportingQuote "Section 20(2) of the German Courts Act provides that persons shall have immunity from jurisdiction according to the rules of general international law, or pursuant to international agreements or other legal rules"@en,
+        "The German labour court regarded the applicants’ action under the German Provision of Labour (Temporary Staff) Act inadmissible as the defendant, ESA, had claimed immunity from jurisdiction in accordance with Article XV § 2 of the ESA Convention and Article IV § 1 of its Annex I."@en ;
+    ns2:hasCourt doc:authority_1 .
+
+doc:domestic_proceeding_darmstadt_labour_court_decisions_21_march_1995 a ns1:DomesticProceeding ;
+    rdfs:label "Darmstadt Labour Court decision of 21 March 1995 declaring the applicants’ actions inadmissible"@en ;
+    ns1:followsProceeding doc:domestic_proceeding_arbeitsgericht_second_applicant_1993 ;
+    ns1:hasSourceParagraph 15 ;
+    ns1:hasSupportingQuote "On 21 March 1995 the Darmstadt Labour Court, following hearings, declared the applicants’ respective actions inadmissible."@en .
+
+doc:domestic_proceeding_federal_labour_court_2 a doc:DomesticProceeding ;
+    rdfs:label "Federal Labour Court of 10 November 1993 (Waite and Kennedy case)"^^xsd:string,
+        "Labour Court referred to the Federal Labour Court decision (10 November 1993)"^^xsd:string ;
+    doc:followsProceeding doc:domestic_proceeding_darmstadt_labour_court_1 ;
+    doc:hasSourceParagraph 41 ;
+    doc:hasSupportingQuote "The Labour Court referred to the decision of the Federal Labour Court of 10 November 1993 in the case concerning Mr Waite and Mr Kennedy"^^xsd:string,
+        "The Labour Court referred to the decision of the Federal Labour Court of 10 November 1993"@en,
+        "The Labour Court referred to the decision of the Federal Labour Court of 10 November 1993 in the case concerning Mr Waite and Mr Kennedy"@en .
+
+doc:domestic_proceeding_german_labour_court_track_3 a doc:DomesticProceeding ;
+    rdfs:label "German labour court proceedings on ESA’s immunity from jurisdiction"^^xsd:string ;
+    doc:followsProceeding doc:domestic_proceeding_darmstadt_labour_court_1 ;
+    doc:hasSourceParagraph 41 ;
+    doc:hasSupportingQuote "The German labour court proceedings in the present case, as in the case of Mr Waite and Mr Kennedy, had concentrated on the question of whether or not ESA could validly rely on its immunity from jurisdiction"^^xsd:string,
+        "The German labour court proceedings in the present case, as in the case of Mr Waite and Mr Kennedy, had concentrated on the question of whether or not ESA could validly rely on its immunity from jurisdiction"@en .
+
+doc:domestic_proceeding_arbeitsgericht_second_applicant_1993 a ns1:DomesticProceeding ;
+    rdfs:label "proceedings before the Darmstadt Labour Court (Arbeitsgericht) against ESA in October and November 1993"@en ;
+    ns1:hasSourceParagraph 13 ;
+    ns1:hasSupportingQuote "In October and November 1993 the applicants instituted proceedings before the Darmstadt Labour Court ( Arbeitsgericht ) against ESA, arguing that, pursuant to the German Provision of Labour (Temporary Staff) Act ( Arbeitnehmerüberlassungsgesetz ), they had acquired the status of employees of ESA."@en .
+
+doc:authority_1 a ns2:DomesticAuthority ;
+    rdfs:label "Darmstadt Labour Court"@en,
+        "Federal Labour Court"@en,
+        "German labour court"@en ;
+    ns2:hasAuthorityKind ns2:AuthorityJudicial .
+
+doc:domestic_proceeding_darmstadt_labour_court_1 a doc:DomesticProceeding ;
+    rdfs:label "Darmstadt Labour Court"^^xsd:string ;
+    doc:hasSourceParagraph 41 ;
+    doc:hasSupportingQuote "access to the Darmstadt Labour Court, only to be told that their action was barred by operation of law"^^xsd:string,
+        "access to the Darmstadt Labour Court, only to be told that their action was barred by operation of law"@en .
+

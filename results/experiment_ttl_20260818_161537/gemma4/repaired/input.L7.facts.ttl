@@ -1,0 +1,154 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/b5cd3566c122/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/b5cd3566c122> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:7"^^xsd:string .
+
+doc:participation_appeal_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_applicant_bail_review_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSourceParagraph "7"^^xsd:string ;
+    echr:hasSupportingQuote "An application was made to the High Court to review bail"^^xsd:string ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_applicant_trial_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSourceParagraph "3"^^xsd:string ;
+    echr:hasSupportingQuote "the applicant execute a number of Jewish women"^^xsd:string ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_trial_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:proceeding_bail_review_1 a echr:DomesticProceeding ;
+    rdfs:label "High Court bail review"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_trial_1 ;
+    echr:hasCourt doc:high_court_1 ;
+    echr:hasDecisionDate "1999-03-26"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "7"^^xsd:string ;
+    echr:hasSupportingQuote "An application was made to the High Court to review bail on 26 March 1999. It was refused."^^xsd:string .
+
+doc:proceeding_house_of_lords_1 a echr:DomesticProceeding ;
+    rdfs:label "petition for leave to appeal to the House of Lords"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_appeal_1 ;
+    echr:hasCourt doc:house_of_lords_1 ;
+    echr:hasDecisionDate "2000-06-15"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "11"^^xsd:string ;
+    echr:hasSupportingQuote "On 15 June 2000, the House of Lords refused the petition for leave to appeal."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:trial_1 a echr:DomesticProceeding ;
+    rdfs:label "trial of Anthony Sawoniuk"^^xsd:string ;
+    echr:hasCourt doc:court_1 ;
+    echr:hasDecisionDate "1999-04-01"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasProceedingStartDate "1999-02-08"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSittingJudge doc:judgePotts ;
+    echr:hasSourceParagraph "The facts"^^xsd:string ;
+    echr:hasSupportingQuote "In the trial which took place between 8 February and 1 April 1999"^^xsd:string ;
+    echr:raisesArticle6Issue doc:issueAbuseOfProcess .
+
+doc:court_1 a echr:DomesticAuthority ;
+    rdfs:label "Court of Mr Justice Potts"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Mr Justice Potts and a jury"^^xsd:string ;
+    echr:hasSourceParagraph "The facts"^^xsd:string .
+
+doc:court_of_appeal_1 a echr:DomesticAuthority ;
+    rdfs:label "Court of Appeal"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial .
+
+doc:detention_belmarsh_1 a echr:PreTrialDetention ;
+    rdfs:label "detention at Belmarsh prison"^^xsd:string ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:applicant_1 ;
+    echr:hasDetentionStartDate "1999-03-25"^^xsd:date ;
+    echr:hasSourceParagraph "6"^^xsd:string ;
+    echr:hasSupportingQuote "on 25 March 1999... the judge... decided to withdraw the applicant’s bail... he would be held in the hospital wing of Belmarsh prison"^^xsd:string .
+
+doc:high_court_1 a echr:DomesticAuthority ;
+    rdfs:label "High Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial .
+
+doc:house_of_lords_1 a echr:DomesticAuthority ;
+    rdfs:label "House of Lords"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial .
+
+doc:issueAbuseOfProcess a echr:Article6Issue ;
+    rdfs:label "application for stay as abuse of process"^^xsd:string ;
+    echr:affectsParty doc:anthonySawoniuk ;
+    echr:hasSupportingQuote "the trial should be stayed as an abuse on the basis that due inter alia to the lapse of time since events the applicant could not obtain a fair trial"^^xsd:string .
+
+doc:judgePotts a echr:JudicialOfficer ;
+    rdfs:label "Mr Justice Potts"^^xsd:string ;
+    echr:hasPersonName "Mr Justice Potts"^^xsd:string .
+
+doc:participation_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:anthonySawoniuk .
+
+doc:proceeding_appeal_1 a echr:DomesticProceeding ;
+    rdfs:label "appeal against conviction"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_trial_1 ;
+    echr:hasCourt doc:court_of_appeal_1 ;
+    echr:hasDecisionDate "2000-02-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "4"^^xsd:string ;
+    echr:hasSupportingQuote "In its judgment of 10 February 2000, the Court of Appeal rejected the applicant’s appeal."^^xsd:string .
+
+doc:trial_court_1 a echr:DomesticAuthority ;
+    rdfs:label "Trial Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial .
+
+doc:anthonySawoniuk a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Anthony SAWONIUK"^^xsd:string ;
+    echr:hasBirthYear "1921"^^xsd:gYear ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasHonorific "Mr"^^xsd:string ;
+    echr:hasSourceParagraph "The facts"^^xsd:string .
+
+doc:proceeding_trial_1 a echr:DomesticProceeding ;
+    rdfs:label "trial of the applicant"^^xsd:string,
+        "trial proceedings"^^xsd:string ;
+    echr:hasCourt doc:trial_court_1 ;
+    echr:hasDecisionDate "1999-04-01"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasPreTrialDetention doc:detention_belmarsh_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "2"^^xsd:string,
+        "3"^^xsd:string ;
+    echr:hasSupportingQuote "During the trial the judge and jury visited the location"^^xsd:string,
+        "On 1 April 1999, the jury convicted the applicant of counts 1 and 3."^^xsd:string .
+
+doc:applicant_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicant"^^xsd:string ;
+    echr:hasHonorific "Mr"^^xsd:string ;
+    echr:hasPersonName "the applicant"^^xsd:string .
+

@@ -1,0 +1,41 @@
+{
+  "source": "results/experiment_ttl_20260818_161537/gpt5mini/repaired/input.L10.facts.ttl",
+  "operations": [
+    {
+      "finding": "flagged_missing_followsProceeding_for",
+      "rationale": "The Brussels Court of Appeal\u2019s judgment of 7 December 2016 is described as ordering execution of the Aliens Appeals Board\u2019s judgment of 20 October 2016 (quote: \"the Brussels Court of Appeal\u2019s judgment of 7 December 2016 ordering the Belgian State to execute the Aliens Appeals Board\u2019s judgment of 20 October 2016\"). The graph currently links doc:brusselsCourtOfAppealProceeding to doc:aliensAppealsBoardProceeding; there is a separate node doc:aliens_appeals_board_20oct2016 that clearly represents the Aliens Appeals Board judgment of 20 October 2016 (has the same date and supporting quote). Replace the followsProceeding target so the Court of Appeal proceeding follows the canonical doc:aliens_appeals_board_20oct2016 node.",
+      "action": "remove",
+      "subject": "doc:brusselsCourtOfAppealProceeding",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:aliensAppealsBoardProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "flagged_missing_followsProceeding_for",
+      "rationale": "The Brussels Court of Appeal\u2019s judgment of 7 December 2016 is described as ordering execution of the Aliens Appeals Board\u2019s judgment of 20 October 2016 (quote: \"the Brussels Court of Appeal\u2019s judgment of 7 December 2016 ordering the Belgian State to execute the Aliens Appeals Board\u2019s judgment of 20 October 2016\"). The graph currently links doc:brusselsCourtOfAppealProceeding to doc:aliensAppealsBoardProceeding; there is a separate node doc:aliens_appeals_board_20oct2016 that clearly represents the Aliens Appeals Board judgment of 20 October 2016 (has the same date and supporting quote). Replace the followsProceeding target so the Court of Appeal proceeding follows the canonical doc:aliens_appeals_board_20oct2016 node.",
+      "action": "add",
+      "subject": "doc:brusselsCourtOfAppealProceeding",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:aliens_appeals_board_20oct2016",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceedings",
+      "rationale": "The text explicitly states that \"the Aliens Appeals Board is an administrative court\" (quote from doc:procAliensAppeal: \"The Aliens Appeals Board is an administrative court which rules in a collegial formation or as a single judge.\"). Therefore the authority-kind triple asserting that the Aliens Appeals Board is judicial is incorrect. Remove the echr:AuthorityJudicial value from doc:aliensAppealsBoard and keep the administrative classification.",
+      "action": "remove",
+      "subject": "doc:aliensAppealsBoard",
+      "predicate": "echr:hasAuthorityKind",
+      "object": "echr:AuthorityJudicial",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    }
+  ]
+}

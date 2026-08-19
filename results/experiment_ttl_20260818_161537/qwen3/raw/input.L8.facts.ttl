@@ -1,0 +1,284 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/2e580396bd3f/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/2e580396bd3f> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:8"^^xsd:string .
+
+doc:adjournment_1 a echr:Adjournment ;
+    echr:hasAdjournmentCause echr:DelayAttributedToApplicant ;
+    echr:hasAdjournmentDate "1998-07"^^xsd:gYearMonth ;
+    echr:hasDomesticProceeding doc:proceeding_2 ;
+    echr:hasExtractionNote "adjournment request cited difficulties with more than 100 volumes of case materials"^^xsd:string ;
+    echr:hasResumptionDate "1998-08-10"^^xsd:date ;
+    echr:hasSourceParagraph "4"^^xsd:string .
+
+doc:article6_issue_4 a echr:Article6Issue ;
+    echr:affectsParty doc:natural_person_1 ;
+    echr:hasDelayAttribution echr:DelayUnattributed ;
+    echr:hasSourceParagraph "3"^^xsd:string ;
+    echr:hasSupportingQuote "the Regional Court had failed to react properly to the mishandling of the applicant’s property by the prosecutor’s office"^^xsd:string ;
+    echr:issueArisesIn doc:proceeding_3 .
+
+doc:case_document_1 a echr:CaseDocument ;
+    echr:hasApplicant doc:party_1 .
+
+doc:domestic_proceeding_1 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:domestic_proceeding_2,
+        doc:domestic_proceeding_3 ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasDecisionDate "1998-05-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasPreTrialDetention doc:pre_trial_detention_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasStatedDuration "P6Y"^^xsd:duration ;
+    echr:hasSupportingQuote "On 27 May 1998 the Nizhniy Novgorod Regional Court found the applicant guilty on charges of misappropriation and embezzlement, larceny, bribery and attempt not to return money from abroad."^^xsd:string ;
+    echr:raisesArticle6Issue doc:article6_issue_1 .
+
+doc:inactivity_period_1 a echr:InactivityPeriod ;
+    echr:hasDomesticProceeding doc:proceeding_2 ;
+    echr:hasInactivityCause echr:DelayAttributedToAuthorities ;
+    echr:hasInactivityEndDate "1998-07"^^xsd:gYearMonth ;
+    echr:hasInactivityStartDate "1997-04-21"^^xsd:date ;
+    echr:hasSourceParagraph "4"^^xsd:string .
+
+doc:participation_1 a echr:Participation ;
+    echr:hasDomesticProceeding doc:proceeding_1 ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSourceParagraph "2"^^xsd:string ;
+    echr:participatingParty doc:natural_person_1 .
+
+doc:participation_2 a echr:Participation ;
+    echr:hasDomesticProceeding doc:proceeding_2 ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSourceParagraph "2"^^xsd:string ;
+    echr:participatingParty doc:natural_person_1 .
+
+doc:participation_3 a echr:Participation ;
+    echr:hasDomesticProceeding doc:proceeding_3 ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSourceParagraph "3"^^xsd:string ;
+    echr:participatingParty doc:natural_person_1 .
+
+doc:participation_4 a echr:Participation ;
+    echr:hasDomesticProceeding doc:proceeding_2 ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSourceParagraph "2"^^xsd:string ;
+    echr:participatingParty doc:legal_representative_1 .
+
+doc:participation_5 a echr:Participation ;
+    echr:hasDomesticProceeding doc:proceeding_2 ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSourceParagraph "4"^^xsd:string ;
+    echr:participatingParty doc:legal_representative_2 .
+
+doc:participation_6 a echr:Participation ;
+    echr:hasDomesticProceeding doc:proceeding_2 ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSourceParagraph "4"^^xsd:string ;
+    echr:participatingParty doc:legal_representative_3 .
+
+doc:pre_trial_detention_2 a echr:PreTrialDetention ;
+    echr:hasCustodialMeasure echr:MeasurePoliceCustody ;
+    echr:hasDetainee doc:natural_person_1 ;
+    echr:hasDetentionEndDate "1996-01-19"^^xsd:date ;
+    echr:hasDetentionStartDate "1995-10-05"^^xsd:date ;
+    echr:hasDomesticProceeding doc:proceeding_4 ;
+    echr:hasSourceParagraph "5"^^xsd:string ;
+    echr:hasStatedDetentionDuration "P1127D"^^xsd:duration .
+
+doc:proceeding_5 a echr:DomesticProceeding ;
+    echr:hasCourt doc:authority_3 ;
+    echr:hasDecisionDate "1996-05-18"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingStartDate "1996-05"^^xsd:gYearMonth ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "5"^^xsd:string .
+
+doc:proceeding_6 a echr:DomesticProceeding ;
+    echr:hasCourt doc:authority_5 ;
+    echr:hasDecisionDate "1999-02"^^xsd:gYear ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasProceedingStartDate "1995-03"^^xsd:gYearMonth ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "6"^^xsd:string .
+
+doc:article6_issue_1 a echr:Article6Issue ;
+    echr:affectsParty doc:natural_person_1,
+        doc:party_1 ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "The applicant also contested the legality of certain witness’ statements, as they lacked indications of the time or place of questioning."^^xsd:string,
+        "The applicant claimed that he was not informed about the holding of the examinations until they were over, in violation of the national law."^^xsd:string,
+        "The applicant objected to the admission of the statements, claiming that, among other things, they were not affixed by an apostille, and therefore not in conformity with requirements relating to foreign official papers."^^xsd:string,
+        "The court admitted several documents in English during the trial, the translations of which had not been provided to the applicant before the trial."^^xsd:string,
+        "The witnesses did not attend the trial and the applicant could not question them."^^xsd:string,
+        "the applicant was not allowed full access to the verbatim record and to documents in the case file"^^xsd:string ;
+    echr:issueArisesIn doc:proceeding_2 .
+
+doc:article6_issue_2 a echr:Article6Issue ;
+    echr:affectsParty doc:natural_person_1,
+        doc:party_1 ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasSourceParagraph "1"^^xsd:string,
+        "4"^^xsd:string ;
+    echr:hasSupportingQuote "It appears that the civil claims by the latter three companies were submitted on 20 April 1998, i.e. during the trial."^^xsd:string,
+        "The court also granted civil claims for damages by the shipyard “Oka” and three other companies, “Zhanto”, “NL TOP” and “Slot"^^xsd:string,
+        "her request to adjourn the hearing was not granted by the Supreme Court, and it appears that the issues of the judgment and access to the case file have not been addressed by the Supreme Court"^^xsd:string ;
+    echr:issueArisesIn doc:proceeding_2 .
+
+doc:article6_issue_3 a echr:Article6Issue ;
+    echr:affectsParty doc:natural_person_1,
+        doc:party_1 ;
+    echr:hasDelayAttribution echr:DelayAttributedToApplicant,
+        echr:DelayAttributedToAuthorities ;
+    echr:hasSourceParagraph "1"^^xsd:string,
+        "2"^^xsd:string ;
+    echr:hasSupportingQuote "In one order the court noted breaches of the relevant rules of criminal procedure during investigation, and found that these breaches had been remedied during the trial."^^xsd:string,
+        "The applicant claims that he was not informed of them, did not receive copies promptly and was therefore unable to appeal against them."^^xsd:string,
+        "The court also accepted that there had been breaches of the relevant procedural rules in respect of property belonging to the applicant, which had been seized."^^xsd:string,
+        "The court also noted that a number of documents in the case file were in foreign languages, but considered that this did not violate the defence rights because the documents were similar to, or copies of, other documents in Russian."^^xsd:string,
+        "The court considered that the fact that the defendants were not properly informed about the examinations did not invalidate the conclusions of the experts’ reports, and that the applicant had failed to contest the results of the reports during the investigation or during the trial."^^xsd:string,
+        "The court further noted that certain witness statements had been admitted in evidence, even though they gave no indication as to the time or place of questioning."^^xsd:string,
+        "one of his lawyers was on sick leave, and his request to admit Mrs Moskalenko as his lawyer was denied by the Regional Court"^^xsd:string ;
+    echr:issueArisesIn doc:proceeding_2 .
+
+doc:authority_2 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Supreme Court"^^xsd:string ;
+    echr:hasSourceParagraph "2"^^xsd:string .
+
+doc:authority_5 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Nizhniy Novgorod regional prosecutor’s office"^^xsd:string ;
+    echr:hasSourceParagraph "6"^^xsd:string .
+
+doc:domestic_proceeding_2 a echr:DomesticProceeding ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasDecisionDate "1998-05-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "The court also granted civil claims for damages by the shipyard “Oka” and three other companies, “Zhanto”, “NL TOP” and “Slot”."^^xsd:string ;
+    echr:raisesArticle6Issue doc:article6_issue_2 .
+
+doc:domestic_proceeding_3 a echr:DomesticProceeding ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasDecisionDate "1998-05-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnknown ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "On 27 May 1998 the Regional Court made a number of further orders ( частные определения ) in the case."^^xsd:string ;
+    echr:raisesArticle6Issue doc:article6_issue_3 .
+
+doc:legal_representative_1 a echr:LegalRepresentative ;
+    echr:hasPersonName "Mr. O."^^xsd:string ;
+    echr:hasSourceParagraph "2"^^xsd:string .
+
+doc:legal_representative_2 a echr:LegalRepresentative ;
+    echr:hasPersonName "Mrs Moskalenko"^^xsd:string ;
+    echr:hasSourceParagraph "4"^^xsd:string .
+
+doc:legal_representative_3 a echr:LegalRepresentative ;
+    echr:hasPersonName "Mr. K."^^xsd:string ;
+    echr:hasSourceParagraph "4"^^xsd:string .
+
+doc:pre_trial_detention_1 a echr:PreTrialDetention ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:natural_person_1,
+        doc:party_1 ;
+    echr:hasDetentionEndDate "2000-10"^^xsd:gYearMonth ;
+    echr:hasDetentionStartDate "1995"^^xsd:gYear ;
+    echr:hasDomesticProceeding doc:proceeding_1,
+        doc:proceeding_2,
+        doc:proceeding_3 ;
+    echr:hasSourceParagraph "1"^^xsd:string,
+        "5"^^xsd:string ;
+    echr:hasStatedDetentionDuration "P1826D"^^xsd:duration ;
+    echr:hasSupportingQuote "In total, the court sentenced him to six years in prison and confiscation of some property."^^xsd:string .
+
+doc:proceeding_4 a echr:DomesticProceeding ;
+    echr:hasCourt doc:authority_3 ;
+    echr:hasDecisionDate "1995-10-05"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingStartDate "1995-03"^^xsd:gYearMonth ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "5"^^xsd:string ;
+    echr:hasStatedDuration "P1127D"^^xsd:duration .
+
+doc:authority_3 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Nizhniy Novgorod prosecutor’s office"^^xsd:string ;
+    echr:hasSourceParagraph "5"^^xsd:string .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasDecisionDate "1997-04-21"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingStartDate "1995"^^xsd:gYear ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasStatedDuration "P730D"^^xsd:duration .
+
+doc:proceeding_3 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:proceeding_2 ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasDecisionDate "1998-05-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelReopening ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingStartDate "1998-05"^^xsd:gYearMonth ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "3"^^xsd:string .
+
+doc:authority_1 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Nizhniy Novgorod Regional Court"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "On 27 May 1998 the Nizhniy Novgorod Regional Court found the applicant guilty on charges of misappropriation and embezzlement, larceny, bribery and attempt not to return money from abroad."^^xsd:string .
+
+doc:party_1 a echr:NaturalPerson,
+        echr:Party ;
+    echr:hasHonorific "the"^^xsd:string ;
+    echr:hasPartyName "the applicant"^^xsd:string ;
+    echr:hasPersonName "the applicant"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "On 27 May 1998 the Nizhniy Novgorod Regional Court found the applicant guilty..."^^xsd:string ;
+    echr:isAnonymised false .
+
+doc:natural_person_1 a echr:NaturalPerson ;
+    echr:hasHonorific "He"^^xsd:string ;
+    echr:hasPersonName "the applicant"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:isAnonymised false .
+
+doc:proceeding_2 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:authority_2 ;
+    echr:hasDecisionDate "1998-08-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasOutcomeDirection echr:DirectionMixed ;
+    echr:hasProceedingStartDate "1998-07"^^xsd:gYearMonth ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "2"^^xsd:string .
+

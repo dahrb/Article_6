@@ -1,0 +1,195 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/9850b086e44d/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/9850b086e44d> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:2"^^xsd:string .
+
+doc:domestic_proceeding_3 a echr:DomesticProceeding ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasCourt doc:domestic_authority_1 ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "45"^^xsd:string ;
+    echr:hasSupportingQuote "Section 20(2) of the German Courts Act provides that persons shall have immunity from jurisdiction according to the rules of general international law, or pursuant to international agreements or other legal rules (see paragraph 20 above)."^^xsd:string ;
+    echr:raisesArticle6Issue doc:article6_issue_1 .
+
+doc:judicial_officer_1 a echr:JudicialOfficer ;
+    echr:hasName "Mr K. Herndl"^^xsd:string ;
+    echr:hasPersonName "Mr K. Herndl"^^xsd:string ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "The Court heard addresses by Mr Herndl, Mr Laule, Mr W.J. Habscheid and Mrs Voelskow-Thies."^^xsd:string .
+
+doc:judicial_officer_2 a echr:JudicialOfficer ;
+    echr:hasName "Mr G. Laule"^^xsd:string ;
+    echr:hasPersonName "Mr G. Laule"^^xsd:string ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "The Court heard addresses by Mr Herndl, Mr Laule, Mr W.J. Habscheid and Mrs Voelskow-Thies."^^xsd:string .
+
+doc:judicial_officer_3 a echr:JudicialOfficer ;
+    echr:hasName "Mr W.J. Habscheid"^^xsd:string ;
+    echr:hasPersonName "Mr W.J. Habscheid"^^xsd:string ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "The Court heard addresses by Mr Herndl, Mr Laule, Mr W.J. Habscheid and Mrs Voelskow-Thies."^^xsd:string .
+
+doc:legal_representative_1 a echr:LegalRepresentative ;
+    echr:hasName "Mr Beer and Mr Regan"^^xsd:string,
+        "Mr W.J. Habscheid"^^xsd:string ;
+    echr:hasPersonName "Mr Beer and Mr Regan"^^xsd:string,
+        "Mr W.J. Habscheid"^^xsd:string ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "for the applicants Mr W.J. Habscheid , of the Kempten Bar, Counsel"^^xsd:string .
+
+doc:legal_representative_2 a echr:LegalRepresentative ;
+    echr:hasName "Mr E. Habscheid"^^xsd:string ;
+    echr:hasPersonName "Mr E. Habscheid"^^xsd:string ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "Mr E. Habscheid , of the Dresden Bar, Adviser"^^xsd:string .
+
+doc:legal_representative_3 a echr:LegalRepresentative ;
+    echr:hasName "Mr G. Laule"^^xsd:string ;
+    echr:hasPersonName "Mr G. Laule"^^xsd:string ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "for Mr Waite and Mr Kennedy Mr G. Laule , of the Frankfurt Bar, Counsel"^^xsd:string .
+
+doc:legal_representative_4 a echr:LegalRepresentative ;
+    echr:hasName "Mr A. Meyer-Landrut"^^xsd:string ;
+    echr:hasPersonName "Mr A. Meyer-Landrut"^^xsd:string ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "Mr A. Meyer-Landrut , of the Frankfurt Bar"^^xsd:string .
+
+doc:legal_representative_5 a echr:LegalRepresentative ;
+    echr:hasName "Mr C. Just"^^xsd:string ;
+    echr:hasPersonName "Mr C. Just"^^xsd:string ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "Mr C. Just , of the Frankfurt Bar, Advisers"^^xsd:string .
+
+doc:legal_representative_6 a echr:LegalRepresentative ;
+    echr:hasName "Mr K. Herndl"^^xsd:string ;
+    echr:hasPersonName "Mr K. Herndl"^^xsd:string ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "for the Commission Mr K. Herndl , Delegate"^^xsd:string .
+
+doc:natural_person_1 a echr:NaturalPerson ;
+    echr:hasBirthYear "1952"^^xsd:gYear ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue "Mr"^^xsd:string ;
+    echr:hasGenderCueText "Mr Karlheinz Beer"^^xsd:string ;
+    echr:hasPersonName "Mr Karlheinz Beer"^^xsd:string ;
+    echr:hasSourceParagraph "10"^^xsd:string ;
+    echr:isAnonymised false .
+
+doc:natural_person_2 a echr:NaturalPerson ;
+    echr:hasBirthYear "1960"^^xsd:gYear ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue "Mr"^^xsd:string ;
+    echr:hasGenderCueText "Mr Philip Regan"^^xsd:string ;
+    echr:hasPersonName "Mr Philip Regan"^^xsd:string ;
+    echr:hasSourceParagraph "10"^^xsd:string ;
+    echr:isAnonymised false .
+
+doc:domestic_authority_2 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Federal Labour Court"^^xsd:string .
+
+doc:domestic_proceeding_2 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:domestic_proceeding_1 ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasCourt doc:domestic_authority_1,
+        doc:domestic_authority_2 ;
+    echr:hasDecisionDate "1994-09-06"^^echr:PartialDate ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasExtractionNote "Settlement amount of 22,000 marks (DEM) paid by company T.I. to second applicant"@en ;
+    echr:hasInstanceLevel echr:LevelAppeal,
+        echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeSettled,
+        echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant,
+        echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasProceedingStartDate "1993-09-00"^^echr:PartialDate ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSittingJudge doc:judicial_officer_4 ;
+    echr:hasSourceParagraph "17"^^xsd:string,
+        "46"^^xsd:string ;
+    echr:hasStatedDuration "P11M"^^xsd:duration ;
+    echr:hasSupportingQuote "In the proceedings instituted by the second applicant against his dismissal by the company T.I. (see paragraph 13 above), a settlement had been reached in the Darmstadt Labour Court on 6 September 1994."^^xsd:string,
+        "The Labour Court considered that ESA enjoyed immunity from jurisdiction according to the ESA Convention and its Annex I. In its view, ESA had been established as a new and independent organisation and was therefore not bound by Article 6 § 2 of the Agreement concerning ESOC (see paragraph 15 above). The Labour Court further referred to the decision of the Federal Labour Court in the case of Mr Waite and Mr Kennedy (see paragraph 15 above)."^^xsd:string ;
+    echr:raisesArticle6Issue doc:article6_issue_1 .
+
+doc:party_2 a echr:Party ;
+    echr:hasPartyName "the second applicant"^^xsd:string .
+
+doc:domestic_proceeding_1 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:domestic_proceeding_2 ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasCourt doc:domestic_authority_1 ;
+    echr:hasDecisionDate "1995-03-21"^^echr:PartialDate ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasExtractionNote "First applicant received DEM 14,000 for lawyer's fees and DEM 305,000 for loss of job"@en ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible,
+        echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasProceedingStartDate "1995-09-13"^^xsd:date,
+        "1993-10-00"^^echr:PartialDate ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSittingJudge doc:judicial_officer_4 ;
+    echr:hasSourceParagraph "15"^^xsd:string,
+        "41"^^xsd:string,
+        "45"^^xsd:string ;
+    echr:hasStatedDuration "P1Y5M"^^xsd:duration ;
+    echr:hasSupportingQuote "On 21 March 1995 the Darmstadt Labour Court, following hearings, declared the applicants’ respective actions inadmissible."^^xsd:string,
+        "The German labour court proceedings in the present case, as in the case of Mr Waite and Mr Kennedy, had concentrated on the question of whether or not ESA could validly rely on its immunity from jurisdiction."^^xsd:string,
+        "The German labour court regarded the applicants’ action under the German Provision of Labour (Temporary Staff) Act inadmissible as the defendant, ESA, had claimed immunity from jurisdiction in accordance with Article XV § 2 of the ESA Convention and Article IV § 1 of its Annex I."^^xsd:string ;
+    echr:isFinalDomesticDecision true ;
+    echr:raisesArticle6Issue doc:article6_issue_1 .
+
+doc:judicial_officer_4 a echr:JudicialOfficer ;
+    echr:hasName "Mrs Voelskow-Thies"^^xsd:string ;
+    echr:hasPersonName "Mrs Voelskow-Thies"^^xsd:string ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "The Court heard addresses by Mr Herndl, Mr Laule, Mr W.J. Habscheid and Mrs Voelskow-Thies."^^xsd:string .
+
+doc:party_1 a echr:Party ;
+    echr:hasPartyName "Mr Beer and Mr Regan"^^xsd:string,
+        "the applicants"^^xsd:string .
+
+doc:article6_issue_1 a echr:Article6Issue ;
+    echr:affectsParty doc:party_1 ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasSourceParagraph "14"^^xsd:string,
+        "33"^^xsd:string,
+        "45"^^xsd:string ;
+    echr:hasSupportingQuote """ESA relied on its immunity from jurisdiction under Article XV § 2 of the ESA Convention and its Annex I.
+
+The Labour Court considered that ESA had validly relied on its immunity from jurisdiction.
+
+The Labour Court, referring to section 20(2) of the Courts Act (Gerichtsverfassungsgesetz), according to which immunity from jurisdiction could be provided for, inter alia, in international agreements, considered that ESA enjoyed such immunity under Article XV § 2 of the ESA Convention and its Annex I."""^^xsd:string,
+        "The German labour court regarded the applicants’ action under the German Provision of Labour (Temporary Staff) Act inadmissible as the defendant, ESA, had claimed immunity from jurisdiction in accordance with Article XV § 2 of the ESA Convention and Article IV § 1 of its Annex I."^^xsd:string,
+        "they had been denied access to a court for a determination of their dispute with ESA in connection with an issue under German labour law."^^xsd:string ;
+    echr:issueArisesIn doc:domestic_proceeding_1 .
+
+doc:domestic_authority_1 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Darmstadt Labour Court"^^xsd:string,
+        "Darmstadt Labour Court (Arbeitsgericht)"^^xsd:string ;
+    echr:hasName "Darmstadt Labour Court"^^xsd:string .
+
+doc:participation_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:party_1,
+        doc:party_2 .
+

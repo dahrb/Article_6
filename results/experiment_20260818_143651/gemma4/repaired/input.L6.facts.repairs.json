@@ -1,0 +1,17 @@
+{
+  "source": "results/experiment_20260818_143651/gemma4/repaired/input.L6.facts.ttl",
+  "operations": [
+    {
+      "finding": "The node doc:proceeding_1 has two conflicting objects for the functional property echr:hasCourt (commercialCourt and commercialCourtArmenia). Based on the labels, these likely refer to the same entity (Commercial Court of Armenia).",
+      "rationale": "Functional properties must have a single value. I will remove the duplicate court node to resolve the validator error.",
+      "action": "remove",
+      "subject": "doc:proceeding_1",
+      "predicate": "echr:hasCourt",
+      "object": "doc:commercialCourt",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    }
+  ]
+}

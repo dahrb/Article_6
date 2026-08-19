@@ -1,0 +1,36 @@
+{
+  "source": "input.jsonl",
+  "conformance": {
+    "shacl_evaluated": null,
+    "conforms": null,
+    "findings": 1,
+    "errors": 1,
+    "warnings": 0,
+    "by_kind": {
+      "suspect_multi_value": 1
+    },
+    "shacl_violations": 0,
+    "shacl_by_constraint": {},
+    "shacl_by_shape": {},
+    "repairs_applied": {}
+  },
+  "gate_repairs": [],
+  "findings": [
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/21841ddb7db9/natural_person_1> carries 5 distinct numeric values on <https://growgraph.dev/doc/21841ddb7db9/hasShareholdingPercentage> \u2014 the signature of distinct quantities collapsed into one node.",
+      "subject": "https://growgraph.dev/doc/21841ddb7db9/natural_person_1",
+      "predicate": "https://growgraph.dev/doc/21841ddb7db9/hasShareholdingPercentage",
+      "values": [
+        "1.01",
+        "37.76",
+        "61.8",
+        "95.19",
+        "99.6"
+      ],
+      "component": "",
+      "source_shape": ""
+    }
+  ]
+}

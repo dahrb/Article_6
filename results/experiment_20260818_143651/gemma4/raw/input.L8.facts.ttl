@@ -1,0 +1,174 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/e8290bd348ae/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/e8290bd348ae> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:8"^^xsd:string .
+
+doc:cassation_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "Appeal/Cassation at the Supreme Court"@en ;
+    echr:followsProceeding doc:trial_proceeding_1 ;
+    echr:hasCourt doc:supremeCourtRu ;
+    echr:hasDecisionDate "1998-08-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationApplicantCassation ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "4"@en ;
+    echr:hasSupportingQuote "On 10 August 1998 the Supreme Court confirmed the judgment of the Nizhniy Novgorod Regional Court"@en .
+
+doc:detention_appeal_1 a echr:DomesticProceeding ;
+    rdfs:label "Appeal against detention order"@en ;
+    echr:followsProceeding doc:detention_order_1 ;
+    echr:hasCourt doc:supremeCourtRu ;
+    echr:hasDecisionDate "1998-05-19"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "A"@en ;
+    echr:hasSupportingQuote "The reply from the Supreme Court, dated 19 May 1998, stated that the national law did not allow appeals against that type of trial court orders separately"@en .
+
+doc:issueRepresentation a echr:Article6Issue ;
+    rdfs:label "Inadequate representation and denial of lawyer admission"@en ;
+    echr:hasSourceParagraph "2"@en ;
+    echr:hasSupportingQuote "the applicant’s representation was inadequate... his request to admit Mrs Moskalenko as his lawyer was denied by the Regional Court"@en ;
+    echr:issueArisesIn doc:trial_proceeding_1 .
+
+doc:klimentyev_1 a echr:NaturalPerson ;
+    rdfs:label "Andrey Anatolyevich Klimentyev"@en ;
+    echr:hasBirthYear "1954"^^xsd:gYear .
+
+doc:lawyerK a echr:LegalRepresentative ;
+    rdfs:label "Mr. K."@en,
+        "Mr. O."@en .
+
+doc:lawyerMoskalenko a echr:LegalRepresentative ;
+    rdfs:label "Mrs Moskalenko"@en .
+
+doc:participation_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSourceParagraph "5"@en ;
+    echr:hasSupportingQuote "found the applicant guilty"@en ;
+    echr:participatingParty doc:person_1 .
+
+doc:proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "Trial before the Nizhniy Novgorod Regional Court"^^xsd:string ;
+    rdfs:comment "Sentenced to six years in prison"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasDecisionDate "1998-05-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "5"@en ;
+    echr:hasStatedDuration "P6Y"^^xsd:duration ;
+    echr:hasSupportingQuote "On 27 May 1998 the Nizhniy Novgorod Regional Court found the applicant guilty"@en .
+
+doc:retrial_1 a echr:DomesticProceeding ;
+    rdfs:label "New trial at Regional Court"@en ;
+    echr:followsProceeding doc:appeal_1 ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasInstanceLevel echr:LevelReopening ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "A"@en ;
+    echr:hasSupportingQuote "On 30 March 1998, during the new trial"@en .
+
+doc:adjournment_request_1 a echr:Adjournment ;
+    rdfs:label "Request for adjournment by Mrs Moskalenko"@en ;
+    rdfs:comment "Request for adjournment based on 100 volumes of case materials"^^xsd:string ;
+    echr:hasAdjournmentDate "1998-08-10"^^xsd:date ;
+    echr:hasExtractionNote "The request was made by Mrs Moskalenko to the Supreme Court, not granted"@en ;
+    echr:hasSourceParagraph "3"@en ;
+    echr:hasSupportingQuote "she requested an adjournment of the hearing to give her time to study the case materials"@en .
+
+doc:appeal_1 a echr:DomesticProceeding ;
+    rdfs:label "Appeal to the Supreme Court"@en ;
+    echr:followsProceeding doc:trial_1 ;
+    echr:hasCourt doc:supremeCourtRu ;
+    echr:hasDecisionDate "1997-07"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "A"@en ;
+    echr:hasSupportingQuote "In July 1997 the Supreme Court quashed the conviction on the applicant’s appeal and remitted the case to the Nizhniy Novgorod Regional Court"@en .
+
+doc:detention_order_1 a echr:DomesticProceeding ;
+    rdfs:label "Detention order hearing"@en ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasDecisionDate "1998-04-02"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "A"@en ;
+    echr:hasSupportingQuote "On 2 April 1998 the Nizhniy Novgorod Regional Court granted the prosecutor’s renewed motion for detention"@en .
+
+doc:participationApplicantCassation a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:person_1 .
+
+doc:participationApplicantTrial a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:person_1 .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "Pre-trial investigation"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "2"@en ;
+    echr:hasSupportingQuote "during the pre-trial investigation"@en .
+
+doc:trial_1 a echr:DomesticProceeding ;
+    rdfs:label "First trial of Andrey Klimentyev"@en ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasDecisionDate "1997-04-21"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "A"@en ;
+    echr:hasSupportingQuote "On 21 April 1997 the Nizhniy Novgorod Regional Court found the applicant guilty on some of the charges"@en .
+
+doc:trial_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "Trial at Nizhniy Novgorod Regional Court"@en ;
+    echr:hasAdjournment doc:adjournment_request_1 ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasDecisionDate "1998-05-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationApplicantTrial ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "12"@en ;
+    echr:hasSupportingQuote "On 27 May 1998... the applicant was ordered by the Nizhniy Novgorod Court to pay damages to “Oka”."@en .
+
+doc:person_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicant"^^xsd:string,
+        "the applicant"@en ;
+    echr:hasPersonName "the applicant"@en ;
+    echr:hasSourceParagraph "1"@en ;
+    echr:hasSupportingQuote "the applicant"@en ;
+    echr:isAnonymised true .
+
+doc:supremeCourtRu a echr:DomesticAuthority ;
+    rdfs:label "Supreme Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial .
+
+doc:authority_1 a echr:DomesticAuthority ;
+    rdfs:label "Nizhniy Novgorod Regional Court"^^xsd:string,
+        "Nizhniy Novgorod Regional Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Nizhniy Novgorod Regional Court"@en ;
+    echr:hasSourceParagraph "5"@en ;
+    echr:hasSupportingQuote "Nizhniy Novgorod Regional Court"@en .
+

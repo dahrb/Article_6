@@ -1,0 +1,65 @@
+{
+  "source": "results/experiment_ttl_20260818_161537/gemma4/repaired/input.L2.facts.ttl",
+  "operations": [
+    {
+      "finding": "The graph contains multiple redundant nodes representing the same domestic proceeding (the action against ESA at the Darmstadt Labour Court). doc:proceedingEsaBeer, doc:proceedingEsaRegan, doc:proceeding_1, doc:proceeding_labour_court_1, and doc:german_court_proceedings_1 all describe the same legal action where the court applied immunity to ESA, leading to inadmissibility on 21 March 1995. These should be consolidated into a single proceeding node for the applicants.",
+      "rationale": "The facts state that on 21 March 1995, the Darmstadt Labour Court declared the applicants' (plural) respective actions inadmissible. The different nodes in the graph are fragmented versions of the same procedural step. doc:proceedingReganTi is a distinct matter (against company T.I. with a different outcome and date) and must remain separate.",
+      "action": "remove",
+      "subject": "doc:german_court_proceedings_1",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding \u043f\u043e\u0436\u0438\u043b\u043e\u0439",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "skipped: triple not present"
+    },
+    {
+      "finding": "The graph contains multiple redundant nodes representing the same domestic proceeding (the action against ESA at the Darmstadt Labour Court). doc:proceedingEsaBeer, doc:proceedingEsaRegan, doc:proceeding_1, doc:proceeding_labour_court_1, and doc:german_court_proceedings_1 all describe the same legal action where the court applied immunity to ESA, leading to inadmissibility on 21 March 1995. These should be consolidated into a single proceeding node for the applicants.",
+      "rationale": "The facts state that on 21 March 1995, the Darmstadt Labour Court declared the applicants' (plural) respective actions inadmissible. The different nodes in the graph are fragmented versions of the same procedural step. doc:proceedingReganTi is a distinct matter (against company T.I. with a different outcome and date) and must remain separate.",
+      "action": "remove",
+      "subject": "doc:proceedingEsaRegan",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "The graph contains multiple redundant nodes representing the same domestic proceeding (the action against ESA at the Darmstadt Labour Court). doc:proceedingEsaBeer, doc:proceedingEsaRegan, doc:proceeding_1, doc:proceeding_labour_court_1, and doc:german_court_proceedings_1 all describe the same legal action where the court applied immunity to ESA, leading to inadmissibility on 21 March 1995. These should be consolidated into a single proceeding node for the applicants.",
+      "rationale": "The facts state that on 21 March 1995, the Darmstadt Labour Court declared the applicants' (plural) respective actions inadmissible. The different nodes in the graph are fragmented versions of the same procedural step. doc:proceedingReganTi is a distinct matter (against company T.I. with a different outcome and date) and must remain separate.",
+      "action": "remove",
+      "subject": "doc:proceeding_1",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "The graph contains multiple redundant nodes representing the same domestic proceeding (the action against ESA at the Darmstadt Labour Court). doc:proceedingEsaBeer, doc:proceedingEsaRegan, doc:proceeding_1, doc:proceeding_labour_court_1, and doc:german_court_proceedings_1 all describe the same legal action where the court applied immunity to ESA, leading to inadmissibility on 21 March 1995. These should be consolidated into a single proceeding node for the applicants.",
+      "rationale": "The facts state that on 21 March 1995, the Darmstadt Labour Court declared the applicants' (plural) respective actions inadmissible. The different nodes in the graph are fragmented versions of the same procedural step. doc:proceedingReganTi is a distinct matter (against company T.I. with a different outcome and date) and must remain separate.",
+      "action": "remove",
+      "subject": "doc:proceeding_labour_court_1",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "The graph contains multiple redundant nodes representing the same domestic proceeding (the action against ESA at the Darmstadt Labour Court). doc:proceedingEsaBeer, doc:proceedingEsaRegan, doc:proceeding_1, doc:proceeding_labour_court_1, and doc:german_court_proceedings_1 all describe the same legal action where the court applied immunity to ESA, leading to inadmissibility on 21 March 1995. These should be consolidated into a single proceeding node for the applicants.",
+      "rationale": "The facts state that on 21 March 1995, the Darmstadt Labour Court declared the applicants' (plural) respective actions inadmissible. The different nodes in the graph are fragmented versions of the same procedural step. doc:proceedingReganTi is a distinct matter (against company T.I. with a different outcome and date) and must remain separate.",
+      "action": "add",
+      "subject": "doc:proceedingEsaBeer",
+      "predicate": "echr:isFinalDomesticDecision",
+      "object": "true",
+      "object_is_literal": true,
+      "datatype": "xsd:boolean",
+      "lang": null,
+      "status": "applied"
+    }
+  ]
+}

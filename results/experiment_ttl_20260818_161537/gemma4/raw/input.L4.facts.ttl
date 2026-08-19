@@ -1,0 +1,216 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/0f7d8e3736c3/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/0f7d8e3736c3> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:4"^^xsd:string .
+
+doc:issue_fairness_1 a echr:Article6Issue ;
+    rdfs:label "Unfairness of criminal proceedings"^^xsd:string ;
+    echr:hasSourceParagraph "3"^^xsd:string ;
+    echr:hasSupportingQuote "criminal proceedings had been unfair"^^xsd:string ;
+    echr:issueArisesIn doc:criminal_proceeding_1 .
+
+doc:issue_length_1 a echr:Article6Issue ;
+    rdfs:label "Excessive length of criminal proceedings"^^xsd:string ;
+    echr:hasSourceParagraph "3"^^xsd:string ;
+    echr:hasSupportingQuote "criminal proceedings had been unfair and excessively long"^^xsd:string ;
+    echr:issueArisesIn doc:criminal_proceeding_1 .
+
+doc:ministryOfInternalAffairs a echr:DomesticAuthority ;
+    rdfs:label "Ministry of Internal Affairs"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Ministry of Internal Affairs (MIA)"^^xsd:string ;
+    echr:hasSourceParagraph "10"^^xsd:string .
+
+doc:personAleksanderMatko a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Aleksander Matko"^^xsd:string ;
+    echr:hasPersonName "Aleksander Matko"^^xsd:string ;
+    echr:hasSourceParagraph "23"^^xsd:string ;
+    echr:hasSupportingQuote "Aleksander Matko"^^xsd:string ;
+    echr:isAnonymised false .
+
+doc:police_detention_1 a echr:PreTrialDetention ;
+    rdfs:label "Police detention of Aleksander Matko"^^xsd:string ;
+    echr:hasCustodialMeasure echr:MeasurePoliceCustody ;
+    echr:hasDetainee doc:aleksanderMatko ;
+    echr:hasDetentionEndDate "1995-04-06"^^xsd:date ;
+    echr:hasDetentionStartDate "1995-04-05"^^xsd:date ;
+    echr:hasSourceParagraph "12"^^xsd:string .
+
+doc:proceeding_6 a echr:DomesticProceeding ;
+    rdfs:label "final appeal against conviction"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_5 ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "2001-05-09"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "49"^^xsd:string ;
+    echr:hasSupportingQuote "the Maribor Higher Court upheld the conviction"^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:proceeding_criminal_1 a echr:DomesticProceeding ;
+    rdfs:label "criminal proceedings against the applicant"^^xsd:string ;
+    echr:followsProceeding doc:investigation_criminal_1 ;
+    echr:hasCourt doc:authoritySlovenjGradecPolice ;
+    echr:hasDecisionDate "2001-02-12"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participation_applicant_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "21"^^xsd:string ;
+    echr:hasSupportingQuote "The judgment of 12 February 2001 issued in the proceedings instituted against the applicant"^^xsd:string .
+
+doc:publicProsecutor a echr:DomesticAuthority ;
+    rdfs:label "Public Prosecutor"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial .
+
+doc:slovenjGradecPolice a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec Police"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Slovenj Gradec Internal Affairs Administration (Uprava za notranje zadeve)"^^xsd:string ;
+    echr:hasSourceParagraph "10"^^xsd:string .
+
+doc:authoritySlovenjGradecPolice a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec Police"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Slovenj Gradec Police"^^xsd:string ;
+    echr:hasSourceParagraph "21"^^xsd:string ;
+    echr:hasSupportingQuote "Slovenj Gradec Police"^^xsd:string .
+
+doc:investigation_criminal_1 a echr:DomesticProceeding ;
+    rdfs:label "criminal investigation instituted against the applicant"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participationApplicantInv ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "22"^^xsd:string ;
+    echr:hasSupportingQuote "the criminal investigation instituted against the applicant"^^xsd:string .
+
+doc:participationApplicantInv a echr:Participation ;
+    rdfs:label "Participation of the applicant in criminal investigation"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSourceParagraph "22"^^xsd:string ;
+    echr:hasSupportingQuote "criminal investigation instituted against the applicant"^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSourceParagraph "40"^^xsd:string ;
+    echr:hasSupportingQuote "the Slovenj Gradec District Court decided not to open a criminal investigation against the applicant"^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_applicant_1 a echr:Participation ;
+    rdfs:label "Participation of the applicant in criminal proceedings"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSourceParagraph "21"^^xsd:string ;
+    echr:hasSupportingQuote "proceedings instituted against the applicant"^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_matko_1 a echr:Participation ;
+    rdfs:label "Participation of Aleksander Matko in criminal proceedings"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSourceParagraph "14"^^xsd:string ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "criminal investigation - initial request"^^xsd:string ;
+    echr:hasCourt doc:slGradecDistrictCourt ;
+    echr:hasDecisionDate "1997-05-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "40"^^xsd:string ;
+    echr:hasSupportingQuote "the Slovenj Gradec District Court decided not to open a criminal investigation against the applicant"^^xsd:string .
+
+doc:proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "appeal against decision not to open investigation"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "1997-12-04"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "41"^^xsd:string ;
+    echr:hasSupportingQuote "the Maribor Higher Court upheld her appeal... and opened a criminal investigation against the applicant"^^xsd:string .
+
+doc:proceeding_3 a echr:DomesticProceeding ;
+    rdfs:label "criminal trial - first instance"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_2 ;
+    echr:hasCourt doc:slGradecDistrictCourt ;
+    echr:hasDecisionDate "1999-11-22"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeAcquittal ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "46"^^xsd:string ;
+    echr:hasSupportingQuote "By a judgment of 22 November 1999 the court acquitted the applicant"^^xsd:string .
+
+doc:proceeding_4 a echr:DomesticProceeding ;
+    rdfs:label "appeal against acquittal"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_3 ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "2000-09-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "47"^^xsd:string ;
+    echr:hasSupportingQuote "the Maribor Higher Court quashed the judgment and remitted the case to a new panel for retrial"^^xsd:string .
+
+doc:proceeding_5 a echr:DomesticProceeding ;
+    rdfs:label "retrial"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_4 ;
+    echr:hasCourt doc:slGradecDistrictCourt ;
+    echr:hasDecisionDate "2001-02-12"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelReopening ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "48"^^xsd:string ;
+    echr:hasSupportingQuote "the Slovenj Gradec District Court convicted the applicant as charged"^^xsd:string .
+
+doc:aleksanderMatko a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Aleksander Matko"^^xsd:string ;
+    echr:hasBirthYear "1961"^^xsd:gYear ;
+    echr:hasHonorific "Mr"^^xsd:string ;
+    echr:hasPersonName "Mr Aleksander Matko"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string,
+        "9"^^xsd:string ;
+    echr:isAnonymised false .
+
+doc:criminal_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "Criminal proceedings against Aleksander Matko"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participation_matko_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "14"^^xsd:string,
+        "3"^^xsd:string ;
+    echr:hasSupportingQuote "the criminal proceedings had been unfair and excessively long"^^xsd:string .
+
+doc:applicant a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicant"^^xsd:string ;
+    echr:hasPersonName "the applicant"^^xsd:string ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:hasSupportingQuote "the driver, who was later identified as the applicant"^^xsd:string ;
+    echr:isAnonymised false .
+
+doc:mariborHigherCourt a echr:DomesticAuthority ;
+    rdfs:label "Maribor Higher Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial .
+
+doc:slGradecDistrictCourt a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec District Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial .
+

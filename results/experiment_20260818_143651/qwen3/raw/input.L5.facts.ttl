@@ -1,0 +1,151 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/eee0472ea239/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/eee0472ea239> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:5"^^xsd:string .
+
+doc:adjournment_1 a echr:Adjournment .
+
+doc:article6_issue_1 a echr:Article6Issue ;
+    echr:affectsParty doc:party_1 ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasSourceParagraph "8"^^xsd:string ;
+    echr:hasSupportingQuote "The applicant also stated that, in accordance with the Law on the Bar and practice of law, D.’s complaint had to be examined by the Sevastopol Bar because he was practising in Sevastopol; the transfer of the complaint to a different regional Bar had been unlawful."^^xsd:string ;
+    echr:issueArisesIn doc:domestic_proceeding_1 .
+
+doc:domestic_proceeding_3 a echr:DomesticProceeding ;
+    rdfs:label "Domestic proceeding: QDC of Zakarpattya, 17 April 2013"^^xsd:string ;
+    echr:affectsParty doc:party_1 ;
+    echr:followsProceeding doc:domestic_proceeding_2 ;
+    echr:hasCourt doc:domestic_authority_2 ;
+    echr:hasDecisionDate "2013-04-17"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelSupervisoryReview ;
+    echr:hasOutcome echr:OutcomeUnknown ;
+    echr:hasOutcomeDirection echr:DirectionUnknown ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasProceedingStartDate "2013-05-22"^^echr:PartialDate ;
+    echr:hasProceedingType echr:TypeDisciplinary ;
+    echr:hasSourceParagraph "12"^^xsd:string,
+        "32"^^xsd:string ;
+    echr:hasSupportingQuote "The applicant appealed against the decisions of 17 April and 16 May 2013 to the HQDCB, however the appeal did not have a suspensive effect."^^xsd:string,
+        "The applicant did not explain why he had not been able to familiarize himself with that decision before that date."^^xsd:string ;
+    echr:isPending true .
+
+doc:domestic_proceeding_4 a echr:DomesticProceeding ;
+    rdfs:label "Domestic proceeding: HQDCB, 16 May 2013"^^xsd:string ;
+    echr:hasDecisionDate "2013-05-16"^^xsd:date ;
+    echr:hasSourceParagraph "32"^^xsd:string ;
+    echr:hasSupportingQuote "The applicant did not explain why he had not been able to familiarize himself with that decision before that date."^^xsd:string .
+
+doc:inactivity_period_1 a echr:InactivityPeriod .
+
+doc:article6_issue_2 a echr:Article6Issue ;
+    echr:affectsParty doc:party_1 ;
+    echr:hasDelayAttribution echr:DelayUnattributed ;
+    echr:hasSourceParagraph "4"^^xsd:string ;
+    echr:hasSupportingQuote "According to the applicant, he had not been informed of the meeting."^^xsd:string ;
+    echr:issueArisesIn doc:domestic_proceeding_1 .
+
+doc:article6_issue_3 a echr:Article6Issue ;
+    echr:affectsParty doc:party_1 ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasSourceParagraph "12"^^xsd:string ;
+    echr:hasSupportingQuote "the applicant complained that the QDC of Zakarpattya had not been competent to examine the complaint because under Article 33 of the Law on the Bar and practice of law, complaints against advocates had to be examined by the Bar of the region where those lawyers were practising."^^xsd:string ;
+    echr:issueArisesIn doc:domestic_proceeding_2 .
+
+doc:domestic_authority_2 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityDisciplinary ;
+    echr:hasAuthorityName "HQDCB"^^xsd:string,
+        "Higher Qualification and Disciplinary Commission of the Bar"^^xsd:string ;
+    echr:hasSourceParagraph "3"^^xsd:string ;
+    echr:hasSupportingQuote "On 12 October 2012 the members of the Sevastopol Bar elected the applicant to represent them in the Higher Qualification and Disciplinary Commission of the Bar."^^xsd:string .
+
+doc:judicial_officer_1 a echr:JudicialOfficer ;
+    echr:hasPersonName "D."^^xsd:string ;
+    echr:hasSourceParagraph "5"^^xsd:string ;
+    echr:hasSupportingQuote "Lawyer D. complained to the HQDCB that by failing to attend the meeting of 7 December 2012 the applicant had violated Article 62 of the Rules of Professional Conduct..."^^xsd:string .
+
+doc:legal_representative_1 a echr:LegalRepresentative ;
+    echr:hasPersonName "Mr A.V. Yakovlev"^^xsd:string,
+        "the applicant"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Roman Yuryevich Martynovskiy (“the applicant”), who was born in 1965, lives in Kyiv and was represented by Mr A.V. Yakovlev and Mr M. Kikkas, lawyers practising in Kyiv;"^^xsd:string .
+
+doc:legal_representative_2 a echr:LegalRepresentative ;
+    echr:hasPersonName "Mr M. Kikkas"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Roman Yuryevich Martynovskiy (“the applicant”), who was born in 1965, lives in Kyiv and was represented by Mr A.V. Yakovlev and Mr M. Kikkas, lawyers practising in Kyiv;"^^xsd:string .
+
+doc:domestic_authority_1 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityDisciplinary ;
+    echr:hasAuthorityName "QDC of Zakarpattya"^^xsd:string,
+        "Qualification and Disciplinary Commission of the Regional Bar of Zakarpattya"^^xsd:string ;
+    echr:hasSourceParagraph "6"^^xsd:string ;
+    echr:hasSupportingQuote "On 24 January 2013 the head of the HQDCB transferred D.’s complaint to the Qualification and Disciplinary Commission of the Regional Bar of Zakarpattya."^^xsd:string .
+
+doc:domestic_proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "Domestic proceeding: HQDCB, 16 May 2013"^^xsd:string ;
+    echr:affectsParty doc:party_1 ;
+    echr:followsProceeding doc:domestic_proceeding_1 ;
+    echr:hasCourt doc:domestic_authority_1 ;
+    echr:hasDecisionDate "2013-05-16"^^xsd:date,
+        "2013-05-16"^^echr:PartialDate ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasProceedingStartDate "2013-04-17"^^echr:PartialDate ;
+    echr:hasProceedingType echr:TypeDisciplinary ;
+    echr:hasSourceParagraph "11"^^xsd:string,
+        "32"^^xsd:string ;
+    echr:hasStatedDuration "P1M"^^xsd:duration ;
+    echr:hasSupportingQuote "On 16 May the QDC of Zakarpattya upheld the decision of 17 April 2013."^^xsd:string,
+        "The courts established that the QDC of Zakarpattya and the HQDCB had examined the applicant’s case in accordance with the procedure prescribed by law, in particular, the transfer of D.’s complaint to the QDC of Zakarpattya had been lawful."^^xsd:string ;
+    echr:isPending false ;
+    echr:raisesArticle6Issue doc:article6_issue_3 .
+
+doc:domestic_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "Domestic proceeding: QDC of Zakarpattya, 17 April 2013"^^xsd:string ;
+    echr:affectsParty doc:party_1 ;
+    echr:hasCourt doc:domestic_authority_1 ;
+    echr:hasDecisionDate "2013-04-17"^^xsd:date,
+        "2013-04-17"^^echr:PartialDate ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasOutcome echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasProceedingStartDate "2013-01-24"^^echr:PartialDate ;
+    echr:hasProceedingType echr:TypeDisciplinary ;
+    echr:hasSittingJudge doc:judicial_officer_1 ;
+    echr:hasSourceParagraph "32"^^xsd:string,
+        "9"^^xsd:string ;
+    echr:hasStatedDuration "P2M"^^xsd:duration ;
+    echr:hasSupportingQuote "On 17 April 2013, in the applicant's absence, the Disciplinary Chamber of the QDC of Zakarpattya suspended the applicant’s licence to practise as an advocate for six months for his failure to attend the meeting of 7 December 2012 and violating Article 62 of the Rules of Professional Conduct."^^xsd:string,
+        "The courts established that the QDC of Zakarpattya and the HQDCB had examined the applicant’s case in accordance with the procedure prescribed by law, in particular, the transfer of D.’s complaint to the QDC of Zakarpattya had been lawful."^^xsd:string ;
+    echr:isPending false ;
+    echr:raisesArticle6Issue doc:article6_issue_2 .
+
+doc:participation_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating,
+        echr:SideResponding ;
+    echr:participatingParty doc:party_1 .
+
+doc:party_1 a echr:NaturalPerson,
+        echr:Party ;
+    echr:hasBirthYear "1965"^^xsd:gYear ;
+    echr:hasHonorific "Mr"^^xsd:string ;
+    echr:hasName "the applicant"^^xsd:string ;
+    echr:hasPartyName "Mr Roman Yuryevich Martynovskiy"^^xsd:string,
+        "the applicant"^^xsd:string ;
+    echr:hasPersonName "Mr Roman Yuryevich Martynovskiy"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "the application (no. 69358/13) against Ukraine lodged with the Court under Article 34 of the Convention for the Protection of Human Rights and Fundamental Freedoms (“the Convention”) on 19 September 2013 by a Ukrainian national, Mr Roman Yuryevich Martynovskiy (“the applicant”), who was born in 1965, lives in Kyiv"^^xsd:string ;
+    echr:isRepresentedBy doc:legal_representative_1,
+        doc:legal_representative_2 .
+

@@ -1,0 +1,59 @@
+{
+  "source": "input.jsonl",
+  "conformance": {
+    "shacl_evaluated": null,
+    "conforms": null,
+    "findings": 3,
+    "errors": 3,
+    "warnings": 0,
+    "by_kind": {
+      "suspect_multi_value": 3
+    },
+    "shacl_violations": 0,
+    "shacl_by_constraint": {},
+    "shacl_by_shape": {},
+    "repairs_applied": {}
+  },
+  "gate_repairs": [],
+  "findings": [
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/7ad6c8442851/applicant_1> carries 2 distinct numeric values on <https://growgraph.dev/echr#hasStatedAge> \u2014 the signature of distinct quantities collapsed into one node.",
+      "subject": "https://growgraph.dev/doc/7ad6c8442851/applicant_1",
+      "predicate": "https://growgraph.dev/echr#hasStatedAge",
+      "values": [
+        "75",
+        "78"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/7ad6c8442851/proceeding_1> points at 2 objects via <https://growgraph.dev/echr#hasOutcome>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/7ad6c8442851/proceeding_1",
+      "predicate": "https://growgraph.dev/echr#hasOutcome",
+      "values": [
+        "https://growgraph.dev/echr#OutcomeConviction",
+        "https://growgraph.dev/echr#OutcomeUpheldOnAppeal"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/7ad6c8442851/proceeding_1> points at 2 objects via <https://growgraph.dev/echr#raisesArticle6Issue>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/7ad6c8442851/proceeding_1",
+      "predicate": "https://growgraph.dev/echr#raisesArticle6Issue",
+      "values": [
+        "https://growgraph.dev/doc/7ad6c8442851/article6_issue_1",
+        "https://growgraph.dev/doc/7ad6c8442851/issue_1"
+      ],
+      "component": "",
+      "source_shape": ""
+    }
+  ]
+}

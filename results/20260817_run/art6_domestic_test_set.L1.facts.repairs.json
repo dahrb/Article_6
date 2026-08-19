@@ -1,0 +1,77 @@
+{
+  "source": "results/20260817_run/art6_domestic_test_set.L1.facts.ttl",
+  "operations": [
+    {
+      "finding": "mistyped_candidate",
+      "rationale": "The node doc:refusal_2005_08_10 represents a decision by the regional prosecutor on 10 August 2005: the candidate's description says 'On 10 August 2005 the regional prosecutor refused to bring an action ...'. That text describes a domestic authority decision in this applicant's case and must be typed echr:DomesticProceeding. The description also gives the decision date and indicates the disposition (a refusal), so add hasDecisionDate and hasOutcome accordingly.",
+      "action": "add",
+      "subject": "doc:refusal_2005_08_10",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "mistyped_candidate",
+      "rationale": "The node doc:refusal_2005_08_10 represents a decision by the regional prosecutor on 10 August 2005: the candidate's description says 'On 10 August 2005 the regional prosecutor refused to bring an action ...'. That text describes a domestic authority decision in this applicant's case and must be typed echr:DomesticProceeding. The description also gives the decision date and indicates the disposition (a refusal), so add hasDecisionDate and hasOutcome accordingly.",
+      "action": "add",
+      "subject": "doc:refusal_2005_08_10",
+      "predicate": "echr:hasDecisionDate",
+      "object": "2005-08-10",
+      "object_is_literal": true,
+      "datatype": "xsd:date",
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "mistyped_candidate",
+      "rationale": "The node doc:refusal_2005_08_10 represents a decision by the regional prosecutor on 10 August 2005: the candidate's description says 'On 10 August 2005 the regional prosecutor refused to bring an action ...'. That text describes a domestic authority decision in this applicant's case and must be typed echr:DomesticProceeding. The description also gives the decision date and indicates the disposition (a refusal), so add hasDecisionDate and hasOutcome accordingly.",
+      "action": "add",
+      "subject": "doc:refusal_2005_08_10",
+      "predicate": "echr:hasOutcome",
+      "object": "echr:OutcomeRefusedExamination",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "missing_followsProceeding",
+      "rationale": "The facts state that 'the regional prosecutor\u2019s refusal was upheld on 11 October 2005 by the appellate prosecutor.' That language (upheld) frames the appellate prosecutor decision as reviewing the regional prosecutor refusal, so the appellate decision must follow the regional refusal.",
+      "action": "add",
+      "subject": "doc:appellate_prosecutor_upheld_2005_10_11",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:refusal_2005_08_10",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "missing_followsProceeding",
+      "rationale": "The facts say the refusal was upheld 'and subsequently on 29 November 2005 by the Chief Public Prosecutor\u2019s Office at the Supreme Court of Cassation.' That indicates the Chief Public Prosecutor's decision reviewed the earlier appellate decision (a subsequent upholding), so the Chief Public Prosecutor proceeding should follow the appellate prosecutor proceeding.",
+      "action": "add",
+      "subject": "doc:chief_pp_upheld_2005_11_29",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:appellate_prosecutor_upheld_2005_10_11",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "isFinalDomesticDecision_conflict",
+      "rationale": "Two proceedings in the graph are marked as the final domestic decision (doc:dup_nitsa_judicial_review_2005_09_28_2006_03_10 and doc:proceeding_appeal_2001). The facts state that the Dupnitsa District Court judgment of 10 March 2006 'Since the judgment was not subject to appeal, it became final.' That 2006 judgment is the final domestic decision before the Strasbourg application in the narrative; the 2001 appeal is an earlier, unrelated finality for a different decision and should not remain marked as the (case-level) final domestic decision. Remove the isFinalDomesticDecision true marking from doc:proceeding_appeal_2001.",
+      "action": "remove",
+      "subject": "doc:proceeding_appeal_2001",
+      "predicate": "echr:isFinalDomesticDecision",
+      "object": "true",
+      "object_is_literal": true,
+      "datatype": "xsd:boolean",
+      "lang": null,
+      "status": "applied"
+    }
+  ]
+}

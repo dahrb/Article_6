@@ -1,0 +1,363 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/7409210b2ae6/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/7409210b2ae6> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:8"^^xsd:string .
+
+doc:adjournment_1 a echr:Adjournment ;
+    echr:hasAdjournment doc:domestic_proceeding_2 ;
+    echr:hasAdjournmentCause echr:DelayAttributedToApplicant ;
+    echr:hasAdjournmentDate "1998-07"^^xsd:gYearMonth ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "Referring to difficulties in organising an adequate defence, she requested an adjournment of the hearing to give her time to study the case materials (more than 100 volumes)."^^xsd:string .
+
+doc:authority_kind_1 a echr:AuthorityKind .
+
+doc:delay_attribution_1 a echr:DelayAttribution ;
+    echr:hasName "attributed to the authorities"^^xsd:string .
+
+doc:delay_attribution_2 a echr:DelayAttribution ;
+    echr:hasName "unattributed"^^xsd:string .
+
+doc:inactivity_period_1 a echr:InactivityPeriod ;
+    echr:hasInactivityCause echr:DelayUnattributed ;
+    echr:hasInactivityEndDate "1998-08-10"^^xsd:date ;
+    echr:hasInactivityPeriod doc:domestic_proceeding_2 ;
+    echr:hasInactivityStartDate "1998-05-27"^^xsd:date ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "it appears that the issues of the judgment and access to the case file have not been addressed by the Supreme Court."^^xsd:string .
+
+doc:instance_level_1 a echr:InstanceLevel ;
+    echr:hasName "first instance"^^xsd:string .
+
+doc:instance_level_2 a echr:InstanceLevel ;
+    echr:hasName "appeal"^^xsd:string .
+
+doc:instance_level_3 a echr:InstanceLevel ;
+    echr:hasName "supervisory review"^^xsd:string .
+
+doc:natural_person_2 a echr:NaturalPerson ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue "Mr."^^xsd:string ;
+    echr:hasGenderCueText "Mr. O."^^xsd:string ;
+    echr:hasHonorific "Mr."^^xsd:string ;
+    echr:hasPersonName "Mr. O."^^xsd:string ;
+    echr:isRepresentedBy doc:legal_representative_1 .
+
+doc:natural_person_3 a echr:NaturalPerson ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasGenderCue "Mrs"^^xsd:string ;
+    echr:hasGenderCueText "Mrs Moskalenko"^^xsd:string ;
+    echr:hasHonorific "Mrs"^^xsd:string ;
+    echr:hasPersonName "Mrs Moskalenko"^^xsd:string ;
+    echr:isRepresentedBy doc:legal_representative_2 .
+
+doc:natural_person_4 a echr:NaturalPerson ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue "Mr."^^xsd:string ;
+    echr:hasGenderCueText "Mr. K."^^xsd:string ;
+    echr:hasHonorific "Mr."^^xsd:string ;
+    echr:hasPersonName "Mr. K."^^xsd:string ;
+    echr:isRepresentedBy doc:legal_representative_3 .
+
+doc:natural_person_5 a echr:NaturalPerson ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue "Mr"^^xsd:string ;
+    echr:hasGenderCueText "Mr Fedotov"^^xsd:string ;
+    echr:hasHonorific "Mr"^^xsd:string ;
+    echr:hasPersonName "Mr Fedotov"^^xsd:string .
+
+doc:partial_date_1 a echr:PartialDate .
+
+doc:pre_trial_detention_1 a echr:PreTrialDetention ;
+    echr:hasCustodialMeasure doc:custodial_measure_1 ;
+    echr:hasDetainee doc:natural_person_1 ;
+    echr:hasDetentionEndDate "1997-04-21"^^xsd:date,
+        "2000"^^xsd:gYear ;
+    echr:hasDetentionStartDate "1995-03-07"^^xsd:date,
+        "1995"^^xsd:gYear ;
+    echr:hasPreTrialDetention doc:domestic_proceeding_1 ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasStatedDetentionDuration "P5Y"^^xsd:duration ;
+    echr:hasSupportingQuote "He was sentenced to one and a half years in prison (the time he had already spent in pre-trial detention)"^^xsd:string,
+        "In October 2000 the applicant was released from detention."^^xsd:string .
+
+doc:proceeding_type_1 a echr:ProceedingType ;
+    echr:hasName "criminal"^^xsd:string .
+
+doc:article6_issue_1 a echr:Article6Issue ;
+    echr:affectsParty doc:natural_person_1 ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasSourceParagraph "1"^^xsd:string,
+        "3"^^xsd:string ;
+    echr:hasSupportingQuote "His request to admit Mrs Moskalenko as his lawyer was denied by the Regional Court."^^xsd:string,
+        "It further appears that the applicant was not allowed full access to the verbatim record and to documents in the case file."^^xsd:string,
+        "She also complained that the applicant had not been served with the final copy of the judgment and court orders of 27 May 1998, that he had had no access to the verbatim record and that some volumes of the case had not been given to the applicant."^^xsd:string,
+        "The Regional Court’s refusal to admit Mrs Moskalenko as another lawyer did not constitute a violation of the applicant’s right to defence."^^xsd:string,
+        "The Supreme Court did not refer to the complaint referring to the property dispute or to the admission of three civil claimants during the trial."^^xsd:string,
+        "The Supreme Court did not refer to the complaint referring to the property dispute."^^xsd:string,
+        "The reasons given by the court for the order were the witnesses’ refusal to testify in the courtroom, public and media pressure on the court instigated by the applicant and breach of the court order. ... the judge’s bias was allegedly shown by his refusal to call some of the witnesses requested by the defence ... by his order to detain the applicant and by admitting evidence contested by the defence."^^xsd:string,
+        "There is no record of the hearing."^^xsd:string,
+        "the verbatim record, which ran to 15 volumes, was not attached."^^xsd:string ;
+    echr:raisesArticle6Issue doc:domestic_proceeding_2 .
+
+doc:article6_issue_2 a echr:Article6Issue ;
+    echr:affectsParty doc:natural_person_1 ;
+    echr:hasSourceParagraph "1"^^xsd:string,
+        "3"^^xsd:string ;
+    echr:hasSupportingQuote "In the second trial, on 27 May 1998 ... the applicant was ordered by the Nizhniy Novgorod Court to pay damages to \"Oka\"."^^xsd:string,
+        "The reply from the Supreme Court, dated 19 May 1998, stated that the national law did not allow appeals against that type of trial court orders separately from appeals against judgments."^^xsd:string ;
+    echr:raisesArticle6Issue doc:domestic_proceeding_3 .
+
+doc:custodial_measure_1 a echr:CustodialMeasure ;
+    echr:hasName "remand in custody"^^xsd:string .
+
+doc:domestic_authority_2 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Supreme Court"^^xsd:string ;
+    echr:hasSourceParagraph "2"^^xsd:string ;
+    echr:hasSupportingQuote "In July 1997 the Supreme Court quashed the conviction on the applicant’s appeal and remitted the case to the Nizhniy Novgorod Regional Court."^^xsd:string .
+
+doc:domestic_authority_3 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Nizhniy Novgorod prosecutor’s office"^^xsd:string,
+        "Nizhniy Novgorod regional prosecutor’s office"^^xsd:string .
+
+doc:domestic_proceeding_4 a echr:DomesticProceeding ;
+    echr:hasCourt doc:domestic_authority_3 ;
+    echr:hasDecisionDate "1999"^^xsd:gYear ;
+    echr:hasDomesticProceeding doc:case_document_1 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome doc:proceeding_outcome_4 ;
+    echr:hasOutcomeDirection doc:outcome_direction_2 ;
+    echr:hasParticipation doc:participation_2 ;
+    echr:hasProceedingStartDate "1999"^^xsd:gYear ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasStatedDuration "P1Y"^^xsd:duration ;
+    echr:hasSupportingQuote "In February 1999 the applicant’s first (1982) conviction was quashed, and the file in that case was closed by the Nizhniy Novgorod regional prosecutor’s office."^^xsd:string,
+        "The file in that case was closed by the Nizhniy Novgorod regional prosecutor’s office."^^xsd:string ;
+    echr:isFinalDomesticDecision false .
+
+doc:legal_representative_1 a echr:LegalRepresentative ;
+    echr:hasPersonName "Mr. O."^^xsd:string,
+        "Mrs Moskalenko"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "He is represented before the Court by Mrs Moskalenko, a lawyer practising in Moscow, Russia"^^xsd:string .
+
+doc:legal_representative_2 a echr:LegalRepresentative ;
+    echr:hasPersonName "Mr Gerhart R. Baum"^^xsd:string,
+        "Mrs Moskalenko"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Gerhart R. Baum, a lawyer practising in Koln, Germany."^^xsd:string .
+
+doc:legal_representative_3 a echr:LegalRepresentative ;
+    echr:hasPersonName "Mr. K."^^xsd:string .
+
+doc:participation_1 a echr:Participation ;
+    echr:hasPartySide doc:party_side_1 ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "The applicant, together with another person, was charged with embezzlement and other economic crimes on 7 March 1995."^^xsd:string ;
+    echr:participatingParty doc:natural_person_1 .
+
+doc:party_side_2 a echr:PartySide ;
+    echr:hasName "initiating party"^^xsd:string .
+
+doc:proceeding_outcome_1 a echr:ProceedingOutcome ;
+    echr:hasName "conviction"^^xsd:string .
+
+doc:proceeding_outcome_2 a echr:ProceedingOutcome ;
+    echr:hasName "decision below upheld"^^xsd:string .
+
+doc:proceeding_outcome_3 a echr:ProceedingOutcome ;
+    echr:hasName "measure imposed"^^xsd:string .
+
+doc:proceeding_outcome_4 a echr:ProceedingOutcome ;
+    echr:hasName "quashed and remitted"^^xsd:string .
+
+doc:domestic_authority_1 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Nizhniy Novgorod Regional Court"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "The Nizhniy Novgorod Regional Court found the applicant guilty... On 30 March 1998, during the new trial, the prosecutor applied to the court... On 2 April 1998 the Nizhniy Novgorod Regional Court granted the prosecutor’s renewed motion..."^^xsd:string .
+
+doc:outcome_direction_1 a echr:OutcomeDirection ;
+    echr:hasName "unfavourable to the applicant"^^xsd:string .
+
+doc:outcome_direction_2 a echr:OutcomeDirection ;
+    echr:hasName "favourable to the applicant"^^xsd:string .
+
+doc:party_side_1 a echr:PartySide ;
+    echr:hasName "responding party"^^xsd:string .
+
+doc:domestic_proceeding_1 a echr:DomesticProceeding ;
+    echr:hasCourt doc:domestic_authority_1 ;
+    echr:hasDecisionDate "1997-04-21"^^xsd:date ;
+    echr:hasDomesticProceeding doc:case_document_1 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome doc:proceeding_outcome_1 ;
+    echr:hasOutcomeDirection doc:outcome_direction_1 ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasProceedingStartDate "1995-03-07"^^xsd:date,
+        "1995"^^xsd:gYear ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasStatedDuration "P2Y"^^xsd:duration ;
+    echr:hasSupportingQuote "An appeal to the Supreme Court by the applicant’s lawyer, Mr. O., challenged the judgment on a number of points."^^xsd:string,
+        "By a judgment of the Nizhniy Novgorod Regional Court of 21 April 1997, later quashed by the Supreme Court, the applicant was ordered to pay the \"Oka\" damages in the amount that had been transferred to it previously."^^xsd:string,
+        "By the end of 1995 the money had not been transferred, but the Port claimed ownership of the ship and argued that it had suffered heavy losses due to the arrest."^^xsd:string,
+        "Following the institution of an investigation against the applicant in March 1995, on 5 October 1995 property belonging to the applicant - the ship Stavanger and a floating drydock - was frozen on the order of the Nizhniy Novgorod prosecutor’s office."^^xsd:string,
+        "His lawyers, including Mrs Moskalenko, were present at the hearing."^^xsd:string,
+        "In December 1995 a German-speaking Swiss magazine \"Facts\" published an article \"Elections. A Candidate from Prison\", which described the situation in Nizhniy Novgorod and the applicant’s election campaign to the State Duma."^^xsd:string,
+        "In December 1995 the Makhachkala Sea Port forwarded to the prosecutor’s office a copy of the contract between the owner of the ship, a company owned by the applicant and called \"Russian Shipping\", and the Makhachkala Sea Port."^^xsd:string,
+        "In January 1996 the Port transferred the sum of 2.5 million US dollars to a special account of the Nizhniy Novgorod city administration."^^xsd:string,
+        "In July and on 10 August 1998 Mrs Moskalenko made a number of requests to the Supreme Court."^^xsd:string,
+        "In March 1995, an investigation was instituted against the applicant."^^xsd:string,
+        "In May 1996 the Head of the Industry department of the Nizhniy Novgorod regional administration asked the Nizhniy Novgorod prosecutor for permission to use the proceeds from the Stavanger for the needs of the \"Oka\" shipyard, which had built the vessel, and which had been declared bankrupt in February 1996."^^xsd:string,
+        "In October 1995 the Makhachkala International Sea Port contacted the prosecutor of Nizhniy Novgorod and informed him that the Stavanger had been purchased by the Port before the arrest."^^xsd:string,
+        "It appears that on 8 July 1998 the Regional Court ordered that the applicant should be given the amended version."^^xsd:string,
+        "It appears that the order freezing the drydock was lifted in May 1996, as it belonged to a Norwegian company \"Aroko\"."^^xsd:string,
+        "Mrs Moskalenko complained that the applicant had had no access to the verbatim record and that some volumes of the case had not been given to the applicant."^^xsd:string,
+        "Mrs Moskalenko complained that the applicant had not been served with the final copy of the judgment and court orders of 27 May 1998."^^xsd:string,
+        "Mrs Moskalenko requested an adjournment of the hearing to give her time to study the case materials (more than 100 volumes)."^^xsd:string,
+        "Mrs Moskalenko’s request to adjourn the hearing was not granted by the Supreme Court."^^xsd:string,
+        "On 18 May 1996 the Nizhniy Novgorod prosecutor’s office unfroze the account and transferred the money to the yard."^^xsd:string,
+        "On 19 January 1996 the Stavanger was freed from arrest - and on 11 March 1996 the proceeds from the ship sale were frozen on the order of the Nizhniy Novgorod prosecutor’s office."^^xsd:string,
+        "Since one of the applicant’s lawyers, Mr. K., had had eye surgery in May 1998 and was apparently unable to act, Mrs Moskalenko joined the defence team before the cassation hearing."^^xsd:string,
+        "The Port transferred the sum of 2.5 million US dollars to a special account of the Nizhniy Novgorod city administration."^^xsd:string,
+        "The Stavanger was freed from arrest on 19 January 1996."^^xsd:string,
+        "The Stavanger was placed under arrest in a shipyard near Astrakhan on the Caspian Sea."^^xsd:string,
+        "The Supreme Court concluded that the applicant had been adequately represented throughout the pre-trial investigation and the trial, and that at no point had he been without a representative."^^xsd:string,
+        "The Supreme Court concluded that the disputed evidence had been properly evaluated by the Nizhniy Novgorod Regional Court and found admissible."^^xsd:string,
+        "The Supreme Court confirmed the judgment of the Nizhniy Novgorod Regional Court, with some alterations, on 10 August 1998."^^xsd:string,
+        "The Supreme Court did not refer to the complaint referring to the property dispute or to the admission of three civil claimants during the trial."^^xsd:string,
+        "The Supreme Court did not refer to the complaint referring to the property dispute."^^xsd:string,
+        "The Supreme Court dropped certain charges from the conviction and altered the classification of certain crimes, in view of the Criminal Code which entered into force in 1997."^^xsd:string,
+        "The Supreme Court found that there had not been any significant breaches of national procedural law or international standards during the trial."^^xsd:string,
+        "The Supreme Court found the conclusions of the Regional Court reasonable and substantiated."^^xsd:string,
+        "The Supreme Court noted that the defendants were informed of the contents of all documents in foreign languages during the hearing."^^xsd:string,
+        "The amount transferred was 2.5 million US dollars."^^xsd:string,
+        "The appeal contested the admissibility of expert reports, documents in foreign languages, certain procedural documents, witness statements made during pre-trial investigation, witness statements taken by the Norwegian police, and other evidence obtained in Norway that was not in conformity with the Russian procedural rules."^^xsd:string,
+        "The appeal questioned the Regional Court’s and the Regional Prosecutor’s impartiality for their failure to react to the admitted mishandling of the applicant’s property during the investigation."^^xsd:string,
+        "The appeal stated that allowing three companies, \"Zhanto\", \"NL TOP\" and \"Slot\", to submit their civil claims after the commencement of the trial was contrary to the national legislation."^^xsd:string,
+        "The appeal stated that the applicant’s representation was inadequate, as one of his lawyers was on sick leave, and his request to admit Mrs Moskalenko as his lawyer was denied by the Regional Court."^^xsd:string,
+        "The applicant claims that he did not receive the amended version."^^xsd:string,
+        "The applicant denied signing the contract."^^xsd:string,
+        "The applicant had been accused of economic crimes which had caused damage to \"Oka\"."^^xsd:string,
+        "The applicant had purchased the Stavanger with money stolen from the yard."^^xsd:string,
+        "The applicant received a copy of the trial court judgment on 3 June 1998."^^xsd:string,
+        "The applicant requested permission to attend the hearing in the Supreme Court in person, but the request was turned down."^^xsd:string,
+        "The applicant was detained from 1995 to 2000."^^xsd:string,
+        "The applicant was not allowed full access to the verbatim record and to documents in the case file."^^xsd:string,
+        "The applicant was not given a copy of the order lifting the freeze on the drydock."^^xsd:string,
+        "The applicant was not given a copy of the relevant order."^^xsd:string,
+        "The applicant was ordered to pay damages to \"Oka\"."^^xsd:string,
+        "The applicant was released from detention in October 2000."^^xsd:string,
+        "The applicant, together with another person, was charged with embezzlement and other economic crimes on 7 March 1995. On 21 April 1997 the Nizhniy Novgorod Regional Court found the applicant guilty on some of the charges, and not guilty on most. He was sentenced to one and a half years in prison (the time he had already spent in pre-trial detention) and some of his property was confiscated."^^xsd:string,
+        "The applicant’s detention lasted five years."^^xsd:string,
+        "The applicant’s first (1982) conviction was quashed."^^xsd:string,
+        "The applicant’s lawyer, Mr K., had not applied for an adjournment of the hearing for health reasons."^^xsd:string,
+        "The article contained an interview with the Prosecutor of the Nizhniy Novgorod Region, Mr Fedotov."^^xsd:string,
+        "The contract between \"Russian Shipping\" and the Makhachkala Sea Port was dated 10 February 1995."^^xsd:string,
+        "The contract provided for the purchase of the Stavanger for 2.5 million US dollars."^^xsd:string,
+        "The contract was to enter into force after the transfer of the purchase price to \"Russian Shipping’s\" German bank account."^^xsd:string,
+        "The copy bore the applicant’s signature on behalf of \"Russian Shipping\", but he later denied signing that contract."^^xsd:string,
+        "The defence requested the court to stand down for lack of impartiality, shown by the refusal to postpone the hearing, but the motion was rejected."^^xsd:string,
+        "The drydock belonged to a Norwegian company \"Aroko\"."^^xsd:string,
+        "The money was to be transferred to a German bank account."^^xsd:string,
+        "The order freezing the drydock was lifted in May 1996."^^xsd:string,
+        "The proceeds from the sale of the Stavanger were transferred to the \"Oka\" shipyard."^^xsd:string,
+        "The proceeds from the ship sale were frozen on 11 March 1996."^^xsd:string,
+        "The prosecutor is further cited, without quotation marks, as having described the economic activities of the applicant as fraud and embezzlement."^^xsd:string,
+        "The prosecutor is quoted as saying that the applicant’s election campaign \"pursues ... just one aim - to avoid punishment\"."^^xsd:string,
+        "The sentencing of the applicant to a total of six years in prison was upheld."^^xsd:string,
+        "The ship Stavanger was built in Nizhniy Novgorod shipyard \"Oka\"."^^xsd:string,
+        "The shipyard \"Oka\" had been declared bankrupt in February 1996."^^xsd:string,
+        "The trial record consisted of two volumes."^^xsd:string,
+        "The verbatim record ran to 15 volumes."^^xsd:string,
+        "The verbatim record was not attached when the trial record was forwarded to the Supreme Court."^^xsd:string,
+        "There is no record of the hearing."^^xsd:string ;
+    echr:isFinalDomesticDecision false .
+
+doc:domestic_proceeding_3 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:domestic_proceeding_1 ;
+    echr:hasCourt doc:domestic_authority_1 ;
+    echr:hasDecisionDate "1998-05-27"^^xsd:date ;
+    echr:hasDomesticProceeding doc:case_document_1 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome doc:proceeding_outcome_3 ;
+    echr:hasOutcomeDirection doc:outcome_direction_2 ;
+    echr:hasParticipation doc:participation_2 ;
+    echr:hasProceedingStartDate "1998-03-30"^^xsd:date,
+        "1998"^^xsd:gYear ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "1"^^xsd:string,
+        "3"^^xsd:string ;
+    echr:hasStatedDuration "P10M"^^xsd:duration ;
+    echr:hasSupportingQuote "During the second trial, on 27 May 1998 (confirmed by the Supreme Court on 10 August 1998) the applicant was ordered by the Nizhniy Novgorod Court to pay damages to \"Oka\"."^^xsd:string,
+        "On 27 May 1998 the Nizhniy Novgorod Regional Court issued an order ( частное определение ) in which it noted that the investigators had violated the Code of Criminal Procedure (CCP) by transferring the money to \"Oka\" prior to a final court finding on his guilt."^^xsd:string,
+        "On 30 March 1998, during the new trial, the prosecutor applied to the court to detain the applicant for violations of the undertaking not to leave the city during the trial and obstruction of justice. The Regional Court rejected the motion as unsubstantiated. ... On 2 April 1998 the Nizhniy Novgorod Regional Court granted the prosecutor’s renewed motion for detention on grounds of obstruction of justice and violations of the undertaking not to leave the city, and the applicant was arrested in the course of the hearing. ... In total, the Regional Court heard more then 35 witnesses during the trial. In addition, five witness statements were admitted in the trial, in the absence of the witnesses."^^xsd:string,
+        "The Regional Court’s refusal to admit Mrs Moskalenko as another lawyer did not constitute a violation of the applicant’s right to defence."^^xsd:string,
+        "The proceeds from the sale of the Stavanger were deducted from the damages awarded to the yard."^^xsd:string ;
+    echr:isFinalDomesticDecision false ;
+    echr:isPending true ;
+    echr:raisesArticle6Issue doc:article6_issue_2 .
+
+doc:participation_2 a echr:Participation ;
+    echr:hasPartySide doc:party_side_1,
+        doc:party_side_2 ;
+    echr:participatingParty doc:natural_person_1 .
+
+doc:domestic_proceeding_2 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:domestic_proceeding_3 ;
+    echr:hasCourt doc:domestic_authority_2 ;
+    echr:hasDecisionDate "1998-08-10"^^xsd:date,
+        "1997-07"^^xsd:gYearMonth ;
+    echr:hasDomesticProceeding doc:case_document_1 ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome doc:proceeding_outcome_2 ;
+    echr:hasOutcomeDirection doc:outcome_direction_1 ;
+    echr:hasParticipation doc:participation_2 ;
+    echr:hasProceedingStartDate "1998"^^xsd:gYear,
+        "1997-07"^^xsd:gYearMonth ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "1"^^xsd:string,
+        "2"^^xsd:string ;
+    echr:hasStatedDuration "P10M"^^xsd:duration ;
+    echr:hasSupportingQuote "In July 1997 the Supreme Court quashed the conviction on the applicant’s appeal and remitted the case to the Nizhniy Novgorod Regional Court."^^xsd:string,
+        "On 10 August 1998 the Supreme Court confirmed the judgment of the Nizhniy Novgorod Regional Court, with some alterations."^^xsd:string,
+        "Overall, the Supreme Court found that there had not been any significant breaches of national procedural law or international standards during the trial."^^xsd:string,
+        "The Supreme Court concluded that the disputed evidence had been properly evaluated by the Nizhniy Novgorod Regional Court and found admissible."^^xsd:string,
+        "The Supreme Court did not refer to the complaint referring to the property dispute or to the admission of three civil claimants during the trial."^^xsd:string,
+        "The Supreme Court did not refer to the complaint referring to the property dispute."^^xsd:string,
+        "The Supreme Court dropped certain charges from the conviction and altered the classification of certain crimes, in view of the Criminal Code which entered into force in 1997."^^xsd:string,
+        "The sentencing of the applicant to a total of six years in prison was upheld."^^xsd:string ;
+    echr:isFinalDomesticDecision true ;
+    echr:raisesArticle6Issue doc:article6_issue_1 .
+
+doc:case_document_1 a echr:CaseDocument ;
+    echr:hasApplicant doc:natural_person_1 ;
+    echr:hasDomesticProceeding doc:domestic_proceeding_1,
+        doc:domestic_proceeding_2,
+        doc:domestic_proceeding_3,
+        doc:domestic_proceeding_4 .
+
+doc:natural_person_1 a echr:NaturalPerson ;
+    echr:hasApplicant doc:case_document_1 ;
+    echr:hasBirthYear "1954"^^xsd:gYear ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue "Mr."^^xsd:string ;
+    echr:hasGenderCueText "the applicant"^^xsd:string ;
+    echr:hasHonorific "Mr"^^xsd:string,
+        "Mr."^^xsd:string ;
+    echr:hasPersonName "Andrey Anatolyevich Klimentyev"^^xsd:string,
+        "the applicant"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string ;
+    echr:hasSupportingQuote "The applicant, Andrey Anatolyevich Klimentyev, is a Russian national, who was born in 1954 and lives in Nizhniy Novgorod."^^xsd:string ;
+    echr:isAnonymised false .
+

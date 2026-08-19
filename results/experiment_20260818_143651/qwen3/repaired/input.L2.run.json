@@ -1,0 +1,72 @@
+{
+  "source": "input.jsonl",
+  "line_number": 2,
+  "ontocast_version": "0.6.1",
+  "render_mode": "facts",
+  "current_domain": "https://growgraph.dev",
+  "doc_iri": "https://growgraph.dev/doc/9850b086e44d",
+  "tenant": "growgraph",
+  "project": "art6_qwen3",
+  "llm": {
+    "provider": "openai",
+    "model_name": "Qwen-3-80B",
+    "temperature": 1.0
+  },
+  "budget": {
+    "chars_sent": 1196909,
+    "chars_received": 39278,
+    "calls_count": 9,
+    "cache_hits": 0,
+    "input_tokens": 356770,
+    "output_tokens": 10859,
+    "cached_input_tokens": 0,
+    "cached_output_tokens": 0,
+    "reasoning_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0,
+    "ontology_triples_generated": 0,
+    "facts_triples_generated": 275,
+    "ontology_operations_count": 0,
+    "facts_operations_count": 15,
+    "node_durations": {
+      "Convert to Text": 0.0009773689962457865,
+      "Chunk Text": 0.004549593009869568,
+      "ctx/merge_document_ontology": 9.804978617466986e-6,
+      "Render Facts/loop_lag_total": 0.7368366681301007,
+      "Render Facts/loop_lag_max": 0.4812080129951937,
+      "prompt/ontology_chapter": 0.18201888403564226,
+      "llm/cache_lookup": 1.2978475080162752,
+      "llm/inflight_wait": 6.667359911007225,
+      "llm/provider": 93.88707336699008,
+      "repair/deterministic": 0.01446176205354277,
+      "Render Facts/unit_sum": 102.69703649400617,
+      "Render Facts/worker_wait": 0.000019493003492243588,
+      "Render Facts": 35.483789744001115,
+      "Merge Facts": 2.5743229590007104,
+      "Validate Facts": 0.01193207000324037,
+      "Serialize": 0.06985042100131977
+    },
+    "counters": {
+      "ctx/merge_document_ontology.calls": 3,
+      "llm/calls_timed": 9
+    }
+  },
+  "ontology_triples": 0,
+  "facts_triples": 525,
+  "retrieval_metrics": {
+    "ontology_context_mode": "fixed_single_ontology",
+    "ontology_snapshot_triples": 929,
+    "facts_anchor_count": 1,
+    "facts_anchor_units": 6,
+    "facts_llm_repair_renders_total": 3,
+    "facts_llm_repair_renders_failed": 0,
+    "facts_findings_residual": 27,
+    "facts_rejected_merges": 90,
+    "validated_without_ontology_context": 1,
+    "facts_validation_findings": 0,
+    "facts_validation_errors": 0,
+    "facts_merge_repair_passes": 0,
+    "facts_merge_vetoes": 0,
+    "facts_merge_repairs_rejected": 0
+  }
+}

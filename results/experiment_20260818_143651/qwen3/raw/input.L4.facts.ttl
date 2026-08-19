@@ -1,0 +1,401 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/c045cb95908f/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/c045cb95908f> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:4"^^xsd:string .
+
+doc:delay_attribution_1 a echr:DelayAttribution ;
+    rdfs:label "attributed to the authorities"^^xsd:string ;
+    skos:definition "Dormant periods, repeated remittals, adjournments ordered by the court, slowness of experts appointed by it."^^xsd:string ;
+    skos:prefLabel "attributed to the authorities"^^xsd:string .
+
+doc:inactivity_period_1 a echr:InactivityPeriod ;
+    echr:hasInactivityEndDate "2001-02-12"^^xsd:date ;
+    echr:hasInactivityStartDate "1995-04-05"^^xsd:date ;
+    echr:hasSupportingQuote "The judgment of 12 February 2001 issued in the proceedings instituted against the applicant (see paragraph 48), established that three officers of the Slovenj Gradec Police, D.P., J.K. and M.F., who were in the car which stopped the applicant, received information about the location of a “white Golf”, believed to be being driven by the applicant, and an order to stop it."^^xsd:string .
+
+doc:inactivity_period_2 a echr:InactivityPeriod ;
+    echr:hasInactivityEndDate "1995-04-07"^^xsd:date ;
+    echr:hasInactivityStartDate "1995-04-06"^^xsd:date ;
+    echr:hasSupportingQuote "Next day, 7 April 1995, the applicant sought medical aid in the Maribor General Hospital."^^xsd:string .
+
+doc:judicial_officer_2 a echr:JudicialOfficer ;
+    echr:hasPersonName "D.P."^^xsd:string,
+        "J.K."^^xsd:string,
+        "M.F."^^xsd:string ;
+    echr:hasSourceParagraph "28"^^xsd:string,
+        "29"^^xsd:string,
+        "32"^^xsd:string ;
+    echr:hasSupportingQuote "In his statement, the applicant alleged that about eight to ten officers had dragged him to the metallic fence of the construction site behind the Slovenj Gradec Health Centre where they had beaten him, shouted at him and threatened to kill him."^^xsd:string,
+        "The complaint mentions the names of two officers, D.P. and J.K., who were present at the scene but not involved in the alleged ill-treatment."^^xsd:string,
+        "The criminal complaint of the Slovenj Gradec Police states that Aleksander Matko sustained injuries as a result of the use of force."^^xsd:string,
+        "The latter, which under the “subject” ( zadeva ) refers solely to the criminal offence allegedly committed by the applicant, reads as follows:"^^xsd:string .
+
+doc:judicial_officer_4 a echr:JudicialOfficer ;
+    echr:hasPersonName "I.G."^^xsd:string .
+
+doc:natural_person_1 a echr:NaturalPerson ;
+    echr:hasGenderConfidence "0.9"^^xsd:decimal ;
+    echr:hasGenderCue "Mr"^^xsd:string ;
+    echr:hasGenderCueText "Mr"^^xsd:string ;
+    echr:hasHonorific "Mr"^^xsd:string ;
+    echr:hasPersonName "the applicant"^^xsd:string ;
+    echr:isAnonymised false .
+
+doc:participation_4 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:party_3 .
+
+doc:participation_5 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:party_1 .
+
+doc:participation_6 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:party_2 .
+
+doc:pre_trial_detention_1 a echr:PreTrialDetention ;
+    echr:hasDetentionEndDate "1995-04-05"^^xsd:date,
+        "1995-04-06"^^xsd:date ;
+    echr:hasDetentionStartDate "1995-04-05"^^xsd:date ;
+    echr:hasSourceParagraph "12"^^xsd:string ;
+    echr:hasStatedDetentionDuration "PT1H"^^xsd:duration ;
+    echr:hasSupportingQuote "He was brought to the Slovenj Gradec Police Station [...] and released on 6 April 1995 at approximately half past midnight."^^xsd:string,
+        "The applicant was released after questioning."^^xsd:string .
+
+doc:proceeding_8 a echr:DomesticProceeding ;
+    rdfs:label "Costs order, Slovenj Gradec District Court, 11 October 2001"^^xsd:string ;
+    echr:hasCourt doc:authority_2 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:proceeding_2_participation_1 ;
+    echr:hasProceedingStartDate "2001-10-11"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "50"^^xsd:string ;
+    echr:hasSupportingQuote "Lastly, on 11 October 2001 the Slovenj Gradec District Court ordered the applicant to pay an additional sum to cover the costs of one of the witnesses heard during the proceedings. On that day, the proceedings were “finally concluded” ( pravnomočno končan postopek )."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:domestic_authority_2 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Slovenj Gradec Police"^^xsd:string ;
+    echr:hasName "Slovenj Gradec Police"^^xsd:string ;
+    echr:hasSourceParagraph "10"^^xsd:string,
+        "28"^^xsd:string,
+        "33"^^xsd:string ;
+    echr:hasSupportingQuote "On 7 April 1995 the applicant went to the Slovenj Gradec Police"^^xsd:string,
+        "Slovenj Gradec Internal Affairs Administration ( Uprava za notranje zadeve – hereinafter referred as the “Slovenj Gradec Police”)"^^xsd:string,
+        "The Slovenj Gradec Police report finds, inter alia , that D.P. and J.K. stopped the applicant’s car"^^xsd:string .
+
+doc:domestic_authority_3 a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Slovenian courts"^^xsd:string,
+        "Slovenj Gradec Police"^^xsd:string ;
+    echr:hasName "Slovenj Gradec Police"^^xsd:string ;
+    echr:hasSourceParagraph "29"^^xsd:string,
+        "3"^^xsd:string,
+        "32"^^xsd:string ;
+    echr:hasSupportingQuote "On 15 May 1995 the applicant lodged, through his lawyer, a written criminal complaint ( kazenska ovadba ) with the Slovenj Gradec Police against unidentified police officers"^^xsd:string,
+        "The criminal complaint of the Slovenj Gradec Police states that Aleksander Matko sustained injuries as a result of the use of force."^^xsd:string,
+        "the investigation into his allegations had not been effective"^^xsd:string .
+
+doc:domestic_proceeding_1 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:domestic_proceeding_2 ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasDecisionDate "1997-01-17"^^xsd:date,
+        "2001-02-12"^^xsd:date ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasParty "cd:party_1"^^xsd:string ;
+    echr:hasProceedingStartDate "1995-04-05"^^xsd:date,
+        "1995-04-07"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "12"^^xsd:string,
+        "21"^^xsd:string,
+        "28"^^xsd:string,
+        "34"^^xsd:string,
+        "35"^^xsd:string ;
+    echr:hasSupportingQuote "In the decision the Public Prosecutor identified D.P., J.K. and M. J. as the officers accused in the applicant’s complaint."^^xsd:string,
+        "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."^^xsd:string,
+        "On 5 April 1995 at about 8.30 p.m. the applicant, driving a car, was arrested in Slovenj Gradec by officers of the Special Unit and the Slovenj Gradec Police."^^xsd:string,
+        "On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint against the officers of the Special Unit concerning the events of 5 April 1995."^^xsd:string,
+        "The judgment of 12 February 2001 issued in the proceedings instituted against the applicant (see paragraph 48), established that three officers of the Slovenj Gradec Police, D.P., J.K. and M.F., who were in the car which stopped the applicant, received information about the location of a “white Golf”, believed to be being driven by the applicant, and an order to stop it."^^xsd:string ;
+    echr:isFinalDomesticDecision true ;
+    echr:raisesArticle6Issue doc:article6_issue_1 .
+
+doc:domestic_proceeding_2 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:domestic_proceeding_3 ;
+    echr:hasCourt doc:domestic_authority_2 ;
+    echr:hasDecisionDate "1995-04-06"^^xsd:date,
+        "1997-01-17"^^xsd:date ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasProceedingStartDate "1995-04-05"^^xsd:date,
+        "1995-04-06"^^xsd:date,
+        "1995-04-07"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "12"^^xsd:string,
+        "26"^^xsd:string,
+        "31"^^xsd:string,
+        "32"^^xsd:string ;
+    echr:hasSupportingQuote "He was questioned by the police and released on 6 April 1995 at approximately half past midnight."^^xsd:string,
+        "In the meantime, on 14 July 1995, the Slovenj Gradec District Public Prosecutor (the “Public Prosecutor”) requested the Slovenj Gradec Police to identify the officers who had participated in the procedure against the applicant and to conduct an interview with them."^^xsd:string,
+        "On 6 April 1995, soon after his release, the applicant was admitted to the Slovenj Gradec General Hospital where he stayed until 7 p.m. The medical report, written by a doctor in that hospital, stated that the applicant had bruises on his head, but did not include any details of the injuries. The applicant was advised to rest for a few days."^^xsd:string,
+        "The latter, which under the “subject” ( zadeva ) refers solely to the criminal offence allegedly committed by the applicant, reads as follows:"^^xsd:string .
+
+doc:domestic_proceeding_3 a echr:DomesticProceeding ;
+    echr:hasCourt doc:domestic_authority_3 ;
+    echr:hasDecisionDate "1995-04-19"^^xsd:date,
+        "1997-01-17"^^xsd:date ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasParticipation doc:participation_3 ;
+    echr:hasProceedingStartDate "1995-04-07"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSittingJudge doc:judicial_officer_1 ;
+    echr:hasSourceParagraph "27"^^xsd:string,
+        "29"^^xsd:string,
+        "3"^^xsd:string,
+        "32"^^xsd:string ;
+    echr:hasSupportingQuote "On 15 May 1995 the applicant lodged, through his lawyer, a written criminal complaint ( kazenska ovadba ) with the Slovenj Gradec Police against unidentified police officers for causing minor bodily harm ( lahka telesna poškodba ) and an unlawful deprivation of liberty ( protipraven odvzem prostosti )."^^xsd:string,
+        "The applicant alleged that he had been ill-treated by the police and that the investigation into his allegations had not been effective."^^xsd:string,
+        "The criminal complaint of the Slovenj Gradec Police states that Aleksander Matko sustained injuries as a result of the use of force."^^xsd:string,
+        "The medical report of 7 April 1995 indicates several lesions, including: - bruises on the right eye and a small amount of suffusion in the surrounding area; - a haematoma on the left side of the forehead - a painful nose; - a 6 cm by 4 cm haematoma on the left shoulder; - two 4-5 cm linear skin abrasions on the left side of the thorax; - a child’s-hand-sized moderate oedema behind the right ear; - an extensive haematoma on the left thigh. The doctors had also suspected a fracture of the right temporal bone. The report of an x-ray examination on 19 April 1995 indicated that there was a hairline fracture ( fissur a)."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:inactivity_1 a echr:InactivityPeriod ;
+    echr:hasExtractionNote "Gap between criminal complaint lodged and request to open investigation; attributed to authorities' delay."^^xsd:string ;
+    echr:hasInactivityCause echr:DelayAttributedToAuthorities ;
+    echr:hasInactivityEndDate "1997-01-17"^^xsd:date ;
+    echr:hasInactivityStartDate "1995-04-12"^^xsd:date .
+
+doc:judicial_officer_1 a echr:JudicialOfficer ;
+    echr:hasPersonName "D.P."^^xsd:string,
+        "M.J."^^xsd:string ;
+    echr:hasSourceParagraph "32"^^xsd:string ;
+    echr:hasSupportingQuote "the officers of the MIA’s Special Unit, who were headed by M.J (...)."^^xsd:string .
+
+doc:participation_3 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:party_2 .
+
+doc:party_3 a echr:Party ;
+    echr:hasPartyName "officers of the Special Unit"^^xsd:string ;
+    echr:hasSourceParagraph "28"^^xsd:string,
+        "32"^^xsd:string ;
+    echr:hasSupportingQuote "made an oral complaint against the officers of the Special Unit concerning the events of 5 April 1995"^^xsd:string,
+        "the officers of the special working group of the Criminal Police Directorate [the officers of the Slovenj Gradec Police and the Special Unit] committed the alleged criminal offences"^^xsd:string .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "Criminal complaint lodged, Slovenj Gradec Police, 12 April 1995"^^xsd:string ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasInactivityPeriod doc:inactivity_1 ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:proceeding_1_participation_1 ;
+    echr:hasProceedingStartDate "1995-04-12"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "37"^^xsd:string ;
+    echr:hasSupportingQuote "On 12 April 1995 the Slovenj Gradec Police lodged a criminal complaint against the applicant for the criminal offence of “obstructing an official in the course of his duties” under section 302, paragraph 4-1 of the Slovenian Criminal Code, which referred to the same incident as the applicant’s criminal complaint."^^xsd:string ;
+    echr:isFinalDomesticDecision false .
+
+doc:proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "Request to open criminal investigation, Slovenj Gradec District Court, 17 January 1997"^^xsd:string ;
+    echr:hasCourt doc:authority_2 ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:proceeding_2_participation_1 ;
+    echr:hasProceedingStartDate "1997-01-17"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "38"^^xsd:string ;
+    echr:hasSupportingQuote "On 17 January 1997 the Public Prosecutor requested the Slovenj Gradec District Court to open a criminal investigation against the applicant."^^xsd:string ;
+    echr:isFinalDomesticDecision false .
+
+doc:proceeding_3 a echr:DomesticProceeding ;
+    rdfs:label "Appeal against refusal to investigate, Maribor Higher Court, 4 December 1997"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_2 ;
+    echr:hasCourt doc:authority_3 ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:proceeding_2_participation_1 ;
+    echr:hasProceedingStartDate "1997-05-12"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "41"^^xsd:string ;
+    echr:hasSupportingQuote "On 12 May 1997 the Public Prosecutor appealed against this decision. On 4 December 1997 the Maribor Higher Court upheld her appeal finding that, despite the shortcomings mentioned in the first-instance decision, there were sufficient grounds for suspicion that the applicant had committed the alleged offence. Accordingly, it changed the first-instance court’s decision and opened a criminal investigation against the applicant."^^xsd:string ;
+    echr:isFinalDomesticDecision false ;
+    echr:raisesArticle6Issue doc:article6_issue_1 .
+
+doc:proceeding_4 a echr:DomesticProceeding ;
+    rdfs:label "Filing of indictment, Slovenj Gradec District Court, 28 December 1998"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:authority_2 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:proceeding_2_participation_1 ;
+    echr:hasProceedingStartDate "1998-12-28"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "44"^^xsd:string ;
+    echr:hasSupportingQuote "On 28 December 1998 the Public Prosecutor filed an indictment against the applicant for “attempting to obstruct an official in the course of his duties” ( poskus kaznivega dejanja preprečitve uradnega dejanja uradni osebi )."^^xsd:string ;
+    echr:isFinalDomesticDecision false ;
+    echr:raisesArticle6Issue doc:article6_issue_3 .
+
+doc:proceeding_5 a echr:DomesticProceeding ;
+    rdfs:label "Appeal against acquittal, Maribor Higher Court, 27 September 2000"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_4 ;
+    echr:hasCourt doc:authority_3 ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:proceeding_1_participation_1 ;
+    echr:hasProceedingStartDate "2000-01-05"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "47"^^xsd:string ;
+    echr:hasSupportingQuote "On 5 January 2000 the Public Prosecutor appealed against the judgment and on 27 September 2000 the Maribor Higher Court quashed the judgment and remitted the case to a new panel for retrial."^^xsd:string ;
+    echr:isFinalDomesticDecision false ;
+    echr:raisesArticle6Issue doc:article6_issue_1 .
+
+doc:proceeding_7 a echr:DomesticProceeding ;
+    rdfs:label "Appeal against conviction, Maribor Higher Court, 9 May 2001"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_6 ;
+    echr:hasCourt doc:authority_3 ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:proceeding_1_participation_1 ;
+    echr:hasProceedingStartDate "2001-03-12"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "49"^^xsd:string ;
+    echr:hasSupportingQuote "On 12 March 2001 the Public Prosecutor appealed against this judgment and applied for a heavier sentence. The applicant also appealed. On 9 May 2001 the Maribor Higher Court upheld the conviction but amended the judgment with respect to the costs of the proceedings."^^xsd:string ;
+    echr:isFinalDomesticDecision true ;
+    echr:raisesArticle6Issue doc:article6_issue_3 .
+
+doc:prosecutor a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the Public Prosecutor"^^xsd:string ;
+    echr:hasPartyName "the Public Prosecutor"^^xsd:string .
+
+doc:article6_issue_3 a echr:Article6Issue ;
+    rdfs:label "Length of proceedings and judicial bias"^^xsd:string ;
+    echr:affectsParty doc:applicant ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasSourceParagraph "49"^^xsd:string ;
+    echr:hasSupportingQuote "On 12 March 2001 the Public Prosecutor appealed against this judgment and applied for a heavier sentence. The applicant also appealed. On 9 May 2001 the Maribor Higher Court upheld the conviction but amended the judgment with respect to the costs of the proceedings."^^xsd:string,
+        "The medical report of 7 April 1995 indicates several lesions, including: - bruises on the right eye and a small amount of suffusion in the surrounding area; - a haematoma on the left side of the forehead - a painful nose; - a 6 cm by 4 cm haematoma on the left shoulder; - two 4-5 cm linear skin abrasions on the left side of the thorax; - a child’s-hand-sized moderate oedema behind the right ear; - an extensive haematoma on the left thigh. The doctors had also suspected a fracture of the right temporal bone. The report of an x-ray examination on 19 April 1995 indicated that there was a hairline fracture ( fissur a)."^^xsd:string ;
+    echr:issueArisesIn doc:proceeding_7 .
+
+doc:authority_1 a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec Police"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Slovenj Gradec District Public Prosecutor’s Office (Okrožno državno tožilstvo)"^^xsd:string,
+        "Slovenj Gradec Police"^^xsd:string ;
+    echr:hasName "Slovenj Gradec District Public Prosecutor’s Office"^^xsd:string ;
+    echr:hasSourceParagraph "10"^^xsd:string,
+        "30"^^xsd:string,
+        "34"^^xsd:string ;
+    echr:hasSupportingQuote "On 15 June 1995 the Slovenj Gradec District Public Prosecutor’s Office (Okrožno državno tožilstvo ) asked the applicant’s lawyer to add his client’s deposition to the file"^^xsd:string,
+        "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."^^xsd:string,
+        "Slovenj Gradec Internal Affairs Administration ( Uprava za notranje zadeve – hereinafter referred as the “Slovenj Gradec Police”)"^^xsd:string .
+
+doc:participation_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:party_1 .
+
+doc:party_2 a echr:Party ;
+    echr:hasPartyName "unidentified police officers"^^xsd:string ;
+    echr:hasSourceParagraph "29"^^xsd:string,
+        "32"^^xsd:string ;
+    echr:hasSupportingQuote "a written criminal complaint ( kazenska ovadba ) with the Slovenj Gradec Police against unidentified police officers for causing minor bodily harm"^^xsd:string,
+        "the criminal complaint of the Slovenj Gradec Police states that Aleksander Matko sustained injuries as a result of the use of force."^^xsd:string .
+
+doc:proceeding_6 a echr:DomesticProceeding ;
+    rdfs:label "Retrial judgment, Slovenj Gradec District Court, 12 February 2001"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_5 ;
+    echr:hasCourt doc:authority_2 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:proceeding_2_participation_1 ;
+    echr:hasProceedingStartDate "2001-02-12"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "48"^^xsd:string ;
+    echr:hasSupportingQuote "By a judgment of 12 February 2001, the Slovenj Gradec District Court convicted the applicant as charged and sentenced him to 3 months’ imprisonment, suspended for 3 years."^^xsd:string ;
+    echr:isFinalDomesticDecision false ;
+    echr:raisesArticle6Issue doc:article6_issue_1 .
+
+doc:applicant a echr:NaturalPerson ;
+    rdfs:label "the applicant"^^xsd:string ;
+    echr:hasPartyName "the applicant"^^xsd:string ;
+    echr:hasPersonName "the applicant"^^xsd:string ;
+    echr:isAnonymised true .
+
+doc:authority_3 a echr:DomesticAuthority ;
+    rdfs:label "Maribor Higher Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Maribor Higher Court"^^xsd:string .
+
+doc:party_1 a echr:NaturalPerson,
+        echr:Party ;
+    echr:hasBirthYear "1961"^^xsd:gYear ;
+    echr:hasHonorific "Mr"^^xsd:string ;
+    echr:hasPartyName "the applicant"^^xsd:string ;
+    echr:hasPersonName "Mr Aleksander Matko"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string,
+        "28"^^xsd:string,
+        "29"^^xsd:string,
+        "35"^^xsd:string ;
+    echr:hasSupportingQuote "In the decision the Public Prosecutor identified D.P., J.K. and M. J. as the officers accused in the applicant’s complaint."^^xsd:string,
+        "On 15 May 1995 the applicant lodged, through his lawyer, a written criminal complaint"^^xsd:string,
+        "On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint"^^xsd:string,
+        "by a Slovenian national, Mr Aleksander Matko (“the applicant”) "^^xsd:string .
+
+doc:proceeding_1_participation_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant .
+
+doc:article6_issue_1 a echr:Article6Issue ;
+    rdfs:label "Judicial bias and lack of impartiality"^^xsd:string,
+        "Unjustified delay in investigation and appeal"^^xsd:string ;
+    echr:affectsParty doc:applicant,
+        doc:party_1 ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasSourceParagraph "3"^^xsd:string,
+        "30"^^xsd:string,
+        "34"^^xsd:string,
+        "41"^^xsd:string,
+        "48"^^xsd:string ;
+    echr:hasSupportingQuote "By a judgment of 12 February 2001, the Slovenj Gradec District Court convicted the applicant as charged and sentenced him to 3 months’ imprisonment, suspended for 3 years."^^xsd:string,
+        "During the police procedure, the applicant did not request medical aid and the police only afterwards learned that he had sustained injuries."^^xsd:string,
+        "He also alleged that the criminal proceedings had been unfair and excessively long (Article 6 of the Convention)."^^xsd:string,
+        "On 12 May 1997 the Public Prosecutor appealed against this decision. On 4 December 1997 the Maribor Higher Court upheld her appeal finding that, despite the shortcomings mentioned in the first-instance decision, there were sufficient grounds for suspicion that the applicant had committed the alleged offence. Accordingly, it changed the first-instance court’s decision and opened a criminal investigation against the applicant."^^xsd:string,
+        "On 15 June 1995 the Slovenj Gradec District Public Prosecutor’s Office (Okrožno državno tožilstvo ) asked the applicant’s lawyer to add his client’s deposition to the file, which he did on 20 June 1995. On 21 October 1996 and 6 January 1997 the applicant’s lawyer sought information from the Public Prosecutor’s Office about the state of progress in the proceedings."^^xsd:string,
+        "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."^^xsd:string,
+        "When the officers caught him, the applicant again tried to resist and they responded by using truncheons and gripped his elbow to handcuff him, knocking him down in the process."^^xsd:string ;
+    echr:issueArisesIn doc:domestic_proceeding_1,
+        doc:proceeding_3,
+        doc:proceeding_6 .
+
+doc:authority_2 a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec District Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Slovenj Gradec District Court"^^xsd:string .
+
+doc:proceeding_2_participation_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:prosecutor .
+

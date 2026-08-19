@@ -1,0 +1,285 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/6b799c48ca24/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/6b799c48ca24> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:1"^^xsd:string .
+
+doc:domesticGuardianshipAppointmentByMunicipalCouncil a echr:DomesticProceeding ;
+    rdfs:label "appointment of a guardian"@en ;
+    echr:hasCourt doc:ruseMunicipalCouncil ;
+    echr:hasDecisionDate "2 February 2005"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasProceedingStartDate "7 June 2001"^^xsd:string ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "11"^^xsd:string ;
+    echr:hasSupportingQuote "transmitted to the Ruse Municipal Council on 7 June 2001 for the appointment of a guardian"@en .
+
+doc:domestic_proceeding_11 a echr:DomesticProceeding ;
+    rdfs:label "Dupnitsa District Court gave judgment on 10 March 2006 dismissing the application"@en ;
+    echr:followsProceeding doc:domestic_proceeding_10 ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasProceedingStartDate "2006-03-10"^^xsd:date ;
+    echr:hasProceedingType echr:TypeUnknown ;
+    echr:hasSourceParagraph "40"^^xsd:string ;
+    echr:hasSupportingQuote "The Dupnitsa District Court gave judgment on 10 March 2006"@en ;
+    echr:isFinalDomesticDecision true .
+
+doc:domestic_proceeding_12 a echr:DomesticProceeding ;
+    rdfs:label "oral requests to the guardian to apply for release from partial guardianship and to allow leaving the home"@en ;
+    echr:hasProceedingType echr:TypeUnknown ;
+    echr:hasSourceParagraph "41"^^xsd:string ;
+    echr:hasSupportingQuote "Lastly, the applicant asserted that he had made several oral requests to his guardian to apply for his release from partial guardianship and to allow him to leave the home"@en .
+
+doc:domestic_proceeding_6 a echr:DomesticProceeding ;
+    rdfs:label "Chief Public Prosecutor’s Office at the Supreme Court of Cassation upheld the refusal"@en ;
+    echr:followsProceeding doc:domestic_proceeding_5 ;
+    echr:hasProceedingStartDate "2005-11-29"^^xsd:date ;
+    echr:hasProceedingType echr:TypeUnknown ;
+    echr:hasSourceParagraph "38"^^xsd:string ;
+    echr:hasSupportingQuote "and subsequently on 29 November 2005 by the Chief Public Prosecutor’s Office at the Supreme Court of Cassation"@en .
+
+doc:domestic_proceeding_partial_incapacity_1 a echr:DomesticAuthority,
+        echr:DomesticProceeding ;
+    rdfs:label "Ruse Regional Court judgment of 20 November 2000 declaring the applicant partially incapacitated"@en ;
+    echr:followsProceeding doc:domestic_proceeding_total_incapacity_1 ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasCourt doc:domestic_authority_ruse_regional_court_1 ;
+    echr:hasDecisionDate "2000-11-20"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasProceedingStartDate "2000"^^xsd:gYear ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "10"^^xsd:string ;
+    echr:hasSupportingQuote "In a judgment of 20 November 2000, the court declared the applicant to be partially incapacitated on the grounds that he had been suffering from simple schizophrenia since 1975, and that his ability to manage his own affairs and interests and to realise the consequences of his own acts had been impaired."@en .
+
+doc:domestic_proceeding_partial_incapacity_2 a echr:DomesticProceeding ;
+    rdfs:label "Ruse Regional Court judgment of 20 November 2000 declaring the applicant partially incapacitated"@en ;
+    echr:followsProceeding doc:domestic_proceeding_total_incapacity_1 ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasCourt doc:domestic_authority_ruse_regional_court_1 ;
+    echr:hasDecisionDate "2000-11-20"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasProceedingStartDate "2000"^^xsd:gYear ;
+    echr:hasProceedingType echr:TypeUnknown ;
+    echr:hasSourceParagraph "10"^^xsd:string ;
+    echr:hasSupportingQuote "In a judgment of 20 November 2000, the court declared the applicant to be partially incapacitated on the grounds that he had been suffering from simple schizophrenia since 1975, and that his ability to manage his own affairs and interests and to realise the consequences of his own acts had been impaired."@en .
+
+doc:domestic_proceeding_total_incapacity_2 a echr:DomesticProceeding ;
+    rdfs:label "Ruse Regional prosecutor applying for a declaration of total legal incapacity"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasCourt doc:domestic_authority_ruse_regional_prosecutor_1 ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasProceedingType echr:TypeUnknown ;
+    echr:hasSourceParagraph "10"^^xsd:string ;
+    echr:hasSupportingQuote "On an unspecified date in 2000, at the request of the applicant’s two relatives, the Ruse regional prosecutor applied to the Ruse Regional Court ( Окръжен съд ) for a declaration of total legal incapacity in respect of the applicant."@en .
+
+doc:domestic_registration_14_december_2002 a echr:DomesticProceeding ;
+    rdfs:label "14 December 2002"@en ;
+    echr:followsProceeding doc:domestic_placement_agreement_10_december_2002 ;
+    echr:hasCourt doc:rilaMunicipalityResidenceRegistration ;
+    echr:hasDecisionDate "14 December 2002"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasProceedingStartDate "14 December 2002"^^xsd:string ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "16"^^xsd:string ;
+    echr:hasSupportingQuote "On 14 December 2002, at the request of the Director of the Pastra social care home, the applicant was registered as having his home address in the municipality of Rila."@en .
+
+doc:dummy_1 a echr:DomesticProceeding ;
+    rdfs:label "domestic legal proceedings"@en ;
+    echr:hasSourceParagraph "3"^^xsd:string ;
+    echr:hasSupportingQuote "The applicant shared a room measuring 16 sq. m with four other residents and the beds were practically side by side."^^xsd:string .
+
+doc:natural_person_applicant_1 a echr:NaturalPerson ;
+    rdfs:label "Mr Rusi Kosev Stanev"@en,
+        "the applicant"@en ;
+    echr:hasBirthYear "1956"^^xsd:gYear ;
+    echr:hasPersonName "Mr Rusi Kosev Stanev"@en ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "The applicant was born in 1956"@en,
+        "The applicant was born in 1956 in Ruse"@en .
+
+doc:domestic_guardian_request_9_september_2005 a echr:DomesticProceeding ;
+    rdfs:label "9 September 2005"@en ;
+    echr:hasCourt doc:rilaMunicipalCouncil ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasProceedingStartDate "9 September 2005"^^xsd:string ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:hasSupportingQuote "On 9 September 2005 the applicant’s lawyer requested the Rila Municipal Council to appoint a guardian for her client."@en .
+
+doc:domestic_guardianship_appointment_2_february_2005 a echr:DomesticProceeding ;
+    rdfs:label "2 February 2005"@en ;
+    echr:followsProceeding doc:domestic_guardian_request_9_september_2005 ;
+    echr:hasCourt doc:ruseMunicipalCouncil ;
+    echr:hasDecisionDate "2 February 2005"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:hasSupportingQuote "the Municipal Council had decided on 2 February 2005 to appoint the Director of the Pastra social care home as the applicant’s guardian"@en .
+
+doc:domestic_guardianship_chain_12_april_2001_to_guardianship a echr:DomesticProceeding ;
+    rdfs:label "procedural chain"@en ;
+    echr:followsProceeding doc:domestic_judgment_12_april_2001 ;
+    echr:hasSourceParagraph "11"^^xsd:string ;
+    echr:hasSupportingQuote "That judgment was upheld in a judgment of 12 April 2001 by the Veliko Tarnovo Court of Appeal"@en .
+
+doc:domestic_judgment_12_april_2001 a echr:DomesticProceeding ;
+    rdfs:label "12 April 2001"@en ;
+    echr:hasCourt doc:velikoTarnovoCourtOfAppeal ;
+    echr:hasDecisionDate "12 April 2001"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasProceedingStartDate "12 April 2001"^^xsd:string ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "11"^^xsd:string ;
+    echr:hasSupportingQuote "upheld in a judgment of 12 April 2001 by the Veliko Tarnovo Court of Appeal ( Апелативен съд )"@en .
+
+doc:domestic_placement_agreement_10_december_2002 a echr:DomesticProceeding ;
+    rdfs:label "10 December 2002"@en ;
+    echr:followsProceeding doc:domestic_social_services_request_29_may_2002 ;
+    echr:hasCourt doc:pastraSocialCareHome ;
+    echr:hasDecisionDate "10 December 2002"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasProceedingStartDate "10 December 2002"^^xsd:string ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "14"^^xsd:string ;
+    echr:hasSupportingQuote "On 10 December 2002 a welfare-placement agreement was signed between R.P. and the social care home for adults with mental disorders near the village of Pastra in the municipality of Rila (“the Pastra social care home”)"@en .
+
+doc:domestic_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "the applicant, through his lawyer, asked the public prosecutor’s office to apply to the Regional Court to have his legal capacity restored"@en ;
+    echr:hasProceedingStartDate "2004-11-25"^^xsd:date ;
+    echr:hasProceedingType echr:TypeUnknown ;
+    echr:hasSourceParagraph "37"^^xsd:string ;
+    echr:hasSupportingQuote "On 25 November 2004 the applicant, through his lawyer, asked the public prosecutor’s office to apply to the Regional Court to have his legal capacity restored"@en .
+
+doc:domestic_proceeding_10 a echr:DomesticProceeding ;
+    rdfs:label "Dupnitsa District Court hearing"@en ;
+    echr:followsProceeding doc:domestic_proceeding_9 ;
+    echr:hasProceedingStartDate "2006-01-18"^^xsd:date ;
+    echr:hasProceedingType echr:TypeUnknown ;
+    echr:hasSourceParagraph "39"^^xsd:string ;
+    echr:hasSupportingQuote "On 18 January 2006 the court held a hearing"@en .
+
+doc:domestic_proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "public prosecutor requested the Pastra social care home to send him a doctor’s opinion and other medical certificates concerning the applicant’s disorders"@en ;
+    echr:followsProceeding doc:domestic_proceeding_1 ;
+    echr:hasProceedingStartDate "2005-03-02"^^xsd:date ;
+    echr:hasProceedingType echr:TypeUnknown ;
+    echr:hasSourceParagraph "37"^^xsd:string ;
+    echr:hasSupportingQuote "On 2 March 2005 the public prosecutor requested the Pastra social care home to send him a doctor’s opinion and other medical certificates concerning the applicant’s disorders in preparation for a possible application to the courts for restoration of his legal capacity"@en .
+
+doc:domestic_proceeding_3 a echr:DomesticProceeding ;
+    rdfs:label "admission to a psychiatric hospital from 31 May to 15 June 2005 for a medical assessment"@en ;
+    echr:followsProceeding doc:domestic_proceeding_2 ;
+    echr:hasProceedingStartDate "2005-05"^^xsd:gYearMonth ;
+    echr:hasProceedingType echr:TypeUnknown ;
+    echr:hasSourceParagraph "37"^^xsd:string ;
+    echr:hasSupportingQuote "Further to that request, the applicant was admitted to a psychiatric hospital from 31 May to 15 June 2005 for a medical assessment"@en .
+
+doc:domestic_proceeding_4 a echr:DomesticProceeding ;
+    rdfs:label "regional prosecutor refused to bring an action for restoration of the applicant’s legal capacity"@en ;
+    echr:followsProceeding doc:domestic_proceeding_3 ;
+    echr:hasProceedingStartDate "2005-08-10"^^xsd:date ;
+    echr:hasProceedingType echr:TypeUnknown ;
+    echr:hasSourceParagraph "38"^^xsd:string ;
+    echr:hasSupportingQuote "On 10 August 2005 the regional prosecutor refused to bring an action for restoration of the applicant’s legal capacity"@en .
+
+doc:domestic_proceeding_5 a echr:DomesticProceeding ;
+    rdfs:label "appellate prosecutor upheld the regional prosecutor’s refusal"@en ;
+    echr:followsProceeding doc:domestic_proceeding_4 ;
+    echr:hasProceedingStartDate "2005-10-11"^^xsd:date ;
+    echr:hasProceedingType echr:TypeUnknown ;
+    echr:hasSourceParagraph "38"^^xsd:string ;
+    echr:hasSupportingQuote "Despite those objections, the regional prosecutor’s refusal was upheld on 11 October 2005 by the appellate prosecutor"@en .
+
+doc:domestic_proceeding_7 a echr:DomesticProceeding ;
+    rdfs:label "the applicant, through his lawyer, asked the mayor of Rila to bring a court action for his release from partial guardianship"@en ;
+    echr:hasProceedingStartDate "2005-09-09"^^xsd:date ;
+    echr:hasProceedingType echr:TypeUnknown ;
+    echr:hasSourceParagraph "39"^^xsd:string ;
+    echr:hasSupportingQuote "On 9 September 2005 the applicant, through his lawyer, asked the mayor of Rila to bring a court action for his release from partial guardianship"@en .
+
+doc:domestic_proceeding_8 a echr:DomesticProceeding ;
+    rdfs:label "mayor of Rila refused the request"@en ;
+    echr:followsProceeding doc:domestic_proceeding_7 ;
+    echr:hasProceedingStartDate "2005-09-16"^^xsd:date ;
+    echr:hasProceedingType echr:TypeUnknown ;
+    echr:hasSourceParagraph "39"^^xsd:string ;
+    echr:hasSupportingQuote "In a letter of 16 September 2005, the mayor of Rila refused his request"@en .
+
+doc:domestic_proceeding_9 a echr:DomesticProceeding ;
+    rdfs:label "application to the Dupnitsa District Court for judicial review of the mayor’s decision"@en ;
+    echr:followsProceeding doc:domestic_proceeding_8 ;
+    echr:hasProceedingStartDate "2005-09"^^xsd:gYearMonth ;
+    echr:hasProceedingType echr:TypeUnknown ;
+    echr:hasSourceParagraph "39"^^xsd:string ;
+    echr:hasSupportingQuote "On 28 September 2005 the applicant’s lawyer applied to the Dupnitsa District Court for judicial review of the mayor’s decision"@en .
+
+doc:domestic_social_services_request_29_may_2002 a echr:DomesticProceeding ;
+    rdfs:label "29 May 2002"@en ;
+    echr:followsProceeding doc:domestic_guardianship_appointment_23_may_2002 ;
+    echr:hasCourt doc:ruseSocialServices ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasProceedingStartDate "29 May 2002"^^xsd:string ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "13"^^xsd:string ;
+    echr:hasSupportingQuote "On 29 May 2002 R.P. asked the Ruse social services to place the applicant in a social care home for people with mental disorders."@en .
+
+doc:pastraSocialCareHome a echr:DomesticAuthority ;
+    rdfs:label "Pastra social care home"@en ;
+    echr:hasAuthorityName "the Pastra social care home"@en .
+
+doc:rilaMunicipalCouncil a echr:DomesticAuthority ;
+    rdfs:label "Rila Municipal Council"@en ;
+    echr:hasAuthorityName "Rila Municipal Council"@en .
+
+doc:rilaMunicipalityResidenceRegistration a echr:DomesticAuthority ;
+    rdfs:label "municipality of Rila"@en ;
+    echr:hasAuthorityName "the municipality of Rila"@en .
+
+doc:ruseSocialServices a echr:DomesticAuthority ;
+    rdfs:label "Ruse social services"@en ;
+    echr:hasAuthorityName "Ruse social services"@en .
+
+doc:velikoTarnovoCourtOfAppeal a echr:DomesticAuthority ;
+    rdfs:label "Veliko Tarnovo Court of Appeal"@en ;
+    echr:hasAuthorityName "Veliko Tarnovo Court of Appeal ( Апелативен съд )"@en .
+
+doc:domestic_authority_ruse_regional_court_1 a echr:DomesticAuthority ;
+    rdfs:label "( Окръжен съд )"@en ;
+    echr:hasAuthorityName "( Окръжен съд )"@en .
+
+doc:domestic_authority_ruse_regional_prosecutor_1 a echr:DomesticAuthority ;
+    rdfs:label "Ruse regional prosecutor"@en ;
+    echr:hasAuthorityName "Ruse regional prosecutor"@en .
+
+doc:domestic_guardianship_appointment_23_may_2002 a echr:DomesticProceeding ;
+    rdfs:label "23 May 2002"@en ;
+    echr:followsProceeding doc:domestic_guardianship_chain_12_april_2001_to_guardianship ;
+    echr:hasCourt doc:ruseMunicipalCouncil ;
+    echr:hasDecisionDate "23 May 2002"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "12"^^xsd:string ;
+    echr:hasSupportingQuote "on 23 May 2002 the Municipal Council appointed Ms R.P., a council officer, as the applicant’s guardian"@en .
+
+doc:domestic_proceeding_total_incapacity_1 a echr:DomesticAuthority,
+        echr:DomesticProceeding ;
+    rdfs:label "Ruse Regional prosecutor applying for a declaration of total legal incapacity"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasCourt doc:domestic_authority_ruse_regional_prosecutor_1 ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "10"^^xsd:string ;
+    echr:hasSupportingQuote "On an unspecified date in 2000, at the request of the applicant’s two relatives, the Ruse regional prosecutor applied to the Ruse Regional Court ( Окръжен съд ) for a declaration of total legal incapacity in respect of the applicant."@en .
+
+doc:ruseMunicipalCouncil a echr:DomesticAuthority ;
+    rdfs:label "Ruse Municipal Council"@en ;
+    echr:decidedProceeding doc:domestic_guardianship_appointment_23_may_2002,
+        doc:domestic_guardianship_appointment_2_february_2005 ;
+    echr:hasAuthorityName "Ruse Municipal Council"@en .
+

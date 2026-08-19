@@ -1,0 +1,782 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/374a77632880/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <https://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/374a77632880> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "art6_domestic_test_set.jsonl:1"^^xsd:string .
+
+doc:admission_2005_05_31_to_2005_06_15 a schema:MedicalProcedure ;
+    rdfs:label "admitted to psychiatric hospital from 31 May to 15 June 2005"@en ;
+    schema:description "Admitted for a medical assessment in preparation for a possible application to the courts for restoration of legal capacity."@en ;
+    schema:endDate "2005-06-15"^^xsd:date ;
+    schema:location doc:psychiatricHospital ;
+    schema:startDate "2005-05-31"^^xsd:date .
+
+doc:agreement_2002_12_10 a schema:Agreement ;
+    rdfs:label "placement agreement 10 December 2002"@en ;
+    schema:agent doc:guardianRP ;
+    schema:description "Agreement signed between the guardian R.P. and the Pastra social care home; did not mention the applicant's name. It stated that the home was to provide food, clothing, medical services, heating and accommodation in return for payment; 80% of the sum was to be used as payment for services and the remaining 20% put aside for personal expenses. The agreement did not specify the duration of the provision of the services."@en ;
+    schema:participant doc:pastraSocialCareHome ;
+    schema:startDate "2002-12-10"^^xsd:date .
+
+doc:allowanceAmountEurApprox a schema:MonetaryAmount ;
+    rdfs:label "monthly allowance amount (approx. EUR)"@en ;
+    rdfs:comment "approximate conversion stated in source"@en ;
+    schema:currency "EUR"^^xsd:string ;
+    schema:value "8"^^xsd:decimal .
+
+doc:appellate_prosecutor_upheld_2005_10_11 a echr:DomesticProceeding ;
+    rdfs:label "appellate prosecutor decision (11 October 2005)"@en ;
+    echr:hasCourt doc:appellateProsecutorOffice ;
+    echr:hasDecisionDate "2005-10-11"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasSupportingQuote "Despite those objections, the regional prosecutor’s refusal was upheld on 11 October 2005 by the appellate prosecutor."@en .
+
+doc:appointment_decision_2005_02_02 a schema:Event ;
+    rdfs:label "Rila Municipal Council appointment decision 2 February 2005"@en ;
+    schema:agent doc:rilaMunicipalCouncil ;
+    schema:description "The Rila Municipal Council decided to appoint the Director of the Pastra social care home as the applicant's guardian."@en ;
+    schema:participant doc:guardianRP ;
+    schema:startDate "2005-02-02"^^xsd:date .
+
+doc:bedside_table_1 a schema:Thing ;
+    rdfs:label "a bedside table"@en ;
+    echr:hasExtractionNote "Only a bedside table in which to store his clothes."@en ;
+    schema:owner doc:applicant .
+
+doc:carbamazepine_600mg a schema:Drug ;
+    rdfs:label "carbamazepine (600 mg)"@en ;
+    schema:dosage doc:dosage_1 .
+
+doc:case_36760_06 a echr:CaseDocument ;
+    rdfs:label "application (no. 36760/06)"@en ;
+    echr:hasApplicant doc:partyRusiKosevStanev ;
+    echr:hasApplicationNumber "36760/06"^^xsd:string ;
+    echr:hasRespondentState "Republic of Bulgaria"@en ;
+    schema:datePublished "2006-09-08"^^xsd:date .
+
+doc:chief_pp_upheld_2005_11_29 a echr:DomesticProceeding ;
+    rdfs:label "Chief Public Prosecutor's Office decision (29 November 2005)"@en ;
+    echr:hasCourt doc:publicProsecutorOffice ;
+    echr:hasDecisionDate "2005-11-29"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasSupportingQuote "and subsequently on 29 November 2005 by the Chief Public Prosecutor’s Office at the Supreme Court of Cassation."@en .
+
+doc:clothes_1 a schema:Product ;
+    rdfs:label "his clothes"@en ;
+    echr:hasExtractionNote "He preferred to keep them in his bed at night for fear that they might be stolen and replaced with old clothes."@en ;
+    schema:owner doc:applicant .
+
+doc:common_room_1 a schema:Room ;
+    rdfs:label "common room at the home"@en ;
+    rdfs:comment "The room was not heated in winter and the residents kept their coats, hats and gloves on when inside."@en ;
+    schema:containedInPlace doc:socialCareHomePastra ;
+    schema:hasProduct doc:books_collection_1,
+        doc:chessboard_1,
+        doc:television_1 ;
+    schema:openingHoursSpecification doc:opening_hours_1 .
+
+doc:director_letter_to_police_2006_10_13 a schema:CommunicateAction ;
+    rdfs:label "Director's letter to the Ruse municipal police 13 October 2006"@en ;
+    echr:hasExtractionNote "On 13 October 2006 the Director wrote asking the police to search for the applicant and transfer him to Sofia so employees of the home could collect him and take him back to Pastra."@en ;
+    schema:agent doc:homeDirector ;
+    schema:recipient doc:ruseMunicipalPolice ;
+    schema:startDate "2006-10-13"^^xsd:date .
+
+doc:director_statement_to_prosecutor_1 a prov:Entity ;
+    rdfs:label "statement by the Director to the public prosecutor's office"@en ;
+    prov:hadPrimarySource doc:publicProsecutorOffice ;
+    prov:wasAttributedTo doc:homeDirector ;
+    echr:hasExtractionNote "According to a statement made by the Director to the public prosecutor's office on an unspecified date, the applicant came back early because he was unable to manage his finances and had no accommodation."@en .
+
+doc:dup_nitsa_judicial_review_2005_09_28_2006_03_10 a echr:DomesticProceeding ;
+    rdfs:label "Dupnitsa District Court judicial review (28 September 2005 - 10 March 2006)"@en ;
+    echr:hasCourt doc:dupnicaDistrictCourt ;
+    echr:hasDecisionDate "2006-03-10"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasParticipation doc:participationApplicantDupnitsa,
+        doc:participationMayorDupnitsa ;
+    echr:hasProceedingStartDate "2005-09-28"^^xsd:date ;
+    echr:hasSupportingQuote "On 18 January 2006 the court held a hearing at which the representative of the mayor of Rila objected that the form of authority was invalid as it had not been countersigned by the guardian. The guardian, who was present at the hearing, stated that he was not opposed to the applicant’s application."@en,
+        "On 28 September 2005 the applicant’s lawyer applied to the Dupnitsa District Court for judicial review of the mayor’s decision, under Article 115 of the Family Code."@en,
+        "The Dupnitsa District Court gave judgment on 10 March 2006. ... the court dismissed the application, ... Since the judgment was not subject to appeal, it became final."@en ;
+    echr:isFinalDomesticDecision true .
+
+doc:envelope_posting_assistance_1 a schema:CommunicateAction ;
+    rdfs:label "staff put his sheets of paper in envelopes and sent them off for him"@en ;
+    rdfs:comment "Staff asked the applicant to give them any sheets of paper he wished to post so that they could put them in envelopes and send them off for him."@en ;
+    schema:agent doc:staff_group_1 ;
+    schema:recipient doc:applicant .
+
+doc:envelope_refusal_1 a schema:RefuseAction ;
+    rdfs:label "staff refused to supply him with envelopes"@en ;
+    rdfs:comment "The applicant did not have access to his own money and therefore could not buy envelopes."@en ;
+    schema:agent doc:staff_group_1 ;
+    schema:object doc:envelopes_1 ;
+    schema:target doc:applicant .
+
+doc:evaluation_report_annual_1 a schema:Report ;
+    rdfs:label "annual evaluation report on the applicant’s behaviour and social skills"@en ;
+    rdfs:comment "Reports indicated the applicant was uncommunicative, preferred to stay on his own rather than join group activities, refused to take his medication, had no close relatives to visit while on leave, was not on good terms with his half-sister, and it was unclear whether he had anywhere to live outside the social care home. The reports concluded reintegration into society was impossible and set an objective of ensuring acquisition of skills for social resettlement and reintegration into the family. He appears never to have been offered therapy to that end."@en ;
+    schema:about doc:applicant ;
+    schema:creator doc:homeDirector,
+        doc:homeSocialWorker .
+
+doc:evidence_feb_2011 a schema:Report ;
+    rdfs:label "most recent evidence submitted February 2011"@en ;
+    schema:about doc:applicant ;
+    schema:datePublished "2011-02"^^xsd:gYearMonth ;
+    schema:description "According to the most recent evidence submitted in February 2011, the applicant was still living in the home at that time."@en ;
+    schema:location doc:pastraSocialCareHome .
+
+doc:examination_2006_08_31 a schema:MedicalTest ;
+    rdfs:label "examination on 31 August 2006"@en ;
+    schema:datePublished "2006-08-31"^^xsd:date ;
+    schema:description "At the applicant's lawyer's request the applicant was examined by Dr V.S. and by a psychologist, Ms I.A.; the report of that examination found the earlier 15 June 2005 diagnosis of schizophrenia to be inaccurate, observed no risk of deterioration and noted stabilisation of the applicant's health."@en ;
+    schema:patient doc:applicant ;
+    schema:performer doc:drVs,
+        doc:msIa .
+
+doc:father_second_wife_1 a echr:NaturalPerson ;
+    rdfs:label "his father’s second wife"@en ;
+    echr:hasExtractionNote "Named in the facts as one of the applicant's only close relatives."@en .
+
+doc:government_memorial_1 a prov:Entity ;
+    rdfs:label "Government memorial before the Grand Chamber"@en ;
+    prov:wasAttributedTo doc:government_1 ;
+    echr:hasExtractionNote "Government stated renovations in late 2009 (including sanitary facilities), central heating installed, diet varied (fruit, vegetables, meat), residents had access to television, books and games, and the State provided clothes; the applicant did not dispute these assertions."@en .
+
+doc:guardian_1 a echr:NaturalPerson,
+        schema:Person ;
+    rdfs:label "the applicant’s guardian"@en,
+        "the guardian"@en ;
+    echr:hasExtractionNote "The guardian was present at the hearing and stated that he was not opposed to the applicant's application; the applicant asserted that he had made several oral requests to his guardian to apply for his release from partial guardianship and to allow him to leave the home, but his requests had always been refused."@en .
+
+doc:guardian_appointment_2002 a echr:DomesticProceeding ;
+    rdfs:label "appointment of Ms R.P. as guardian by Ruse Municipal Council on 23 May 2002"@en ;
+    echr:hasCourt doc:authorityRuseMunicipalCouncil ;
+    echr:hasDecisionDate "2002-05-23"^^xsd:date .
+
+doc:hygiene_conditions_note_1 a schema:Thing ;
+    rdfs:label "diet and hygiene and sanitary conditions (extraction note)"@en ;
+    echr:hasExtractionNote "Access to the bathroom, which was unhealthy and decrepit, was permitted once a week. The toilets in the courtyard were unhygienic holes in the ground covered by dilapidated shelters; each toilet was shared by at least eight people. Toiletries were available only sporadically."@en,
+        "The food provided at the home was insufficient and of poor quality; the applicant had no say in the choice of meals and was not allowed to help prepare them."@en .
+
+doc:invalidity_pension_2008 a schema:MonetaryAmount ;
+    rdfs:label "applicant's invalidity pension (2008)"@en ;
+    schema:about doc:applicant ;
+    schema:currency "BGN"^^xsd:string ;
+    schema:description "The applicant's invalidity pension as updated in 2008 amounted to 130 Bulgarian levs (BGN) (approximately 65 euros)."@en ;
+    schema:value "130"^^xsd:decimal .
+
+doc:journeys_to_pastra_1 a schema:Event ;
+    rdfs:label "regular journeys to Pastra"@en ;
+    echr:hasExtractionNote "He regularly went to the village of Pastra; during visits he mainly provided domestic help to villagers or carried out tasks at the village restaurant."@en ;
+    schema:agent doc:applicant ;
+    schema:location doc:pastraPlace .
+
+doc:judgment_stanev_v_bulgaria_2012_01_17 a schema:Judgment ;
+    rdfs:label "Judgment in Stanev v. Bulgaria (17 January 2012)"@en ;
+    schema:about doc:caseStanevVBulgaria ;
+    schema:court doc:courtEuropeanCourtOfHumanRightsGrandChamber ;
+    schema:datePublished "2012-01-17"^^xsd:date ;
+    schema:event doc:deliberation_2011_02_09,
+        doc:deliberation_2011_12_07 ;
+    schema:judge doc:personAngelikaNussberger,
+        doc:personDeanSpielmann,
+        doc:personEgbertMyjer,
+        doc:personFrancoiseTulkens,
+        doc:personGannaYudkivska,
+        doc:personIsabelleBerroLefevre,
+        doc:personJeanPaulCosta,
+        doc:personJosepCasadevall,
+        doc:personJuliaLaffranque,
+        doc:personKhanlarHajiyev,
+        doc:personLechGarlicki,
+        doc:personLuisLopezGuerra,
+        doc:personMirjanaLazarovaTrajkovska,
+        doc:personNicolasBratza,
+        doc:personNinaVajic,
+        doc:personVincentADeGaetano,
+        doc:personVincentBerger,
+        doc:personZdravkaKalaydjieva .
+
+doc:lawyer_challenge_2005_08_10 a schema:LegalAction ;
+    rdfs:label "applicant's lawyer challenged the refusal (10 August 2005)"@en ;
+    schema:agent doc:applicantsLawyer ;
+    schema:datePublished "2005-08-10"^^xsd:date ;
+    schema:description "The applicant's lawyer challenged the refusal, arguing her client should have the opportunity to assess for himself whether, given the living conditions at the home, it was in his interests to remain there and that enforced continuation amounted in practice to a deprivation of liberty."@en .
+
+doc:leave_series_2002_2006_1 a schema:Event ;
+    rdfs:label "leaves to Ruse between 2002 and 2006"@en ;
+    echr:hasExtractionNote "Between 2002 and 2006 the applicant returned to Ruse three times on leave of absence."@en,
+        "Each trip was authorised for a period of about ten days."@en ;
+    schema:agent doc:applicant ;
+    schema:location doc:rusePlace .
+
+doc:maintenance_medication_since_2002 a schema:MedicalTherapy ;
+    rdfs:label "maintenance medication since 2002 under monthly supervision of a psychiatrist"@en ;
+    schema:description "The applicant had been on maintenance medication since 2002 under the monthly supervision of a psychiatrist."@en ;
+    schema:startDate "2002"^^xsd:gYear .
+
+doc:mayor_refusal_2005_09_16 a echr:DomesticProceeding ;
+    rdfs:label "mayor refusal (16 September 2005)"@en ;
+    echr:hasCourt doc:mayorOfRila ;
+    echr:hasDecisionDate "2005-09-16"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasSupportingQuote "In a letter of 16 September 2005, the mayor of Rila refused his request, stating that there was no basis for such an action in view of the medical certificate of 15 June 2005, the opinions of the Director and the social worker, and the conclusions reached by the public prosecutor’s office."@en .
+
+doc:medical_certificate_2005_06_15 a schema:CreativeWork ;
+    rdfs:label "medical certificate of 15 June 2005"@en ;
+    rdfs:comment "The certificate records that, following his placement in the home in 2002, the applicant was given anti-psychotic medication (carbamazepine (600 mg)) under the monthly supervision of a psychiatrist."@en ;
+    schema:datePublished "2005-06-15"^^xsd:date .
+
+doc:medication_supervision_1 a schema:MedicalTherapy ;
+    rdfs:label "monthly supervision by a psychiatrist"@en ;
+    rdfs:comment "Supervision of medication was monthly."@en ;
+    schema:provider doc:psychiatrist_1 .
+
+doc:ministryLabourSocialPolicy a echr:DomesticAuthority ;
+    rdfs:label "Ministry of Labour and Social Policy"@en ;
+    echr:hasAuthorityName "Ministry of Labour and Social Policy"@en .
+
+doc:partyBulgarianGovernment a echr:Party ;
+    rdfs:label "the Bulgarian Government"@en ;
+    echr:hasPartyName "the Bulgarian Government"@en ;
+    echr:isRepresentedBy doc:agentNNikolova,
+        doc:agentRNikolova .
+
+doc:payment_for_journey_1 a schema:MonetaryAmount ;
+    rdfs:label "journey cost BGN 60"@en ;
+    echr:hasExtractionNote "The journey cost BGN 60 (approximately EUR 30), which was paid to the applicant by the home’s management."@en ;
+    schema:currency "BGN"@en ;
+    schema:provider doc:home_1 ;
+    schema:recipient doc:applicant ;
+    schema:value "60"^^xsd:decimal .
+
+doc:placement_2002 a schema:MoveAction ;
+    rdfs:label "placement in the home in 2002"@en ;
+    schema:patient doc:applicant ;
+    schema:startDate "2002"^^xsd:gYear ;
+    schema:toLocation doc:socialCareHomePastra .
+
+doc:placement_agreement_2002 a schema:Agreement ;
+    rdfs:label "welfare-placement agreement signed between R.P. and the social care home on 10 December 2002"@en ;
+    echr:hasExtractionNote "The applicant was not informed of the agreement."@en ;
+    schema:agent doc:guardianRP ;
+    schema:dateCreated "2002-12-10"^^xsd:date ;
+    schema:recipient doc:pastraSocialCareHome .
+
+doc:placement_application_2002 a schema:Action ;
+    rdfs:label "application by R.P. to Ruse social services requesting placement in a social care home (29 May 2002)"@en ;
+    schema:agent doc:guardianRP ;
+    schema:recipient doc:ruseSocialServices ;
+    schema:startDate "2002-05-29"^^xsd:date .
+
+doc:police_informed_director_2006_10_19 a schema:CommunicateAction ;
+    rdfs:label "Ruse police informed the Director 19 October 2006"@en ;
+    echr:hasExtractionNote "On 19 October 2006 the Ruse police informed the Director that the applicant's whereabouts had been discovered but that the police could not transfer him because he was not the subject of a wanted notice."@en ;
+    schema:agent doc:ruseMunicipalPolice ;
+    schema:recipient doc:homeDirector ;
+    schema:startDate "2006-10-19"^^xsd:date .
+
+doc:proceeding_appeal_2001 a echr:DomesticProceeding ;
+    rdfs:label "judgment of 12 April 2001 upholding the 20 November 2000 judgment"@en ;
+    echr:followsProceeding doc:proceeding_declaration_2000 ;
+    echr:hasCourt doc:velikoTarnovoCourtOfAppeal ;
+    echr:hasDecisionDate "2001-04-12"^^xsd:date ;
+    echr:hasExtractionNote "Appeal by the applicant was dismissed and the first-instance judgment was upheld; judgment transmitted to Ruse Municipal Council on 7 June 2001 for appointment of guardian."@en ;
+    echr:isFinalDomesticDecision true .
+
+doc:prosecutor_request_2005_03_02 a schema:Action ;
+    rdfs:label "public prosecutor requested Pastra home to send doctor's opinion (2 March 2005)"@en ;
+    schema:agent doc:publicProsecutorOffice ;
+    schema:datePublished "2005-03-02"^^xsd:date ;
+    schema:description "On 2 March 2005 the public prosecutor requested the Pastra social care home to send a doctor's opinion and other medical certificates concerning the applicant's disorders in preparation for a possible application to the courts for restoration of his legal capacity."@en ;
+    schema:recipient doc:pastraSocialCareHome .
+
+doc:refusal_2005_08_10 a schema:Action ;
+    rdfs:label "regional prosecutor refused to bring an action for restoration (10 August 2005)"@en ;
+    schema:about doc:certificate_2005_06_15,
+        doc:placement_in_home_2002 ;
+    schema:agent doc:regionalProsecutorPerson ;
+    schema:datePublished "2005-08-10"^^xsd:date ;
+    schema:description "On 10 August 2005 the regional prosecutor refused to bring an action for restoration of the applicant's legal capacity on the grounds that the doctors, the Director of the Pastra social care home and the home's social worker considered the applicant unable to cope on his own and that the home was the most suitable place for him to live."@en .
+
+doc:relative_half_sister_1 a echr:NaturalPerson ;
+    rdfs:label "his half-sister"@en ;
+    echr:hasExtractionNote "Named in the facts as one of the applicant's only close relatives."@en .
+
+doc:remission_statement_2006 a schema:MedicalCondition ;
+    rdfs:label "stable remission since 2006"@en ;
+    rdfs:comment "At the Grand Chamber hearing the applicant's representatives stated that their client had been in stable remission since 2006 and had not undergone any psychiatric treatment in recent years."@en ;
+    schema:patient doc:applicant .
+
+doc:report_2006_08_31 a schema:Report ;
+    rdfs:label "report drawn up on 31 August 2006"@en ;
+    schema:author doc:drVs,
+        doc:msIa ;
+    schema:datePublished "2006-08-31"^^xsd:date ;
+    schema:description "The report concluded the 15 June 2005 diagnosis of schizophrenia was inaccurate because the patient did not display all symptoms; that the applicant had not shown signs of aggression at the time but a suspicious attitude and slight tendency to 'verbal aggression'; that he had not undergone treatment for the condition between 2002 and 2006; that his health had visibly stabilised; that no risk of deterioration had been observed; and that, in the Director's opinion, the applicant was capable of reintegrating into society."@en .
+
+doc:report_findings_institutionalisation_2006_08_31 a schema:Report ;
+    rdfs:label "report conclusions on institutionalisation and alcohol risk (31 August 2006)"@en ;
+    schema:about doc:pastraSocialCareHome ;
+    schema:datePublished "2006-08-31"^^xsd:date ;
+    schema:description "The report stated that the applicant's stay in the Pastra social care home was damaging to his health and risked developing 'institutionalisation syndrome' the longer he stayed; that it would be more beneficial to integrate him into community life with as few restrictions as possible; that his tendency to alcohol abuse (apparent prior to 2002) should be monitored; and warned that behaviour of an alcohol-dependent person could have similar characteristics to schizophrenia, requiring vigilance to avoid confusion between the two conditions."@en .
+
+doc:residence_registration_2002_12_14 a schema:Event ;
+    rdfs:label "residence registration 14 December 2002"@en ;
+    schema:agent doc:guardianRP ;
+    schema:description "At the request of the Director of the Pastra social care home, the applicant was registered as having his home address in the municipality of Rila; the residence certificate stated the address had been changed for the purpose of his \"permanent supervision\"."@en ;
+    schema:location doc:pastraSocialCareHome ;
+    schema:startDate "2002-12-14"^^xsd:date .
+
+doc:restoration_request_2004_11_25 a schema:LegalAction ;
+    rdfs:label "request to apply to Regional Court to restore legal capacity (25 November 2004)"@en ;
+    schema:agent doc:applicant ;
+    schema:datePublished "2004-11-25"^^xsd:date ;
+    schema:description "On 25 November 2004 the applicant, through his lawyer, asked the public prosecutor's office to apply to the Regional Court to have his legal capacity restored."@en ;
+    schema:participant doc:applicantsLawyer ;
+    schema:recipient doc:publicProsecutorOffice .
+
+doc:return_event_2006_10_31 a schema:MoveAction ;
+    rdfs:label "driven back to the social care home on 31 October 2006"@en ;
+    schema:agent doc:staff_group_1 ;
+    schema:patient doc:applicant ;
+    schema:startTime "2006-10-31"^^xsd:date ;
+    schema:toLocation doc:socialCareHomePastra .
+
+doc:returned_early_1 a schema:Event ;
+    rdfs:label "returned to Pastra before end of authorised leave after first two visits to Ruse"@en ;
+    echr:hasExtractionNote "The applicant returned to Pastra before the end of his authorised period of leave after his first two visits to Ruse."@en ;
+    schema:agent doc:applicant .
+
+doc:room_1 a schema:Room ;
+    rdfs:label "a room measuring 16 sq. m"@en ;
+    echr:hasExtractionNote "Beds were practically side by side."@en ;
+    schema:floorSize doc:roomsize_1 ;
+    schema:occupant doc:applicant,
+        doc:other_residents_group_1 .
+
+doc:ruseRegionalProsecutor a echr:DomesticAuthority ;
+    rdfs:label "regional prosecutor"@en,
+        "the Ruse regional prosecutor"@en ;
+    echr:hasAuthorityName "the Ruse regional prosecutor"@en ;
+    echr:hasExtractionNote "Applied to the Ruse Regional Court (unspecified date in 2000) for a declaration of total legal incapacity in respect of the applicant (at the request of the applicant's two relatives)."@en .
+
+doc:social_allowance_grant_2007_02_07 a schema:Grant ;
+    rdfs:label "monthly allowance granted on 7 February 2007"@en ;
+    rdfs:comment "The municipal social assistance department granted the applicant a monthly allowance."@en ;
+    schema:amount doc:allowanceAmountBgn ;
+    schema:dateGranted "2007-02-07"^^xsd:date ;
+    schema:provider doc:socialAssistanceDepartment ;
+    schema:recipient doc:applicant .
+
+doc:social_assessment_2005_12_30 a schema:Report ;
+    rdfs:label "social assessment of 30 December 2005"@en ;
+    rdfs:comment "The assessment concluded the applicant was incapable of working (even in a sheltered environment), had no need for training or retraining, and was therefore entitled to a social allowance to cover transport, subsistence and medication."@en ;
+    schema:about doc:applicant ;
+    schema:author doc:socialAssistanceDepartment ;
+    schema:datePublished "2005-12-30"^^xsd:date .
+
+doc:social_assistance_report_2009_04 a schema:Report ;
+    rdfs:label "Social Assistance Agency report April 2009"@en ;
+    schema:datePublished "2009-04"^^xsd:gYearMonth ;
+    schema:description "Report produced by the Social Assistance Agency in April 2009: seventy-three people living in the home, one was in hospital and two had absconded. Among the residents, twenty-three were entirely lacking legal capacity, two were partially lacking capacity and the others enjoyed full legal capacity."@en ;
+    schema:location doc:pastraSocialCareHome .
+
+doc:sofiaPlace a schema:Place ;
+    rdfs:label "Sofia"@en .
+
+doc:third_leave_2006_1 a schema:Event ;
+    rdfs:label "third period of leave 15-25 September 2006"@en ;
+    echr:hasExtractionNote "The third period of leave was authorised from 15 to 25 September 2006; after the applicant failed to return on the scheduled date the Director wrote to the Ruse municipal police."@en ;
+    schema:agent doc:applicant ;
+    schema:endDate "2006-09-25"^^xsd:date ;
+    schema:location doc:rusePlace ;
+    schema:startDate "2006-09-15"^^xsd:date .
+
+doc:transfer_to_pastra_2002 a schema:Action ;
+    rdfs:label "applicant taken by ambulance to the Pastra social care home on 10 December 2002"@en ;
+    echr:hasExtractionNote "Transport by ambulance the same day as the placement agreement; distance described in the facts as some 400 km from Ruse."@en ;
+    schema:location doc:pastraSocialCareHome ;
+    schema:startDate "2002-12-10"^^xsd:date .
+
+doc:agentNNikolova a echr:LegalRepresentative,
+        echr:NaturalPerson ;
+    rdfs:label "Ms N. Nikolova"@en ;
+    echr:hasHonorific "Ms"^^xsd:string ;
+    echr:hasPersonName "Ms N. Nikolova"@en ;
+    schema:worksFor doc:ministryOfJustice .
+
+doc:agentRNikolova a echr:LegalRepresentative,
+        echr:NaturalPerson ;
+    rdfs:label "Ms R. Nikolova"@en ;
+    echr:hasHonorific "Ms"^^xsd:string ;
+    echr:hasPersonName "Ms R. Nikolova"@en ;
+    schema:worksFor doc:ministryOfJustice .
+
+doc:allowanceAmountBgn a schema:MonetaryAmount ;
+    rdfs:label "allowance increased to BGN 19.50 on 3 February 2009"@en,
+        "monthly allowance amount in BGN"@en ;
+    echr:hasExtractionNote "approximately EUR 10"@en ;
+    schema:amount "19.5"^^xsd:decimal ;
+    schema:currency "BGN"^^xsd:string,
+        "BGN"@en ;
+    schema:datePublished "2009-02-03"^^xsd:date ;
+    schema:value "16.5"^^xsd:decimal .
+
+doc:appellateProsecutorOffice a echr:DomesticAuthority ;
+    rdfs:label "appellate prosecutor"@en .
+
+doc:authorityRuseMunicipalCouncil a echr:DomesticAuthority ;
+    rdfs:label "Ruse Municipal Council"@en ;
+    echr:hasAuthorityName "Ruse Municipal Council"@en ;
+    echr:hasExtractionNote "Received transmission of the appeal judgment on 7 June 2001 for the appointment of a guardian and on 23 May 2002 appointed Ms R.P. as guardian until 31 December 2002."@en .
+
+doc:block_3 a schema:Place ;
+    rdfs:label "block 3 of the Pastra social care home"@en ;
+    schema:containedInPlace doc:pastraSocialCareHome ;
+    schema:description "Reserved for residents with the least serious health problems; residents in this block were able to move around the premises and go alone to the nearest village with prior permission."@en .
+
+doc:books_collection_1 a schema:Book ;
+    rdfs:label "several books"@en .
+
+doc:caseStanevVBulgaria a schema:LegalCase ;
+    rdfs:label "Stanev v. Bulgaria"@en ;
+    schema:caseNumber "36760/06"^^xsd:string ;
+    schema:court doc:courtEuropeanCourtOfHumanRightsGrandChamber .
+
+doc:certificate_2005_06_15 a schema:MedicalReport ;
+    rdfs:label "certificate issued 15 June 2005"@en ;
+    schema:datePublished "2005-06-15"^^xsd:date ;
+    schema:description "In a certificate issued on 15 June 2005 the doctors attested that the applicant showed symptoms of schizophrenia; they did not express an opinion on his capacity for resettlement or on the need to keep him in the Pastra social care home."@en ;
+    schema:subjectOf doc:diagnosis_schizophrenia_2005_06_15 .
+
+doc:chessboard_1 a schema:Product ;
+    rdfs:label "a chessboard"@en .
+
+doc:deliberation_2011_02_09 a schema:Event ;
+    rdfs:label "Deliberation in private (9 February 2011)"@en ;
+    schema:location doc:courtEuropeanCourtOfHumanRightsGrandChamber ;
+    schema:startDate "2011-02-09"^^xsd:date .
+
+doc:deliberation_2011_12_07 a schema:Event ;
+    rdfs:label "Deliberation in private (7 December 2011)"@en ;
+    schema:location doc:courtEuropeanCourtOfHumanRightsGrandChamber ;
+    schema:startDate "2011-12-07"^^xsd:date .
+
+doc:diagnosis_schizophrenia_2005_06_15 a schema:MedicalCondition ;
+    rdfs:label "diagnosis of schizophrenia (15 June 2005)"@en ;
+    schema:description "Doctors attested on 15 June 2005 that the applicant showed symptoms of schizophrenia."@en ;
+    schema:name "schizophrenia"@en .
+
+doc:dosage_1 a schema:StructuredValue ;
+    rdfs:label "600 mg dosage"@en ;
+    schema:unitText "mg"@en ;
+    schema:value 600 .
+
+doc:dupnicaDistrictCourt a echr:DomesticAuthority ;
+    rdfs:label "Dupnitsa District Court"@en ;
+    echr:hasAuthorityName "Dupnitsa District Court"@en .
+
+doc:envelopes_1 a schema:Product ;
+    rdfs:label "envelopes"@en .
+
+doc:government_1 a schema:Organization ;
+    rdfs:label "the Government"@en .
+
+doc:homeSocialWorker a echr:NaturalPerson,
+        schema:Person ;
+    rdfs:label "the home's social worker"@en,
+        "the home’s social worker"@en .
+
+doc:legalRepAGenova a echr:LegalRepresentative,
+        echr:NaturalPerson ;
+    rdfs:label "Ms A. Genova"@en ;
+    echr:hasHonorific "Ms"^^xsd:string ;
+    echr:hasPersonName "Ms A. Genova"@en ;
+    schema:location "Sofia"@en .
+
+doc:legalRepLNelson a echr:LegalRepresentative,
+        echr:NaturalPerson ;
+    rdfs:label "Ms L. Nelson"@en ;
+    echr:hasHonorific "Ms"^^xsd:string ;
+    echr:hasPersonName "Ms L. Nelson"@en ;
+    schema:worksFor doc:orgMentalDisabilityAdvocacyCenter .
+
+doc:legalRepVLee a echr:LegalRepresentative,
+        echr:NaturalPerson ;
+    rdfs:label "Ms V. Lee"@en ;
+    echr:hasHonorific "Ms"^^xsd:string ;
+    echr:hasPersonName "Ms V. Lee"@en ;
+    schema:worksFor doc:orgMentalDisabilityAdvocacyCenter .
+
+doc:municipal_council_1 a schema:GovernmentOrganization ;
+    rdfs:label "Municipal Council"@en .
+
+doc:opening_hours_1 a schema:OpeningHoursSpecification ;
+    rdfs:label "common room availability until 3 p.m."@en ;
+    schema:closes "15:00:00"^^xsd:time .
+
+doc:other_residents_group_1 a schema:Thing ;
+    rdfs:label "four other residents"@en ;
+    echr:hasExtractionNote "Count reported in the facts (four other residents sharing the room)."@en .
+
+doc:participationApplicantDupnitsa a echr:Participation ;
+    rdfs:label "participation of the applicant in Dupnitsa District Court proceeding"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participationMayorDupnitsa a echr:Participation ;
+    rdfs:label "participation of the mayor of Rila in Dupnitsa District Court proceeding"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:mayorOfRila .
+
+doc:partyRusiKosevStanev a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Rusi Kosev Stanev"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue echr:GenderCueHonorific ;
+    echr:hasGenderCueText "Mr Rusi Kosev Stanev"@en ;
+    echr:hasHonorific "Mr"^^xsd:string ;
+    echr:hasPersonName "Mr Rusi Kosev Stanev"@en ;
+    echr:isAnonymised false ;
+    echr:isRepresentedBy doc:legalRepAGenova,
+        doc:legalRepLNelson,
+        doc:legalRepVLee .
+
+doc:pastraPlace a schema:Place ;
+    rdfs:label "the village of Pastra"@en .
+
+doc:personAngelikaNussberger a schema:Person ;
+    rdfs:label "Angelika Nußberger"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personDeanSpielmann a schema:Person ;
+    rdfs:label "Dean Spielmann"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personEgbertMyjer a schema:Person ;
+    rdfs:label "Egbert Myjer"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personFrancoiseTulkens a schema:Person ;
+    rdfs:label "Françoise Tulkens"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personGannaYudkivska a schema:Person ;
+    rdfs:label "Ganna Yudkivska"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personIsabelleBerroLefevre a schema:Person ;
+    rdfs:label "Isabelle Berro-Lefèvre"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personJeanPaulCosta a schema:Person ;
+    rdfs:label "Jean-Paul Costa"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personJosepCasadevall a schema:Person ;
+    rdfs:label "Josep Casadevall"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personJuliaLaffranque a schema:Person ;
+    rdfs:label "Julia Laffranque"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personKhanlarHajiyev a schema:Person ;
+    rdfs:label "Khanlar Hajiyev"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personLechGarlicki a schema:Person ;
+    rdfs:label "Lech Garlicki"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personLuisLopezGuerra a schema:Person ;
+    rdfs:label "Luis López Guerra"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personMirjanaLazarovaTrajkovska a schema:Person ;
+    rdfs:label "Mirjana Lazarova Trajkovska"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personNicolasBratza a schema:Person ;
+    rdfs:label "Nicolas Bratza"@en ;
+    schema:jobTitle "President"^^xsd:string .
+
+doc:personNinaVajic a schema:Person ;
+    rdfs:label "Nina Vajić"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personVincentADeGaetano a schema:Person ;
+    rdfs:label "Vincent A. De Gaetano"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:personVincentBerger a schema:Person ;
+    rdfs:label "Vincent Berger"@en ;
+    schema:jobTitle "Jurisconsult"^^xsd:string .
+
+doc:personZdravkaKalaydjieva a schema:Person ;
+    rdfs:label "Zdravka Kalaydjieva"@en ;
+    schema:jobTitle "Judge"^^xsd:string .
+
+doc:placeStrasbourg a schema:Place ;
+    rdfs:label "Strasbourg"@en .
+
+doc:placement_in_home_2002 a schema:Event ;
+    rdfs:label "placed in Pastra social care home in 2002"@en ;
+    schema:description "The applicant had been placed in the Pastra social care home in 2002; as his health had not deteriorated since 2002 the regime remained unchanged."@en ;
+    schema:location doc:pastraSocialCareHome ;
+    schema:startDate "2002"^^xsd:gYear .
+
+doc:proceeding_declaration_2000 a echr:DomesticProceeding ;
+    rdfs:label "judgment of 20 November 2000 declaring the applicant partially incapacitated"@en ;
+    echr:hasCourt doc:ruseRegionalCourt ;
+    echr:hasDecisionDate "2000-11-20"^^xsd:date ;
+    echr:hasExtractionNote "Court declared applicant partially incapacitated (not totally) on grounds of schizophrenia since 1975; took into account expert medical report and interviews; noted history of hospital admissions and behaviour described by witnesses."@en ;
+    echr:hasProceedingType echr:TypeGuardianship .
+
+doc:psychiatricHospital a schema:Hospital,
+        schema:MedicalOrganization ;
+    rdfs:label "psychiatric hospital"@en .
+
+doc:psychiatrist_1 a schema:Person ;
+    rdfs:label "a psychiatrist"@en .
+
+doc:regionalProsecutorPerson a echr:NaturalPerson,
+        schema:Person ;
+    rdfs:label "regional prosecutor"@en ;
+    schema:affiliation doc:publicProsecutorOffice .
+
+doc:rilaMunicipalCouncil a schema:Organization ;
+    rdfs:label "Rila Municipal Council"@en .
+
+doc:roomsize_1 a schema:QuantitativeValue ;
+    rdfs:label "room size 16 sq. m"@en ;
+    schema:unitText "sq. m"@en ;
+    schema:value "16"^^xsd:decimal .
+
+doc:ruseRegionalCourt a echr:DomesticAuthority ;
+    rdfs:label "Ruse Regional Court ( Окръжен съд )"@en ;
+    echr:hasAuthorityName "Ruse Regional Court ( Окръжен съд )"@en .
+
+doc:ruseSocialServices a schema:Organization ;
+    rdfs:label "Ruse social services"@en ;
+    echr:hasExtractionNote "R.P. asked Ruse social services on 29 May 2002 to place the applicant in a social care home and appended a psychiatric diagnosis; social services drew up a welfare report on the applicant."@en .
+
+doc:television_1 a schema:Product ;
+    rdfs:label "television set"@en .
+
+doc:velikoTarnovoCourtOfAppeal a echr:DomesticAuthority ;
+    rdfs:label "Veliko Tarnovo Court of Appeal ( Апелативен съд )"@en ;
+    echr:hasAuthorityName "Veliko Tarnovo Court of Appeal ( Апелативен съд )"@en .
+
+doc:drVs a echr:NaturalPerson,
+        schema:Person ;
+    rdfs:label "Dr V.S."@en .
+
+doc:home_1 a schema:Organization ;
+    rdfs:label "the home"@en ;
+    echr:hasExtractionNote "Government (in its memorial) stated that renovation work was carried out in late 2009 including sanitary facilities; the home now had central heating; the diet was varied and regularly included fruit and vegetables as well as meat; residents had access to television, books and games; the State provided them all with clothes — the applicant did not dispute these assertions."@en,
+        "Residents did not have their own items of clothing because clothes were not returned to the same people after being washed."@en,
+        "The applicant shared a room measuring 16 sq. m with four other residents; the beds were practically side by side."@en,
+        "The home’s management kept hold of the applicant's identity papers and allowed him to leave only with special permission from the Director."@en .
+
+doc:mayorOfRila a echr:DomesticAuthority ;
+    rdfs:label "mayor of Rila"@en ;
+    echr:hasAuthorityName "mayor of Rila"@en .
+
+doc:ministryOfJustice a echr:DomesticAuthority ;
+    rdfs:label "Ministry of Justice"@en ;
+    echr:hasJurisdictionState "Republic of Bulgaria"@en .
+
+doc:msIa a echr:NaturalPerson,
+        schema:Person ;
+    rdfs:label "Ms I.A."@en .
+
+doc:orgMentalDisabilityAdvocacyCenter a schema:Organization ;
+    rdfs:label "Mental Disability Advocacy Center"@en ;
+    schema:location "Budapest"@en .
+
+doc:ruseMunicipalPolice a schema:Organization ;
+    rdfs:label "Ruse municipal police"@en .
+
+doc:rusePlace a schema:Place ;
+    rdfs:label "Ruse"@en .
+
+doc:socialAssistanceDepartment a schema:Organization ;
+    rdfs:label "municipal social assistance department"@en ;
+    schema:parentOrganization doc:municipal_council_1 .
+
+doc:applicantsLawyer a echr:LegalRepresentative,
+        schema:Person ;
+    rdfs:label "his lawyer"@en,
+        "the applicant's lawyer"@en ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasGenderCue echr:GenderCuePronoun ;
+    echr:hasGenderCueText "she"@en .
+
+doc:staff_group_1 a schema:Organization ;
+    rdfs:label "staff of the home"@en .
+
+doc:courtEuropeanCourtOfHumanRightsGrandChamber a schema:Court ;
+    rdfs:label "European Court of Human Rights, Grand Chamber"@en ;
+    schema:location doc:placeStrasbourg .
+
+doc:homeDirector a echr:NaturalPerson,
+        schema:Person ;
+    rdfs:label "Director of the social care home"@en,
+        "the Director"@en,
+        "the home’s Director"@en .
+
+doc:socialCareHomePastra a schema:Residence ;
+    rdfs:label "social care home in Pastra"@en ;
+    rdfs:comment "The common room was available until 3 p.m., was not heated in winter and residents kept their coats, hats and gloves on when inside. No other social, cultural or sports activities were available."@en .
+
+doc:guardianRP a echr:LegalRepresentative ;
+    rdfs:label "Ms R.P."@en,
+        "R.P."@en ;
+    echr:hasExtractionNote "Appointed by the Ruse Municipal Council on 23 May 2002 as the applicant's guardian until 31 December 2002; council officer."@en,
+        "On 29 May 2002 R.P. applied to Ruse social services for placement of the applicant in a social care home and appended documents including a psychiatric diagnosis."@en .
+
+doc:publicProsecutorOffice a echr:DomesticAuthority,
+        schema:Organization ;
+    rdfs:label "Chief Public Prosecutor's Office at the Supreme Court of Cassation"@en,
+        "public prosecutor's office"@en,
+        "the public prosecutor's office"@en ;
+    echr:hasAuthorityName "Chief Public Prosecutor's Office at the Supreme Court of Cassation"@en .
+
+doc:pastraSocialCareHome a schema:Organization ;
+    rdfs:label "Pastra social care home"@en,
+        "the Pastra social care home"@en ;
+    echr:hasExtractionNote "An institution for adults with mental disorders near the village of Pastra in the municipality of Rila; described as under the responsibility of the Ministry of Labour and Social Policy."@en ;
+    schema:description "Located in an isolated area of the Rila mountains in south-west Bulgaria; accessible via a dirt track from the village of Pastra, the nearest locality 8 km away."@en .
+
+doc:applicant a echr:NaturalPerson,
+        echr:Party,
+        schema:Person ;
+    rdfs:label "the applicant"@en ;
+    echr:hasBirthYear "1956"^^xsd:gYear ;
+    echr:hasExtractionNote "Applicant stated he had not been told why he was being placed in the home or for how long; the Government did not dispute this."@en,
+        "Born in 1956 in Ruse; lived in Ruse until December 2002; only close relatives recorded: his half-sister and his father’s second wife."@en,
+        "Diagnosed with schizophrenia in 1975; panel of occupational physicians (20 December 1990) found 90% degree of disablement; in receipt of an invalidity pension."@en,
+        "Placed in the Pastra social care home by a welfare-placement agreement signed on 10 December 2002; applicant was not informed of the agreement; taken there by ambulance the same day (about 400 km from Ruse)."@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderConfidence "1"^^xsd:decimal ;
+    echr:hasGenderCue echr:GenderCuePronoun ;
+    echr:hasGenderCueText "he"@en ;
+    echr:hasPersonName "the applicant"@en ;
+    echr:isAnonymised true ;
+    echr:isRepresentedBy doc:applicantsLawyer ;
+    schema:memberOf doc:block_3,
+        doc:home_1,
+        doc:socialCareHomePastra .
+

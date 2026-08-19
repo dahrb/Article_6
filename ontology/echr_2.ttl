@@ -1,0 +1,584 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix echr:    <https://growgraph.dev/echr#> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema:  <https://schema.org/> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix vann:    <http://purl.org/vocab/vann/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/echr> a owl:Ontology ;
+    rdfs:label "ECHR Art. 6 — Domestic Proceedings Extraction Schema (Streamlined)"@en ;
+    dcterms:title "ECHR Art. 6 — Domestic Proceedings Extraction Schema"@en ;
+    dcterms:description """Streamlined extraction schema focused strictly on the domestic 
+(national) procedural history narrated in the facts of European Court of Human Rights 
+judgments.
+
+Designed specifically for information extraction: every class corresponds to an observable 
+entity in the factual narrative, every link direction is canonical, and controlled 
+vocabularies are strictly closed by explicit owl:oneOf enumerations with explicit escape 
+values (echr:LevelUnknown, echr:TypeOther, echr:OutcomeOther, etc.)."""@en ;
+    dcterms:created "2026-07-24T00:00:00+00:00"^^xsd:dateTime ;
+    dcterms:modified "2026-08-18T00:00:00+00:00"^^xsd:dateTime ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    vann:preferredNamespacePrefix "echr" ;
+    owl:versionIRI <https://growgraph.dev/echr/3.0.0> ;
+    owl:versionInfo "3.0.0" .
+
+################################################################
+# 0. Datatypes
+################################################################
+
+echr:PartialDate a rdfs:Datatype ;
+    rdfs:label "partial date"@en ;
+    skos:definition "A date as precise as the text allows: a full date, a year and month, or a bare year."@en ;
+    owl:equivalentClass [ a rdfs:Datatype ;
+        owl:unionOf ( xsd:date xsd:gYearMonth xsd:gYear ) ] ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+################################################################
+# 1. Core Classes
+################################################################
+
+echr:CaseDocument a owl:Class ;
+    rdfs:label "Case Document"@en ;
+    skos:definition "The Strasbourg judgment or decision being processed. Attach extracted domestic proceedings to this case IRI."@en ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:DomesticProceeding a owl:Class ;
+    rdfs:label "Domestic Proceeding"@en ;
+    skos:definition "One set of proceedings before a single national court or authority in the domestic chain (e.g. first-instance trial, appeal, cassation)."@en ;
+    skos:scopeNote "Where a case is remitted and retried before the same court, the retrial is a separate proceeding linked by echr:followsProceeding."@en ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:DomesticAuthority a owl:Class ;
+    rdfs:label "Domestic Authority"@en ;
+    skos:definition "A national court, tribunal, prosecutor, or administrative body that decided a proceeding."@en ;
+    rdfs:subClassOf foaf:Organization ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:InactivityPeriod a owl:Class ;
+    rdfs:label "Inactivity Period"@en ;
+    skos:definition "A dormant stretch during which the facts record that no procedural step was taken within a proceeding."@en ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:Adjournment a owl:Class ;
+    rdfs:label "Adjournment"@en ;
+    skos:definition "A hearing that was listed and subsequently postponed to a later date."@en ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( echr:CaseDocument echr:DomesticProceeding echr:DomesticAuthority 
+                  echr:InactivityPeriod echr:Adjournment ) .
+
+################################################################
+# 2. Vocabulary Container Classes
+################################################################
+
+echr:InstanceLevel a owl:Class ;
+    rdfs:label "Instance Level"@en ;
+    skos:definition "Controlled vocabulary: position of a proceeding in the national hierarchy."@en ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:ProceedingType a owl:Class ;
+    rdfs:label "Proceeding Type"@en ;
+    skos:definition "Controlled vocabulary: consolidated nature of the proceeding in domestic terms."@en ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:ProceedingOutcome a owl:Class ;
+    rdfs:label "Proceeding Outcome"@en ;
+    skos:definition "Controlled vocabulary: the disposition that closed the proceeding."@en ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:OutcomeDirection a owl:Class ;
+    rdfs:label "Outcome Direction"@en ;
+    skos:definition "Controlled vocabulary: which way the disposition cut for the applicant."@en ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:AuthorityKind a owl:Class ;
+    rdfs:label "Authority Kind"@en ;
+    skos:definition "Controlled vocabulary: institutional nature of the deciding body (judicial, prosecutorial, administrative, disciplinary)."@en ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:DelayAttribution a owl:Class ;
+    rdfs:label "Delay Attribution"@en ;
+    skos:definition "Controlled vocabulary: to whom the facts attribute a dormant stretch or adjournment."@en ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+################################################################
+# 3. Canonical Object Properties
+################################################################
+
+echr:hasDomesticProceeding a owl:ObjectProperty ;
+    rdfs:label "has domestic proceeding"@en ;
+    skos:definition "Attaches an extracted proceeding to the case document."@en ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:DomesticProceeding ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:followsProceeding a owl:ObjectProperty, owl:AsymmetricProperty, owl:IrreflexiveProperty ;
+    rdfs:label "follows proceeding"@en ;
+    skos:definition "Links a proceeding to the one immediately before it in the domestic procedural chain (e.g. appeal follows first instance)."@en ;
+    rdfs:domain echr:DomesticProceeding ;
+    rdfs:range echr:DomesticProceeding ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasCourt a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has court"@en ;
+    skos:definition "The authority that conducted or decided the proceeding."@en ;
+    rdfs:domain echr:DomesticProceeding ;
+    rdfs:range echr:DomesticAuthority ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasAuthorityKind a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has authority kind"@en ;
+    skos:definition "Institutional categorization of the authority."@en ;
+    rdfs:domain echr:DomesticAuthority ;
+    rdfs:range echr:AuthorityKind ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasInstanceLevel a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has instance level"@en ;
+    skos:definition "Where this proceeding sat in the national judicial hierarchy."@en ;
+    rdfs:domain echr:DomesticProceeding ;
+    rdfs:range echr:InstanceLevel ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasProceedingType a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has proceeding type"@en ;
+    skos:definition "The legal track/nature of this proceeding."@en ;
+    rdfs:domain echr:DomesticProceeding ;
+    rdfs:range echr:ProceedingType ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasOutcome a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has outcome"@en ;
+    skos:definition "The disposition that closed this proceeding."@en ;
+    rdfs:domain echr:DomesticProceeding ;
+    rdfs:range echr:ProceedingOutcome ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasOutcomeDirection a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has outcome direction"@en ;
+    skos:definition "Whether the disposition favoured or disfavoured the applicant."@en ;
+    rdfs:domain echr:DomesticProceeding ;
+    rdfs:range echr:OutcomeDirection ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasInactivityPeriod a owl:ObjectProperty ;
+    rdfs:label "has inactivity period"@en ;
+    skos:definition "A dormant period occurring within this proceeding."@en ;
+    rdfs:domain echr:DomesticProceeding ;
+    rdfs:range echr:InactivityPeriod ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasInactivityCause a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has inactivity cause"@en ;
+    skos:definition "To whom the facts attribute responsibility for this dormant stretch."@en ;
+    rdfs:domain echr:InactivityPeriod ;
+    rdfs:range echr:DelayAttribution ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasAdjournment a owl:ObjectProperty ;
+    rdfs:label "has adjournment"@en ;
+    skos:definition "A hearing in this proceeding that was postponed."@en ;
+    rdfs:domain echr:DomesticProceeding ;
+    rdfs:range echr:Adjournment ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasAdjournmentCause a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has adjournment cause"@en ;
+    skos:definition "To whom the facts attribute responsibility for this adjournment."@en ;
+    rdfs:domain echr:Adjournment ;
+    rdfs:range echr:DelayAttribution ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+################################################################
+# 4. Datatype Properties
+################################################################
+
+# Proceeding Properties
+echr:hasProceedingStartDate a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has proceeding start date"@en ;
+    skos:definition "Date the proceeding was instituted."@en ;
+    rdfs:domain echr:DomesticProceeding ;
+    rdfs:range echr:PartialDate ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasDecisionDate a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has decision date"@en ;
+    skos:definition "Date of the decision closing this proceeding."@en ;
+    rdfs:domain echr:DomesticProceeding ;
+    rdfs:range echr:PartialDate ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:isPending a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "is pending"@en ;
+    skos:definition "True where the proceeding was still undecided at the time of the ECHR application."@en ;
+    rdfs:domain echr:DomesticProceeding ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:isFinalDomesticDecision a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "is final domestic decision"@en ;
+    skos:definition "True for the proceeding that concluded the domestic remedies prior to Strasbourg."@en ;
+    rdfs:domain echr:DomesticProceeding ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+# Authority Properties
+echr:hasAuthorityName a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has authority name"@en ;
+    skos:definition "Name of the court or authority verbatim as written in the case text."@en ;
+    rdfs:domain echr:DomesticAuthority ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasJurisdictionState a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has jurisdiction state"@en ;
+    skos:definition "The State whose legal order the authority belongs to."@en ;
+    rdfs:domain echr:DomesticAuthority ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+# Delay Event Properties
+echr:hasInactivityStartDate a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has inactivity start date"@en ;
+    skos:definition "Date of the last procedural step before dormancy."@en ;
+    rdfs:domain echr:InactivityPeriod ;
+    rdfs:range echr:PartialDate ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasInactivityEndDate a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has inactivity end date"@en ;
+    skos:definition "Date of the first procedural step after dormancy."@en ;
+    rdfs:domain echr:InactivityPeriod ;
+    rdfs:range echr:PartialDate ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasAdjournmentDate a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has adjournment date"@en ;
+    skos:definition "Date of the hearing that was adjourned."@en ;
+    rdfs:domain echr:Adjournment ;
+    rdfs:range echr:PartialDate ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasResumptionDate a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has resumption date"@en ;
+    skos:definition "Date to which the adjourned hearing was postponed."@en ;
+    rdfs:domain echr:Adjournment ;
+    rdfs:range echr:PartialDate ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+# Case Document Metadata
+echr:hasHudocId a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has HUDOC id"@en ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasApplicationNumber a owl:DatatypeProperty ;
+    rdfs:label "has application number"@en ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasCaseName a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has case name"@en ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasRespondentState a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has respondent state"@en ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasJudgmentDate a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has judgment date"@en ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:PartialDate ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+################################################################
+# 5. Evidence Anchoring
+################################################################
+
+echr:hasSupportingQuote a owl:DatatypeProperty ;
+    rdfs:label "has supporting quote"@en ;
+    skos:definition "Verbatim text snippet supporting the extracted entity."@en ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasSourceParagraph a owl:DatatypeProperty ;
+    rdfs:label "has source paragraph"@en ;
+    skos:definition "The numbered paragraph of the judgment from which the entity was read."@en ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasExtractionNote a owl:DatatypeProperty ;
+    rdfs:label "has extraction note"@en ;
+    skos:definition "A short note explaining ambiguities or approximate dates."@en ;
+    rdfs:subPropertyOf skos:note ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+################################################################
+# 6. Controlled Vocabularies
+################################################################
+
+#---------------------------------------------------------------
+# 6.1 Instance Level
+#---------------------------------------------------------------
+
+echr:LevelInvestigative a echr:InstanceLevel ;
+    skos:prefLabel "investigative or pre-trial"@en ;
+    skos:inScheme echr:InstanceLevelScheme .
+
+echr:LevelAdministrativeReview a echr:InstanceLevel ;
+    skos:prefLabel "administrative or quasi-judicial review"@en ;
+    skos:inScheme echr:InstanceLevelScheme .
+
+echr:LevelFirstInstance a echr:InstanceLevel ;
+    skos:prefLabel "first instance"@en ;
+    skos:inScheme echr:InstanceLevelScheme .
+
+echr:LevelAppeal a echr:InstanceLevel ;
+    skos:prefLabel "appeal"@en ;
+    skos:inScheme echr:InstanceLevelScheme .
+
+echr:LevelCassation a echr:InstanceLevel ;
+    skos:prefLabel "cassation or supreme court"@en ;
+    skos:inScheme echr:InstanceLevelScheme .
+
+echr:LevelConstitutional a echr:InstanceLevel ;
+    skos:prefLabel "constitutional court"@en ;
+    skos:inScheme echr:InstanceLevelScheme .
+
+echr:LevelSupervisoryReview a echr:InstanceLevel ;
+    skos:prefLabel "supervisory review"@en ;
+    skos:inScheme echr:InstanceLevelScheme .
+
+echr:LevelReopening a echr:InstanceLevel ;
+    skos:prefLabel "reopening or retrial"@en ;
+    skos:inScheme echr:InstanceLevelScheme .
+
+echr:LevelEnforcement a echr:InstanceLevel ;
+    skos:prefLabel "enforcement"@en ;
+    skos:inScheme echr:InstanceLevelScheme .
+
+echr:LevelUnknown a echr:InstanceLevel ;
+    skos:prefLabel "unknown"@en ;
+    skos:inScheme echr:InstanceLevelScheme .
+
+echr:InstanceLevelScheme a skos:ConceptScheme ;
+    rdfs:label "Instance level vocabulary"@en .
+
+echr:InstanceLevel owl:equivalentClass [ a owl:Class ;
+    owl:oneOf ( echr:LevelInvestigative echr:LevelAdministrativeReview echr:LevelFirstInstance
+        echr:LevelAppeal echr:LevelCassation echr:LevelConstitutional echr:LevelSupervisoryReview
+        echr:LevelReopening echr:LevelEnforcement echr:LevelUnknown ) ] .
+
+#---------------------------------------------------------------
+# 6.2 Proceeding Type (Consolidated)
+#---------------------------------------------------------------
+
+echr:TypeCriminal a echr:ProceedingType ;
+    skos:prefLabel "criminal"@en ;
+    skos:inScheme echr:ProceedingTypeScheme .
+
+echr:TypeCivil a echr:ProceedingType ;
+    skos:prefLabel "civil (including commercial, labour, family, property)"@en ;
+    skos:inScheme echr:ProceedingTypeScheme .
+
+echr:TypeAdministrative a echr:ProceedingType ;
+    skos:prefLabel "administrative (including tax, regulatory, asylum)"@en ;
+    skos:inScheme echr:ProceedingTypeScheme .
+
+echr:TypeConstitutional a echr:ProceedingType ;
+    skos:prefLabel "constitutional"@en ;
+    skos:inScheme echr:ProceedingTypeScheme .
+
+echr:TypeDisciplinary a echr:ProceedingType ;
+    skos:prefLabel "disciplinary"@en ;
+    skos:inScheme echr:ProceedingTypeScheme .
+
+echr:TypeOther a echr:ProceedingType ;
+    skos:prefLabel "other"@en ;
+    skos:inScheme echr:ProceedingTypeScheme .
+
+echr:TypeUnknown a echr:ProceedingType ;
+    skos:prefLabel "unknown"@en ;
+    skos:inScheme echr:ProceedingTypeScheme .
+
+echr:ProceedingTypeScheme a skos:ConceptScheme ;
+    rdfs:label "Proceeding type vocabulary"@en .
+
+echr:ProceedingType owl:equivalentClass [ a owl:Class ;
+    owl:oneOf ( echr:TypeCriminal echr:TypeCivil echr:TypeAdministrative echr:TypeConstitutional
+        echr:TypeDisciplinary echr:TypeOther echr:TypeUnknown ) ] .
+
+#---------------------------------------------------------------
+# 6.3 Proceeding Outcome
+#---------------------------------------------------------------
+
+echr:OutcomeConviction a echr:ProceedingOutcome ;
+    skos:prefLabel "conviction"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
+echr:OutcomeAcquittal a echr:ProceedingOutcome ;
+    skos:prefLabel "acquittal"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
+echr:OutcomeClaimGranted a echr:ProceedingOutcome ;
+    skos:prefLabel "claim granted"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
+echr:OutcomeClaimDismissed a echr:ProceedingOutcome ;
+    skos:prefLabel "claim dismissed"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
+echr:OutcomeClaimPartlyGranted a echr:ProceedingOutcome ;
+    skos:prefLabel "claim partly granted"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
+echr:OutcomeDeclaredInadmissible a echr:ProceedingOutcome ;
+    skos:prefLabel "declared inadmissible"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
+echr:OutcomeRefusedExamination a echr:ProceedingOutcome ;
+    skos:prefLabel "examination refused"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
+echr:OutcomeDiscontinued a echr:ProceedingOutcome ;
+    skos:prefLabel "discontinued"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
+echr:OutcomeSettled a echr:ProceedingOutcome ;
+    skos:prefLabel "settled"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
+echr:OutcomeQuashedAndRemitted a echr:ProceedingOutcome ;
+    skos:prefLabel "quashed and remitted"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
+echr:OutcomeUpheldOnAppeal a echr:ProceedingOutcome ;
+    skos:prefLabel "decision below upheld"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
+echr:OutcomeMeasureImposed a echr:ProceedingOutcome ;
+    skos:prefLabel "measure imposed"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
+echr:OutcomeOther a echr:ProceedingOutcome ;
+    skos:prefLabel "other"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
+echr:OutcomeUnknown a echr:ProceedingOutcome ;
+    skos:prefLabel "unknown"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
+echr:ProceedingOutcomeScheme a skos:ConceptScheme ;
+    rdfs:label "Proceeding outcome vocabulary"@en .
+
+echr:ProceedingOutcome owl:equivalentClass [ a owl:Class ;
+    owl:oneOf ( echr:OutcomeConviction echr:OutcomeAcquittal echr:OutcomeClaimGranted
+        echr:OutcomeClaimDismissed echr:OutcomeClaimPartlyGranted echr:OutcomeDeclaredInadmissible
+        echr:OutcomeRefusedExamination echr:OutcomeDiscontinued echr:OutcomeSettled
+        echr:OutcomeQuashedAndRemitted echr:OutcomeUpheldOnAppeal echr:OutcomeMeasureImposed
+        echr:OutcomeOther echr:OutcomeUnknown ) ] .
+
+#---------------------------------------------------------------
+# 6.4 Outcome Direction
+#---------------------------------------------------------------
+
+echr:DirectionFavourableToApplicant a echr:OutcomeDirection ;
+    skos:prefLabel "favourable to the applicant"@en ;
+    skos:inScheme echr:OutcomeDirectionScheme .
+
+echr:DirectionUnfavourableToApplicant a echr:OutcomeDirection ;
+    skos:prefLabel "unfavourable to the applicant"@en ;
+    skos:inScheme echr:OutcomeDirectionScheme .
+
+echr:DirectionMixed a echr:OutcomeDirection ;
+    skos:prefLabel "mixed"@en ;
+    skos:inScheme echr:OutcomeDirectionScheme .
+
+echr:DirectionUnknown a echr:OutcomeDirection ;
+    skos:prefLabel "unknown"@en ;
+    skos:inScheme echr:OutcomeDirectionScheme .
+
+echr:OutcomeDirectionScheme a skos:ConceptScheme ;
+    rdfs:label "Outcome direction vocabulary"@en .
+
+echr:OutcomeDirection owl:equivalentClass [ a owl:Class ;
+    owl:oneOf ( echr:DirectionFavourableToApplicant echr:DirectionUnfavourableToApplicant
+        echr:DirectionMixed echr:DirectionUnknown ) ] .
+
+#---------------------------------------------------------------
+# 6.5 Authority Kind
+#---------------------------------------------------------------
+
+echr:AuthorityJudicial a echr:AuthorityKind ;
+    skos:prefLabel "judicial"@en ;
+    skos:inScheme echr:AuthorityKindScheme .
+
+echr:AuthorityProsecutorial a echr:AuthorityKind ;
+    skos:prefLabel "prosecutorial or investigative"@en ;
+    skos:inScheme echr:AuthorityKindScheme .
+
+echr:AuthorityAdministrative a echr:AuthorityKind ;
+    skos:prefLabel "administrative"@en ;
+    skos:inScheme echr:AuthorityKindScheme .
+
+echr:AuthorityDisciplinary a echr:AuthorityKind ;
+    skos:prefLabel "disciplinary or professional"@en ;
+    skos:inScheme echr:AuthorityKindScheme .
+
+echr:AuthorityUnknown a echr:AuthorityKind ;
+    skos:prefLabel "unknown"@en ;
+    skos:inScheme echr:AuthorityKindScheme .
+
+echr:AuthorityKindScheme a skos:ConceptScheme ;
+    rdfs:label "Authority kind vocabulary"@en .
+
+echr:AuthorityKind owl:equivalentClass [ a owl:Class ;
+    owl:oneOf ( echr:AuthorityJudicial echr:AuthorityProsecutorial echr:AuthorityAdministrative
+        echr:AuthorityDisciplinary echr:AuthorityUnknown ) ] .
+
+#---------------------------------------------------------------
+# 6.6 Delay Attribution
+#---------------------------------------------------------------
+
+echr:DelayAttributedToAuthorities a echr:DelayAttribution ;
+    skos:prefLabel "attributed to the authorities"@en ;
+    skos:inScheme echr:DelayAttributionScheme .
+
+echr:DelayAttributedToApplicant a echr:DelayAttribution ;
+    skos:prefLabel "attributed to the applicant"@en ;
+    skos:inScheme echr:DelayAttributionScheme .
+
+echr:DelayAttributedToComplexity a echr:DelayAttribution ;
+    skos:prefLabel "attributed to the complexity of the case"@en ;
+    skos:inScheme echr:DelayAttributionScheme .
+
+echr:DelayUnattributed a echr:DelayAttribution ;
+    skos:prefLabel "unattributed"@en ;
+    skos:inScheme echr:DelayAttributionScheme .
+
+echr:DelayAttributionScheme a skos:ConceptScheme ;
+    rdfs:label "Delay attribution vocabulary"@en .
+
+echr:DelayAttribution owl:equivalentClass [ a owl:Class ;
+    owl:oneOf ( echr:DelayAttributedToAuthorities echr:DelayAttributedToApplicant
+        echr:DelayAttributedToComplexity echr:DelayUnattributed ) ] .

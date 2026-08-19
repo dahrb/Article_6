@@ -1,0 +1,154 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/1e1ea52a2393/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/1e1ea52a2393> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:4"^^xsd:string .
+
+doc:case_document_1 a echr:CaseDocument ;
+    echr:hasApplicant doc:natural_person_1 ;
+    echr:hasDomesticProceeding doc:domestic_proceeding_1,
+        doc:domestic_proceeding_2 .
+
+doc:domestic_proceeding_2 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:domestic_proceeding_1,
+        doc:domestic_proceeding_3 ;
+    echr:hasCourt doc:domestic_authority_1 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance,
+        echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeUnknown ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasPreTrialDetention doc:medical_evidence_1,
+        doc:pre_trial_detention_1 ;
+    echr:hasProceedingStartDate "1995-04-05"^^xsd:date,
+        "1995-05-15"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "18"^^xsd:string,
+        "29"^^xsd:string ;
+    echr:hasStatedDuration "P2D"^^xsd:duration ;
+    echr:hasSupportingQuote "On 15 May 1995 the applicant lodged, through his lawyer, a written criminal complaint ( kazenska ovadba ) with the Slovenj Gradec Police against unidentified police officers for causing minor bodily harm ( lahka telesna poškodba ) and an unlawful deprivation of liberty ( protipraven odvzem prostosti )."^^xsd:string,
+        "They subsequently took him to the police station on suspicion of committing the criminal offence of \"obstructing an official in the course of his duties\" ( preprečitev uradnega dejanja uradni osebi ). The applicant was released after questioning."^^xsd:string ;
+    echr:raisesArticle6Issue doc:article6_issue_1 .
+
+doc:domestic_proceeding_3 a echr:DomesticProceeding ;
+    echr:followsProceeding doc:domestic_proceeding_1 ;
+    echr:hasCourt doc:domestic_authority_1 ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeUnknown ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasProceedingStartDate "1995-04-07"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "28"^^xsd:string ;
+    echr:hasSupportingQuote "On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint against the officers of the Special Unit concerning the events of 5 April 1995."^^xsd:string .
+
+doc:judicial_officer_1 a echr:JudicialOfficer ;
+    echr:hasPersonName "D.P."^^xsd:string ;
+    echr:hasSourceParagraph "21"^^xsd:string ;
+    echr:hasSupportingQuote "The judgment of 12 February 2001 issued in the proceedings instituted against the applicant (see paragraph 48), established that three officers of the Slovenj Gradec Police, D.P., J.K. and M.F., who were in the car which stopped the applicant, received information about the location of a \"white Golf\", believed to be being driven by the applicant, and an order to stop it."^^xsd:string .
+
+doc:judicial_officer_2 a echr:JudicialOfficer ;
+    echr:hasPersonName "J.K."^^xsd:string ;
+    echr:hasSourceParagraph "21"^^xsd:string ;
+    echr:hasSupportingQuote "The judgment of 12 February 2001 issued in the proceedings instituted against the applicant (see paragraph 48), established that three officers of the Slovenj Gradec Police, D.P., J.K. and M.F., who were in the car which stopped the applicant, received information about the location of a \"white Golf\", believed to be being driven by the applicant, and an order to stop it."^^xsd:string .
+
+doc:judicial_officer_3 a echr:JudicialOfficer ;
+    echr:hasPersonName "M.F."^^xsd:string ;
+    echr:hasSourceParagraph "21"^^xsd:string ;
+    echr:hasSupportingQuote "The judgment of 12 February 2001 issued in the proceedings instituted against the applicant (see paragraph 48), established that three officers of the Slovenj Gradec Police, D.P., J.K. and M.F., who were in the car which stopped the applicant, received information about the location of a \"white Golf\", believed to be being driven by the applicant, and an order to stop it."^^xsd:string .
+
+doc:medical_evidence_1 a echr:PreTrialDetention ;
+    echr:hasCustodialMeasure echr:MeasureOther ;
+    echr:hasDetainee doc:natural_person_1 ;
+    echr:hasDetentionEndDate "1995-04-07"^^xsd:date ;
+    echr:hasDetentionStartDate "1995-04-05"^^xsd:date ;
+    echr:hasSourceParagraph "26"^^xsd:string ;
+    echr:hasSupportingQuote "On 6 April 1995, soon after his release, the applicant was admitted to the Slovenj Gradec General Hospital where he stayed until 7 p.m."^^xsd:string .
+
+doc:article6_issue_1 a echr:Article6Issue ;
+    echr:affectsParty doc:natural_person_1,
+        doc:party_1 ;
+    echr:hasDelayAttribution echr:DelayAttributedToAuthorities ;
+    echr:hasSourceParagraph "17"^^xsd:string,
+        "34"^^xsd:string ;
+    echr:hasSupportingQuote "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."^^xsd:string,
+        "When the driver, who was later identified as the applicant, stopped the car, an unspecified number of the Special Unit’s officers confronted him and informed him that this was a police procedure."^^xsd:string .
+
+doc:party_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicant"^^xsd:string ;
+    echr:hasName "the applicant"^^xsd:string ;
+    echr:hasPersonName "the applicant"^^xsd:string ;
+    echr:isAnonymised true .
+
+doc:pre_trial_detention_1 a echr:PreTrialDetention ;
+    echr:hasCustodialMeasure echr:MeasurePoliceCustody ;
+    echr:hasDetainee doc:natural_person_1 ;
+    echr:hasDetentionEndDate "1995-04-05"^^xsd:date,
+        "1995-04-06"^^xsd:date ;
+    echr:hasDetentionStartDate "1995-04-05"^^xsd:date ;
+    echr:hasSourceParagraph "12"^^xsd:string,
+        "18"^^xsd:string ;
+    echr:hasSupportingQuote "He was brought to the Slovenj Gradec Police Station... released on 6 April 1995 at approximately half past midnight."^^xsd:string,
+        "They subsequently took him to the police station on suspicion of committing the criminal offence of \"obstructing an official in the course of his duties\" ( preprečitev uradnega dejanja uradni osebi ). The applicant was released after questioning."^^xsd:string .
+
+doc:domestic_authority_1 a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec District Public Prosecutor’s Office"^^xsd:string ;
+    echr:decidedProceeding doc:domestic_proceeding_1 ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Slovenj Gradec District Public Prosecutor’s Office"^^xsd:string,
+        "Slovenj Gradec Police"^^xsd:string ;
+    echr:hasName "Slovenj Gradec District Public Prosecutor’s Office"^^xsd:string ;
+    echr:hasSourceParagraph "12"^^xsd:string,
+        "21"^^xsd:string ;
+    echr:hasSupportingQuote "The judgment of 12 February 2001 issued in the proceedings instituted against the applicant (see paragraph 48), established that three officers of the Slovenj Gradec Police, D.P., J.K. and M.F., who were in the car which stopped the applicant, received information about the location of a \"white Golf\", believed to be being driven by the applicant, and an order to stop it."^^xsd:string,
+        "brought to the Slovenj Gradec Police Station"^^xsd:string .
+
+doc:participation_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:party_1 .
+
+doc:domestic_proceeding_1 a echr:DomesticProceeding ;
+    echr:hasCourt doc:domestic_authority_1 ;
+    echr:hasDecisionDate "1995-04-06"^^xsd:date,
+        "1997-01-17"^^xsd:date,
+        "2001-02-12"^^xsd:date ;
+    echr:hasExtractionNote "Duration inferred from proceeding start (1995) to decision date (2001); text states no explicit duration but implies a multi-year process from 1995 to 2001."^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeClaimDismissed,
+        echr:OutcomeUnknown ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant,
+        echr:DirectionUnknown ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasPreTrialDetention doc:pre_trial_detention_1 ;
+    echr:hasProceedingStartDate "1995-04-05"^^xsd:date,
+        "2001-02-12"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSittingJudge doc:judicial_officer_1,
+        doc:judicial_officer_2,
+        doc:judicial_officer_3 ;
+    echr:hasSourceParagraph "12"^^xsd:string,
+        "21"^^xsd:string,
+        "34"^^xsd:string ;
+    echr:hasStatedDuration "P6Y2M"^^xsd:duration ;
+    echr:hasSupportingQuote "He was brought to the Slovenj Gradec Police Station for having allegedly failed to comply with the police orders. He was questioned by the police and released on 6 April 1995 at approximately half past midnight."^^xsd:string,
+        "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."^^xsd:string,
+        "The judgment of 12 February 2001 issued in the proceedings instituted against the applicant (see paragraph 48), established that three officers of the Slovenj Gradec Police, D.P., J.K. and M.F., who were in the car which stopped the applicant, received information about the location of a \"white Golf\", believed to be being driven by the applicant, and an order to stop it."^^xsd:string ;
+    echr:raisesArticle6Issue doc:article6_issue_1 .
+
+doc:natural_person_1 a echr:NaturalPerson ;
+    echr:hasBirthYear "1961"^^xsd:gYear ;
+    echr:hasHonorific "Mr"^^xsd:string,
+        "the"^^xsd:string ;
+    echr:hasPersonName "Mr Aleksander Matko"^^xsd:string,
+        "the applicant"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string,
+        "17"^^xsd:string ;
+    echr:hasSupportingQuote "When the driver, who was later identified as the applicant, stopped the car, an unspecified number of the Special Unit’s officers confronted him and informed him that this was a police procedure."^^xsd:string,
+        "by a Slovenian national, Mr Aleksander Matko (\"the applicant\")"^^xsd:string ;
+    echr:isAnonymised false .
+

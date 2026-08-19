@@ -1,0 +1,137 @@
+{
+  "source": "results/experiment_ttl_20260818_161537/qwen3/repaired/input.L2.facts.ttl",
+  "operations": [
+    {
+      "finding": "domestic_proceeding_1 and domestic_proceeding_2 both have conflicting multi-values for hasInstanceLevel and hasProceedingType, and the facts clearly describe two distinct proceedings in a chain: (1) the German labour court's refusal to examine the claim on immunity grounds (1995-09-13), followed by (2) an appeal to the same court which again refused examination (1998-03-16). The appeal proceeding (domestic_proceeding_2) must be typed as LevelAppeal and TypeCivil, and the first instance (domestic_proceeding_1) as LevelFirstInstance and TypeCivil. The multi-values are artifacts of incorrect inference and must be reduced to single values consistent with the narrative.",
+      "rationale": "The facts describe a clear domestic chain: on 13 September 1995, the German labour court refused to examine the applicants\u2019 claim under the Provision of Labour (Temporary Staff) Act because ESA claimed immunity (doc:domestic_proceeding_1). Later, on 16 March 1998, the same court, in a subsequent proceeding, again refused examination \u2014 this time explicitly referring to its prior decision in Waite and Kennedy (doc:domestic_proceeding_2). This is a sequential appeal, not parallel avenues. Therefore, domestic_proceeding_1 is first instance, domestic_proceeding_2 is appeal. Both are civil proceedings under German labour law (the claim was based on the Provision of Labour Act). The multi-values violate functional property constraints and contradict the facts' narrative. We remove the incorrect multi-values and retain only the single, contextually correct values.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_1",
+      "predicate": "echr:hasInstanceLevel",
+      "object": "echr:LevelAdministrativeReview",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceeding_1 and domestic_proceeding_2 both have conflicting multi-values for hasInstanceLevel and hasProceedingType, and the facts clearly describe two distinct proceedings in a chain: (1) the German labour court's refusal to examine the claim on immunity grounds (1995-09-13), followed by (2) an appeal to the same court which again refused examination (1998-03-16). The appeal proceeding (domestic_proceeding_2) must be typed as LevelAppeal and TypeCivil, and the first instance (domestic_proceeding_1) as LevelFirstInstance and TypeCivil. The multi-values are artifacts of incorrect inference and must be reduced to single values consistent with the narrative.",
+      "rationale": "The facts describe a clear domestic chain: on 13 September 1995, the German labour court refused to examine the applicants\u2019 claim under the Provision of Labour (Temporary Staff) Act because ESA claimed immunity (doc:domestic_proceeding_1). Later, on 16 March 1998, the same court, in a subsequent proceeding, again refused examination \u2014 this time explicitly referring to its prior decision in Waite and Kennedy (doc:domestic_proceeding_2). This is a sequential appeal, not parallel avenues. Therefore, domestic_proceeding_1 is first instance, domestic_proceeding_2 is appeal. Both are civil proceedings under German labour law (the claim was based on the Provision of Labour Act). The multi-values violate functional property constraints and contradict the facts' narrative. We remove the incorrect multi-values and retain only the single, contextually correct values.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_1",
+      "predicate": "echr:hasInstanceLevel",
+      "object": "echr:LevelInvestigative",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceeding_1 and domestic_proceeding_2 both have conflicting multi-values for hasInstanceLevel and hasProceedingType, and the facts clearly describe two distinct proceedings in a chain: (1) the German labour court's refusal to examine the claim on immunity grounds (1995-09-13), followed by (2) an appeal to the same court which again refused examination (1998-03-16). The appeal proceeding (domestic_proceeding_2) must be typed as LevelAppeal and TypeCivil, and the first instance (domestic_proceeding_1) as LevelFirstInstance and TypeCivil. The multi-values are artifacts of incorrect inference and must be reduced to single values consistent with the narrative.",
+      "rationale": "The facts describe a clear domestic chain: on 13 September 1995, the German labour court refused to examine the applicants\u2019 claim under the Provision of Labour (Temporary Staff) Act because ESA claimed immunity (doc:domestic_proceeding_1). Later, on 16 March 1998, the same court, in a subsequent proceeding, again refused examination \u2014 this time explicitly referring to its prior decision in Waite and Kennedy (doc:domestic_proceeding_2). This is a sequential appeal, not parallel avenues. Therefore, domestic_proceeding_1 is first instance, domestic_proceeding_2 is appeal. Both are civil proceedings under German labour law (the claim was based on the Provision of Labour Act). The multi-values violate functional property constraints and contradict the facts' narrative. We remove the incorrect multi-values and retain only the single, contextually correct values.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_1",
+      "predicate": "echr:hasProceedingType",
+      "object": "echr:TypeAdministrative",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceeding_1 and domestic_proceeding_2 both have conflicting multi-values for hasInstanceLevel and hasProceedingType, and the facts clearly describe two distinct proceedings in a chain: (1) the German labour court's refusal to examine the claim on immunity grounds (1995-09-13), followed by (2) an appeal to the same court which again refused examination (1998-03-16). The appeal proceeding (domestic_proceeding_2) must be typed as LevelAppeal and TypeCivil, and the first instance (domestic_proceeding_1) as LevelFirstInstance and TypeCivil. The multi-values are artifacts of incorrect inference and must be reduced to single values consistent with the narrative.",
+      "rationale": "The facts describe a clear domestic chain: on 13 September 1995, the German labour court refused to examine the applicants\u2019 claim under the Provision of Labour (Temporary Staff) Act because ESA claimed immunity (doc:domestic_proceeding_1). Later, on 16 March 1998, the same court, in a subsequent proceeding, again refused examination \u2014 this time explicitly referring to its prior decision in Waite and Kennedy (doc:domestic_proceeding_2). This is a sequential appeal, not parallel avenues. Therefore, domestic_proceeding_1 is first instance, domestic_proceeding_2 is appeal. Both are civil proceedings under German labour law (the claim was based on the Provision of Labour Act). The multi-values violate functional property constraints and contradict the facts' narrative. We remove the incorrect multi-values and retain only the single, contextually correct values.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_1",
+      "predicate": "echr:hasProceedingType",
+      "object": "echr:TypeCriminal",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceeding_1 and domestic_proceeding_2 both have conflicting multi-values for hasInstanceLevel and hasProceedingType, and the facts clearly describe two distinct proceedings in a chain: (1) the German labour court's refusal to examine the claim on immunity grounds (1995-09-13), followed by (2) an appeal to the same court which again refused examination (1998-03-16). The appeal proceeding (domestic_proceeding_2) must be typed as LevelAppeal and TypeCivil, and the first instance (domestic_proceeding_1) as LevelFirstInstance and TypeCivil. The multi-values are artifacts of incorrect inference and must be reduced to single values consistent with the narrative.",
+      "rationale": "The facts describe a clear domestic chain: on 13 September 1995, the German labour court refused to examine the applicants\u2019 claim under the Provision of Labour (Temporary Staff) Act because ESA claimed immunity (doc:domestic_proceeding_1). Later, on 16 March 1998, the same court, in a subsequent proceeding, again refused examination \u2014 this time explicitly referring to its prior decision in Waite and Kennedy (doc:domestic_proceeding_2). This is a sequential appeal, not parallel avenues. Therefore, domestic_proceeding_1 is first instance, domestic_proceeding_2 is appeal. Both are civil proceedings under German labour law (the claim was based on the Provision of Labour Act). The multi-values violate functional property constraints and contradict the facts' narrative. We remove the incorrect multi-values and retain only the single, contextually correct values.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_1",
+      "predicate": "echr:hasInstanceLevel",
+      "object": "echr:LevelFirstInstance",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceeding_1 and domestic_proceeding_2 both have conflicting multi-values for hasInstanceLevel and hasProceedingType, and the facts clearly describe two distinct proceedings in a chain: (1) the German labour court's refusal to examine the claim on immunity grounds (1995-09-13), followed by (2) an appeal to the same court which again refused examination (1998-03-16). The appeal proceeding (domestic_proceeding_2) must be typed as LevelAppeal and TypeCivil, and the first instance (domestic_proceeding_1) as LevelFirstInstance and TypeCivil. The multi-values are artifacts of incorrect inference and must be reduced to single values consistent with the narrative.",
+      "rationale": "The facts describe a clear domestic chain: on 13 September 1995, the German labour court refused to examine the applicants\u2019 claim under the Provision of Labour (Temporary Staff) Act because ESA claimed immunity (doc:domestic_proceeding_1). Later, on 16 March 1998, the same court, in a subsequent proceeding, again refused examination \u2014 this time explicitly referring to its prior decision in Waite and Kennedy (doc:domestic_proceeding_2). This is a sequential appeal, not parallel avenues. Therefore, domestic_proceeding_1 is first instance, domestic_proceeding_2 is appeal. Both are civil proceedings under German labour law (the claim was based on the Provision of Labour Act). The multi-values violate functional property constraints and contradict the facts' narrative. We remove the incorrect multi-values and retain only the single, contextually correct values.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_1",
+      "predicate": "echr:hasProceedingType",
+      "object": "echr:TypeCivil",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceeding_1 and domestic_proceeding_2 both have conflicting multi-values for hasInstanceLevel and hasProceedingType, and the facts clearly describe two distinct proceedings in a chain: (1) the German labour court's refusal to examine the claim on immunity grounds (1995-09-13), followed by (2) an appeal to the same court which again refused examination (1998-03-16). The appeal proceeding (domestic_proceeding_2) must be typed as LevelAppeal and TypeCivil, and the first instance (domestic_proceeding_1) as LevelFirstInstance and TypeCivil. The multi-values are artifacts of incorrect inference and must be reduced to single values consistent with the narrative.",
+      "rationale": "The facts describe a clear domestic chain: on 13 September 1995, the German labour court refused to examine the applicants\u2019 claim under the Provision of Labour (Temporary Staff) Act because ESA claimed immunity (doc:domestic_proceeding_1). Later, on 16 March 1998, the same court, in a subsequent proceeding, again refused examination \u2014 this time explicitly referring to its prior decision in Waite and Kennedy (doc:domestic_proceeding_2). This is a sequential appeal, not parallel avenues. Therefore, domestic_proceeding_1 is first instance, domestic_proceeding_2 is appeal. Both are civil proceedings under German labour law (the claim was based on the Provision of Labour Act). The multi-values violate functional property constraints and contradict the facts' narrative. We remove the incorrect multi-values and retain only the single, contextually correct values.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_2",
+      "predicate": "echr:hasInstanceLevel",
+      "object": "echr:LevelFirstInstance",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceeding_1 and domestic_proceeding_2 both have conflicting multi-values for hasInstanceLevel and hasProceedingType, and the facts clearly describe two distinct proceedings in a chain: (1) the German labour court's refusal to examine the claim on immunity grounds (1995-09-13), followed by (2) an appeal to the same court which again refused examination (1998-03-16). The appeal proceeding (domestic_proceeding_2) must be typed as LevelAppeal and TypeCivil, and the first instance (domestic_proceeding_1) as LevelFirstInstance and TypeCivil. The multi-values are artifacts of incorrect inference and must be reduced to single values consistent with the narrative.",
+      "rationale": "The facts describe a clear domestic chain: on 13 September 1995, the German labour court refused to examine the applicants\u2019 claim under the Provision of Labour (Temporary Staff) Act because ESA claimed immunity (doc:domestic_proceeding_1). Later, on 16 March 1998, the same court, in a subsequent proceeding, again refused examination \u2014 this time explicitly referring to its prior decision in Waite and Kennedy (doc:domestic_proceeding_2). This is a sequential appeal, not parallel avenues. Therefore, domestic_proceeding_1 is first instance, domestic_proceeding_2 is appeal. Both are civil proceedings under German labour law (the claim was based on the Provision of Labour Act). The multi-values violate functional property constraints and contradict the facts' narrative. We remove the incorrect multi-values and retain only the single, contextually correct values.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_2",
+      "predicate": "echr:hasProceedingType",
+      "object": "echr:TypeCriminal",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceeding_1 and domestic_proceeding_2 both have conflicting multi-values for hasInstanceLevel and hasProceedingType, and the facts clearly describe two distinct proceedings in a chain: (1) the German labour court's refusal to examine the claim on immunity grounds (1995-09-13), followed by (2) an appeal to the same court which again refused examination (1998-03-16). The appeal proceeding (domestic_proceeding_2) must be typed as LevelAppeal and TypeCivil, and the first instance (domestic_proceeding_1) as LevelFirstInstance and TypeCivil. The multi-values are artifacts of incorrect inference and must be reduced to single values consistent with the narrative.",
+      "rationale": "The facts describe a clear domestic chain: on 13 September 1995, the German labour court refused to examine the applicants\u2019 claim under the Provision of Labour (Temporary Staff) Act because ESA claimed immunity (doc:domestic_proceeding_1). Later, on 16 March 1998, the same court, in a subsequent proceeding, again refused examination \u2014 this time explicitly referring to its prior decision in Waite and Kennedy (doc:domestic_proceeding_2). This is a sequential appeal, not parallel avenues. Therefore, domestic_proceeding_1 is first instance, domestic_proceeding_2 is appeal. Both are civil proceedings under German labour law (the claim was based on the Provision of Labour Act). The multi-values violate functional property constraints and contradict the facts' narrative. We remove the incorrect multi-values and retain only the single, contextually correct values.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_2",
+      "predicate": "echr:hasInstanceLevel",
+      "object": "echr:LevelAppeal",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "domestic_proceeding_1 and domestic_proceeding_2 both have conflicting multi-values for hasInstanceLevel and hasProceedingType, and the facts clearly describe two distinct proceedings in a chain: (1) the German labour court's refusal to examine the claim on immunity grounds (1995-09-13), followed by (2) an appeal to the same court which again refused examination (1998-03-16). The appeal proceeding (domestic_proceeding_2) must be typed as LevelAppeal and TypeCivil, and the first instance (domestic_proceeding_1) as LevelFirstInstance and TypeCivil. The multi-values are artifacts of incorrect inference and must be reduced to single values consistent with the narrative.",
+      "rationale": "The facts describe a clear domestic chain: on 13 September 1995, the German labour court refused to examine the applicants\u2019 claim under the Provision of Labour (Temporary Staff) Act because ESA claimed immunity (doc:domestic_proceeding_1). Later, on 16 March 1998, the same court, in a subsequent proceeding, again refused examination \u2014 this time explicitly referring to its prior decision in Waite and Kennedy (doc:domestic_proceeding_2). This is a sequential appeal, not parallel avenues. Therefore, domestic_proceeding_1 is first instance, domestic_proceeding_2 is appeal. Both are civil proceedings under German labour law (the claim was based on the Provision of Labour Act). The multi-values violate functional property constraints and contradict the facts' narrative. We remove the incorrect multi-values and retain only the single, contextually correct values.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_2",
+      "predicate": "echr:hasProceedingType",
+      "object": "echr:TypeCivil",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "doc:domestic_proceeding_2 is the final domestic decision before the Strasbourg application \u2014 it is the last decision the facts present as having exhausted domestic remedies. The applicant\u2019s case was refused examination by the German labour court on 16 March 1998, and the judgment explicitly states that the application was referred to the Court by the Commission on that date, confirming no further domestic recourse was available.",
+      "rationale": "The judgment states: 'The case was referred to the Court... by the European Commission of Human Rights... on 16 March 1998...' \u2014 this is the date the final domestic decision (doc:domestic_proceeding_2) was taken and the Strasbourg application was lodged. The prior decision (doc:domestic_proceeding_1) was not final in the sense of exhausting remedies \u2014 the applicant appealed it, leading to doc:domestic_proceeding_2. Only doc:domestic_proceeding_2 is the last step the facts present as closing the domestic path. Marking it as isFinalDomesticDecision true satisfies the requirement that exactly one proceeding carry this flag.",
+      "action": "add",
+      "subject": "doc:domestic_proceeding_2",
+      "predicate": "echr:isFinalDomesticDecision",
+      "object": "true",
+      "object_is_literal": true,
+      "datatype": "xsd:boolean",
+      "lang": null,
+      "status": "applied"
+    }
+  ]
+}

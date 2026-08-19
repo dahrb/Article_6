@@ -1,0 +1,232 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/793e920a37d4/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/793e920a37d4> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:2"^^xsd:string .
+
+doc:companyT a echr:Party ;
+    rdfs:label "company T."^^xsd:string ;
+    echr:hasSourceParagraph "11"^^xsd:string ;
+    echr:hasSupportingQuote "the French company T."^^xsd:string .
+
+doc:german_court_proceedings_1 a echr:DomesticProceeding ;
+    rdfs:label "German court proceedings against ESA"^^xsd:string ;
+    echr:hasCourt doc:german_courts_1 ;
+    echr:hasInstanceLevel echr:LevelUnknown ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1,
+        doc:participation_2 ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "53"^^xsd:string ;
+    echr:hasSupportingQuote "the rule of immunity from jurisdiction, which the German courts applied to ESA in the present case"^^xsd:string .
+
+doc:issue_access_to_court_1 a echr:Article6Issue ;
+    rdfs:label "denial of access to a court"^^xsd:string ;
+    echr:hasSourceParagraph "33"^^xsd:string ;
+    echr:hasSupportingQuote "complained that they had been denied access to a court for a determination of their dispute with ESA"^^xsd:string ;
+    echr:issueArisesIn doc:proceeding_labour_court_1 .
+
+doc:issue_immunity_1 a echr:Article6Issue ;
+    rdfs:label "Lack of access to court due to immunity from jurisdiction"^^xsd:string ;
+    echr:hasSourceParagraph "45"^^xsd:string,
+        "46"^^xsd:string,
+        "48"^^xsd:string ;
+    echr:hasSupportingQuote "the German labour court regarded the applicants’ action... inadmissible as the defendant, ESA, had claimed immunity from jurisdiction"^^xsd:string ;
+    echr:issueArisesIn doc:proceeding_1 .
+
+doc:participationBeerEsa a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSourceParagraph "13"^^xsd:string ;
+    echr:participatingParty doc:karlheinzBeer .
+
+doc:participationEsaBeer a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSourceParagraph "13"^^xsd:string ;
+    echr:participatingParty doc:esa .
+
+doc:participationReganEsa a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSourceParagraph "13"^^xsd:string ;
+    echr:participatingParty doc:philipRegan .
+
+doc:participationReganTi a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:participatingParty doc:philipRegan .
+
+doc:participationTiRegan a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:participatingParty doc:companyTi .
+
+doc:proceedingEsaBeer a echr:DomesticProceeding ;
+    rdfs:label "proceeding by Mr Beer against ESA"^^xsd:string ;
+    echr:hasCourt doc:darmstadtLabourCourt ;
+    echr:hasDecisionDate "1995-03-21"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "15"^^xsd:string ;
+    echr:hasSupportingQuote "On 21 March 1995 the Darmstadt Labour Court... declared the applicants’ respective actions inadmissible."^^xsd:string .
+
+doc:proceedingEsaRegan a echr:DomesticProceeding ;
+    rdfs:label "proceeding by Mr Regan against ESA"^^xsd:string ;
+    echr:hasCourt doc:darmstadtLabourCourt ;
+    echr:hasDecisionDate "1995-03-21"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "15"^^xsd:string ;
+    echr:hasSupportingQuote "On 21 March 1995 the Darmstadt Labour Court... declared the applicants’ respective actions inadmissible."^^xsd:string .
+
+doc:proceedingReganTi a echr:DomesticProceeding ;
+    rdfs:label "proceeding by Mr Regan against company T.I."^^xsd:string ;
+    echr:hasCourt doc:darmstadtLabourCourt ;
+    echr:hasDecisionDate "1994-09-06"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeSettled ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "17"^^xsd:string ;
+    echr:hasSupportingQuote "In the proceedings instituted by the second applicant against his dismissal by the company T.I... a settlement had been reached in the Darmstadt Labour Court on 6 September 1994."^^xsd:string .
+
+doc:applicantsParty a echr:Party ;
+    rdfs:label "the applicants"^^xsd:string ;
+    echr:hasPartyName "the applicants"^^xsd:string .
+
+doc:applicants_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicants"^^xsd:string ;
+    echr:hasPersonName "the applicants"^^xsd:string .
+
+doc:companyTi a echr:Party ;
+    rdfs:label "company T.I."^^xsd:string ;
+    echr:hasSourceParagraph "11"^^xsd:string ;
+    echr:hasSupportingQuote "the Italian company T.I."^^xsd:string .
+
+doc:esa a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "European Space Agency"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "European Space Agency"^^xsd:string ;
+    echr:hasSourceParagraph "12"^^xsd:string ;
+    echr:hasSupportingQuote "The European Space Agency ('ESA') with headquarters in Paris"^^xsd:string .
+
+doc:esaParty a echr:Party ;
+    rdfs:label "ESA"^^xsd:string ;
+    echr:hasPartyName "ESA"^^xsd:string .
+
+doc:esa_1 a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "ESA"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "ESA"^^xsd:string .
+
+doc:german_courts_1 a echr:DomesticAuthority ;
+    rdfs:label "German courts"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "German courts"^^xsd:string .
+
+doc:karlheinzBeer a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Karlheinz Beer"^^xsd:string,
+        "Mr Karlheinz Beer"^^xsd:string ;
+    echr:hasBirthYear "1952"^^xsd:gYear ;
+    echr:hasPersonName "Mr Karlheinz Beer"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string,
+        "10"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Karlheinz Beer is a German national, born in 1952"^^xsd:string,
+        "a German national, Mr Karlheinz Beer"^^xsd:string .
+
+doc:participation_beer_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSourceParagraph "39"^^xsd:string ;
+    echr:hasSupportingQuote "the labour court proceedings instituted by the applicants"^^xsd:string ;
+    echr:participatingParty doc:personBeer .
+
+doc:participation_regan_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSourceParagraph "39"^^xsd:string ;
+    echr:hasSupportingQuote "the labour court proceedings instituted by the applicants"^^xsd:string ;
+    echr:participatingParty doc:personRegan .
+
+doc:personBeer a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Beer"^^xsd:string ;
+    echr:hasPersonName "Mr Beer"^^xsd:string ;
+    echr:hasSourceParagraph "33"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Beer"^^xsd:string .
+
+doc:personRegan a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Regan"^^xsd:string ;
+    echr:hasPersonName "Mr Regan"^^xsd:string ;
+    echr:hasSourceParagraph "33"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Regan"^^xsd:string .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "Applicants' action under the German Provision of Labour (Temporary Staff) Act"^^xsd:string ;
+    echr:hasCourt doc:darmstadtLabourCourt ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1,
+        doc:participation_2 ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "45"^^xsd:string,
+        "46"^^xsd:string ;
+    echr:hasSupportingQuote "the Darmstadt Labour Court concluded that the conditions... for finding that the applicants’ action was inadmissible were fulfilled"^^xsd:string .
+
+doc:proceeding_labour_court_1 a echr:DomesticProceeding ;
+    rdfs:label "Labour court proceedings (Beer and Regan)"^^xsd:string ;
+    echr:hasCourt doc:darmstadtLabourCourt ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_beer_1,
+        doc:participation_regan_1 ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "41"^^xsd:string ;
+    echr:hasSupportingQuote "The applicants had access to the Darmstadt Labour Court, only to be told that their action was barred by operation of law."^^xsd:string .
+
+doc:participation_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSourceParagraph "61"^^xsd:string ;
+    echr:hasSupportingQuote "the applicants... attempted to obtain recognition of permanent employment by ESA"^^xsd:string ;
+    echr:participatingParty doc:applicantsParty,
+        doc:applicants_1 .
+
+doc:participation_2 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:esaParty,
+        doc:esa_1 .
+
+doc:philipRegan a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Philip Regan"^^xsd:string,
+        "Philip Regan"^^xsd:string ;
+    echr:hasBirthYear "1960"^^xsd:gYear ;
+    echr:hasPersonName "Mr Philip Regan"^^xsd:string ;
+    echr:hasSourceParagraph "1"^^xsd:string,
+        "10"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Philip Regan is a British national, born in 1960"^^xsd:string,
+        "a British national, Mr Philip Regan"^^xsd:string .
+
+doc:darmstadtLabourCourt a echr:DomesticAuthority ;
+    rdfs:label "Darmstadt Labour Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Darmstadt Labour Court"^^xsd:string ;
+    echr:hasSourceParagraph "13"^^xsd:string,
+        "41"^^xsd:string ;
+    echr:hasSupportingQuote "Darmstadt Labour Court"^^xsd:string,
+        "Darmstadt Labour Court (Arbeitsgericht)"^^xsd:string .
+

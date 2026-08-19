@@ -1,0 +1,140 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/1f8f0c875c9d/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/base/cd,kyiv_admin_court_of_appeal_6_mar_2017_quashed_1> a doc:DomesticProceeding ;
+    rdfs:label "On 6 March 2017 the Kyiv Administrative Court of Appeal quashed the decision of 22 December 2016"@en ;
+    doc:followsProceeding <http://example.org/base/cd,podilskyy_dec_22_dec_2016_no_examination_1> ;
+    doc:hasSourceParagraph "25"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 6 March 2017 the Kyiv Administrative Court of Appeal quashed the decision of 22 December 2016."^^xsd:string .
+
+<http://example.org/base/cd,supreme_court_final_9_dec_2021_1> a doc:DomesticProceeding ;
+    rdfs:label "final decision of the Supreme Court of 9 December 2021"@en ;
+    doc:followsProceeding <http://example.org/base/cd,kyiv_district_admin_court_found_lawful_8_apr_2021_1> ;
+    doc:hasSourceParagraph "31"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "The applicant’s appeals were rejected (final decision of the Supreme Court of 9 December 2021)."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+<https://growgraph.dev/doc/1f8f0c875c9d> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:5"^^xsd:string .
+
+doc:disciplinary_decision_16_may_2013 a doc:DomesticProceeding ;
+    rdfs:label "decisions of 16 May 2013"^^xsd:string ;
+    doc:followsProceeding doc:disciplinary_decision_17_april_2013 ;
+    doc:hasSourceParagraph 33 ;
+    doc:hasSupportingQuote "because of the decisions of 17 April and 16 May 2013"^^xsd:string .
+
+doc:domestic_proceeding_3_hqdcbd_appeal a doc:DomesticProceeding ;
+    rdfs:label "HQDCB appeal against the decisions of 17 April and 16 May 2013"@en ;
+    doc:followsProceeding doc:domestic_proceeding_2_qdc_of_zakarpattya_upholding ;
+    doc:hasSourceParagraph "12"^^xsd:string ;
+    echr:hasSupportingQuote "The applicant appealed against the decisions of 17 April and 16 May 2013 to the HQDCB, however the appeal did not have a suspensive effect."@en .
+
+doc:domestic_proceeding_decision_16_may_2013 a doc:DomesticProceeding ;
+    rdfs:label "decision of 16 May 2013"^^xsd:string ;
+    doc:followsProceeding doc:domestic_proceeding_decision_17_april_2013 ;
+    doc:hasSourceParagraph 33 ;
+    doc:hasSupportingQuote "decisions of 17 April and 16 May 2013"^^xsd:string .
+
+<http://example.org/base/cd,hqdc_draft_decision_vote_2016_1> a doc:DomesticProceeding ;
+    rdfs:label "On 22 July 2016 the draft decision was put to vote at a HQDCB meeting, the draft decision was rejected"@en ;
+    doc:followsProceeding <http://example.org/base/cd,hqdc_no_decision_2013_1> ;
+    doc:hasSourceParagraph "20"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 22 July 2016 the draft decision was put to vote at a HQDCB meeting where 19 out of 30 HQDCB members were present. Out of 19 members, 11 voted in favour of the decision, 6 voted against it, and 2 abstained. In view of the changes to the Rules of Procedure adopted in 2014 (see paragraph 16 above), the draft decision was rejected and the decisions suspending the applicant’s licence remained valid."^^xsd:string .
+
+<http://example.org/base/cd,hqdc_no_decision_2013_1> a doc:DomesticProceeding ;
+    rdfs:label "In 2013 the HQDCB held two hearings in the applicant’s case, but failed to reach a decision"@en ;
+    doc:hasSourceParagraph "15"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeUnknown ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "In 2013 the HQDCB held two hearings in the applicant’s case, but failed to reach a decision"^^xsd:string .
+
+<http://example.org/base/cd,kyiv_district_admin_court_appeal_5_oct_2016_1> a doc:DomesticProceeding ;
+    rdfs:label "On 5 October 2016 the applicant lodged an appeal with the Kyiv District Administrative Court against the decisions of the Zakarpattya Bar and the decision of the HQDCB"@en ;
+    doc:followsProceeding <http://example.org/base/cd,hqdc_draft_decision_vote_2016_1> ;
+    doc:hasSourceParagraph "21"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeUnknown ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 5 October 2016 the applicant lodged an appeal with the Kyiv District Administrative Court against the decisions of the Zakarpattya Bar and the decision of the HQDCB."^^xsd:string .
+
+<http://example.org/base/cd,kyiv_district_admin_court_found_lawful_8_apr_2021_1> a doc:DomesticProceeding ;
+    rdfs:label "On 8 April 2021 the Kyiv District Administrative Court found that all the decisions issued by the self-government bodies of the Bar against the applicant had been lawful"@en ;
+    doc:followsProceeding <http://example.org/base/cd,kyiv_district_admin_court_resumed_15_may_2018_1> ;
+    doc:hasSourceParagraph "30"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 8 April 2021 the Kyiv District Administrative Court found that all the decisions issued by the self-government bodies of the Bar against the applicant had been lawful."^^xsd:string .
+
+<http://example.org/base/cd,kyiv_district_admin_court_resumed_15_may_2018_1> a doc:DomesticProceeding ;
+    rdfs:label "On 15 May 2018 the Kyiv District Administrative Court resumed the examination of the applicant’s appeal lodged on 5 October 2016"@en ;
+    doc:followsProceeding <http://example.org/base/cd,kyiv_district_admin_court_suspension_16_feb_2017_1> ;
+    doc:hasSourceParagraph "27"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeUnknown ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 15 May 2018 the Kyiv District Administrative Court resumed the examination of the applicant’s appeal lodged on 5 October 2016."^^xsd:string .
+
+<http://example.org/base/cd,kyiv_district_admin_court_suspension_16_feb_2017_1> a doc:DomesticProceeding ;
+    rdfs:label "On 16 February 2017 the Kyiv District Administrative Court granted the request and suspended the examination of the appeal of 5 October 2016"@en ;
+    doc:followsProceeding <http://example.org/base/cd,podilskyy_dec_22_dec_2016_no_examination_1> ;
+    doc:hasSourceParagraph "24"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeUnknown ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 16 February 2017 the Kyiv District Administrative Court granted the request and suspended the examination of the appeal of 5 October 2016."^^xsd:string .
+
+doc:disciplinary_decision_17_april_2013 a doc:DomesticProceeding ;
+    rdfs:label "decisions of 17 April 2013"^^xsd:string ;
+    doc:followsProceeding doc:disciplinary_meeting_7_december_2012 ;
+    doc:hasSourceParagraph 33 ;
+    doc:hasSupportingQuote "because of the decisions of 17 April and 16 May 2013"^^xsd:string .
+
+doc:domestic_proceeding_1_hqdcbd_qualification_disciplinary_commission a doc:DomesticProceeding ;
+    rdfs:label "Disciplinary Chamber of the QDC of Zakarpattya"@en ;
+    doc:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "On 17 April 2013, in the applicant’s absence, the Disciplinary Chamber of the QDC of Zakarpattya suspended the applicant’s licence to practise as an advocate for six months for his failure to attend the meeting of 7 December 2012 and violating Article 62 of the Rules of Professional Conduct."@en .
+
+doc:domestic_proceeding_2_qdc_of_zakarpattya_upholding a doc:DomesticProceeding ;
+    rdfs:label "QDC of Zakarpattya upheld the decision of 17 April 2013"@en ;
+    doc:followsProceeding doc:domestic_proceeding_1_hqdcbd_qualification_disciplinary_commission ;
+    doc:hasSourceParagraph "11"^^xsd:string ;
+    echr:hasSupportingQuote "On 16 May the QDC of Zakarpattya upheld the decision of 17 April 2013."@en .
+
+<http://example.org/base/cd,podilskyy_dec_22_dec_2016_no_examination_1> a doc:DomesticProceeding ;
+    rdfs:label "On 22 December 2016 the Podilskyy District Court decided not to examine the applicant’s appeal"@en ;
+    doc:followsProceeding <http://example.org/base/cd,kyiv_district_admin_court_appeal_5_oct_2016_1> ;
+    doc:hasSourceParagraph "23"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 22 December 2016 the Podilskyy District Court decided not to examine the applicant’s appeal."^^xsd:string .
+
+doc:disciplinary_meeting_7_december_2012 a doc:DomesticProceeding ;
+    rdfs:label "meeting of 7 December 2012"^^xsd:string ;
+    doc:followsProceeding doc:domestic_proceeding_decision_17_april_2013 ;
+    doc:hasSourceParagraph 34 ;
+    doc:hasSupportingQuote "absent from the meeting of 7 December 2012"^^xsd:string .
+
+doc:domestic_proceeding_decision_17_april_2013 a doc:DomesticProceeding ;
+    rdfs:label "decision of 17 April 2013"^^xsd:string ;
+    doc:followsProceeding doc:disciplinary_meeting_7_december_2012 ;
+    doc:hasSourceParagraph 33 ;
+    doc:hasSupportingQuote "decisions of 17 April and 16 May 2013"^^xsd:string .
+

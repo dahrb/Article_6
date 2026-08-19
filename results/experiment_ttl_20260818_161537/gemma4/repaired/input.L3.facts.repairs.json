@@ -1,0 +1,77 @@
+{
+  "source": "results/experiment_ttl_20260818_161537/gemma4/repaired/input.L3.facts.ttl",
+  "operations": [
+    {
+      "finding": "The domestic proceedings graph contains highly inconsistent dates and corrupted entity mappings (e.g., doc:proceeding_1 has 'the Fund' as court, doc:proceeding_2 has a 2006 date for a case started in 2011, and doc:proceeding_3 conflates the General Assembly and Constitutional Court).",
+      "rationale": "The existing graph mixes two different legal tracks. One track involves the annulment of a sale (proceeding_annulment_1 -> appeal_1 -> rectification_1). Another track (proceeding_1, 2, 3, 4) is erroneously linked and contains impossible dates (2006 decision for 2011 start). The quotes show that doc:proceeding_1 and doc:proceeding_annulment_1 are the same event (2011 initiation), and doc:proceeding_3's label 'General Assembly' is matched with a quote about the 'Constitutional Court'.",
+      "action": "remove",
+      "subject": "doc:proceeding_1",
+      "predicate": "echr:hasCourt",
+      "object": "doc:the_fund",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "skipped: triple not present"
+    },
+    {
+      "finding": "The domestic proceedings graph contains highly inconsistent dates and corrupted entity mappings (e.g., doc:proceeding_1 has 'the Fund' as court, doc:proceeding_2 has a 2006 date for a case started in 2011, and doc:proceeding_3 conflates the General Assembly and Constitutional Court).",
+      "rationale": "The existing graph mixes two different legal tracks. One track involves the annulment of a sale (proceeding_annulment_1 -> appeal_1 -> rectification_1). Another track (proceeding_1, 2, 3, 4) is erroneously linked and contains impossible dates (2006 decision for 2011 start). The quotes show that doc:proceeding_1 and doc:proceeding_annulment_1 are the same event (2011 initiation), and doc:proceeding_3's label 'General Assembly' is matched with a quote about the 'Constitutional Court'.",
+      "action": "remove",
+      "subject": "doc:proceeding_2",
+      "predicate": "echr:hasDecisionDate",
+      "object": "2006-07-20",
+      "object_is_literal": true,
+      "datatype": "echr:PartialDate",
+      "lang": null,
+      "status": "skipped: triple not present"
+    },
+    {
+      "finding": "The domestic proceedings graph contains highly inconsistent dates and corrupted entity mappings (e.g., doc:proceeding_1 has 'the Fund' as court, doc:proceeding_2 has a 2006 date for a case started in 2011, and doc:proceeding_3 conflates the General Assembly and Constitutional Court).",
+      "rationale": "The existing graph mixes two different legal tracks. One track involves the annulment of a sale (proceeding_annulment_1 -> appeal_1 -> rectification_1). Another track (proceeding_1, 2, 3, 4) is erroneously linked and contains impossible dates (2006 decision for 2011 start). The quotes show that doc:proceeding_1 and doc:proceeding_annulment_1 are the same event (2011 initiation), and doc:proceeding_3's label 'General Assembly' is matched with a quote about the 'Constitutional Court'.",
+      "action": "remove",
+      "subject": "doc:proceeding_3",
+      "predicate": "echr:hasProceedingStartDate",
+      "object": "2017-09-11",
+      "object_is_literal": true,
+      "datatype": "echr:PartialDate",
+      "lang": null,
+      "status": "skipped: triple not present"
+    },
+    {
+      "finding": "The domestic proceedings graph contains highly inconsistent dates and corrupted entity mappings (e.g., doc:proceeding_1 has 'the Fund' as court, doc:proceeding_2 has a 2006 date for a case started in 2011, and doc:proceeding_3 conflates the General Assembly and Constitutional Court).",
+      "rationale": "The existing graph mixes two different legal tracks. One track involves the annulment of a sale (proceeding_annulment_1 -> appeal_1 -> rectification_1). Another track (proceeding_1, 2, 3, 4) is erroneously linked and contains impossible dates (2006 decision for 2011 start). The quotes show that doc:proceeding_1 and doc:proceeding_annulment_1 are the same event (2011 initiation), and doc:proceeding_3's label 'General Assembly' is matched with a quote about the 'Constitutional Court'.",
+      "action": "remove",
+      "subject": "doc:proceeding_3",
+      "predicate": "echr:isFinalDomesticDecision",
+      "object": "true",
+      "object_is_literal": true,
+      "datatype": "xsd:boolean",
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "The domestic proceedings graph contains highly inconsistent dates and corrupted entity mappings (e.g., doc:proceeding_1 has 'the Fund' as court, doc:proceeding_2 has a 2006 date for a case started in 2011, and doc:proceeding_3 conflates the General Assembly and Constitutional Court).",
+      "rationale": "The existing graph mixes two different legal tracks. One track involves the annulment of a sale (proceeding_annulment_1 -> appeal_1 -> rectification_1). Another track (proceeding_1, 2, 3, 4) is erroneously linked and contains impossible dates (2006 decision for 2011 start). The quotes show that doc:proceeding_1 and doc:proceeding_annulment_1 are the same event (2011 initiation), and doc:proceeding_3's label 'General Assembly' is matched with a quote about the 'Constitutional Court'.",
+      "action": "remove",
+      "subject": "doc:proceeding_4",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:proceeding_3",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "Conflict in isFinalDomesticDecision between doc:proceeding_rectification_1 and doc:proceeding_3.",
+      "rationale": "According to the quotes, the final step in the track seeking annulment of the sale was the rectification decision on 30 June 2017. The individual application to the Constitutional Court (incorrectly merged into doc:proceeding_3) is a separate remedy, but the rectification decision in the main administrative track is the terminal point of that chain. More importantly, the Constitutional Court application was declared inadmissible, whereas the rectification was granted. The facts treat the rectification as the final domestic resolution of the merit.",
+      "action": "remove",
+      "subject": "doc:proceeding_3",
+      "predicate": "echr:isFinalDomesticDecision",
+      "object": "true",
+      "object_is_literal": true,
+      "datatype": "xsd:boolean",
+      "lang": null,
+      "status": "skipped: triple not present"
+    }
+  ]
+}

@@ -12,6 +12,11 @@
 # For each model this runs TWO phases:
 #   phase 1  `ontocast process` over the test set          -> <model>/raw/
 #   phase 2  copy raw -> repaired/, then repair_facts.py   -> <model>/repaired/
+#   phase 3  static SHACL gate on repaired/                -> <model>/validate.log
+#            (no LLM call; validate_shapes.py against ontology/echr-shapes.ttl.
+#            repair_facts.py already runs these same shapes DURING phase 2 and
+#            feeds violations to the model as findings to fix -- this phase is
+#            the after-the-fact check that the repair actually cleared them.)
 #
 # The repair pass always uses the SAME model that produced the facts, so a
 # model is judged on its own extraction plus its own self-correction.
@@ -26,7 +31,7 @@
 # EXPERIMENT DESIGN
 # ---------------------------------------------------------------------------
 # Held constant across all four models (the only intended variable is the LLM):
-#   ontology            ontology/echr.ttl @ 2.2.0
+#   ontology            ${ONTOLOGY_TTL}, default ontology/echr_2.ttl
 #   facts prompt        art6/ontology/prompts/facts.txt
 #   chunking            CHUNK_SECTION_CLASSIFIER=off, MIN=5000, MAX=15000
 #                       -- classifier off keeps the whole document; the section
@@ -111,6 +116,13 @@ MODEL_SPECS=(
 # Placeholder credential for the local vLLM servers, which do not check it.
 VLLM_API_KEY="${VLLM_API_KEY:-token-abc123}"
 
+# The ontology snapshot copied alongside the outputs. echr_2.ttl is the current
+# schema; echr.ttl was retired to ontology/old/ after the 2026-08-18 comparison.
+# This is the snapshot only -- OntoCast reads the ontology from its Fuseki
+# catalog, so the catalog entry for ONTOLOGY_CONTEXT_FIXED_ONTOLOGY_ID=echr must
+# be loaded from the SAME file, or the snapshot will not describe the run.
+ONTOLOGY_TTL="${ONTOLOGY_TTL:-${REPO_ROOT}/ontology/echr_2.ttl}"
+
 # ============================================================================
 # END EDIT ME
 # ============================================================================
@@ -163,6 +175,7 @@ for key in ${MODELS}; do
         [[ "${code}" == "200" ]] || die "${key}: Fuseki dataset ${ds} missing (HTTP ${code})"
     done
 done
+[[ -f "${ONTOLOGY_TTL}" ]] || die "ontology not found: ${ONTOLOGY_TTL}"
 printf '  fuseki datasets: ok\n'
 printf '  output: %s\n' "${EXPERIMENT_DIR}"
 printf '  limit:  %s\n' "${LIMIT:-all 10 cases}"
@@ -177,7 +190,7 @@ fi
 mkdir -p "${EXPERIMENT_DIR}"
 
 # Record exactly what this experiment held constant, alongside its outputs.
-cp "${REPO_ROOT}/ontology/echr.ttl" "${EXPERIMENT_DIR}/echr.ttl.snapshot"
+cp "${ONTOLOGY_TTL}" "${EXPERIMENT_DIR}/echr.ttl.snapshot"
 cp "${SCRIPT_DIR}/prompts/facts.txt" "${EXPERIMENT_DIR}/facts.prompt.snapshot"
 
 python3 - <<PY > "${EXPERIMENT_DIR}/manifest.json"
@@ -193,7 +206,7 @@ print(json.dumps({
         "the local servers."
     ),
     "held_constant": {
-        "ontology": "ontology/echr.ttl (snapshot alongside)",
+        "ontology": "${ONTOLOGY_TTL} (snapshot alongside)",
         "facts_prompt": "art6/ontology/prompts/facts.txt (snapshot alongside)",
         "chunk_section_classifier": "off",
         "chunk_min_size": 5000,
@@ -302,6 +315,19 @@ for key in ${MODELS}; do
         printf '%s\n' "${repair_rc}" > "${model_dir}/repair.failed"
     fi
     printf '\nphase 2 done for %s\n' "${key}"
+
+    printf '\n--- phase 3: static SHACL gate (post-repair check) -> %s ---\n' "${repaired_dir#${REPO_ROOT}/}"
+    set +e
+    (cd "${REPO_ROOT}" && uv run python -m art6.ontology.validate_shapes \
+        --facts-dir "${repaired_dir}") \
+        2>&1 | tee "${model_dir}/validate.log"
+    validate_rc=${PIPESTATUS[0]}
+    set -e
+    if (( validate_rc != 0 )); then
+        printf 'WARNING: %s SHACL gate exited %d\n' "${key}" "${validate_rc}"
+        printf '%s\n' "${validate_rc}" > "${model_dir}/validate.failed"
+    fi
+    printf '\nphase 3 done for %s\n' "${key}"
 done
 
 printf '\n============================================================\n'
@@ -312,8 +338,12 @@ for key in ${MODELS}; do
     [[ -d "${d}" ]] || continue
     raw=$(find "${d}/raw" -name '*.facts.ttl' 2>/dev/null | wc -l)
     rep=$(find "${d}/repaired" -maxdepth 1 -name '*.facts.ttl' 2>/dev/null | wc -l)
+    shacl_violations=$(awk '/^  TOTAL/{print $3; exit}' "${d}/validate.log" 2>/dev/null)
+    shacl_violations="${shacl_violations:-?}"
     flags=""
-    [[ -f "${d}/extract.failed" ]] && flags="${flags} EXTRACT_FAILED"
-    [[ -f "${d}/repair.failed"  ]] && flags="${flags} REPAIR_FAILED"
-    printf '  %-10s raw=%-3s repaired=%-3s%s\n' "${key}" "${raw}" "${rep}" "${flags}"
+    [[ -f "${d}/extract.failed"  ]] && flags="${flags} EXTRACT_FAILED"
+    [[ -f "${d}/repair.failed"   ]] && flags="${flags} REPAIR_FAILED"
+    [[ -f "${d}/validate.failed" ]] && flags="${flags} VALIDATE_FAILED"
+    printf '  %-10s raw=%-3s repaired=%-3s shacl_violations=%-3s%s\n' \
+        "${key}" "${raw}" "${rep}" "${shacl_violations}" "${flags}"
 done

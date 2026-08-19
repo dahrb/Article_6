@@ -1,0 +1,149 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/4900299706c5/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/4900299706c5> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:1"^^xsd:string .
+
+doc:proc_chief_public_prosecutor_2005_11_29 a echr:DomesticProceeding ;
+    rdfs:label "Chief Public Prosecutor's Office decision of 29 November 2005"^^xsd:string ;
+    echr:followsProceeding doc:proc_appellate_prosecutor_2005_10_11 ;
+    echr:hasCourt doc:authorityChiefPublicProsecutorOffice ;
+    echr:hasDecisionDate "2005-11-29"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "38"^^xsd:string ;
+    echr:hasSupportingQuote "Despite those objections, the regional prosecutor’s refusal was upheld on 11 October 2005 by the appellate prosecutor, and subsequently on 29 November 2005 by the Chief Public Prosecutor’s Office at the Supreme Court of Cassation."^^xsd:string .
+
+doc:proc_dupnitsa_district_court_2006_03_10 a echr:DomesticProceeding ;
+    rdfs:label "Dupnitsa District Court judgment of 10 March 2006"^^xsd:string ;
+    echr:followsProceeding doc:proc_mayor_rila_2005_09_16 ;
+    echr:hasCourt doc:authorityDupnitsaDistrictCourt ;
+    echr:hasDecisionDate "2006-03-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "40"^^xsd:string ;
+    echr:hasSupportingQuote "The Dupnitsa District Court gave judgment on 10 March 2006. ... As to the merits, the court dismissed the application, finding that the guardian had no legitimate interest in contesting the mayor’s refusal, given that he could apply independently and directly for the applicant to be released from partial guardianship. Since the judgment was not subject to appeal, it became final."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:proc_ruse_municipal_council_2002_05_23 a echr:DomesticProceeding ;
+    rdfs:label "Ruse Municipal Council appointment of guardian on 23 May 2002"^^xsd:string ;
+    echr:followsProceeding doc:proc_veliko_tarnovo_2001_04_12 ;
+    echr:hasCourt doc:authorityRuseMunicipalCouncil ;
+    echr:hasDecisionDate "2002-05-23"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "12"^^xsd:string ;
+    echr:hasSupportingQuote "Since the applicant’s family members had refused to take on any guardianship responsibilities, on 23 May 2002 the Municipal Council appointed Ms R.P., a council officer, as the applicant’s guardian until 31 December 2002."^^xsd:string .
+
+doc:authorityAppellateProsecutor a echr:DomesticAuthority ;
+    rdfs:label "Appellate prosecutor"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Appellate prosecutor"^^xsd:string ;
+    echr:hasJurisdictionState "Bulgaria"^^xsd:string .
+
+doc:authorityChiefPublicProsecutorOffice a echr:DomesticAuthority ;
+    rdfs:label "Chief Public Prosecutor's Office at the Supreme Court of Cassation"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Chief Public Prosecutor's Office at the Supreme Court of Cassation"^^xsd:string ;
+    echr:hasJurisdictionState "Bulgaria"^^xsd:string .
+
+doc:authorityDupnitsaDistrictCourt a echr:DomesticAuthority ;
+    rdfs:label "Dupnitsa District Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Dupnitsa District Court"^^xsd:string ;
+    echr:hasJurisdictionState "Bulgaria"^^xsd:string .
+
+doc:authorityMayorRila a echr:DomesticAuthority ;
+    rdfs:label "Mayor of Rila"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Mayor of Rila"^^xsd:string ;
+    echr:hasJurisdictionState "Bulgaria"^^xsd:string .
+
+doc:authorityRegionalProsecutor a echr:DomesticAuthority ;
+    rdfs:label "Regional prosecutor"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Regional prosecutor"^^xsd:string ;
+    echr:hasJurisdictionState "Bulgaria"^^xsd:string .
+
+doc:authorityRuseMunicipalCouncil a echr:DomesticAuthority ;
+    rdfs:label "Ruse Municipal Council"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Ruse Municipal Council"^^xsd:string ;
+    echr:hasJurisdictionState "Bulgaria"^^xsd:string .
+
+doc:authorityRuseRegionalCourt a echr:DomesticAuthority ;
+    rdfs:label "Ruse Regional Court (Окръжен съд)"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Ruse Regional Court (Окръжен съд)"^^xsd:string ;
+    echr:hasJurisdictionState "Bulgaria"^^xsd:string .
+
+doc:authorityVelikoTarnovoCourtOfAppeal a echr:DomesticAuthority ;
+    rdfs:label "Veliko Tarnovo Court of Appeal (Апелативен съд)"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Veliko Tarnovo Court of Appeal (Апелативен съд)"^^xsd:string ;
+    echr:hasJurisdictionState "Bulgaria"^^xsd:string .
+
+doc:proc_appellate_prosecutor_2005_10_11 a echr:DomesticProceeding ;
+    rdfs:label "Appellate prosecutor upheld refusal on 11 October 2005"^^xsd:string ;
+    echr:followsProceeding doc:proc_regional_prosecutor_refusal_2005_08_10 ;
+    echr:hasCourt doc:authorityAppellateProsecutor ;
+    echr:hasDecisionDate "2005-10-11"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "38"^^xsd:string ;
+    echr:hasSupportingQuote "Despite those objections, the regional prosecutor’s refusal was upheld on 11 October 2005 by the appellate prosecutor, and subsequently on 29 November 2005 by the Chief Public Prosecutor’s Office at the Supreme Court of Cassation."^^xsd:string .
+
+doc:proc_mayor_rila_2005_09_16 a echr:DomesticProceeding ;
+    rdfs:label "Mayor of Rila decision of 16 September 2005"^^xsd:string ;
+    echr:hasCourt doc:authorityMayorRila ;
+    echr:hasDecisionDate "2005-09-16"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSourceParagraph "39"^^xsd:string ;
+    echr:hasSupportingQuote "In a letter of 16 September 2005, the mayor of Rila refused his request, stating that there was no basis for such an action in view of the medical certificate of 15 June 2005, the opinions of the Director and the social worker, and the conclusions reached by the public prosecutor’s office."^^xsd:string .
+
+doc:proc_regional_prosecutor_refusal_2005_08_10 a echr:DomesticProceeding ;
+    rdfs:label "Regional prosecutor refusal to bring action on 10 August 2005"^^xsd:string ;
+    echr:hasCourt doc:authorityRegionalProsecutor ;
+    echr:hasDecisionDate "2005-08-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "38"^^xsd:string ;
+    echr:hasSupportingQuote "On 10 August 2005 the regional prosecutor refused to bring an action for restoration of the applicant’s legal capacity on the grounds that, in the opinion of the doctors, the Director of the Pastra social care home and the home’s social worker, the applicant was unable to cope on his own, and that the home, where he could undergo medical treatment, was the most suitable place for him to live."^^xsd:string .
+
+doc:proc_ruse_regional_court_2000_11_20 a echr:DomesticProceeding ;
+    rdfs:label "Ruse Regional Court judgment of 20 November 2000"^^xsd:string ;
+    echr:hasCourt doc:authorityRuseRegionalCourt ;
+    echr:hasDecisionDate "2000-11-20"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "10"^^xsd:string ;
+    echr:hasSupportingQuote "In a judgment of 20 November 2000, the court declared the applicant to be partially incapacitated on the grounds that he had been suffering from simple schizophrenia since 1975, and that his ability to manage his own affairs and interests and to realise the consequences of his own acts had been impaired."^^xsd:string .
+
+doc:proc_veliko_tarnovo_2001_04_12 a echr:DomesticProceeding ;
+    rdfs:label "Veliko Tarnovo Court of Appeal judgment of 12 April 2001"^^xsd:string ;
+    echr:followsProceeding doc:proc_ruse_regional_court_2000_11_20 ;
+    echr:hasCourt doc:authorityVelikoTarnovoCourtOfAppeal ;
+    echr:hasDecisionDate "2001-04-12"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSourceParagraph "11"^^xsd:string ;
+    echr:hasSupportingQuote "That judgment was upheld in a judgment of 12 April 2001 by the Veliko Tarnovo Court of Appeal ( Апелативен съд ) on an appeal by the applicant, and was subsequently transmitted to the Ruse Municipal Council on 7 June 2001 for the appointment of a guardian."^^xsd:string .
+

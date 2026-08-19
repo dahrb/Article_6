@@ -1,0 +1,480 @@
+input:    /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/input.jsonl
+records:  10
+  L1: 001-108690    23,996 chars
+  L2: 001-58299     34,551 chars
+  L3: 001-248393    28,861 chars
+  L4: 001-77778     25,237 chars
+  L5: 001-248395    26,542 chars
+  L6: 001-189419    17,298 chars
+  L7: 001-5878      19,724 chars
+  L8: 001-22669     19,512 chars
+  L9: 001-188177    17,640 chars
+  L10: 001-202468    38,275 chars
+prompts:  facts_user_instruction
+
+output:   /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw
+tenant:   growgraph / art6_gemma4_echr2
+model:    gemma-4-31b (openai, temp 1.0)
+mode:     render=facts ontology_context=fixed_single_ontology max_visits=1
+
+Model 'gemma-4-31b' is not a known openai preset (OpenAIModel). Passing it through -- the provider decides whether it exists.
+ERROR:ontocast.tool.triple_manager.fuseki:Failed to create dataset growgraph--art6_gemma4_echr2--facts. Status code: 403
+ERROR:ontocast.tool.triple_manager.fuseki:Response: <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<title>Error 403 Access denied : only localhost access allowed</title>
+</head>
+<body>
+<h2>HTTP ERROR 403 Access denied : only localhost access allowed</h2>
+<table>
+<tr><th>URI:</th><td>http://localhost:3032/$/datasets</td></tr>
+<tr><th>STATUS:</th><td>403</td></tr>
+<tr><th>MESSAGE:</th><td>Access denied : only localhost access allowed</td></tr>
+</table>
+
+</body>
+</html>
+ERROR:ontocast.tool.triple_manager.fuseki:Failed to create dataset growgraph--art6_gemma4_echr2--ontologies. Status code: 403
+ERROR:ontocast.tool.triple_manager.fuseki:Response: <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<title>Error 403 Access denied : only localhost access allowed</title>
+</head>
+<body>
+<h2>HTTP ERROR 403 Access denied : only localhost access allowed</h2>
+<table>
+<tr><th>URI:</th><td>http://localhost:3032/$/datasets</td></tr>
+<tr><th>STATUS:</th><td>403</td></tr>
+<tr><th>MESSAGE:</th><td>Access denied : only localhost access allowed</td></tr>
+</table>
+
+</body>
+</html>
+INFO:ontocast.tool.triple_manager.fuseki:Fuseki tenancy set to tenant='growgraph' project='art6_gemma4_echr2' (facts=growgraph--art6_gemma4_echr2--facts ontologies=growgraph--art6_gemma4_echr2--ontologies)
+ERROR:ontocast.tool.triple_manager.fuseki:Failed to create dataset growgraph--art6_gemma4_echr2--facts. Status code: 403
+ERROR:ontocast.tool.triple_manager.fuseki:Response: <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<title>Error 403 Access denied : only localhost access allowed</title>
+</head>
+<body>
+<h2>HTTP ERROR 403 Access denied : only localhost access allowed</h2>
+<table>
+<tr><th>URI:</th><td>http://localhost:3032/$/datasets</td></tr>
+<tr><th>STATUS:</th><td>403</td></tr>
+<tr><th>MESSAGE:</th><td>Access denied : only localhost access allowed</td></tr>
+</table>
+
+</body>
+</html>
+ERROR:ontocast.tool.triple_manager.fuseki:Failed to create dataset growgraph--art6_gemma4_echr2--ontologies. Status code: 403
+ERROR:ontocast.tool.triple_manager.fuseki:Response: <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<title>Error 403 Access denied : only localhost access allowed</title>
+</head>
+<body>
+<h2>HTTP ERROR 403 Access denied : only localhost access allowed</h2>
+<table>
+<tr><th>URI:</th><td>http://localhost:3032/$/datasets</td></tr>
+<tr><th>STATUS:</th><td>403</td></tr>
+<tr><th>MESSAGE:</th><td>Access denied : only localhost access allowed</td></tr>
+</table>
+
+</body>
+</html>
+INFO:ontocast.toolbox:Found 2 seed ontologies in ontology_directory
+ERROR:ontocast.tool.triple_manager.fuseki:Fetched 1 of 2 ontology graphs; 1 failed. The catalog is incomplete and must not be treated as authoritative.
+INFO:ontocast.tool.triple_manager.fuseki:Successfully loaded 1 unique ontologies from Fuseki
+INFO:ontocast.toolbox:Found 1 ontologies in triple store
+INFO:ontocast.toolbox:Syncing seed ontology to triple store: https://growgraph.dev/__null__/ (version: 1.0.0)
+INFO:ontocast.toolbox:Ontology sync finished: 2 ontolog(ies) in 0.28s
+WARNING:ontocast.tool.ontology_manager:Cannot add ontology without valid IRI (ontology_id: None)
+INFO:ontocast.tool.triple_manager.fuseki:Ontology graph https://growgraph.dev/__null__/#860315ea8e4d17c364fc6ed19a61c0f1886a3d4ea5095c3270a9fcfe1689e7a0 uploaded to Fuseki as named graph.
+INFO:ontocast.toolbox:Materialized ontology https://growgraph.dev/__null__/ in 0.05s
+INFO:ontocast.tool.triple_manager.fuseki:Ontology graph https://growgraph.dev/echr#51a192c1907cc5137fbb94e3b2bbeaa60e14e7cc417de68febc4c7e6628df93f uploaded to Fuseki as named graph.
+INFO:ontocast.toolbox:Materialized ontology https://growgraph.dev/echr in 0.12s
+INFO:ontocast.toolbox:Ontology materialize + enrich finished for 2 ontolog(ies) in 0.12s (reindex_concurrency=2); initialize total 0.42s
+INFO:ontocast.agent.chunk_text:Chunking the text
+INFO:ontocast.agent.chunk_text:Created 1 chunks for processing: [23996]
+INFO:ontocast.agent.chunk_text:Created 1 content units: [23996]
+INFO:ontocast.agent.chunk_text:Section labels: (unlabeled)=1
+INFO:ontocast.stategraph.atomic:Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+INFO:ontocast.agent.render_facts:Render facts for content unit 1
+INFO:ontocast.agent.render_facts:Generating fresh facts as Turtle
+INFO:ontocast.agent.render_facts:Rendering fresh facts
+INFO:ontocast.agent.render_facts:Fresh facts generated with 53 triple(s).
+INFO:ontocast.stategraph.atomic:Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+WARNING:ontocast.util.numeric_inventory:Numeric coverage: 47 missing mention(s) truncated to 30 for the repair prompt
+INFO:ontocast.tool.agg.aggregate:Starting aggregation with metadata for 1 units
+INFO:ontocast.tool.agg.aggregate:Aggregation entity classification stats: fact=7 known_ontology=2 tentative_ontology=29
+INFO:ontocast.tool.agg.clustering:Embedding 15 entity representations in parallel...
+INFO:ontocast.tool.sentence_transformer:Loading sentence-transformer model: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (device=auto)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 199/199 [00:00<00:00, 4224.17it/s]
+INFO:ontocast.tool.agg.clustering:Embedded 15 entities
+INFO:ontocast.tool.agg.clustering:Clustering 15 entities...
+INFO:ontocast.tool.agg.clustering:Formed 5 clusters: 3 singletons, 2 multi-entity clusters, max cluster size: 8
+INFO:ontocast.tool.agg.clustering:Embedding 20 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 20 entities
+INFO:ontocast.tool.agg.clustering:Clustering 20 entities...
+INFO:ontocast.tool.agg.clustering:Formed 4 clusters: 3 singletons, 1 multi-entity clusters, max cluster size: 17
+INFO:ontocast.tool.agg.clustering:Embedding 3 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 3 entities
+INFO:ontocast.tool.agg.clustering:Clustering 3 entities...
+INFO:ontocast.tool.agg.clustering:Formed 2 clusters: 1 singletons, 1 multi-entity clusters, max cluster size: 2
+INFO:ontocast.tool.agg.aggregate:Rejected 52 candidate merges after symbolic validation
+INFO:ontocast.tool.agg.clustering:Created mapping for 38 entities to 38 representatives
+INFO:ontocast.tool.agg.uri_builder:Built URI mapping: 38 entities, 7 normalised
+INFO:ontocast.tool.agg.rewriter:Merged 1 unit graphs with provenance: 53 -> 164 triples (7 entities merged)
+INFO:ontocast.tool.agg.aggregate:Aggregation with metadata complete
+WARNING:ontocast.tool.facts_invariants:Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+INFO:ontocast.agent.serialize:LLM: 1 calls, 61,968 sent, 3,560 received | 16,069 in / 1,161 out tokens | Triples: 0 ontology, 53 facts
+INFO:ontocast.agent.serialize:Durations: Render Facts 17.3s, Render Facts/unit_sum 17.3s, llm/provider 17.2s, Merge Facts 6.2s, Convert to Text 0.3s, Render Facts/loop_lag_total 0.1s, Render Facts/loop_lag_max 0.0s, Chunk Text 0.0s, prompt/ontology_chapter 0.0s, Validate Facts 0.0s, llm/cache_lookup 0.0s, repair/deterministic 0.0s, ctx/merge_document_ontology 0.0s, llm/inflight_wait 0.0s, Render Facts/worker_wait 0.0s
+INFO:ontocast.agent.serialize:Effective workers: Render Facts 1.0x (loop lag 0.1s)
+INFO:ontocast.tool.triple_manager.fuseki:Graph graph https://growgraph.dev/doc/5181901b0ee9/ uploaded to Fuseki as named graph.
+INFO:ontocast.api.process_helpers:Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L1.facts.ttl
+INFO:ontocast.api.process_helpers:Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L1.facts.validation.json
+INFO:ontocast.api.process_helpers:Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L1.run.json
+INFO:ontocast.agent.chunk_text:Chunking the text
+INFO:ontocast.agent.chunk_text:Created 1 chunks for processing: [34551]
+INFO:ontocast.agent.chunk_text:Created 1 content units: [34551]
+INFO:ontocast.agent.chunk_text:Section labels: (unlabeled)=1
+INFO:ontocast.stategraph.atomic:Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+INFO:ontocast.agent.render_facts:Render facts for content unit 1
+INFO:ontocast.agent.render_facts:Generating fresh facts as Turtle
+INFO:ontocast.agent.render_facts:Rendering fresh facts
+INFO:ontocast.agent.render_facts:Fresh facts generated with 32 triple(s).
+INFO:ontocast.stategraph.atomic:Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+WARNING:ontocast.util.numeric_inventory:Numeric coverage: 76 missing mention(s) truncated to 30 for the repair prompt
+INFO:ontocast.tool.agg.aggregate:Starting aggregation with metadata for 1 units
+INFO:ontocast.tool.agg.aggregate:Aggregation entity classification stats: fact=4 known_ontology=2 tentative_ontology=26
+INFO:ontocast.tool.agg.clustering:Embedding 18 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 18 entities
+INFO:ontocast.tool.agg.clustering:Clustering 18 entities...
+INFO:ontocast.tool.agg.clustering:Formed 9 clusters: 6 singletons, 3 multi-entity clusters, max cluster size: 6
+INFO:ontocast.tool.agg.clustering:Embedding 11 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 11 entities
+INFO:ontocast.tool.agg.clustering:Clustering 11 entities...
+INFO:ontocast.tool.agg.clustering:Formed 7 clusters: 5 singletons, 2 multi-entity clusters, max cluster size: 4
+INFO:ontocast.tool.agg.clustering:Embedding 3 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 3 entities
+INFO:ontocast.tool.agg.clustering:Clustering 3 entities...
+INFO:ontocast.tool.agg.clustering:Formed 3 clusters: 3 singletons, 0 multi-entity clusters, max cluster size: 1
+INFO:ontocast.tool.agg.aggregate:Rejected 16 candidate merges after symbolic validation
+INFO:ontocast.tool.agg.clustering:Created mapping for 32 entities to 31 representatives
+INFO:ontocast.tool.agg.uri_builder:Built URI mapping: 32 entities, 4 normalised
+INFO:ontocast.tool.agg.rewriter:Merged 1 unit graphs with provenance: 32 -> 101 triples (4 entities merged)
+INFO:ontocast.tool.agg.aggregate:Aggregation with metadata complete
+WARNING:ontocast.tool.facts_invariants:Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+INFO:ontocast.agent.serialize:LLM: 1 calls, 72,523 sent, 2,526 received | 18,315 in / 809 out tokens | Triples: 0 ontology, 32 facts
+INFO:ontocast.agent.serialize:Durations: Render Facts 9.1s, Render Facts/unit_sum 9.1s, llm/provider 9.0s, Merge Facts 0.7s, Render Facts/loop_lag_total 0.1s, Render Facts/loop_lag_max 0.0s, prompt/ontology_chapter 0.0s, Chunk Text 0.0s, Validate Facts 0.0s, Convert to Text 0.0s, llm/cache_lookup 0.0s, repair/deterministic 0.0s, llm/inflight_wait 0.0s, ctx/merge_document_ontology 0.0s, Render Facts/worker_wait 0.0s
+INFO:ontocast.agent.serialize:Effective workers: Render Facts 1.0x (loop lag 0.1s)
+INFO:ontocast.tool.triple_manager.fuseki:Graph graph https://growgraph.dev/doc/a00933ceea71/ uploaded to Fuseki as named graph.
+INFO:ontocast.api.process_helpers:Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L2.facts.ttl
+INFO:ontocast.api.process_helpers:Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L2.facts.validation.json
+INFO:ontocast.api.process_helpers:Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L2.run.json
+INFO:ontocast.agent.chunk_text:Chunking the text
+INFO:ontocast.agent.chunk_text:Created 1 chunks for processing: [28861]
+INFO:ontocast.agent.chunk_text:Created 1 content units: [28861]
+INFO:ontocast.agent.chunk_text:Section labels: (unlabeled)=1
+INFO:ontocast.stategraph.atomic:Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+INFO:ontocast.agent.render_facts:Render facts for content unit 1
+INFO:ontocast.agent.render_facts:Generating fresh facts as Turtle
+INFO:ontocast.agent.render_facts:Rendering fresh facts
+INFO:ontocast.agent.render_facts:Fresh facts generated with 106 triple(s).
+INFO:ontocast.stategraph.atomic:Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+WARNING:ontocast.util.numeric_inventory:Numeric coverage: 61 missing mention(s) truncated to 30 for the repair prompt
+INFO:ontocast.tool.agg.aggregate:Starting aggregation with metadata for 1 units
+INFO:ontocast.tool.agg.aggregate:Aggregation entity classification stats: fact=13 known_ontology=2 tentative_ontology=34
+INFO:ontocast.tool.agg.clustering:Embedding 27 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 27 entities
+INFO:ontocast.tool.agg.clustering:Clustering 27 entities...
+INFO:ontocast.tool.agg.clustering:Formed 3 clusters: 1 singletons, 2 multi-entity clusters, max cluster size: 24
+INFO:ontocast.tool.agg.clustering:Embedding 19 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 19 entities
+INFO:ontocast.tool.agg.clustering:Clustering 19 entities...
+INFO:ontocast.tool.agg.clustering:Formed 9 clusters: 6 singletons, 3 multi-entity clusters, max cluster size: 6
+INFO:ontocast.tool.agg.clustering:Embedding 3 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 3 entities
+INFO:ontocast.tool.agg.clustering:Clustering 3 entities...
+INFO:ontocast.tool.agg.clustering:Formed 3 clusters: 3 singletons, 0 multi-entity clusters, max cluster size: 1
+INFO:ontocast.tool.agg.aggregate:Rejected 59 candidate merges after symbolic validation
+INFO:ontocast.tool.agg.clustering:Created mapping for 49 entities to 44 representatives
+INFO:ontocast.tool.agg.uri_builder:Built URI mapping: 49 entities, 13 normalised
+INFO:ontocast.tool.agg.rewriter:Merged 1 unit graphs with provenance: 106 -> 287 triples (9 entities merged)
+INFO:ontocast.tool.agg.aggregate:Aggregation with metadata complete
+WARNING:ontocast.tool.facts_invariants:Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+INFO:ontocast.agent.serialize:LLM: 1 calls, 66,833 sent, 6,731 received | 17,189 in / 2,085 out tokens | Triples: 0 ontology, 106 facts
+INFO:ontocast.agent.serialize:Durations: Render Facts 22.1s, Render Facts/unit_sum 22.1s, llm/provider 21.9s, Merge Facts 1.4s, Render Facts/loop_lag_total 0.2s, Render Facts/loop_lag_max 0.1s, prompt/ontology_chapter 0.0s, Validate Facts 0.0s, Chunk Text 0.0s, Convert to Text 0.0s, repair/deterministic 0.0s, llm/cache_lookup 0.0s, ctx/merge_document_ontology 0.0s, llm/inflight_wait 0.0s, Render Facts/worker_wait 0.0s
+INFO:ontocast.agent.serialize:Effective workers: Render Facts 1.0x (loop lag 0.2s)
+INFO:ontocast.tool.triple_manager.fuseki:Graph graph https://growgraph.dev/doc/7c8ffd472caa/ uploaded to Fuseki as named graph.
+INFO:ontocast.api.process_helpers:Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L3.facts.ttl
+INFO:ontocast.api.process_helpers:Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L3.facts.validation.json
+INFO:ontocast.api.process_helpers:Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L3.run.json
+INFO:ontocast.agent.chunk_text:Chunking the text
+INFO:ontocast.agent.chunk_text:Created 1 chunks for processing: [25237]
+INFO:ontocast.agent.chunk_text:Created 1 content units: [25237]
+INFO:ontocast.agent.chunk_text:Section labels: (unlabeled)=1
+INFO:ontocast.stategraph.atomic:Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+INFO:ontocast.agent.render_facts:Render facts for content unit 1
+INFO:ontocast.agent.render_facts:Generating fresh facts as Turtle
+INFO:ontocast.agent.render_facts:Rendering fresh facts
+INFO:ontocast.agent.render_facts:Fresh facts generated with 93 triple(s).
+INFO:ontocast.stategraph.atomic:Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+WARNING:ontocast.util.numeric_inventory:Numeric coverage: 43 missing mention(s) truncated to 30 for the repair prompt
+INFO:ontocast.tool.agg.aggregate:Starting aggregation with metadata for 1 units
+INFO:ontocast.tool.agg.aggregate:Aggregation entity classification stats: fact=11 known_ontology=2 tentative_ontology=33
+INFO:ontocast.tool.agg.clustering:Embedding 25 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 25 entities
+INFO:ontocast.tool.agg.clustering:Clustering 25 entities...
+INFO:ontocast.tool.agg.clustering:Formed 5 clusters: 3 singletons, 2 multi-entity clusters, max cluster size: 16
+INFO:ontocast.tool.agg.clustering:Embedding 18 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 18 entities
+INFO:ontocast.tool.agg.clustering:Clustering 18 entities...
+INFO:ontocast.tool.agg.clustering:Formed 4 clusters: 3 singletons, 1 multi-entity clusters, max cluster size: 15
+INFO:ontocast.tool.agg.clustering:Embedding 3 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 3 entities
+INFO:ontocast.tool.agg.clustering:Clustering 3 entities...
+INFO:ontocast.tool.agg.clustering:Formed 3 clusters: 3 singletons, 0 multi-entity clusters, max cluster size: 1
+INFO:ontocast.tool.agg.aggregate:Rejected 82 candidate merges after symbolic validation
+INFO:ontocast.tool.agg.clustering:Created mapping for 46 entities to 45 representatives
+INFO:ontocast.tool.agg.uri_builder:Built URI mapping: 46 entities, 11 normalised
+INFO:ontocast.tool.agg.rewriter:Merged 1 unit graphs with provenance: 93 -> 284 triples (11 entities merged)
+INFO:ontocast.tool.agg.aggregate:Aggregation with metadata complete
+WARNING:ontocast.tool.facts_invariants:Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+INFO:ontocast.agent.serialize:LLM: 1 calls, 63,209 sent, 5,818 received | 16,380 in / 1,860 out tokens | Triples: 0 ontology, 93 facts
+INFO:ontocast.agent.serialize:Durations: Render Facts 19.3s, Render Facts/unit_sum 19.3s, llm/provider 19.2s, Merge Facts 1.2s, Render Facts/loop_lag_total 0.1s, Render Facts/loop_lag_max 0.1s, prompt/ontology_chapter 0.0s, Validate Facts 0.0s, Chunk Text 0.0s, repair/deterministic 0.0s, Convert to Text 0.0s, llm/cache_lookup 0.0s, llm/inflight_wait 0.0s, ctx/merge_document_ontology 0.0s, Render Facts/worker_wait 0.0s
+INFO:ontocast.agent.serialize:Effective workers: Render Facts 1.0x (loop lag 0.1s)
+INFO:ontocast.tool.triple_manager.fuseki:Graph graph https://growgraph.dev/doc/f2ce7889910b/ uploaded to Fuseki as named graph.
+INFO:ontocast.api.process_helpers:Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L4.facts.ttl
+INFO:ontocast.api.process_helpers:Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L4.facts.validation.json
+INFO:ontocast.api.process_helpers:Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L4.run.json
+INFO:ontocast.agent.chunk_text:Chunking the text
+INFO:ontocast.agent.chunk_text:Created 1 chunks for processing: [26542]
+INFO:ontocast.agent.chunk_text:Created 1 content units: [26542]
+INFO:ontocast.agent.chunk_text:Section labels: (unlabeled)=1
+INFO:ontocast.stategraph.atomic:Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+INFO:ontocast.agent.render_facts:Render facts for content unit 1
+INFO:ontocast.agent.render_facts:Generating fresh facts as Turtle
+INFO:ontocast.agent.render_facts:Rendering fresh facts
+INFO:ontocast.agent.render_facts:Fresh facts generated with 118 triple(s).
+INFO:ontocast.stategraph.atomic:Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+WARNING:ontocast.util.numeric_inventory:Numeric coverage: 65 missing mention(s) truncated to 30 for the repair prompt
+INFO:ontocast.tool.agg.aggregate:Starting aggregation with metadata for 1 units
+INFO:ontocast.tool.agg.aggregate:Aggregation entity classification stats: fact=14 known_ontology=2 tentative_ontology=34
+INFO:ontocast.tool.agg.clustering:Embedding 28 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 28 entities
+INFO:ontocast.tool.agg.clustering:Clustering 28 entities...
+INFO:ontocast.tool.agg.clustering:Formed 3 clusters: 1 singletons, 2 multi-entity clusters, max cluster size: 20
+INFO:ontocast.tool.agg.clustering:Embedding 19 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 19 entities
+INFO:ontocast.tool.agg.clustering:Clustering 19 entities...
+INFO:ontocast.tool.agg.clustering:Formed 7 clusters: 4 singletons, 3 multi-entity clusters, max cluster size: 10
+INFO:ontocast.tool.agg.clustering:Embedding 3 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 3 entities
+INFO:ontocast.tool.agg.clustering:Clustering 3 entities...
+INFO:ontocast.tool.agg.clustering:Formed 3 clusters: 3 singletons, 0 multi-entity clusters, max cluster size: 1
+INFO:ontocast.tool.agg.aggregate:Rejected 72 candidate merges after symbolic validation
+INFO:ontocast.tool.agg.clustering:Created mapping for 50 entities to 49 representatives
+INFO:ontocast.tool.agg.uri_builder:Built URI mapping: 50 entities, 14 normalised
+INFO:ontocast.tool.agg.rewriter:Merged 1 unit graphs with provenance: 118 -> 359 triples (14 entities merged)
+INFO:ontocast.tool.agg.aggregate:Aggregation with metadata complete
+WARNING:ontocast.tool.facts_invariants:Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+INFO:ontocast.agent.serialize:LLM: 1 calls, 64,514 sent, 7,254 received | 16,852 in / 2,282 out tokens | Triples: 0 ontology, 118 facts
+INFO:ontocast.agent.serialize:Durations: Render Facts 23.9s, Render Facts/unit_sum 23.9s, llm/provider 23.7s, Merge Facts 1.6s, Render Facts/loop_lag_total 0.4s, Render Facts/loop_lag_max 0.2s, prompt/ontology_chapter 0.0s, Validate Facts 0.0s, Chunk Text 0.0s, repair/deterministic 0.0s, Convert to Text 0.0s, llm/cache_lookup 0.0s, ctx/merge_document_ontology 0.0s, llm/inflight_wait 0.0s, Render Facts/worker_wait 0.0s
+INFO:ontocast.agent.serialize:Effective workers: Render Facts 1.0x (loop lag 0.4s)
+INFO:ontocast.tool.triple_manager.fuseki:Graph graph https://growgraph.dev/doc/7206789a3fe5/ uploaded to Fuseki as named graph.
+INFO:ontocast.api.process_helpers:Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L5.facts.ttl
+INFO:ontocast.api.process_helpers:Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L5.facts.validation.json
+INFO:ontocast.api.process_helpers:Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L5.run.json
+INFO:ontocast.agent.chunk_text:Chunking the text
+INFO:ontocast.agent.chunk_text:Created 1 chunks for processing: [17298]
+INFO:ontocast.agent.chunk_text:Created 1 content units: [17298]
+INFO:ontocast.agent.chunk_text:Section labels: (unlabeled)=1
+INFO:ontocast.stategraph.atomic:Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+INFO:ontocast.agent.render_facts:Render facts for content unit 1
+INFO:ontocast.agent.render_facts:Generating fresh facts as Turtle
+INFO:ontocast.agent.render_facts:Rendering fresh facts
+INFO:ontocast.agent.render_facts:Fresh facts generated with 122 triple(s).
+INFO:ontocast.stategraph.atomic:Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+INFO:ontocast.tool.agg.aggregate:Starting aggregation with metadata for 1 units
+INFO:ontocast.tool.agg.aggregate:Aggregation entity classification stats: fact=14 known_ontology=2 tentative_ontology=32
+INFO:ontocast.tool.agg.clustering:Embedding 20 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 20 entities
+INFO:ontocast.tool.agg.clustering:Clustering 20 entities...
+INFO:ontocast.tool.agg.clustering:Formed 5 clusters: 4 singletons, 1 multi-entity clusters, max cluster size: 16
+INFO:ontocast.tool.agg.clustering:Embedding 25 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 25 entities
+INFO:ontocast.tool.agg.clustering:Clustering 25 entities...
+INFO:ontocast.tool.agg.clustering:Formed 3 clusters: 1 singletons, 2 multi-entity clusters, max cluster size: 18
+INFO:ontocast.tool.agg.clustering:Embedding 3 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 3 entities
+INFO:ontocast.tool.agg.clustering:Clustering 3 entities...
+INFO:ontocast.tool.agg.clustering:Formed 2 clusters: 1 singletons, 1 multi-entity clusters, max cluster size: 2
+INFO:ontocast.tool.agg.aggregate:Rejected 82 candidate merges after symbolic validation
+INFO:ontocast.tool.agg.clustering:Created mapping for 48 entities to 48 representatives
+INFO:ontocast.tool.agg.uri_builder:Built URI mapping: 48 entities, 14 normalised
+INFO:ontocast.tool.agg.rewriter:Merged 1 unit graphs with provenance: 122 -> 371 triples (14 entities merged)
+INFO:ontocast.tool.agg.aggregate:Aggregation with metadata complete
+WARNING:ontocast.tool.facts_invariants:Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+INFO:ontocast.agent.serialize:LLM: 1 calls, 55,270 sent, 7,434 received | 14,479 in / 2,359 out tokens | Triples: 0 ontology, 122 facts
+INFO:ontocast.agent.serialize:Durations: Render Facts 24.3s, Render Facts/unit_sum 24.3s, llm/provider 24.1s, Merge Facts 1.6s, Render Facts/loop_lag_total 0.2s, Render Facts/loop_lag_max 0.2s, prompt/ontology_chapter 0.0s, Validate Facts 0.0s, Chunk Text 0.0s, llm/cache_lookup 0.0s, repair/deterministic 0.0s, Convert to Text 0.0s, ctx/merge_document_ontology 0.0s, llm/inflight_wait 0.0s, Render Facts/worker_wait 0.0s
+INFO:ontocast.agent.serialize:Effective workers: Render Facts 1.0x (loop lag 0.2s)
+INFO:ontocast.tool.triple_manager.fuseki:Graph graph https://growgraph.dev/doc/5f16894b5362/ uploaded to Fuseki as named graph.
+INFO:ontocast.api.process_helpers:Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L6.facts.ttl
+INFO:ontocast.api.process_helpers:Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L6.facts.validation.json
+INFO:ontocast.api.process_helpers:Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L6.run.json
+INFO:ontocast.agent.chunk_text:Chunking the text
+INFO:ontocast.agent.chunk_text:Created 1 chunks for processing: [19724]
+INFO:ontocast.agent.chunk_text:Created 1 content units: [19724]
+INFO:ontocast.agent.chunk_text:Section labels: (unlabeled)=1
+INFO:ontocast.stategraph.atomic:Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+INFO:ontocast.agent.render_facts:Render facts for content unit 1
+INFO:ontocast.agent.render_facts:Generating fresh facts as Turtle
+INFO:ontocast.agent.render_facts:Rendering fresh facts
+INFO:ontocast.agent.render_facts:Fresh facts generated with 70 triple(s).
+INFO:ontocast.stategraph.atomic:Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+INFO:ontocast.tool.agg.aggregate:Starting aggregation with metadata for 1 units
+INFO:ontocast.tool.agg.aggregate:Aggregation entity classification stats: fact=9 known_ontology=2 tentative_ontology=31
+INFO:ontocast.tool.agg.clustering:Embedding 20 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 20 entities
+INFO:ontocast.tool.agg.clustering:Clustering 20 entities...
+INFO:ontocast.tool.agg.clustering:Formed 7 clusters: 6 singletons, 1 multi-entity clusters, max cluster size: 14
+INFO:ontocast.tool.agg.clustering:Embedding 3 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 3 entities
+INFO:ontocast.tool.agg.clustering:Clustering 3 entities...
+INFO:ontocast.tool.agg.clustering:Formed 2 clusters: 1 singletons, 1 multi-entity clusters, max cluster size: 2
+INFO:ontocast.tool.agg.clustering:Embedding 19 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 19 entities
+INFO:ontocast.tool.agg.clustering:Clustering 19 entities...
+INFO:ontocast.tool.agg.clustering:Formed 6 clusters: 4 singletons, 2 multi-entity clusters, max cluster size: 10
+INFO:ontocast.tool.agg.aggregate:Rejected 44 candidate merges after symbolic validation
+INFO:ontocast.tool.agg.clustering:Created mapping for 42 entities to 42 representatives
+INFO:ontocast.tool.agg.uri_builder:Built URI mapping: 42 entities, 9 normalised
+INFO:ontocast.tool.agg.rewriter:Merged 1 unit graphs with provenance: 70 -> 215 triples (9 entities merged)
+INFO:ontocast.tool.agg.aggregate:Aggregation with metadata complete
+WARNING:ontocast.tool.facts_invariants:Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+INFO:ontocast.agent.serialize:LLM: 1 calls, 57,696 sent, 4,239 received | 14,808 in / 1,410 out tokens | Triples: 0 ontology, 70 facts
+INFO:ontocast.agent.serialize:Durations: Render Facts 14.6s, Render Facts/unit_sum 14.6s, llm/provider 14.5s, Merge Facts 0.9s, Render Facts/loop_lag_total 0.1s, Render Facts/loop_lag_max 0.0s, prompt/ontology_chapter 0.0s, Validate Facts 0.0s, Chunk Text 0.0s, repair/deterministic 0.0s, Convert to Text 0.0s, llm/cache_lookup 0.0s, ctx/merge_document_ontology 0.0s, llm/inflight_wait 0.0s, Render Facts/worker_wait 0.0s
+INFO:ontocast.agent.serialize:Effective workers: Render Facts 1.0x (loop lag 0.1s)
+INFO:ontocast.tool.triple_manager.fuseki:Graph graph https://growgraph.dev/doc/b2e2f2b6f4d8/ uploaded to Fuseki as named graph.
+INFO:ontocast.api.process_helpers:Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L7.facts.ttl
+INFO:ontocast.api.process_helpers:Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L7.facts.validation.json
+INFO:ontocast.api.process_helpers:Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L7.run.json
+INFO:ontocast.agent.chunk_text:Chunking the text
+INFO:ontocast.agent.chunk_text:Created 1 chunks for processing: [19512]
+INFO:ontocast.agent.chunk_text:Created 1 content units: [19512]
+INFO:ontocast.agent.chunk_text:Section labels: (unlabeled)=1
+INFO:ontocast.stategraph.atomic:Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+INFO:ontocast.agent.render_facts:Render facts for content unit 1
+INFO:ontocast.agent.render_facts:Generating fresh facts as Turtle
+INFO:ontocast.agent.render_facts:Rendering fresh facts
+INFO:ontocast.agent.render_facts:Fresh facts generated with 62 triple(s).
+INFO:ontocast.stategraph.atomic:Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+INFO:ontocast.tool.agg.aggregate:Starting aggregation with metadata for 1 units
+INFO:ontocast.tool.agg.aggregate:Aggregation entity classification stats: fact=7 known_ontology=2 tentative_ontology=30
+INFO:ontocast.tool.agg.clustering:Embedding 19 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 19 entities
+INFO:ontocast.tool.agg.clustering:Clustering 19 entities...
+INFO:ontocast.tool.agg.clustering:Formed 9 clusters: 7 singletons, 2 multi-entity clusters, max cluster size: 7
+INFO:ontocast.tool.agg.clustering:Embedding 17 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 17 entities
+INFO:ontocast.tool.agg.clustering:Clustering 17 entities...
+INFO:ontocast.tool.agg.clustering:Formed 7 clusters: 2 singletons, 5 multi-entity clusters, max cluster size: 5
+INFO:ontocast.tool.agg.clustering:Embedding 3 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 3 entities
+INFO:ontocast.tool.agg.clustering:Clustering 3 entities...
+INFO:ontocast.tool.agg.clustering:Formed 3 clusters: 3 singletons, 0 multi-entity clusters, max cluster size: 1
+INFO:ontocast.tool.agg.aggregate:Rejected 29 candidate merges after symbolic validation
+INFO:ontocast.tool.agg.clustering:Created mapping for 39 entities to 38 representatives
+INFO:ontocast.tool.agg.uri_builder:Built URI mapping: 39 entities, 7 normalised
+INFO:ontocast.tool.agg.rewriter:Merged 1 unit graphs with provenance: 62 -> 191 triples (7 entities merged)
+INFO:ontocast.tool.agg.aggregate:Aggregation with metadata complete
+WARNING:ontocast.tool.facts_invariants:Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+INFO:ontocast.agent.serialize:LLM: 1 calls, 57,484 sent, 3,888 received | 14,807 in / 1,266 out tokens | Triples: 0 ontology, 62 facts
+INFO:ontocast.agent.serialize:Durations: Render Facts 13.2s, Render Facts/unit_sum 13.2s, llm/provider 13.1s, Merge Facts 1.5s, Render Facts/loop_lag_total 0.1s, Render Facts/loop_lag_max 0.0s, prompt/ontology_chapter 0.0s, Validate Facts 0.0s, Chunk Text 0.0s, repair/deterministic 0.0s, llm/cache_lookup 0.0s, Convert to Text 0.0s, ctx/merge_document_ontology 0.0s, llm/inflight_wait 0.0s, Render Facts/worker_wait 0.0s
+INFO:ontocast.agent.serialize:Effective workers: Render Facts 1.0x (loop lag 0.1s)
+INFO:ontocast.tool.triple_manager.fuseki:Graph graph https://growgraph.dev/doc/7e487360f82b/ uploaded to Fuseki as named graph.
+INFO:ontocast.api.process_helpers:Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L8.facts.ttl
+INFO:ontocast.api.process_helpers:Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L8.facts.validation.json
+INFO:ontocast.api.process_helpers:Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L8.run.json
+INFO:ontocast.agent.chunk_text:Chunking the text
+INFO:ontocast.agent.chunk_text:Created 1 chunks for processing: [17640]
+INFO:ontocast.agent.chunk_text:Created 1 content units: [17640]
+INFO:ontocast.agent.chunk_text:Section labels: (unlabeled)=1
+INFO:ontocast.stategraph.atomic:Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+INFO:ontocast.agent.render_facts:Render facts for content unit 1
+INFO:ontocast.agent.render_facts:Generating fresh facts as Turtle
+INFO:ontocast.agent.render_facts:Rendering fresh facts
+INFO:ontocast.agent.render_facts:Fresh facts generated with 55 triple(s).
+INFO:ontocast.stategraph.atomic:Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+WARNING:ontocast.util.numeric_inventory:Numeric coverage: 40 missing mention(s) truncated to 30 for the repair prompt
+INFO:ontocast.tool.agg.aggregate:Starting aggregation with metadata for 1 units
+INFO:ontocast.tool.agg.aggregate:Aggregation entity classification stats: fact=7 known_ontology=2 tentative_ontology=28
+INFO:ontocast.tool.agg.clustering:Embedding 18 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 18 entities
+INFO:ontocast.tool.agg.clustering:Clustering 18 entities...
+INFO:ontocast.tool.agg.clustering:Formed 5 clusters: 4 singletons, 1 multi-entity clusters, max cluster size: 14
+INFO:ontocast.tool.agg.clustering:Embedding 16 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 16 entities
+INFO:ontocast.tool.agg.clustering:Clustering 16 entities...
+INFO:ontocast.tool.agg.clustering:Formed 5 clusters: 1 singletons, 4 multi-entity clusters, max cluster size: 4
+INFO:ontocast.tool.agg.clustering:Embedding 3 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 3 entities
+INFO:ontocast.tool.agg.clustering:Clustering 3 entities...
+INFO:ontocast.tool.agg.clustering:Formed 3 clusters: 3 singletons, 0 multi-entity clusters, max cluster size: 1
+INFO:ontocast.tool.agg.aggregate:Rejected 38 candidate merges after symbolic validation
+INFO:ontocast.tool.agg.clustering:Created mapping for 37 entities to 37 representatives
+INFO:ontocast.tool.agg.uri_builder:Built URI mapping: 37 entities, 7 normalised
+INFO:ontocast.tool.agg.rewriter:Merged 1 unit graphs with provenance: 55 -> 170 triples (7 entities merged)
+INFO:ontocast.tool.agg.aggregate:Aggregation with metadata complete
+WARNING:ontocast.tool.facts_invariants:Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+INFO:ontocast.agent.serialize:LLM: 1 calls, 55,612 sent, 3,345 received | 14,704 in / 1,075 out tokens | Triples: 0 ontology, 55 facts
+INFO:ontocast.agent.serialize:Durations: Render Facts 11.4s, Render Facts/unit_sum 11.4s, llm/provider 11.3s, Merge Facts 0.8s, Render Facts/loop_lag_total 0.0s, prompt/ontology_chapter 0.0s, Validate Facts 0.0s, Chunk Text 0.0s, Render Facts/loop_lag_max 0.0s, repair/deterministic 0.0s, llm/cache_lookup 0.0s, Convert to Text 0.0s, llm/inflight_wait 0.0s, ctx/merge_document_ontology 0.0s, Render Facts/worker_wait 0.0s
+INFO:ontocast.agent.serialize:Effective workers: Render Facts 1.0x (loop lag 0.0s)
+INFO:ontocast.tool.triple_manager.fuseki:Graph graph https://growgraph.dev/doc/1a18c72ccc82/ uploaded to Fuseki as named graph.
+INFO:ontocast.api.process_helpers:Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L9.facts.ttl
+INFO:ontocast.api.process_helpers:Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L9.facts.validation.json
+INFO:ontocast.api.process_helpers:Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L9.run.json
+INFO:ontocast.agent.chunk_text:Chunking the text
+INFO:ontocast.agent.chunk_text:Created 1 chunks for processing: [38275]
+INFO:ontocast.agent.chunk_text:Created 1 content units: [38275]
+INFO:ontocast.agent.chunk_text:Section labels: (unlabeled)=1
+INFO:ontocast.stategraph.atomic:Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+INFO:ontocast.agent.render_facts:Render facts for content unit 1
+INFO:ontocast.agent.render_facts:Generating fresh facts as Turtle
+INFO:ontocast.agent.render_facts:Rendering fresh facts
+INFO:ontocast.agent.render_facts:Fresh facts generated with 230 triple(s).
+INFO:ontocast.stategraph.atomic:Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+WARNING:ontocast.util.numeric_inventory:Numeric coverage: 58 missing mention(s) truncated to 30 for the repair prompt
+INFO:ontocast.tool.agg.aggregate:Starting aggregation with metadata for 1 units
+INFO:ontocast.tool.agg.aggregate:Aggregation entity classification stats: fact=24 known_ontology=2 tentative_ontology=35
+INFO:ontocast.tool.agg.clustering:Embedding 38 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 38 entities
+INFO:ontocast.tool.agg.clustering:Clustering 38 entities...
+INFO:ontocast.tool.agg.clustering:Formed 7 clusters: 1 singletons, 6 multi-entity clusters, max cluster size: 17
+INFO:ontocast.tool.agg.clustering:Embedding 20 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 20 entities
+INFO:ontocast.tool.agg.clustering:Clustering 20 entities...
+INFO:ontocast.tool.agg.clustering:Formed 10 clusters: 8 singletons, 2 multi-entity clusters, max cluster size: 6
+INFO:ontocast.tool.agg.clustering:Embedding 3 entity representations in parallel...
+INFO:ontocast.tool.agg.clustering:Embedded 3 entities
+INFO:ontocast.tool.agg.clustering:Clustering 3 entities...
+INFO:ontocast.tool.agg.clustering:Formed 3 clusters: 3 singletons, 0 multi-entity clusters, max cluster size: 1
+INFO:ontocast.tool.agg.aggregate:Rejected 121 candidate merges after symbolic validation
+INFO:ontocast.tool.agg.clustering:Created mapping for 61 entities to 60 representatives
+INFO:ontocast.tool.agg.uri_builder:Built URI mapping: 61 entities, 24 normalised
+INFO:ontocast.tool.agg.rewriter:Merged 1 unit graphs with provenance: 230 -> 695 triples (24 entities merged)
+INFO:ontocast.tool.agg.aggregate:Aggregation with metadata complete
+WARNING:ontocast.tool.facts_invariants:Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+INFO:ontocast.agent.serialize:LLM: 1 calls, 76,247 sent, 13,630 received | 19,219 in / 4,330 out tokens | Triples: 0 ontology, 230 facts
+INFO:ontocast.agent.serialize:Durations: Render Facts 45.0s, Render Facts/unit_sum 45.0s, llm/provider 44.5s, Merge Facts 3.7s, Render Facts/loop_lag_total 0.6s, Render Facts/loop_lag_max 0.5s, Validate Facts 0.0s, prompt/ontology_chapter 0.0s, Chunk Text 0.0s, Convert to Text 0.0s, repair/deterministic 0.0s, llm/cache_lookup 0.0s, ctx/merge_document_ontology 0.0s, llm/inflight_wait 0.0s, Render Facts/worker_wait 0.0s
+INFO:ontocast.agent.serialize:Effective workers: Render Facts 1.0x (loop lag 0.6s)
+INFO:ontocast.tool.triple_manager.fuseki:Graph graph https://growgraph.dev/doc/4321b21c5b12/ uploaded to Fuseki as named graph.
+INFO:ontocast.api.process_helpers:Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L10.facts.ttl
+INFO:ontocast.api.process_helpers:Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L10.facts.validation.json
+INFO:ontocast.api.process_helpers:Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_echr2_20260819_122533/gemma4/raw/input.L10.run.json

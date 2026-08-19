@@ -21,11 +21,11 @@ entity in the factual narrative, every link direction is canonical, and controll
 vocabularies are strictly closed by explicit owl:oneOf enumerations with explicit escape 
 values (echr:LevelUnknown, echr:TypeOther, echr:OutcomeOther, etc.)."""@en ;
     dcterms:created "2026-07-24T00:00:00+00:00"^^xsd:dateTime ;
-    dcterms:modified "2026-08-18T00:00:00+00:00"^^xsd:dateTime ;
+    dcterms:modified "2026-08-19T00:00:00+00:00"^^xsd:dateTime ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     vann:preferredNamespacePrefix "echr" ;
-    owl:versionIRI <https://growgraph.dev/echr/3.0.0> ;
-    owl:versionInfo "3.0.0" .
+    owl:versionIRI <https://growgraph.dev/echr/3.3.0> ;
+    owl:versionInfo "3.3.0" .
 
 ################################################################
 # 0. Datatypes
@@ -47,11 +47,37 @@ echr:CaseDocument a owl:Class ;
     skos:definition "The Strasbourg judgment or decision being processed. Attach extracted domestic proceedings to this case IRI."@en ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
+echr:DomesticEvent a owl:Class ;
+    rdfs:label "Domestic Event"@en ;
+    skos:definition "Any milestone in the domestic procedural history narrated in the facts: a court proceeding, a non-judicial administrative decision, an act enforcing an earlier decision, or an internal prosecutorial review. The shared superclass exists so hasCourt, hasOutcome, hasDecisionDate, followsProceeding and the other timeline vocabulary apply uniformly across all four, and a chain can mix them (e.g. an administrative decision followed by its enforcement)."@en ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
 echr:DomesticProceeding a owl:Class ;
     rdfs:label "Domestic Proceeding"@en ;
     skos:definition "One set of proceedings before a single national court or authority in the domestic chain (e.g. first-instance trial, appeal, cassation)."@en ;
     skos:scopeNote "Where a case is remitted and retried before the same court, the retrial is a separate proceeding linked by echr:followsProceeding."@en ;
-    rdfs:subClassOf prov:Activity ;
+    rdfs:subClassOf echr:DomesticEvent ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:AdministrativeAction a owl:Class ;
+    rdfs:label "Administrative Action"@en ;
+    skos:definition "A decision by a state or municipal body outside a formal trial (e.g. appointing a guardian, denying a welfare request, refusing a permit)."@en ;
+    skos:scopeNote "If the same decision is later challenged before a court, model the challenge as a separate echr:DomesticProceeding linked back to this action with echr:followsProceeding."@en ;
+    rdfs:subClassOf echr:DomesticEvent ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:EnforcementAction a owl:Class ;
+    rdfs:label "Enforcement Action"@en ;
+    skos:definition "The physical or bureaucratic execution of an earlier decision (e.g. forced relocation to an institution, seizure of property, removal from the country)."@en ;
+    rdfs:subClassOf echr:DomesticEvent ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:ProsecutorialReview a owl:Class ;
+    rdfs:label "Prosecutorial Review"@en ;
+    skos:definition "An internal decision or appeal within a public prosecutor's office (e.g. a regional prosecutor's refusal to act, reviewed by the prosecutor's office above it), distinct from a proceeding before a court."@en ;
+    skos:scopeNote "Use echr:DomesticProceeding instead once the matter reaches a court -- this class is only for review that stays inside the prosecution service."@en ;
+    rdfs:subClassOf echr:DomesticEvent ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
 echr:DomesticAuthority a owl:Class ;
@@ -70,9 +96,54 @@ echr:Adjournment a owl:Class ;
     skos:definition "A hearing that was listed and subsequently postponed to a later date."@en ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
+#---------------------------------------------------------------
+# 1.1 Party and person classes
+#
+# echr:Party is who took part; echr:NaturalPerson is what kind of thing a
+# human party (or a human acting for one) is. A human party is typed BOTH
+# echr:Party and echr:NaturalPerson; a company or public-body party is typed
+# echr:Party alone. echr:Participation records where and on which side --
+# scoped to one echr:DomesticEvent -- because the side a party is on changes
+# as the case moves up (the accused at trial is the moving party on appeal).
+#---------------------------------------------------------------
+
+echr:Party a owl:Class ;
+    rdfs:label "Party"@en ;
+    skos:definition "A person, company or public body taking part in the domestic proceedings, including the future applicant."@en ;
+    skos:scopeNote "What sort of entity a party is comes from its type, not from a separate vocabulary: a human party is also typed echr:NaturalPerson, and an institutional party that decided another event in the chain is also typed echr:DomesticAuthority. A party that went on to apply to Strasbourg is reached through echr:hasApplicant on the case document."@en ;
+    rdfs:subClassOf foaf:Agent ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:NaturalPerson a owl:Class ;
+    rdfs:label "Natural Person"@en ;
+    skos:definition "An identified or referred-to human being in the case: an applicant, a co-party, a lawyer, a relative. Create one instance per person, however they are designated -- a person named only as \"the applicant\" or as \"X\" is still a natural person."@en ;
+    rdfs:subClassOf foaf:Person ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:LegalRepresentative a owl:Class ;
+    rdfs:label "Legal Representative"@en ;
+    skos:definition "A lawyer, legal-aid counsel, guardian or agent acting for a party in the domestic proceedings."@en ;
+    rdfs:subClassOf echr:NaturalPerson ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:Participation a owl:Class ;
+    rdfs:label "Participation"@en ;
+    skos:definition "One party's involvement in one domestic event: who they were and which side they were on, at that instance."@en ;
+    skos:scopeNote "Create one instance per party per event. A party appearing at three instances of the chain has three participations, not one -- this is what lets the schema record a party switching sides (respondent at trial, appellant on appeal) without contradiction."@en ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
 [] a owl:AllDisjointClasses ;
-    owl:members ( echr:CaseDocument echr:DomesticProceeding echr:DomesticAuthority 
-                  echr:InactivityPeriod echr:Adjournment ) .
+    owl:members ( echr:CaseDocument echr:DomesticProceeding echr:AdministrativeAction
+                  echr:EnforcementAction echr:ProsecutorialReview echr:DomesticAuthority
+                  echr:InactivityPeriod echr:Adjournment echr:NaturalPerson echr:Participation ) .
+
+# echr:Party is deliberately disjoint from neither echr:NaturalPerson nor
+# echr:DomesticAuthority: a human party is both a party and a natural person, and a
+# prosecutor's office can be a party in one proceeding and the deciding authority in
+# another.
+[] a owl:AllDisjointClasses ;
+    owl:members ( echr:CaseDocument echr:DomesticProceeding echr:AdministrativeAction
+                  echr:EnforcementAction echr:ProsecutorialReview echr:Party ) .
 
 ################################################################
 # 2. Vocabulary Container Classes
@@ -114,6 +185,20 @@ echr:DelayAttribution a owl:Class ;
     rdfs:subClassOf skos:Concept ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
+echr:StatusAlteration a owl:Class ;
+    rdfs:label "Status Alteration"@en ;
+    skos:definition "Controlled vocabulary: a legal-capacity or civil-status restriction imposed on, or restored to, the applicant by a domestic event."@en ;
+    skos:scopeNote "Kept separate from echr:hasOutcomeDirection: direction says which way a decision cut for the applicant in general, this says specifically what capacity restriction resulted, if any."@en ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:PartySide a owl:Class ;
+    rdfs:label "Party Side"@en ;
+    skos:definition "Controlled vocabulary: which side of a domestic event a party was on, stated in terms that hold across civil, criminal and appellate instances alike."@en ;
+    skos:scopeNote "Deliberately coarse. Claimant, prosecution and appellant are all the moving party; defendant, accused and respondent on appeal are all the responding party. Recording the shared distinction rather than the domestic label is what makes the value comparable between a first-instance trial and a cassation appeal, and between one legal order and another."@en ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
 ################################################################
 # 3. Canonical Object Properties
 ################################################################
@@ -127,15 +212,15 @@ echr:hasDomesticProceeding a owl:ObjectProperty ;
 
 echr:followsProceeding a owl:ObjectProperty, owl:AsymmetricProperty, owl:IrreflexiveProperty ;
     rdfs:label "follows proceeding"@en ;
-    skos:definition "Links a proceeding to the one immediately before it in the domestic procedural chain (e.g. appeal follows first instance)."@en ;
-    rdfs:domain echr:DomesticProceeding ;
-    rdfs:range echr:DomesticProceeding ;
+    skos:definition "Links a domestic event to the one immediately before it in the domestic procedural chain (e.g. appeal follows first instance; enforcement follows the decision it enforces)."@en ;
+    rdfs:domain echr:DomesticEvent ;
+    rdfs:range echr:DomesticEvent ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
 echr:hasCourt a owl:ObjectProperty, owl:FunctionalProperty ;
     rdfs:label "has court"@en ;
-    skos:definition "The authority that conducted or decided the proceeding."@en ;
-    rdfs:domain echr:DomesticProceeding ;
+    skos:definition "The authority that conducted or decided this domestic event."@en ;
+    rdfs:domain echr:DomesticEvent ;
     rdfs:range echr:DomesticAuthority ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
@@ -148,36 +233,43 @@ echr:hasAuthorityKind a owl:ObjectProperty, owl:FunctionalProperty ;
 
 echr:hasInstanceLevel a owl:ObjectProperty, owl:FunctionalProperty ;
     rdfs:label "has instance level"@en ;
-    skos:definition "Where this proceeding sat in the national judicial hierarchy."@en ;
-    rdfs:domain echr:DomesticProceeding ;
+    skos:definition "Where this domestic event sat in the national judicial or administrative hierarchy."@en ;
+    rdfs:domain echr:DomesticEvent ;
     rdfs:range echr:InstanceLevel ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
 echr:hasProceedingType a owl:ObjectProperty, owl:FunctionalProperty ;
     rdfs:label "has proceeding type"@en ;
-    skos:definition "The legal track/nature of this proceeding."@en ;
-    rdfs:domain echr:DomesticProceeding ;
+    skos:definition "The legal track/nature of this domestic event."@en ;
+    rdfs:domain echr:DomesticEvent ;
     rdfs:range echr:ProceedingType ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
 echr:hasOutcome a owl:ObjectProperty, owl:FunctionalProperty ;
     rdfs:label "has outcome"@en ;
-    skos:definition "The disposition that closed this proceeding."@en ;
-    rdfs:domain echr:DomesticProceeding ;
+    skos:definition "The disposition that closed this domestic event."@en ;
+    rdfs:domain echr:DomesticEvent ;
     rdfs:range echr:ProceedingOutcome ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
 echr:hasOutcomeDirection a owl:ObjectProperty, owl:FunctionalProperty ;
     rdfs:label "has outcome direction"@en ;
     skos:definition "Whether the disposition favoured or disfavoured the applicant."@en ;
-    rdfs:domain echr:DomesticProceeding ;
+    rdfs:domain echr:DomesticEvent ;
     rdfs:range echr:OutcomeDirection ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasStatusApplied a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has status applied"@en ;
+    skos:definition "The specific legal-capacity or civil-status restriction this domestic event imposed on or restored to the applicant, if any."@en ;
+    rdfs:domain echr:DomesticEvent ;
+    rdfs:range echr:StatusAlteration ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
 echr:hasInactivityPeriod a owl:ObjectProperty ;
     rdfs:label "has inactivity period"@en ;
-    skos:definition "A dormant period occurring within this proceeding."@en ;
-    rdfs:domain echr:DomesticProceeding ;
+    skos:definition "A dormant period occurring within this domestic event."@en ;
+    rdfs:domain echr:DomesticEvent ;
     rdfs:range echr:InactivityPeriod ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
@@ -190,8 +282,8 @@ echr:hasInactivityCause a owl:ObjectProperty, owl:FunctionalProperty ;
 
 echr:hasAdjournment a owl:ObjectProperty ;
     rdfs:label "has adjournment"@en ;
-    skos:definition "A hearing in this proceeding that was postponed."@en ;
-    rdfs:domain echr:DomesticProceeding ;
+    skos:definition "A hearing in this domestic event that was postponed."@en ;
+    rdfs:domain echr:DomesticEvent ;
     rdfs:range echr:Adjournment ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
@@ -202,36 +294,72 @@ echr:hasAdjournmentCause a owl:ObjectProperty, owl:FunctionalProperty ;
     rdfs:range echr:DelayAttribution ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
+echr:hasApplicant a owl:ObjectProperty ;
+    rdfs:label "has applicant"@en ;
+    skos:definition "The party or parties who went on to apply to Strasbourg. Cases may have several; a company applicant is a party without being a natural person."@en ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:Party ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasParticipation a owl:ObjectProperty ;
+    rdfs:label "has participation"@en ;
+    skos:definition "A party's involvement in this domestic event. One participation per party per event; a party appearing at three instances of the chain has three."@en ;
+    rdfs:domain echr:DomesticEvent ;
+    rdfs:range echr:Participation ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:participatingParty a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "participating party"@en ;
+    skos:definition "The party whose involvement this is."@en ;
+    rdfs:domain echr:Participation ;
+    rdfs:range echr:Party ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasPartySide a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has party side"@en ;
+    skos:definition "Which side of this domestic event the party was on. Functional: a party has one side at one instance, and a party who changes side between instances does so by having a different value on a different participation."@en ;
+    rdfs:domain echr:Participation ;
+    rdfs:range echr:PartySide ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:isRepresentedBy a owl:ObjectProperty ;
+    rdfs:label "is represented by"@en ;
+    skos:definition "The lawyer, legal-aid counsel or guardian acting for this party in the domestic proceedings."@en ;
+    rdfs:domain echr:Party ;
+    rdfs:range echr:LegalRepresentative ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
 ################################################################
 # 4. Datatype Properties
 ################################################################
 
-# Proceeding Properties
+# Domestic Event Properties -- the name predates DomesticEvent broadening the
+# domain from echr:DomesticProceeding; kept for extraction-prompt continuity.
 echr:hasProceedingStartDate a owl:DatatypeProperty, owl:FunctionalProperty ;
     rdfs:label "has proceeding start date"@en ;
-    skos:definition "Date the proceeding was instituted."@en ;
-    rdfs:domain echr:DomesticProceeding ;
+    skos:definition "Date this domestic event was instituted."@en ;
+    rdfs:domain echr:DomesticEvent ;
     rdfs:range echr:PartialDate ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
 echr:hasDecisionDate a owl:DatatypeProperty, owl:FunctionalProperty ;
     rdfs:label "has decision date"@en ;
-    skos:definition "Date of the decision closing this proceeding."@en ;
-    rdfs:domain echr:DomesticProceeding ;
+    skos:definition "Date of the decision closing this domestic event."@en ;
+    rdfs:domain echr:DomesticEvent ;
     rdfs:range echr:PartialDate ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
 echr:isPending a owl:DatatypeProperty, owl:FunctionalProperty ;
     rdfs:label "is pending"@en ;
-    skos:definition "True where the proceeding was still undecided at the time of the ECHR application."@en ;
-    rdfs:domain echr:DomesticProceeding ;
+    skos:definition "True where this domestic event was still undecided at the time of the ECHR application."@en ;
+    rdfs:domain echr:DomesticEvent ;
     rdfs:range xsd:boolean ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
 echr:isFinalDomesticDecision a owl:DatatypeProperty, owl:FunctionalProperty ;
     rdfs:label "is final domestic decision"@en ;
-    skos:definition "True for the proceeding that concluded the domestic remedies prior to Strasbourg."@en ;
-    rdfs:domain echr:DomesticProceeding ;
+    skos:definition "True for the domestic event that concluded the domestic remedies prior to Strasbourg."@en ;
+    rdfs:domain echr:DomesticEvent ;
     rdfs:range xsd:boolean ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
@@ -247,6 +375,21 @@ echr:hasJurisdictionState a owl:DatatypeProperty, owl:FunctionalProperty ;
     rdfs:label "has jurisdiction state"@en ;
     skos:definition "The State whose legal order the authority belongs to."@en ;
     rdfs:domain echr:DomesticAuthority ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+# Party and Person Properties
+echr:hasPartyName a owl:DatatypeProperty ;
+    rdfs:label "has party name"@en ;
+    skos:definition "Name or designation of the party as written in the case text (often initials or \"the applicant\")."@en ;
+    rdfs:domain echr:Party ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasPersonName a owl:DatatypeProperty ;
+    rdfs:label "has person name"@en ;
+    skos:definition "Full designation of a natural person as written in the case text, including any honorific: \"Mr Rusi Kosev Stanev\", \"Ms A. Genova\", \"the applicant\"."@en ;
+    rdfs:domain echr:NaturalPerson ;
     rdfs:range xsd:string ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
@@ -317,12 +460,6 @@ echr:hasJudgmentDate a owl:DatatypeProperty, owl:FunctionalProperty ;
 echr:hasSupportingQuote a owl:DatatypeProperty ;
     rdfs:label "has supporting quote"@en ;
     skos:definition "Verbatim text snippet supporting the extracted entity."@en ;
-    rdfs:range xsd:string ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
-echr:hasSourceParagraph a owl:DatatypeProperty ;
-    rdfs:label "has source paragraph"@en ;
-    skos:definition "The numbered paragraph of the judgment from which the entity was read."@en ;
     rdfs:range xsd:string ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
@@ -480,6 +617,10 @@ echr:OutcomeMeasureImposed a echr:ProceedingOutcome ;
     skos:prefLabel "measure imposed"@en ;
     skos:inScheme echr:ProceedingOutcomeScheme .
 
+echr:OutcomeMeasureSubstituted a echr:ProceedingOutcome ;
+    skos:prefLabel "a different measure substituted for the one requested"@en ;
+    skos:inScheme echr:ProceedingOutcomeScheme .
+
 echr:OutcomeOther a echr:ProceedingOutcome ;
     skos:prefLabel "other"@en ;
     skos:inScheme echr:ProceedingOutcomeScheme .
@@ -496,7 +637,131 @@ echr:ProceedingOutcome owl:equivalentClass [ a owl:Class ;
         echr:OutcomeClaimDismissed echr:OutcomeClaimPartlyGranted echr:OutcomeDeclaredInadmissible
         echr:OutcomeRefusedExamination echr:OutcomeDiscontinued echr:OutcomeSettled
         echr:OutcomeQuashedAndRemitted echr:OutcomeUpheldOnAppeal echr:OutcomeMeasureImposed
-        echr:OutcomeOther echr:OutcomeUnknown ) ] .
+        echr:OutcomeMeasureSubstituted echr:OutcomeOther echr:OutcomeUnknown ) ] .
+
+################################################################
+# 5. Pre-trial detention module
+#
+# Detention pending investigation or trial is the pre-trial fact that bears
+# hardest on Article 6 § 1, for two reasons.
+#
+#  (a) It usually fixes the start of the reasonable-time period in criminal
+#      cases. The period runs from the moment the applicant is substantially
+#      affected by the accusation — ordinarily arrest or first questioning,
+#      not committal or the opening of the trial. Where a detention is
+#      recorded, echr:hasDetentionStartDate is normally the better clock start
+#      than echr:hasProceedingStartDate.
+#  (b) It raises the standard by which delay is judged. The Court requires
+#      special diligence of authorities holding an accused in custody, so the
+#      same elapsed time is treated more severely where the applicant was
+#      detained throughout it.
+#
+# A detention is its own node rather than a pair of dates on the proceeding,
+# because a person may be detained, released and re-detained within one set of
+# proceedings, and because the ground relied on changes from one review to the
+# next. Create one instance per continuous period under a single measure; a
+# change of measure — police custody converted to remand, remand to house
+# arrest — closes one node and opens another.
+################################################################
+
+echr:PreTrialDetention a owl:Class ;
+    rdfs:label "Pre-Trial Detention"@en ;
+    skos:definition "A continuous period during which a person was deprived of liberty in connection with proceedings not yet finally determined, as narrated in the facts."@en ;
+    skos:scopeNote "Pre-trial only. Detention serving a sentence after final conviction is out of scope, as is detention on grounds unconnected with these proceedings. Detention continuing after a first-instance conviction while an appeal is pending is the hard case: it is in scope, and echr:hasExtractionNote should say so."@en ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:CustodialMeasure a owl:Class ;
+    rdfs:label "Custodial Measure"@en ;
+    skos:definition "Controlled vocabulary: the form the deprivation of liberty took."@en ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+#---------------------------------------------------------------
+# 5.1 Detention properties
+#---------------------------------------------------------------
+
+echr:hasPreTrialDetention a owl:ObjectProperty ;
+    rdfs:label "has pre-trial detention"@en ;
+    skos:definition "Attaches a period of detention to the proceeding in which it was ordered or continued. A detention spanning investigation and trial attaches to both."@en ;
+    rdfs:domain echr:DomesticProceeding ;
+    rdfs:range echr:PreTrialDetention ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasDetainee a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has detainee"@en ;
+    skos:definition "The person held. Usually the future applicant; record a co-accused only where the facts turn on the comparison."@en ;
+    rdfs:domain echr:PreTrialDetention ;
+    rdfs:range echr:NaturalPerson ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasCustodialMeasure a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has custodial measure"@en ;
+    skos:definition "The form this deprivation of liberty took."@en ;
+    rdfs:domain echr:PreTrialDetention ;
+    rdfs:range echr:CustodialMeasure ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasDetentionStartDate a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has detention start date"@en ;
+    skos:definition "Date the person was taken into custody under this measure. Record only the precision the text gives."@en ;
+    rdfs:domain echr:PreTrialDetention ;
+    rdfs:range echr:PartialDate ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasDetentionEndDate a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has detention end date"@en ;
+    skos:definition "Date the person was released or the measure was replaced. Omit where the facts present the person as still detained; record echr:EndingStillDetained instead."@en ;
+    rdfs:domain echr:PreTrialDetention ;
+    rdfs:range echr:PartialDate ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasStatedDetentionDuration a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has stated detention duration"@en ;
+    skos:definition "Length of the detention where the judgment states it in words, as an xsd:duration. Do not compute this from the dates — record it only when the text asserts it."@en ;
+    rdfs:domain echr:PreTrialDetention ;
+    rdfs:range xsd:duration ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+#---------------------------------------------------------------
+# 5.2 Custodial measure
+#---------------------------------------------------------------
+
+echr:MeasurePoliceCustody a echr:CustodialMeasure ;
+    skos:prefLabel "police custody"@en ;
+    skos:definition "Short initial custody at a police station or by an investigating authority, before any judicial order — garde à vue and its equivalents. Where an arrest date is given at all, this is usually the measure it belongs to."@en ;
+    skos:inScheme echr:CustodialMeasureScheme .
+
+echr:MeasureRemandInCustody a echr:CustodialMeasure ;
+    skos:prefLabel "remand in custody"@en ;
+    skos:definition "Detention on remand ordered by a court or prosecutor pending investigation or trial."@en ;
+    skos:inScheme echr:CustodialMeasureScheme .
+
+echr:MeasureHouseArrest a echr:CustodialMeasure ;
+    skos:prefLabel "house arrest"@en ;
+    skos:inScheme echr:CustodialMeasureScheme .
+
+echr:MeasurePsychiatricConfinement a echr:CustodialMeasure ;
+    skos:prefLabel "psychiatric confinement"@en ;
+    skos:definition "Compulsory placement for psychiatric assessment or treatment ordered in these proceedings."@en ;
+    skos:inScheme echr:CustodialMeasureScheme .
+
+echr:MeasureOther a echr:CustodialMeasure ;
+    skos:prefLabel "other"@en ;
+    skos:inScheme echr:CustodialMeasureScheme .
+
+echr:MeasureUnknown a echr:CustodialMeasure ;
+    skos:prefLabel "unknown"@en ;
+    skos:definition "The facts record that the person was detained but not under what measure."@en ;
+    skos:inScheme echr:CustodialMeasureScheme .
+
+echr:CustodialMeasureScheme a skos:ConceptScheme ;
+    rdfs:label "Custodial measure vocabulary"@en .
+
+echr:CustodialMeasure owl:equivalentClass [ a owl:Class ;
+    owl:oneOf ( echr:MeasurePoliceCustody echr:MeasureRemandInCustody echr:MeasureHouseArrest
+        echr:MeasurePsychiatricConfinement echr:MeasureOther echr:MeasureUnknown ) ] .
+
 
 #---------------------------------------------------------------
 # 6.4 Outcome Direction
@@ -545,6 +810,14 @@ echr:AuthorityDisciplinary a echr:AuthorityKind ;
     skos:prefLabel "disciplinary or professional"@en ;
     skos:inScheme echr:AuthorityKindScheme .
 
+echr:AuthorityMunicipal a echr:AuthorityKind ;
+    skos:prefLabel "municipal or local government"@en ;
+    skos:inScheme echr:AuthorityKindScheme .
+
+echr:AuthoritySocialWelfare a echr:AuthorityKind ;
+    skos:prefLabel "social welfare or care institution"@en ;
+    skos:inScheme echr:AuthorityKindScheme .
+
 echr:AuthorityUnknown a echr:AuthorityKind ;
     skos:prefLabel "unknown"@en ;
     skos:inScheme echr:AuthorityKindScheme .
@@ -554,7 +827,8 @@ echr:AuthorityKindScheme a skos:ConceptScheme ;
 
 echr:AuthorityKind owl:equivalentClass [ a owl:Class ;
     owl:oneOf ( echr:AuthorityJudicial echr:AuthorityProsecutorial echr:AuthorityAdministrative
-        echr:AuthorityDisciplinary echr:AuthorityUnknown ) ] .
+        echr:AuthorityDisciplinary echr:AuthorityMunicipal echr:AuthoritySocialWelfare
+        echr:AuthorityUnknown ) ] .
 
 #---------------------------------------------------------------
 # 6.6 Delay Attribution
@@ -582,3 +856,64 @@ echr:DelayAttributionScheme a skos:ConceptScheme ;
 echr:DelayAttribution owl:equivalentClass [ a owl:Class ;
     owl:oneOf ( echr:DelayAttributedToAuthorities echr:DelayAttributedToApplicant
         echr:DelayAttributedToComplexity echr:DelayUnattributed ) ] .
+
+#---------------------------------------------------------------
+# 6.7 Status Alteration
+#---------------------------------------------------------------
+
+echr:StatusPartialIncapacity a echr:StatusAlteration ;
+    skos:prefLabel "partial legal incapacity imposed"@en ;
+    skos:inScheme echr:StatusAlterationScheme .
+
+echr:StatusFullIncapacity a echr:StatusAlteration ;
+    skos:prefLabel "full legal incapacity imposed"@en ;
+    skos:inScheme echr:StatusAlterationScheme .
+
+echr:StatusCapacityRestored a echr:StatusAlteration ;
+    skos:prefLabel "legal capacity restored"@en ;
+    skos:inScheme echr:StatusAlterationScheme .
+
+echr:StatusOther a echr:StatusAlteration ;
+    skos:prefLabel "other status alteration"@en ;
+    skos:inScheme echr:StatusAlterationScheme .
+
+echr:StatusUnknown a echr:StatusAlteration ;
+    skos:prefLabel "unknown"@en ;
+    skos:inScheme echr:StatusAlterationScheme .
+
+echr:StatusAlterationScheme a skos:ConceptScheme ;
+    rdfs:label "Status alteration vocabulary"@en .
+
+echr:StatusAlteration owl:equivalentClass [ a owl:Class ;
+    owl:oneOf ( echr:StatusPartialIncapacity echr:StatusFullIncapacity
+        echr:StatusCapacityRestored echr:StatusOther echr:StatusUnknown ) ] .
+
+#---------------------------------------------------------------
+# 6.8 Party Side
+#---------------------------------------------------------------
+
+echr:SideInitiating a echr:PartySide ;
+    skos:prefLabel "initiating party"@en ;
+    skos:definition "The party who moved the authority to act at this instance: the claimant or plaintiff in civil proceedings, the prosecution in criminal proceedings, the appellant on appeal, the applicant for supervisory review or reopening."@en ;
+    skos:inScheme echr:PartySideScheme .
+
+echr:SideResponding a echr:PartySide ;
+    skos:prefLabel "responding party"@en ;
+    skos:definition "The party the proceeding was brought against at this instance: the defendant in civil proceedings, the accused in criminal proceedings, the respondent on appeal."@en ;
+    skos:inScheme echr:PartySideScheme .
+
+echr:SideThirdParty a echr:PartySide ;
+    skos:prefLabel "third party"@en ;
+    skos:definition "A party joined to the proceeding without being on either side of the principal dispute: an intervener, a civil party joined to a criminal trial, a public body appearing to be heard."@en ;
+    skos:inScheme echr:PartySideScheme .
+
+echr:SideUnknown a echr:PartySide ;
+    skos:prefLabel "unknown"@en ;
+    skos:definition "The facts place the party in the event but not on a side. The expected value where a judgment names a body without saying what it was doing there."@en ;
+    skos:inScheme echr:PartySideScheme .
+
+echr:PartySideScheme a skos:ConceptScheme ;
+    rdfs:label "Party side vocabulary"@en .
+
+echr:PartySide owl:equivalentClass [ a owl:Class ;
+    owl:oneOf ( echr:SideInitiating echr:SideResponding echr:SideThirdParty echr:SideUnknown ) ] .

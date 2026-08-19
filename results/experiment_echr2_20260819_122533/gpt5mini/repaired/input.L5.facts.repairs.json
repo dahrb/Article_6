@@ -1,0 +1,19 @@
+{
+  "source": "results/experiment_echr2_20260819_122533/gpt5mini/repaired/input.L5.facts.ttl",
+  "operations": [
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Same court and identical decision date (2021-04-08). The kept node has more triples (includes proceeding start date 2016-10-05 and inactivity info) and more inbound links, so it should survive while the other duplicate is dropped. Both nodes' supporting quotes reference the same Kyiv District Administrative Court decision of 8 April 2021.",
+      "action": "merge",
+      "keep": "doc:kyiv_district_admin_proceeding_2016_10_05_2021_04_08",
+      "drop": "doc:kyiv_district_admin_final_decision_2021_04_08",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 1,
+        "properties_moved": 2,
+        "survivor_value_kept": 7
+      }
+    }
+  ]
+}

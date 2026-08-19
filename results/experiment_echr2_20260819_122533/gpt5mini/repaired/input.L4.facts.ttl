@@ -1,0 +1,101 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/b50a283804a9/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/b50a283804a9> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:1"^^xsd:string .
+
+doc:proc_investigating_judge_concluded_investigation_19980317 a echr:DomesticProceeding ;
+    rdfs:label "On 17 March 1998 the criminal investigation was concluded with the investigating judge’s decision ordering the exclusion of certain documents from the case-file in accordance with section 83, paragraph 3, of the Criminal Procedure Act."@en ;
+    echr:followsProceeding doc:proc_maribor_higher_court_upheld_appeal_19971204 ;
+    echr:hasCourt doc:authoritySlovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "1998-03-17"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "43"^^xsd:string ;
+    echr:hasSupportingQuote "On 17 March 1998 the criminal investigation was concluded with the investigating judge’s decision ordering the exclusion of certain documents from the case-file in accordance with section 83, paragraph 3, of the Criminal Procedure Act."^^xsd:string .
+
+doc:proc_public_prosecutor_dismissal_19970117 a echr:DomesticProceeding ;
+    rdfs:label "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."@en ;
+    echr:followsProceeding doc:proc_applicant_oral_complaint_19950407 ;
+    echr:hasCourt doc:authoritySlovenjGradecDistrictPublicProsecutor ;
+    echr:hasDecisionDate "1997-01-17"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "34"^^xsd:string ;
+    echr:hasSupportingQuote "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."^^xsd:string .
+
+doc:authorityMariborHigherCourt a echr:DomesticAuthority ;
+    rdfs:label "Maribor Higher Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Maribor Higher Court"^^xsd:string ;
+    echr:hasSourceParagraph "41"^^xsd:string ;
+    echr:hasSupportingQuote "On 4 December 1997 the Maribor Higher Court upheld her appeal finding that, despite the shortcomings mentioned in the first-instance decision, there were sufficient grounds for suspicion that the applicant had committed the alleged offence. Accordingly, it changed the first-instance court’s decision and opened a criminal investigation against the applicant."^^xsd:string .
+
+doc:authoritySlovenjGradecDistrictPublicProsecutor a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec District Public Prosecutor’s Office"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Slovenj Gradec District Public Prosecutor’s Office ( Okrožno državno tožilstvo )"^^xsd:string ;
+    echr:hasSourceParagraph "34"^^xsd:string ;
+    echr:hasSupportingQuote "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."^^xsd:string .
+
+doc:proc_applicant_oral_complaint_19950407 a echr:DomesticProceeding ;
+    rdfs:label "On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint against the officers of the Special Unit concerning the events of 5 April 1995."@en ;
+    echr:hasCourt doc:authoritySlovenjGradecPolice ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasProceedingStartDate "1995-04-07"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "28"^^xsd:string ;
+    echr:hasSupportingQuote "On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint against the officers of the Special Unit concerning the events of 5 April 1995."^^xsd:string .
+
+doc:proc_maribor_higher_court_upheld_appeal_19971204 a echr:DomesticProceeding ;
+    rdfs:label "On 4 December 1997 the Maribor Higher Court upheld her appeal finding that, despite the shortcomings mentioned in the first-instance decision, there were sufficient grounds for suspicion that the applicant had committed the alleged offence. Accordingly, it changed the first-instance court’s decision and opened a criminal investigation against the applicant."@en ;
+    echr:followsProceeding doc:proc_sg_districtcourt_decision_not_to_open_19970408 ;
+    echr:hasCourt doc:authorityMariborHigherCourt ;
+    echr:hasDecisionDate "1997-12-04"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "41"^^xsd:string ;
+    echr:hasSupportingQuote "On 4 December 1997 the Maribor Higher Court upheld her appeal finding that, despite the shortcomings mentioned in the first-instance decision, there were sufficient grounds for suspicion that the applicant had committed the alleged offence. Accordingly, it changed the first-instance court’s decision and opened a criminal investigation against the applicant."^^xsd:string .
+
+doc:proc_police_initiated_case_against_applicant_19950412 a echr:DomesticProceeding ;
+    rdfs:label "On 12 April 1995 the Slovenj Gradec Police lodged a criminal complaint against the applicant for the criminal offence of 'obstructing an official in the course of his duties' which referred to the same incident as the applicant's criminal complaint."@en ;
+    echr:hasCourt doc:authoritySlovenjGradecPolice ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasProceedingStartDate "1995-04-12"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "37"^^xsd:string ;
+    echr:hasSupportingQuote "On 12 April 1995 the Slovenj Gradec Police lodged a criminal complaint against the applicant for the criminal offence of 'obstructing an official in the course of his duties' under section 302, paragraph 4-1 of the Slovenian Criminal Code, which referred to the same incident as the applicant's criminal complaint."^^xsd:string .
+
+doc:proc_sg_districtcourt_decision_not_to_open_19970408 a echr:DomesticProceeding ;
+    rdfs:label "On 8 April 1997, further to a proposal of the investigating judge, the Slovenj Gradec District Court decided not to open a criminal investigation against the applicant."@en ;
+    echr:followsProceeding doc:proc_police_initiated_case_against_applicant_19950412 ;
+    echr:hasCourt doc:authoritySlovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "1997-04-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "40"^^xsd:string ;
+    echr:hasSupportingQuote "On 8 April 1997, further to a proposal of the investigating judge, the Slovenj Gradec District Court decided not to open a criminal investigation against the applicant."^^xsd:string .
+
+doc:authoritySlovenjGradecDistrictCourt a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec District Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Slovenj Gradec District Court"^^xsd:string ;
+    echr:hasSourceParagraph "40"^^xsd:string ;
+    echr:hasSupportingQuote "On 8 April 1997, further to a proposal of the investigating judge, the Slovenj Gradec District Court decided not to open a criminal investigation against the applicant."^^xsd:string .
+
+doc:authoritySlovenjGradecPolice a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec Police"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Slovenj Gradec Police"^^xsd:string ;
+    echr:hasSourceParagraph "28"^^xsd:string ;
+    echr:hasSupportingQuote "On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint against the officers of the Special Unit concerning the events of 5 April 1995."^^xsd:string .
+

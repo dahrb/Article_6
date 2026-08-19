@@ -1,0 +1,94 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/308fc6fa5074/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/308fc6fa5074> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:7"^^xsd:string .
+
+doc:highcourt_bail_review_1999_03_26 a echr:DomesticProceeding ;
+    rdfs:label "An application was made to the High Court to review bail on 26 March 1999. It was refused."^^xsd:string ;
+    echr:followsProceeding doc:trial_1999_potts ;
+    echr:hasCourt doc:courtHighcourt ;
+    echr:hasDecisionDate "1999-03-26"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelSupervisoryReview ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSourceParagraph "23"^^xsd:string ;
+    echr:hasSupportingQuote "An application was made to the High Court to review bail on 26 March 1999. It was refused. The applicant states that the High Court judge took the view that he should not interfere with the decision given the stage reached in the proceedings, i.e. the closing speeches."^^xsd:string ;
+    echr:isFinalDomesticDecision false ;
+    echr:isPending false .
+
+doc:house_of_lords_2000_06_15 a echr:DomesticProceeding ;
+    rdfs:label "On 15 June 2000, the House of Lords refused the petition for leave to appeal."^^xsd:string ;
+    echr:followsProceeding doc:court_of_appeal_2000_02_10 ;
+    echr:hasCourt doc:courtHouseOfLords ;
+    echr:hasDecisionDate "2000-06-15"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "35"^^xsd:string ;
+    echr:hasSupportingQuote "On 15 June 2000, the House of Lords refused the petition for leave to appeal. No reasons were given."^^xsd:string ;
+    echr:isFinalDomesticDecision true ;
+    echr:isPending false .
+
+doc:courtCourtOfAppeal a echr:DomesticAuthority ;
+    rdfs:label "Court of Appeal"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Court of Appeal"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string .
+
+doc:courtHighcourt a echr:DomesticAuthority ;
+    rdfs:label "High Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "High Court"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string .
+
+doc:courtHouseOfLords a echr:DomesticAuthority ;
+    rdfs:label "House of Lords"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "House of Lords"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string .
+
+doc:courtTrialPotts a echr:DomesticAuthority ;
+    rdfs:label "Mr Justice Potts and a jury"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Mr Justice Potts"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string .
+
+doc:court_of_appeal_2000_02_10 a echr:DomesticProceeding ;
+    rdfs:label "In its judgment of 10 February 2000, the Court of Appeal rejected the applicant’s appeal."^^xsd:string ;
+    echr:followsProceeding doc:trial_1999_potts ;
+    echr:hasCourt doc:courtCourtOfAppeal ;
+    echr:hasDecisionDate "2000-02-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "27"^^xsd:string ;
+    echr:hasSupportingQuote "In its judgment of 10 February 2000, the Court of Appeal rejected the applicant’s appeal."^^xsd:string ;
+    echr:isFinalDomesticDecision false ;
+    echr:isPending false .
+
+doc:trial_1999_potts a echr:DomesticProceeding ;
+    rdfs:label "In the trial which took place between 8 February and 1 April 1999, before Mr Justice Potts and a jury, the applicant was represented by senior and junior counsel and solicitors."^^xsd:string ;
+    echr:hasCourt doc:courtTrialPotts ;
+    echr:hasDecisionDate "1999-04-01"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingStartDate "1999-02-08"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "14"^^xsd:string,
+        "25"^^xsd:string ;
+    echr:hasSupportingQuote "In the trial which took place between 8 February and 1 April 1999, before Mr Justice Potts and a jury, the applicant was represented by senior and junior counsel and solicitors."^^xsd:string,
+        "On 1 April 1999, the jury convicted the applicant of counts 1 and 3. The applicant was sentenced to a mandatory term of life imprisonment."^^xsd:string ;
+    echr:isFinalDomesticDecision false ;
+    echr:isPending false .
+

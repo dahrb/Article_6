@@ -1,0 +1,245 @@
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# SHACL validation layer for echr_2.ttl (v3.3.0).
+#
+# Targets the hallucination classes named in extraction_quality_report.md /
+# extraction_fixes_evaluation.md:
+#   - property clobbering: a functional property (already declared
+#     owl:FunctionalProperty in the ontology, but OWL never *rejects* a
+#     second value -- it just breaks reasoning silently) asserted twice on
+#     one node, e.g. two courts or two decision dates on one proceeding.
+#   - invented vocabulary: a term outside the closed owl:oneOf enumeration
+#     for a controlled-vocabulary property (Qwen3 minting
+#     echr:OutcomeDismissed, echr:InstanceLevelSecondInstance, etc).
+#   - missing evidence anchors: a proceeding/inactivity period/adjournment
+#     asserted with no echr:hasSupportingQuote to check it against.
+#   - false merges: a node carrying more than one rdfs:label, or a
+#     DomesticAuthority with no (or more than one) hasAuthorityName --
+#     the multi-label defect neither the functional-property checks nor
+#     the vocabulary checks can see, because rdfs:label admits many values
+#     by design (see SingleLabelShape below).
+#
+# echr:hasSourceParagraph was removed from echr_2.ttl on 2026-08-19: the
+# source text's paragraph numbering was not a consistent part of the corpus
+# (several documents have none at all) and the property was a persistent
+# source of fabricated anchors with no compensating value. Quote fidelity
+# (hasSupportingQuote) is the anchor now; it is a per-document substring
+# check, not expressible in static SHACL, hence sh:Warning severity below
+# rather than a structural shape.
+#
+# Evidence anchoring is reported at sh:Warning, not sh:Violation: on real
+# extractions ~97% of proceedings carry a quote and paragraph anchor, but a
+# few legitimately don't (e.g. a proceeding's outcome is stated only via a
+# cross-reference in a later paragraph). A validator that fails a build over
+# that is worse than one that flags it. See the sibling paragraph-anchor
+# validator's own note that "a validator that invents violations is worse
+# than none."
+#
+# Usage:
+#   uv run pyshacl -s ontology/echr-shapes.ttl -m -a -f human <facts.ttl>
+
+################################################################
+# 1. Atomic node shapes -- one value per functional property
+################################################################
+
+echr:DomesticEventAtomicShape a sh:NodeShape ;
+    # DomesticProceeding, AdministrativeAction, EnforcementAction and
+    # ProsecutorialReview all subclass echr:DomesticEvent and share its
+    # property vocabulary (2026-08-19 ontology extension), so one shape
+    # covers all four rather than four near-identical copies.
+    sh:targetClass echr:DomesticProceeding, echr:AdministrativeAction,
+        echr:EnforcementAction, echr:ProsecutorialReview ;
+    sh:property [
+        sh:path echr:hasCourt ;
+        sh:maxCount 1 ;
+        sh:class echr:DomesticAuthority ;
+        sh:message "a proceeding may have at most one deciding authority" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasInstanceLevel ;
+        sh:maxCount 1 ;
+        sh:in ( echr:LevelInvestigative echr:LevelAdministrativeReview echr:LevelFirstInstance
+                echr:LevelAppeal echr:LevelCassation echr:LevelConstitutional
+                echr:LevelSupervisoryReview echr:LevelReopening echr:LevelEnforcement
+                echr:LevelUnknown ) ;
+        sh:message "hasInstanceLevel must be a single value from the closed InstanceLevel vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasProceedingType ;
+        sh:maxCount 1 ;
+        sh:in ( echr:TypeCriminal echr:TypeCivil echr:TypeAdministrative echr:TypeConstitutional
+                echr:TypeDisciplinary echr:TypeOther echr:TypeUnknown ) ;
+        sh:message "hasProceedingType must be a single value from the closed ProceedingType vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasOutcome ;
+        sh:maxCount 1 ;
+        sh:in ( echr:OutcomeConviction echr:OutcomeAcquittal echr:OutcomeClaimGranted
+                echr:OutcomeClaimDismissed echr:OutcomeClaimPartlyGranted
+                echr:OutcomeDeclaredInadmissible echr:OutcomeRefusedExamination
+                echr:OutcomeDiscontinued echr:OutcomeSettled echr:OutcomeQuashedAndRemitted
+                echr:OutcomeUpheldOnAppeal echr:OutcomeMeasureImposed
+                echr:OutcomeMeasureSubstituted echr:OutcomeOther echr:OutcomeUnknown ) ;
+        sh:message "hasOutcome must be a single value from the closed ProceedingOutcome vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasOutcomeDirection ;
+        sh:maxCount 1 ;
+        sh:in ( echr:DirectionFavourableToApplicant echr:DirectionUnfavourableToApplicant
+                echr:DirectionMixed echr:DirectionUnknown ) ;
+        sh:message "hasOutcomeDirection must be a single value from the closed OutcomeDirection vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasStatusApplied ;
+        sh:maxCount 1 ;
+        sh:in ( echr:StatusPartialIncapacity echr:StatusFullIncapacity
+                echr:StatusCapacityRestored echr:StatusOther echr:StatusUnknown ) ;
+        sh:message "hasStatusApplied must be a single value from the closed StatusAlteration vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasProceedingStartDate ;
+        sh:maxCount 1 ;
+        sh:message "a domestic event may have at most one start date" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasDecisionDate ;
+        sh:maxCount 1 ;
+        sh:message "a domestic event may have at most one decision date" ;
+    ] ;
+    sh:property [
+        sh:path echr:isPending ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:boolean ;
+        sh:message "isPending must be a single boolean" ;
+    ] ;
+    sh:property [
+        sh:path echr:isFinalDomesticDecision ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:boolean ;
+        sh:message "isFinalDomesticDecision must be a single boolean" ;
+    ] .
+
+echr:AuthorityAtomicShape a sh:NodeShape ;
+    sh:targetClass echr:DomesticAuthority ;
+    sh:property [
+        sh:path echr:hasAuthorityKind ;
+        sh:maxCount 1 ;
+        sh:in ( echr:AuthorityJudicial echr:AuthorityProsecutorial echr:AuthorityAdministrative
+                echr:AuthorityDisciplinary echr:AuthorityMunicipal echr:AuthoritySocialWelfare
+                echr:AuthorityUnknown ) ;
+        sh:message "hasAuthorityKind must be a single value from the closed AuthorityKind vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasAuthorityName ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasJurisdictionState ;
+        sh:maxCount 1 ;
+        sh:message "an authority may have at most one jurisdiction state" ;
+    ] .
+
+echr:ParticipationAtomicShape a sh:NodeShape ;
+    sh:targetClass echr:Participation ;
+    sh:property [
+        sh:path echr:participatingParty ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class echr:Party ;
+        sh:message "a participation must record exactly one party" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasPartySide ;
+        sh:maxCount 1 ;
+        sh:in ( echr:SideInitiating echr:SideResponding echr:SideThirdParty echr:SideUnknown ) ;
+        sh:message "hasPartySide must be a single value from the closed PartySide vocabulary" ;
+    ] .
+
+# False-merge guard, not specific to DomesticAuthority: a node carrying more
+# than one rdfs:label is asserting that two distinct things it was told apart
+# in the source text (e.g. "Constitutional Court" and "İstanbul Administrative
+# Court") are one entity. rdfs:label is not owl:FunctionalProperty in RDFS
+# itself, so nothing in the ontology or in reasoning catches this -- it is a
+# SHACL-only check. Observed on echr_2/gemma4 2026-08-19: one DomesticAuthority
+# node held five labels spanning a Constitutional Court and three different
+# administrative-court chambers, with zero hasAuthorityName for the shape
+# above to catch either. Scoped to the entity classes this ontology defines
+# (not sh:targetSubjectsOf rdfs:label globally), so it never fires on the
+# CaseDocument or catalog-ontology nodes that legitimately carry one label.
+echr:SingleLabelShape a sh:NodeShape ;
+    sh:targetClass echr:DomesticAuthority, echr:DomesticProceeding, echr:AdministrativeAction,
+        echr:EnforcementAction, echr:ProsecutorialReview, echr:CaseDocument,
+        echr:InactivityPeriod, echr:Adjournment, echr:Party, echr:NaturalPerson,
+        echr:LegalRepresentative ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:maxCount 1 ;
+        sh:message "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice" ;
+    ] .
+
+echr:InactivityAtomicShape a sh:NodeShape ;
+    sh:targetClass echr:InactivityPeriod ;
+    sh:property [
+        sh:path echr:hasInactivityCause ;
+        sh:maxCount 1 ;
+        sh:in ( echr:DelayAttributedToAuthorities echr:DelayAttributedToApplicant
+                echr:DelayAttributedToComplexity echr:DelayUnattributed ) ;
+        sh:message "hasInactivityCause must be a single value from the closed DelayAttribution vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasInactivityStartDate ;
+        sh:maxCount 1 ;
+        sh:message "an inactivity period may have at most one start date" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasInactivityEndDate ;
+        sh:maxCount 1 ;
+        sh:message "an inactivity period may have at most one end date" ;
+    ] .
+
+echr:AdjournmentAtomicShape a sh:NodeShape ;
+    sh:targetClass echr:Adjournment ;
+    sh:property [
+        sh:path echr:hasAdjournmentCause ;
+        sh:maxCount 1 ;
+        sh:in ( echr:DelayAttributedToAuthorities echr:DelayAttributedToApplicant
+                echr:DelayAttributedToComplexity echr:DelayUnattributed ) ;
+        sh:message "hasAdjournmentCause must be a single value from the closed DelayAttribution vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasAdjournmentDate ;
+        sh:maxCount 1 ;
+        sh:message "an adjournment may have at most one adjournment date" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasResumptionDate ;
+        sh:maxCount 1 ;
+        sh:message "an adjournment may have at most one resumption date" ;
+    ] .
+
+echr:CaseDocumentAtomicShape a sh:NodeShape ;
+    sh:targetClass echr:CaseDocument ;
+    sh:property [ sh:path echr:hasHudocId ; sh:maxCount 1 ] ;
+    sh:property [ sh:path echr:hasCaseName ; sh:maxCount 1 ] ;
+    sh:property [ sh:path echr:hasRespondentState ; sh:maxCount 1 ] ;
+    sh:property [ sh:path echr:hasJudgmentDate ; sh:maxCount 1 ] .
+
+################################################################
+# 2. Evidence anchoring -- flag proceedings/events with no anchor
+################################################################
+
+echr:EvidenceAnchoringShape a sh:NodeShape ;
+    sh:targetClass echr:DomesticProceeding, echr:AdministrativeAction, echr:EnforcementAction,
+        echr:ProsecutorialReview, echr:InactivityPeriod, echr:Adjournment ;
+    sh:property [
+        sh:path echr:hasSupportingQuote ;
+        sh:minCount 1 ;
+        sh:minLength 5 ;
+        sh:severity sh:Warning ;
+        sh:message "no supporting quote anchors this entity to the source text" ;
+    ] .

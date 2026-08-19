@@ -1,0 +1,43 @@
+{
+  "source": "results/experiment_echr2_20260819_122533/gpt5mini/repaired/input.L5.facts.ttl",
+  "operations": [
+    {
+      "finding": "incorrect_outcome_value",
+      "rationale": "The quote for the Kyiv Administrative Court of Appeal decision of 6 March 2017 states that the court \"quashed the decision of 22 December 2016.\" It does not say the case was remitted. The stored outcome echr:OutcomeQuashedAndRemitted therefore overstates what the quote supports; the evidence supports that the decision was quashed only.",
+      "action": "remove",
+      "subject": "doc:kyiv_admin_court_of_appeal_decision_2017_03_06",
+      "predicate": "echr:hasOutcome",
+      "object": "echr:OutcomeQuashedAndRemitted",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "incorrect_outcome_value",
+      "rationale": "The quote for the Kyiv Administrative Court of Appeal decision of 6 March 2017 states that the court \"quashed the decision of 22 December 2016.\" It does not say the case was remitted. The stored outcome echr:OutcomeQuashedAndRemitted therefore overstates what the quote supports; the evidence supports that the decision was quashed only.",
+      "action": "add",
+      "subject": "doc:kyiv_admin_court_of_appeal_decision_2017_03_06",
+      "predicate": "echr:hasOutcome",
+      "object": "echr:OutcomeQuashed",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both nodes describe the Kyiv District Administrative Court decision of 8 April 2021. They share hasCourt = Kyiv District Administrative Court and hasDecisionDate = 2021-04-08 and their supporting quotes refer to the same decision. The doc:kyiv_district_admin_proceeding_2016_10_05_2021_04_08 node contains more metadata (start date, inactivity period) and more inbound links, so it is the better representative to keep.",
+      "action": "merge",
+      "keep": "doc:kyiv_district_admin_proceeding_2016_10_05_2021_04_08",
+      "drop": "doc:kyiv_district_admin_final_decision_2021_04_08",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 0,
+        "properties_moved": 3,
+        "survivor_value_kept": 7
+      }
+    }
+  ]
+}

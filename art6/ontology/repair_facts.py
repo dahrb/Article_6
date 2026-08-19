@@ -21,7 +21,27 @@ document to fix exactly the defects that shape of mistake produces:
      outside echr:DomesticProceeding (heuristically surfaced by keyword, not
      assumed -- the model decides whether each candidate is really one);
   4. whatever the SHACL-lite validator already flagged in the sibling
-     `<stem>.facts.validation.json` (dangling_reference, suspect_multi_value).
+     `<stem>.facts.validation.json` (dangling_reference, suspect_multi_value),
+     PLUS whatever ontology/echr-shapes.ttl flags on the graph directly --
+     the multi-label false-merge shape in particular exists specifically so
+     this pass can fix what it names (added 2026-08-19, see
+     `find_shape_violations` below);
+  5. DUPLICATE ENTITIES -- one real proceeding or authority extracted as two
+     nodes, surfaced deterministically (same court + same decision date; same
+     authority name) and confirmed by the model.
+
+DUPLICATES ARE MERGED AND DELETED, NOT LEFT ORPHANED. The model only names the
+pair and which node survives; `merge_nodes` does the work -- it re-points every
+inbound edge onto the survivor, moves across any property the survivor lacks
+(the survivor's own value wins for anything the ontology declares
+owl:FunctionalProperty, so a merge can never manufacture the multi-value
+contradiction it exists to remove), and then deletes every triple mentioning
+the duplicate. Nothing is left behind for a later pass to clean up.
+
+A final `sweep_stub_orphans` deletes typed nodes that carry nothing but
+rdf:type/rdfs:label and have no inbound reference. It is deliberately narrow:
+an unreferenced node that has real properties is CONTENT, not litter, and is
+kept for the graph build to connect.
 
 The model returns a flat patch of add/remove triple operations, not prose or
 raw Turtle, so every change is auditable. Every subject a patch operation
@@ -45,22 +65,90 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import re
 import shutil
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
 from openai import OpenAI
 from pydantic import BaseModel, Field, model_validator
-from rdflib import RDF, Graph, Namespace, URIRef
+from rdflib import OWL, RDF, RDFS, Graph, Namespace, URIRef
 from rdflib import Literal as RDFLiteral
 
 from art6.paths import REPO_ROOT, relative
 
-ONTOLOGY_TTL = REPO_ROOT / "ontology" / "echr.ttl"
+# Overridable so a run can be pinned to the same snapshot it extracted against:
+#   ART6_ONTOLOGY_TTL=results/<run>/echr.ttl.snapshot uv run python -m art6.ontology.repair_facts ...
+ONTOLOGY_TTL = Path(
+    os.environ.get("ART6_ONTOLOGY_TTL", REPO_ROOT / "ontology" / "echr_2.ttl")
+)
 KEYS_FILE = REPO_ROOT / "keys.env"
 
 ECHR = Namespace("https://growgraph.dev/echr#")
+RDFS_NS = Namespace("http://www.w3.org/2000/01/rdf-schema#")
+SH = Namespace("http://www.w3.org/ns/shacl#")
+
+
+@lru_cache(maxsize=1)
+def functional_properties() -> frozenset[URIRef]:
+    """Properties the ontology declares owl:FunctionalProperty.
+
+    Read from echr_2.ttl rather than hardcoded, so a schema edit cannot leave
+    the merge logic silently applying the previous version's cardinalities.
+    Merging two nodes has to know which predicates take exactly one value: for
+    those the surviving node's value wins and the duplicate's is dropped, and
+    for everything else (quotes, source paragraphs, notes) both are kept.
+    """
+    g = Graph()
+    g.parse(ONTOLOGY_TTL)
+    return frozenset(g.subjects(RDF.type, OWL.FunctionalProperty))
+
+
+@lru_cache(maxsize=1)
+def ontology_terms() -> frozenset[URIRef]:
+    """Every echr: term the ontology actually defines.
+
+    Classes, properties, and the named individuals inside every owl:oneOf
+    enumeration. Anything else in the echr: namespace is invented vocabulary.
+
+    This exists because the extraction prompt's closed-vocabulary discipline
+    was being enforced on the models but NOT on the repair pass: a patch could
+    "correct" echr:OutcomeQuashedAndRemitted to echr:OutcomeQuashed -- a term
+    that does not exist -- and the two-namespace guard waved it through,
+    because it only ever checked that SUBJECTS were doc:-namespaced. Observed
+    in the 2026-08-19 echr_2 run: extraction produced 0 invented terms and the
+    repair pass introduced 1.
+    """
+    g = Graph()
+    g.parse(ONTOLOGY_TTL)
+    terms = set()
+    for kind in (OWL.Class, OWL.ObjectProperty, OWL.DatatypeProperty):
+        terms |= {s for s in g.subjects(RDF.type, kind) if isinstance(s, URIRef)}
+    for lst in g.objects(None, OWL.oneOf):
+        cur = lst
+        while cur and cur != RDF.nil:
+            for first in g.objects(cur, RDF.first):
+                if isinstance(first, URIRef):
+                    terms.add(first)
+            cur = next(g.objects(cur, RDF.rest), None)
+    return frozenset(terms)
+
+
+def unknown_echr_terms(*candidates: str) -> list[str]:
+    """Which of ``candidates`` (CURIEs) name an echr: term the ontology lacks."""
+    known = ontology_terms()
+    bad = []
+    for curie in candidates:
+        prefix, _, local = curie.partition(":")
+        if prefix != "echr" or not local:
+            continue
+        if ECHR[local] not in known:
+            bad.append(curie)
+    return bad
+
 
 # Outcomes that presuppose a decision below, per the ontology's own
 # scope note on echr:DomesticProceeding (see the 2026-08-18 edit).
@@ -96,7 +184,6 @@ def load_openai_api_key() -> str:
                 value = line.split("=", 1)[1].strip()
                 if value:
                     return value
-    import os
 
     key = os.environ.get("OPENAI_API_KEY")
     if not key:
@@ -153,8 +240,36 @@ class RepairGroup(BaseModel):
     ops: list[TripleOp]
 
 
+class MergeOp(BaseModel):
+    """Two nodes that are one entity. The code does the merging, not the model.
+
+    Asking a model to hand-write the add/remove triples that fold one node into
+    another is how you get half-merged nodes and dangling references. It names
+    the pair and the survivor; `merge_nodes` moves the properties and inbound
+    edges and deletes the duplicate outright.
+    """
+
+    keep: str = Field(
+        description="CURIE of the node to survive, e.g. 'doc:appeal_2016'"
+    )
+    drop: str = Field(
+        description="CURIE of the duplicate to fold into `keep` and delete entirely."
+    )
+    rationale: str = Field(
+        description="Why these are the same entity, citing the label/date/quote."
+    )
+
+
 class RepairPatch(BaseModel):
     groups: list[RepairGroup]
+    merges: list[MergeOp] = Field(
+        default_factory=list,
+        description=(
+            "Pairs of nodes that denote the same real entity. Only include a "
+            "pair when the evidence shows one entity described twice; if in "
+            "doubt, leave them separate."
+        ),
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -257,6 +372,90 @@ APPEAL_SHAPED_OUTCOME_CURIES = {
 }
 
 
+def _normalize_name(value) -> str:
+    """Casefold and strip punctuation, for comparing authority names."""
+    return re.sub(r"[^a-z0-9]+", " ", str(value).lower()).strip()
+
+
+def find_duplicate_candidates(graph: Graph) -> list[dict]:
+    """Groups of same-typed doc: nodes that look like one entity split in two.
+
+    Deterministic surfacing only -- the model decides whether a group really is
+    one entity. Two keys, both chosen because a false positive is expensive
+    (merging two genuinely distinct proceedings asserts a falsehood):
+
+      DomesticProceeding  same hasCourt AND same hasDecisionDate. One court
+                          cannot decide the same case twice on one day, so a
+                          collision here is a duplicate rather than a coincidence.
+      DomesticAuthority   same normalized hasAuthorityName / rdfs:label.
+
+    Each group is returned with enough context -- label, dates, outcome, quotes,
+    and how many triples the node carries -- for the model to pick which node to
+    keep without needing the source text.
+    """
+    doc_ns = str(next((ns for prefix, ns in graph.namespaces() if prefix == "doc"), ""))
+    groups: list[dict] = []
+
+    def _members(nodes: list[URIRef]) -> list[dict]:
+        out = []
+        for n in nodes:
+            out.append(
+                {
+                    "curie": _curie(graph, n),
+                    "label": _label(graph, n),
+                    "triples": sum(1 for _ in graph.predicate_objects(n)),
+                    "inbound_links": sum(1 for _ in graph.subjects(None, n)),
+                    "properties": sorted(
+                        {_curie(graph, p) for p in graph.predicates(n, None)}
+                    ),
+                    "quotes": [
+                        str(o) for o in graph.objects(n, ECHR.hasSupportingQuote)
+                    ],
+                }
+            )
+        return out
+
+    by_court_date: dict[tuple, list[URIRef]] = {}
+    for s_ in graph.subjects(RDF.type, ECHR.DomesticProceeding):
+        if not str(s_).startswith(doc_ns):
+            continue
+        court = next(graph.objects(s_, ECHR.hasCourt), None)
+        date = next(graph.objects(s_, ECHR.hasDecisionDate), None)
+        if court is None or date is None:
+            continue
+        by_court_date.setdefault((str(court), str(date)), []).append(s_)
+    for (court, date), nodes in by_court_date.items():
+        if len(nodes) > 1:
+            groups.append(
+                {
+                    "class": "echr:DomesticProceeding",
+                    "matched_on": f"same hasCourt <{court}> and hasDecisionDate {date}",
+                    "members": _members(nodes),
+                }
+            )
+
+    by_name: dict[str, list[URIRef]] = {}
+    for s_ in graph.subjects(RDF.type, ECHR.DomesticAuthority):
+        if not str(s_).startswith(doc_ns):
+            continue
+        name = next(graph.objects(s_, ECHR.hasAuthorityName), None) or next(
+            graph.objects(s_, RDFS.label), None
+        )
+        if name is None:
+            continue
+        by_name.setdefault(_normalize_name(name), []).append(s_)
+    for name, nodes in by_name.items():
+        if len(nodes) > 1:
+            groups.append(
+                {
+                    "class": "echr:DomesticAuthority",
+                    "matched_on": f"same authority name {name!r}",
+                    "members": _members(nodes),
+                }
+            )
+    return groups
+
+
 def find_appeal_shaped_gaps(summaries: list[ProceedingSummary]) -> list[str]:
     return [
         p.curie
@@ -280,6 +479,58 @@ def load_validator_findings(facts_ttl: Path) -> list[dict]:
         return []
     data = json.loads(validation_path.read_text())
     return data.get("findings", [])
+
+
+@lru_cache(maxsize=1)
+def _shapes_graph() -> Graph:
+    from art6.ontology.validate_shapes import SHAPES_PATH
+
+    g = Graph()
+    g.parse(SHAPES_PATH)
+    return g
+
+
+def find_shape_violations(graph: Graph) -> list[dict]:
+    """Static SHACL violations from ontology/echr-shapes.ttl, in the graph
+    alone -- no source text, no LLM call.
+
+    Returned in the same shape as load_validator_findings, so both feed the
+    model identically. This is what makes the shapes file load-bearing rather
+    than a standalone report card: SingleLabelShape names exactly the
+    false-merge defect (a node with two rdfs:label values) that neither the
+    functional-property nor the vocabulary checks can see, and this function
+    is what gets that finding in front of the model that can fix it.
+    """
+    from pyshacl import validate as shacl_validate
+
+    conforms, results_graph, _ = shacl_validate(
+        graph,
+        shacl_graph=_shapes_graph(),
+        advanced=True,
+        inference="none",
+        abort_on_first=False,
+        meta_shacl=False,
+    )
+    if conforms:
+        return []
+
+    findings = []
+    for result in results_graph.subjects(RDF.type, SH.ValidationResult):
+        severity = next(results_graph.objects(result, SH.resultSeverity), None)
+        message = next(results_graph.objects(result, SH.resultMessage), None)
+        focus = next(results_graph.objects(result, SH.focusNode), None)
+        path = next(results_graph.objects(result, SH.resultPath), None)
+        findings.append(
+            {
+                "kind": "shacl_violation",
+                "severity": "error" if severity == SH.Violation else "warning",
+                "message": str(message) if message is not None else "",
+                "subject": _curie(graph, focus) if focus is not None else "",
+                "predicate": _curie(graph, path) if path is not None else "",
+                "values": [],
+            }
+        )
+    return findings
 
 
 def load_ontology_context() -> str:
@@ -365,9 +616,23 @@ but no node yet exists for) a brand-new doc: node with a lowercase_snake_case \
 local name. Never write a triple whose subject is in the echr:, schema:, \
 rdf:, or rdfs: namespace -- those are read-only vocabulary.
 
+DUPLICATE ENTITIES. You are also given groups of nodes that share a \
+distinguishing key -- two proceedings with the same court AND the same \
+decision date, or two authorities with the same name. One court does not \
+decide the same case twice on one day, so such a group is usually one entity \
+the extraction split in two. For each group that really is one entity, emit a \
+`merges` entry naming which node to KEEP and which to DROP. Keep the node \
+carrying the most evidence -- more properties, a fuller supporting quote, a \
+more specific label. Do NOT hand-write add/remove triples to do the merging \
+yourself: naming the pair is enough, and the pipeline moves the properties \
+and the inbound links and deletes the duplicate for you. If a group turns out \
+to be two genuinely distinct steps that happen to share a date, leave it out \
+of `merges` entirely.
+
 Return a patch: one RepairGroup per finding you act on, each carrying the \
-rationale and the exact add/remove operations. If a candidate or gap does \
-not hold up under the quotes, leave it out rather than forcing an edge.
+rationale and the exact add/remove operations, plus a `merges` list for \
+duplicate entities. If a candidate, gap or duplicate group does not hold up \
+under the quotes, leave it out rather than forcing an edge.
 """
 
 
@@ -377,6 +642,7 @@ def build_user_prompt(
     ontology_context: str,
     summaries: list[ProceedingSummary],
     candidates: list[dict],
+    duplicate_groups: list[dict],
     appeal_gaps: list[str],
     final_conflicts: list[str],
     validator_findings: list[dict],
@@ -384,6 +650,7 @@ def build_user_prompt(
     payload = {
         "domestic_proceedings": [vars(p) for p in summaries],
         "mistyped_candidates": candidates,
+        "duplicate_candidate_groups": duplicate_groups,
         "flagged_missing_followsProceeding_for": appeal_gaps,
         "flagged_isFinalDomesticDecision_conflict": final_conflicts,
         "validator_findings": validator_findings,
@@ -446,6 +713,88 @@ def resolve_term(
     return RDFLiteral(curie_or_literal, datatype=dt, lang=lang)
 
 
+def merge_nodes(graph: Graph, keep: URIRef, drop: URIRef) -> dict:
+    """Fold ``drop`` into ``keep`` and delete it. Returns a summary of the move.
+
+    Three moves, in order:
+
+    1. INBOUND. Every ``(s, p, drop)`` becomes ``(s, p, keep)``. This is what
+       repairs the chain: a followsProceeding edge aimed at the duplicate ends
+       up aimed at the survivor without the model having to name the edge.
+       A rewrite that would produce a self-loop (``s`` is ``keep``) is dropped
+       instead -- echr:followsProceeding is owl:AsymmetricProperty and
+       owl:IrreflexiveProperty, so a self-loop is a schema violation, and the
+       identity that made the pair a duplicate is exactly what creates one.
+    2. OUTBOUND. Every ``(drop, p, o)`` is added as ``(keep, p, o)``, EXCEPT
+       where ``p`` is owl:FunctionalProperty and ``keep`` already has a value --
+       the survivor's own value wins, otherwise the merge would manufacture the
+       multi-value contradiction it exists to remove. rdf:type and rdfs:label
+       are treated the same way: the survivor keeps its own label.
+    3. DELETE. Every remaining triple with ``drop`` as subject or object goes.
+       Nothing is left behind to be post-processed away later.
+    """
+    functional = functional_properties() | {RDFS.label}
+    moved_in = rewritten_selfloop = moved_out = kept_own = 0
+
+    for s_, p_ in list(graph.subject_predicates(drop)):
+        graph.remove((s_, p_, drop))
+        if s_ == keep:
+            rewritten_selfloop += 1
+            continue
+        graph.add((s_, p_, keep))
+        moved_in += 1
+
+    for p_, o_ in list(graph.predicate_objects(drop)):
+        if p_ == RDF.type:
+            graph.add((keep, p_, o_))
+            continue
+        # Mirror of the inbound self-loop guard, for the other direction: a
+        # `drop -> keep` edge would become `keep -> keep`. Both directions have
+        # to be checked -- guarding only the inbound one silently minted a
+        # followsProceeding self-loop on the survivor (observed on gpt5mini L5,
+        # 2026-08-19), violating owl:IrreflexiveProperty.
+        if o_ == keep:
+            rewritten_selfloop += 1
+            continue
+        if p_ in functional and (keep, p_, None) in graph:
+            kept_own += 1
+            continue
+        graph.add((keep, p_, o_))
+        moved_out += 1
+
+    graph.remove((drop, None, None))
+    graph.remove((None, None, drop))
+    return {
+        "inbound_edges_repointed": moved_in,
+        "self_loops_dropped": rewritten_selfloop,
+        "properties_moved": moved_out,
+        "survivor_value_kept": kept_own,
+    }
+
+
+def sweep_stub_orphans(graph: Graph, doc_ns: str) -> list[str]:
+    """Delete typed doc: nodes that carry no content AND nothing points at them.
+
+    Deliberately narrow. A node with real properties -- a date, an outcome, a
+    quote -- is CONTENT even when nothing links to it, and deleting it would
+    lose an extraction rather than clean one up; those are left for the graph
+    build to connect. Only a bare ``rdf:type`` (optionally plus a label), with
+    zero inbound references, is swept: that is a stub the model minted and
+    never populated, which no post-processing step can do anything with.
+    """
+    removed: list[str] = []
+    for node in sorted(set(graph.subjects(RDF.type, None)), key=str):
+        if not str(node).startswith(doc_ns):
+            continue
+        if any(True for _ in graph.subjects(None, node)):
+            continue
+        if {p for p in graph.predicates(node, None)} - {RDF.type, RDFS.label}:
+            continue
+        removed.append(_curie(graph, node))
+        graph.remove((node, None, None))
+    return removed
+
+
 def apply_patch(
     graph: Graph, patch: RepairPatch, doc_ns: str
 ) -> tuple[Graph, list[dict]]:
@@ -493,6 +842,20 @@ def apply_patch(
                     record["status"] = "skipped: subject not in doc: namespace"
                     audit.append(record)
                     continue
+                if op.action == "add":
+                    # Closed-vocabulary discipline applies to the repair pass
+                    # too. Without this a patch can "correct" a valid term to
+                    # an invented one and the namespace guard waves it through.
+                    unknown = unknown_echr_terms(
+                        op.predicate, *([] if op.object_is_literal else [op.object])
+                    )
+                    if unknown:
+                        record["status"] = (
+                            "skipped: not defined in the ontology: "
+                            + ", ".join(unknown)
+                        )
+                        audit.append(record)
+                        continue
                 if op.action == "add" and not op.object_is_literal:
                     obj_prefix, _, obj_local = op.object.partition(":")
                     if (
@@ -532,6 +895,50 @@ def apply_patch(
                 else:
                     record["status"] = "skipped: triple not present"
             audit.append(record)
+
+    # Merges run AFTER the add/remove ops, never before: an op names nodes by
+    # the CURIE the model was shown, and a merge that ran first would have
+    # already deleted one of them, turning a valid op into a spurious skip.
+    for merge in patch.merges:
+        record = {
+            "finding": "duplicate_entity",
+            "rationale": merge.rationale,
+            "action": "merge",
+            "keep": merge.keep,
+            "drop": merge.drop,
+        }
+        try:
+            keep = resolve_term(
+                working, merge.keep, is_literal=False, datatype=None, lang=None
+            )
+            drop = resolve_term(
+                working, merge.drop, is_literal=False, datatype=None, lang=None
+            )
+        except ValueError as exc:
+            record["status"] = f"skipped: {exc}"
+            audit.append(record)
+            continue
+
+        if not (str(keep).startswith(doc_ns) and str(drop).startswith(doc_ns)):
+            record["status"] = "skipped: merge outside the doc: namespace"
+        elif keep == drop:
+            record["status"] = "skipped: keep and drop are the same node"
+        elif (keep, RDF.type, None) not in working:
+            record["status"] = f"skipped: {merge.keep} is not a node in the graph"
+        elif (drop, RDF.type, None) not in working:
+            record["status"] = f"skipped: {merge.drop} is not a node in the graph"
+        elif set(working.objects(keep, RDF.type)) != set(
+            working.objects(drop, RDF.type)
+        ):
+            # Different classes means the model is asserting a retype, not a
+            # duplicate. That is a legitimate change but it must come through an
+            # explicit rdf:type op that the two-namespace guard can see.
+            record["status"] = "skipped: nodes have different rdf:type"
+        else:
+            record["status"] = "applied"
+            record["effect"] = merge_nodes(working, keep, drop)
+        audit.append(record)
+
     return working, audit
 
 
@@ -561,11 +968,20 @@ def repair_one(
         return
 
     candidates = find_mistyped_candidates(graph)
+    duplicate_groups = find_duplicate_candidates(graph)
     appeal_gaps = find_appeal_shaped_gaps(summaries)
     final_conflicts = find_final_decision_conflicts(summaries)
-    validator_findings = load_validator_findings(facts_ttl)
+    validator_findings = load_validator_findings(facts_ttl) + find_shape_violations(
+        graph
+    )
 
-    if not (candidates or appeal_gaps or final_conflicts or validator_findings):
+    if not (
+        candidates
+        or duplicate_groups
+        or appeal_gaps
+        or final_conflicts
+        or validator_findings
+    ):
         print(f"  clean {relative(facts_ttl)}: nothing flagged")
         return
 
@@ -575,6 +991,7 @@ def repair_one(
         ontology_context=ontology_context,
         summaries=summaries,
         candidates=candidates,
+        duplicate_groups=duplicate_groups,
         appeal_gaps=appeal_gaps,
         final_conflicts=final_conflicts,
         validator_findings=validator_findings,
@@ -583,17 +1000,42 @@ def repair_one(
 
     applied_ops = sum(1 for g in patch.groups for op in g.ops)
     print(
-        f"  {relative(facts_ttl)}: model proposed {len(patch.groups)} group(s), {applied_ops} op(s)"
+        f"  {relative(facts_ttl)}: model proposed {len(patch.groups)} group(s), "
+        f"{applied_ops} op(s), {len(patch.merges)} merge(s)"
     )
 
     repaired_graph, audit = apply_patch(graph, patch, doc_ns)
+    swept = sweep_stub_orphans(repaired_graph, doc_ns)
+    if swept:
+        audit.append(
+            {
+                "finding": "stub_orphan_sweep",
+                "rationale": (
+                    "Typed nodes carrying nothing but rdf:type/rdfs:label with no "
+                    "inbound reference; nothing downstream can use them."
+                ),
+                "action": "delete_node",
+                "nodes": swept,
+                "status": "applied",
+            }
+        )
     applied = sum(1 for a in audit if a["status"] == "applied")
     skipped = [a for a in audit if a["status"] != "applied"]
-    print(f"    applied {applied}, skipped {len(skipped)}")
+    merged = sum(
+        1 for a in audit if a["action"] == "merge" and a["status"] == "applied"
+    )
+    print(
+        f"    applied {applied} (of which {merged} merge(s)), skipped {len(skipped)}, "
+        f"stub orphans swept {len(swept)}"
+    )
     for a in skipped:
-        print(
-            f"    SKIPPED [{a['finding']}] {a['action']} {a['subject']} {a['predicate']} {a['object']}: {a['status']}"
-        )
+        if a["action"] == "merge":
+            print(f"    SKIPPED merge {a['keep']} <- {a['drop']}: {a['status']}")
+        else:
+            print(
+                f"    SKIPPED [{a['finding']}] {a['action']} {a['subject']} "
+                f"{a['predicate']} {a['object']}: {a['status']}"
+            )
 
     audit_path = facts_ttl.parent / (
         facts_ttl.name.removesuffix(".ttl") + ".repairs.json"

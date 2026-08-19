@@ -1,0 +1,87 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/56d8937113fc/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/56d8937113fc> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:9"^^xsd:string .
+
+doc:domestic_proceeding_supreme_2008 a echr:DomesticProceeding ;
+    rdfs:label "On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant inadmissible."^^xsd:string ;
+    echr:followsProceeding doc:domestic_proceeding_appeal_2007 ;
+    echr:hasCourt doc:authoritySupremeCourt ;
+    echr:hasDecisionDate "2008-02-20"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "26"^^xsd:string ;
+    echr:hasSupportingQuote "On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant inadmissible."^^xsd:string ;
+    echr:isFinalDomesticDecision true ;
+    echr:isPending false .
+
+doc:authorityFirstInstanceCourt a echr:DomesticAuthority ;
+    rdfs:label "court of first instance"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "court of first instance"^^xsd:string ;
+    echr:hasJurisdictionState "Georgia"^^xsd:string .
+
+doc:authorityInvestigatingAuthorities a echr:DomesticAuthority ;
+    rdfs:label "investigating authorities"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "investigating authorities"^^xsd:string ;
+    echr:hasJurisdictionState "Georgia"^^xsd:string .
+
+doc:authoritySupremeCourt a echr:DomesticAuthority ;
+    rdfs:label "Supreme Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Supreme Court"^^xsd:string ;
+    echr:hasJurisdictionState "Georgia"^^xsd:string .
+
+doc:authorityTbilisiCourtOfAppeal a echr:DomesticAuthority ;
+    rdfs:label "Tbilisi Court of Appeal"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Tbilisi Court of Appeal"^^xsd:string ;
+    echr:hasJurisdictionState "Georgia"^^xsd:string .
+
+doc:domestic_proceeding_appeal_2007 a echr:DomesticProceeding ;
+    rdfs:label "On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction."^^xsd:string ;
+    echr:followsProceeding doc:domestic_proceeding_trial_2006 ;
+    echr:hasCourt doc:authorityTbilisiCourtOfAppeal ;
+    echr:hasDecisionDate "2007-06-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "25"^^xsd:string ;
+    echr:hasSupportingQuote "On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction."^^xsd:string ;
+    echr:isPending false .
+
+doc:domestic_proceeding_investigation_2005 a echr:DomesticProceeding ;
+    rdfs:label "Criminal proceedings against the applicant (a) Investigation"^^xsd:string ;
+    echr:hasCourt doc:authorityInvestigatingAuthorities ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasProceedingStartDate "2005-07-10"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "9"^^xsd:string ;
+    echr:hasSupportingQuote "On 14 July 2005 a search warrant was issued in respect of the applicant. He was arrested and remanded in custody on 27 July 2005."^^xsd:string ;
+    echr:isPending false .
+
+doc:domestic_proceeding_trial_2006 a echr:DomesticProceeding ;
+    rdfs:label "Criminal proceedings against the applicant (b) Trial"^^xsd:string ;
+    echr:followsProceeding doc:domestic_proceeding_investigation_2005 ;
+    echr:hasCourt doc:authorityFirstInstanceCourt ;
+    echr:hasDecisionDate "2006-12-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingStartDate "2006-07-17"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "22"^^xsd:string ;
+    echr:hasSupportingQuote "On 8 December 2006 the court of first instance convicted the applicant of aggravated murder and the illegal acquisition, possession and carrying of firearms, and sentenced him to 17 years’ imprisonment."^^xsd:string ;
+    echr:isPending false .
+

@@ -1,5 +1,6 @@
 TASK: Extract the chronological chain of domestic legal proceedings from the provided European Court of Human Rights (ECHR) text.
-Ensure that you model only domestic proceedings and do not use
+Ensure that you model only domestic proceedings and events inc. related administrative procedures related to the case. DO NOT model legal precedent or other legal cases which did not DIRECTLY affect the applicants in the case under consideration.
+The ultimate is to be able to construct a timeline of key events and legal procedures which led up to the legal decision or judgment rendered by the ECtHR
 
 STRICT SCHEMA CONSTRAINTS:
 
@@ -9,13 +10,17 @@ STRICT SCHEMA CONSTRAINTS:
 
 EXTRACTION RULES:
 
-    Focus on Domestic Events: Extract only events and legal proceedings that occurred at the national level prior to the submission to the ECHR. Instantiate these as echr:DomesticProceeding.
+    Focus on Domestic Events: Extract only events and proceedings that occurred prior to the submission to the ECHR. Instantiate each as the most specific echr:DomesticEvent subclass it actually is: echr:DomesticProceeding for a step before a court or tribunal, echr:AdministrativeAction for a non-judicial decision by a state or municipal body (e.g. appointing a guardian, denying a welfare request), echr:EnforcementAction for the physical or bureaucratic execution of an earlier decision, and echr:ProsecutorialReview for an internal decision or appeal that stays inside a prosecutor's office without reaching a court. Do not force everything into echr:DomesticProceeding just because it is the most familiar class.
 
     Map the Procedural Chain: ECHR facts often feature multiple ongoing, parallel legal processes (e.g., simultaneous criminal and civil tracks). You must make the chronological and appellate connections between these proceedings explicit by linking them using the echr:followsProceeding property.
 
-    Anchor All Evidence: Every extracted entity must be grounded in the source text. You must populate echr:hasSupportingQuote with the exact verbatim substring and echr:hasSourceParagraph with the corresponding paragraph number.
+    Anchor All Evidence: Every extracted entity must be grounded in the source text. You must populate echr:hasSupportingQuote with the exact verbatim substring from the text.
 
     A single echr:DomesticProceeding represents exactly ONE jurisdictional instance (i.e. trial or appeal)
         - It is strictly forbidden for a proceeding to have more than one echr:hasCourt or more than one echr:hasDecisionDate.
         - If the text mentions a case moving to a new court, being appealed, or receiving a new decision on a different date, you MUST mint a completely NEW echr:DomesticProceeding IRI.
         - You must link the new proceeding to the old one using echr:followsProceeding. Never merge them.
+
+    Model the Parties: Create one echr:Party per person, company or public body taking part in a domestic event, and type a human party ALSO as echr:NaturalPerson (a company or public body is echr:Party alone). Link the future Strasbourg applicant(s) from the case document with echr:hasApplicant.
+        - Record each party's involvement at each instance as a separate echr:Participation (echr:hasParticipation from the event, echr:participatingParty back to the party, echr:hasPartySide for which side they were on: initiating, responding, third party, or unknown). A party who is the responding party at trial and the initiating party on appeal gets TWO participations, not one with two sides.
+        - Where the text names a lawyer, legal-aid counsel or guardian acting for a party, create an echr:LegalRepresentative (a subclass of echr:NaturalPerson) and link it with echr:isRepresentedBy from the party.

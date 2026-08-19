@@ -1,0 +1,93 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/33cb8ce32071/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/33cb8ce32071> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:8"^^xsd:string .
+
+doc:proc_supreme_1998_08_10 a echr:DomesticProceeding ;
+    rdfs:label "Supreme Court cassation decision 10 August 1998 (confirmed)"@en ;
+    echr:followsProceeding doc:proc_regional_1998_05_27 ;
+    echr:hasCourt doc:authoritySupremeCourtRussia ;
+    echr:hasDecisionDate "1998-08-10"^^echr:PartialDate ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "23"^^xsd:string ;
+    echr:hasSupportingQuote "On 10 August 1998 the Supreme Court confirmed the judgment of the Nizhniy Novgorod Regional Court, with some alterations."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:proc_supreme_detention_1998_05_19 a echr:DomesticProceeding ;
+    rdfs:label "Supreme Court reply re detention appeal 19 May 1998"@en ;
+    echr:followsProceeding doc:proc_regional_1998_05_27 ;
+    echr:hasCourt doc:authoritySupremeCourtRussia ;
+    echr:hasDecisionDate "1998-05-19"^^echr:PartialDate ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnknown ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "10"^^xsd:string ;
+    echr:hasSupportingQuote "The reply from the Supreme Court, dated 19 May 1998, stated that the national law did not allow appeals against that type of trial court orders separately from appeals against judgments."^^xsd:string ;
+    echr:isFinalDomesticDecision false .
+
+doc:proc_regional_1997_04_21 a echr:DomesticProceeding ;
+    rdfs:label "Nizhniy Novgorod Regional Court judgment 21 April 1997"@en ;
+    echr:hasCourt doc:authorityNizhniyNovgorodRegionalCourt ;
+    echr:hasDecisionDate "1997-04-21"^^echr:PartialDate ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "5"^^xsd:string ;
+    echr:hasSupportingQuote "On 21 April 1997 the Nizhniy Novgorod Regional Court found the applicant guilty on some of the charges, and not guilty on most."^^xsd:string ;
+    echr:isFinalDomesticDecision false .
+
+doc:proc_supreme_1997_07 a echr:DomesticProceeding ;
+    rdfs:label "Supreme Court decision July 1997 (quashed and remitted)"@en ;
+    echr:followsProceeding doc:proc_regional_1997_04_21 ;
+    echr:hasCourt doc:authoritySupremeCourtRussia ;
+    echr:hasDecisionDate "1997-07"^^echr:PartialDate ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "6"^^xsd:string ;
+    echr:hasSupportingQuote "In July 1997 the Supreme Court quashed the conviction on the applicant’s appeal and remitted the case to the Nizhniy Novgorod Regional Court."^^xsd:string ;
+    echr:isFinalDomesticDecision false .
+
+doc:authorityNizhniyNovgorodRegionalCourt a echr:DomesticAuthority ;
+    rdfs:label "Nizhniy Novgorod Regional Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Nizhniy Novgorod Regional Court"^^xsd:string ;
+    echr:hasJurisdictionState "Russia"^^xsd:string .
+
+doc:proc_regional_1998_05_27 a echr:DomesticProceeding ;
+    rdfs:label "Nizhniy Novgorod Regional Court retrial judgment 27 May 1998"@en ;
+    echr:followsProceeding doc:proc_supreme_1997_07 ;
+    echr:hasCourt doc:authorityNizhniyNovgorodRegionalCourt ;
+    echr:hasDecisionDate "1998-05-27"^^echr:PartialDate ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingStartDate "1998-03-30"^^echr:PartialDate ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "17"^^xsd:string,
+        "7"^^xsd:string,
+        "9"^^xsd:string ;
+    echr:hasSupportingQuote "On 2 April 1998 the Nizhniy Novgorod Regional Court granted the prosecutor’s renewed motion for detention on grounds of obstruction of justice and violations of the undertaking not to leave the city, and the applicant was arrested in the course of the hearing."^^xsd:string,
+        "On 27 May 1998 the Nizhniy Novgorod Regional Court found the applicant guilty on charges of misappropriation and embezzlement, larceny, bribery and attempt not to return money from abroad."^^xsd:string,
+        "On 30 March 1998, during the new trial, the prosecutor applied to the court to detain the applicant... The Regional Court rejected the motion as unsubstantiated."^^xsd:string ;
+    echr:isFinalDomesticDecision false .
+
+doc:authoritySupremeCourtRussia a echr:DomesticAuthority ;
+    rdfs:label "Supreme Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Supreme Court"^^xsd:string ;
+    echr:hasJurisdictionState "Russia"^^xsd:string .
+

@@ -59,6 +59,16 @@ INPUT_JSON="${INPUT_JSON:-${REPO_ROOT}/data/art6_domestic_test_set.json}"
 # Where the .ttl and .run.json outputs land.
 OUTPUT_DIR="${OUTPUT_DIR:-${REPO_ROOT}/results/$(date +%Y%m%d)_run}"
 
+# `ontocast process` runs from inside ONTOCAST_REPO (see the `cd` below), so a
+# relative INPUT_JSON/OUTPUT_DIR resolves against the WRONG directory once
+# execution gets there and fails with "neither a file nor a directory" for a
+# path that plainly exists. A caller overriding either as a relative path
+# (e.g. EXPERIMENT_DIR=results/foo passed to run_experiment.sh) hits this
+# silently. Absolutize both here, before anything else reads them.
+INPUT_JSON="$(cd "$(dirname "${INPUT_JSON}")" && pwd)/$(basename "${INPUT_JSON}")"
+mkdir -p "${OUTPUT_DIR}"
+OUTPUT_DIR="$(cd "${OUTPUT_DIR}" && pwd)"
+
 # Dataset/collection namespace in Fuseki: {TENANT}--{PROJECT}--facts and
 # --ontologies. These are CLI-only; OntoCast never reads them from the .env.
 # The prior_results/ runs used growgraph / art6.

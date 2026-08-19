@@ -1,0 +1,91 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/b2e2f2b6f4d8/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/b2e2f2b6f4d8> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:7"^^xsd:string .
+
+doc:case_63716_00 a echr:CaseDocument ;
+    echr:hasApplicationNumber "63716/00"^^xsd:string ;
+    echr:hasCaseName "Anthony SAWONIUK against the United Kingdom"^^xsd:string ;
+    echr:hasDomesticProceeding doc:trial_sawoniuk_1999 ;
+    echr:hasRespondentState "United Kingdom"^^xsd:string .
+
+doc:petitionHouseLords a echr:DomesticProceeding ;
+    rdfs:label "Petition for leave to appeal to the House of Lords"^^xsd:string ;
+    echr:followsProceeding doc:appeal_sawoniuk_2000 ;
+    echr:hasCourt doc:houseOfLords ;
+    echr:hasDecisionDate "2000-06-15"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "THE FACTS"^^xsd:string ;
+    echr:hasSupportingQuote "On 15 June 2000, the House of Lords refused the petition for leave to appeal."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:proceedingBailReview a echr:DomesticProceeding ;
+    rdfs:label "High Court Bail Review"^^xsd:string ;
+    echr:followsProceeding doc:trial_sawoniuk_1999 ;
+    echr:hasCourt doc:courtHighBail ;
+    echr:hasDecisionDate "1999-03-26"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "THE FACTS"^^xsd:string ;
+    echr:hasSupportingQuote "An application was made to the High Court to review bail on 26 March 1999. It was refused."^^xsd:string .
+
+doc:appeal_sawoniuk_2000 a echr:DomesticProceeding ;
+    rdfs:label "Appeal against conviction (2000)"^^xsd:string ;
+    echr:followsProceeding doc:trial_sawoniuk_1999 ;
+    echr:hasCourt doc:courtAppeal ;
+    echr:hasDecisionDate "2000-02-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "THE FACTS"^^xsd:string ;
+    echr:hasSupportingQuote "In its judgment of 10 February 2000, the Court of Appeal rejected the applicant’s appeal."^^xsd:string .
+
+doc:courtAppeal a echr:DomesticAuthority ;
+    rdfs:label "Court of Appeal"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Court of Appeal"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string .
+
+doc:courtHighBail a echr:DomesticAuthority ;
+    rdfs:label "High Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "High Court"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string .
+
+doc:courtPotts a echr:DomesticAuthority ;
+    rdfs:label "Mr Justice Potts and a jury"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Mr Justice Potts and a jury"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string .
+
+doc:houseOfLords a echr:DomesticAuthority ;
+    rdfs:label "House of Lords"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "House of Lords"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string .
+
+doc:trial_sawoniuk_1999 a echr:DomesticProceeding ;
+    rdfs:label "Trial of Anthony Sawoniuk (1999)"^^xsd:string ;
+    echr:hasCourt doc:courtPotts ;
+    echr:hasDecisionDate "1999-04-01"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingStartDate "1999-02-08"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSourceParagraph "THE FACTS"^^xsd:string ;
+    echr:hasSupportingQuote "In the trial which took place between 8 February and 1 April 1999, before Mr Justice Potts and a jury"^^xsd:string .
+

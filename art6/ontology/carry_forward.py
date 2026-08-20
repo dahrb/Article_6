@@ -54,6 +54,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import datetime
 import json
 import logging
 import os
@@ -63,6 +64,35 @@ import sys
 import time
 
 logger = logging.getLogger("carry_forward")
+
+# ---------------------------------------------------------------------------
+# The domain prompt, read live.
+#
+# ``expand_input_to_states`` picks ``facts_user_instruction`` out of each JSONL
+# record, because that is how ``ontocast process`` receives it. run_data.sh
+# regenerates the JSONL from prompts/facts.txt on every run, so that path is
+# never stale -- but carry_forward.py is normally pointed at a JSONL somebody
+# built earlier, and then the embedded prompt is a COPY frozen at build time.
+# That is exactly how the 2026-08-19 cfcmp run shipped a 1,783-byte facts.txt
+# that predated the 3.3.0 ontology: the file on disk had moved on, the JSONL
+# had not.
+#
+# So read the file itself, every run, and let it win over whatever the record
+# carries. There is no second copy to keep in sync and no way for a stale JSONL
+# to silently steer an experiment.
+# ---------------------------------------------------------------------------
+FACTS_PROMPT_PATH = pathlib.Path(__file__).resolve().parent / "prompts" / "facts.txt"
+
+
+def load_facts_prompt() -> str:
+    """The current contents of prompts/facts.txt, resolved next to this file."""
+    if not FACTS_PROMPT_PATH.is_file():
+        raise SystemExit(f"facts prompt not found: {FACTS_PROMPT_PATH}")
+    text = FACTS_PROMPT_PATH.read_text(encoding="utf-8").strip()
+    if not text:
+        raise SystemExit(f"facts prompt is empty: {FACTS_PROMPT_PATH}")
+    return text
+
 
 # ---------------------------------------------------------------------------
 # The carry-forward framing.
@@ -158,6 +188,8 @@ def _fmt(n: float) -> str:
 
 
 async def _run(args: argparse.Namespace) -> int:
+    run_started = datetime.datetime.now(datetime.UTC)
+    t_run = time.perf_counter()
     # Imported here, after the env file has been applied: Config() reads the
     # environment at construction, and several ontocast modules snapshot
     # settings at import time.
@@ -183,6 +215,11 @@ async def _run(args: argparse.Namespace) -> int:
     )
     from ontocast.stategraph.unit_context import UnitLoopContext
     from ontocast.toolbox import ToolBox
+
+    if not args.no_response_repair:
+        from art6.ontology.response_repair import enable as enable_response_repair
+
+        enable_response_repair()
 
     config = Config()
     config.validate_llm_config()
@@ -238,6 +275,16 @@ async def _run(args: argparse.Namespace) -> int:
     )
     logger.info("expanded %s into %d record(s)", input_path.name, len(states))
 
+    # Read once, applied per record below. Logged with its length so a run's own
+    # log records which revision of the prompt it actually used.
+    facts_prompt = load_facts_prompt()
+    logger.info(
+        "facts prompt: %d chars from %s (overrides any copy embedded in %s)",
+        len(facts_prompt),
+        FACTS_PROMPT_PATH,
+        input_path.name,
+    )
+
     selected = set(args.only) if args.only else None
     summary: list[dict] = []
     failures = 0
@@ -249,6 +296,10 @@ async def _run(args: argparse.Namespace) -> int:
         t_record = time.perf_counter()
 
         convert_document(state, tools)
+        # MUST come after convert_document: that agent copies the record's own
+        # facts_user_instruction into the state, so an override applied any
+        # earlier is silently discarded here.
+        state.facts_user_instruction = facts_prompt
         if state.status == Status.FAILED or state.docling_doc is None:
             logger.error("%s: conversion failed: %s", label, state.failure_reason)
             failures += 1
@@ -297,8 +348,14 @@ async def _run(args: argparse.Namespace) -> int:
                     description="Placeholder until resolve_unit_ontology_context runs.",
                 ),
                 ontology_patch_sources=[],
+                # The carry-forward framing SUPPLEMENTS the domain prompt, it
+                # does not stand in for it. Replacing it stripped every rule in
+                # facts.txt -- evidence anchoring, no-precedent, one-court-per-
+                # proceeding, one-label-per-entity -- from chunks 2..N, which is
+                # what produced the cfcmp run's missing hasSupportingQuote layer
+                # (4 quotes across L1/L2/L6/L10; 115 once this was fixed).
                 facts_user_instruction=(
-                    CARRY_FORWARD_INSTRUCTION
+                    f"{state.facts_user_instruction}\n\n{CARRY_FORWARD_INSTRUCTION}"
                     if carried
                     else state.facts_user_instruction
                 ),
@@ -445,9 +502,26 @@ async def _run(args: argparse.Namespace) -> int:
                 f"(+{c['delta']:>3})  {c['seconds']:>6}s  {c['status']}"
             )
 
+    run_seconds = time.perf_counter() - t_run
+    run_finished = datetime.datetime.now(datetime.UTC)
+    print(
+        f"\ntotal wall time: {_fmt(run_seconds)}  "
+        f"({run_started.isoformat(timespec='seconds')} -> "
+        f"{run_finished.isoformat(timespec='seconds')})"
+    )
+
     if args.report:
+        report_out = {
+            "started": run_started.isoformat(timespec="seconds"),
+            "finished": run_finished.isoformat(timespec="seconds"),
+            "total_seconds": round(run_seconds, 1),
+            "chunk_min_size": args.chunk_min_size,
+            "chunk_max_size": args.chunk_max_size,
+            "response_repair_enabled": not args.no_response_repair,
+            "records": summary,
+        }
         pathlib.Path(args.report).write_text(
-            json.dumps(summary, indent=2), encoding="utf-8"
+            json.dumps(report_out, indent=2), encoding="utf-8"
         )
         print(f"\nreport written to {args.report}")
 
@@ -479,6 +553,15 @@ def main() -> int:
         "--no-aggregate",
         action="store_true",
         help="Skip the post-hoc aggregator; serialise the carried graph as-is.",
+    )
+    ap.add_argument(
+        "--no-response-repair",
+        action="store_true",
+        help=(
+            "Do not repair malformed facts-render JSON (mismatched bracket "
+            "closers). Without repair these replies are dropped entirely -- "
+            "see art6/ontology/response_repair.py -- so this is for A/B only."
+        ),
     )
     ap.add_argument("--report", help="Write the run summary as JSON to this path.")
     ap.add_argument("--log-level", default="INFO")

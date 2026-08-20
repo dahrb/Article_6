@@ -1,0 +1,49 @@
+{
+  "source": "results/experiment_cfcmp_20260819_165630/stock8k/input.L3.facts.ttl",
+  "operations": [
+    {
+      "finding": "doc:domestic_proceeding_1 is a duplicate of doc:proceeding_1, both describing the initial annulment proceedings regarding the sale of Viva TV-Radio Viva.",
+      "rationale": "Both nodes describe the same action (annulment of sale) and the same subject matter. doc:proceeding_1 contains specific dates and the court, making it the superior node.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_1",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "doc:proceeding_4 contains conflicting information; its decision date is listed as 2016-01-25, but the supporting quote identifies a decision on 23 May 2018 for the Constitutional Court application. The 2016 date refers to a rectification request by the Fund, not the applicant's final step.",
+      "rationale": "The Constitutional Court decision is the final domestic step. The date 2016-01-25 is erroneously mapped to the Constitutional Court application in doc:proceeding_4.",
+      "action": "remove",
+      "subject": "doc:proceeding_4",
+      "predicate": "echr:hasDecisionDate",
+      "object": "2016-01-25",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": null,
+      "status": "skipped: triple not present"
+    },
+    {
+      "finding": "doc:proceeding_4 contains conflicting information; its decision date is listed as 2016-01-25, but the supporting quote identifies a decision on 23 May 2018 for the Constitutional Court application. The 2016 date refers to a rectification request by the Fund, not the applicant's final step.",
+      "rationale": "The Constitutional Court decision is the final domestic step. The date 2016-01-25 is erroneously mapped to the Constitutional Court application in doc:proceeding_4.",
+      "action": "add",
+      "subject": "doc:proceeding_4",
+      "predicate": "echr:hasDecisionDate",
+      "object": "2018-05-23",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "doc:proceeding_1 has full dates and court details; doc:domestic_proceeding_1 is a vague duplicate.",
+      "action": "merge",
+      "keep": "doc:proceeding_1",
+      "drop": "doc:domestic_proceeding_1",
+      "status": "skipped: doc:domestic_proceeding_1 is not a node in the graph"
+    }
+  ]
+}

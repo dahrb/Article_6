@@ -6,9 +6,10 @@ facts graphs and reports functional-property clobbering, invented vocabulary
 terms, and missing evidence anchors -- the defect classes named in
 ontology/extraction_quality_report.md and extraction_fixes_evaluation.md.
 
-This is the static counterpart to validate_source_paragraphs.py, which checks
-echr:hasSourceParagraph against each document's own text and cannot be static
-shapes for that reason. This validator needs no source text: everything it
+This is the static counterpart to validate_source_quotes.py, which checks
+echr:hasSupportingQuote against each document's own text and cannot be static
+shapes for that reason -- the legal set of values is a property of the
+document, not the schema. This validator needs no source text: everything it
 checks is a property of the graph alone.
 
 Usage:
@@ -23,16 +24,127 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import os
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 
 from pyshacl import validate as shacl_validate
-from rdflib import Graph, Namespace
+from rdflib import OWL, RDF, RDFS, Graph, Namespace, URIRef
 
 from art6.paths import REPO_ROOT, relative
 
 SH = Namespace("http://www.w3.org/ns/shacl#")
 SHAPES_PATH = REPO_ROOT / "ontology" / "echr-shapes.ttl"
+ONTOLOGY_TTL = Path(
+    os.environ.get("ART6_ONTOLOGY_TTL", REPO_ROOT / "ontology" / "echr_2.ttl")
+)
+ECHR_NS = "https://growgraph.dev/echr#"
+
+# Turtle long strings are quoted with ''' throughout this template so they
+# never collide with the Python triple quotes wrapping them.
+_UNDEFINED_TERM_TEMPLATE = """
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+@prefix gen: <https://growgraph.dev/echr-shapes/generated#> .
+
+gen:UndefinedTermShape
+    a sh:NodeShape ;
+    sh:target [
+        a sh:SPARQLTarget ;
+        sh:select '''SELECT ?this WHERE { ?this ?p ?o . FILTER(isIRI(?this)) }''' ;
+    ] ;
+    sh:sparql [
+        sh:message "predicate {?value} is not a term the ontology defines - invented vocabulary" ;
+        sh:severity sh:Violation ;
+        sh:select '''
+            SELECT $this ?value WHERE {
+                $this ?value ?o .
+                FILTER(STRSTARTS(STR(?value), "__NS__"))
+                FILTER(?value NOT IN (__ALLOWED__))
+            }
+        ''' ;
+    ] ;
+    sh:sparql [
+        sh:message "object {?value} is not a term the ontology defines - invented vocabulary" ;
+        sh:severity sh:Violation ;
+        sh:select '''
+            SELECT $this ?value WHERE {
+                $this ?p ?value .
+                FILTER(isIRI(?value))
+                FILTER(STRSTARTS(STR(?value), "__NS__"))
+                FILTER(?value NOT IN (__ALLOWED__))
+            }
+        ''' ;
+    ] .
+"""
+
+
+@lru_cache(maxsize=1)
+def defined_terms() -> frozenset[str]:
+    """Every echr: term the ontology actually defines.
+
+    Classes, properties, declared datatypes, and the named individuals inside
+    every owl:oneOf enumeration. Anything else in the echr: namespace is
+    invented vocabulary. Mirrors repair_facts.ontology_terms(); both read the
+    live ontology, so a schema edit cannot leave a frozen allow-list behind.
+    """
+    g = Graph()
+    g.parse(ONTOLOGY_TTL)
+    terms: set[str] = set()
+    for kind in (OWL.Class, OWL.ObjectProperty, OWL.DatatypeProperty, RDFS.Datatype):
+        terms |= {str(s) for s in g.subjects(RDF.type, kind) if isinstance(s, URIRef)}
+    for lst in g.objects(None, OWL.oneOf):
+        cur = lst
+        while cur and cur != RDF.nil:
+            for first in g.objects(cur, RDF.first):
+                if isinstance(first, URIRef):
+                    terms.add(str(first))
+            cur = next(g.objects(cur, RDF.rest), None)
+    return frozenset(t for t in terms if t.startswith(ECHR_NS))
+
+
+def undefined_term_shape() -> Graph:
+    """A SHACL shape flagging any echr: term the ontology does not define.
+
+    Generated from the ontology rather than written into echr-shapes.ttl,
+    because a hand-maintained allow-list of legal terms is a copy: it goes
+    stale the moment the schema moves, and a stale allow-list either waves
+    through invented vocabulary or rejects legitimate new terms. The ontology
+    is the only source of truth, so the list is derived from it on every run.
+
+    Two SPARQL constraints, because invented vocabulary appears in both
+    positions and the static shapes can only see the second:
+
+      - PREDICATE: an invented property (echr:hasGuardianshipStatus). No sh:in
+        or sh:class shape can catch this -- shapes constrain the values of
+        properties they already name, so a property nobody declared is never
+        validated at all.
+      - OBJECT: an invented individual (echr:TypeGuardianship, seen 10x on L1
+        in the 2026-08-19 verification run) or an invented class in rdf:type
+        position. Per-property sh:in lists catch this only for the handful of
+        properties that have one; this catches it everywhere.
+    """
+    # SPARQL's IN takes a comma-separated ExpressionList; space-separating the
+    # IRIs parses as far as the first one and then fails on the rest.
+    allowed = ", ".join(f"<{term}>" for term in sorted(defined_terms()))
+    ttl = _UNDEFINED_TERM_TEMPLATE.replace("__NS__", ECHR_NS).replace(
+        "__ALLOWED__", allowed
+    )
+    g = Graph()
+    g.parse(data=ttl, format="turtle")
+    return g
+
+
+def load_shapes(shapes_path: Path | None = None) -> Graph:
+    """The static shapes file plus the generated undefined-term shape.
+
+    Every consumer goes through here rather than parsing SHAPES_PATH directly,
+    so the vocabulary check is never silently absent from a validation run.
+    """
+    g = Graph()
+    g.parse(shapes_path or SHAPES_PATH, format="turtle")
+    g += undefined_term_shape()
+    return g
 
 
 @dataclass
@@ -132,8 +244,7 @@ def main() -> None:
     if not args.facts_dir and not args.experiment_dir:
         parser.error("one of --facts-dir or --experiment-dir is required")
 
-    shapes_graph = Graph()
-    shapes_graph.parse(args.shapes, format="turtle")
+    shapes_graph = load_shapes(args.shapes)
 
     jobs: list[tuple[str, Path]] = []
     if args.experiment_dir:

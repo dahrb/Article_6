@@ -1,0 +1,22 @@
+{
+  "started": "2026-08-19T22:30:31",
+  "models": [
+    "gemma4"
+  ],
+  "limit": "all",
+  "temperature": 1.0,
+  "temperature_note": "1.0 is the only value gpt-5 reasoning models accept; applied to all four models for comparability. ontology_vllm.env had 0.2 tuned for the local servers.",
+  "held_constant": {
+    "ontology": "/home/dahrb/Projects/article_6/domestic_proceedings/ontology/echr_2.ttl (snapshot alongside)",
+    "facts_prompt": "art6/ontology/prompts/facts.txt (snapshot alongside)",
+    "chunk_section_classifier": "off",
+    "chunk_min_size": 5000,
+    "chunk_max_size": 15000,
+    "llm_graph_format": "turtle",
+    "ontology_context_mode": "selected_single_ontology",
+    "render_mode": "facts",
+    "max_visits": 1
+  },
+  "git_head": "438598f9d05662e5a69fc40ecdd2e7541d6f3130",
+  "git_dirty": true
+}

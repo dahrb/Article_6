@@ -1,0 +1,57 @@
+{
+  "source": "results/experiment_cfcmp_20260819_165630/stock8k/input.L2.facts.ttl",
+  "operations": [
+    {
+      "finding": "The graph contains three nodes describing proceedings before the Darmstadt Labour Court against ESA. 'doc:domestic_proceeding_1' and 'doc:proceeding_1' are generic descriptors of the same action as 'doc:proceedingDarmstadtLabourCourt', which provides the specific decision date (21 March 1995) and the specific outcome (inadmissibility due to immunity). 'doc:proceeding_2' is a distinct proceeding involving a different defendant (company T.I.) and a different outcome (settlement).",
+      "rationale": "Merging redundant nodes describing the same legal action against ESA to resolve the isFinalDomesticDecision conflict and clean up the graph.",
+      "action": "remove",
+      "subject": "doc:domestic_proceeding_1",
+      "predicate": "echr:isFinalDomesticDecision",
+      "object": "true",
+      "object_is_literal": true,
+      "datatype": "xsd:boolean",
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "The graph contains three nodes describing proceedings before the Darmstadt Labour Court against ESA. 'doc:domestic_proceeding_1' and 'doc:proceeding_1' are generic descriptors of the same action as 'doc:proceedingDarmstadtLabourCourt', which provides the specific decision date (21 March 1995) and the specific outcome (inadmissibility due to immunity). 'doc:proceeding_2' is a distinct proceeding involving a different defendant (company T.I.) and a different outcome (settlement).",
+      "rationale": "Merging redundant nodes describing the same legal action against ESA to resolve the isFinalDomesticDecision conflict and clean up the graph.",
+      "action": "remove",
+      "subject": "doc:proceeding_1",
+      "predicate": "echr:isFinalDomesticDecision",
+      "object": "null",
+      "object_is_literal": true,
+      "datatype": "xsd:boolean",
+      "lang": null,
+      "status": "skipped: triple not present"
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "doc:proceedingDarmstadtLabourCourt has the most complete evidence, including specific dates and outcome details.",
+      "action": "merge",
+      "keep": "doc:proceedingDarmstadtLabourCourt",
+      "drop": "doc:domestic_proceeding_1",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 0,
+        "properties_moved": 3,
+        "survivor_value_kept": 5
+      }
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "doc:proceeding_1 is a duplicate of the proceeding against ESA.",
+      "action": "merge",
+      "keep": "doc:proceedingDarmstadtLabourCourt",
+      "drop": "doc:proceeding_1",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 0,
+        "properties_moved": 2,
+        "survivor_value_kept": 6
+      }
+    }
+  ]
+}

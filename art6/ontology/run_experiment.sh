@@ -85,8 +85,12 @@ LIMIT="${LIMIT-}"
 
 EXPERIMENT_DIR="${EXPERIMENT_DIR:-${REPO_ROOT}/results/experiment_$(date +%Y%m%d_%H%M%S)}"
 
-# Temperature. 1.0 is the only value gpt-5 models accept -- see the note above.
-TEMPERATURE="${TEMPERATURE:-1.0}"
+# Default temperature for models without their own override in MODEL_SPECS
+# below. 0.4: at 1.0, gemma-4-31b showed wide response variance on an
+# IDENTICAL repair prompt (2026-08-20, 5 draws -- a real 9-op answer, a real
+# 1-op answer, an empty decline, and a runaway generation that never closed).
+# 5 draws at 0.4 against the same prompt were all clean, substantive answers.
+TEMPERATURE="${TEMPERATURE:-0.4}"
 
 # Serialization the ontology context and the model's own output use.
 # turtle is ~2.9x more compact than jsonld for this ontology (measured via the
@@ -104,14 +108,27 @@ GRAPH_FORMAT="${GRAPH_FORMAT:-turtle}"
 # triples during aggregation.
 PROJECT_SUFFIX="${PROJECT_SUFFIX:-}"
 
-# key|model_name|base_url|fuseki_project
-# An empty base_url means the hosted OpenAI API.
+# key|model_name|base_url|fuseki_project|temperature
+# An empty base_url means the hosted OpenAI API. An empty temperature field
+# means "use the global ${TEMPERATURE} default" (see above) -- gpt-5mini and
+# gpt-5.4-nano get an explicit 1.0 here because gpt-5 reasoning models REJECT
+# any other value ("Unsupported value: 'temperature' does not support 0.2
+# with this model"), so this is not optional for them the way it is for the
+# local vLLM models.
 MODEL_SPECS=(
-    "gpt5mini|gpt-5-mini||art6_gpt5mini"
-    "gpt54nano|gpt-5.4-nano||art6_gpt54nano"
-    "gemma4|gemma-4-31b|http://localhost:8000/v1|art6_gemma4"
-    "qwen3|Qwen-3-80B|http://localhost:8003/v1|art6_qwen3"
+    "gpt5mini|gpt-5-mini||art6_gpt5mini|1.0"
+    "gpt54nano|gpt-5.4-nano||art6_gpt54nano|1.0"
+    "gemma4|gemma-4-31b|http://localhost:8000/v1|art6_gemma4|"
+    "qwen3|Qwen-3-80B|http://localhost:8003/v1|art6_qwen3|"
 )
+
+# How many repair passes per document. Each pass re-derives the findings from
+# the patched graph, so a pass can act on what the previous one exposed, and
+# the loop stops early on no-ops or no-progress. One pass leaves work on the
+# table: on the 2026-08-19 L1 graph, pass 1 cleared 68 SHACL violations down to
+# 15 and pass 2 took those to 3. Cost is bounded -- the loop almost always
+# stops at pass 3.
+REPAIR_PASSES="${REPAIR_PASSES:-4}"
 
 # Placeholder credential for the local vLLM servers, which do not check it.
 VLLM_API_KEY="${VLLM_API_KEY:-token-abc123}"
@@ -154,8 +171,9 @@ spec_for() {
 printf '=== preflight ===\n'
 for key in ${MODELS}; do
     spec="$(spec_for "${key}")" || die "unknown model key: ${key}"
-    IFS='|' read -r _ model_name base_url project <<< "${spec}"
+    IFS='|' read -r _ model_name base_url project model_temp <<< "${spec}"
     project="${project}${PROJECT_SUFFIX}"
+    model_temp="${model_temp:-${TEMPERATURE}}"
 
     if [[ -n "${base_url}" ]]; then
         served=$(curl -s -m 10 "${base_url}/models" \
@@ -199,11 +217,12 @@ print(json.dumps({
     "started": datetime.datetime.now().isoformat(timespec="seconds"),
     "models": "${MODELS}".split(),
     "limit": "${LIMIT}" or "all",
-    "temperature": float("${TEMPERATURE}"),
+    "temperature_default": float("${TEMPERATURE}"),
     "temperature_note": (
-        "1.0 is the only value gpt-5 reasoning models accept; applied to all "
-        "four models for comparability. ontology_vllm.env had 0.2 tuned for "
-        "the local servers."
+        "per-model, from MODEL_SPECS in run_experiment.sh: gpt-5 reasoning "
+        "models get 1.0 (the only value they accept), local vLLM models get "
+        "the default above unless MODEL_SPECS overrides them. See each "
+        "model's ontology.env snapshot for the value actually used."
     ),
     "held_constant": {
         "ontology": "${ONTOLOGY_TTL} (snapshot alongside)",
@@ -225,8 +244,9 @@ PY
 
 for key in ${MODELS}; do
     spec="$(spec_for "${key}")"
-    IFS='|' read -r _ model_name base_url project <<< "${spec}"
+    IFS='|' read -r _ model_name base_url project model_temp <<< "${spec}"
     project="${project}${PROJECT_SUFFIX}"
+    model_temp="${model_temp:-${TEMPERATURE}}"
 
     model_dir="${EXPERIMENT_DIR}/${key}"
     raw_dir="${model_dir}/raw"
@@ -245,7 +265,7 @@ for key in ${MODELS}; do
         cat "${BASE_ENV_FILE}"
         printf '\n# ---- run_experiment.sh overrides for %s ----\n' "${key}"
         printf 'LLM_MODEL_NAME=%s\n' "${model_name}"
-        printf 'LLM_TEMPERATURE=%s\n' "${TEMPERATURE}"
+        printf 'LLM_TEMPERATURE=%s\n' "${model_temp}"
         printf 'CHUNK_SECTION_CLASSIFIER=off\n'
         printf 'LLM_GRAPH_FORMAT=%s\n' "${GRAPH_FORMAT}"
         # Pin the ontology instead of having each model pick it from the
@@ -300,7 +320,7 @@ for key in ${MODELS}; do
     rm -rf "${repaired_dir}"
     cp -r "${raw_dir}" "${repaired_dir}"
 
-    repair_args=(--facts-dir "${repaired_dir}" --model "${model_name}" --temperature "${TEMPERATURE}")
+    repair_args=(--facts-dir "${repaired_dir}" --model "${model_name}" --temperature "${model_temp}" --passes "${REPAIR_PASSES}")
     if [[ -n "${base_url}" ]]; then
         repair_args+=(--base-url "${base_url}" --api-key "${VLLM_API_KEY}")
     fi

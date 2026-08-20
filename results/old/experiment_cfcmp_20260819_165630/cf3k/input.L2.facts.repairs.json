@@ -1,0 +1,18 @@
+{
+  "source": "results/experiment_cfcmp_20260819_165630/cf3k/input.L2.facts.ttl",
+  "operations": [
+    {
+      "finding": "stub_orphan_sweep",
+      "rationale": "Typed nodes carrying nothing but rdf:type/rdfs:label with no inbound reference; nothing downstream can use them.",
+      "action": "delete_node",
+      "nodes": [
+        "doc:eldo",
+        "doc:esaConvention",
+        "doc:esaStaffRegulations",
+        "doc:esro",
+        "doc:germanProvisionOfLabourTemporaryStaffAct"
+      ],
+      "status": "applied"
+    }
+  ]
+}

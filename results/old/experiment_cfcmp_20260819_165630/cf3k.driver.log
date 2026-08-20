@@ -1,0 +1,1327 @@
+2026-08-19 16:56:43,049 INFO    carry_forward: applied 63 setting(s) from cf3k.env
+2026-08-19 16:56:45,622 WARNING ontocast.config.settings: Model 'gemma-4-31b' is not a known openai preset (OpenAIModel). Passing it through -- the provider decides whether it exists.
+2026-08-19 16:56:46,330 INFO    httpx: HTTP Request: POST http://localhost:3032/$/datasets "HTTP/1.1 403 Forbidden"
+2026-08-19 16:56:46,330 ERROR   ontocast.tool.triple_manager.fuseki: Failed to create dataset growgraph--art6_gemma4_cf3k--facts. Status code: 403
+2026-08-19 16:56:46,331 ERROR   ontocast.tool.triple_manager.fuseki: Response: <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<title>Error 403 Access denied : only localhost access allowed</title>
+</head>
+<body>
+<h2>HTTP ERROR 403 Access denied : only localhost access allowed</h2>
+<table>
+<tr><th>URI:</th><td>http://localhost:3032/$/datasets</td></tr>
+<tr><th>STATUS:</th><td>403</td></tr>
+<tr><th>MESSAGE:</th><td>Access denied : only localhost access allowed</td></tr>
+</table>
+
+</body>
+</html>
+2026-08-19 16:56:46,339 INFO    httpx: HTTP Request: POST http://localhost:3032/$/datasets "HTTP/1.1 403 Forbidden"
+2026-08-19 16:56:46,340 ERROR   ontocast.tool.triple_manager.fuseki: Failed to create dataset growgraph--art6_gemma4_cf3k--ontologies. Status code: 403
+2026-08-19 16:56:46,340 ERROR   ontocast.tool.triple_manager.fuseki: Response: <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<title>Error 403 Access denied : only localhost access allowed</title>
+</head>
+<body>
+<h2>HTTP ERROR 403 Access denied : only localhost access allowed</h2>
+<table>
+<tr><th>URI:</th><td>http://localhost:3032/$/datasets</td></tr>
+<tr><th>STATUS:</th><td>403</td></tr>
+<tr><th>MESSAGE:</th><td>Access denied : only localhost access allowed</td></tr>
+</table>
+
+</body>
+</html>
+2026-08-19 16:56:46,340 INFO    ontocast.tool.triple_manager.fuseki: Fuseki tenancy set to tenant='growgraph' project='art6_gemma4_cf3k' (facts=growgraph--art6_gemma4_cf3k--facts ontologies=growgraph--art6_gemma4_cf3k--ontologies)
+2026-08-19 16:56:46,350 INFO    httpx: HTTP Request: POST http://localhost:3032/$/datasets "HTTP/1.1 403 Forbidden"
+2026-08-19 16:56:46,350 ERROR   ontocast.tool.triple_manager.fuseki: Failed to create dataset growgraph--art6_gemma4_cf3k--facts. Status code: 403
+2026-08-19 16:56:46,350 ERROR   ontocast.tool.triple_manager.fuseki: Response: <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<title>Error 403 Access denied : only localhost access allowed</title>
+</head>
+<body>
+<h2>HTTP ERROR 403 Access denied : only localhost access allowed</h2>
+<table>
+<tr><th>URI:</th><td>http://localhost:3032/$/datasets</td></tr>
+<tr><th>STATUS:</th><td>403</td></tr>
+<tr><th>MESSAGE:</th><td>Access denied : only localhost access allowed</td></tr>
+</table>
+
+</body>
+</html>
+2026-08-19 16:56:46,357 INFO    httpx: HTTP Request: POST http://localhost:3032/$/datasets "HTTP/1.1 403 Forbidden"
+2026-08-19 16:56:46,357 ERROR   ontocast.tool.triple_manager.fuseki: Failed to create dataset growgraph--art6_gemma4_cf3k--ontologies. Status code: 403
+2026-08-19 16:56:46,357 ERROR   ontocast.tool.triple_manager.fuseki: Response: <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<title>Error 403 Access denied : only localhost access allowed</title>
+</head>
+<body>
+<h2>HTTP ERROR 403 Access denied : only localhost access allowed</h2>
+<table>
+<tr><th>URI:</th><td>http://localhost:3032/$/datasets</td></tr>
+<tr><th>STATUS:</th><td>403</td></tr>
+<tr><th>MESSAGE:</th><td>Access denied : only localhost access allowed</td></tr>
+</table>
+
+</body>
+</html>
+2026-08-19 16:56:46,434 INFO    ontocast.toolbox: Found 2 seed ontologies in ontology_directory
+2026-08-19 16:56:46,445 INFO    httpx: HTTP Request: POST http://localhost:3032/growgraph--art6_gemma4_cf3k--ontologies/sparql "HTTP/1.1 200 OK"
+2026-08-19 16:56:46,445 INFO    ontocast.toolbox: Found 0 ontologies in triple store
+2026-08-19 16:56:46,446 INFO    ontocast.toolbox: Syncing seed ontology to triple store: https://growgraph.dev/__null__/ (version: 1.0.0)
+2026-08-19 16:56:46,446 INFO    ontocast.toolbox: Syncing seed ontology to triple store: https://growgraph.dev/echr (version: 3.3.0)
+2026-08-19 16:56:46,446 INFO    ontocast.toolbox: Ontology sync finished: 2 ontolog(ies) in 0.09s
+2026-08-19 16:56:46,446 WARNING ontocast.tool.ontology_manager: Cannot add ontology without valid IRI (ontology_id: None)
+2026-08-19 16:56:46,552 INFO    httpx: HTTP Request: PUT http://localhost:3032/growgraph--art6_gemma4_cf3k--ontologies/data?graph=https://growgraph.dev/echr%23de45940bb31dd8b28cee5710f4d67e0f089a58972bddc0120ae42fa6b41ef32e "HTTP/1.1 201 Created"
+2026-08-19 16:56:46,553 INFO    ontocast.tool.triple_manager.fuseki: Ontology graph https://growgraph.dev/echr#de45940bb31dd8b28cee5710f4d67e0f089a58972bddc0120ae42fa6b41ef32e uploaded to Fuseki as named graph.
+2026-08-19 16:56:46,553 INFO    ontocast.toolbox: Materialized ontology https://growgraph.dev/echr in 0.10s
+2026-08-19 16:56:46,614 INFO    httpx: HTTP Request: PUT http://localhost:3032/growgraph--art6_gemma4_cf3k--ontologies/data?graph=https://growgraph.dev/__null__/%23e58525534e5cefb8d44e42fb962b3b13f431d0f762ac7f3369dea225a5544b45 "HTTP/1.1 201 Created"
+2026-08-19 16:56:46,615 INFO    ontocast.tool.triple_manager.fuseki: Ontology graph https://growgraph.dev/__null__/#e58525534e5cefb8d44e42fb962b3b13f431d0f762ac7f3369dea225a5544b45 uploaded to Fuseki as named graph.
+2026-08-19 16:56:46,615 INFO    ontocast.toolbox: Materialized ontology https://growgraph.dev/__null__/ in 0.17s
+2026-08-19 16:56:46,615 INFO    ontocast.toolbox: Ontology materialize + enrich finished for 2 ontolog(ies) in 0.17s (reindex_concurrency=2); initialize total 0.27s
+2026-08-19 16:56:46,615 INFO    carry_forward: chunking: min_size=3000 max_size=6000 section_classifier=off
+2026-08-19 16:56:46,617 INFO    carry_forward: expanded input.jsonl into 10 record(s)
+2026-08-19 16:56:47,057 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-19 16:56:48,679 INFO    ontocast.tool.sentence_transformer: Loading sentence-transformer model: sentence-transformers/paraphrase-multilingual-mpnet-base-v2 (device=auto)
+2026-08-19 16:56:48,680 INFO    sentence_transformers.base.model: No device provided, using cpu
+2026-08-19 16:56:48,803 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-08-19 16:56:48,804 WARNING huggingface_hub.utils._http: Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-08-19 16:56:48,812 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/4328cf26390c98c5e3c738b4460a05b95f4911f5/modules.json "HTTP/1.1 200 OK"
+2026-08-19 16:56:48,915 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:56:48,924 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/4328cf26390c98c5e3c738b4460a05b95f4911f5/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-19 16:56:48,924 INFO    sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/paraphrase-multilingual-mpnet-base-v2.
+2026-08-19 16:56:49,026 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:56:49,034 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/4328cf26390c98c5e3c738b4460a05b95f4911f5/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-19 16:56:49,134 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:56:49,142 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/4328cf26390c98c5e3c738b4460a05b95f4911f5/README.md "HTTP/1.1 200 OK"
+2026-08-19 16:56:49,241 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:56:49,250 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/4328cf26390c98c5e3c738b4460a05b95f4911f5/modules.json "HTTP/1.1 200 OK"
+2026-08-19 16:56:49,350 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:56:49,358 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/4328cf26390c98c5e3c738b4460a05b95f4911f5/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-08-19 16:56:49,460 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-08-19 16:56:49,561 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:56:49,568 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/4328cf26390c98c5e3c738b4460a05b95f4911f5/config.json "HTTP/1.1 200 OK"
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 15185.42it/s]
+2026-08-19 16:56:49,760 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-08-19 16:56:49,864 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-19 16:56:49,966 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-19 16:56:50,067 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-19 16:56:50,318 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:56:50,326 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/4328cf26390c98c5e3c738b4460a05b95f4911f5/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-19 16:56:50,428 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:56:50,436 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/4328cf26390c98c5e3c738b4460a05b95f4911f5/config.json "HTTP/1.1 200 OK"
+2026-08-19 16:56:50,538 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:56:50,545 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/4328cf26390c98c5e3c738b4460a05b95f4911f5/config.json "HTTP/1.1 200 OK"
+2026-08-19 16:56:50,650 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:56:50,658 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/4328cf26390c98c5e3c738b4460a05b95f4911f5/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-19 16:56:50,761 INFO    httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-08-19 16:56:50,866 INFO    httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-08-19 16:56:53,013 INFO    httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2 "HTTP/1.1 200 OK"
+2026-08-19 16:56:53,143 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:56:53,153 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/4328cf26390c98c5e3c738b4460a05b95f4911f5/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-08-19 16:56:53,258 INFO    httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-mpnet-base-v2 "HTTP/1.1 200 OK"
+2026-08-19 16:57:24,563 INFO    ontocast.tool.chunk.chunker: Semantic chunking produced 6 chunks with lengths: [3690, 3127, 4492, 3822, 3051, 5814]
+2026-08-19 16:57:24,564 INFO    ontocast.agent.chunk_text: Created 6 chunks for processing: [3689, 3126, 4491, 3821, 3050, 5814]
+2026-08-19 16:57:24,566 INFO    ontocast.agent.chunk_text: Created 6 content units: [3689, 3126, 4491, 3821, 3050, 5814]
+2026-08-19 16:57:24,567 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=6
+2026-08-19 16:57:24,567 INFO    carry_forward: L1: 6 chunk(s), sizes=[3689, 3126, 4491, 3821, 3050, 5814]
+2026-08-19 16:57:24,578 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 16:57:24,578 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 16:57:24,578 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-19 16:57:24,578 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-19 16:57:29,110 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 16:57:29,128 INFO    ontocast.agent.render_facts: Fresh facts generated with 14 triple(s).
+2026-08-19 16:57:29,128 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 16:57:29,130 INFO    carry_forward: L1 chunk 1/6: 3689 chars, carried 0 -> 14 triples (+14) in 4.6s
+2026-08-19 16:57:29,137 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 16:57:29,138 INFO    ontocast.agent.render_facts: Render facts for content unit 2
+2026-08-19 16:57:29,138 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 16:57:29,138 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 16:57:43,158 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 16:57:43,243 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 61 total triple(s).
+2026-08-19 16:57:43,243 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 16:57:43,247 INFO    carry_forward: L1 chunk 2/6: 3126 chars, carried 14 -> 75 triples (+61) in 14.1s
+2026-08-19 16:57:43,255 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 16:57:43,255 INFO    ontocast.agent.render_facts: Render facts for content unit 3
+2026-08-19 16:57:43,255 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 16:57:43,255 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 16:57:52,684 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 16:57:52,687 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 16:58:00,464 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 16:58:00,466 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 2/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 16:58:08,656 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 16:58:08,659 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 3/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 16:58:08,660 ERROR   ontocast.agent.common: Failed to parse LLM response after 3 attempts. Last error: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 16:58:08,660 ERROR   ontocast.agent.render_facts: Failed to generate triples: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 16:58:08,660 INFO    ontocast.stategraph.atomic: Unit facts render failed at attempt 1/1 (no search request)
+2026-08-19 16:58:08,660 INFO    ontocast.stategraph.atomic: Unit facts loop exhausted retries
+2026-08-19 16:58:08,660 ERROR   carry_forward: L1 chunk 3/6 FAILED (Failed to generate graph update for facts): 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 16:58:08,660 INFO    carry_forward: L1 chunk 3/6: 4491 chars, carried 75 -> 75 triples (+0) in 25.4s
+2026-08-19 16:58:08,676 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 16:58:08,676 INFO    ontocast.agent.render_facts: Render facts for content unit 4
+2026-08-19 16:58:08,676 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 16:58:08,676 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 16:58:15,254 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 16:58:15,257 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 16:58:22,358 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 16:58:22,386 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 22 total triple(s).
+2026-08-19 16:58:22,386 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 16:58:22,389 INFO    carry_forward: L1 chunk 4/6: 3821 chars, carried 75 -> 97 triples (+22) in 13.7s
+2026-08-19 16:58:22,396 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 16:58:22,396 INFO    ontocast.agent.render_facts: Render facts for content unit 5
+2026-08-19 16:58:22,396 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 16:58:22,396 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 16:58:33,539 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 16:58:33,586 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 47 total triple(s).
+2026-08-19 16:58:33,586 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 16:58:33,590 INFO    carry_forward: L1 chunk 5/6: 3050 chars, carried 97 -> 144 triples (+47) in 11.2s
+2026-08-19 16:58:33,597 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 16:58:33,598 INFO    ontocast.agent.render_facts: Render facts for content unit 6
+2026-08-19 16:58:33,598 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 16:58:33,598 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 16:58:54,092 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 16:58:54,176 WARNING ontocast.onto.rdfgraph: Recovering malformed Turtle after parse failure: at line 31 of <>:
+Bad syntax (expected '.' or '}' or ']' at end of statement) at ^ in:
+"...b' refusal to bring action for restoration of capacity" ;\n    '^b'followsProceeding cd:prosecutorial_review_capacity_2004 ;\n  '..."
+2026-08-19 16:58:54,177 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: at line 7 of <>:
+Bad syntax (objectList expected) at ^ in:
+"...b'st for restoration of legal capacity to prosecutor\'s office"'^b' .\n    echr:hasParticipation cd:participation_stanev_capacit'..."
+2026-08-19 16:59:15,831 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 16:59:15,954 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 92 total triple(s).
+2026-08-19 16:59:15,954 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 16:59:15,961 INFO    carry_forward: L1 chunk 6/6: 5814 chars, carried 144 -> 236 triples (+92) in 42.4s
+2026-08-19 16:59:15,963 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-19 16:59:19,074 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=42 known_ontology=2 tentative_ontology=56
+2026-08-19 16:59:19,075 INFO    ontocast.tool.agg.clustering: Embedding 10 entity representations in parallel...
+2026-08-19 16:59:19,075 INFO    ontocast.tool.sentence_transformer: Loading sentence-transformer model: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (device=auto)
+2026-08-19 16:59:19,076 INFO    sentence_transformers.base.model: No device provided, using cpu
+2026-08-19 16:59:19,204 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:59:19,212 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/modules.json "HTTP/1.1 200 OK"
+2026-08-19 16:59:19,312 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:59:19,320 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-19 16:59:19,320 INFO    sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2.
+2026-08-19 16:59:19,423 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:59:19,432 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-19 16:59:19,536 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:59:19,545 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/README.md "HTTP/1.1 200 OK"
+2026-08-19 16:59:19,647 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:59:19,656 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/modules.json "HTTP/1.1 200 OK"
+2026-08-19 16:59:19,756 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:59:19,765 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-08-19 16:59:19,867 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-08-19 16:59:19,970 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:59:19,980 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json "HTTP/1.1 200 OK"
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 14076.51it/s]
+2026-08-19 16:59:20,136 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-08-19 16:59:20,239 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-19 16:59:20,345 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-19 16:59:20,448 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-19 16:59:20,553 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:59:20,561 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-19 16:59:20,661 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:59:20,669 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json "HTTP/1.1 200 OK"
+2026-08-19 16:59:20,771 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:59:20,779 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json "HTTP/1.1 200 OK"
+2026-08-19 16:59:20,880 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:59:20,888 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-19 16:59:20,991 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:59:20,998 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-19 16:59:21,104 INFO    httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-08-19 16:59:21,212 INFO    httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-08-19 16:59:22,395 INFO    httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 "HTTP/1.1 200 OK"
+2026-08-19 16:59:22,643 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-19 16:59:22,651 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-08-19 16:59:22,756 INFO    httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 "HTTP/1.1 200 OK"
+2026-08-19 16:59:22,867 INFO    ontocast.tool.agg.clustering: Embedded 10 entities
+2026-08-19 16:59:22,875 INFO    ontocast.tool.agg.clustering: Clustering 10 entities...
+2026-08-19 16:59:22,876 INFO    ontocast.tool.agg.clustering: Formed 8 clusters: 6 singletons, 2 multi-entity clusters, max cluster size: 2
+2026-08-19 16:59:22,876 INFO    ontocast.tool.agg.clustering: Embedding 29 entity representations in parallel...
+2026-08-19 16:59:23,161 INFO    ontocast.tool.agg.clustering: Embedded 29 entities
+2026-08-19 16:59:23,161 INFO    ontocast.tool.agg.clustering: Clustering 29 entities...
+2026-08-19 16:59:23,164 INFO    ontocast.tool.agg.clustering: Formed 7 clusters: 5 singletons, 2 multi-entity clusters, max cluster size: 17
+2026-08-19 16:59:23,164 INFO    ontocast.tool.agg.clustering: Embedding 61 entity representations in parallel...
+2026-08-19 16:59:24,022 INFO    ontocast.tool.agg.clustering: Embedded 61 entities
+2026-08-19 16:59:24,022 INFO    ontocast.tool.agg.clustering: Clustering 61 entities...
+2026-08-19 16:59:24,024 INFO    ontocast.tool.agg.clustering: Formed 12 clusters: 7 singletons, 5 multi-entity clusters, max cluster size: 40
+2026-08-19 16:59:24,053 INFO    ontocast.tool.agg.aggregate: Rejected 167 candidate merges after symbolic validation
+2026-08-19 16:59:24,053 INFO    ontocast.tool.agg.clustering: Created mapping for 100 entities to 96 representatives
+2026-08-19 16:59:24,054 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 100 entities, 42 normalised
+2026-08-19 16:59:24,061 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 236 -> 686 triples (39 entities merged)
+2026-08-19 16:59:24,062 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-19 16:59:24,079 INFO    carry_forward: L1 done: 6 chunk(s) -> 689 triples in 157.5s -> input.L1.facts.ttl
+2026-08-19 16:59:24,080 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-19 16:59:36,807 INFO    ontocast.tool.chunk.chunker: Semantic chunking produced 9 chunks with lengths: [3398, 3231, 3245, 5858, 4749, 3391, 3978, 5729, 972]
+2026-08-19 16:59:36,808 INFO    ontocast.agent.chunk_text: Created 9 chunks for processing: [3397, 3230, 3244, 5857, 4748, 3390, 3977, 5728, 972]
+2026-08-19 16:59:36,812 INFO    ontocast.agent.chunk_text: Created 9 content units: [3397, 3230, 3244, 5857, 4748, 3390, 3977, 5728, 972]
+2026-08-19 16:59:36,812 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=9
+2026-08-19 16:59:36,812 INFO    carry_forward: L2: 9 chunk(s), sizes=[3397, 3230, 3244, 5857, 4748, 3390, 3977, 5728, 972]
+2026-08-19 16:59:36,823 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 16:59:36,823 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 16:59:36,823 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-19 16:59:36,823 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-19 16:59:40,817 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 16:59:40,842 INFO    ontocast.agent.render_facts: Fresh facts generated with 15 triple(s).
+2026-08-19 16:59:40,842 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 16:59:40,845 INFO    carry_forward: L2 chunk 1/9: 3397 chars, carried 0 -> 15 triples (+15) in 4.0s
+2026-08-19 16:59:40,860 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 16:59:40,860 INFO    ontocast.agent.render_facts: Render facts for content unit 2
+2026-08-19 16:59:40,860 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 16:59:40,860 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 16:59:50,136 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 16:59:50,182 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 40 total triple(s).
+2026-08-19 16:59:50,182 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 16:59:50,187 INFO    carry_forward: L2 chunk 2/9: 3230 chars, carried 15 -> 51 triples (+36) in 9.3s
+2026-08-19 16:59:50,198 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 16:59:50,198 INFO    ontocast.agent.render_facts: Render facts for content unit 3
+2026-08-19 16:59:50,198 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 16:59:50,198 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:00:03,039 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:00:03,096 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 61 total triple(s).
+2026-08-19 17:00:03,096 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:00:03,099 INFO    carry_forward: L2 chunk 3/9: 3244 chars, carried 51 -> 112 triples (+61) in 12.9s
+2026-08-19 17:00:03,106 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:00:03,107 INFO    ontocast.agent.render_facts: Render facts for content unit 4
+2026-08-19 17:00:03,107 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:00:03,107 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:00:07,898 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:00:08,294 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 16 total triple(s).
+2026-08-19 17:00:08,294 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:00:08,297 INFO    ontocast.stategraph.atomic: Finding-driven facts repair render 1/1: 3 finding(s) (2 mandatory)
+2026-08-19 17:00:08,297 INFO    ontocast.agent.render_facts: Render facts for content unit 4
+2026-08-19 17:00:08,297 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:00:08,297 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:00:14,917 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:00:14,920 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:00:21,171 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:00:21,175 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 2/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:00:27,319 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:00:27,325 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 3/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:00:27,325 ERROR   ontocast.agent.common: Failed to parse LLM response after 3 attempts. Last error: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:00:27,325 ERROR   ontocast.agent.render_facts: Failed to generate triples: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:00:27,325 WARNING ontocast.stategraph.atomic: Finding-driven facts repair render failed (Failed to generate graph update for facts: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type); keeping graph
+2026-08-19 17:00:27,325 WARNING ontocast.stategraph.atomic: 2 mandatory deterministic finding(s) remain unresolved
+2026-08-19 17:00:27,332 INFO    carry_forward: L2 chunk 4/9: 5857 chars, carried 112 -> 128 triples (+16) in 24.2s
+2026-08-19 17:00:27,358 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:00:27,358 INFO    ontocast.agent.render_facts: Render facts for content unit 5
+2026-08-19 17:00:27,359 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:00:27,359 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:00:34,667 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:00:34,671 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:00:41,676 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:00:41,703 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 25 total triple(s).
+2026-08-19 17:00:41,704 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:00:41,706 INFO    ontocast.stategraph.atomic: Finding-driven facts repair render 1/1: 3 finding(s) (2 mandatory)
+2026-08-19 17:00:41,707 INFO    ontocast.agent.render_facts: Render facts for content unit 5
+2026-08-19 17:00:41,707 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:00:41,707 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:00:47,767 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:00:47,770 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:00:53,626 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:00:53,649 INFO    ontocast.agent.render_facts: Facts update has 2 operation(s) with 14 total triple(s).
+2026-08-19 17:00:53,654 INFO    carry_forward: L2 chunk 5/9: 4748 chars, carried 128 -> 165 triples (+37) in 26.3s
+2026-08-19 17:00:53,661 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:00:53,661 INFO    ontocast.agent.render_facts: Render facts for content unit 6
+2026-08-19 17:00:53,661 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:00:53,661 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:00:58,335 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:00:58,354 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 13 total triple(s).
+2026-08-19 17:00:58,354 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:00:58,357 INFO    ontocast.stategraph.atomic: Finding-driven facts repair render 1/1: 3 finding(s) (2 mandatory)
+2026-08-19 17:00:58,357 INFO    ontocast.agent.render_facts: Render facts for content unit 6
+2026-08-19 17:00:58,357 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:00:58,357 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:01:02,431 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:01:02,483 INFO    ontocast.agent.render_facts: Facts update has 2 operation(s) with 7 total triple(s).
+2026-08-19 17:01:02,492 INFO    carry_forward: L2 chunk 6/9: 3390 chars, carried 165 -> 177 triples (+12) in 8.8s
+2026-08-19 17:01:02,510 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:01:02,510 INFO    ontocast.agent.render_facts: Render facts for content unit 7
+2026-08-19 17:01:02,510 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:01:02,510 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:01:08,679 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:01:08,682 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:01:15,129 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:01:15,196 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 24 total triple(s).
+2026-08-19 17:01:15,196 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:01:15,204 INFO    ontocast.stategraph.atomic: Finding-driven facts repair render 1/1: 3 finding(s) (2 mandatory)
+2026-08-19 17:01:15,204 INFO    ontocast.agent.render_facts: Render facts for content unit 7
+2026-08-19 17:01:15,204 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:01:15,204 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:01:19,944 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:01:19,990 INFO    ontocast.agent.render_facts: Facts update has 2 operation(s) with 16 total triple(s).
+2026-08-19 17:01:19,998 INFO    carry_forward: L2 chunk 7/9: 3977 chars, carried 177 -> 214 triples (+37) in 17.5s
+2026-08-19 17:01:20,009 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:01:20,009 INFO    ontocast.agent.render_facts: Render facts for content unit 8
+2026-08-19 17:01:20,009 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:01:20,009 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:01:25,062 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:01:25,085 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 15 total triple(s).
+2026-08-19 17:01:25,085 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:01:25,089 INFO    ontocast.stategraph.atomic: Finding-driven facts repair render 1/1: 3 finding(s) (2 mandatory)
+2026-08-19 17:01:25,089 INFO    ontocast.agent.render_facts: Render facts for content unit 8
+2026-08-19 17:01:25,089 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:01:25,089 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:01:30,079 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:01:30,106 INFO    ontocast.agent.render_facts: Facts update has 2 operation(s) with 10 total triple(s).
+2026-08-19 17:01:30,113 INFO    carry_forward: L2 chunk 8/9: 5728 chars, carried 214 -> 235 triples (+21) in 10.1s
+2026-08-19 17:01:30,122 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:01:30,123 INFO    ontocast.agent.render_facts: Render facts for content unit 9
+2026-08-19 17:01:30,123 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:01:30,123 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:01:33,562 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:01:33,579 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 4 total triple(s).
+2026-08-19 17:01:33,579 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:01:33,582 INFO    ontocast.stategraph.atomic: Finding-driven facts repair render 1/1: 3 finding(s) (2 mandatory)
+2026-08-19 17:01:33,582 INFO    ontocast.agent.render_facts: Render facts for content unit 9
+2026-08-19 17:01:33,582 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:01:33,582 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:01:36,917 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:01:36,941 INFO    ontocast.agent.render_facts: Facts update has 2 operation(s) with 3 total triple(s).
+2026-08-19 17:01:36,947 INFO    carry_forward: L2 chunk 9/9: 972 chars, carried 235 -> 239 triples (+4) in 6.8s
+2026-08-19 17:01:36,948 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-19 17:01:39,916 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=52 known_ontology=3 tentative_ontology=47
+2026-08-19 17:01:39,916 INFO    ontocast.tool.agg.clustering: Embedding 8 entity representations in parallel...
+2026-08-19 17:01:40,012 INFO    ontocast.tool.agg.clustering: Embedded 8 entities
+2026-08-19 17:01:40,012 INFO    ontocast.tool.agg.clustering: Clustering 8 entities...
+2026-08-19 17:01:40,014 INFO    ontocast.tool.agg.clustering: Formed 7 clusters: 6 singletons, 1 multi-entity clusters, max cluster size: 2
+2026-08-19 17:01:40,014 INFO    ontocast.tool.agg.clustering: Embedding 26 entity representations in parallel...
+2026-08-19 17:01:40,450 INFO    ontocast.tool.agg.clustering: Embedded 26 entities
+2026-08-19 17:01:40,451 INFO    ontocast.tool.agg.clustering: Clustering 26 entities...
+2026-08-19 17:01:40,452 INFO    ontocast.tool.agg.clustering: Formed 12 clusters: 10 singletons, 2 multi-entity clusters, max cluster size: 14
+2026-08-19 17:01:40,452 INFO    ontocast.tool.agg.clustering: Embedding 68 entity representations in parallel...
+2026-08-19 17:01:41,525 INFO    ontocast.tool.agg.clustering: Embedded 68 entities
+2026-08-19 17:01:41,525 INFO    ontocast.tool.agg.clustering: Clustering 68 entities...
+2026-08-19 17:01:41,527 INFO    ontocast.tool.agg.clustering: Formed 20 clusters: 12 singletons, 8 multi-entity clusters, max cluster size: 22
+2026-08-19 17:01:41,545 INFO    ontocast.tool.agg.aggregate: Rejected 101 candidate merges after symbolic validation
+2026-08-19 17:01:41,545 INFO    ontocast.tool.agg.clustering: Created mapping for 102 entities to 98 representatives
+2026-08-19 17:01:41,546 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 102 entities, 52 normalised
+2026-08-19 17:01:41,561 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 239 -> 698 triples (49 entities merged)
+2026-08-19 17:01:41,561 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-19 17:01:41,584 INFO    carry_forward: L2 done: 9 chunk(s) -> 701 triples in 137.5s -> input.L2.facts.ttl
+2026-08-19 17:01:41,585 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-19 17:01:51,198 INFO    ontocast.tool.chunk.chunker: Semantic chunking produced 8 chunks with lengths: [3025, 3849, 3260, 3497, 3013, 3540, 3296, 5381]
+2026-08-19 17:01:51,200 INFO    ontocast.agent.chunk_text: Created 8 chunks for processing: [3022, 3848, 3259, 3496, 3012, 3539, 3295, 5381]
+2026-08-19 17:01:51,203 INFO    ontocast.agent.chunk_text: Created 8 content units: [3022, 3848, 3259, 3496, 3012, 3539, 3295, 5381]
+2026-08-19 17:01:51,203 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=8
+2026-08-19 17:01:51,204 INFO    carry_forward: L3: 8 chunk(s), sizes=[3022, 3848, 3259, 3496, 3012, 3539, 3295, 5381]
+2026-08-19 17:01:51,227 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:01:51,228 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 17:01:51,228 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-19 17:01:51,228 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-19 17:01:57,465 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:01:57,511 INFO    ontocast.agent.render_facts: Fresh facts generated with 24 triple(s).
+2026-08-19 17:01:57,511 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:01:57,526 INFO    ontocast.stategraph.atomic: Finding-driven facts repair render 1/1: 2 finding(s) (1 mandatory)
+2026-08-19 17:01:57,526 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 17:01:57,526 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:01:57,526 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:02:00,470 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:02:00,514 INFO    ontocast.agent.render_facts: Facts update has 2 operation(s) with 2 total triple(s).
+2026-08-19 17:02:00,517 INFO    carry_forward: L3 chunk 1/8: 3022 chars, carried 0 -> 24 triples (+24) in 9.3s
+2026-08-19 17:02:00,542 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:02:00,543 INFO    ontocast.agent.render_facts: Render facts for content unit 2
+2026-08-19 17:02:00,543 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:02:00,543 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:02:12,757 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:02:12,818 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 49 total triple(s).
+2026-08-19 17:02:12,818 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:02:12,821 INFO    carry_forward: L3 chunk 2/8: 3848 chars, carried 24 -> 73 triples (+49) in 12.3s
+2026-08-19 17:02:12,829 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:02:12,829 INFO    ontocast.agent.render_facts: Render facts for content unit 3
+2026-08-19 17:02:12,829 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:02:12,829 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:02:27,425 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:02:27,492 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 54 total triple(s).
+2026-08-19 17:02:27,492 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:02:27,495 INFO    carry_forward: L3 chunk 3/8: 3259 chars, carried 73 -> 127 triples (+54) in 14.7s
+2026-08-19 17:02:27,502 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:02:27,502 INFO    ontocast.agent.render_facts: Render facts for content unit 4
+2026-08-19 17:02:27,502 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:02:27,502 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:02:43,780 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:02:43,893 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 66 total triple(s).
+2026-08-19 17:02:43,894 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:02:43,898 INFO    carry_forward: L3 chunk 4/8: 3496 chars, carried 127 -> 193 triples (+66) in 16.4s
+2026-08-19 17:02:43,907 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:02:43,908 INFO    ontocast.agent.render_facts: Render facts for content unit 5
+2026-08-19 17:02:43,908 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:02:43,908 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:02:58,155 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:02:58,233 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 57 total triple(s).
+2026-08-19 17:02:58,233 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:02:58,241 INFO    carry_forward: L3 chunk 5/8: 3012 chars, carried 193 -> 250 triples (+57) in 14.3s
+2026-08-19 17:02:58,251 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:02:58,251 INFO    ontocast.agent.render_facts: Render facts for content unit 6
+2026-08-19 17:02:58,251 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:02:58,251 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:03:06,951 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:03:06,995 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 26 total triple(s).
+2026-08-19 17:03:06,995 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:03:07,001 INFO    carry_forward: L3 chunk 6/8: 3539 chars, carried 250 -> 276 triples (+26) in 8.8s
+2026-08-19 17:03:07,011 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:03:07,011 INFO    ontocast.agent.render_facts: Render facts for content unit 7
+2026-08-19 17:03:07,011 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:03:07,011 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:03:17,703 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:03:17,706 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:03:31,135 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:03:31,139 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 2/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:03:44,536 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:03:44,589 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 43 total triple(s).
+2026-08-19 17:03:44,589 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:03:44,597 INFO    carry_forward: L3 chunk 7/8: 3295 chars, carried 276 -> 319 triples (+43) in 37.6s
+2026-08-19 17:03:44,608 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:03:44,608 INFO    ontocast.agent.render_facts: Render facts for content unit 8
+2026-08-19 17:03:44,608 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:03:44,608 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:03:56,718 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:03:56,777 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 47 total triple(s).
+2026-08-19 17:03:56,777 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:03:56,786 INFO    carry_forward: L3 chunk 8/8: 5381 chars, carried 319 -> 366 triples (+47) in 12.2s
+2026-08-19 17:03:56,788 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-19 17:04:04,241 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=68 known_ontology=3 tentative_ontology=47
+2026-08-19 17:04:04,241 INFO    ontocast.tool.agg.clustering: Embedding 84 entity representations in parallel...
+2026-08-19 17:04:05,627 INFO    ontocast.tool.agg.clustering: Embedded 84 entities
+2026-08-19 17:04:05,627 INFO    ontocast.tool.agg.clustering: Clustering 84 entities...
+2026-08-19 17:04:05,629 INFO    ontocast.tool.agg.clustering: Formed 14 clusters: 7 singletons, 7 multi-entity clusters, max cluster size: 45
+2026-08-19 17:04:05,629 INFO    ontocast.tool.agg.clustering: Embedding 9 entity representations in parallel...
+2026-08-19 17:04:05,744 INFO    ontocast.tool.agg.clustering: Embedded 9 entities
+2026-08-19 17:04:05,744 INFO    ontocast.tool.agg.clustering: Clustering 9 entities...
+2026-08-19 17:04:05,747 INFO    ontocast.tool.agg.clustering: Formed 8 clusters: 7 singletons, 1 multi-entity clusters, max cluster size: 2
+2026-08-19 17:04:05,747 INFO    ontocast.tool.agg.clustering: Embedding 25 entity representations in parallel...
+2026-08-19 17:04:06,351 INFO    ontocast.tool.agg.clustering: Embedded 25 entities
+2026-08-19 17:04:06,351 INFO    ontocast.tool.agg.clustering: Clustering 25 entities...
+2026-08-19 17:04:06,353 INFO    ontocast.tool.agg.clustering: Formed 8 clusters: 6 singletons, 2 multi-entity clusters, max cluster size: 15
+2026-08-19 17:04:06,433 INFO    ontocast.tool.agg.aggregate: Rejected 221 candidate merges after symbolic validation
+2026-08-19 17:04:06,433 INFO    ontocast.tool.agg.clustering: Created mapping for 118 entities to 106 representatives
+2026-08-19 17:04:06,434 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 118 entities, 68 normalised
+2026-08-19 17:04:06,451 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 366 -> 1022 triples (57 entities merged)
+2026-08-19 17:04:06,451 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-19 17:04:06,491 INFO    carry_forward: L3 done: 8 chunk(s) -> 1025 triples in 144.9s -> input.L3.facts.ttl
+2026-08-19 17:04:06,492 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-19 17:04:16,663 INFO    ontocast.tool.chunk.chunker: Semantic chunking produced 7 chunks with lengths: [4663, 3736, 3095, 3488, 3177, 3243, 3835]
+2026-08-19 17:04:16,665 INFO    ontocast.agent.chunk_text: Created 7 chunks for processing: [4662, 3735, 3094, 3487, 3176, 3242, 3835]
+2026-08-19 17:04:16,667 INFO    ontocast.agent.chunk_text: Created 7 content units: [4662, 3735, 3094, 3487, 3176, 3242, 3835]
+2026-08-19 17:04:16,667 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=7
+2026-08-19 17:04:16,668 INFO    carry_forward: L4: 7 chunk(s), sizes=[4662, 3735, 3094, 3487, 3176, 3242, 3835]
+2026-08-19 17:04:16,691 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:04:16,691 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 17:04:16,692 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-19 17:04:16,692 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-19 17:04:23,752 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:04:23,774 INFO    ontocast.agent.render_facts: Fresh facts generated with 25 triple(s).
+2026-08-19 17:04:23,775 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:04:23,779 INFO    ontocast.stategraph.atomic: Finding-driven facts repair render 1/1: 2 finding(s) (1 mandatory)
+2026-08-19 17:04:23,779 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 17:04:23,779 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:04:23,779 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:04:26,517 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:04:26,533 INFO    ontocast.agent.render_facts: Facts update has 2 operation(s) with 4 total triple(s).
+2026-08-19 17:04:26,535 INFO    carry_forward: L4 chunk 1/7: 4662 chars, carried 0 -> 25 triples (+25) in 9.9s
+2026-08-19 17:04:26,541 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:04:26,541 INFO    ontocast.agent.render_facts: Render facts for content unit 2
+2026-08-19 17:04:26,541 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:04:26,541 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:04:32,470 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:04:32,473 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:04:38,294 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:04:38,297 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 2/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:04:44,462 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:04:44,486 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 21 total triple(s).
+2026-08-19 17:04:44,486 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:04:44,488 INFO    carry_forward: L4 chunk 2/7: 3735 chars, carried 25 -> 46 triples (+21) in 18.0s
+2026-08-19 17:04:44,494 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:04:44,494 INFO    ontocast.agent.render_facts: Render facts for content unit 3
+2026-08-19 17:04:44,494 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:04:44,494 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:04:52,630 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:04:52,665 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 33 total triple(s).
+2026-08-19 17:04:52,665 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:04:52,668 INFO    carry_forward: L4 chunk 3/7: 3094 chars, carried 46 -> 79 triples (+33) in 8.2s
+2026-08-19 17:04:52,675 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:04:52,675 INFO    ontocast.agent.render_facts: Render facts for content unit 4
+2026-08-19 17:04:52,675 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:04:52,675 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:05:05,839 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:05:05,908 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 59 total triple(s).
+2026-08-19 17:05:05,908 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:05:05,912 INFO    carry_forward: L4 chunk 4/7: 3487 chars, carried 79 -> 138 triples (+59) in 13.2s
+2026-08-19 17:05:05,919 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:05:05,920 INFO    ontocast.agent.render_facts: Render facts for content unit 5
+2026-08-19 17:05:05,920 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:05:05,920 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:05:13,009 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:05:13,012 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:05:20,304 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:05:20,338 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 26 total triple(s).
+2026-08-19 17:05:20,338 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:05:20,342 INFO    carry_forward: L4 chunk 5/7: 3176 chars, carried 138 -> 164 triples (+26) in 14.4s
+2026-08-19 17:05:20,350 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:05:20,350 INFO    ontocast.agent.render_facts: Render facts for content unit 6
+2026-08-19 17:05:20,350 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:05:20,350 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:05:41,783 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:05:41,891 WARNING ontocast.onto.rdfgraph: Recovering malformed Turtle after parse failure: at line 61 of <>:
+Bad syntax (expected '.' or '}' or ']' at end of statement) at ^ in:
+"...b'  echr:hasJurisdictionState "Slovenia" .\n\ncd:investigation_ '^b'reopened_1 a echr:DomesticProceeding ;\n    rdfs:label "Crimi'..."
+2026-08-19 17:05:41,892 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: at line 7 of <>:
+Bad syntax (objectList expected) at ^ in:
+"...b'bel "Criminal complaint by Slovenj Gradec Police April 1995"'^b' .\n    echr:hasSupportingQuote "On 12 April 1995 the Slovenj'..."
+2026-08-19 17:06:01,366 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:06:01,494 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 86 total triple(s).
+2026-08-19 17:06:01,494 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:06:01,500 INFO    carry_forward: L4 chunk 6/7: 3242 chars, carried 164 -> 250 triples (+86) in 41.2s
+2026-08-19 17:06:01,509 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:06:01,509 INFO    ontocast.agent.render_facts: Render facts for content unit 7
+2026-08-19 17:06:01,509 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:06:01,509 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:06:17,316 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:06:17,407 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 69 total triple(s).
+2026-08-19 17:06:17,407 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:06:17,415 INFO    carry_forward: L4 chunk 7/7: 3835 chars, carried 250 -> 319 triples (+69) in 15.9s
+2026-08-19 17:06:17,417 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-19 17:06:23,034 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=52 known_ontology=3 tentative_ontology=49
+2026-08-19 17:06:23,034 INFO    ontocast.tool.agg.clustering: Embedding 9 entity representations in parallel...
+2026-08-19 17:06:23,113 INFO    ontocast.tool.agg.clustering: Embedded 9 entities
+2026-08-19 17:06:23,114 INFO    ontocast.tool.agg.clustering: Clustering 9 entities...
+2026-08-19 17:06:23,115 INFO    ontocast.tool.agg.clustering: Formed 9 clusters: 9 singletons, 0 multi-entity clusters, max cluster size: 1
+2026-08-19 17:06:23,115 INFO    ontocast.tool.agg.clustering: Embedding 66 entity representations in parallel...
+2026-08-19 17:06:24,029 INFO    ontocast.tool.agg.clustering: Embedded 66 entities
+2026-08-19 17:06:24,029 INFO    ontocast.tool.agg.clustering: Clustering 66 entities...
+2026-08-19 17:06:24,030 INFO    ontocast.tool.agg.clustering: Formed 15 clusters: 10 singletons, 5 multi-entity clusters, max cluster size: 44
+2026-08-19 17:06:24,030 INFO    ontocast.tool.agg.clustering: Embedding 29 entity representations in parallel...
+2026-08-19 17:06:24,458 INFO    ontocast.tool.agg.clustering: Embedded 29 entities
+2026-08-19 17:06:24,458 INFO    ontocast.tool.agg.clustering: Clustering 29 entities...
+2026-08-19 17:06:24,459 INFO    ontocast.tool.agg.clustering: Formed 11 clusters: 6 singletons, 5 multi-entity clusters, max cluster size: 11
+2026-08-19 17:06:24,509 INFO    ontocast.tool.agg.aggregate: Rejected 152 candidate merges after symbolic validation
+2026-08-19 17:06:24,509 INFO    ontocast.tool.agg.clustering: Created mapping for 104 entities to 100 representatives
+2026-08-19 17:06:24,509 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 104 entities, 52 normalised
+2026-08-19 17:06:24,521 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 319 -> 935 triples (49 entities merged)
+2026-08-19 17:06:24,521 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-19 17:06:24,548 INFO    carry_forward: L4 done: 7 chunk(s) -> 938 triples in 138.1s -> input.L4.facts.ttl
+2026-08-19 17:06:24,548 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-19 17:06:31,488 INFO    ontocast.tool.chunk.chunker: Semantic chunking produced 7 chunks with lengths: [3423, 3249, 4573, 3850, 3198, 3211, 5038]
+2026-08-19 17:06:31,489 INFO    ontocast.agent.chunk_text: Created 7 chunks for processing: [3422, 3248, 4572, 3849, 3197, 3210, 5038]
+2026-08-19 17:06:31,492 INFO    ontocast.agent.chunk_text: Created 7 content units: [3422, 3248, 4572, 3849, 3197, 3210, 5038]
+2026-08-19 17:06:31,492 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=7
+2026-08-19 17:06:31,493 INFO    carry_forward: L5: 7 chunk(s), sizes=[3422, 3248, 4572, 3849, 3197, 3210, 5038]
+2026-08-19 17:06:31,506 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:06:31,506 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 17:06:31,506 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-19 17:06:31,506 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-19 17:06:38,922 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:06:38,947 INFO    ontocast.agent.render_facts: Fresh facts generated with 28 triple(s).
+2026-08-19 17:06:38,947 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:06:38,951 INFO    ontocast.stategraph.atomic: Finding-driven facts repair render 1/1: 2 finding(s) (1 mandatory)
+2026-08-19 17:06:38,951 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 17:06:38,951 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:06:38,951 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:06:45,376 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:06:45,404 INFO    ontocast.agent.render_facts: Facts update has 2 operation(s) with 23 total triple(s).
+2026-08-19 17:06:45,405 INFO    carry_forward: L5 chunk 1/7: 3422 chars, carried 0 -> 49 triples (+49) in 13.9s
+2026-08-19 17:06:45,412 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:06:45,412 INFO    ontocast.agent.render_facts: Render facts for content unit 2
+2026-08-19 17:06:45,412 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:06:45,412 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:06:57,970 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:06:58,036 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 54 total triple(s).
+2026-08-19 17:06:58,036 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:06:58,040 INFO    carry_forward: L5 chunk 2/7: 3248 chars, carried 49 -> 103 triples (+54) in 12.6s
+2026-08-19 17:06:58,047 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:06:58,047 INFO    ontocast.agent.render_facts: Render facts for content unit 3
+2026-08-19 17:06:58,047 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:06:58,047 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:07:14,967 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:07:15,061 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 81 total triple(s).
+2026-08-19 17:07:15,061 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:07:15,066 INFO    carry_forward: L5 chunk 3/7: 4572 chars, carried 103 -> 184 triples (+81) in 17.0s
+2026-08-19 17:07:15,073 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:07:15,073 INFO    ontocast.agent.render_facts: Render facts for content unit 4
+2026-08-19 17:07:15,073 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:07:15,073 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:07:21,010 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:07:21,036 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 20 total triple(s).
+2026-08-19 17:07:21,036 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:07:21,041 INFO    carry_forward: L5 chunk 4/7: 3849 chars, carried 184 -> 204 triples (+20) in 6.0s
+2026-08-19 17:07:21,050 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:07:21,050 INFO    ontocast.agent.render_facts: Render facts for content unit 5
+2026-08-19 17:07:21,050 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:07:21,050 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:07:24,413 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:07:24,417 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:07:27,769 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:07:27,785 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 7 total triple(s).
+2026-08-19 17:07:27,785 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:07:27,791 INFO    carry_forward: L5 chunk 5/7: 3197 chars, carried 204 -> 211 triples (+7) in 6.7s
+2026-08-19 17:07:27,799 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:07:27,799 INFO    ontocast.agent.render_facts: Render facts for content unit 6
+2026-08-19 17:07:27,800 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:07:27,800 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:07:33,093 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:07:33,116 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 18 total triple(s).
+2026-08-19 17:07:33,116 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:07:33,122 INFO    carry_forward: L5 chunk 6/7: 3210 chars, carried 211 -> 229 triples (+18) in 5.3s
+2026-08-19 17:07:33,130 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:07:33,130 INFO    ontocast.agent.render_facts: Render facts for content unit 7
+2026-08-19 17:07:33,130 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:07:33,130 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:07:39,670 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:07:39,694 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 14 total triple(s).
+2026-08-19 17:07:39,694 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:07:39,700 INFO    carry_forward: L5 chunk 7/7: 5038 chars, carried 229 -> 243 triples (+14) in 6.6s
+2026-08-19 17:07:39,702 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-19 17:07:42,921 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=37 known_ontology=3 tentative_ontology=62
+2026-08-19 17:07:42,921 INFO    ontocast.tool.agg.clustering: Embedding 10 entity representations in parallel...
+2026-08-19 17:07:43,020 INFO    ontocast.tool.agg.clustering: Embedded 10 entities
+2026-08-19 17:07:43,020 INFO    ontocast.tool.agg.clustering: Clustering 10 entities...
+2026-08-19 17:07:43,021 INFO    ontocast.tool.agg.clustering: Formed 7 clusters: 5 singletons, 2 multi-entity clusters, max cluster size: 3
+2026-08-19 17:07:43,021 INFO    ontocast.tool.agg.clustering: Embedding 57 entity representations in parallel...
+2026-08-19 17:07:43,852 INFO    ontocast.tool.agg.clustering: Embedded 57 entities
+2026-08-19 17:07:43,852 INFO    ontocast.tool.agg.clustering: Clustering 57 entities...
+2026-08-19 17:07:43,855 INFO    ontocast.tool.agg.clustering: Formed 13 clusters: 7 singletons, 6 multi-entity clusters, max cluster size: 30
+2026-08-19 17:07:43,855 INFO    ontocast.tool.agg.clustering: Embedding 35 entity representations in parallel...
+2026-08-19 17:07:44,426 INFO    ontocast.tool.agg.clustering: Embedded 35 entities
+2026-08-19 17:07:44,426 INFO    ontocast.tool.agg.clustering: Clustering 35 entities...
+2026-08-19 17:07:44,428 INFO    ontocast.tool.agg.clustering: Formed 10 clusters: 6 singletons, 4 multi-entity clusters, max cluster size: 21
+2026-08-19 17:07:44,459 INFO    ontocast.tool.agg.aggregate: Rejected 142 candidate merges after symbolic validation
+2026-08-19 17:07:44,459 INFO    ontocast.tool.agg.clustering: Created mapping for 102 entities to 97 representatives
+2026-08-19 17:07:44,460 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 102 entities, 37 normalised
+2026-08-19 17:07:44,469 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 243 -> 698 triples (33 entities merged)
+2026-08-19 17:07:44,469 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-19 17:07:44,489 INFO    carry_forward: L5 done: 7 chunk(s) -> 701 triples in 79.9s -> input.L5.facts.ttl
+2026-08-19 17:07:44,489 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-19 17:07:47,875 INFO    ontocast.tool.chunk.chunker: Semantic chunking produced 5 chunks with lengths: [3034, 3609, 3041, 3238, 4376]
+2026-08-19 17:07:47,876 INFO    ontocast.agent.chunk_text: Created 5 chunks for processing: [3033, 3608, 3040, 3237, 4376]
+2026-08-19 17:07:47,878 INFO    ontocast.agent.chunk_text: Created 5 content units: [3033, 3608, 3040, 3237, 4376]
+2026-08-19 17:07:47,878 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=5
+2026-08-19 17:07:47,878 INFO    carry_forward: L6: 5 chunk(s), sizes=[3033, 3608, 3040, 3237, 4376]
+2026-08-19 17:07:47,893 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:07:47,894 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 17:07:47,894 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-19 17:07:47,894 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-19 17:07:51,423 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:07:51,433 INFO    ontocast.agent.render_facts: Fresh facts generated with 10 triple(s).
+2026-08-19 17:07:51,433 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:07:51,435 INFO    carry_forward: L6 chunk 1/5: 3033 chars, carried 0 -> 10 triples (+10) in 3.6s
+2026-08-19 17:07:51,442 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:07:51,442 INFO    ontocast.agent.render_facts: Render facts for content unit 2
+2026-08-19 17:07:51,442 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:07:51,442 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:07:57,363 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:07:57,388 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 27 total triple(s).
+2026-08-19 17:07:57,389 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:07:57,391 INFO    carry_forward: L6 chunk 2/5: 3608 chars, carried 10 -> 37 triples (+27) in 6.0s
+2026-08-19 17:07:57,397 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:07:57,397 INFO    ontocast.agent.render_facts: Render facts for content unit 3
+2026-08-19 17:07:57,397 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:07:57,397 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:08:04,735 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:08:04,739 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:08:12,313 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:08:12,316 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 2/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:08:13,214 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 3/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:08:13,214 ERROR   ontocast.agent.common: Failed to parse LLM response after 3 attempts. Last error: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:08:13,214 ERROR   ontocast.agent.render_facts: Failed to generate triples: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:08:13,214 INFO    ontocast.stategraph.atomic: Unit facts render failed at attempt 1/1 (no search request)
+2026-08-19 17:08:13,215 INFO    ontocast.stategraph.atomic: Unit facts loop exhausted retries
+2026-08-19 17:08:13,215 ERROR   carry_forward: L6 chunk 3/5 FAILED (Failed to generate graph update for facts): 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:08:13,215 INFO    carry_forward: L6 chunk 3/5: 3040 chars, carried 37 -> 37 triples (+0) in 15.8s
+2026-08-19 17:08:13,221 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:08:13,221 INFO    ontocast.agent.render_facts: Render facts for content unit 4
+2026-08-19 17:08:13,221 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:08:13,221 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:08:22,568 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:08:22,614 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 46 total triple(s).
+2026-08-19 17:08:22,614 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:08:22,617 INFO    carry_forward: L6 chunk 4/5: 3237 chars, carried 37 -> 83 triples (+46) in 9.4s
+2026-08-19 17:08:22,624 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:08:22,624 INFO    ontocast.agent.render_facts: Render facts for content unit 5
+2026-08-19 17:08:22,624 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:08:22,624 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:08:37,079 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:08:37,155 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 76 total triple(s).
+2026-08-19 17:08:37,155 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:08:37,159 INFO    carry_forward: L6 chunk 5/5: 4376 chars, carried 83 -> 159 triples (+76) in 14.5s
+2026-08-19 17:08:37,161 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-19 17:08:38,820 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=28 known_ontology=2 tentative_ontology=38
+2026-08-19 17:08:38,820 INFO    ontocast.tool.agg.clustering: Embedding 23 entity representations in parallel...
+2026-08-19 17:08:39,028 INFO    ontocast.tool.agg.clustering: Embedded 23 entities
+2026-08-19 17:08:39,029 INFO    ontocast.tool.agg.clustering: Clustering 23 entities...
+2026-08-19 17:08:39,031 INFO    ontocast.tool.agg.clustering: Formed 7 clusters: 5 singletons, 2 multi-entity clusters, max cluster size: 15
+2026-08-19 17:08:39,031 INFO    ontocast.tool.agg.clustering: Embedding 39 entity representations in parallel...
+2026-08-19 17:08:39,625 INFO    ontocast.tool.agg.clustering: Embedded 39 entities
+2026-08-19 17:08:39,626 INFO    ontocast.tool.agg.clustering: Clustering 39 entities...
+2026-08-19 17:08:39,627 INFO    ontocast.tool.agg.clustering: Formed 4 clusters: 2 singletons, 2 multi-entity clusters, max cluster size: 30
+2026-08-19 17:08:39,627 INFO    ontocast.tool.agg.clustering: Embedding 6 entity representations in parallel...
+2026-08-19 17:08:39,686 INFO    ontocast.tool.agg.clustering: Embedded 6 entities
+2026-08-19 17:08:39,686 INFO    ontocast.tool.agg.clustering: Clustering 6 entities...
+2026-08-19 17:08:39,688 INFO    ontocast.tool.agg.clustering: Formed 5 clusters: 4 singletons, 1 multi-entity clusters, max cluster size: 2
+2026-08-19 17:08:39,702 INFO    ontocast.tool.agg.aggregate: Rejected 100 candidate merges after symbolic validation
+2026-08-19 17:08:39,702 INFO    ontocast.tool.agg.clustering: Created mapping for 68 entities to 60 representatives
+2026-08-19 17:08:39,702 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 68 entities, 28 normalised
+2026-08-19 17:08:39,710 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 159 -> 410 triples (20 entities merged)
+2026-08-19 17:08:39,710 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-19 17:08:39,726 INFO    carry_forward: L6 done: 5 chunk(s) -> 413 triples in 55.2s -> input.L6.facts.ttl
+2026-08-19 17:08:39,727 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-19 17:08:47,416 INFO    ontocast.tool.chunk.chunker: Semantic chunking produced 6 chunks with lengths: [4097, 3160, 3184, 3057, 4065, 2161]
+2026-08-19 17:08:47,417 INFO    ontocast.agent.chunk_text: Created 6 chunks for processing: [4096, 3159, 3183, 3056, 4064, 2161]
+2026-08-19 17:08:47,419 INFO    ontocast.agent.chunk_text: Created 6 content units: [4096, 3159, 3183, 3056, 4064, 2161]
+2026-08-19 17:08:47,420 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=6
+2026-08-19 17:08:47,420 INFO    carry_forward: L7: 6 chunk(s), sizes=[4096, 3159, 3183, 3056, 4064, 2161]
+2026-08-19 17:08:47,433 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:08:47,433 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 17:08:47,433 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-19 17:08:47,433 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-19 17:08:54,809 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:08:54,831 INFO    ontocast.agent.render_facts: Fresh facts generated with 29 triple(s).
+2026-08-19 17:08:54,831 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:08:54,835 INFO    ontocast.stategraph.atomic: Finding-driven facts repair render 1/1: 2 finding(s) (1 mandatory)
+2026-08-19 17:08:54,835 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 17:08:54,835 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:08:54,835 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:08:57,472 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:08:57,488 INFO    ontocast.agent.render_facts: Facts update has 2 operation(s) with 3 total triple(s).
+2026-08-19 17:08:57,489 INFO    carry_forward: L7 chunk 1/6: 4096 chars, carried 0 -> 30 triples (+30) in 10.1s
+2026-08-19 17:08:57,496 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:08:57,496 INFO    ontocast.agent.render_facts: Render facts for content unit 2
+2026-08-19 17:08:57,496 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:08:57,496 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:09:08,758 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:09:08,812 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 48 total triple(s).
+2026-08-19 17:09:08,812 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:09:08,815 INFO    carry_forward: L7 chunk 2/6: 3159 chars, carried 30 -> 78 triples (+48) in 11.3s
+2026-08-19 17:09:08,822 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:09:08,822 INFO    ontocast.agent.render_facts: Render facts for content unit 3
+2026-08-19 17:09:08,822 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:09:08,822 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:09:18,362 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:09:18,410 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 40 total triple(s).
+2026-08-19 17:09:18,410 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:09:18,414 INFO    carry_forward: L7 chunk 3/6: 3183 chars, carried 78 -> 118 triples (+40) in 9.6s
+2026-08-19 17:09:18,422 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:09:18,422 INFO    ontocast.agent.render_facts: Render facts for content unit 4
+2026-08-19 17:09:18,422 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:09:18,422 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:09:27,419 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:09:27,465 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 38 total triple(s).
+2026-08-19 17:09:27,465 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:09:27,470 INFO    carry_forward: L7 chunk 4/6: 3056 chars, carried 118 -> 156 triples (+38) in 9.1s
+2026-08-19 17:09:27,478 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:09:27,478 INFO    ontocast.agent.render_facts: Render facts for content unit 5
+2026-08-19 17:09:27,478 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:09:27,478 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:09:31,367 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:09:31,384 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 5 total triple(s).
+2026-08-19 17:09:31,384 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:09:31,389 INFO    carry_forward: L7 chunk 5/6: 4064 chars, carried 156 -> 161 triples (+5) in 3.9s
+2026-08-19 17:09:31,396 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:09:31,396 INFO    ontocast.agent.render_facts: Render facts for content unit 6
+2026-08-19 17:09:31,396 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:09:31,396 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:09:36,282 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:09:36,303 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 16 total triple(s).
+2026-08-19 17:09:36,303 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:09:36,307 INFO    carry_forward: L7 chunk 6/6: 2161 chars, carried 161 -> 177 triples (+16) in 4.9s
+2026-08-19 17:09:36,309 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-19 17:09:37,964 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=27 known_ontology=2 tentative_ontology=55
+2026-08-19 17:09:37,965 INFO    ontocast.tool.agg.clustering: Embedding 45 entity representations in parallel...
+2026-08-19 17:09:38,615 INFO    ontocast.tool.agg.clustering: Embedded 45 entities
+2026-08-19 17:09:38,615 INFO    ontocast.tool.agg.clustering: Clustering 45 entities...
+2026-08-19 17:09:38,617 INFO    ontocast.tool.agg.clustering: Formed 16 clusters: 11 singletons, 5 multi-entity clusters, max cluster size: 19
+2026-08-19 17:09:38,617 INFO    ontocast.tool.agg.clustering: Embedding 8 entity representations in parallel...
+2026-08-19 17:09:38,705 INFO    ontocast.tool.agg.clustering: Embedded 8 entities
+2026-08-19 17:09:38,705 INFO    ontocast.tool.agg.clustering: Clustering 8 entities...
+2026-08-19 17:09:38,707 INFO    ontocast.tool.agg.clustering: Formed 7 clusters: 6 singletons, 1 multi-entity clusters, max cluster size: 2
+2026-08-19 17:09:38,707 INFO    ontocast.tool.agg.clustering: Embedding 31 entity representations in parallel...
+2026-08-19 17:09:39,209 INFO    ontocast.tool.agg.clustering: Embedded 31 entities
+2026-08-19 17:09:39,209 INFO    ontocast.tool.agg.clustering: Clustering 31 entities...
+2026-08-19 17:09:39,211 INFO    ontocast.tool.agg.clustering: Formed 2 clusters: 0 singletons, 2 multi-entity clusters, max cluster size: 29
+2026-08-19 17:09:39,228 INFO    ontocast.tool.agg.aggregate: Rejected 106 candidate merges after symbolic validation
+2026-08-19 17:09:39,228 INFO    ontocast.tool.agg.clustering: Created mapping for 84 entities to 83 representatives
+2026-08-19 17:09:39,228 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 84 entities, 27 normalised
+2026-08-19 17:09:39,238 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 177 -> 536 triples (27 entities merged)
+2026-08-19 17:09:39,238 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-19 17:09:39,257 INFO    carry_forward: L7 done: 6 chunk(s) -> 539 triples in 59.5s -> input.L7.facts.ttl
+2026-08-19 17:09:39,257 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-19 17:09:48,333 INFO    ontocast.tool.chunk.chunker: Semantic chunking produced 6 chunks with lengths: [3156, 3004, 3032, 3007, 3135, 4178]
+2026-08-19 17:09:48,334 INFO    ontocast.agent.chunk_text: Created 6 chunks for processing: [3155, 3003, 3031, 3006, 3134, 4178]
+2026-08-19 17:09:48,338 INFO    ontocast.agent.chunk_text: Created 6 content units: [3155, 3003, 3031, 3006, 3134, 4178]
+2026-08-19 17:09:48,338 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=6
+2026-08-19 17:09:48,338 INFO    carry_forward: L8: 6 chunk(s), sizes=[3155, 3003, 3031, 3006, 3134, 4178]
+2026-08-19 17:09:48,360 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:09:48,360 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 17:09:48,360 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-19 17:09:48,360 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-19 17:10:01,985 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:10:02,044 INFO    ontocast.agent.render_facts: Fresh facts generated with 66 triple(s).
+2026-08-19 17:10:02,044 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:10:02,048 INFO    ontocast.stategraph.atomic: Finding-driven facts repair render 1/1: 2 finding(s) (1 mandatory)
+2026-08-19 17:10:02,048 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 17:10:02,048 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:10:02,048 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:10:07,207 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:10:07,231 INFO    ontocast.agent.render_facts: Facts update has 2 operation(s) with 17 total triple(s).
+2026-08-19 17:10:07,233 INFO    carry_forward: L8 chunk 1/6: 3155 chars, carried 0 -> 73 triples (+73) in 18.9s
+2026-08-19 17:10:07,666 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:10:07,666 INFO    ontocast.agent.render_facts: Render facts for content unit 2
+2026-08-19 17:10:07,666 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:10:07,666 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:10:20,279 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:10:20,355 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 62 total triple(s).
+2026-08-19 17:10:20,355 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:10:20,359 INFO    carry_forward: L8 chunk 2/6: 3003 chars, carried 73 -> 135 triples (+62) in 13.1s
+2026-08-19 17:10:20,368 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:10:20,368 INFO    ontocast.agent.render_facts: Render facts for content unit 3
+2026-08-19 17:10:20,368 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:10:20,368 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:10:28,608 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:10:28,643 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 36 total triple(s).
+2026-08-19 17:10:28,643 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:10:28,647 INFO    carry_forward: L8 chunk 3/6: 3031 chars, carried 135 -> 171 triples (+36) in 8.3s
+2026-08-19 17:10:28,657 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:10:28,657 INFO    ontocast.agent.render_facts: Render facts for content unit 4
+2026-08-19 17:10:28,657 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:10:28,657 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:10:38,542 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:10:38,599 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 45 total triple(s).
+2026-08-19 17:10:38,599 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:10:38,605 INFO    carry_forward: L8 chunk 4/6: 3006 chars, carried 171 -> 216 triples (+45) in 10.0s
+2026-08-19 17:10:38,613 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:10:38,613 INFO    ontocast.agent.render_facts: Render facts for content unit 5
+2026-08-19 17:10:38,613 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:10:38,613 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:10:52,810 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:10:52,894 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 63 total triple(s).
+2026-08-19 17:10:52,894 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:10:52,901 INFO    carry_forward: L8 chunk 5/6: 3134 chars, carried 216 -> 279 triples (+63) in 14.3s
+2026-08-19 17:10:52,909 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:10:52,909 INFO    ontocast.agent.render_facts: Render facts for content unit 6
+2026-08-19 17:10:52,909 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:10:52,909 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:11:08,243 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:11:08,338 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 70 total triple(s).
+2026-08-19 17:11:08,338 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:11:08,346 INFO    carry_forward: L8 chunk 6/6: 4178 chars, carried 279 -> 349 triples (+70) in 15.4s
+2026-08-19 17:11:08,348 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-19 17:11:15,197 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=64 known_ontology=2 tentative_ontology=61
+2026-08-19 17:11:15,197 INFO    ontocast.tool.agg.clustering: Embedding 85 entity representations in parallel...
+2026-08-19 17:11:16,311 INFO    ontocast.tool.agg.clustering: Embedded 85 entities
+2026-08-19 17:11:16,311 INFO    ontocast.tool.agg.clustering: Clustering 85 entities...
+2026-08-19 17:11:16,312 INFO    ontocast.tool.agg.clustering: Formed 33 clusters: 22 singletons, 11 multi-entity clusters, max cluster size: 14
+2026-08-19 17:11:16,312 INFO    ontocast.tool.agg.clustering: Embedding 10 entity representations in parallel...
+2026-08-19 17:11:16,416 INFO    ontocast.tool.agg.clustering: Embedded 10 entities
+2026-08-19 17:11:16,416 INFO    ontocast.tool.agg.clustering: Clustering 10 entities...
+2026-08-19 17:11:16,418 INFO    ontocast.tool.agg.clustering: Formed 10 clusters: 10 singletons, 0 multi-entity clusters, max cluster size: 1
+2026-08-19 17:11:16,418 INFO    ontocast.tool.agg.clustering: Embedding 32 entity representations in parallel...
+2026-08-19 17:11:16,963 INFO    ontocast.tool.agg.clustering: Embedded 32 entities
+2026-08-19 17:11:16,963 INFO    ontocast.tool.agg.clustering: Clustering 32 entities...
+2026-08-19 17:11:16,964 INFO    ontocast.tool.agg.clustering: Formed 12 clusters: 9 singletons, 3 multi-entity clusters, max cluster size: 17
+2026-08-19 17:11:16,983 INFO    ontocast.tool.agg.aggregate: Rejected 156 candidate merges after symbolic validation
+2026-08-19 17:11:16,984 INFO    ontocast.tool.agg.clustering: Created mapping for 127 entities to 123 representatives
+2026-08-19 17:11:16,984 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 127 entities, 64 normalised
+2026-08-19 17:11:17,000 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 349 -> 1025 triples (61 entities merged)
+2026-08-19 17:11:17,000 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-19 17:11:17,029 INFO    carry_forward: L8 done: 6 chunk(s) -> 1028 triples in 97.8s -> input.L8.facts.ttl
+2026-08-19 17:11:17,030 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-19 17:11:23,661 INFO    ontocast.tool.chunk.chunker: Semantic chunking produced 5 chunks with lengths: [3908, 3149, 3241, 5135, 2207]
+2026-08-19 17:11:23,662 INFO    ontocast.agent.chunk_text: Created 5 chunks for processing: [3907, 3148, 3240, 5134, 2207]
+2026-08-19 17:11:23,666 INFO    ontocast.agent.chunk_text: Created 5 content units: [3907, 3148, 3240, 5134, 2207]
+2026-08-19 17:11:23,666 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=5
+2026-08-19 17:11:23,666 INFO    carry_forward: L9: 5 chunk(s), sizes=[3907, 3148, 3240, 5134, 2207]
+2026-08-19 17:11:23,685 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:11:23,685 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 17:11:23,685 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-19 17:11:23,685 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-19 17:11:33,940 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:11:33,976 INFO    ontocast.agent.render_facts: Fresh facts generated with 44 triple(s).
+2026-08-19 17:11:33,976 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:11:33,980 INFO    ontocast.stategraph.atomic: Finding-driven facts repair render 1/1: 2 finding(s) (1 mandatory)
+2026-08-19 17:11:33,980 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 17:11:33,980 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:11:33,980 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:11:36,990 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:11:37,008 INFO    ontocast.agent.render_facts: Facts update has 2 operation(s) with 5 total triple(s).
+2026-08-19 17:11:37,010 INFO    carry_forward: L9 chunk 1/5: 3907 chars, carried 0 -> 43 triples (+43) in 13.3s
+2026-08-19 17:11:37,016 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:11:37,016 INFO    ontocast.agent.render_facts: Render facts for content unit 2
+2026-08-19 17:11:37,016 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:11:37,016 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:11:47,177 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:11:47,224 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 51 total triple(s).
+2026-08-19 17:11:47,224 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:11:47,228 INFO    carry_forward: L9 chunk 2/5: 3148 chars, carried 43 -> 94 triples (+51) in 10.2s
+2026-08-19 17:11:47,234 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:11:47,235 INFO    ontocast.agent.render_facts: Render facts for content unit 3
+2026-08-19 17:11:47,235 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:11:47,235 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:11:54,899 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:11:54,903 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:12:03,228 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:12:03,266 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 30 total triple(s).
+2026-08-19 17:12:03,266 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:12:03,270 INFO    carry_forward: L9 chunk 3/5: 3240 chars, carried 94 -> 124 triples (+30) in 16.0s
+2026-08-19 17:12:03,277 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:12:03,277 INFO    ontocast.agent.render_facts: Render facts for content unit 4
+2026-08-19 17:12:03,277 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:12:03,277 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:12:15,098 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:12:15,154 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 52 total triple(s).
+2026-08-19 17:12:15,154 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:12:15,159 INFO    carry_forward: L9 chunk 4/5: 5134 chars, carried 124 -> 176 triples (+52) in 11.9s
+2026-08-19 17:12:15,167 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:12:15,167 INFO    ontocast.agent.render_facts: Render facts for content unit 5
+2026-08-19 17:12:15,167 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:12:15,167 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:12:22,678 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:12:22,681 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:12:30,358 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:12:30,362 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 2/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:12:38,613 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:12:38,650 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 30 total triple(s).
+2026-08-19 17:12:38,650 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:12:38,655 INFO    carry_forward: L9 chunk 5/5: 2207 chars, carried 176 -> 206 triples (+30) in 23.5s
+2026-08-19 17:12:38,657 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-19 17:12:41,107 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=38 known_ontology=2 tentative_ontology=52
+2026-08-19 17:12:41,107 INFO    ontocast.tool.agg.clustering: Embedding 55 entity representations in parallel...
+2026-08-19 17:12:41,890 INFO    ontocast.tool.agg.clustering: Embedded 55 entities
+2026-08-19 17:12:41,890 INFO    ontocast.tool.agg.clustering: Clustering 55 entities...
+2026-08-19 17:12:41,892 INFO    ontocast.tool.agg.clustering: Formed 16 clusters: 11 singletons, 5 multi-entity clusters, max cluster size: 20
+2026-08-19 17:12:41,892 INFO    ontocast.tool.agg.clustering: Embedding 9 entity representations in parallel...
+2026-08-19 17:12:41,972 INFO    ontocast.tool.agg.clustering: Embedded 9 entities
+2026-08-19 17:12:41,972 INFO    ontocast.tool.agg.clustering: Clustering 9 entities...
+2026-08-19 17:12:41,973 INFO    ontocast.tool.agg.clustering: Formed 5 clusters: 4 singletons, 1 multi-entity clusters, max cluster size: 5
+2026-08-19 17:12:41,973 INFO    ontocast.tool.agg.clustering: Embedding 28 entity representations in parallel...
+2026-08-19 17:12:42,404 INFO    ontocast.tool.agg.clustering: Embedded 28 entities
+2026-08-19 17:12:42,404 INFO    ontocast.tool.agg.clustering: Clustering 28 entities...
+2026-08-19 17:12:42,406 INFO    ontocast.tool.agg.clustering: Formed 7 clusters: 5 singletons, 2 multi-entity clusters, max cluster size: 15
+2026-08-19 17:12:42,420 INFO    ontocast.tool.agg.aggregate: Rejected 131 candidate merges after symbolic validation
+2026-08-19 17:12:42,421 INFO    ontocast.tool.agg.clustering: Created mapping for 92 entities to 91 representatives
+2026-08-19 17:12:42,421 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 92 entities, 38 normalised
+2026-08-19 17:12:42,429 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 206 -> 620 triples (37 entities merged)
+2026-08-19 17:12:42,430 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-19 17:12:42,447 INFO    carry_forward: L9 done: 5 chunk(s) -> 623 triples in 85.4s -> input.L9.facts.ttl
+2026-08-19 17:12:42,448 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-19 17:12:49,714 INFO    ontocast.tool.chunk.chunker: Semantic chunking produced 11 chunks with lengths: [3013, 3688, 3892, 3170, 3289, 3223, 3804, 3124, 3708, 3930, 3434]
+2026-08-19 17:12:49,715 INFO    ontocast.agent.chunk_text: Created 11 chunks for processing: [3012, 3687, 3891, 3169, 3288, 3222, 3803, 3123, 3707, 3929, 3434]
+2026-08-19 17:12:49,717 INFO    ontocast.agent.chunk_text: Created 11 content units: [3012, 3687, 3891, 3169, 3288, 3222, 3803, 3123, 3707, 3929, 3434]
+2026-08-19 17:12:49,717 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=11
+2026-08-19 17:12:49,717 INFO    carry_forward: L10: 11 chunk(s), sizes=[3012, 3687, 3891, 3169, 3288, 3222, 3803, 3123, 3707, 3929, 3434]
+2026-08-19 17:12:49,725 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:12:49,725 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-19 17:12:49,725 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-19 17:12:49,726 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-19 17:12:54,248 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:12:54,260 INFO    ontocast.agent.render_facts: Fresh facts generated with 17 triple(s).
+2026-08-19 17:12:54,260 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:12:54,261 INFO    carry_forward: L10 chunk 1/11: 3012 chars, carried 0 -> 17 triples (+17) in 4.5s
+2026-08-19 17:12:54,269 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:12:54,269 INFO    ontocast.agent.render_facts: Render facts for content unit 2
+2026-08-19 17:12:54,269 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:12:54,269 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:13:01,550 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:13:01,554 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:13:09,482 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:13:09,486 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 2/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:13:18,083 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:13:18,120 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 38 total triple(s).
+2026-08-19 17:13:18,120 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:13:18,122 INFO    carry_forward: L10 chunk 2/11: 3687 chars, carried 17 -> 55 triples (+38) in 23.9s
+2026-08-19 17:13:18,129 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:13:18,129 INFO    ontocast.agent.render_facts: Render facts for content unit 3
+2026-08-19 17:13:18,129 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:13:18,129 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:13:33,875 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:13:33,977 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 83 total triple(s).
+2026-08-19 17:13:33,977 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:13:33,981 INFO    carry_forward: L10 chunk 3/11: 3891 chars, carried 55 -> 138 triples (+83) in 15.9s
+2026-08-19 17:13:33,988 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:13:33,988 INFO    ontocast.agent.render_facts: Render facts for content unit 4
+2026-08-19 17:13:33,988 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:13:33,988 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:13:50,390 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:13:50,473 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 75 total triple(s).
+2026-08-19 17:13:50,473 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:13:50,478 INFO    carry_forward: L10 chunk 4/11: 3169 chars, carried 138 -> 213 triples (+75) in 16.5s
+2026-08-19 17:13:50,487 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:13:50,487 INFO    ontocast.agent.render_facts: Render facts for content unit 5
+2026-08-19 17:13:50,487 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:13:50,487 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:14:01,167 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:14:01,216 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 46 total triple(s).
+2026-08-19 17:14:01,216 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:14:01,223 INFO    carry_forward: L10 chunk 5/11: 3288 chars, carried 213 -> 259 triples (+46) in 10.7s
+2026-08-19 17:14:01,232 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:14:01,232 INFO    ontocast.agent.render_facts: Render facts for content unit 6
+2026-08-19 17:14:01,232 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:14:01,232 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:14:20,548 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:14:20,677 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 95 total triple(s).
+2026-08-19 17:14:20,677 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:14:20,686 INFO    carry_forward: L10 chunk 6/11: 3222 chars, carried 259 -> 351 triples (+92) in 19.5s
+2026-08-19 17:14:20,696 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:14:20,697 INFO    ontocast.agent.render_facts: Render facts for content unit 7
+2026-08-19 17:14:20,697 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:14:20,697 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:14:27,716 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:14:27,721 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:14:33,475 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:14:33,479 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 2/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:14:38,989 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:14:38,993 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 3/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:14:38,993 ERROR   ontocast.agent.common: Failed to parse LLM response after 3 attempts. Last error: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:14:38,993 ERROR   ontocast.agent.render_facts: Failed to generate triples: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:14:38,993 INFO    ontocast.stategraph.atomic: Unit facts render failed at attempt 1/1 (no search request)
+2026-08-19 17:14:38,993 INFO    ontocast.stategraph.atomic: Unit facts loop exhausted retries
+2026-08-19 17:14:38,993 ERROR   carry_forward: L10 chunk 7/11 FAILED (Failed to generate graph update for facts): 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:14:38,993 INFO    carry_forward: L10 chunk 7/11: 3803 chars, carried 351 -> 351 triples (+0) in 18.3s
+2026-08-19 17:14:39,003 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:14:39,003 INFO    ontocast.agent.render_facts: Render facts for content unit 8
+2026-08-19 17:14:39,003 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:14:39,003 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:14:42,955 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:14:42,959 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 1/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:14:46,339 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:14:46,342 WARNING ontocast.agent.common: Failed to parse LLM response on attempt 2/3: 1 validation error for GraphUpdateRenderReport
+  Input should be a valid dictionary or instance of GraphUpdateRenderReport [type=model_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/model_type
+2026-08-19 17:14:50,389 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:14:50,407 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 8 total triple(s).
+2026-08-19 17:14:50,407 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:14:50,415 INFO    carry_forward: L10 chunk 8/11: 3123 chars, carried 351 -> 359 triples (+8) in 11.4s
+2026-08-19 17:14:50,425 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:14:50,425 INFO    ontocast.agent.render_facts: Render facts for content unit 9
+2026-08-19 17:14:50,425 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:14:50,425 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:14:53,327 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:14:53,341 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 5 total triple(s).
+2026-08-19 17:14:53,341 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:14:53,350 INFO    carry_forward: L10 chunk 9/11: 3707 chars, carried 359 -> 364 triples (+5) in 2.9s
+2026-08-19 17:14:53,360 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:14:53,360 INFO    ontocast.agent.render_facts: Render facts for content unit 10
+2026-08-19 17:14:53,360 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:14:53,360 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:14:56,636 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:14:56,653 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 8 total triple(s).
+2026-08-19 17:14:56,653 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:14:56,661 INFO    carry_forward: L10 chunk 10/11: 3929 chars, carried 364 -> 372 triples (+8) in 3.3s
+2026-08-19 17:14:56,671 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-19 17:14:56,671 INFO    ontocast.agent.render_facts: Render facts for content unit 11
+2026-08-19 17:14:56,671 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-19 17:14:56,671 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-19 17:15:05,196 INFO    httpx: HTTP Request: POST http://localhost:8000/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-19 17:15:05,230 INFO    ontocast.agent.render_facts: Facts update has 1 operation(s) with 31 total triple(s).
+2026-08-19 17:15:05,230 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-19 17:15:05,240 INFO    carry_forward: L10 chunk 11/11: 3434 chars, carried 372 -> 401 triples (+29) in 8.6s
+2026-08-19 17:15:05,242 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-19 17:15:14,413 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=66 known_ontology=3 tentative_ontology=45
+2026-08-19 17:15:14,413 INFO    ontocast.tool.agg.clustering: Embedding 80 entity representations in parallel...
+2026-08-19 17:15:15,553 INFO    ontocast.tool.agg.clustering: Embedded 80 entities
+2026-08-19 17:15:15,553 INFO    ontocast.tool.agg.clustering: Clustering 80 entities...
+2026-08-19 17:15:15,554 INFO    ontocast.tool.agg.clustering: Formed 14 clusters: 11 singletons, 3 multi-entity clusters, max cluster size: 62
+2026-08-19 17:15:15,554 INFO    ontocast.tool.agg.clustering: Embedding 9 entity representations in parallel...
+2026-08-19 17:15:15,654 INFO    ontocast.tool.agg.clustering: Embedded 9 entities
+2026-08-19 17:15:15,655 INFO    ontocast.tool.agg.clustering: Clustering 9 entities...
+2026-08-19 17:15:15,657 INFO    ontocast.tool.agg.clustering: Formed 9 clusters: 9 singletons, 0 multi-entity clusters, max cluster size: 1
+2026-08-19 17:15:15,657 INFO    ontocast.tool.agg.clustering: Embedding 25 entity representations in parallel...
+2026-08-19 17:15:15,933 INFO    ontocast.tool.agg.clustering: Embedded 25 entities
+2026-08-19 17:15:15,933 INFO    ontocast.tool.agg.clustering: Clustering 25 entities...
+2026-08-19 17:15:15,934 INFO    ontocast.tool.agg.clustering: Formed 8 clusters: 4 singletons, 4 multi-entity clusters, max cluster size: 9
+2026-08-19 17:15:15,984 INFO    ontocast.tool.agg.aggregate: Rejected 233 candidate merges after symbolic validation
+2026-08-19 17:15:15,984 INFO    ontocast.tool.agg.clustering: Created mapping for 114 entities to 104 representatives
+2026-08-19 17:15:15,984 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 114 entities, 66 normalised
+2026-08-19 17:15:15,997 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 401 -> 1133 triples (57 entities merged)
+2026-08-19 17:15:15,998 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-19 17:15:16,025 INFO    carry_forward: L10 done: 11 chunk(s) -> 1136 triples in 153.6s -> input.L10.facts.ttl
+
+==============================================================================
+CARRY-FORWARD SUMMARY
+==============================================================================
+rec   chunks    chars  triples     sec  output
+L1         6   23,991      689   157.5  input.L1.facts.ttl
+L2         9   34,543      701   137.5  input.L2.facts.ttl
+L3         8   28,852     1025   144.9  input.L3.facts.ttl
+L4         7   25,231      938   138.1  input.L4.facts.ttl
+L5         7   26,536      701    79.9  input.L5.facts.ttl
+L6         5   17,294      413    55.2  input.L6.facts.ttl
+L7         6   19,719      539    59.5  input.L7.facts.ttl
+L8         6   19,507     1028    97.8  input.L8.facts.ttl
+L9         5   17,636      623    85.4  input.L9.facts.ttl
+L10       11   38,265     1136   153.6  input.L10.facts.ttl
+
+  L1 per-chunk:
+    chunk 1:   3,689 chars  carried_in=   0  out=  14  (+ 14)     4.6s  success
+    chunk 2:   3,126 chars  carried_in=  14  out=  75  (+ 61)    14.1s  success
+    chunk 3:   4,491 chars  carried_in=  75  out=  75  (+  0)    25.4s  failed
+    chunk 4:   3,821 chars  carried_in=  75  out=  97  (+ 22)    13.7s  success
+    chunk 5:   3,050 chars  carried_in=  97  out= 144  (+ 47)    11.2s  success
+    chunk 6:   5,814 chars  carried_in= 144  out= 236  (+ 92)    42.4s  success
+
+  L2 per-chunk:
+    chunk 1:   3,397 chars  carried_in=   0  out=  15  (+ 15)     4.0s  success
+    chunk 2:   3,230 chars  carried_in=  15  out=  51  (+ 36)     9.3s  success
+    chunk 3:   3,244 chars  carried_in=  51  out= 112  (+ 61)    12.9s  success
+    chunk 4:   5,857 chars  carried_in= 112  out= 128  (+ 16)    24.2s  success
+    chunk 5:   4,748 chars  carried_in= 128  out= 165  (+ 37)    26.3s  success
+    chunk 6:   3,390 chars  carried_in= 165  out= 177  (+ 12)     8.8s  success
+    chunk 7:   3,977 chars  carried_in= 177  out= 214  (+ 37)    17.5s  success
+    chunk 8:   5,728 chars  carried_in= 214  out= 235  (+ 21)    10.1s  success
+    chunk 9:     972 chars  carried_in= 235  out= 239  (+  4)     6.8s  success
+
+  L3 per-chunk:
+    chunk 1:   3,022 chars  carried_in=   0  out=  24  (+ 24)     9.3s  success
+    chunk 2:   3,848 chars  carried_in=  24  out=  73  (+ 49)    12.3s  success
+    chunk 3:   3,259 chars  carried_in=  73  out= 127  (+ 54)    14.7s  success
+    chunk 4:   3,496 chars  carried_in= 127  out= 193  (+ 66)    16.4s  success
+    chunk 5:   3,012 chars  carried_in= 193  out= 250  (+ 57)    14.3s  success
+    chunk 6:   3,539 chars  carried_in= 250  out= 276  (+ 26)     8.8s  success
+    chunk 7:   3,295 chars  carried_in= 276  out= 319  (+ 43)    37.6s  success
+    chunk 8:   5,381 chars  carried_in= 319  out= 366  (+ 47)    12.2s  success
+
+  L4 per-chunk:
+    chunk 1:   4,662 chars  carried_in=   0  out=  25  (+ 25)     9.9s  success
+    chunk 2:   3,735 chars  carried_in=  25  out=  46  (+ 21)    18.0s  success
+    chunk 3:   3,094 chars  carried_in=  46  out=  79  (+ 33)     8.2s  success
+    chunk 4:   3,487 chars  carried_in=  79  out= 138  (+ 59)    13.2s  success
+    chunk 5:   3,176 chars  carried_in= 138  out= 164  (+ 26)    14.4s  success
+    chunk 6:   3,242 chars  carried_in= 164  out= 250  (+ 86)    41.2s  success
+    chunk 7:   3,835 chars  carried_in= 250  out= 319  (+ 69)    15.9s  success
+
+  L5 per-chunk:
+    chunk 1:   3,422 chars  carried_in=   0  out=  49  (+ 49)    13.9s  success
+    chunk 2:   3,248 chars  carried_in=  49  out= 103  (+ 54)    12.6s  success
+    chunk 3:   4,572 chars  carried_in= 103  out= 184  (+ 81)    17.0s  success
+    chunk 4:   3,849 chars  carried_in= 184  out= 204  (+ 20)     6.0s  success
+    chunk 5:   3,197 chars  carried_in= 204  out= 211  (+  7)     6.7s  success
+    chunk 6:   3,210 chars  carried_in= 211  out= 229  (+ 18)     5.3s  success
+    chunk 7:   5,038 chars  carried_in= 229  out= 243  (+ 14)     6.6s  success
+
+  L6 per-chunk:
+    chunk 1:   3,033 chars  carried_in=   0  out=  10  (+ 10)     3.6s  success
+    chunk 2:   3,608 chars  carried_in=  10  out=  37  (+ 27)     6.0s  success
+    chunk 3:   3,040 chars  carried_in=  37  out=  37  (+  0)    15.8s  failed
+    chunk 4:   3,237 chars  carried_in=  37  out=  83  (+ 46)     9.4s  success
+    chunk 5:   4,376 chars  carried_in=  83  out= 159  (+ 76)    14.5s  success
+
+  L7 per-chunk:
+    chunk 1:   4,096 chars  carried_in=   0  out=  30  (+ 30)    10.1s  success
+    chunk 2:   3,159 chars  carried_in=  30  out=  78  (+ 48)    11.3s  success
+    chunk 3:   3,183 chars  carried_in=  78  out= 118  (+ 40)     9.6s  success
+    chunk 4:   3,056 chars  carried_in= 118  out= 156  (+ 38)     9.1s  success
+    chunk 5:   4,064 chars  carried_in= 156  out= 161  (+  5)     3.9s  success
+    chunk 6:   2,161 chars  carried_in= 161  out= 177  (+ 16)     4.9s  success
+
+  L8 per-chunk:
+    chunk 1:   3,155 chars  carried_in=   0  out=  73  (+ 73)    18.9s  success
+    chunk 2:   3,003 chars  carried_in=  73  out= 135  (+ 62)    13.1s  success
+    chunk 3:   3,031 chars  carried_in= 135  out= 171  (+ 36)     8.3s  success
+    chunk 4:   3,006 chars  carried_in= 171  out= 216  (+ 45)    10.0s  success
+    chunk 5:   3,134 chars  carried_in= 216  out= 279  (+ 63)    14.3s  success
+    chunk 6:   4,178 chars  carried_in= 279  out= 349  (+ 70)    15.4s  success
+
+  L9 per-chunk:
+    chunk 1:   3,907 chars  carried_in=   0  out=  43  (+ 43)    13.3s  success
+    chunk 2:   3,148 chars  carried_in=  43  out=  94  (+ 51)    10.2s  success
+    chunk 3:   3,240 chars  carried_in=  94  out= 124  (+ 30)    16.0s  success
+    chunk 4:   5,134 chars  carried_in= 124  out= 176  (+ 52)    11.9s  success
+    chunk 5:   2,207 chars  carried_in= 176  out= 206  (+ 30)    23.5s  success
+
+  L10 per-chunk:
+    chunk 1:   3,012 chars  carried_in=   0  out=  17  (+ 17)     4.5s  success
+    chunk 2:   3,687 chars  carried_in=  17  out=  55  (+ 38)    23.9s  success
+    chunk 3:   3,891 chars  carried_in=  55  out= 138  (+ 83)    15.9s  success
+    chunk 4:   3,169 chars  carried_in= 138  out= 213  (+ 75)    16.5s  success
+    chunk 5:   3,288 chars  carried_in= 213  out= 259  (+ 46)    10.7s  success
+    chunk 6:   3,222 chars  carried_in= 259  out= 351  (+ 92)    19.5s  success
+    chunk 7:   3,803 chars  carried_in= 351  out= 351  (+  0)    18.3s  failed
+    chunk 8:   3,123 chars  carried_in= 351  out= 359  (+  8)    11.4s  success
+    chunk 9:   3,707 chars  carried_in= 359  out= 364  (+  5)     2.9s  success
+    chunk 10:   3,929 chars  carried_in= 364  out= 372  (+  8)     3.3s  success
+    chunk 11:   3,434 chars  carried_in= 372  out= 401  (+ 29)     8.6s  success
+
+report written to /home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_cfcmp_20260819_165630/cf3k.report.json
+
+10 record(s) processed, 3 failure(s)

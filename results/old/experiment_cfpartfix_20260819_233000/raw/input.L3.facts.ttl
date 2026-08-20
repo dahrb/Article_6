@@ -1,0 +1,473 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/e6c95e367099/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/e6c95e367099> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:3"^^xsd:string .
+
+doc:actionEstablishEconomicUnits a echr:AdministrativeAction ;
+    rdfs:label "decision to establish economic and commercial units for Viva TV and Radio Viva"^^xsd:string ;
+    echr:hasCourt doc:partySdif ;
+    echr:hasDecisionDate "2007-07-19"^^xsd:date ;
+    echr:hasParticipation doc:participationSdifUnits ;
+    echr:hasSupportingQuote "On 19 July 2007, the Fund decided to establish two economic and commercial units: one for Viva TV and the other for Radio Viva."^^xsd:string .
+
+doc:actionFundManagementTransfer a echr:AdministrativeAction ;
+    rdfs:label "Fund decision to transfer management and control of Erol Aksoy Group companies"^^xsd:string ;
+    echr:followsProceeding doc:actionFundDefaultDecision ;
+    echr:hasCourt doc:partySdif ;
+    echr:hasDecisionDate "2008-09-18"^^xsd:date ;
+    echr:hasParticipation doc:participation_sdif_transfer_2008 ;
+    echr:hasSupportingQuote "On 18 September 2008, the Fund further resolved to transfer the management and control of all companies within the Erol Aksoy Group to itself"^^xsd:string .
+
+doc:actionFundNonEnforcementDecision a echr:AdministrativeAction ;
+    rdfs:label "Fund decision on impossibility of enforcing the judgment"^^xsd:string ;
+    echr:hasCourt doc:partySdif ;
+    echr:hasDecisionDate "2015-10-27"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationSdifNonEnforcement ;
+    echr:hasSupportingQuote "On 18 April 2016, the Fund notified the applicant of a decision taken on 27 October 2015 regarding the impossibility of enforcing the judgment."^^xsd:string .
+
+doc:actionOwnershipTransfer a echr:EnforcementAction ;
+    rdfs:label "Transfer of ownership of Viva TV-Radio Viva to company A"^^xsd:string ;
+    echr:followsProceeding doc:action_award_approval_2012 ;
+    echr:hasCourt doc:partySdif ;
+    echr:hasDecisionDate "2012-05-09"^^xsd:date ;
+    echr:hasSupportingQuote "On the same day... the Fund transferred the ownership of Viva TV-Radio Viva to company A"^^xsd:string .
+
+doc:action_tender_offer_2007 a echr:AdministrativeAction ;
+    rdfs:label "Fund decision to offer Viva TV and Radio Viva for sale (2007)"^^xsd:string ;
+    echr:followsProceeding doc:action_valuation_2007 ;
+    echr:hasCourt doc:partySdif ;
+    echr:hasDecisionDate "2007-08-29"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasSupportingQuote "On 29 August 2007, the Fund resolved to offer both Viva TV and Radio Viva for sale together in a single tendering process"^^xsd:string .
+
+doc:case_58919_18 a echr:CaseDocument ;
+    echr:hasApplicant doc:partyAksoyGroup ;
+    echr:hasApplicationNumber "58919/18"^^xsd:string ;
+    echr:hasCaseName "Erol Aksoy v. Türkiye"^^xsd:string ;
+    echr:hasDomesticProceeding doc:proceedingAnnulmentAdminCourt,
+        doc:proceedingAnnulmentSac,
+        doc:proceedingConstitutionalCourtApp,
+        doc:proceedingOverturnIstanbulCourt,
+        doc:proceedingSacChamberDecision,
+        doc:proceedingSacGaDecision,
+        doc:proceedingSacRectification,
+        doc:proceeding_sac_rectification_2017 ;
+    echr:hasRespondentState "Türkiye"^^xsd:string .
+
+doc:companyA a echr:Party ;
+    rdfs:label "Company A"^^xsd:string ;
+    echr:hasPartyName "company A."^^xsd:string .
+
+doc:companyAnadolu a echr:Party ;
+    rdfs:label "Anadolu Radyo ve Görüntü Hizmetleri A.Ş."^^xsd:string ;
+    echr:hasPartyName "Anadolu Radyo ve Görüntü Hizmetleri A.Ş."^^xsd:string .
+
+doc:companyCinebes a echr:Party ;
+    rdfs:label "Cinebeş Filmcilik ve Yapımcılık A.Ş."^^xsd:string ;
+    echr:hasPartyName "Cinebeş Filmcilik ve Yapımcılık A.Ş."^^xsd:string .
+
+doc:companyCinedijital a echr:Party ;
+    rdfs:label "Cine Dijital İletişim Hizmetleri Ticaret A.Ş."^^xsd:string ;
+    echr:hasPartyName "Cine Dijital İletişim Hizmetleri Ticaret A.Ş."^^xsd:string .
+
+doc:companyD a echr:Party ;
+    rdfs:label "Company D"^^xsd:string ;
+    echr:hasPartyName "company D"^^xsd:string .
+
+doc:companyErdem a echr:Party ;
+    rdfs:label "Erdem Radyo Televizyon Yayıncılığı ve Reklamcılık A.Ş."^^xsd:string ;
+    echr:hasPartyName "Erdem Radyo Televizyon Yayıncılığı ve Reklamcılık A.Ş."^^xsd:string .
+
+doc:companyKutyay a echr:Party ;
+    rdfs:label "Kutyay Özel Radyo Televizyon Yayıncılık A.Ş."^^xsd:string ;
+    echr:hasPartyName "Kutyay Özel Radyo Televizyon Yayıncılık A.Ş."^^xsd:string .
+
+doc:companyMedya a echr:Party ;
+    rdfs:label "Medya İletişim Hizmetleri Sanayi A.Ş."^^xsd:string ;
+    echr:hasPartyName "Medya İletişim Hizmetleri Sanayi A.Ş."^^xsd:string .
+
+doc:companyMultikanal a echr:Party ;
+    rdfs:label "Multikanal Dağıtım ve Ticaret A.Ş."^^xsd:string ;
+    echr:hasPartyName "Multikanal Dağıtım ve Ticaret A.Ş."^^xsd:string .
+
+doc:companyPAs a echr:Party ;
+    rdfs:label "Company P. A.Ş."^^xsd:string ;
+    echr:hasPartyName "P. A.Ş."^^xsd:string .
+
+doc:companySporCocuk a echr:Party ;
+    rdfs:label "Spor ve Çocuk Televizyon Reklamcılık ve Yapımcılık A.Ş."^^xsd:string ;
+    echr:hasPartyName "Spor ve Çocuk Televizyon Reklamcılık ve Yapımcılık A.Ş."^^xsd:string .
+
+doc:eventLiquidationProtocol a echr:AdministrativeAction ;
+    rdfs:label "signing of the debt liquidation protocol"^^xsd:string ;
+    echr:followsProceeding doc:actionRecoverDebt ;
+    echr:hasDecisionDate "2006-05-09"^^xsd:date ;
+    echr:hasParticipation doc:participationAksoyProtocol,
+        doc:participationSdifProtocol ;
+    echr:hasSupportingQuote "On 9 May 2006, a debt liquidation protocol (Borç Tasfiye Protokolü...) was signed between the Fund (as creditor) and the Erol Aksoy Group (as debtor)"^^xsd:string .
+
+doc:eventNonEnforcement a echr:EnforcementAction ;
+    rdfs:label "non-enforcement of SAC judgments"^^xsd:string ;
+    echr:followsProceeding doc:proceedingAnnulmentSac ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationSdifEnforcement ;
+    echr:hasSupportingQuote "non-enforcement of judgments delivered by the Supreme Administrative Court"^^xsd:string .
+
+doc:proceedingConstitutionalCourtProperty a echr:DomesticProceeding ;
+    rdfs:label "Constitutional Court individual application regarding property rights"^^xsd:string ;
+    echr:hasCourt doc:authConstCourt ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participationAksoyConstProperty ;
+    echr:hasSupportingQuote "The Constitutional Court concluded that the administration’s failure to enforce the annulment decisions amounted to a violation of the applicant’s property rights under Article 35 of the Constitution"^^xsd:string .
+
+doc:proceedingStandingSac a echr:DomesticProceeding ;
+    rdfs:label "Supreme Administrative Court proceeding on standing"^^xsd:string ;
+    echr:followsProceeding doc:proceedingStandingAdminCourt ;
+    echr:hasCourt doc:authSac ;
+    echr:hasDecisionDate "2006-07-20"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participationAksoySac ;
+    echr:hasSupportingQuote "On 20 July 2006, the Supreme Administrative Court, ruling unanimously, found that the applicant had a legal interest in the enforcement proceedings... and quashed the administrative court’s earlier decision"^^xsd:string .
+
+doc:actionFundDefaultDecision a echr:AdministrativeAction ;
+    rdfs:label "Fund decision to rely on default provisions"^^xsd:string ;
+    echr:hasCourt doc:partySdif ;
+    echr:hasDecisionDate "2008-04-03"^^xsd:date ;
+    echr:hasParticipation doc:participationAksoyGroupDefault,
+        doc:participationSdifDefault ;
+    echr:hasSupportingQuote "On 3 April 2008, the Fund concluded that the Erol Aksoy Group had failed to fulfil several commitments and obligations set out in the Liquidation Protocol... Consequently, the Fund decided to rely on its provisions concerning default."^^xsd:string .
+
+doc:actionMergeUnits a echr:AdministrativeAction ;
+    rdfs:label "Fund decision to merge economic and commercial units"^^xsd:string ;
+    echr:followsProceeding doc:action_valuation_2009 ;
+    echr:hasCourt doc:partySdif ;
+    echr:hasDecisionDate "2009-07-09"^^xsd:date ;
+    echr:hasSupportingQuote "On 9 July 2009, the Fund decided to merge the two economic and commercial units"^^xsd:string .
+
+doc:actionRecoverDebt a echr:AdministrativeAction ;
+    rdfs:label "decision to recover misappropriated resources"^^xsd:string ;
+    echr:followsProceeding doc:actionTransferManagement ;
+    echr:hasCourt doc:partySdif ;
+    echr:hasDecisionDate "2001-09-14"^^xsd:date ;
+    echr:hasParticipation doc:participationAksoyRecovery ;
+    echr:hasSupportingQuote "on 14 September 2001, the Fund resolved to recover 726,122,000 Turkish liras from the former shareholders"^^xsd:string .
+
+doc:actionTransferManagement a echr:AdministrativeAction ;
+    rdfs:label "transfer of management and control of İktisat Bankası T.A.Ş."^^xsd:string ;
+    echr:hasCourt doc:authBrsb ;
+    echr:hasDecisionDate "2001-03-15"^^xsd:date ;
+    echr:hasParticipation doc:participationIktisatBankTransfer ;
+    echr:hasSupportingQuote "By a decision dated 15 March 2001, the Banking Regulation and Supervision Board... resolved to transfer the management and control of İktisat Bankası T.A.Ş. to the Savings Deposit Insurance Fund"^^xsd:string .
+
+doc:action_award_approval_2012 a echr:AdministrativeAction ;
+    rdfs:label "Fund approval of award to company A"^^xsd:string ;
+    echr:followsProceeding doc:action_tender_offer_2011 ;
+    echr:hasCourt doc:partySdif ;
+    echr:hasDecisionDate "2012-05-03"^^xsd:date ;
+    echr:hasSupportingQuote "on 3 May 2012, the Fund approved the award of Viva TV-Radio Viva to company A"^^xsd:string .
+
+doc:action_fund_enforcement_refusal_2017 a echr:AdministrativeAction ;
+    rdfs:label "Fund response to enforcement request of annulment judgment (2017)"^^xsd:string ;
+    echr:followsProceeding doc:proceedingOverturnIstanbulCourt ;
+    echr:hasCourt doc:partySdif ;
+    echr:hasDecisionDate "2017-08-11"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_sdif_enforcement_refusal_2017 ;
+    echr:hasSupportingQuote "On 5 September 2017, the Fund responded, stating that a decision had already been made on 11 August 2017 regarding the enforcement of the relevant judgment... the annulment decision could not be enforced due to legal and practical impossibilities"^^xsd:string .
+
+doc:action_tender_offer_2009 a echr:AdministrativeAction ;
+    rdfs:label "Fund decision to offer Viva TV-Radio Viva for sale (2009)"^^xsd:string ;
+    echr:followsProceeding doc:actionMergeUnits ;
+    echr:hasCourt doc:partySdif ;
+    echr:hasDecisionDate "2009-11-05"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasSupportingQuote "On 5 November 2009, the Fund resolved to offer Viva TV-Radio Viva for sale"^^xsd:string .
+
+doc:action_tender_offer_2011 a echr:AdministrativeAction ;
+    rdfs:label "Fund decision to offer Viva TV-Radio Viva for sale again (2011)"^^xsd:string ;
+    echr:followsProceeding doc:action_tender_offer_2009 ;
+    echr:hasCourt doc:partySdif ;
+    echr:hasDecisionDate "2011-01-13"^^xsd:date ;
+    echr:hasSupportingQuote "On 13 January 2011, the Fund decided to offer Viva TV-Radio Viva for sale again"^^xsd:string .
+
+doc:action_valuation_2007 a echr:AdministrativeAction ;
+    rdfs:label "TSKB valuation report of August 2007"^^xsd:string ;
+    echr:hasCourt doc:authTskb ;
+    echr:hasDecisionDate "2007-08-01"^^xsd:date ;
+    echr:hasSupportingQuote "On 1 August 2007, the Industrial Development Bank of Türkiye ( Türkiye Sınaî Kalkınma Bankası A.Ş ., hereinafter referred to as “TSKB”) issued a report"^^xsd:string .
+
+doc:action_valuation_2009 a echr:AdministrativeAction ;
+    rdfs:label "TSKB valuation report of June 2009"^^xsd:string ;
+    echr:hasCourt doc:authTskb ;
+    echr:hasDecisionDate "2009-06-30"^^xsd:date ;
+    echr:hasSupportingQuote "On 30 June 2009, a valuation report issued by TSKB determined that the value of Radio Viva was USD 5,782,000"^^xsd:string .
+
+doc:authBrsb a echr:DomesticAuthority ;
+    rdfs:label "Banking Regulation and Supervision Board"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Banking Regulation and Supervision Board"^^xsd:string ;
+    echr:hasJurisdictionState "Türkiye"^^xsd:string .
+
+doc:authIstanbulAdminCourt a echr:DomesticAuthority ;
+    rdfs:label "6th Chamber of the İstanbul Administrative Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "6th Chamber of the İstanbul Administrative Court"^^xsd:string ;
+    echr:hasJurisdictionState "Türkiye"^^xsd:string .
+
+doc:lawyerNHolliger a echr:LegalRepresentative ;
+    rdfs:label "Ms N. Holliger"^^xsd:string ;
+    echr:hasPersonName "Ms N. Holliger"^^xsd:string .
+
+doc:participationAksoyAdminCourt a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyAksoyGroup .
+
+doc:participationAksoyConstCourt a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyAksoyGroup .
+
+doc:participationAksoyConstProperty a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyAksoyGroup .
+
+doc:participationAksoyGroupDefault a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyAksoyGroup .
+
+doc:participationAksoyProtocol a echr:Participation ;
+    rdfs:label "Participation of Erol Aksoy in liquidation protocol"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyAksoyGroup .
+
+doc:participationAksoyRecovery a echr:Participation ;
+    rdfs:label "Participation of Erol Aksoy in recovery action"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyAksoyGroup .
+
+doc:participationIktisatBankTransfer a echr:Participation ;
+    rdfs:label "Participation of İktisat Bank in transfer action"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyIktisatBank .
+
+doc:participationSdifDefault a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partySdif .
+
+doc:participationSdifEnforcement a echr:Participation ;
+    rdfs:label "Participation of SDIF in enforcement phase"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partySdif .
+
+doc:participationSdifNonEnforcement a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partySdif .
+
+doc:participationSdifProtocol a echr:Participation ;
+    rdfs:label "Participation of SDIF in liquidation protocol"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partySdif .
+
+doc:participationSdifSacRect a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partySdif .
+
+doc:participationSdifUnits a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partySdif .
+
+doc:participation_aksoy_admin_court_2011 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyAksoyGroup .
+
+doc:participation_aksoy_sac_rect_2017 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyAksoyGroup .
+
+doc:participation_sdif_admin_court_2011 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partySdif .
+
+doc:participation_sdif_enforcement_refusal_2017 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partySdif .
+
+doc:participation_sdif_sac_rect_2017 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partySdif .
+
+doc:participation_sdif_transfer_2008 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partySdif .
+
+doc:partyIktisatBank a echr:Party ;
+    rdfs:label "İktisat Bankası T.A.Ş."^^xsd:string ;
+    echr:hasPartyName "İktisat Bankası T.A.Ş."^^xsd:string .
+
+doc:proceedingConstitutionalCourtApp a echr:DomesticProceeding ;
+    rdfs:label "individual application to the Constitutional Court"^^xsd:string ;
+    echr:followsProceeding doc:action_fund_enforcement_refusal_2017 ;
+    echr:hasCourt doc:authConstCourt ;
+    echr:hasDecisionDate "2018-05-23"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelConstitutional ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationAksoyConstCourt ;
+    echr:hasProceedingStartDate "2017-09-11"^^xsd:date ;
+    echr:hasSupportingQuote "On 11 September 2017, the applicant lodged an individual application with the Constitutional Court... the Constitutional Court declared the application inadmissible"^^xsd:string .
+
+doc:proceedingSacRectification a echr:DomesticProceeding ;
+    rdfs:label "Supreme Administrative Court rectification request"^^xsd:string ;
+    echr:followsProceeding doc:proceedingSacGaDecision ;
+    echr:hasCourt doc:authSac ;
+    echr:hasDecisionDate "2016-01-25"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationSdifSacRect ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 25 January 2016, the Supreme Administrative Court rejected the Fund’s request for rectification"^^xsd:string .
+
+doc:proceedingStandingAdminCourt a echr:DomesticProceeding ;
+    rdfs:label "first-instance administrative court proceeding on standing"^^xsd:string ;
+    echr:hasCourt doc:authSac ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationAksoySac ;
+    echr:hasSupportingQuote "the decision of the first-instance administrative court, which had dismissed the case on the grounds of his lack of standing"^^xsd:string .
+
+doc:authConstCourt a echr:DomesticAuthority ;
+    rdfs:label "Constitutional Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Constitutional Court"^^xsd:string ;
+    echr:hasJurisdictionState "Türkiye"^^xsd:string .
+
+doc:authTskb a echr:DomesticAuthority ;
+    rdfs:label "Industrial Development Bank of Türkiye"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Türkiye Sınaî Kalkınma Bankası A.Ş."^^xsd:string ;
+    echr:hasJurisdictionState "Türkiye"^^xsd:string .
+
+doc:proceedingAnnulmentAdminCourt a echr:DomesticProceeding ;
+    rdfs:label "proceedings before the administrative court contesting the sale of Viva TV-Radio Viva"^^xsd:string ;
+    echr:hasCourt doc:authIstanbulAdminCourt,
+        doc:authSac ;
+    echr:hasDecisionDate "2014-03-19"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationAksoyAdminCourt,
+        doc:participation_aksoy_admin_court_2011,
+        doc:participation_sdif_admin_court_2011 ;
+    echr:hasProceedingStartDate "2011-02-07"^^xsd:date,
+        "2011-02-24"^^xsd:date ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 19 March 2014, the 6th Chamber of the İstanbul Administrative Court dismissed the applicant’s claim"^^xsd:string,
+        "On 24 February 2011, the applicant initiated proceedings before the administrative court, seeking the annulment of the sale of Viva TV-Radio Viva."^^xsd:string,
+        "On 7 February 2011, the applicant initiated proceedings before the administrative court, contesting the actions of the Fund concerning the tendering of Viva TV-Radio Viva"^^xsd:string .
+
+doc:proceedingAnnulmentSac a echr:DomesticProceeding ;
+    rdfs:label "annulment proceedings before the Supreme Administrative Court"^^xsd:string ;
+    echr:hasCourt doc:authSac ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participationAksoySac ;
+    echr:hasProceedingStartDate "2014-03-19"^^xsd:date ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On an appeal by the applicant, the 13th Chamber of the Supreme Administrative Court upheld that decision on 9 December 2014."^^xsd:string,
+        "proceedings initiated by the applicant to annul decisions related to the valuation, tender invitation and subsequent sale of a television channel and radio station owned by joint-stock companies in which the applicant held shares"^^xsd:string .
+
+doc:proceedingOverturnIstanbulCourt a echr:DomesticProceeding ;
+    rdfs:label "overturning of the Istanbul Administrative Court judgment"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_sac_rectification_2017 ;
+    echr:hasCourt doc:authSac ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participationAksoySac,
+        doc:participationSdifSacGa ;
+    echr:hasSupportingQuote "the court overturned the judgment of the 6th Chamber of the Istanbul Administrative Court dated 19 March 2014 and annulled the sale in question"^^xsd:string .
+
+doc:proceedingSacChamberDecision a echr:DomesticProceeding ;
+    rdfs:label "13th Chamber of the Supreme Administrative Court proceeding"^^xsd:string ;
+    echr:followsProceeding doc:proceedingAnnulmentAdminCourt ;
+    echr:hasCourt doc:authSac ;
+    echr:hasDecisionDate "2014-12-09"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationAksoySac,
+        doc:participationSdifSacGa ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 9 December 2014, the 13th Chamber of the Supreme Administrative Court dismissed the applicant’s case."^^xsd:string .
+
+doc:proceeding_sac_rectification_2017 a echr:DomesticProceeding ;
+    rdfs:label "request for rectification before the 13th Chamber of the Supreme Administrative Court (2017)"^^xsd:string ;
+    echr:followsProceeding doc:proceedingSacGaDecision ;
+    echr:hasCourt doc:authSac ;
+    echr:hasDecisionDate "2017-06-30"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_aksoy_sac_rect_2017,
+        doc:participation_sdif_sac_rect_2017 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 30 June 2017, the 13 th Chamber of the Supreme Administrative Court granted the request"^^xsd:string .
+
+doc:participationSdifSacGa a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partySdif .
+
+doc:proceedingSacGaDecision a echr:DomesticProceeding ;
+    rdfs:label "General Assembly of the Supreme Administrative Court appeal"^^xsd:string ;
+    echr:followsProceeding doc:proceedingSacChamberDecision ;
+    echr:hasCourt doc:authSac ;
+    echr:hasDecisionDate "2015-07-07"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participationAksoySac,
+        doc:participationSdifSacGa ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 7 July 2015, following an appeal by the applicant, the General Assembly... annulled the Fund’s decision."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:participationAksoySac a echr:Participation ;
+    rdfs:label "Participation of Erol Aksoy in SAC proceedings"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyAksoyGroup .
+
+doc:authSac a echr:DomesticAuthority ;
+    rdfs:label "13th Chamber of the Supreme Administrative Court"^^xsd:string,
+        "Administrative Court"^^xsd:string,
+        "General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court"^^xsd:string,
+        "Supreme Administrative Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "13th Chamber of the Supreme Administrative Court"^^xsd:string,
+        "General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court"^^xsd:string,
+        "Supreme Administrative Court"^^xsd:string,
+        "administrative court"^^xsd:string ;
+    echr:hasJurisdictionState "Türkiye"^^xsd:string .
+
+doc:partyAksoyGroup a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Erol Aksoy Group"^^xsd:string,
+        "Mr Erol Aksoy"^^xsd:string ;
+    echr:hasPartyName "Erol Aksoy Group"^^xsd:string ;
+    echr:hasPersonName "Mr Erol Aksoy"^^xsd:string ;
+    echr:isRepresentedBy doc:lawyerNHolliger .
+
+doc:partySdif a echr:Party ;
+    rdfs:label "Saving Deposit Insurance Fund"^^xsd:string ;
+    echr:hasPartyName "Saving Deposit Insurance Fund"^^xsd:string .
+

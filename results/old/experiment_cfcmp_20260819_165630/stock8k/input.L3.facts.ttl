@@ -1,0 +1,235 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/0402b215c41c/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ns1: <http://www.w3.org/ns/qudt/ontology#> .
+@prefix ns2: <http://qudt.org/schema/qudt/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/0402b215c41c> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:3"^^xsd:string .
+
+doc:caseVivaTv a echr:CaseDocument ;
+    rdfs:label "Case concerning sale of Viva TV-Radio Viva"^^xsd:string ;
+    echr:hasDomesticProceeding doc:proceeding_1,
+        doc:proceeding_2,
+        doc:proceeding_3,
+        doc:proceeding_4 .
+
+doc:case_58919_18 a echr:CaseDocument ;
+    rdfs:label "Erol Aksoy v. Türkiye"^^xsd:string ;
+    echr:hasApplicant doc:personErolAksoy ;
+    echr:hasApplicationNumber "58919/18"^^xsd:string ;
+    echr:hasDomesticProceeding doc:domestic_proceeding_1 ;
+    echr:hasRespondentState "Türkiye"^^xsd:string .
+
+doc:case_document_1 a echr:CaseDocument ;
+    echr:hasDomesticProceeding doc:proceeding_1,
+        doc:proceeding_2,
+        doc:proceeding_3 .
+
+doc:fundAuthority a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "the Fund"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "the Fund"^^xsd:string .
+
+doc:recovery_amount_1 a ns2:QuantityValue ;
+    rdfs:label "Amount Fund resolved to recover from shareholders"^^xsd:string ;
+    ns2:numericValue 726122000.0 ;
+    rdfs:comment "Turkish liras"^^xsd:string .
+
+doc:shareholding_1 a ns2:QuantityValue ;
+    rdfs:label "Applicant's personal shareholding in İktisat Bank"^^xsd:string ;
+    ns2:numericValue 1.01 ;
+    rdfs:comment "%"^^xsd:string .
+
+doc:shareholding_2 a ns2:QuantityValue ;
+    rdfs:label "Applicant's shareholding in Avrupa ve Amerika Holding A.Ş."^^xsd:string ;
+    ns2:numericValue 61.8 ;
+    rdfs:comment "%"^^xsd:string .
+
+doc:shareholding_3 a ns2:QuantityValue ;
+    rdfs:label "Avrupa ve Amerika Holding A.Ş.'s shareholding in the Bank"^^xsd:string ;
+    ns2:numericValue 95.19 ;
+    rdfs:comment "%"^^xsd:string .
+
+doc:shareholding_4 a ns2:QuantityValue ;
+    rdfs:label "Total Aksoy family shareholding in Avrupa ve Amerika Holding A.Ş."^^xsd:string ;
+    ns2:numericValue 99.6 ;
+    rdfs:comment "%"^^xsd:string .
+
+doc:shareholding_5 a ns2:QuantityValue ;
+    rdfs:label "Other family members' shareholding in Avrupa ve Amerika Holding A.Ş."^^xsd:string ;
+    ns2:numericValue 37.76 ;
+    rdfs:comment "%"^^xsd:string .
+
+doc:valuation_1 a ns1:QuantityValue ;
+    rdfs:label "value of Radio Viva Economic and Commercial Unit 1 August 2007"^^xsd:string ;
+    rdfs:comment "Unit: USD"^^xsd:string ;
+    ns1:numericValue 4258000.0 .
+
+doc:valuation_2 a ns1:QuantityValue ;
+    rdfs:label "value of Viva TV Economic and Commercial Unit 1 August 2007"^^xsd:string ;
+    rdfs:comment "Unit: USD"^^xsd:string ;
+    ns1:numericValue 373400.0 .
+
+doc:valuation_3 a ns1:QuantityValue ;
+    rdfs:label "value of Radio Viva 30 June 2009"^^xsd:string ;
+    rdfs:comment "Unit: USD"^^xsd:string ;
+    ns1:numericValue 5782000.0 .
+
+doc:valuation_4 a ns1:QuantityValue ;
+    rdfs:label "value of Viva TV 30 June 2009"^^xsd:string ;
+    rdfs:comment "Unit: USD"^^xsd:string ;
+    ns1:numericValue 132000.0 .
+
+doc:valuation_5 a ns1:QuantityValue ;
+    rdfs:label "Estimated value of Viva TV-Radio Viva"^^xsd:string,
+        "estimated value of Viva TV-Radio Viva 13 January 2011"^^xsd:string ;
+    rdfs:comment "Unit: USD"^^xsd:string,
+        "estimated value based on outdated report"^^xsd:string ;
+    ns1:numericValue 6000000.0 ;
+    ns1:unit doc:unitUsd .
+
+doc:valuation_6 a ns1:QuantityValue ;
+    rdfs:label "valuation of the entity by experts 30 June 2009"^^xsd:string ;
+    rdfs:comment "Unit: USD"^^xsd:string ;
+    ns1:numericValue 5914000.0 .
+
+doc:courtConstitutional a echr:DomesticAuthority ;
+    rdfs:label "Constitutional Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Constitutional Court"^^xsd:string ;
+    echr:hasJurisdictionState "Turkey"^^xsd:string .
+
+doc:courtIstanbulAdmin a echr:DomesticAuthority ;
+    rdfs:label "6th Chamber of the İstanbul Administrative Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "6th Chamber of the İstanbul Administrative Court"^^xsd:string ;
+    echr:hasJurisdictionState "Turkey"^^xsd:string .
+
+doc:domestic_proceeding_1 rdfs:label "Proceedings to annul decisions related to valuation and sale of Viva TV-Radio Viva"^^xsd:string ;
+    echr:hasCourt doc:courtSupremeAdmin ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "proceedings initiated by the applicant to annul decisions related to the valuation, tender invitation and subsequent sale of a television channel and radio station"^^xsd:string .
+
+doc:proceeding_4 a echr:DomesticProceeding ;
+    rdfs:label "Individual application to Constitutional Court"^^xsd:string,
+        "request for rectification before the Supreme Administrative Court"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_3 ;
+    echr:hasCourt doc:courtConstitutional,
+        doc:courtSupremeAdmin ;
+    echr:hasDecisionDate "2016-01-25"^^xsd:date,
+        "2018-05-23"^^xsd:date,
+        "2018-05-23" ;
+    echr:hasExtractionNote "Based on paragraphs 41 and 42."^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelCassation,
+        echr:LevelConstitutional ;
+    echr:hasOutcome echr:OutcomeClaimDismissed,
+        echr:OutcomeDeclaredInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_2 ;
+    echr:hasProceedingStartDate "2017-09-11"^^xsd:date ;
+    echr:hasProceedingType echr:TypeConstitutional ;
+    echr:hasSupportingQuote "On 11 September 2017, the applicant lodged an individual application with the Constitutional Court... In a decision of 23 May 2018, the Constitutional Court... declared the application inadmissible."^^xsd:string,
+        "On 25 January 2016, the Supreme Administrative Court rejected the Fund’s request for rectification"^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:unitUsd a ns1:Unit ;
+    rdfs:label "USD"^^xsd:string .
+
+doc:applicant_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicant"^^xsd:string ;
+    echr:hasPersonName "the applicant"^^xsd:string .
+
+doc:participation_1 a echr:Participation ;
+    rdfs:label "Participation of Erol Aksoy in annulment proceedings"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "proceedings initiated by the applicant"^^xsd:string ;
+    echr:participatingParty doc:applicant_1,
+        doc:personErolAksoy .
+
+doc:personErolAksoy a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Erol Aksoy"^^xsd:string ;
+    echr:hasPersonName "Mr Erol Aksoy"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Erol Aksoy"^^xsd:string .
+
+doc:participation_2 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating,
+        echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "First instance proceeding for annulment of sale"^^xsd:string,
+        "first instance proceeding before the administrative court"^^xsd:string ;
+    echr:hasCourt doc:courtIstanbulAdmin,
+        doc:courtSupremeAdmin ;
+    echr:hasDecisionDate "2014-03-19"^^xsd:date ;
+    echr:hasExtractionNote "Based on paragraphs 33 and 35."^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasProceedingStartDate "2011-02-07"^^xsd:date,
+        "2011-02-24"^^xsd:date ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 24 February 2011, the applicant initiated proceedings before the administrative court, seeking the annulment of the sale of Viva TV-Radio Viva... On 19 March 2014, the 6th Chamber of the İstanbul Administrative Court dismissed the applicant’s claim"^^xsd:string,
+        "On 7 February 2011, the applicant initiated proceedings before the administrative court"^^xsd:string .
+
+doc:proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "Appeal of first instance decision"^^xsd:string,
+        "proceeding before the 13th Chamber of the Supreme Administrative Court"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:courtSupremeAdmin ;
+    echr:hasDecisionDate "2014-12-09"^^xsd:date ;
+    echr:hasExtractionNote "Based on paragraph 35."^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeClaimDismissed,
+        echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_2 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 9 December 2014, the 13th Chamber of the Supreme Administrative Court dismissed the applicant’s case"^^xsd:string,
+        "On an appeal by the applicant, the 13th Chamber of the Supreme Administrative Court upheld that decision on 9 December 2014."^^xsd:string .
+
+doc:proceeding_3 a echr:DomesticProceeding ;
+    rdfs:label "Request for rectification"^^xsd:string,
+        "appeal before the General Assembly of the Supreme Administrative Court"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_2 ;
+    echr:hasCourt doc:courtSupremeAdmin ;
+    echr:hasDecisionDate "2015-07-07"^^xsd:date,
+        "2017-06-30"^^xsd:date ;
+    echr:hasExtractionNote "Based on paragraphs 37 and 38."^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelCassation,
+        echr:LevelReopening ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_2 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 30 June 2017, the 13 th Chamber of the Supreme Administrative Court granted the request... the court overturned the judgment of the 6th Chamber of the Istanbul Administrative Court dated 19 March 2014 and annulled the sale in question."^^xsd:string,
+        "On 7 July 2015, following an appeal by the applicant, the General Assembly... annulled the Fund’s decision"^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:courtSupremeAdmin a echr:DomesticAuthority ;
+    rdfs:label "13th Chamber of the Supreme Administrative Court"^^xsd:string,
+        "General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court"^^xsd:string,
+        "Supreme Administrative Court"^^xsd:string,
+        "administrative court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "13th Chamber of the Supreme Administrative Court"^^xsd:string,
+        "General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court"^^xsd:string,
+        "Supreme Administrative Court"^^xsd:string,
+        "administrative court"^^xsd:string ;
+    echr:hasJurisdictionState "Turkey"^^xsd:string,
+        "Türkiye"^^xsd:string .
+

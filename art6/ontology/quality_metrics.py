@@ -270,7 +270,6 @@ ROWS = [
     ("hasInstanceLevel", "prop:hasInstanceLevel"),
     ("hasOutcomeDirection", "prop:hasOutcomeDirection"),
     ("supporting quotes", "prop:hasSupportingQuote"),
-    ("source paragraphs", "prop:hasSourceParagraph"),
     ("proceedings w/o court", "proc_no_court"),
     ("proceedings w/o outcome", "proc_no_outcome"),
     ("proceedings w/o date", "proc_no_date"),

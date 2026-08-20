@@ -111,7 +111,6 @@ def stats(g):
     s["proc_no_outcome"] = sum(
         1 for p in s["proceedings"] if (p, ECHR.hasOutcome, None) not in g
     )
-    s["srcpara"] = len(list(g.triples((None, ECHR.hasSourceParagraph, None))))
     s["quotes"] = len(list(g.triples((None, ECHR.hasSupportingQuote, None))))
     return s
 
@@ -127,7 +126,6 @@ KEYS = [
     "components",
     "proc_no_court",
     "proc_no_outcome",
-    "srcpara",
     "quotes",
 ]
 

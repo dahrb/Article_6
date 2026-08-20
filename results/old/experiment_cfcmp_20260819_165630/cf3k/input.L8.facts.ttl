@@ -1,0 +1,369 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/6808a9af9f63/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/6808a9af9f63> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:8"^^xsd:string .
+
+doc:asset_freeze_1 a echr:AdministrativeAction ;
+    rdfs:label "freezing of property (ship Stavanger and drydock)"^^xsd:string ;
+    echr:hasCourt doc:authNnProsecutorOffice ;
+    echr:hasDecisionDate "1995-10-05"^^xsd:date ;
+    echr:hasSupportingQuote "on 5 October 1995 property belonging to the applicant - the ship Stavanger and a floating drydock - was frozen on the order of the Nizhniy Novgorod prosecutor’s office."^^xsd:string .
+
+doc:authNnCityAdministration a echr:DomesticAuthority ;
+    rdfs:label "Nizhniy Novgorod city administration"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Nizhniy Novgorod city administration"^^xsd:string ;
+    echr:hasJurisdictionState "Russia"^^xsd:string .
+
+doc:authNnIndustryDept a echr:DomesticAuthority ;
+    rdfs:label "Head of the Industry department of the Nizhniy Novgorod regional administration"^^xsd:string,
+        "Nizhniy Novgorod regional administration"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Head of the Industry department of the Nizhniy Novgorod regional administration"^^xsd:string,
+        "Nizhniy Novgorod regional administration"^^xsd:string ;
+    echr:hasJurisdictionState "Russia"^^xsd:string .
+
+doc:authRegionalProsecutor a echr:DomesticAuthority ;
+    rdfs:label "Regional Prosecutor"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Regional Prosecutor"^^xsd:string ;
+    echr:hasJurisdictionState "Russia"^^xsd:string .
+
+doc:case_46503_99 a echr:CaseDocument ;
+    echr:hasApplicant doc:applicantKlimentyev ;
+    echr:hasApplicationNumber "46503/99"^^xsd:string ;
+    echr:hasCaseName "Andrey Anatolyevitch KLIMENTYEV against Russia"^^xsd:string ;
+    echr:hasDomesticProceeding doc:appeal_detention_1,
+        doc:assetFreezeProceeds,
+        doc:assetUnfreezeDrydock,
+        doc:assetUnfreezeProceeds,
+        doc:cassation_appeal_1,
+        doc:cassation_hearing_1,
+        doc:conviction_1982_quash,
+        doc:motion_impartiality_1,
+        doc:orderAmendedJudgment,
+        doc:proceeding_1,
+        doc:proceeding_2,
+        doc:proceeding_3,
+        doc:request_bias_1,
+        doc:supreme_court_decision_1 ;
+    echr:hasRespondentState "Russia"^^xsd:string .
+
+doc:companyAroko a echr:Party ;
+    rdfs:label "Aroko"^^xsd:string ;
+    echr:hasPartyName "Aroko"^^xsd:string .
+
+doc:companyNlTop a echr:Party ;
+    rdfs:label "company NL TOP"^^xsd:string ;
+    echr:hasPartyName "NL TOP"^^xsd:string .
+
+doc:companyRussianShipping a echr:Party ;
+    rdfs:label "Russian Shipping"^^xsd:string ;
+    echr:hasPartyName "Russian Shipping"^^xsd:string .
+
+doc:companySlot a echr:Party ;
+    rdfs:label "company Slot"^^xsd:string ;
+    echr:hasPartyName "Slot"^^xsd:string .
+
+doc:companyZhanto a echr:Party ;
+    rdfs:label "company Zhanto"^^xsd:string ;
+    echr:hasPartyName "Zhanto"^^xsd:string .
+
+doc:detention_end_1 a echr:PreTrialDetention ;
+    rdfs:label "detention end October 2000"^^xsd:string ;
+    echr:hasDetainee doc:applicantKlimentyev ;
+    echr:hasDetentionEndDate "2000-10"^^xsd:gYearMonth ;
+    echr:hasSupportingQuote "In October 2000 the applicant was released from detention."^^xsd:string .
+
+doc:drydock_1 a echr:Party ;
+    rdfs:label "floating drydock"^^xsd:string ;
+    echr:hasPartyName "floating drydock"^^xsd:string .
+
+doc:election_1 a echr:AdministrativeAction ;
+    rdfs:label "declaration of elections invalid"^^xsd:string ;
+    echr:hasCourt doc:authElectoralCommittee ;
+    echr:hasDecisionDate "1998-04-01"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasSupportingQuote "On 1 April 1998 the local electoral committee declared the elections invalid"^^xsd:string .
+
+doc:mrFedotov a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Fedotov"^^xsd:string ;
+    echr:hasPersonName "Mr Fedotov"^^xsd:string .
+
+doc:portMakhachkala a echr:Party ;
+    rdfs:label "Makhachkala International Sea Port"^^xsd:string ;
+    echr:hasPartyName "Makhachkala International Sea Port"^^xsd:string .
+
+doc:request_adjourn_supreme_1 a echr:Adjournment ;
+    rdfs:label "request to adjourn hearing by applicant's representative"^^xsd:string ;
+    echr:hasAdjournmentCause echr:DelayAttributedToApplicant ;
+    echr:hasSupportingQuote "Her request to adjourn the hearing was not granted by the Supreme Court"^^xsd:string .
+
+doc:shipStavanger a echr:Party ;
+    rdfs:label "ship Stavanger"^^xsd:string ;
+    echr:hasPartyName "Stavanger"^^xsd:string .
+
+doc:shipyardOka a echr:Party ;
+    rdfs:label "shipyard Oka"^^xsd:string ;
+    echr:hasPartyName "shipyard Oka"^^xsd:string .
+
+doc:witnessA a echr:NaturalPerson ;
+    rdfs:label "witness A."^^xsd:string ;
+    echr:hasPersonName "A."^^xsd:string .
+
+doc:witnessB a echr:NaturalPerson ;
+    rdfs:label "witness B."^^xsd:string ;
+    echr:hasPersonName "B."^^xsd:string .
+
+doc:witnessM a echr:NaturalPerson ;
+    rdfs:label "witness M."^^xsd:string ;
+    echr:hasPersonName "M."^^xsd:string .
+
+doc:witnessP a echr:NaturalPerson ;
+    rdfs:label "witness P."^^xsd:string ;
+    echr:hasPersonName "P."^^xsd:string .
+
+doc:witnessR a echr:NaturalPerson ;
+    rdfs:label "witness R."^^xsd:string ;
+    echr:hasPersonName "R."^^xsd:string .
+
+doc:adjournment_request_1 a echr:Adjournment ;
+    rdfs:label "adjournment request by Mrs Moskalenko"^^xsd:string ;
+    echr:hasAdjournmentCause echr:DelayAttributedToComplexity ;
+    echr:hasAdjournmentDate "1998-08-10"^^xsd:date ;
+    echr:hasSupportingQuote "she requested an adjournment of the hearing to give her time to study the case materials (more than 100 volumes)."^^xsd:string .
+
+doc:appeal_detention_1 a echr:DomesticProceeding ;
+    rdfs:label "appeal against detention order of 2 April"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_3 ;
+    echr:hasCourt doc:authSupremeCourt ;
+    echr:hasDecisionDate "1998-05-19"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_civil_defender_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 23 April 1998 the applicant’s “civil defender”... lodged with the Supreme Court an appeal against the court order of 2 April to detain the applicant."^^xsd:string .
+
+doc:assetFreezeProceeds a echr:AdministrativeAction ;
+    rdfs:label "freezing of ship sale proceeds"^^xsd:string ;
+    echr:hasCourt doc:authNnProsecutorOffice ;
+    echr:hasDecisionDate "1996-03-11"^^xsd:date ;
+    echr:hasSupportingQuote "on 11 March 1996 the proceeds from the ship sale were frozen on the order of the Nizhniy Novgorod prosecutor’s office."^^xsd:string .
+
+doc:assetUnfreezeDrydock a echr:AdministrativeAction ;
+    rdfs:label "lifting of drydock freeze"^^xsd:string ;
+    echr:hasDecisionDate "1996-05"^^xsd:gYearMonth ;
+    echr:hasSupportingQuote "It appears that the order freezing the drydock was lifted in May 1996"^^xsd:string .
+
+doc:assetUnfreezeProceeds a echr:AdministrativeAction ;
+    rdfs:label "unfreezing of ship sale proceeds"^^xsd:string ;
+    echr:hasCourt doc:authNnProsecutorOffice ;
+    echr:hasDecisionDate "1996-05-18"^^xsd:date ;
+    echr:hasSupportingQuote "On 18 May 1996 the Nizhniy Novgorod prosecutor’s office unfroze the account and transferred the money to the yard."^^xsd:string .
+
+doc:authElectoralCommittee a echr:DomesticAuthority ;
+    rdfs:label "local electoral committee"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "local electoral committee"^^xsd:string ;
+    echr:hasJurisdictionState "Russia"^^xsd:string .
+
+doc:cassation_appeal_1 a echr:DomesticProceeding ;
+    rdfs:label "appeal to the Supreme Court by Mr. O."^^xsd:string ;
+    echr:followsProceeding doc:proceeding_3 ;
+    echr:hasCourt doc:authSupremeCourt ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasParticipation doc:participation_mr_o_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "An appeal to the Supreme Court by the applicant’s lawyer, Mr. O., challenged the judgment on a number of points."^^xsd:string .
+
+doc:cassation_hearing_1 a echr:DomesticProceeding ;
+    rdfs:label "cassation hearing before the Supreme Court"^^xsd:string ;
+    echr:hasAdjournment doc:adjournment_request_1 ;
+    echr:hasCourt doc:authSupremeCourt ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasParticipation doc:participation_moskalenko_1 .
+
+doc:civil_defender_1 a echr:LegalRepresentative ;
+    rdfs:label "applicant's civil defender"^^xsd:string ;
+    echr:hasPersonName "civil defender"^^xsd:string .
+
+doc:conviction_1982_quash a echr:DomesticProceeding ;
+    rdfs:label "quashing of 1982 conviction"^^xsd:string ;
+    echr:hasCourt doc:authNnProsecutorOffice ;
+    echr:hasDecisionDate "1999-02"^^xsd:gYearMonth ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasSupportingQuote "In February 1999 the applicant’s first (1982) conviction was quashed"^^xsd:string .
+
+doc:detention_1 a echr:PreTrialDetention ;
+    rdfs:label "pre-trial detention period 1"^^xsd:string ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:applicantKlimentyev ;
+    echr:hasSupportingQuote "the time he had already spent in pre-trial detention"^^xsd:string .
+
+doc:detention_2 a echr:PreTrialDetention ;
+    rdfs:label "pre-trial detention period 2"^^xsd:string ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:applicantKlimentyev ;
+    echr:hasDetentionStartDate "1998-04-02"^^xsd:date ;
+    echr:hasSupportingQuote "On 2 April 1998 the Nizhniy Novgorod Regional Court granted the prosecutor’s renewed motion for detention... and the applicant was arrested in the course of the hearing"^^xsd:string .
+
+doc:motion_impartiality_1 a echr:DomesticProceeding ;
+    rdfs:label "motion for the court to stand down for lack of impartiality"^^xsd:string ;
+    echr:hasCourt doc:authSupremeCourt ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasSupportingQuote "the defence requested the court to stand down for lack of impartiality... but the motion was rejected."^^xsd:string .
+
+doc:orderAmendedJudgment a echr:DomesticProceeding ;
+    rdfs:label "order to provide amended judgment"^^xsd:string ;
+    echr:hasCourt doc:authNnRegionalCourt ;
+    echr:hasDecisionDate "1998-07-08"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasSupportingQuote "on 8 July 1998 the Regional Court ordered that the applicant should be given the amended version"^^xsd:string .
+
+doc:participationApplicantRetrial a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicantKlimentyev .
+
+doc:participationMrKRetrial a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:mrK .
+
+doc:participation_applicant_request_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicantKlimentyev .
+
+doc:participation_moskalenko_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:moskalenko_1 .
+
+doc:participation_mr_o_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:mrO .
+
+doc:participation_supreme_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicantKlimentyev .
+
+doc:request_bias_1 a echr:DomesticProceeding ;
+    rdfs:label "request to dismiss judge for bias"^^xsd:string ;
+    echr:hasCourt doc:authNnRegionalCourt ;
+    echr:hasDecisionDate "1998-05-19"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_applicant_request_1,
+        doc:participation_civil_defender_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 19 May the applicant’s “civil defender” requested the Regional Court to dismiss the judge presiding in the case for bias... Both requests were rejected by the Regional Court."^^xsd:string,
+        "On the same day the applicant requested to admit Mrs Moskalenko as his lawyer... Both requests were rejected by the Regional Court."^^xsd:string .
+
+doc:supreme_court_decision_1 a echr:DomesticProceeding ;
+    rdfs:label "Supreme Court decision on 10 August 1998"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_3 ;
+    echr:hasCourt doc:authSupremeCourt ;
+    echr:hasDecisionDate "1998-08-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_supreme_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "(confirmed by the Supreme Court on 10 August 1998)"^^xsd:string,
+        "On 10 August 1998 the Supreme Court confirmed the judgment of the Nizhniy Novgorod Regional Court, with some alterations."^^xsd:string .
+
+doc:moskalenko_1 a echr:LegalRepresentative ;
+    rdfs:label "Mrs Moskalenko"^^xsd:string ;
+    echr:hasPersonName "Mrs Moskalenko"^^xsd:string .
+
+doc:mrK a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr K."^^xsd:string ;
+    echr:hasPersonName "Mr K."^^xsd:string .
+
+doc:mrO a echr:LegalRepresentative ;
+    rdfs:label "Mr. O."^^xsd:string ;
+    echr:hasPersonName "Mr. O."^^xsd:string .
+
+doc:participation_civil_defender_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:civil_defender_1 .
+
+doc:proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "appeal to the Supreme Court"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:authSupremeCourt ;
+    echr:hasDecisionDate "1997-07"^^xsd:gYearMonth ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "In July 1997 the Supreme Court quashed the conviction on the applicant’s appeal and remitted the case to the Nizhniy Novgorod Regional Court"^^xsd:string .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "first trial at Nizhniy Novgorod Regional Court"^^xsd:string ;
+    echr:hasCourt doc:authNnRegionalCourt ;
+    echr:hasDecisionDate "1997-04-21"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "By a judgment of the Nizhniy Novgorod Regional Court of 21 April 1997... the applicant was ordered to pay the “Oka” damages"^^xsd:string,
+        "On 21 April 1997 the Nizhniy Novgorod Regional Court found the applicant guilty on some of the charges"^^xsd:string .
+
+doc:authNnProsecutorOffice a echr:DomesticAuthority ;
+    rdfs:label "Nizhniy Novgorod prosecutor’s office"^^xsd:string,
+        "Nizhniy Novgorod regional prosecutor’s office"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Nizhniy Novgorod prosecutor’s office"^^xsd:string,
+        "Nizhniy Novgorod regional prosecutor’s office"^^xsd:string ;
+    echr:hasJurisdictionState "Russia"^^xsd:string .
+
+doc:authNnRegionalCourt a echr:DomesticAuthority ;
+    rdfs:label "Nizhniy Novgorod Regional Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Nizhniy Novgorod Regional Court"^^xsd:string ;
+    echr:hasJurisdictionState "Russia"^^xsd:string .
+
+doc:proceeding_3 a echr:DomesticProceeding ;
+    rdfs:label "retrial at Nizhniy Novgorod Regional Court"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_1,
+        doc:proceeding_2 ;
+    echr:hasCourt doc:authNnRegionalCourt ;
+    echr:hasDecisionDate "1998-05-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelReopening ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationApplicantRetrial,
+        doc:participationMrKRetrial ;
+    echr:hasPreTrialDetention doc:detention_1,
+        doc:detention_2 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "During the second trial, on 27 May 1998... the applicant was ordered by the Nizhniy Novgorod Court to pay damages to “Oka”."^^xsd:string,
+        "On 27 May 1998 the Nizhniy Novgorod Regional Court found the applicant guilty on charges of misappropriation and embezzlement, larceny, bribery and attempt not to return money from abroad."^^xsd:string,
+        "On 27 May 1998 the Regional Court made a number of further orders... In one order the court noted breaches of the relevant rules of criminal procedure during investigation, and found that these breaches had been remedied during the trial."^^xsd:string,
+        "On 30 March 1998, during the new trial"^^xsd:string .
+
+doc:authSupremeCourt a echr:DomesticAuthority ;
+    rdfs:label "Supreme Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Supreme Court"^^xsd:string ;
+    echr:hasJurisdictionState "Russia"^^xsd:string .
+
+doc:applicantKlimentyev a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Andrey Anatolyevich Klimentyev"^^xsd:string ;
+    echr:hasPersonName "Andrey Anatolyevich Klimentyev"^^xsd:string ;
+    echr:isRepresentedBy doc:moskalenko_1,
+        doc:mrK,
+        doc:mrO .
+

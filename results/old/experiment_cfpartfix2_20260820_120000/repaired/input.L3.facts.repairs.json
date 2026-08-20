@@ -1,0 +1,35 @@
+{
+  "source": "results/experiment_cfpartfix2_20260820_120000/repaired/input.L3.facts.ttl",
+  "operations": [
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both represent the appeal of the Istanbul Administrative Court's 2014 decision to the 13th Chamber of the SAC.",
+      "action": "merge",
+      "keep": "doc:proceedingSacChamberDecision",
+      "drop": "doc:proceedingAnnulmentSac",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 2,
+        "self_loops_dropped": 0,
+        "properties_moved": 4,
+        "survivor_value_kept": 6
+      },
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "The 'overturning' is the outcome of the 2017 rectification request, not a separate proceeding.",
+      "action": "merge",
+      "keep": "doc:proceeding_sac_rectification_2017",
+      "drop": "doc:proceedingOverturnIstanbulCourt",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 2,
+        "self_loops_dropped": 1,
+        "properties_moved": 3,
+        "survivor_value_kept": 4
+      },
+      "pass": 1
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "source": "results/experiment_cfcmp_20260819_165630/stock8k/input.L10.facts.ttl",
+  "operations": [
+    {
+      "finding": "The node doc:proceeding_1 is being used for two entirely different events: a successful urgent application for stay of execution (7 Oct 2016) and an unsuccessful action (13 Dec 2016). This is causing the suspect_multi_value errors for outcome, direction, and type. The 7 Oct event is actually described as doc:domestic_proceeding_1, creating a duplicate/overlap.",
+      "rationale": "The evidence shows two distinct events. One is an urgent stay granted on 7 October 2016 (doc:domestic_proceeding_1). The other is an unsuccessful application on 13 December 2016 (which was erroneously mixed into doc:proceeding_1).",
+      "action": "remove",
+      "subject": "doc:proceeding_1",
+      "predicate": "echr:hasOutcome",
+      "object": "echr:OutcomeClaimGranted",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "The node doc:proceeding_1 is being used for two entirely different events: a successful urgent application for stay of execution (7 Oct 2016) and an unsuccessful action (13 Dec 2016). This is causing the suspect_multi_value errors for outcome, direction, and type. The 7 Oct event is actually described as doc:domestic_proceeding_1, creating a duplicate/overlap.",
+      "rationale": "The evidence shows two distinct events. One is an urgent stay granted on 7 October 2016 (doc:domestic_proceeding_1). The other is an unsuccessful application on 13 December 2016 (which was erroneously mixed into doc:proceeding_1).",
+      "action": "remove",
+      "subject": "doc:proceeding_1",
+      "predicate": "echr:hasOutcome",
+      "object": "echr:OutcomeClaimDismissed",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "The node doc:proceeding_1 is being used for two entirely different events: a successful urgent application for stay of execution (7 Oct 2016) and an unsuccessful action (13 Dec 2016). This is causing the suspect_multi_value errors for outcome, direction, and type. The 7 Oct event is actually described as doc:domestic_proceeding_1, creating a duplicate/overlap.",
+      "rationale": "The evidence shows two distinct events. One is an urgent stay granted on 7 October 2016 (doc:domestic_proceeding_1). The other is an unsuccessful application on 13 December 2016 (which was erroneously mixed into doc:proceeding_1).",
+      "action": "add",
+      "subject": "doc:proceeding_1",
+      "predicate": "echr:hasOutcome",
+      "object": "echr:OutcomeClaimDismissed",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "The node doc:proceeding_1 is being used for two entirely different events: a successful urgent application for stay of execution (7 Oct 2016) and an unsuccessful action (13 Dec 2016). This is causing the suspect_multi_value errors for outcome, direction, and type. The 7 Oct event is actually described as doc:domestic_proceeding_1, creating a duplicate/overlap.",
+      "rationale": "The evidence shows two distinct events. One is an urgent stay granted on 7 October 2016 (doc:domestic_proceeding_1). The other is an unsuccessful application on 13 December 2016 (which was erroneously mixed into doc:proceeding_1).",
+      "action": "add",
+      "subject": "doc:proceeding_1",
+      "predicate": "echr:hasCourt",
+      "object": "doc:brussels_dutch_tpi",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "skipped: object node does not exist in the graph or this patch"
+    },
+    {
+      "finding": "The node doc:proceeding_1 is being used for two entirely different events: a successful urgent application for stay of execution (7 Oct 2016) and an unsuccessful action (13 Dec 2016). This is causing the suspect_multi_value errors for outcome, direction, and type. The 7 Oct event is actually described as doc:domestic_proceeding_1, creating a duplicate/overlap.",
+      "rationale": "The evidence shows two distinct events. One is an urgent stay granted on 7 October 2016 (doc:domestic_proceeding_1). The other is an unsuccessful application on 13 December 2016 (which was erroneously mixed into doc:proceeding_1).",
+      "action": "add",
+      "subject": "doc:proceeding_1",
+      "predicate": "echr:hasDecisionDate",
+      "object": "2016-12-13",
+      "object_is_literal": true,
+      "datatype": "xsd:date",
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "doc:proceeding_5 (Aliens Office visa refusal) is typed as echr:DomesticProceeding but describes an administrative decision by the Aliens Office, not a court proceeding. This should be treated as the administrative act that triggers the subsequent proceedings.",
+      "rationale": "The Aliens Office is an administrative body. Its refusal to grant a visa is the underlying administrative decision, not a 'proceeding' in the judicial sense defined by the ontology as a step in a chain of courts.",
+      "action": "remove",
+      "subject": "doc:proceeding_5",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticProceeding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "Proceeding doc:proceeding_6 (Aliens Appeals Board 20 Oct 2016) follows doc:proceeding_5 (the 17 Oct refusals), but the graph has doc:proceeding_6 starting in Feb 2017. The quote says the judgment was 20 October 2016.",
+      "rationale": "The quotes explicitly state the judgment was 20 October 2016. The Feb 2017 date refers to a subsequent appeal by the State.",
+      "action": "add",
+      "subject": "doc:proceeding_6",
+      "predicate": "echr:hasDecisionDate",
+      "object": "2016-10-20",
+      "object_is_literal": true,
+      "datatype": "xsd:date",
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "Proceeding doc:proceeding_6 (Aliens Appeals Board 20 Oct 2016) follows doc:proceeding_5 (the 17 Oct refusals), but the graph has doc:proceeding_6 starting in Feb 2017. The quote says the judgment was 20 October 2016.",
+      "rationale": "The quotes explicitly state the judgment was 20 October 2016. The Feb 2017 date refers to a subsequent appeal by the State.",
+      "action": "add",
+      "subject": "doc:proceeding_6",
+      "predicate": "echr:hasCourt",
+      "object": "doc:aliensAppealsBoard",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied"
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "The graph has two nodes for the October 2016 urgent application; doc:domestic_proceeding_1 has the correct date and outcome.",
+      "action": "merge",
+      "keep": "doc:domestic_proceeding_1",
+      "drop": "doc:proceeding_1",
+      "status": "skipped: nodes have different rdf:type"
+    }
+  ]
+}

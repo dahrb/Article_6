@@ -1,0 +1,125 @@
+{
+  "source": "input.jsonl",
+  "conformance": {
+    "shacl_evaluated": null,
+    "conforms": null,
+    "findings": 8,
+    "errors": 8,
+    "warnings": 0,
+    "by_kind": {
+      "suspect_multi_value": 8
+    },
+    "shacl_violations": 0,
+    "shacl_by_constraint": {},
+    "shacl_by_shape": {},
+    "repairs_applied": {}
+  },
+  "gate_repairs": [],
+  "findings": [
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/d95783804b49/aliensAppealsBoard> points at 2 objects via <https://growgraph.dev/echr#hasAuthorityKind>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/d95783804b49/aliensAppealsBoard",
+      "predicate": "https://growgraph.dev/echr#hasAuthorityKind",
+      "values": [
+        "https://growgraph.dev/echr#AuthorityAdministrative",
+        "https://growgraph.dev/echr#AuthorityJudicial"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/d95783804b49/proceeding_1> points at 2 objects via <https://growgraph.dev/echr#hasOutcome>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/d95783804b49/proceeding_1",
+      "predicate": "https://growgraph.dev/echr#hasOutcome",
+      "values": [
+        "https://growgraph.dev/echr#OutcomeClaimDismissed",
+        "https://growgraph.dev/echr#OutcomeClaimGranted"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/d95783804b49/proceeding_1> points at 2 objects via <https://growgraph.dev/echr#hasOutcomeDirection>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/d95783804b49/proceeding_1",
+      "predicate": "https://growgraph.dev/echr#hasOutcomeDirection",
+      "values": [
+        "https://growgraph.dev/echr#DirectionFavourableToApplicant",
+        "https://growgraph.dev/echr#DirectionUnfavourableToApplicant"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/d95783804b49/proceeding_1> points at 2 objects via <https://growgraph.dev/echr#hasProceedingType>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/d95783804b49/proceeding_1",
+      "predicate": "https://growgraph.dev/echr#hasProceedingType",
+      "values": [
+        "https://growgraph.dev/echr#TypeAdministrative",
+        "https://growgraph.dev/echr#TypeCivil"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/d95783804b49/proceeding_2> points at 3 objects via <https://growgraph.dev/echr#hasOutcome>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/d95783804b49/proceeding_2",
+      "predicate": "https://growgraph.dev/echr#hasOutcome",
+      "values": [
+        "https://growgraph.dev/echr#OutcomeClaimGranted",
+        "https://growgraph.dev/echr#OutcomeMeasureImposed",
+        "https://growgraph.dev/echr#OutcomeUpheldOnAppeal"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/d95783804b49/proceeding_2> points at 2 objects via <https://growgraph.dev/echr#hasProceedingType>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/d95783804b49/proceeding_2",
+      "predicate": "https://growgraph.dev/echr#hasProceedingType",
+      "values": [
+        "https://growgraph.dev/echr#TypeAdministrative",
+        "https://growgraph.dev/echr#TypeCivil"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/d95783804b49/proceeding_3> points at 2 objects via <https://growgraph.dev/echr#hasOutcome>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/d95783804b49/proceeding_3",
+      "predicate": "https://growgraph.dev/echr#hasOutcome",
+      "values": [
+        "https://growgraph.dev/echr#OutcomeClaimDismissed",
+        "https://growgraph.dev/echr#OutcomeOther"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/d95783804b49/proceeding_3> points at 2 objects via <https://growgraph.dev/echr#hasOutcomeDirection>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/d95783804b49/proceeding_3",
+      "predicate": "https://growgraph.dev/echr#hasOutcomeDirection",
+      "values": [
+        "https://growgraph.dev/echr#DirectionUnfavourableToApplicant",
+        "https://growgraph.dev/echr#DirectionUnknown"
+      ],
+      "component": "",
+      "source_shape": ""
+    }
+  ]
+}

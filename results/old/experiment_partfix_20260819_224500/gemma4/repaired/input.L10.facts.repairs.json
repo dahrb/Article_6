@@ -1,0 +1,35 @@
+{
+  "source": "results/experiment_partfix_20260819_224500/gemma4/repaired/input.L10.facts.ttl",
+  "operations": [
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both nodes refer to the same Conseil d'\u00c9tat decision of 17 May 2018 dismissing appeals on points of law. They are duplicates of the same legal event.",
+      "action": "merge",
+      "keep": "doc:proceeding_cassation_2",
+      "drop": "doc:proceeding_cassation_3",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 0,
+        "properties_moved": 2,
+        "survivor_value_kept": 7
+      },
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both nodes refer to the same Aliens Appeals Board decision of 24 March 2017 dismissing applications to set aside previous decisions. They are duplicates.",
+      "action": "merge",
+      "keep": "doc:proceeding_set_aside_1",
+      "drop": "doc:proceeding_set_aside_2",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 2,
+        "self_loops_dropped": 0,
+        "properties_moved": 2,
+        "survivor_value_kept": 5
+      },
+      "pass": 1
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "source": "results/experiment_cfpartfix2_20260820_120000/repaired/input.L4.facts.ttl",
+  "operations": [
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both nodes describe the request for investigation on 1997-01-17; the kept node specifies the Public Prosecutor's role.",
+      "action": "merge",
+      "keep": "doc:criminal_investigation_request_1",
+      "drop": "doc:criminal_request_1",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 0,
+        "self_loops_dropped": 0,
+        "properties_moved": 2,
+        "survivor_value_kept": 4
+      },
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both nodes describe the judgment of 12 February 2001; the kept node specifies the outcome as a conviction.",
+      "action": "merge",
+      "keep": "doc:trial_retrial_1",
+      "drop": "doc:criminal_proceeding_1",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 0,
+        "properties_moved": 3,
+        "survivor_value_kept": 6
+      },
+      "pass": 1
+    }
+  ]
+}

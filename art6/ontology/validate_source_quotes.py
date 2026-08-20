@@ -7,10 +7,9 @@ document the facts were extracted from.
 Motivation: extraction_fixes_evaluation.md cites "quote fidelity ... checked
 by substring match" as a benchmark, but no such check exists in this repo --
 it referred to a one-off measurement, not a reusable tool. This is the
-reusable tool, built the same way as the sibling
-`validate_source_paragraphs.py`: the legal set of valid values is a property
-of the *document*, not the schema, so the SHACL shapes graph is GENERATED per
-document rather than written once and shared.
+reusable tool. The legal set of valid values is a property of the *document*,
+not the schema, so the SHACL shapes graph is GENERATED per document rather
+than written once and shared.
 
 HOW IT WORKS
 ------------

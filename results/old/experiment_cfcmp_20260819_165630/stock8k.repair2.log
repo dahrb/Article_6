@@ -1,0 +1,51 @@
+/home/dahrb/Projects/article_6/domestic_proceedings/.venv/lib/python3.12/site-packages/rdflib/term.py:1862: UserWarning: Parsing weird boolean, 'null' does not map to True or False
+  warnings.warn(
+repairing 10 file(s) under results/experiment_cfcmp_20260819_165630/stock8k
+  model: gemma-4-31b @ http://localhost:8000/v1 (temperature 1.0, timeout 180.0s)
+  results/experiment_cfcmp_20260819_165630/stock8k/input.L1.facts.ttl: model proposed 0 group(s), 0 op(s), 0 merge(s)
+    applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0
+  FAILED results/experiment_cfcmp_20260819_165630/stock8k/input.L1.facts.ttl: RuntimeError: results/experiment_cfcmp_20260819_165630/stock8k/backup/input.L1.facts.ttl already exists and differs from the current results/experiment_cfcmp_20260819_165630/stock8k/input.L1.facts.ttl -- refusing to overwrite an earlier backup
+  results/experiment_cfcmp_20260819_165630/stock8k/input.L10.facts.ttl: model proposed 3 group(s), 8 op(s), 1 merge(s)
+    applied 7 (of which 0 merge(s)), skipped 2, stub orphans swept 0
+    SKIPPED [The node doc:proceeding_1 is being used for two entirely different events: a successful urgent application for stay of execution (7 Oct 2016) and an unsuccessful action (13 Dec 2016). This is causing the suspect_multi_value errors for outcome, direction, and type. The 7 Oct event is actually described as doc:domestic_proceeding_1, creating a duplicate/overlap.] add doc:proceeding_1 echr:hasCourt doc:brussels_dutch_tpi: skipped: object node does not exist in the graph or this patch
+    SKIPPED merge doc:domestic_proceeding_1 <- doc:proceeding_1: skipped: nodes have different rdf:type
+  FAILED results/experiment_cfcmp_20260819_165630/stock8k/input.L10.facts.ttl: RuntimeError: results/experiment_cfcmp_20260819_165630/stock8k/backup/input.L10.facts.ttl already exists and differs from the current results/experiment_cfcmp_20260819_165630/stock8k/input.L10.facts.ttl -- refusing to overwrite an earlier backup
+  results/experiment_cfcmp_20260819_165630/stock8k/input.L2.facts.ttl: model proposed 1 group(s), 2 op(s), 2 merge(s)
+    applied 3 (of which 2 merge(s)), skipped 1, stub orphans swept 0
+    SKIPPED [The graph contains three nodes describing proceedings before the Darmstadt Labour Court against ESA. 'doc:domestic_proceeding_1' and 'doc:proceeding_1' are generic descriptors of the same action as 'doc:proceedingDarmstadtLabourCourt', which provides the specific decision date (21 March 1995) and the specific outcome (inadmissibility due to immunity). 'doc:proceeding_2' is a distinct proceeding involving a different defendant (company T.I.) and a different outcome (settlement).] remove doc:proceeding_1 echr:isFinalDomesticDecision null: skipped: triple not present
+    wrote results/experiment_cfcmp_20260819_165630/stock8k/input.L2.facts.ttl (backup at results/experiment_cfcmp_20260819_165630/stock8k/backup/input.L2.facts.ttl)
+  results/experiment_cfcmp_20260819_165630/stock8k/input.L3.facts.ttl: model proposed 2 group(s), 3 op(s), 1 merge(s)
+    applied 2 (of which 0 merge(s)), skipped 2, stub orphans swept 0
+    SKIPPED [doc:proceeding_4 contains conflicting information; its decision date is listed as 2016-01-25, but the supporting quote identifies a decision on 23 May 2018 for the Constitutional Court application. The 2016 date refers to a rectification request by the Fund, not the applicant's final step.] remove doc:proceeding_4 echr:hasDecisionDate 2016-01-25: skipped: triple not present
+    SKIPPED merge doc:proceeding_1 <- doc:domestic_proceeding_1: skipped: doc:domestic_proceeding_1 is not a node in the graph
+    wrote results/experiment_cfcmp_20260819_165630/stock8k/input.L3.facts.ttl (backup at results/experiment_cfcmp_20260819_165630/stock8k/backup/input.L3.facts.ttl)
+  results/experiment_cfcmp_20260819_165630/stock8k/input.L4.facts.ttl: model proposed 0 group(s), 0 op(s), 1 merge(s)
+    applied 1 (of which 1 merge(s)), skipped 0, stub orphans swept 0
+    wrote results/experiment_cfcmp_20260819_165630/stock8k/input.L4.facts.ttl (backup at results/experiment_cfcmp_20260819_165630/stock8k/backup/input.L4.facts.ttl)
+  results/experiment_cfcmp_20260819_165630/stock8k/input.L5.facts.ttl: model proposed 2 group(s), 5 op(s), 2 merge(s)
+    applied 5 (of which 2 merge(s)), skipped 2, stub orphans swept 0
+    SKIPPED [Fix court assignments and sequence for the Kyiv District Administrative Court chain.] add doc:proceeding_1 echr:hasCourt doc:kyiv_district_admin_court: skipped: object node does not exist in the graph or this patch
+    SKIPPED [Fix court assignments and sequence for the Kyiv District Administrative Court chain.] add doc:proceeding_4 echr:hasCourt doc:kyiv_district_admin_court: skipped: object node does not exist in the graph or this patch
+    wrote results/experiment_cfcmp_20260819_165630/stock8k/input.L5.facts.ttl (backup at results/experiment_cfcmp_20260819_165630/stock8k/backup/input.L5.facts.ttl)
+  results/experiment_cfcmp_20260819_165630/stock8k/input.L6.facts.ttl: model proposed 3 group(s), 24 op(s), 0 merge(s)
+    applied 12 (of which 0 merge(s)), skipped 13, stub orphans swept 1
+    SKIPPED [doc:proceeding_1 has conflicting decision dates and outcomes. The quotes show two distinct decisions: one on 16 November 2007 (leaving the claim unexamined) and one on 10 December 2007 (rejecting the complaint). These represent two distinct proceedings in the same court.] add doc:proceeding_1_1 echr:hasCourt doc:commercial_court: skipped: object node does not exist in the graph or this patch
+    SKIPPED [The court labels for all proceedings are incorrectly set to 'Arbitration Tribunal' regardless of the actual court mentioned in the quotes (e.g., Yerevan Civil Court, District Court, Court of Cassation).] remove doc:proceeding_1 echr:hasCourt doc:arbitration_tribunal: skipped: triple not present
+    SKIPPED [The court labels for all proceedings are incorrectly set to 'Arbitration Tribunal' regardless of the actual court mentioned in the quotes (e.g., Yerevan Civil Court, District Court, Court of Cassation).] add doc:proceeding_1 echr:hasCourt doc:commercial_court: skipped: object node does not exist in the graph or this patch
+    SKIPPED [The court labels for all proceedings are incorrectly set to 'Arbitration Tribunal' regardless of the actual court mentioned in the quotes (e.g., Yerevan Civil Court, District Court, Court of Cassation).] remove doc:proceeding_2 echr:hasCourt doc:arbitration_tribunal: skipped: triple not present
+    SKIPPED [The court labels for all proceedings are incorrectly set to 'Arbitration Tribunal' regardless of the actual court mentioned in the quotes (e.g., Yerevan Civil Court, District Court, Court of Cassation).] add doc:proceeding_2 echr:hasCourt doc:arbitration_tribunal: skipped: object node does not exist in the graph or this patch
+    SKIPPED [The court labels for all proceedings are incorrectly set to 'Arbitration Tribunal' regardless of the actual court mentioned in the quotes (e.g., Yerevan Civil Court, District Court, Court of Cassation).] remove doc:proceeding_3 echr:hasCourt doc:arbitration_tribunal: skipped: triple not present
+    SKIPPED [The court labels for all proceedings are incorrectly set to 'Arbitration Tribunal' regardless of the actual court mentioned in the quotes (e.g., Yerevan Civil Court, District Court, Court of Cassation).] add doc:proceeding_3 echr:hasCourt doc:yerevan_civil_court: skipped: object node does not exist in the graph or this patch
+    SKIPPED [The court labels for all proceedings are incorrectly set to 'Arbitration Tribunal' regardless of the actual court mentioned in the quotes (e.g., Yerevan Civil Court, District Court, Court of Cassation).] remove doc:proceeding_4 echr:hasCourt doc:arbitration_tribunal: skipped: triple not present
+    SKIPPED [The court labels for all proceedings are incorrectly set to 'Arbitration Tribunal' regardless of the actual court mentioned in the quotes (e.g., Yerevan Civil Court, District Court, Court of Cassation).] add doc:proceeding_4 echr:hasCourt doc:district_court: skipped: object node does not exist in the graph or this patch
+    SKIPPED [The court labels for all proceedings are incorrectly set to 'Arbitration Tribunal' regardless of the actual court mentioned in the quotes (e.g., Yerevan Civil Court, District Court, Court of Cassation).] remove doc:proceeding_5 echr:hasCourt doc:arbitration_tribunal: skipped: triple not present
+    SKIPPED [The court labels for all proceedings are incorrectly set to 'Arbitration Tribunal' regardless of the actual court mentioned in the quotes (e.g., Yerevan Civil Court, District Court, Court of Cassation).] add doc:proceeding_5 echr:hasCourt doc:civil_court_of_appeal: skipped: object node does not exist in the graph or this patch
+    SKIPPED [The court labels for all proceedings are incorrectly set to 'Arbitration Tribunal' regardless of the actual court mentioned in the quotes (e.g., Yerevan Civil Court, District Court, Court of Cassation).] remove doc:proceeding_6 echr:hasCourt doc:arbitration_tribunal: skipped: triple not present
+    SKIPPED [The court labels for all proceedings are incorrectly set to 'Arbitration Tribunal' regardless of the actual court mentioned in the quotes (e.g., Yerevan Civil Court, District Court, Court of Cassation).] add doc:proceeding_6 echr:hasCourt doc:court_of_cassation: skipped: object node does not exist in the graph or this patch
+    wrote results/experiment_cfcmp_20260819_165630/stock8k/input.L6.facts.ttl (backup at results/experiment_cfcmp_20260819_165630/stock8k/backup/input.L6.facts.ttl)
+  FAILED results/experiment_cfcmp_20260819_165630/stock8k/input.L7.facts.ttl: APITimeoutError: Request timed out.
+  results/experiment_cfcmp_20260819_165630/stock8k/input.L8.facts.ttl: model proposed 0 group(s), 0 op(s), 2 merge(s)
+    applied 2 (of which 2 merge(s)), skipped 0, stub orphans swept 0
+    wrote results/experiment_cfcmp_20260819_165630/stock8k/input.L8.facts.ttl (backup at results/experiment_cfcmp_20260819_165630/stock8k/backup/input.L8.facts.ttl)
+  FAILED results/experiment_cfcmp_20260819_165630/stock8k/input.L9.facts.ttl: APITimeoutError: Request timed out.
+  4/10 document(s) failed to repair

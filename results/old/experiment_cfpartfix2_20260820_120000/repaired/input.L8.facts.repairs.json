@@ -1,0 +1,80 @@
+{
+  "source": "results/experiment_cfpartfix2_20260820_120000/repaired/input.L8.facts.ttl",
+  "operations": [
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Two requests (bias and lawyer) were made on the same day and rejected by the same court in the same case; these are interlocutory motions within the same proceeding step.",
+      "action": "merge",
+      "keep": "doc:proceedingBiasRequest",
+      "drop": "doc:proceedingLawyerRequest",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 0,
+        "properties_moved": 2,
+        "survivor_value_kept": 7
+      },
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "The damages order is part of the final judgment of the retrial on 27 May 1998.",
+      "action": "merge",
+      "keep": "doc:proceeding_3",
+      "drop": "doc:proceeding_damages_1998",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 0,
+        "properties_moved": 4,
+        "survivor_value_kept": 7
+      },
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "The order regarding CCP violations was issued by the court during the retrial on the same date as the judgment.",
+      "action": "merge",
+      "keep": "doc:proceeding_3",
+      "drop": "doc:proceeding_order_ccp_1998",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 0,
+        "properties_moved": 2,
+        "survivor_value_kept": 4
+      },
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "General 'further orders' issued on the judgment date are part of the same proceeding step.",
+      "action": "merge",
+      "keep": "doc:proceeding_3",
+      "drop": "doc:proceeding_orders_1998",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 1,
+        "properties_moved": 2,
+        "survivor_value_kept": 5
+      },
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "The damages order was part of the judgment of the first trial on 21 April 1997.",
+      "action": "merge",
+      "keep": "doc:proceeding_1",
+      "drop": "doc:proceeding_damages_1997",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 2,
+        "self_loops_dropped": 0,
+        "properties_moved": 3,
+        "survivor_value_kept": 7
+      },
+      "pass": 1
+    }
+  ]
+}

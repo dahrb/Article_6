@@ -1,0 +1,562 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/15ef9b3a7c03/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/15ef9b3a7c03> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:4"^^xsd:string .
+
+doc:caseMatkoSlovenia a echr:CaseDocument ;
+    echr:hasApplicant doc:aleksanderMatko ;
+    echr:hasApplicationNumber "43393/98"^^xsd:string ;
+    echr:hasCaseName "Matko v. Slovenia"^^xsd:string ;
+    echr:hasDomesticProceeding doc:appeal_conviction_1,
+        doc:appeal_first_judgment_1,
+        doc:appeal_investigation_opening_1,
+        doc:costs_order_1,
+        doc:criminal_complaint_police_1,
+        doc:criminal_investigation_active_1,
+        doc:criminal_proceeding_matko_1,
+        doc:indictment_filing_1,
+        doc:investigation_decision_dismissal_1,
+        doc:investigation_request_1,
+        doc:objection_indictment_1,
+        doc:objection_rejection_1,
+        doc:oral_complaint_1,
+        doc:prosecutorial_decision_dismissal_1,
+        doc:prosecutorial_investigation_1,
+        doc:request_investigation_matko_1,
+        doc:retrial_first_instance_1,
+        doc:trial_first_instance_1,
+        doc:written_complaint_1 ;
+    echr:hasRespondentState "Republic of Slovenia"^^xsd:string .
+
+doc:detention_1 a echr:PreTrialDetention ;
+    rdfs:label "police custody of Aleksander Matko"^^xsd:string ;
+    echr:hasCustodialMeasure echr:MeasurePoliceCustody ;
+    echr:hasDetainee doc:aleksanderMatko ;
+    echr:hasDetentionEndDate "1995-04-06"^^xsd:date ;
+    echr:hasDetentionStartDate "1995-04-05"^^xsd:date ;
+    echr:hasSupportingQuote "He was brought to the Slovenj Gradec Police Station... and released on 6 April 1995 at approximately half past midnight."^^xsd:string .
+
+doc:investigation_questioning_1 a echr:DomesticProceeding ;
+    rdfs:label "Questioning of Aleksander Matko by investigating judge"^^xsd:string ;
+    echr:hasCourt doc:sgDistrictCourt ;
+    echr:hasDecisionDate "1997-04-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:part_matko_questioning_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 8 April 1997 the investigating judge questioned the applicant."^^xsd:string .
+
+doc:medical_visit_3 a echr:AdministrativeAction ;
+    rdfs:label "x-ray examination at Maribor General Hospital"^^xsd:string ;
+    echr:followsProceeding doc:medical_visit_2 ;
+    echr:hasCourt doc:mariborGeneralHospital ;
+    echr:hasDecisionDate "1995-04-19"^^xsd:date ;
+    echr:hasSupportingQuote "The report of an x-ray examination on 19 April 1995 indicated that there was a hairline fracture ( fissur a)."^^xsd:string .
+
+doc:miaWorkingGroupReview a echr:AdministrativeAction ;
+    rdfs:label "MIA working group assessment"^^xsd:string ;
+    echr:hasCourt doc:mia ;
+    echr:hasDecisionDate "1995-11-15"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingStartDate "1995-04-20"^^xsd:date ;
+    echr:hasSupportingQuote "the working group established that all the measures and procedures were lawful and in accordance with legal powers and professional rules"^^xsd:string .
+
+doc:officerMj a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Officer M.J."^^xsd:string ;
+    echr:hasPersonName "M.J."^^xsd:string ;
+    echr:hasSupportingQuote "the Special Unit’s officers were under the command of M.J."^^xsd:string .
+
+doc:officerTg a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Officer T.G."^^xsd:string ;
+    echr:hasPersonName "T.G."^^xsd:string .
+
+doc:witness_interviews_1 a echr:DomesticProceeding ;
+    rdfs:label "Interviews of police officers and A.K."^^xsd:string ;
+    echr:hasCourt doc:sgDistrictCourt ;
+    echr:hasDecisionDate "1998-03-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:partAkInterviews ;
+    echr:hasProceedingStartDate "1998-02-19"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "Between 19 February 1998 and 10 March 1998 the investigating judge interviewed five officers from the Slovenj Gradec Police... and A.K."^^xsd:string .
+
+doc:arrest_event_1 a echr:DomesticProceeding ;
+    rdfs:label "arrest of Aleksander Matko"^^xsd:string ;
+    echr:hasDecisionDate "1995-04-05"^^xsd:date ;
+    echr:hasExtractionNote "Applicant was beaten and kicked for approximately 15 minutes."^^xsd:string,
+        "Applicant was dragged approximately 25-30 meters along the road."^^xsd:string,
+        "Arrest occurred at 20.30"^^xsd:string,
+        "Journey to police station lasted approximately 30 minutes."^^xsd:string,
+        "there were 20 officers of the Special Unit and Slovenj Gradec Police at the scene"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:partMatkoArrest,
+        doc:partMiaArrest,
+        doc:partSgPoliceArrest ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 5 April 1995 at about 8.30 p.m. the applicant, driving a car, was arrested in Slovenj Gradec by officers of the Special Unit and the Slovenj Gradec Police."^^xsd:string .
+
+doc:costs_order_1 a echr:DomesticProceeding ;
+    rdfs:label "Order for additional witness costs"^^xsd:string ;
+    echr:followsProceeding doc:appeal_conviction_1 ;
+    echr:hasCourt doc:sgDistrictCourt ;
+    echr:hasDecisionDate "2001-10-11"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_matko_costs_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "on 11 October 2001 the Slovenj Gradec District Court ordered the applicant to pay an additional sum to cover the costs of one of the witnesses"^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:criminal_proceeding_matko_1 a echr:DomesticProceeding ;
+    rdfs:label "criminal proceedings against Aleksander Matko"^^xsd:string ;
+    echr:followsProceeding doc:arrest_event_1 ;
+    echr:hasDecisionDate "2001-02-12"^^xsd:date ;
+    echr:hasExtractionNote "Based on section 302/II of the Criminal Code"^^xsd:string,
+        "Proceedings based on suspicion of committing the criminal offence of 'obstructing an official in the course of his duties' (preprečitev uradnega dejanja uradni osebi)."^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeUnknown ;
+    echr:hasParticipation doc:part_dp_crim_1,
+        doc:part_ig_crim_1,
+        doc:part_jk_crim_1,
+        doc:part_matko_crim_1,
+        doc:part_mf_crim_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "The judgment of 12 February 2001 issued in the proceedings instituted against the applicant"^^xsd:string .
+
+doc:hearing_retrial_1 a echr:Adjournment ;
+    rdfs:label "Hearing of 15 December 2000"^^xsd:string ;
+    echr:hasAdjournmentDate "2000-12-15"^^xsd:date ;
+    echr:hasSupportingQuote "During the retrial, hearings were held on 15 December and 12 February 2001."^^xsd:string .
+
+doc:hearing_trial_1 a echr:Adjournment ;
+    rdfs:label "Hearing of 13 September 1999"^^xsd:string ;
+    echr:hasAdjournmentDate "1999-09-13"^^xsd:date ;
+    echr:hasSupportingQuote "On 13 September 1999 and 22 November 1999 the Slovenj Gradec District Court held hearings."^^xsd:string .
+
+doc:lawyer_matko_1 a echr:LegalRepresentative ;
+    rdfs:label "Lawyer of Aleksander Matko"^^xsd:string ;
+    echr:hasPersonName "lawyer"^^xsd:string .
+
+doc:medical_visit_1 a echr:AdministrativeAction ;
+    rdfs:label "medical admission to Slovenj Gradec General Hospital"^^xsd:string ;
+    echr:hasCourt doc:slovenjGradecGeneralHospital ;
+    echr:hasDecisionDate "1995-04-06"^^xsd:date ;
+    echr:hasSupportingQuote "On 6 April 1995, soon after his release, the applicant was admitted to the Slovenj Gradec General Hospital where he stayed until 7 p.m."^^xsd:string .
+
+doc:medical_visit_2 a echr:AdministrativeAction ;
+    rdfs:label "medical aid at Maribor General Hospital"^^xsd:string ;
+    echr:followsProceeding doc:medical_visit_1 ;
+    echr:hasCourt doc:mariborGeneralHospital ;
+    echr:hasDecisionDate "1995-04-07"^^xsd:date ;
+    echr:hasSupportingQuote "Next day, 7 April 1995, the applicant sought medical aid in the Maribor General Hospital."^^xsd:string .
+
+doc:officerDp a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Officer D.P."^^xsd:string ;
+    echr:hasPersonName "D.P."^^xsd:string .
+
+doc:officerIg a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Officer I.G."^^xsd:string ;
+    echr:hasPersonName "I.G."^^xsd:string .
+
+doc:officerJk a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Officer J.K."^^xsd:string ;
+    echr:hasPersonName "J.K."^^xsd:string .
+
+doc:officerMf a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Officer M.F."^^xsd:string ;
+    echr:hasPersonName "M.F."^^xsd:string .
+
+doc:partAkInterviews a echr:Participation ;
+    echr:hasPartySide echr:SideThirdParty ;
+    echr:hasSupportingQuote "A.K. testified in favour of the applicant"^^xsd:string ;
+    echr:participatingParty doc:witnessAk .
+
+doc:partMatkoArrest a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:partMiaArrest a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:mia .
+
+doc:partSgPoliceArrest a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecPolice .
+
+doc:part_ak_trial_1 a echr:Participation ;
+    echr:hasPartySide echr:SideThirdParty ;
+    echr:participatingParty doc:witnessAk .
+
+doc:part_dc_retrial_1 a echr:Participation ;
+    echr:hasPartySide echr:SideThirdParty ;
+    echr:participatingParty doc:witnessDc .
+
+doc:part_dp_crim_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:officerDp .
+
+doc:part_ig_crim_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "Another officer from the Slovenj Gradec Police, I.G., who had arrived at the scene with the officers of the Special Unit and was also questioned in the criminal investigation"^^xsd:string ;
+    echr:participatingParty doc:officerIg .
+
+doc:part_jk_crim_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:officerJk .
+
+doc:part_matko_appeal_conv_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_matko_costs_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_matko_crim_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_matko_dismissal_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint"^^xsd:string ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_matko_dismissal_2 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_matko_indict_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_matko_invest_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_matko_oral_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_matko_prosecutor_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_matko_questioning_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the investigating judge questioned the applicant."^^xsd:string ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_matko_req_2 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_matko_request_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "a request for an investigation against Matko Aleksander was lodged"^^xsd:string ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_matko_written_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_mf_crim_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:officerMf .
+
+doc:part_prosecutor_dismissal_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint"^^xsd:string ;
+    echr:participatingParty doc:sgDistrictProsecutor .
+
+doc:part_prosecutor_indict_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:sgDistrictProsecutor .
+
+doc:part_prosecutor_req_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:sgDistrictProsecutor .
+
+doc:prosecutorial_decision_dismissal_1 a echr:ProsecutorialReview ;
+    rdfs:label "Public Prosecutor's decision dismissing the applicant's criminal complaint"^^xsd:string ;
+    echr:followsProceeding doc:prosecutorial_investigation_1 ;
+    echr:hasCourt doc:sgDistrictProsecutor ;
+    echr:hasDecisionDate "1997-01-17"^^xsd:date ;
+    echr:hasExtractionNote "Applicant informed of right to initiate subsidiary prosecution within 8 days"^^xsd:string,
+        "Decision served on lawyer on 22 January 1997"^^xsd:string ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_matko_dismissal_1,
+        doc:part_prosecutor_dismissal_1 ;
+    echr:hasSupportingQuote "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."^^xsd:string .
+
+doc:request_investigation_matko_1 a echr:DomesticProceeding ;
+    rdfs:label "request for investigation against Aleksander Matko"^^xsd:string ;
+    echr:hasCourt doc:sgDistrictCourt ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:part_matko_request_1 ;
+    echr:hasProceedingStartDate "1997-01-17"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "on 17 January 1997, a request for an investigation against Matko Aleksander was lodged with the investigating judge in the Slovenj Gradec District Court"^^xsd:string .
+
+doc:slovenjGradecGeneralHospital a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec General Hospital"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthoritySocialWelfare ;
+    echr:hasAuthorityName "Slovenj Gradec General Hospital"^^xsd:string .
+
+doc:witnessDc a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "D.Č."^^xsd:string ;
+    echr:hasPersonName "D.Č."^^xsd:string ;
+    echr:hasSupportingQuote "the court heard a new witness, D.Č., at the applicant’s request."^^xsd:string .
+
+doc:appeal_conviction_1 a echr:DomesticProceeding ;
+    rdfs:label "Appeals against conviction judgment"^^xsd:string ;
+    echr:followsProceeding doc:retrial_first_instance_1 ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "2001-05-09"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_matko_appeal_conv_1,
+        doc:part_prosecutor_appeal_1 ;
+    echr:hasProceedingStartDate "2001-03-12"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 12 March 2001 the Public Prosecutor appealed against this judgment and applied for a heavier sentence. The applicant also appealed."^^xsd:string,
+        "On 9 May 2001 the Maribor Higher Court upheld the conviction"^^xsd:string .
+
+doc:appeal_first_judgment_1 a echr:DomesticProceeding ;
+    rdfs:label "Public Prosecutor's appeal against acquittal"^^xsd:string ;
+    echr:followsProceeding doc:trial_first_instance_1 ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "2000-09-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_matko_appeal_1,
+        doc:part_prosecutor_appeal_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 5 January 2000 the Public Prosecutor appealed against the judgment and on 27 September 2000 the Maribor Higher Court quashed the judgment and remitted the case to a new panel for retrial."^^xsd:string .
+
+doc:appeal_investigation_opening_1 a echr:DomesticProceeding ;
+    rdfs:label "Appeal against decision not to open investigation"^^xsd:string ;
+    echr:followsProceeding doc:investigation_decision_dismissal_1 ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "1997-12-04"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:part_matko_appeal_1,
+        doc:part_prosecutor_appeal_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 12 May 1997 the Public Prosecutor appealed against this decision. On 4 December 1997 the Maribor Higher Court upheld her appeal... and opened a criminal investigation against the applicant."^^xsd:string .
+
+doc:criminal_complaint_police_1 a echr:AdministrativeAction ;
+    rdfs:label "Slovenj Gradec Police criminal complaint"^^xsd:string ;
+    echr:hasCourt doc:slovenjGradecPolice ;
+    echr:hasDecisionDate "1995-04-12"^^xsd:date ;
+    echr:hasSupportingQuote "On 12 April 1995 the Slovenj Gradec Police lodged a criminal complaint against the applicant"^^xsd:string .
+
+doc:criminal_investigation_active_1 a echr:DomesticProceeding ;
+    rdfs:label "Criminal investigation following Maribor Higher Court decision"^^xsd:string ;
+    echr:followsProceeding doc:appeal_investigation_opening_1 ;
+    echr:hasCourt doc:sgDistrictCourt ;
+    echr:hasDecisionDate "1998-03-17"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:part_matko_invest_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 17 March 1998 the criminal investigation was concluded with the investigating judge’s decision ordering the exclusion of certain documents"^^xsd:string .
+
+doc:indictment_filing_1 a echr:DomesticProceeding ;
+    rdfs:label "Filing of indictment against Aleksander Matko"^^xsd:string ;
+    echr:followsProceeding doc:criminal_investigation_active_1 ;
+    echr:hasCourt doc:sgDistrictCourt ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:part_matko_indict_1,
+        doc:part_prosecutor_indict_1 ;
+    echr:hasProceedingStartDate "1998-12-28"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 28 December 1998 the Public Prosecutor filed an indictment against the applicant"^^xsd:string .
+
+doc:investigation_decision_dismissal_1 a echr:DomesticProceeding ;
+    rdfs:label "Slovenj Gradec District Court decision not to open investigation"^^xsd:string ;
+    echr:followsProceeding doc:investigation_request_1 ;
+    echr:hasCourt doc:sgDistrictCourt ;
+    echr:hasDecisionDate "1997-05-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_matko_dismissal_2 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 8 May 1997... the Slovenj Gradec District Court decided not to open a criminal investigation against the applicant."^^xsd:string .
+
+doc:investigation_request_1 a echr:DomesticProceeding ;
+    rdfs:label "Public Prosecutor's request to open investigation"^^xsd:string ;
+    echr:followsProceeding doc:criminal_complaint_police_1 ;
+    echr:hasCourt doc:sgDistrictCourt ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:part_matko_req_2,
+        doc:part_prosecutor_req_1 ;
+    echr:hasProceedingStartDate "1997-01-17"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 17 January 1997 the Public Prosecutor requested the Slovenj Gradec District Court to open a criminal investigation against the applicant."^^xsd:string .
+
+doc:mariborGeneralHospital a echr:DomesticAuthority ;
+    rdfs:label "Maribor General Hospital"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthoritySocialWelfare ;
+    echr:hasAuthorityName "Maribor General Hospital"^^xsd:string .
+
+doc:mia a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Ministry of Internal Affairs"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Ministry of Internal Affairs"^^xsd:string .
+
+doc:objection_indictment_1 a echr:DomesticProceeding ;
+    rdfs:label "Objection to the indictment"^^xsd:string ;
+    echr:followsProceeding doc:indictment_filing_1 ;
+    echr:hasCourt doc:sgDistrictCourt ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:part_matko_obj_1 ;
+    echr:hasProceedingStartDate "1999-01-27"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 27 January 1999 the applicant filed an objection to the indictment."^^xsd:string .
+
+doc:objection_rejection_1 a echr:DomesticProceeding ;
+    rdfs:label "Rejection of objection by Slovenj Gradec District Court"^^xsd:string ;
+    echr:followsProceeding doc:objection_indictment_1 ;
+    echr:hasCourt doc:sgDistrictCourt ;
+    echr:hasDecisionDate "1999-02-16"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_matko_obj_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "His objection was rejected by the Slovenj Gradec District Court on 16 February 1999."^^xsd:string .
+
+doc:oral_complaint_1 a echr:AdministrativeAction ;
+    rdfs:label "oral complaint by Aleksander Matko"^^xsd:string ;
+    echr:hasCourt doc:slovenjGradecPolice ;
+    echr:hasDecisionDate "1995-04-07"^^xsd:date ;
+    echr:hasParticipation doc:part_matko_oral_1 ;
+    echr:hasSupportingQuote "On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint"^^xsd:string .
+
+doc:part_matko_appeal_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_matko_obj_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_matko_trial_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_prosecutor_trial_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:sgDistrictProsecutor .
+
+doc:prosecutorial_investigation_1 a echr:DomesticProceeding ;
+    rdfs:label "investigation by Slovenj Gradec District Public Prosecutor"^^xsd:string ;
+    echr:followsProceeding doc:written_complaint_1 ;
+    echr:hasCourt doc:sgDistrictProsecutor ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:part_matko_prosecutor_1 ;
+    echr:hasProceedingStartDate "1995-06-15"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "on 14 July 1995, the Slovenj Gradec District Public Prosecutor (the “Public Prosecutor”) requested the Slovenj Gradec Police to identify the officers"^^xsd:string,
+        "the Slovenj Gradec District Public Prosecutor’s Office ( Okrožno državno tožilstvo ) asked the applicant’s lawyer to add his client’s deposition to the file"^^xsd:string .
+
+doc:retrial_first_instance_1 a echr:DomesticProceeding ;
+    rdfs:label "Retrial of Aleksander Matko"^^xsd:string ;
+    echr:followsProceeding doc:appeal_first_judgment_1 ;
+    echr:hasAdjournment doc:hearing_retrial_1 ;
+    echr:hasCourt doc:sgDistrictCourt ;
+    echr:hasDecisionDate "2001-02-12"^^xsd:date ;
+    echr:hasExtractionNote "sentenced to 3 months’ imprisonment, suspended for 3 years"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelReopening ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_dc_retrial_1,
+        doc:part_matko_trial_1,
+        doc:part_prosecutor_trial_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "By a judgment of 12 February 2001, the Slovenj Gradec District Court convicted the applicant as charged"^^xsd:string .
+
+doc:trial_first_instance_1 a echr:DomesticProceeding ;
+    rdfs:label "First instance trial of Aleksander Matko"^^xsd:string ;
+    echr:followsProceeding doc:objection_rejection_1 ;
+    echr:hasAdjournment doc:hearing_trial_1 ;
+    echr:hasCourt doc:sgDistrictCourt ;
+    echr:hasDecisionDate "1999-11-22"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeAcquittal ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:part_ak_trial_1,
+        doc:part_matko_trial_1,
+        doc:part_prosecutor_trial_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "By a judgment of 22 November 1999 the court acquitted the applicant."^^xsd:string .
+
+doc:witnessAk a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "A.K."^^xsd:string ;
+    echr:hasPersonName "A.K."^^xsd:string ;
+    echr:hasSupportingQuote "A.K., who had allegedly witnessed the incident."^^xsd:string .
+
+doc:written_complaint_1 a echr:DomesticProceeding ;
+    rdfs:label "written criminal complaint by Aleksander Matko"^^xsd:string ;
+    echr:followsProceeding doc:oral_complaint_1 ;
+    echr:hasCourt doc:slovenjGradecPolice ;
+    echr:hasDecisionDate "1995-05-15"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:part_matko_written_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 15 May 1995 the applicant lodged, through his lawyer, a written criminal complaint ( kazenska ovadba ) with the Slovenj Gradec Police"^^xsd:string .
+
+doc:mariborHigherCourt a echr:DomesticAuthority ;
+    rdfs:label "Maribor Higher Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Maribor Higher Court"^^xsd:string .
+
+doc:part_prosecutor_appeal_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:sgDistrictProsecutor .
+
+doc:slovenjGradecPolice a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Slovenj Gradec Police"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Slovenj Gradec Internal Affairs Administration"^^xsd:string .
+
+doc:sgDistrictProsecutor a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Slovenj Gradec District Public Prosecutor's Office"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Slovenj Gradec District Public Prosecutor’s Office ( Okrožno državno tožilstvo )"^^xsd:string .
+
+doc:sgDistrictCourt a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec District Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Slovenj Gradec District Court"^^xsd:string .
+
+doc:aleksanderMatko a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Aleksander Matko"^^xsd:string ;
+    echr:hasPersonName "Mr Aleksander Matko"^^xsd:string ;
+    echr:isRepresentedBy doc:lawyer_matko_1 .
+

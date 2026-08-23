@@ -1,0 +1,412 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/1d3abbb7e196/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/1d3abbb7e196> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:2"^^xsd:string .
+
+doc:caseBeerAndReganVGermany a echr:CaseDocument ;
+    rdfs:label "CASE OF BEER AND REGAN v. GERMANY (Application no. 28934/95)"^^xsd:string ;
+    echr:hasApplicant doc:applicantKarlheinzBeer,
+        doc:applicantPhilipRegan ;
+    echr:hasApplicationNumber "28934/95"^^xsd:string ;
+    echr:hasJudgmentDate "1999-02-18"^^xsd:date ;
+    echr:hasRespondentState "Germany"^^xsd:string ;
+    echr:hasSupportingQuote "CASE OF BEER AND REGAN v. GERMANY (Application no. 28934/95)"^^xsd:string .
+
+doc:caseDocumentPresentCase a echr:CaseDocument ;
+    rdfs:label "the present case"^^xsd:string ;
+    echr:hasApplicant doc:applicants ;
+    echr:hasDomesticProceeding doc:proceeding_immunity_application_1,
+        doc:proceeding_recognition_1 ;
+    echr:hasRespondentState "Germany"^^xsd:string ;
+    echr:hasSupportingQuote "in the present case"^^xsd:string .
+
+doc:case_1 a echr:CaseDocument ;
+    rdfs:label "Compliance with Article 6 § 1"@en ;
+    echr:hasApplicant doc:partyApplicants ;
+    echr:hasDomesticProceeding doc:proceedingDarmstadtLabourCourt,
+        doc:proceeding_federal_labour_court_1993 ;
+    echr:hasSupportingQuote "Compliance with Article 6 § 1"^^xsd:string .
+
+doc:case_28934_95 a echr:CaseDocument ;
+    rdfs:label "application (no. 28934/95)"^^xsd:string ;
+    echr:hasApplicant doc:partyMrBeer,
+        doc:partyMrRegan ;
+    echr:hasApplicationNumber "28934/95"^^xsd:string ;
+    echr:hasDomesticProceeding doc:domestic_proceeding_labour_1 ;
+    echr:hasSupportingQuote "Mr Beer and Mr Regan applied to the Commission on 13 September 1995."^^xsd:string .
+
+doc:case_document_1 a echr:CaseDocument ;
+    rdfs:label "The Grand Chamber"^^xsd:string ;
+    echr:hasApplicant doc:partyKarlheinzBeer,
+        doc:partyPhilipRegan ;
+    echr:hasSupportingQuote "Mr Karlheinz Beer is a German national, born in 1952 and resident in Darmstadt. Mr Philip Regan is a British national, born in 1960 and resident in London in the United Kingdom."^^xsd:string .
+
+doc:partyCompanyTi a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "second applicant"^^xsd:string,
+        "the company T.I."^^xsd:string ;
+    echr:hasPartyName "the company T.I."^^xsd:string ;
+    echr:hasPersonName "the second applicant"^^xsd:string ;
+    echr:hasSupportingQuote "According to this settlement, the second applicant’s employment with the company T.I. had terminated on 31 December 1993, and the company T.I. undertook to pay to the second applicant the sum of 22,000 marks (DEM) for loss of job."^^xsd:string .
+
+doc:proc_darmstadt_esa_1993_1995 a echr:DomesticProceeding ;
+    rdfs:label "proceedings before the Darmstadt Labour Court ( Arbeitsgericht ) against ESA"^^xsd:string ;
+    echr:hasCourt doc:darmstadtLabourCourt ;
+    echr:hasDecisionDate "1995-03-21"^^xsd:date ;
+    echr:hasExtractionNote "In view of the decisions taken in the case of Mr Waite and Mr Kennedy, the applicants did not pursue the matter."^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_proc1_esa,
+        doc:participation_proc1_firstapp,
+        doc:participation_proc1_secondapp ;
+    echr:hasProceedingStartDate "1993"^^xsd:gYear ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "In October and November 1993 the applicants instituted proceedings before the Darmstadt Labour Court ( Arbeitsgericht ) against ESA, arguing that, pursuant to the German Provision of Labour (Temporary Staff) Act ( Arbeitnehmerüberlassungsgesetz ), they had acquired the status of employees of ESA."^^xsd:string,
+        "On 21 March 1995 the Darmstadt Labour Court, following hearings, declared the applicants’ respective actions inadmissible."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:proc_secondapp_ti_1993_1994 a echr:DomesticProceeding ;
+    rdfs:label "proceedings instituted by the second applicant against his dismissal by the company T.I."^^xsd:string ;
+    echr:hasCourt doc:darmstadtLabourCourt ;
+    echr:hasDecisionDate "1994-09-06"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeSettled ;
+    echr:hasOutcomeDirection echr:DirectionUnknown ;
+    echr:hasParticipation doc:participation_proc1_secondapp,
+        doc:participation_proc2_ti ;
+    echr:hasProceedingStartDate "1993"^^xsd:gYear ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "In the proceedings instituted by the second applicant against his dismissal by the company T.I. (see paragraph 13 above), a settlement had been reached in the Darmstadt Labour Court on 6 September 1994."^^xsd:string .
+
+doc:proceeding_german_courts_1 a echr:DomesticProceeding ;
+    rdfs:label "giving effect to the immunity from jurisdiction of ESA on the basis of section 20(2) of the Courts Act"^^xsd:string ;
+    echr:hasCourt doc:authorityGermanCourts ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationEsaDarmstadt,
+        doc:participation_applicants_1 ;
+    echr:hasSupportingQuote "In view of all these circumstances, the Court finds that, in giving effect to the immunity from jurisdiction of ESA on the basis of section 20(2) of the Courts Act, the German courts did not exceed their margin of appreciation."^^xsd:string .
+
+doc:proceeding_labour_1 a echr:DomesticProceeding ;
+    rdfs:label "labour court proceedings concerning his dismissal"^^xsd:string ;
+    echr:hasCourt doc:authorityLabourCourt ;
+    echr:hasInstanceLevel echr:LevelUnknown ;
+    echr:hasParticipation doc:participation_companyT_1,
+        doc:participation_first_1 ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "labour court proceedings concerning his dismissal"^^xsd:string .
+
+doc:applicantKarlheinzBeer a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Karlheinz Beer"^^xsd:string ;
+    echr:hasPersonName "Mr Karlheinz Beer"^^xsd:string ;
+    echr:hasSupportingQuote "lodged with the Commission under former Article 25 by a German national, Mr Karlheinz Beer, and by a British national, Mr Philip Regan, on 13 September 1995."^^xsd:string .
+
+doc:applicantPhilipRegan a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Philip Regan"^^xsd:string ;
+    echr:hasPersonName "Mr Philip Regan"^^xsd:string ;
+    echr:hasSupportingQuote "lodged with the Commission under former Article 25 by a German national, Mr Karlheinz Beer, and by a British national, Mr Philip Regan, on 13 September 1995."^^xsd:string .
+
+doc:applicants_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicants"^^xsd:string ;
+    echr:hasPartyName "the applicants"^^xsd:string ;
+    echr:hasSupportingQuote "the applicants were able to argue the question of immunity."^^xsd:string .
+
+doc:authorityGermanCourts a echr:DomesticAuthority ;
+    rdfs:label "the German courts"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "the German courts"^^xsd:string ;
+    echr:hasJurisdictionState "Germany"^^xsd:string ;
+    echr:hasSupportingQuote "the German courts did not exceed their margin of appreciation"^^xsd:string .
+
+doc:companyTi a echr:Party ;
+    rdfs:label "the Italian company T.I."^^xsd:string ;
+    echr:hasPartyName "the Italian company T.I."^^xsd:string ;
+    echr:hasSupportingQuote "The second applicant, a systems programmer and employed by the Italian company T.I., was placed at the disposal of the European Space Agency to perform services at the European Space Operations Centre in Darmstadt in 1991."^^xsd:string .
+
+doc:domestic_proceeding_labour_1 a echr:DomesticProceeding ;
+    rdfs:label "the labour court proceedings instituted by the applicants"^^xsd:string,
+        "the reasons advanced by the German labour courts to give effect to the immunity from jurisdiction of ESA under Article XV of the ESA Convention and its Annex I cannot be regarded as arbitrary."^^xsd:string ;
+    echr:hasCourt doc:authorityLabourCourt,
+        doc:labour_court_1 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_applicants_labour_1,
+        doc:participation_beer_labour1,
+        doc:participation_esa_labour1,
+        doc:participation_esa_labour_1,
+        doc:participation_regan_labour1 ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "the applicants were able to argue the question of immunity."^^xsd:string,
+        "the labour court proceedings instituted by the applicants"^^xsd:string,
+        "the reasons advanced by the German labour courts to give effect to the immunity from jurisdiction of ESA under Article XV of the ESA Convention and its Annex I cannot be regarded as arbitrary."^^xsd:string .
+
+doc:federalLabourCourt a echr:DomesticAuthority ;
+    rdfs:label "Federal Labour Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Federal Labour Court"@en ;
+    echr:hasSupportingQuote "the decision of the Federal Labour Court of 10 November 1993 in the case concerning Mr Waite and Mr Kennedy (see paragraph 15 above)."^^xsd:string .
+
+doc:firstApplicant a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the first applicant"^^xsd:string ;
+    echr:hasPartyName "the first applicant"^^xsd:string ;
+    echr:hasSupportingQuote "The first applicant’s contract was later taken over by the French company T."^^xsd:string .
+
+doc:labour_court_1 a echr:DomesticAuthority ;
+    rdfs:label "The Labour Court"^^xsd:string ;
+    echr:hasAuthorityName "The Labour Court"^^xsd:string ;
+    echr:hasJurisdictionState "Germany"^^xsd:string ;
+    echr:hasSupportingQuote "The Labour Court further referred to the decision of the Federal Labour Court in the case of Mr Waite and Mr Kennedy (see paragraph 15 above)."^^xsd:string .
+
+doc:participationApplicantsDarmstadt a echr:Participation ;
+    rdfs:label "Participation of the applicants in Darmstadt Labour Court proceeding"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "The applicants had access to the Darmstadt Labour Court, only to be told that their action was barred by operation of law."^^xsd:string ;
+    echr:participatingParty doc:partyApplicants .
+
+doc:participation_applicants_1 a echr:Participation ;
+    rdfs:label "the applicants"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the alternative means of legal process available to the applicants"^^xsd:string ;
+    echr:participatingParty doc:partyApplicants .
+
+doc:participation_applicants_immunity_1 a echr:Participation ;
+    rdfs:label "participation of the applicants in immunity decision"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "which the German courts applied to ESA in the present case"^^xsd:string ;
+    echr:participatingParty doc:applicants .
+
+doc:participation_applicants_labour_1 a echr:Participation ;
+    rdfs:label "the applicants were able to argue the question of immunity."^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the applicants were able to argue the question of immunity."^^xsd:string ;
+    echr:participatingParty doc:applicants_1 .
+
+doc:participation_applicants_recognition_1 a echr:Participation ;
+    rdfs:label "participation of the applicants in recognition attempt"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the applicants ... attempted to obtain recognition of permanent employment by ESA"^^xsd:string ;
+    echr:participatingParty doc:applicants .
+
+doc:participation_beer_labour1 a echr:Participation ;
+    rdfs:label "participation of Mr Beer in labour court proceedings"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the labour court proceedings instituted by the applicants"^^xsd:string ;
+    echr:participatingParty doc:partyMrBeer .
+
+doc:participation_companyT_1 a echr:Participation ;
+    rdfs:label "participation of the company T. in labour court proceedings"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the company T. undertook to pay to the first applicant the sum of DEM 14,000 for lawyer’s fees incurred in labour court proceedings concerning his dismissal"^^xsd:string ;
+    echr:participatingParty doc:partyCompanyT .
+
+doc:participation_esa_immunity_1 a echr:Participation ;
+    rdfs:label "participation of ESA in immunity decision"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "which the German courts applied to ESA in the present case"^^xsd:string ;
+    echr:participatingParty doc:esa .
+
+doc:participation_esa_labour1 a echr:Participation ;
+    rdfs:label "participation of ESA in labour court proceedings"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "their dispute with ESA"^^xsd:string ;
+    echr:participatingParty doc:esa .
+
+doc:participation_esa_labour_1 a echr:Participation ;
+    rdfs:label "immunity from jurisdiction of ESA"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the reasons advanced by the German labour courts to give effect to the immunity from jurisdiction of ESA under Article XV of the ESA Convention and its Annex I cannot be regarded as arbitrary."^^xsd:string ;
+    echr:participatingParty doc:esa .
+
+doc:participation_esa_recognition_1 a echr:Participation ;
+    rdfs:label "participation of ESA in recognition attempt"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "attempted to obtain recognition of permanent employment by ESA"^^xsd:string ;
+    echr:participatingParty doc:esa .
+
+doc:participation_first_1 a echr:Participation ;
+    rdfs:label "participation of the first applicant in labour court proceedings"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "lawyer’s fees incurred in labour court proceedings concerning his dismissal"^^xsd:string ;
+    echr:participatingParty doc:partyCompanyT .
+
+doc:participation_proc1_esa a echr:Participation ;
+    rdfs:label "the applicants instituted proceedings before the Darmstadt Labour Court ( Arbeitsgericht ) against ESA"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:esa .
+
+doc:participation_proc1_firstapp a echr:Participation ;
+    rdfs:label "the applicants instituted proceedings before the Darmstadt Labour Court ( Arbeitsgericht ) against ESA"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:firstApplicant .
+
+doc:participation_proc2_ti a echr:Participation ;
+    rdfs:label "proceedings instituted by the second applicant against his dismissal by the company T.I."^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:companyTi .
+
+doc:participation_regan_labour1 a echr:Participation ;
+    rdfs:label "participation of Mr Regan in labour court proceedings"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the labour court proceedings instituted by the applicants"^^xsd:string ;
+    echr:participatingParty doc:partyMrRegan .
+
+doc:partyKarlheinzBeer a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Karlheinz Beer"^^xsd:string ;
+    echr:hasPartyName "Mr Karlheinz Beer"^^xsd:string ;
+    echr:hasPersonName "Mr Karlheinz Beer"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Karlheinz Beer is a German national, born in 1952 and resident in Darmstadt."^^xsd:string .
+
+doc:partyPhilipRegan a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Philip Regan"^^xsd:string ;
+    echr:hasPartyName "Mr Philip Regan"^^xsd:string ;
+    echr:hasPersonName "Mr Philip Regan"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Philip Regan is a British national, born in 1960 and resident in London in the United Kingdom."^^xsd:string .
+
+doc:proceedingDarmstadtLabourCourt a echr:DomesticProceeding ;
+    rdfs:label "Darmstadt Labour Court proceeding"@en ;
+    echr:followsProceeding doc:proceeding_federal_labour_court_1993 ;
+    echr:hasCourt doc:darmstadtLabourCourt ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationApplicantsDarmstadt,
+        doc:participationEsaDarmstadt ;
+    echr:hasSupportingQuote "In the instant case the Darmstadt Labour Court concluded that the conditions under section 20(2) of the German Courts Act for finding that the applicants’ action was inadmissible were fulfilled."^^xsd:string .
+
+doc:proceeding_immunity_application_1 a echr:DomesticProceeding ;
+    rdfs:label "the rule of immunity from jurisdiction, which the German courts applied to ESA in the present case"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_recognition_1 ;
+    echr:hasCourt doc:germanCourts ;
+    echr:hasInstanceLevel echr:LevelUnknown ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_applicants_immunity_1,
+        doc:participation_esa_immunity_1 ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "the rule of immunity from jurisdiction, which the German courts applied to ESA in the present case"^^xsd:string .
+
+doc:secondApplicant a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the second applicant"^^xsd:string ;
+    echr:hasPartyName "the second applicant"^^xsd:string ;
+    echr:hasSupportingQuote "In his submissions, the second applicant indicated that, by letter of 27 September 1993, his employer T.I. had dismissed him."^^xsd:string .
+
+doc:authorityLabourCourt a echr:DomesticAuthority ;
+    rdfs:label "labour court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "labour court"^^xsd:string ;
+    echr:hasSupportingQuote "labour court proceedings"^^xsd:string,
+        "labour court proceedings concerning his dismissal"^^xsd:string .
+
+doc:germanCourts a echr:DomesticAuthority ;
+    rdfs:label "German courts"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "German courts"^^xsd:string ;
+    echr:hasJurisdictionState "Germany"^^xsd:string ;
+    echr:hasSupportingQuote "which the German courts applied to ESA in the present case"^^xsd:string .
+
+doc:participationEsaDarmstadt a echr:Participation ;
+    rdfs:label "ESA"^^xsd:string,
+        "Participation of ESA in Darmstadt Labour Court proceeding"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "immunity from jurisdiction of ESA"^^xsd:string,
+        "the defendant, ESA, had claimed immunity from jurisdiction in accordance with Article XV § 2 of the ESA Convention and Article IV § 1 of its Annex I."^^xsd:string ;
+    echr:participatingParty doc:esa .
+
+doc:participation_proc1_secondapp a echr:Participation ;
+    rdfs:label "proceedings instituted by the second applicant against his dismissal by the company T.I."^^xsd:string,
+        "the applicants instituted proceedings before the Darmstadt Labour Court ( Arbeitsgericht ) against ESA"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:secondApplicant .
+
+doc:partyCompanyT a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "first applicant"^^xsd:string,
+        "the company T."^^xsd:string ;
+    echr:hasPartyName "the company T."^^xsd:string ;
+    echr:hasPersonName "the first applicant"^^xsd:string ;
+    echr:hasSupportingQuote "Under the terms of an agreement concluded on 20 June 1995 with the first applicant, terminating his contract of employment on 30 June 1995, the company T. undertook to pay to the first applicant the sum of DEM 14,000 for lawyer’s fees incurred in labour court proceedings concerning his dismissal and DEM 305,000 for the loss of his job."^^xsd:string,
+        "the company T. undertook to pay to the first applicant the sum of DEM 14,000 for lawyer’s fees incurred in labour court proceedings concerning his dismissal and DEM 305,000 for the loss of his job."^^xsd:string .
+
+doc:partyMrBeer a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Beer"^^xsd:string ;
+    echr:hasPartyName "Mr Beer"^^xsd:string ;
+    echr:hasPersonName "Mr Beer"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Beer and Mr Regan applied to the Commission on 13 September 1995."^^xsd:string .
+
+doc:partyMrRegan a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Regan"^^xsd:string ;
+    echr:hasPartyName "Mr Regan"^^xsd:string ;
+    echr:hasPersonName "Mr Regan"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Beer and Mr Regan applied to the Commission on 13 September 1995."^^xsd:string .
+
+doc:proceeding_federal_labour_court_1993 a echr:DomesticProceeding ;
+    rdfs:label "Federal Labour Court decision of 10 November 1993"@en ;
+    echr:hasCourt doc:federalLabourCourt ;
+    echr:hasDecisionDate "1993-11-10"^^xsd:date ;
+    echr:hasSupportingQuote "the decision of the Federal Labour Court of 10 November 1993 in the case concerning Mr Waite and Mr Kennedy (see paragraph 15 above)."^^xsd:string .
+
+doc:proceeding_recognition_1 a echr:DomesticProceeding ;
+    rdfs:label "the applicants, after having performed services at the premises of ESOC in Darmstadt for a considerable time on the basis of contracts with foreign firms, attempted to obtain recognition of permanent employment by ESA on the basis of the above-mentioned special German legislation for the regulation of the German labour market."^^xsd:string ;
+    echr:hasCourt doc:germanCourts ;
+    echr:hasInstanceLevel echr:LevelUnknown ;
+    echr:hasParticipation doc:participation_applicants_recognition_1,
+        doc:participation_esa_recognition_1 ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "the applicants, after having performed services at the premises of ESOC in Darmstadt for a considerable time on the basis of contracts with foreign firms, attempted to obtain recognition of permanent employment by ESA on the basis of the above-mentioned special German legislation for the regulation of the German labour market."^^xsd:string .
+
+doc:applicants a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicants"^^xsd:string ;
+    echr:hasPartyName "the applicants"^^xsd:string ;
+    echr:hasSupportingQuote "the applicants, after having performed services at the premises of ESOC in Darmstadt for a considerable time on the basis of contracts with foreign firms, attempted to obtain recognition of permanent employment by ESA on the basis of the above-mentioned special German legislation for the regulation of the German labour market."^^xsd:string .
+
+doc:darmstadtLabourCourt a echr:DomesticAuthority ;
+    rdfs:label "Darmstadt Labour Court ( Arbeitsgericht )"^^xsd:string,
+        "Darmstadt Labour Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Darmstadt Labour Court ( Arbeitsgericht )"^^xsd:string,
+        "Darmstadt Labour Court"@en ;
+    echr:hasSupportingQuote "The applicants had access to the Darmstadt Labour Court, only to be told that their action was barred by operation of law."^^xsd:string .
+
+doc:partyApplicants a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicants"^^xsd:string,
+        "the applicants"@en ;
+    echr:hasPartyName "the applicants"^^xsd:string ;
+    echr:hasPersonName "The applicants"@en ;
+    echr:hasSupportingQuote "Taking into account in particular the alternative means of legal process available to the applicants, it cannot be said that the limitation on their access to the German courts with regard to ESA impaired the essence of their “right to a court” or was disproportionate for the purposes of Article 6 § 1 of the Convention."^^xsd:string,
+        "The applicants had access to the Darmstadt Labour Court, only to be told that their action was barred by operation of law."^^xsd:string .
+
+doc:esa a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "ESA"^^xsd:string,
+        "The European Space Agency (“ESA”)"^^xsd:string,
+        "ESA"@en ;
+    echr:hasAuthorityName "the Agency"^^xsd:string ;
+    echr:hasPartyName "ESA"^^xsd:string,
+        "The European Space Agency (“ESA”)"^^xsd:string,
+        "ESA"@en ;
+    echr:hasSupportingQuote "ESA"^^xsd:string,
+        "ESA was formed out of ESRO and ELDO as a new and single organisation (see paragraph 12 above)."^^xsd:string,
+        "The European Space Agency (“ESA”) with headquarters in Paris, formed out of the European Space Research Organisation (“ESRO”) and the European Organisation for the Development and Construction of Space Vehicle Launchers (“ELDO”), was established under the Convention for the Establishment of a European Space Agency (“ESA Convention”) of 30 May 1975 ( United Nations Treaty Series 1983, vol. 1297, I – no. 21524)."^^xsd:string,
+        "in giving effect to the immunity from jurisdiction of ESA on the basis of section 20(2) of the Courts Act"^^xsd:string,
+        "the defendant, ESA, had claimed immunity from jurisdiction in accordance with Article XV § 2 of the ESA Convention and Article IV § 1 of its Annex I."^^xsd:string,
+        "their dispute with ESA"^^xsd:string .
+

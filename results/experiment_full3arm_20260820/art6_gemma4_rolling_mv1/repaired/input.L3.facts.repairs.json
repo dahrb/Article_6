@@ -1,0 +1,79 @@
+{
+  "source": "results/experiment_full3arm_20260820/art6_gemma4_rolling_mv1/repaired/input.L3.facts.ttl",
+  "operations": [
+    {
+      "finding": "The proceeding doc:proceeding_admin_court_2011 is attributed to the 13th Chamber of the Supreme Administrative Court, but the quote explicitly states it was the '6th Chamber of the Istanbul Administrative Court'.",
+      "rationale": "Correcting the court based on the supporting quote.",
+      "action": "remove",
+      "subject": "doc:proceeding_admin_court_2011",
+      "predicate": "echr:hasCourt",
+      "object": "doc:sac_chamber_13_node_placeholder",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "skipped: triple not present",
+      "pass": 1
+    },
+    {
+      "finding": "The proceeding doc:proceeding_admin_court_2011 is attributed to the 13th Chamber of the Supreme Administrative Court, but the quote explicitly states it was the '6th Chamber of the Istanbul Administrative Court'.",
+      "rationale": "Correcting the court based on the supporting quote.",
+      "action": "add",
+      "subject": "doc:proceeding_admin_court_2011",
+      "predicate": "echr:hasCourt",
+      "object": "doc:istanbul_administrative_court_6th_chamber",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "skipped: object node does not exist in the graph or this patch",
+      "pass": 1
+    },
+    {
+      "finding": "The authority doc:adminCourtTr is missing a required name.",
+      "rationale": "Adding the name based on the label/context of the node.",
+      "action": "add",
+      "subject": "doc:adminCourtTr",
+      "predicate": "echr:hasAuthorityName",
+      "object": "Administrative Court",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": null,
+      "status": "applied",
+      "pass": 1
+    },
+    {
+      "finding": "The participation doc:participationBrsbTransfer is flagged for a party recording issue, but it already has doc:brsbAuthority. The validator message 'must record exactly one party' suggests a structural check failure, but since it has one, I will ensure it is typed correctly as a participation if it isn't already.",
+      "rationale": "Ensuring the participation node is correctly linked/typed to satisfy the validator's party requirement.",
+      "action": "add",
+      "subject": "doc:participationBrsbTransfer",
+      "predicate": "rdf:type",
+      "object": "echr:Participation",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied",
+      "pass": 1
+    },
+    {
+      "finding": "stub_orphan_sweep",
+      "rationale": "Typed nodes carrying nothing but rdf:type/rdfs:label with no inbound reference; nothing downstream can use them.",
+      "action": "delete_node",
+      "nodes": [
+        "doc:avrupaAmerikaHolding",
+        "doc:companyA",
+        "doc:companyAksRadyo",
+        "doc:companyAnadoluRadyo",
+        "doc:companyCineDijital",
+        "doc:companyCinebes",
+        "doc:companyErdem",
+        "doc:companyKutyay",
+        "doc:companyMedyaIletisim",
+        "doc:companyMultikanal",
+        "doc:companyPAsle",
+        "doc:companySporCocuk",
+        "doc:iktisatBank"
+      ],
+      "status": "applied",
+      "pass": 1
+    }
+  ]
+}

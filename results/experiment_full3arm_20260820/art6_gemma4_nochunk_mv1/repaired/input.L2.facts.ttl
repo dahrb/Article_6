@@ -1,0 +1,96 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/1d3abbb7e196/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/1d3abbb7e196> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:2"^^xsd:string .
+
+doc:caseBeerRegan a echr:CaseDocument ;
+    echr:hasApplicant doc:karlheinzBeer,
+        doc:philipRegan ;
+    echr:hasApplicationNumber "28934/95"^^xsd:string ;
+    echr:hasCaseName "Beer and Regan v. Germany"^^xsd:string ;
+    echr:hasDomesticProceeding doc:proceedingEsaStatus,
+        doc:proceedingReganDismissal ;
+    echr:hasRespondentState "Federal Republic of Germany"^^xsd:string .
+
+doc:companyT a echr:Party ;
+    rdfs:label "T.I." ;
+    echr:hasPartyName "company T."^^xsd:string,
+        "company T.I."^^xsd:string .
+
+doc:esa a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "European Space Agency"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "European Space Agency"^^xsd:string ;
+    echr:hasPartyName "European Space Agency"^^xsd:string .
+
+doc:partBeerEsa a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:karlheinzBeer .
+
+doc:partEsaStatus a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:esa .
+
+doc:partReganEsa a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:philipRegan .
+
+doc:partReganTi a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:philipRegan .
+
+doc:partTiRegan a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:companyT .
+
+doc:proceedingEsaStatus a echr:DomesticProceeding ;
+    rdfs:label "Proceedings against ESA for employee status"^^xsd:string ;
+    echr:hasCourt doc:darmstadtLabourCourt ;
+    echr:hasDecisionDate "1995-03-21"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partBeerEsa,
+        doc:partEsaStatus,
+        doc:partReganEsa ;
+    echr:hasProceedingStartDate "1993-10-01"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "On 21 March 1995 the Darmstadt Labour Court, following hearings, declared the applicants’ respective actions inadmissible."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:proceedingReganDismissal a echr:DomesticProceeding ;
+    rdfs:label "Proceedings by Mr Regan against T.I. dismissal"^^xsd:string ;
+    echr:hasCourt doc:darmstadtLabourCourt ;
+    echr:hasDecisionDate "1994-09-06"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeSettled ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:partReganTi,
+        doc:partTiRegan ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "In the proceedings instituted by the second applicant against his dismissal by the company T.I. ... a settlement had been reached in the Darmstadt Labour Court on 6 September 1994."^^xsd:string .
+
+doc:darmstadtLabourCourt a echr:DomesticAuthority ;
+    rdfs:label "Darmstadt Labour Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Darmstadt Labour Court"^^xsd:string ;
+    echr:hasJurisdictionState "Germany"^^xsd:string .
+
+doc:karlheinzBeer a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Karlheinz Beer"^^xsd:string ;
+    echr:hasPersonName "Mr Karlheinz Beer"^^xsd:string .
+
+doc:philipRegan a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Philip Regan"^^xsd:string ;
+    echr:hasPersonName "Mr Philip Regan"^^xsd:string .
+

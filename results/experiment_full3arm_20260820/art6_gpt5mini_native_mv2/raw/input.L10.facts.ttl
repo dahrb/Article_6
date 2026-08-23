@@ -1,0 +1,1123 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/263d4524fc5a/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/263d4524fc5a> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:10"^^xsd:string .
+
+doc:action_visa_rejection_2016_12 a echr:AdministrativeAction ;
+    rdfs:label "Rejection of other type of visa (December 2016)"^^xsd:string ;
+    echr:hasCourt doc:authority_belgian_authorities_dec2016 ;
+    echr:hasDecisionDate "2016-12"^^xsd:gYearMonth ;
+    echr:hasExtractionNote "paragraph 34"^^xsd:string ;
+    echr:hasParticipation doc:part_visarej_applicants_201612,
+        doc:part_visarej_belgian_auth_201612 ;
+    echr:hasSupportingQuote "the applicants subsequently submitted such an application, which was rejected by the Belgian authorities in December 2016"^^xsd:string .
+
+doc:appealOnPointsOfLawToConseil a echr:DomesticProceeding ;
+    rdfs:label "an appeal on points of law against the decisions of the Aliens Appeals Board lies to the Conseil d’État"^^xsd:string ;
+    echr:followsProceeding doc:applicationSetAsideAliensAppealsBoard ;
+    echr:hasCourt doc:conseilDEtatAuthority ;
+    echr:hasExtractionNote "paragraph 54"^^xsd:string,
+        "paragraph 55; Articles 144 and 145"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasParticipation doc:participationAliensAppealsBoard,
+        doc:participationRequestingConseil ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "Under section 39/67 of the Aliens Act, an appeal on points of law against the decisions of the Aliens Appeals Board lies to the Conseil d’État ."^^xsd:string .
+
+doc:belgianAuthoritiesRefusalVisa a echr:EnforcementAction ;
+    rdfs:label "the Belgian authorities' refusal to issue the so-called “humanitarian” visas"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_brussels_court_20161207 ;
+    echr:hasCourt doc:belgianAuthorities ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationRefusalApplicant,
+        doc:participationRefusalState ;
+    echr:hasSupportingQuote "the Belgian authorities’ refusal to issue them with the so-called “humanitarian” visas had exposed them to a situation incompatible with Article 3 of the Convention"^^xsd:string .
+
+doc:brussels_court_of_appeal_judgment_2016_12_07 a echr:DomesticProceeding ;
+    rdfs:label "Brussels Court of Appeal judgment 7 December 2016"^^xsd:string ;
+    echr:followsProceeding doc:aliens_appeals_board_decision_2016_10_20 ;
+    echr:hasCourt doc:brusselsCourtOfAppeal ;
+    echr:hasDecisionDate "2016-12-07"^^xsd:date ;
+    echr:hasParticipation doc:participation_appeal7_belgian_state,
+        doc:participation_applicants_brussels_2016_12_07 ;
+    echr:hasSupportingQuote "Brussels Court of Appeal’s judgment of 7 December 2016."^^xsd:string .
+
+doc:caseDocumentSource a echr:CaseDocument ;
+    rdfs:label "source case document (extraction note for paragraph markers)"^^xsd:string ;
+    echr:hasExtractionNote "Numeric paragraph markers present in source text: 22, 23, 24, 25, 26, 27, 28; references to paragraphs 71-73."^^xsd:string .
+
+doc:caseLambert a echr:CaseDocument ;
+    rdfs:label "Lambert"^^xsd:string ;
+    echr:hasApplicant doc:applicantsCouple ;
+    echr:hasDomesticProceeding doc:proceeding_admin_challenge_1 ;
+    echr:hasExtractionNote "paragraph-references found in the text: 7, 8, 10, 11, 12, 15, 25, 64"^^xsd:string ;
+    echr:hasRespondentState "Belgium"^^xsd:string ;
+    echr:hasSupportingQuote "Lambert, Counsel,"^^xsd:string .
+
+doc:casePresentCase a echr:CaseDocument ;
+    rdfs:label "the present case"^^xsd:string ;
+    echr:hasApplicant doc:applicants ;
+    echr:hasDomesticProceeding doc:proceeding_aliens_appeals_board_20161020,
+        doc:proceeding_brussels_court_20161207 ;
+    echr:hasExtractionNote "Detected numerals present in source text: 2, 71, 72, 73, 74, 75, 638, 16. These appear as paragraph markers and as part of the CJEU reference 'C-638/16 PPU' and should be recorded as extraction notes because they are not standalone factual quantities tied to domestic events."^^xsd:string ;
+    echr:hasRespondentState "Belgium"^^xsd:string ;
+    echr:hasSupportingQuote "the present case"^^xsd:string .
+
+doc:case_3599_18 a echr:CaseDocument ;
+    rdfs:label "Application no. 3599/18 M.N. and Others against Belgium"@en ;
+    echr:hasApplicationNumber "3599/18"^^xsd:string ;
+    echr:hasExtractionNote "Application lodged with the Court on 10 January 2018 (recorded from the case facts)."^^xsd:string,
+        "No domestic proceedings described in the provided excerpt: the procedural paragraphs instead record the Strasbourg allocation, relinquishment to the Grand Chamber and hearing dates."^^xsd:string ;
+    echr:hasJudgmentDate "2020-03-05"^^xsd:date ;
+    echr:hasRespondentState "Belgium"^^xsd:string ;
+    echr:hasSupportingQuote "The case originated in an application (no. 3599/18) against Belgium lodged with the Court under Article 34 of the Convention for the Protection of Human Rights and Fundamental Freedoms (“the Convention”) on 10 January 2018 by a married couple and their two minor children, all Syrian nationals (“the applicants”)."^^xsd:string .
+
+doc:case_doc_egov_1 a echr:CaseDocument ;
+    rdfs:label "ECHR case document (extracted)"^^xsd:string ;
+    echr:hasApplicant doc:partyTheApplicants ;
+    echr:hasDomesticProceeding doc:aliens_office_refusal_2016_09_13,
+        doc:brussels_court_of_appeal_judgment_2017_06_30,
+        doc:court_of_appeal_judgment_2016_12_07,
+        doc:enforcement_action_2017_12_20 ;
+    echr:hasExtractionNote "Paragraph/section markers present in source (1,2,10,25,41-49,62,65,71,73,90). These are paragraph numeration artifacts and have been ignored as factual numeric quantities."^^xsd:string ;
+    echr:hasSupportingQuote "The applicants did not appeal on points of law against the Brussels Court of Appeal’s judgment of 30 June 2017, on the grounds that the lawyer at the Court of Cassation assigned to their case by the Legal Aid Board had informed them such an appeal would have no reasonable prospect of success."^^xsd:string .
+
+doc:case_document_case_1 a echr:CaseDocument ;
+    rdfs:label "ECHR case document"@en ;
+    echr:hasApplicant doc:partyTheApplicants ;
+    echr:hasExtractionNote "paragraphs: 35, 36, 37, 38, 39, 40, 71, 73"^^xsd:string .
+
+doc:conseil_detat_judgment_2018_05_17 a echr:DomesticProceeding ;
+    rdfs:label "Conseil d’État judgment 17 May 2018"^^xsd:string ;
+    echr:followsProceeding doc:aliens_appeals_board_decision_2016_10_20,
+        doc:appeal_proceeding_2017_03_24 ;
+    echr:hasCourt doc:conseilDetat ;
+    echr:hasDecisionDate "2018-05-17"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasParticipation doc:participation_applicants_conseil_2018_05_17,
+        doc:participation_belgian_state_conseil_2018_05_17 ;
+    echr:hasSupportingQuote "An administrative appeal on points of law lodged by the applicants against that judgment was dismissed by the Conseil d’État on 17 May 2018."^^xsd:string .
+
+doc:legalReferenceGenevaConvention a echr:AdministrativeAction ;
+    rdfs:label "Geneva Convention (Refugees) reference"^^xsd:string ;
+    echr:hasExtractionNote "Article 1, Section A, paragraph 2"^^xsd:string,
+        "New York Protocol of 31 January 1967"^^xsd:string,
+        "signed at Geneva on 28 July 1951"^^xsd:string ;
+    echr:hasSupportingQuote "Article 1, Section A, paragraph 2, of the Convention on the Status of Refugees, signed at Geneva on 28 July 1951, as amended by the New York Protocol of 31 January 1967 (\"the Geneva Convention\"), provides in particular that a refugee is any person..."^^xsd:string .
+
+doc:legalReferenceUrgentExparte a echr:AdministrativeAction ;
+    rdfs:label "reference to urgent or ex parte application before the President"^^xsd:string ;
+    echr:hasExtractionNote "procedural option: urgent application or, where necessary, ex parte application before the President"^^xsd:string ;
+    echr:hasSupportingQuote "The matter shall be brought before the President by means of an urgent application or, in cases of absolute necessity, an ex parte application."^^xsd:string .
+
+doc:legal_reference_enforcement_article1498 a echr:AdministrativeAction ;
+    rdfs:label "reference to Article 1498 (enforcement judge)"^^xsd:string ;
+    echr:hasExtractionNote "Article 1498 of the Judicial Code (as cited in the text)"^^xsd:string ;
+    echr:hasSupportingQuote "any interested party can apply to the enforcement judge (“ juge des saisies ”) on the basis of Article 1498 of the Judicial Code"^^xsd:string .
+
+doc:legal_reference_visa_code_810 a echr:AdministrativeAction ;
+    rdfs:label "Regulation (EC) No. 810/2009 (Visa Code)"^^xsd:string ;
+    echr:hasExtractionNote "13 July 2009"^^xsd:string,
+        "Regulation (EC) No. 810/2009"^^xsd:string,
+        "duration limit: 90 days in any 180-day period"^^xsd:string ;
+    echr:hasSupportingQuote "the Regulation establishes the procedures and conditions for issuing visas for transit through or intended stays in the territory of the member States not exceeding three months (90 days) in any six-month period (180 days)."^^xsd:string .
+
+doc:notification_email_2016_09_29 a echr:AdministrativeAction ;
+    rdfs:label "Aliens Office decision transmitted by email (29 Sep 2016)"^^xsd:string ;
+    echr:followsProceeding doc:administrative_action_refusal_2016_09_13 ;
+    echr:hasCourt doc:aliensOffice ;
+    echr:hasDecisionDate "2016-09-29"^^xsd:date ;
+    echr:hasParticipation doc:participationAliensOfficeRefusal,
+        doc:participationApplicantsRefusal ;
+    echr:hasSupportingQuote "informed them of its decisions by an email of 29 September 2016, transmitted through the visa department of the Belgian embassy in Beirut."^^xsd:string .
+
+doc:numeric_extraction_summary_1 a echr:CaseDocument ;
+    rdfs:label "numeric-extraction-summary"^^xsd:string ;
+    echr:hasExtractionNote "Numeric references found in source text: 1,2,3,4,13,18,23,24,25,28,31,32,33,51,52,58,59,60,61,62,63,64,90,180,810"^^xsd:string ;
+    echr:hasSupportingQuote "(see source text paragraphs and legal references where these numerals appear)"^^xsd:string .
+
+doc:proc_conseil_detat_applicants_20180208 a echr:DomesticProceeding ;
+    rdfs:label "Conseil d'État - dismissal of applicants' appeal (8 February 2018)"^^xsd:string ;
+    echr:followsProceeding doc:proc_aliens_appeals_20170306 ;
+    echr:hasCourt doc:authorityConseilDetat ;
+    echr:hasDecisionDate "2018-02-08"^^xsd:date ;
+    echr:hasExtractionNote "paragraph 17"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_conseil_applicants_20180208,
+        doc:part_conseil_state_20180208 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 8 February 2018 the Conseil d’État dismissed an appeal on points of law by the applicants against the judgment of 6 March 2017."^^xsd:string .
+
+doc:proc_conseil_detat_state_20180208 a echr:DomesticProceeding ;
+    rdfs:label "Conseil d'État - dismissal of Belgian State's appeal (8 February 2018)"^^xsd:string ;
+    echr:followsProceeding doc:proc_aliens_appeals_20161007 ;
+    echr:hasCourt doc:authorityConseilDetat ;
+    echr:hasDecisionDate "2018-02-08"^^xsd:date ;
+    echr:hasExtractionNote "paragraph 18"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:part_conseil_applicants_responding_20180208,
+        doc:part_conseil_state_initiating_20180208 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On the same date the Conseil d’État dismissed an appeal on points of law brought by the Belgian State against the judgment of 7 October 2016 on the grounds that, following the lifting of the stay of execution on 6 March 2017, the contested judgment no longer adversely affected the Belgian State."^^xsd:string .
+
+doc:proceeding_applicants_enforcement_2016_12_15 a echr:DomesticProceeding ;
+    rdfs:label "applicants' action before the enforcement judge at the Brussels French-language TPI (15 December 2016)"@en ;
+    echr:followsProceeding doc:enforcement_payment_order_2016_12_13 ;
+    echr:hasCourt doc:authorityBrusselsFrenchTpi ;
+    echr:hasParticipation doc:participation_applicants_enforcement_2016_12_15,
+        doc:participation_state_responding_2016_12_15 ;
+    echr:hasProceedingStartDate "2016-12-15"^^xsd:date ;
+    echr:hasSupportingQuote "On 15 December 2016 the applicants brought an action against the Belgian State before the enforcement judge at the Brussels French-language TPI, seeking to ensure that the payment order of 13 December 2016 was executed."^^xsd:string .
+
+doc:proceeding_cassation_2017_02_27 a echr:DomesticProceeding ;
+    rdfs:label "appeal on points of law lodged by the Belgian State (27 February 2017)"@en ;
+    echr:followsProceeding doc:proceeding_court_of_appeal_2016_12_07 ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasParticipation doc:participation_applicants_cassation_2017_02_27,
+        doc:participation_state_cassation_2017_02_27 ;
+    echr:hasProceedingStartDate "2017-02-27"^^xsd:date ;
+    echr:hasSupportingQuote "On 27 February 2017 the Belgian State lodged an appeal on points of law against the court of appeal’s judgment of 7 December 2016. Those proceedings are currently pending."^^xsd:string ;
+    echr:isPending true .
+
+doc:proceeding_state_enforcement_2016_12_15 a echr:DomesticProceeding ;
+    rdfs:label "Belgian State proceedings before the enforcement judge at the Brussels Dutch - language TPI (15 December 2016)"@en ;
+    echr:followsProceeding doc:proceeding_court_of_appeal_variation_2016_12_14 ;
+    echr:hasCourt doc:authorityBrusselsDutchTpi ;
+    echr:hasParticipation doc:participation_applicants_enforcement_2016_12_15,
+        doc:participation_applicants_responding_2016_12_15,
+        doc:participation_state_appeal_2016_12_14 ;
+    echr:hasProceedingStartDate "2016-12-15"^^xsd:date ;
+    echr:hasSupportingQuote "On the same date the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch ‐ language TPI, seeking a stay of execution of the principal sentence ( condamnation principale ) resulting from the Aliens Appeals Boards’ judgment of 20 October 2016 (obligation to issue visas or laissez ‐ passers ) and/or a stay of execution of the court of appeal’s judgment of 7 December 2016, and/or to prevent other enforcement measures, such as penalty payments. In the alternative, the State requested a finding that the conditions for a judicial deposit arrangement (“ cantonnement ”) had been met."^^xsd:string .
+
+doc:refusal_correspondence_2016_12_12 a echr:AdministrativeAction ;
+    rdfs:label "correspondence of 12 and 13 December 2016 from the lawyers to the Belgian State"^^xsd:string ;
+    echr:hasCourt doc:belgianState ;
+    echr:hasExtractionNote "Correspondence dated 12 and 13 December 2016"^^xsd:string,
+        "paragraph 34"^^xsd:string ;
+    echr:hasSupportingQuote "In correspondence of 12 and 13 December 2016, the lawyers to the Belgian State informed the applicants that the Belgian authorities were refusing to issue the laissez-passers or long-stay visas requested by them"^^xsd:string .
+
+doc:state_counter_execution_2017_06_30 a echr:DomesticProceeding ;
+    rdfs:label "Court of appeal judgment of 30 June 2017 countering execution"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_appeal_brussels_court_2016_12_07 ;
+    echr:hasCourt doc:brusselsCourtOfAppeal ;
+    echr:hasDecisionDate "2017-06-30"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationStatecounterApplicants,
+        doc:participationStatecounterBelgianState ;
+    echr:hasSupportingQuote "it secured this aim through the court of appeal’s judgment of 30 June 2017"^^xsd:string .
+
+doc:stay_of_execution_request_section_39_82 a echr:AdministrativeAction ;
+    rdfs:label "a request for a stay of execution"^^xsd:string ;
+    echr:followsProceeding doc:aliensOfficeDecisionRefuseVisa ;
+    echr:hasCourt doc:aliensAppealsBoardAuthority ;
+    echr:hasExtractionNote "30 days"^^xsd:string,
+        "paragraph 53"^^xsd:string ;
+    echr:hasParticipation doc:participationAliensAppealsBoard,
+        doc:participationRequestingStay ;
+    echr:hasSupportingQuote "section 39/82 of the Aliens Act provides for the possibility of submitting a request for a stay of execution either under an “ordinary” procedure or under the “extremely urgent” procedure."^^xsd:string .
+
+doc:urgent_application_president_article_584 a echr:DomesticProceeding ;
+    rdfs:label "apply to the president of the court of first instance by means of an urgent application or by an ex parte application"^^xsd:string ;
+    echr:followsProceeding doc:aliensOfficeDecisionRefuseVisa ;
+    echr:hasCourt doc:presidentCourtFirstInstanceAuthority ;
+    echr:hasExtractionNote "paragraph 56; Article 584"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participationPresidentUrgent,
+        doc:participationRequestingUrgent ;
+    echr:hasSupportingQuote "Article 584 of the Judicial Code provides for the possibility of applying to the president of the court of first instance by means of an urgent application or by an ex parte application:"^^xsd:string .
+
+doc:action_refusal_2016_09_13 a echr:AdministrativeAction ;
+    rdfs:label "Aliens Office refusal decisions (13 September 2016)"^^xsd:string ;
+    echr:hasCourt doc:authorityAliensOffice ;
+    echr:hasDecisionDate "2016-09-13"^^xsd:date ;
+    echr:hasExtractionNote "paragraph 11"^^xsd:string ;
+    echr:hasParticipation doc:part_refusal_aliens_office_20160913,
+        doc:part_refusal_applicants_20160913 ;
+    echr:hasSupportingQuote "the Aliens Office’s decisions of 13 September 2016"^^xsd:string .
+
+doc:action_refusal_2016_10_10 a echr:AdministrativeAction ;
+    rdfs:label "Aliens Office new refusal decisions (10 October 2016)"^^xsd:string ;
+    echr:followsProceeding doc:proc_aliens_appeals_20161007 ;
+    echr:hasCourt doc:authorityAliensOffice ;
+    echr:hasDecisionDate "2016-10-10"^^xsd:date ;
+    echr:hasExtractionNote "paragraph 19"^^xsd:string ;
+    echr:hasParticipation doc:part_refusal_aliens_office_20161010,
+        doc:part_refusal_applicants_20161010 ;
+    echr:hasSupportingQuote "the Aliens Office issued new decisions, dated 10 October 2016, refusing to grant the visas; however, it provided the same reasons as in the previous refusals."^^xsd:string .
+
+doc:adminCourts a echr:DomesticAuthority ;
+    rdfs:label "the administrative courts"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "the administrative courts"^^xsd:string ;
+    echr:hasJurisdictionState "Belgium"^^xsd:string ;
+    echr:hasSupportingQuote "they brought proceedings before the administrative courts to challenge the refusal by the Aliens Office to issue them with visas."^^xsd:string .
+
+doc:admin_decision_2016_09_13 a echr:AdministrativeAction ;
+    rdfs:label "the Aliens Office’s decisions of 13 September 2016"^^xsd:string ;
+    echr:hasCourt doc:aliensOffice ;
+    echr:hasDecisionDate "2016-09-13"^^xsd:date ;
+    echr:hasSupportingQuote "the Aliens Office’s decisions of 13 September 2016"^^xsd:string .
+
+doc:admin_decision_2016_10_10 a echr:AdministrativeAction ;
+    rdfs:label "the Aliens Office’s decisions of 10 October 2016"^^xsd:string ;
+    echr:hasCourt doc:aliensOffice ;
+    echr:hasDecisionDate "2016-10-10"^^xsd:date ;
+    echr:hasSupportingQuote "the Aliens Office’s decisions of 10 October 2016"^^xsd:string .
+
+doc:admin_decision_2016_10_17 a echr:AdministrativeAction ;
+    rdfs:label "Aliens Office decisions of 17 October 2016"^^xsd:string ;
+    echr:hasCourt doc:aliensOffice ;
+    echr:hasDecisionDate "2016-10-17"^^xsd:date ;
+    echr:hasSupportingQuote "On 17 October 2016 the Aliens Office again took decisions refusing to issue the visas."^^xsd:string .
+
+doc:aliensOfficeRejectionVisa a echr:AdministrativeAction ;
+    rdfs:label "rejection by the Aliens Office of a request for a visa"^^xsd:string ;
+    echr:hasCourt doc:aliensOffice ;
+    echr:hasParticipation doc:participationRejAliensOffice,
+        doc:participationRejApplicant ;
+    echr:hasSupportingQuote "a rejection by the Aliens Office of a request for a visa with limited territorial validity, lodged on the basis of Article 25 § 1 (a) of the Visa Code by a Syrian family at the Belgian embassy in Beirut."^^xsd:string .
+
+doc:appeal_proceeding_2017_03_24 a echr:DomesticProceeding ;
+    rdfs:label "Aliens Appeals Board judgment 24 March 2017"^^xsd:string ;
+    echr:followsProceeding doc:admin_decision_2016_09_13,
+        doc:admin_decision_2016_10_10 ;
+    echr:hasCourt doc:aliensAppealsBoard ;
+    echr:hasDecisionDate "2017-03-24"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_aliensappeals_aliens_office_2016_10_20,
+        doc:participation_applicants_aliens_appeals_2016_10_20 ;
+    echr:hasSupportingQuote "On 24 March 2017 the Aliens Appeals Board dismissed the application to have those decisions set aside, finding that the Aliens Office’s decisions of 13 September 2016 (see paragraph 11 above) had become final and that, in consequence, the applicants no longer had standing to challenge the subsequent decisions."^^xsd:string .
+
+doc:applicationSetAsideAliensAppealsBoard a echr:DomesticProceeding ;
+    rdfs:label "apply to the Aliens Appeals Board to have the Aliens Office’s decision set aside."^^xsd:string ;
+    echr:followsProceeding doc:aliensOfficeDecisionRefuseVisa ;
+    echr:hasCourt doc:aliensAppealsBoardAuthority ;
+    echr:hasExtractionNote "paragraph 52"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasParticipation doc:participationAliensAppealsBoard,
+        doc:participationRequestingAppeal ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "If the Aliens Office refuses to issue a visa, the requesting party may apply to the Aliens Appeals Board to have the Aliens Office’s decision set aside."^^xsd:string .
+
+doc:authorityBrusselsDutchTpi a echr:DomesticAuthority ;
+    rdfs:label "enforcement judge at the Brussels Dutch - language TPI"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "enforcement judge at the Brussels Dutch - language TPI"@en ;
+    echr:hasJurisdictionState "Belgium"^^xsd:string ;
+    echr:hasSupportingQuote "the enforcement judge at the Brussels Dutch ‐ language TPI"^^xsd:string .
+
+doc:authorityBrusselsFrenchTpi a echr:DomesticAuthority ;
+    rdfs:label "enforcement judge at the Brussels French-language TPI"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "enforcement judge at the Brussels French-language TPI"@en ;
+    echr:hasJurisdictionState "Belgium"^^xsd:string ;
+    echr:hasSupportingQuote "the enforcement judge at the Brussels French-language TPI"^^xsd:string .
+
+doc:authorityPresidentBrusselsDutchTpi a echr:DomesticAuthority ;
+    rdfs:label "President of the Brussels Dutch - speaking TPI"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "President of the Brussels Dutch - speaking TPI"@en ;
+    echr:hasJurisdictionState "Belgium"^^xsd:string ;
+    echr:hasSupportingQuote "with the President of the Brussels Dutch ‐ speaking TPI"^^xsd:string .
+
+doc:belgianEmbassy a echr:DomesticAuthority ;
+    rdfs:label "the Belgian embassy in Beirut"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "the Belgian embassy in Beirut"^^xsd:string ;
+    echr:hasJurisdictionState "Belgium"^^xsd:string ;
+    echr:hasSupportingQuote "On 22 August 2016 the applicant couple, accompanied by one of their children, travelled to the Belgian embassy in Beirut to submit visa applications for themselves and their two children."^^xsd:string .
+
+doc:conseilDEtatAuthority a echr:DomesticAuthority ;
+    rdfs:label "Conseil d’État"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Conseil d’État"^^xsd:string .
+
+doc:conseilDetat a echr:DomesticAuthority ;
+    rdfs:label "Conseil d’État"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Conseil d’État"^^xsd:string .
+
+doc:court_of_appeal_judgment_2016_12_07 a echr:DomesticProceeding ;
+    rdfs:label "The court of appeal’s judgment of 7 December 2016"^^xsd:string ;
+    echr:followsProceeding doc:aliens_office_refusal_2016_09_13 ;
+    echr:hasCourt doc:brusselsCourtOfAppeal ;
+    echr:hasDecisionDate "2016-12-07"^^xsd:date ;
+    echr:hasParticipation doc:participation_applicants_court_2016_12_07 ;
+    echr:hasSupportingQuote "The court of appeal’s judgment of 7 December 2016 was thus no longer operative, given that the Aliens Office’s refusal decisions of 13 September 2016 had become final and irrevocable before the penalty payment was issued against the Belgian State."^^xsd:string .
+
+doc:enforcement_action_2017_12_20 a echr:EnforcementAction ;
+    rdfs:label "On 20 December 2017 the French-language enforcement judge, examining the action brought by the applicants on 15 December 2016, found that the case had become devoid of purpose following the Brussels Court of Appeal’s judgment of 30 June 2017."^^xsd:string ;
+    echr:followsProceeding doc:brussels_court_of_appeal_judgment_2017_06_30 ;
+    echr:hasCourt doc:frenchLanguageEnforcementJudgeAuthority ;
+    echr:hasDecisionDate "2017-12-20"^^xsd:date ;
+    echr:hasParticipation doc:participation_applicants_enforcement_2017_12_20 ;
+    echr:hasProceedingStartDate "2016-12-15"^^xsd:date ;
+    echr:hasSupportingQuote "On 20 December 2017 the French-language enforcement judge, examining the action brought by the applicants on 15 December 2016, found that the case had become devoid of purpose following the Brussels Court of Appeal’s judgment of 30 June 2017."^^xsd:string .
+
+doc:enforcement_payment_order_2016_12_13 a echr:EnforcementAction ;
+    rdfs:label "payment order in respect of the penalties accrued served on the Belgian State (13 December 2016)"@en ;
+    echr:hasDecisionDate "2016-12-13"^^xsd:date ;
+    echr:hasSupportingQuote "On 13 December 2016 a payment order in respect of the penalties accrued was served on the Belgian State."^^xsd:string .
+
+doc:frenchLanguageEnforcementJudgeAuthority a echr:DomesticAuthority ;
+    rdfs:label "the French-language enforcement judge"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "the French-language enforcement judge"^^xsd:string ;
+    echr:hasJurisdictionState "Belgium"^^xsd:string ;
+    echr:hasSupportingQuote "On 20 December 2017 the French-language enforcement judge, examining the action brought by the applicants on 15 December 2016, found that the case had become devoid of purpose following the Brussels Court of Appeal’s judgment of 30 June 2017."^^xsd:string .
+
+doc:part_conseil_applicants_20180208 a echr:Participation ;
+    rdfs:label "participation: applicants in Conseil d'Etat 08-02-2018"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 8 February 2018 the Conseil d’État dismissed an appeal on points of law by the applicants against the judgment of 6 March 2017."^^xsd:string ;
+    echr:participatingParty doc:partyApplicants .
+
+doc:part_conseil_applicants_responding_20180208 a echr:Participation ;
+    rdfs:label "participation: applicants responding in Conseil d'Etat 08-02-2018 (State's appeal)"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 8 February 2018 the Conseil d’État dismissed an appeal on points of law by the applicants against the judgment of 6 March 2017."^^xsd:string ;
+    echr:participatingParty doc:partyApplicants .
+
+doc:part_conseil_state_20180208 a echr:Participation ;
+    rdfs:label "participation: Belgian State in Conseil d'Etat 08-02-2018"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On the same date the Conseil d’État dismissed an appeal on points of law brought by the Belgian State against the judgment of 7 October 2016 on the grounds that, following the lifting of the stay of execution on 6 March 2017, the contested judgment no longer adversely affected the Belgian State."^^xsd:string ;
+    echr:participatingParty doc:partyBelgianState .
+
+doc:part_conseil_state_initiating_20180208 a echr:Participation ;
+    rdfs:label "participation: Belgian State initiating in Conseil d'Etat 08-02-2018 (State's appeal)"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On the same date the Conseil d’État dismissed an appeal on points of law brought by the Belgian State against the judgment of 7 October 2016 on the grounds that, following the lifting of the stay of execution on 6 March 2017, the contested judgment no longer adversely affected the Belgian State."^^xsd:string ;
+    echr:participatingParty doc:partyBelgianState .
+
+doc:part_proc_appeal_applicants_20161007 a echr:Participation ;
+    rdfs:label "participation: applicants in Aliens Appeals Board 07-10-2016"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 7 October 2016 the Aliens Appeals Board, acting under the extremely urgent procedure, ordered a stay of execution of the refusals by the Aliens Office to grant visas and instructed the Belgian State to take new decisions within 48 hours, giving adequate legal grounds, that is, by giving reasons which took account of the extremely dangerous situation in Syria."^^xsd:string ;
+    echr:participatingParty doc:partyApplicants .
+
+doc:part_proc_appeal_applicants_20161014 a echr:Participation ;
+    rdfs:label "participation: applicants in Aliens Appeals Board 14-10-2016"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "By a judgment of 14 October 2016 the Aliens Appeals Board, acting under the extremely urgent procedure, again ordered a stay of execution of the decision of 10 October 2016 refusing to issue the visas, and instructed the Aliens Office to take new decisions, this time giving adequate legal grounds, within 48 hours."^^xsd:string ;
+    echr:participatingParty doc:partyApplicants .
+
+doc:part_proc_appeal_state_20161007 a echr:Participation ;
+    rdfs:label "participation: Belgian State in Aliens Appeals Board 07-10-2016"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 7 October 2016 the Aliens Appeals Board, acting under the extremely urgent procedure, ordered a stay of execution of the refusals by the Aliens Office to grant visas and instructed the Belgian State to take new decisions within 48 hours, giving adequate legal grounds, that is, by giving reasons which took account of the extremely dangerous situation in Syria."^^xsd:string ;
+    echr:participatingParty doc:partyBelgianState .
+
+doc:part_proc_appeal_state_20161014 a echr:Participation ;
+    rdfs:label "participation: Belgian State in Aliens Appeals Board 14-10-2016"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "By a judgment of 14 October 2016 the Aliens Appeals Board, acting under the extremely urgent procedure, again ordered a stay of execution of the decision of 10 October 2016 refusing to issue the visas, and instructed the Aliens Office to take new decisions, this time giving adequate legal grounds, within 48 hours."^^xsd:string ;
+    echr:participatingParty doc:partyBelgianState .
+
+doc:part_proc_lift_applicants_20170306 a echr:Participation ;
+    rdfs:label "participation: applicants in Aliens Appeals Board 06-03-2017"^^xsd:string ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "On 6 March 2017 the Aliens Appeals Board noted that no application had been brought to have the decisions of 13 September 2016 refusing to issue the visas set aside, and decided in consequence to lift the stay of execution of the visa refusal decisions and the interim measures."^^xsd:string ;
+    echr:participatingParty doc:partyApplicants .
+
+doc:part_proc_lift_state_20170306 a echr:Participation ;
+    rdfs:label "participation: Belgian State in Aliens Appeals Board 06-03-2017"^^xsd:string ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "On 6 March 2017 the Aliens Appeals Board noted that no application had been brought to have the decisions of 13 September 2016 refusing to issue the visas set aside, and decided in consequence to lift the stay of execution of the visa refusal decisions and the interim measures."^^xsd:string ;
+    echr:participatingParty doc:partyBelgianState .
+
+doc:part_refusal_aliens_office_20160913 a echr:Participation ;
+    rdfs:label "participation: Aliens Office in refusal 13-09-2016"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the Aliens Office’s decisions of 13 September 2016"^^xsd:string ;
+    echr:participatingParty doc:authorityAliensOffice .
+
+doc:part_refusal_aliens_office_20161010 a echr:Participation ;
+    rdfs:label "participation: Aliens Office in refusal 10-10-2016"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the Aliens Office issued new decisions, dated 10 October 2016, refusing to grant the visas; however, it provided the same reasons as in the previous refusals."^^xsd:string ;
+    echr:participatingParty doc:authorityAliensOffice .
+
+doc:part_refusal_applicants_20160913 a echr:Participation ;
+    rdfs:label "participation: applicants in Aliens Office refusal 13-09-2016"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the Aliens Office’s decisions of 13 September 2016"^^xsd:string ;
+    echr:participatingParty doc:partyApplicants .
+
+doc:part_refusal_applicants_20161010 a echr:Participation ;
+    rdfs:label "participation: applicants in Aliens Office refusal 10-10-2016"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the Aliens Office issued new decisions, dated 10 October 2016, refusing to grant the visas; however, it provided the same reasons as in the previous refusals."^^xsd:string ;
+    echr:participatingParty doc:partyApplicants .
+
+doc:part_visarej_applicants_201612 a echr:Participation ;
+    rdfs:label "participation: applicants in visa rejection Dec 2016"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the applicants subsequently submitted such an application, which was rejected by the Belgian authorities in December 2016"^^xsd:string ;
+    echr:participatingParty doc:partyApplicants .
+
+doc:part_visarej_belgian_auth_201612 a echr:Participation ;
+    rdfs:label "participation: Belgian authorities in visa rejection Dec 2016"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the applicants subsequently submitted such an application, which was rejected by the Belgian authorities in December 2016"^^xsd:string ;
+    echr:participatingParty doc:authority_belgian_authorities_dec2016 .
+
+doc:participationAabApplicant a echr:Participation ;
+    rdfs:label "participation by the applicants in the Aliens Appeals Board proceeding"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the Aliens Appeals Board’s judgment of 20 October 2016, which had instructed the Belgian authorities to issue them with the visas they had requested under Article 3 of the Convention."^^xsd:string ;
+    echr:participatingParty doc:applicants .
+
+doc:participationAabState a echr:Participation ;
+    rdfs:label "participation by the Belgian authorities in the Aliens Appeals Board proceeding"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the Aliens Appeals Board’s judgment of 20 October 2016, which had instructed the Belgian authorities to issue them with the visas they had requested under Article 3 of the Convention."^^xsd:string ;
+    echr:participatingParty doc:belgianAuthorities .
+
+doc:participationAliensOfficeAdminchallenge a echr:Participation ;
+    rdfs:label "participation of the Aliens Office in administrative-courts challenge"^^xsd:string ;
+    echr:hasPartySide echr:SideThirdParty ;
+    echr:hasSupportingQuote "they brought proceedings before the administrative courts to challenge the refusal by the Aliens Office to issue them with visas."^^xsd:string ;
+    echr:participatingParty doc:aliensOffice .
+
+doc:participationAliensOfficeDecision a echr:Participation ;
+    rdfs:label "participation: Aliens Office in its decision"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aliensOfficeAuthority .
+
+doc:participationBcaApplicant a echr:Participation ;
+    rdfs:label "participation by the applicants in the Brussels Court of Appeal"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the Brussels Court of Appeal’s judgment of 7 December 2016 ordering the Belgian State to execute the Aliens Appeals Board’s judgment of 20 October 2016"^^xsd:string ;
+    echr:participatingParty doc:applicants .
+
+doc:participationBcaState a echr:Participation ;
+    rdfs:label "participation by the Belgian State in the Brussels Court of Appeal"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the Brussels Court of Appeal’s judgment of 7 December 2016 ordering the Belgian State to execute the Aliens Appeals Board’s judgment of 20 October 2016"^^xsd:string ;
+    echr:participatingParty doc:belgianAuthorities .
+
+doc:participationPresidentUrgent a echr:Participation ;
+    rdfs:label "participation: President of the Court of First Instance in urgent application"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:presidentCourtFirstInstanceAuthority .
+
+doc:participationRefusalApplicant a echr:Participation ;
+    rdfs:label "participation by the applicants affected by the refusal"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the Belgian authorities’ refusal to issue them with the so-called “humanitarian” visas had exposed them to a situation incompatible with Article 3 of the Convention"^^xsd:string ;
+    echr:participatingParty doc:applicants .
+
+doc:participationRefusalState a echr:Participation ;
+    rdfs:label "participation by the Belgian authorities in the refusal to issue visas"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the Belgian authorities’ refusal to issue them with the so-called “humanitarian” visas had exposed them to a situation incompatible with Article 3 of the Convention"^^xsd:string ;
+    echr:participatingParty doc:belgianAuthorities .
+
+doc:participationRejAliensOffice a echr:Participation ;
+    rdfs:label "participation by the Aliens Office in its rejection"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "a rejection by the Aliens Office of a request for a visa with limited territorial validity, lodged on the basis of Article 25 § 1 (a) of the Visa Code by a Syrian family at the Belgian embassy in Beirut."^^xsd:string ;
+    echr:participatingParty doc:aliensOffice .
+
+doc:participationRejApplicant a echr:Participation ;
+    rdfs:label "participation by the applicants in the Aliens Office rejection"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "a rejection by the Aliens Office of a request for a visa with limited territorial validity, lodged on the basis of Article 25 § 1 (a) of the Visa Code by a Syrian family at the Belgian embassy in Beirut."^^xsd:string ;
+    echr:participatingParty doc:applicants .
+
+doc:participationRequestingAppeal a echr:Participation ;
+    rdfs:label "participation: requesting party in appeal to Aliens Appeals Board"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:requestingParty .
+
+doc:participationRequestingConseil a echr:Participation ;
+    rdfs:label "participation: requesting party on appeal to Conseil d’État"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:requestingParty .
+
+doc:participationRequestingDecision a echr:Participation ;
+    rdfs:label "participation: requesting party in aliens office decision"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:requestingParty .
+
+doc:participationRequestingStay a echr:Participation ;
+    rdfs:label "participation: requesting party for stay of execution"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:requestingParty .
+
+doc:participationRequestingUrgent a echr:Participation ;
+    rdfs:label "participation: requesting party in urgent application to president"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:requestingParty .
+
+doc:participationStatecounterApplicants a echr:Participation ;
+    rdfs:label "participation of the applicants in court of appeal judgment of 30 June 2017"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "it secured this aim through the court of appeal’s judgment of 30 June 2017"^^xsd:string ;
+    echr:participatingParty doc:applicants .
+
+doc:participationStatecounterBelgianState a echr:Participation ;
+    rdfs:label "participation of the Belgian State in court of appeal judgment of 30 June 2017"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the Belgian State sought to counter the execution of the above-cited decisions"^^xsd:string ;
+    echr:participatingParty doc:belgianState .
+
+doc:participation_aliens_office_2016_09_13 a echr:Participation ;
+    rdfs:label "participation of the Aliens Office in the refusal decisions of 13 September 2016"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the Aliens Office’s refusal decisions of 13 September 2016 had become final and irrevocable"^^xsd:string ;
+    echr:participatingParty doc:aliensOfficeAuthority .
+
+doc:participation_aliensappeals_applicants_2016_10_20 a echr:Participation ;
+    rdfs:label "participation of the applicants in Aliens Appeals Board judgment of 20 October 2016"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the applicants sent a formal notice, served by bailiff, to the Belgian authorities seeking execution of the Aliens Appeals Board’s judgment of 20 October 2016"^^xsd:string ;
+    echr:participatingParty doc:applicants .
+
+doc:participation_appeal7_applicants a echr:Participation ;
+    rdfs:label "participation of the applicants in appeal of 7 December 2016"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the applicants could rely on the binding and enforceable nature of the contested judgment"^^xsd:string ;
+    echr:participatingParty doc:applicants .
+
+doc:participation_applicants_admin1 a echr:Participation ;
+    rdfs:label "participation of the applicants in administrative-courts challenge"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "they brought proceedings before the administrative courts to challenge the refusal by the Aliens Office to issue them with visas."^^xsd:string ;
+    echr:participatingParty doc:applicantsCouple .
+
+doc:participation_applicants_aliens_2016_09_13 a echr:Participation ;
+    rdfs:label "participation of the applicants in the Aliens Office refusal decisions of 13 September 2016"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the Aliens Office’s refusal decisions of 13 September 2016 had become final and irrevocable"^^xsd:string ;
+    echr:participatingParty doc:partyTheApplicants .
+
+doc:participation_applicants_brussels_2016_12_07 a echr:Participation ;
+    rdfs:label "participation of the applicants in Brussels Court of Appeal judgment 7 December 2016"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:theApplicants .
+
+doc:participation_applicants_cassation_2017_02_27 a echr:Participation ;
+    rdfs:label "participation: the applicants (cassation 27-02-2017)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyTheApplicants .
+
+doc:participation_applicants_conseil_2018_05_17 a echr:Participation ;
+    rdfs:label "participation of the applicants in Conseil d’État judgment 17 May 2018"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:theApplicants .
+
+doc:participation_applicants_enforcement_2017_12_20 a echr:Participation ;
+    rdfs:label "participation of the applicants in the enforcement decision of 20 December 2017"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 20 December 2017 the French-language enforcement judge, examining the action brought by the applicants on 15 December 2016, found that the case had become devoid of purpose following the Brussels Court of Appeal’s judgment of 30 June 2017."^^xsd:string ;
+    echr:participatingParty doc:partyTheApplicants .
+
+doc:participation_applicants_responding_2016_12_15 a echr:Participation ;
+    rdfs:label "participation: the applicants (responding in State-initiated proceedings 15-12-2016)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On the same date the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch ‐ language TPI, seeking a stay of execution of the principal sentence ( condamnation principale ) resulting from the Aliens Appeals Boards’ judgment of 20 October 2016 (obligation to issue visas or laissez ‐ passers ) and/or a stay of execution of the court of appeal’s judgment of 7 December 2016, and/or to prevent other enforcement measures, such as penalty payments."^^xsd:string ;
+    echr:participatingParty doc:partyTheApplicants .
+
+doc:participation_belgian_state_admin1 a echr:Participation ;
+    rdfs:label "participation of the Belgian State in administrative-courts challenge"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the Belgian State opposed, before the same courts, the granting of visas."^^xsd:string ;
+    echr:participatingParty doc:belgianState .
+
+doc:participation_belgian_state_conseil_2018_05_17 a echr:Participation ;
+    rdfs:label "participation of the Belgian State in Conseil d’État judgment 17 May 2018"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:belgianState .
+
+doc:participation_state_cassation_2017_02_27 a echr:Participation ;
+    rdfs:label "participation: Belgian State (cassation 27-02-2017)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyBelgianState .
+
+doc:participation_state_responding_2016_12_15 a echr:Participation ;
+    rdfs:label "participation: Belgian State (enforcement judge 15-12-2016, responding)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 15 December 2016 the applicants brought an action against the Belgian State before the enforcement judge at the Brussels French-language TPI, seeking to ensure that the payment order of 13 December 2016 was executed."^^xsd:string ;
+    echr:participatingParty doc:partyBelgianState .
+
+doc:participation_tpi25_applicants a echr:Participation ;
+    rdfs:label "participation of the applicants in order of 25 October 2016"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the applicants brought a unilateral application before the President of the Brussels French-language Court of First Instance (\"TPI\")"^^xsd:string ;
+    echr:participatingParty doc:applicants .
+
+doc:participation_tpi25_belgian_state a echr:Participation ;
+    rdfs:label "participation of the Belgian State in order of 25 October 2016"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the acting president of the French-language TPI ordered the State, as an urgent measure, to comply with the Board’s judgment of 20 October 2016"^^xsd:string ;
+    echr:participatingParty doc:belgianState .
+
+doc:participation_tpi7_applicants a echr:Participation ;
+    rdfs:label "participation of the applicants in order of 7 November 2016"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "their application admissible but unfounded"^^xsd:string ;
+    echr:participatingParty doc:applicants .
+
+doc:participation_tpi7_belgian_state a echr:Participation ;
+    rdfs:label "participation of the Belgian State in order of 7 November 2016"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the Belgian authorities could not be criticised for failing voluntarily to comply with a judgment by the Aliens Appeals Board"^^xsd:string ;
+    echr:participatingParty doc:belgianState .
+
+doc:proc_aliens_appeals_20161014 a echr:DomesticProceeding ;
+    rdfs:label "Aliens Appeals Board - stay order (14 October 2016)"^^xsd:string ;
+    echr:followsProceeding doc:action_refusal_2016_10_10 ;
+    echr:hasCourt doc:authorityAliensAppealsBoard ;
+    echr:hasDecisionDate "2016-10-14"^^xsd:date ;
+    echr:hasExtractionNote "paragraph 20"^^xsd:string,
+        "paragraph 21"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:part_proc_appeal_applicants_20161014,
+        doc:part_proc_appeal_state_20161014 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "By a judgment of 14 October 2016 the Aliens Appeals Board, acting under the extremely urgent procedure, again ordered a stay of execution of the decision of 10 October 2016 refusing to issue the visas, and instructed the Aliens Office to take new decisions, this time giving adequate legal grounds, within 48 hours."^^xsd:string .
+
+doc:proc_aliens_appeals_20170306 a echr:DomesticProceeding ;
+    rdfs:label "Aliens Appeals Board - lift stay (6 March 2017)"^^xsd:string ;
+    echr:followsProceeding doc:proc_aliens_appeals_20161014 ;
+    echr:hasCourt doc:authorityAliensAppealsBoard ;
+    echr:hasDecisionDate "2017-03-06"^^xsd:date ;
+    echr:hasExtractionNote "paragraph 16"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_proc_lift_applicants_20170306,
+        doc:part_proc_lift_state_20170306 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 6 March 2017 the Aliens Appeals Board noted that no application had been brought to have the decisions of 13 September 2016 refusing to issue the visas set aside, and decided in consequence to lift the stay of execution of the visa refusal decisions and the interim measures."^^xsd:string .
+
+doc:proceeding_admin_challenge_1 a echr:DomesticProceeding ;
+    rdfs:label "proceedings before the administrative courts challenging the Aliens Office refusal"^^xsd:string ;
+    echr:followsProceeding doc:administrative_action_refusal_2016_09_13 ;
+    echr:hasCourt doc:adminCourts ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasParticipation doc:participationAliensOfficeAdminchallenge,
+        doc:participation_applicants_admin1,
+        doc:participation_belgian_state_admin1 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "they brought proceedings before the administrative courts to challenge the refusal by the Aliens Office to issue them with visas."^^xsd:string .
+
+doc:proceeding_appeal_brussels_court_2016_12_07 a echr:DomesticProceeding ;
+    rdfs:label "Brussels Court of Appeal judgment of 7 December 2016"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_inter_partes_2016_11_07 ;
+    echr:hasCourt doc:brusselsCourtOfAppeal ;
+    echr:hasDecisionDate "2016-12-07"^^xsd:date ;
+    echr:hasExtractionNote "paragraph 32"^^xsd:string,
+        "paragraph 33"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_appeal7_applicants,
+        doc:participation_appeal7_belgian_state ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On an appeal by the applicants, the Brussels Court of Appeal delivered a judgment on 7 December 2016 varying the order of 7 November 2016"^^xsd:string .
+
+doc:proceeding_court_of_appeal_variation_2016_12_14 a echr:DomesticProceeding ;
+    rdfs:label "court of appeal varied the decision of the first-instance court (14 December 2016)"@en ;
+    echr:followsProceeding doc:proceeding_unilateral_stay_2016_12_13 ;
+    echr:hasCourt doc:brusselsCourtOfAppeal ;
+    echr:hasDecisionDate "2016-12-14"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_applicants_appeal_2016_12_14,
+        doc:participation_state_appeal_2016_12_14 ;
+    echr:hasSupportingQuote "However, on an appeal by the Belgian State, the court of appeal varied the decision of the first-instance court in a judgment of 14 December 2016. It noted the Belgian State’s intention to raise the difficulties of complying with the judgment of 7 December 2016 with the enforcement judge (“ le juge des saisies ”) and ordered the applicants not to pursue further enforcement proceedings pending a decision by the enforcement judge who was to rule on the validity of the enforcement procedure and the State’s right to restrict the amounts due in respect of penalty payments."^^xsd:string .
+
+doc:proceeding_inter_partes_2016_11_07 a echr:DomesticProceeding ;
+    rdfs:label "Inter partes order of 7 November 2016 by the French-language TPI"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_unilateral_application_2016_10_25 ;
+    echr:hasCourt doc:brusselsTpiFrenchLanguage ;
+    echr:hasDecisionDate "2016-11-07"^^xsd:date ;
+    echr:hasExtractionNote "paragraph 31"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_tpi7_applicants,
+        doc:participation_tpi7_belgian_state ;
+    echr:hasSupportingQuote "On 7 November 2016 another judge acting as president of the French‐language TPI declared their application admissible but unfounded"^^xsd:string .
+
+doc:proceeding_unilateral_application_2016_10_25 a echr:DomesticProceeding ;
+    rdfs:label "Order of 25 October 2016 by acting president of the French-language TPI"^^xsd:string ;
+    echr:hasCourt doc:brusselsTpiFrenchLanguage ;
+    echr:hasDecisionDate "2016-10-25"^^xsd:date ;
+    echr:hasExtractionNote "paragraph 29"^^xsd:string,
+        "paragraph 30"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_tpi25_applicants,
+        doc:participation_tpi25_belgian_state ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "By an order of 25 October 2016, ... the acting president of the French-language TPI ordered the State, as an urgent measure, to comply with the Board’s judgment of 20 October 2016, that is, to issue the applicants with visas or laissez-passers , and made the order subject to a penalty payment of 1,000 euros (EUR) per day of delay and per applicant."^^xsd:string .
+
+doc:proceeding_unilateral_stay_2016_12_13 a echr:DomesticProceeding ;
+    rdfs:label "unilateral action to stay execution with the President of the Brussels Dutch - speaking TPI (13 December 2016)"@en ;
+    echr:followsProceeding doc:proceeding_court_of_appeal_2016_12_07 ;
+    echr:hasCourt doc:authorityPresidentBrusselsDutchTpi ;
+    echr:hasDecisionDate "2016-12-13"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_applicants_appeal_2016_12_14,
+        doc:participation_state_appeal_2016_12_14 ;
+    echr:hasProceedingStartDate "2016-12-13"^^xsd:date ;
+    echr:hasSupportingQuote "lodged a unilateral action to that effect with the President of the Brussels Dutch ‐ speaking TPI on 13 December 2016, but was unsuccessful (order of the same date)."^^xsd:string .
+
+doc:repApplicantsLawyer a echr:LegalRepresentative,
+        echr:NaturalPerson ;
+    rdfs:label "the applicants' lawyer"^^xsd:string ;
+    echr:hasPersonName "the applicants’ lawyer"^^xsd:string ;
+    echr:hasSupportingQuote "notification email sent to the applicants’ lawyer"^^xsd:string .
+
+doc:visa_application_submission_2016_08_22 a echr:AdministrativeAction ;
+    rdfs:label "submission of visa applications (22 August 2016)"^^xsd:string ;
+    echr:hasCourt doc:belgianEmbassy ;
+    echr:hasProceedingStartDate "2016-08-22"^^xsd:date ;
+    echr:hasSupportingQuote "On 22 August 2016 the applicant couple, accompanied by one of their children, travelled to the Belgian embassy in Beirut to submit visa applications for themselves and their two children."^^xsd:string .
+
+doc:administrative_action_refusal_2016_09_13 a echr:AdministrativeAction ;
+    rdfs:label "Aliens Office refusal of humanitarian visas"^^xsd:string ;
+    echr:followsProceeding doc:visa_application_submission_2016_08_22 ;
+    echr:hasCourt doc:aliensOffice ;
+    echr:hasDecisionDate "2016-09-13"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationAliensOfficeRefusal,
+        doc:participationApplicantsRefusal ;
+    echr:hasSupportingQuote "On 13 September 2016 the Aliens Office, the administrative body responsible for issuing visas (see paragraph 45 below), refused to grant “humanitarian visas” to the applicants and informed them of its decisions by an email of 29 September 2016, transmitted through the visa department of the Belgian embassy in Beirut."^^xsd:string .
+
+doc:aliens_appeals_board_decision_2016_10_20 a echr:DomesticProceeding ;
+    rdfs:label "Aliens Appeals Board judgment 20 October 2016"^^xsd:string ;
+    echr:followsProceeding doc:admin_decision_2016_10_17 ;
+    echr:hasCourt doc:aliensAppealsBoard ;
+    echr:hasDecisionDate "2016-10-20"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_aliensappeals_aliens_office_2016_10_20,
+        doc:participation_applicants_aliens_appeals_2016_10_20 ;
+    echr:hasSupportingQuote "By a judgment of 20 October 2016 the Aliens Appeals Board, essentially reiterating the substance of its previous judgments, ordered a stay of execution of the refusal decisions of 17 October 2016. In addition, in view of the imminent danger faced by the applicants, the Belgian State’s persistent refusal to comply with res judicata authority and the importance of ensuring that the remedy was effective, it considered that it was justified to direct the State to issue the applicants, within 48 hours, with laissez-passers or visas, valid for three months."^^xsd:string .
+
+doc:aliens_office_refusal_2016_09_13 a echr:AdministrativeAction ;
+    rdfs:label "the Aliens Office’s refusal decisions of 13 September 2016"^^xsd:string ;
+    echr:hasCourt doc:aliensOfficeAuthority ;
+    echr:hasDecisionDate "2016-09-13"^^xsd:date ;
+    echr:hasParticipation doc:participation_aliens_office_2016_09_13,
+        doc:participation_applicants_aliens_2016_09_13 ;
+    echr:hasSupportingQuote "the Aliens Office’s refusal decisions of 13 September 2016 had become final and irrevocable"^^xsd:string .
+
+doc:authorityConseilDetat a echr:DomesticAuthority ;
+    rdfs:label "Conseil d'État"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Conseil d'État"^^xsd:string ;
+    echr:hasSupportingQuote "On 8 February 2018 the Conseil d’État dismissed an appeal on points of law by the applicants against the judgment of 6 March 2017."^^xsd:string .
+
+doc:authority_belgian_authorities_dec2016 a echr:DomesticAuthority ;
+    rdfs:label "Belgian authorities (December 2016)"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Belgian authorities"^^xsd:string ;
+    echr:hasSupportingQuote "which was rejected by the Belgian authorities in December 2016"^^xsd:string .
+
+doc:brusselsTpiFrenchLanguage a echr:DomesticAuthority ;
+    rdfs:label "Brussels French-language Court of First Instance (TPI)"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Brussels French-language Court of First Instance (TPI)"^^xsd:string ;
+    echr:hasSupportingQuote "the President of the Brussels French-language Court of First Instance (\"TPI\")"^^xsd:string .
+
+doc:brussels_court_of_appeal_judgment_2017_06_30 a echr:DomesticProceeding ;
+    rdfs:label "Brussels Court of Appeal’s judgment of 30 June 2017"^^xsd:string ;
+    echr:hasCourt doc:brusselsCourtOfAppeal ;
+    echr:hasDecisionDate "2017-06-30"^^xsd:date ;
+    echr:hasParticipation doc:participation_applicants_court_2016_12_07 ;
+    echr:hasSupportingQuote "Brussels Court of Appeal’s judgment of 30 June 2017"^^xsd:string .
+
+doc:participationAliensOfficeRefusal a echr:Participation ;
+    rdfs:label "participation of the Aliens Office in its refusal"^^xsd:string,
+        "participation of the Aliens Office in the notification email (29 Sep 2016)"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 13 September 2016 the Aliens Office, the administrative body responsible for issuing visas (see paragraph 45 below), refused to grant “humanitarian visas” to the applicants and informed them of its decisions by an email of 29 September 2016, transmitted through the visa department of the Belgian embassy in Beirut."^^xsd:string,
+        "informed them of its decisions by an email of 29 September 2016, transmitted through the visa department of the Belgian embassy in Beirut."^^xsd:string ;
+    echr:participatingParty doc:aliensOffice .
+
+doc:participationApplicantsRefusal a echr:Participation ;
+    rdfs:label "participation of the applicants in Aliens Office refusal"^^xsd:string,
+        "participation of the applicants in the notification email (29 Sep 2016)"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 13 September 2016 the Aliens Office, the administrative body responsible for issuing visas (see paragraph 45 below), refused to grant “humanitarian visas” to the applicants and informed them of its decisions by an email of 29 September 2016, transmitted through the visa department of the Belgian embassy in Beirut."^^xsd:string,
+        "informed them of its decisions by an email of 29 September 2016, transmitted through the visa department of the Belgian embassy in Beirut."^^xsd:string ;
+    echr:participatingParty doc:applicantsCouple .
+
+doc:participation_appeal7_belgian_state a echr:Participation ;
+    rdfs:label "participation of the Belgian State in Brussels Court of Appeal judgment 7 December 2016"^^xsd:string,
+        "participation of the Belgian State in appeal of 7 December 2016"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the court of appeal ordered the Belgian State to execute the Aliens Appeals Board’s judgment of 20 October 2016"^^xsd:string ;
+    echr:participatingParty doc:belgianState .
+
+doc:participation_applicants_aliens_appeals_2016_10_20 a echr:Participation ;
+    rdfs:label "participation of the applicants in Aliens Appeals Board judgment 20 October 2016"^^xsd:string,
+        "participation of the applicants in Aliens Appeals Board judgment 24 March 2017"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:theApplicants .
+
+doc:participation_applicants_appeal_2016_12_14 a echr:Participation ;
+    rdfs:label "participation: the applicants (appeal 14-12-2016)"@en,
+        "participation: the applicants (unilateral action 13-12-2016)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyTheApplicants .
+
+doc:participation_applicants_court_2016_12_07 a echr:Participation ;
+    rdfs:label "participation of the applicants in Brussels Court of Appeal’s judgment of 30 June 2017"^^xsd:string,
+        "participation of the applicants in the court of appeal’s judgment of 7 December 2016"^^xsd:string ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "The court of appeal’s judgment of 7 December 2016 was thus no longer operative"^^xsd:string ;
+    echr:participatingParty doc:partyTheApplicants .
+
+doc:participation_applicants_enforcement_2016_12_15 a echr:Participation ;
+    rdfs:label "participation: the applicants (enforcement judge 15-12-2016)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 15 December 2016 the applicants brought an action against the Belgian State before the enforcement judge at the Brussels French-language TPI, seeking to ensure that the payment order of 13 December 2016 was executed."^^xsd:string ;
+    echr:participatingParty doc:partyTheApplicants .
+
+doc:presidentCourtFirstInstanceAuthority a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "the President of the Court of First Instance"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "the President of the Court of First Instance"^^xsd:string ;
+    echr:hasPartyName "the President of the Court of First Instance"^^xsd:string .
+
+doc:proc_aliens_appeals_20161007 a echr:DomesticProceeding ;
+    rdfs:label "Aliens Appeals Board - stay order (7 October 2016)"^^xsd:string ;
+    echr:followsProceeding doc:action_refusal_2016_09_13 ;
+    echr:hasCourt doc:authorityAliensAppealsBoard ;
+    echr:hasDecisionDate "2016-10-07"^^xsd:date ;
+    echr:hasExtractionNote "paragraph 15"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:part_proc_appeal_applicants_20161007,
+        doc:part_proc_appeal_state_20161007 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 7 October 2016 the Aliens Appeals Board, acting under the extremely urgent procedure, ordered a stay of execution of the refusals by the Aliens Office to grant visas and instructed the Belgian State to take new decisions within 48 hours"^^xsd:string .
+
+doc:proceeding_aliens_appeals_board_20161020 a echr:DomesticProceeding ;
+    rdfs:label "Aliens Appeals Board judgment of 20 October 2016"^^xsd:string ;
+    echr:followsProceeding doc:aliensOfficeRejectionVisa ;
+    echr:hasCourt doc:aliensAppealsBoard ;
+    echr:hasDecisionDate "2016-10-20"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participationAabApplicant,
+        doc:participationAabState,
+        doc:participation_aliensappeals_aliens_office_2016_10_20,
+        doc:participation_aliensappeals_applicants_2016_10_20 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "the Aliens Appeals Board’s judgment of 20 October 2016"^^xsd:string,
+        "the Aliens Appeals Board’s judgment of 20 October 2016, which had instructed the Belgian authorities to issue them with the visas they had requested under Article 3 of the Convention."^^xsd:string .
+
+doc:proceeding_brussels_court_20161207 a echr:DomesticProceeding ;
+    rdfs:label "Brussels Court of Appeal judgment of 7 December 2016"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_aliens_appeals_board_20161020 ;
+    echr:hasCourt doc:brusselsCourtOfAppeal ;
+    echr:hasDecisionDate "2016-12-07"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participationBcaApplicant,
+        doc:participationBcaState ;
+    echr:hasSupportingQuote "the Brussels Court of Appeal’s judgment of 7 December 2016 ordering the Belgian State to execute the Aliens Appeals Board’s judgment of 20 October 2016"^^xsd:string .
+
+doc:proceeding_court_of_appeal_2016_12_07 a echr:DomesticProceeding ;
+    rdfs:label "Brussels Court of Appeal judgment of 7 December 2016"@en ;
+    echr:hasCourt doc:brusselsCourtOfAppeal ;
+    echr:hasDecisionDate "2016-12-07"^^xsd:date ;
+    echr:hasSupportingQuote "the court of appeal’s judgment of 7 December 2016"^^xsd:string .
+
+doc:aliensAppealsBoard a echr:DomesticAuthority ;
+    rdfs:label "Aliens Appeals Board"^^xsd:string,
+        "the Aliens Appeals Board"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Aliens Appeals Board"^^xsd:string,
+        "the Aliens Appeals Board"^^xsd:string ;
+    echr:hasJurisdictionState "Belgium"^^xsd:string ;
+    echr:hasSupportingQuote "the Aliens Appeals Board’s judgment of 20 October 2016"^^xsd:string,
+        "the general assembly of the Aliens Appeals Board on 8 December 2016"^^xsd:string .
+
+doc:aliensAppealsBoardAuthority a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Aliens Appeals Board"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Aliens Appeals Board"^^xsd:string ;
+    echr:hasPartyName "Aliens Appeals Board"^^xsd:string .
+
+doc:aliensOfficeDecisionRefuseVisa a echr:AdministrativeAction ;
+    rdfs:label "If the Aliens Office refuses to issue a visa"^^xsd:string ;
+    echr:hasCourt doc:aliensOfficeAuthority ;
+    echr:hasExtractionNote "7 March 2017"^^xsd:string,
+        "paragraph 50"^^xsd:string,
+        "paragraph 51"^^xsd:string,
+        "paragraphs 71-73"^^xsd:string ;
+    echr:hasParticipation doc:participationAliensOfficeDecision,
+        doc:participationRequestingDecision ;
+    echr:hasSupportingQuote "If the Aliens Office refuses to issue a visa, the requesting party may apply to the Aliens Appeals Board to have the Aliens Office’s decision set aside."^^xsd:string .
+
+doc:applicantsCouple a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicants"^^xsd:string ;
+    echr:hasPersonName "the applicant couple"^^xsd:string ;
+    echr:hasSupportingQuote "On 22 August 2016 the applicant couple, accompanied by one of their children, travelled to the Belgian embassy in Beirut to submit visa applications for themselves and their two children."^^xsd:string .
+
+doc:authorityAliensAppealsBoard a echr:DomesticAuthority ;
+    rdfs:label "Aliens Appeals Board"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Aliens Appeals Board"^^xsd:string ;
+    echr:hasExtractionNote "paragraph 52"^^xsd:string ;
+    echr:hasSupportingQuote "the Aliens Appeals Board - the judicial appeal body against decisions by the Aliens Office"^^xsd:string .
+
+doc:participationAliensAppealsBoard a echr:Participation ;
+    rdfs:label "participation: Aliens Appeals Board as respondent on appeal to Conseil d’État"^^xsd:string,
+        "participation: Aliens Appeals Board in appeal"^^xsd:string,
+        "participation: Aliens Appeals Board regarding stay of execution"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aliensAppealsBoardAuthority .
+
+doc:participation_aliensappeals_aliens_office_2016_10_20 a echr:Participation ;
+    rdfs:label "participation of the Aliens Office in Aliens Appeals Board judgment 20 October 2016"^^xsd:string,
+        "participation of the Aliens Office in Aliens Appeals Board judgment 24 March 2017"^^xsd:string,
+        "participation of the Aliens Office in Aliens Appeals Board judgment of 20 October 2016"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the failure by the Aliens Office to comply with a judgment of the Aliens Appeals Board"^^xsd:string ;
+    echr:participatingParty doc:aliensOffice .
+
+doc:participation_state_appeal_2016_12_14 a echr:Participation ;
+    rdfs:label "participation: Belgian State (State-initiated enforcement proceedings 15-12-2016)"@en,
+        "participation: Belgian State (appeal 14-12-2016)"@en,
+        "participation: Belgian State (unilateral action 13-12-2016)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On the same date the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch ‐ language TPI, seeking a stay of execution of the principal sentence ( condamnation principale ) resulting from the Aliens Appeals Boards’ judgment of 20 October 2016 (obligation to issue visas or laissez ‐ passers ) and/or a stay of execution of the court of appeal’s judgment of 7 December 2016, and/or to prevent other enforcement measures, such as penalty payments."^^xsd:string ;
+    echr:participatingParty doc:partyBelgianState .
+
+doc:theApplicants a echr:Party ;
+    rdfs:label "the applicants"^^xsd:string ;
+    echr:hasPartyName "the applicants"^^xsd:string .
+
+doc:aliensOfficeAuthority a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Aliens Office"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Aliens Office"^^xsd:string,
+        "the Aliens Office"^^xsd:string ;
+    echr:hasJurisdictionState "Belgium"^^xsd:string ;
+    echr:hasPartyName "Aliens Office"^^xsd:string,
+        "the Aliens Office"^^xsd:string ;
+    echr:hasSupportingQuote "the Aliens Office’s refusal decisions of 13 September 2016 had become final and irrevocable"^^xsd:string .
+
+doc:authorityAliensOffice a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Aliens Office"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Aliens Office"^^xsd:string ;
+    echr:hasSupportingQuote "In the view of the Aliens Office, granting a visa on humanitarian grounds to an individual who intended to apply for asylum in Belgium would therefore create a precedent which would derogate dangerously from the exceptional nature of the procedure for short-stay visas."^^xsd:string .
+
+doc:belgianAuthorities a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "the Belgian authorities"^^xsd:string ;
+    echr:hasAuthorityName "the Belgian authorities"^^xsd:string ;
+    echr:hasJurisdictionState "Belgium"^^xsd:string ;
+    echr:hasSupportingQuote "the Belgian authorities’ refusal to issue them with the so-called “humanitarian” visas"^^xsd:string .
+
+doc:requestingParty a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the requesting party"^^xsd:string ;
+    echr:hasPartyName "the requesting party"^^xsd:string ;
+    echr:hasPersonName "the requesting party"^^xsd:string .
+
+doc:belgianState a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Belgian State"^^xsd:string,
+        "the Belgian State"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityUnknown ;
+    echr:hasAuthorityName "the Belgian State"^^xsd:string ;
+    echr:hasPartyName "Belgian State"^^xsd:string,
+        "the Belgian State"^^xsd:string ;
+    echr:hasSupportingQuote "the Belgian State opposed, before the same courts, the granting of visas."^^xsd:string,
+        "the Belgian State sought to counter the execution of the above-cited decisions"^^xsd:string .
+
+doc:brusselsCourtOfAppeal a echr:DomesticAuthority ;
+    rdfs:label "Brussels Court of Appeal"^^xsd:string,
+        "court of appeal"^^xsd:string,
+        "Brussels Court of Appeal (Dutch-language division)"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Brussels Court of Appeal"^^xsd:string,
+        "court of appeal"^^xsd:string,
+        "Brussels Court of Appeal (Dutch-language division)"@en ;
+    echr:hasJurisdictionState "Belgium"^^xsd:string ;
+    echr:hasSupportingQuote "Brussels Court of Appeal’s judgment of 30 June 2017"^^xsd:string,
+        "a Dutch-language division of the Court of Appeal"^^xsd:string,
+        "the Brussels Court of Appeal delivered a judgment on 7 December 2016"^^xsd:string,
+        "the Brussels Court of Appeal’s judgment of 7 December 2016"^^xsd:string .
+
+doc:partyApplicants a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicants"^^xsd:string ;
+    echr:hasPersonName "the applicants"^^xsd:string ;
+    echr:hasSupportingQuote "The applicants lodged an application under the extremely urgent procedure with the Aliens Appeals Board"^^xsd:string ;
+    echr:isRepresentedBy doc:repApplicantsLawyer .
+
+doc:partyBelgianState a echr:Party ;
+    rdfs:label "Belgian State"^^xsd:string,
+        "the Belgian State"@en ;
+    echr:hasPartyName "Belgian State"^^xsd:string,
+        "the Belgian State"@en ;
+    echr:hasSupportingQuote "On 27 February 2017 the Belgian State lodged an appeal on points of law against the court of appeal’s judgment of 7 December 2016."^^xsd:string,
+        "brought by the Belgian State against the judgment of 7 October 2016"^^xsd:string .
+
+doc:partyTheApplicants a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicants"^^xsd:string,
+        "the applicants"@en ;
+    echr:hasPartyName "the applicants"^^xsd:string ;
+    echr:hasPersonName "the applicants"@en ;
+    echr:hasSupportingQuote "The applicants did not appeal on points of law against the Brussels Court of Appeal’s judgment of 30 June 2017"^^xsd:string,
+        "The applicants stated that they were unable to follow the advice of the Belgian Government and intended to seek enforcement of the Brussels Court of Appeal’s judgment, in view of the urgency of their personal situation and the disastrous humanitarian conditions prevailing for Syrians in Lebanon."^^xsd:string .
+
+doc:aliensOffice a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Aliens Office"^^xsd:string,
+        "the Aliens Office"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative,
+        echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Aliens Office"^^xsd:string,
+        "the Aliens Office"^^xsd:string ;
+    echr:hasJurisdictionState "Belgium"^^xsd:string ;
+    echr:hasPartyName "Aliens Office"^^xsd:string,
+        "the Aliens Office"^^xsd:string ;
+    echr:hasSupportingQuote "On 13 September 2016 the Aliens Office, the administrative body responsible for issuing visas (see paragraph 45 below), refused to grant “humanitarian visas” to the applicants and informed them of its decisions by an email of 29 September 2016, transmitted through the visa department of the Belgian embassy in Beirut."^^xsd:string,
+        "a rejection by the Aliens Office of a request for a visa with limited territorial validity, lodged on the basis of Article 25 § 1 (a) of the Visa Code"^^xsd:string,
+        "the failure by the Aliens Office to comply with a judgment of the Aliens Appeals Board"^^xsd:string .
+
+doc:applicants a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicants"^^xsd:string ;
+    echr:hasPartyName "the applicants"^^xsd:string ;
+    echr:hasPersonName "the applicants"^^xsd:string ;
+    echr:hasSupportingQuote "The applicants complained that the Belgian authorities’ refusal to issue them with the so-called “humanitarian” visas had exposed them to a situation incompatible with Article 3 of the Convention"^^xsd:string,
+        "the applicants sent a formal notice, served by bailiff, to the Belgian authorities seeking execution of the Aliens Appeals Board’s judgment of 20 October 2016"^^xsd:string .
+

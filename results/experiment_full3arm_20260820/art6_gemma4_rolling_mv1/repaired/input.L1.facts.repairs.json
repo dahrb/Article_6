@@ -1,0 +1,70 @@
+{
+  "source": "results/experiment_full3arm_20260820/art6_gemma4_rolling_mv1/repaired/input.L1.facts.ttl",
+  "operations": [
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only",
+      "rationale": "The authority doc:regionalProsecutorRila is missing a required echr:hasAuthorityName. I will promote its rdfs:label to this property.",
+      "action": "add",
+      "subject": "doc:regionalProsecutorRila",
+      "predicate": "echr:hasAuthorityName",
+      "object": "Regional Prosecutor of Rila",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": "en",
+      "status": "applied",
+      "pass": 1
+    },
+    {
+      "finding": "a participation must record exactly one party",
+      "rationale": "The validator reports a violation for doc:participationPoliceNotify, but the values list shows it already has one party (doc:ruseMunicipalPolice). This is likely a false positive or a typing issue where the party node is not typed as echr:Party. I will ensure the party is typed correctly.",
+      "action": "add",
+      "subject": "doc:ruseMunicipalPolice",
+      "predicate": "rdf:type",
+      "object": "echr:Party",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied",
+      "pass": 1
+    },
+    {
+      "finding": "a participation must record exactly one party",
+      "rationale": "The validator reports a violation for doc:participationHomeStaffReturn, but the values list shows it already has one party (doc:pastraSocialCareHome). I will ensure the party is typed correctly.",
+      "action": "add",
+      "subject": "doc:pastraSocialCareHome",
+      "predicate": "rdf:type",
+      "object": "echr:Party",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied",
+      "pass": 1
+    },
+    {
+      "finding": "a participation must record exactly one party",
+      "rationale": "The validator reports a violation for doc:participation_court_mayor_1, but the values list shows it already has one party (doc:dupnitsaDistrictCourt). I will ensure the party is typed correctly.",
+      "action": "add",
+      "subject": "doc:dupnitsaDistrictCourt",
+      "predicate": "rdf:type",
+      "object": "echr:Party",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied",
+      "pass": 1
+    },
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node doc:regionalProsecutorRila is missing a required echr:hasAuthorityName. Based on the label/context of the node, I will promote its label to the authority name property.",
+      "action": "add",
+      "subject": "doc:regionalProsecutorRila",
+      "predicate": "echr:hasAuthorityName",
+      "object": "Regional Prosecutor of Rila",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": "en",
+      "status": "applied",
+      "pass": 2
+    }
+  ]
+}

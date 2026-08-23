@@ -1,0 +1,15 @@
+{
+  "source": "results/experiment_full3arm_20260820/art6_gemma4_native_mv2/repaired/input.L6.facts.ttl",
+  "operations": [
+    {
+      "finding": "stub_orphan_sweep",
+      "rationale": "Typed nodes carrying nothing but rdf:type/rdfs:label with no inbound reference; nothing downstream can use them.",
+      "action": "delete_node",
+      "nodes": [
+        "doc:participation_5"
+      ],
+      "status": "applied",
+      "pass": 1
+    }
+  ]
+}

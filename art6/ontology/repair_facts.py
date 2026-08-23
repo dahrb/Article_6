@@ -68,6 +68,7 @@ import json
 import os
 import re
 import shutil
+import sys
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -751,6 +752,37 @@ def warm_up_grammar(client: OpenAI, model: str) -> None:
         print(f"  grammar warm-up skipped: {type(exc).__name__}: {str(exc)[:150]}")
 
 
+# OpenAI's reasoning models (the gpt-5 family) reject `max_tokens` outright
+# with a 400 -- "Unsupported parameter: 'max_tokens' is not supported with this
+# model. Use 'max_completion_tokens' instead." -- because the cap has to cover
+# reasoning tokens as well as visible output. vLLM-served models accept
+# `max_tokens` and not the newer name. There is no single spelling that works
+# everywhere, so pick by model and fall back on the 400 if a future model
+# changes sides.
+#
+# This cost the 2026-08-20 experiment ALL FOUR gpt-5-mini repair runs: the cap
+# was added as a runaway-generation guard, tested only against vLLM, and every
+# hosted repair call 400'd on the first request. `repair_facts.py` caught the
+# exception per document, printed "N/N document(s) failed to repair", and
+# exited 0 -- so the driver logged a clean finish and the repaired/ trees were
+# byte-identical copies of raw/. See the report's "Repair" section.
+_REASONING_TOKEN_PARAM_PREFIXES = ("gpt-5", "o1", "o3", "o4")
+
+
+def _token_limit_kwargs(model: str, max_tokens: int) -> dict[str, int]:
+    """The output-cap kwarg this model actually accepts."""
+    name = model.lower().lstrip()
+    if name.startswith(_REASONING_TOKEN_PARAM_PREFIXES):
+        return {"max_completion_tokens": max_tokens}
+    return {"max_tokens": max_tokens}
+
+
+def _is_wrong_token_param_error(exc: Exception) -> bool:
+    """True for the 400 that says we picked the wrong spelling of the cap."""
+    text = str(exc)
+    return "max_tokens" in text and "max_completion_tokens" in text
+
+
 def call_repair_model(
     client: OpenAI,
     model: str,
@@ -784,6 +816,7 @@ def call_repair_model(
       a bad one, and a real inability to help still surfaces after that.
     """
     last_error: Exception | None = None
+    token_kwargs = _token_limit_kwargs(model, max_tokens)
     for attempt in range(1, max_attempts + 1):
         try:
             completion = client.chat.completions.parse(
@@ -794,10 +827,22 @@ def call_repair_model(
                 ],
                 response_format=RepairPatch,
                 temperature=temperature,
-                max_tokens=max_tokens,
+                **token_kwargs,
             )
         except Exception as exc:  # noqa: BLE001
             last_error = exc
+            if _is_wrong_token_param_error(exc):
+                # Wrong spelling for this endpoint: swap it and retry WITHOUT
+                # consuming a sampling attempt -- nothing was sampled, the
+                # request never reached the model.
+                other = (
+                    {"max_completion_tokens": max_tokens}
+                    if "max_tokens" in token_kwargs
+                    else {"max_tokens": max_tokens}
+                )
+                if other != token_kwargs:
+                    token_kwargs = other
+                    max_attempts += 1
             continue
         choice = completion.choices[0]
         if choice.finish_reason == "length":
@@ -1299,7 +1344,7 @@ def repair_one(
     print(f"    wrote {relative(facts_ttl)} (backup at {relative(backup_path)})")
 
 
-def main() -> None:
+def main() -> int:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
@@ -1425,7 +1470,13 @@ def main() -> None:
             )
     if failures:
         print(f"  {failures}/{len(facts_files)} document(s) failed to repair")
+    # Exit non-zero so a driver script cannot record a repair phase as clean
+    # when it repaired nothing. On 2026-08-20 every gpt-5-mini repair call
+    # 400'd on an unsupported parameter, all ten documents failed, and this
+    # returned 0 -- the run looked finished and the "repaired" output was an
+    # unmodified copy of raw. The count was in the log; nothing acted on it.
+    return 1 if failures else 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

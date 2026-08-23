@@ -1,0 +1,306 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/42daa4a6ebe0/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/42daa4a6ebe0> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:7"^^xsd:string .
+
+doc:alexanderBaglay a echr:NaturalPerson ;
+    rdfs:label "Alexander Baglay"^^xsd:string ;
+    echr:hasPersonName "Alexander Baglay"^^xsd:string ;
+    echr:hasSupportingQuote "Alexander Baglay said"^^xsd:string .
+
+doc:case_63716_00 a echr:CaseDocument ;
+    echr:hasApplicant doc:sawoniuk ;
+    echr:hasApplicationNumber "63716/00"^^xsd:string ;
+    echr:hasCaseName "Anthony SAWONIUK against the United Kingdom"^^xsd:string ;
+    echr:hasDomesticProceeding doc:trialSawoniuk ;
+    echr:hasRespondentState "United Kingdom"^^xsd:string .
+
+doc:partial_acquittal_counts_2_4 a echr:DomesticProceeding ;
+    rdfs:label "Partial acquittal on counts 2 and 4"^^xsd:string ;
+    echr:followsProceeding doc:trialSawoniuk ;
+    echr:hasCourt doc:courtPotts ;
+    echr:hasOutcome echr:OutcomeAcquittal ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "the judge ruled that there was insufficient evidence as a matter of law to support a conviction on counts 2 and 4 and that the applicant should be acquitted"^^xsd:string .
+
+doc:petitionHouseOfLords a echr:DomesticProceeding ;
+    rdfs:label "Petition for leave to appeal to the House of Lords"^^xsd:string ;
+    echr:followsProceeding doc:appealConviction ;
+    echr:hasCourt doc:houseOfLordsUk ;
+    echr:hasDecisionDate "2000-06-15"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partSawoniukHouseOfLords ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 15 June 2000, the House of Lords refused the petition for leave to appeal."^^xsd:string .
+
+doc:policeInterviewZan a echr:AdministrativeAction ;
+    rdfs:label "Police interview of Fedor Zan"^^xsd:string ;
+    echr:hasCourt doc:britishPolice ;
+    echr:hasDecisionDate "1996-02-01"^^xsd:date ;
+    echr:hasSupportingQuote "Mr Zan first described this incident to British police in February 1996"^^xsd:string .
+
+doc:tariffFixing a echr:AdministrativeAction ;
+    rdfs:label "Fixing of the tariff"^^xsd:string ;
+    echr:hasCourt doc:homeSecretaryUk ;
+    echr:hasSupportingQuote "The Home Secretary has yet to fix the tariff."^^xsd:string ;
+    echr:isPending true .
+
+doc:tariffRecommendation a echr:DomesticEvent ;
+    rdfs:label "Tariff recommendation"^^xsd:string ;
+    echr:hasCourt doc:lordChiefJustice ;
+    echr:hasSupportingQuote "The Lord Chief Justice recommended a tariff (the period to be served for retribution and deterrence) of five years."^^xsd:string .
+
+doc:valodiaMelianuk a echr:NaturalPerson ;
+    rdfs:label "Valodia Melianuk"^^xsd:string ;
+    echr:hasPersonName "Valodia Melianuk"^^xsd:string ;
+    echr:hasSupportingQuote "his companion, Valodia Melianuk"^^xsd:string .
+
+doc:adjournmentWeekend a echr:Adjournment ;
+    rdfs:label "Weekend adjournment"^^xsd:string ;
+    echr:hasAdjournmentCause echr:DelayUnattributed ;
+    echr:hasSupportingQuote "a long adjournment over a weekend"^^xsd:string .
+
+doc:appealConviction a echr:DomesticProceeding ;
+    rdfs:label "Appeal against conviction"^^xsd:string ;
+    echr:followsProceeding doc:applicationStay,
+        doc:trialConviction ;
+    echr:hasCourt doc:courtOfAppealUk ;
+    echr:hasDecisionDate "2000-02-10"^^xsd:date ;
+    echr:hasExtractionNote "The Court of Appeal certified two points of law of general importance regarding the admissibility of evidence of other criminal activity and jury instructions on propensity."^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partSawoniukAppeal ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "In its judgment of 10 February 2000, the Court of Appeal rejected the applicant’s appeal."^^xsd:string .
+
+doc:applicationEvidenceExclusion a echr:DomesticProceeding ;
+    rdfs:label "Application to exclude evidence of Baglay and Melianuk"^^xsd:string ;
+    echr:hasCourt doc:courtPotts ;
+    echr:hasDecisionDate "1999-02-08"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "the defence made an application that the evidence of two witnesses, Ivan Baglay and Evgeny Melianuk, be excluded as inadmissible. On 8 February 1999, the judge ruled that the evidence of both witnesses was relevant and admissible"^^xsd:string .
+
+doc:applicationProvenance a echr:DomesticProceeding ;
+    rdfs:label "Application to call evidence on provenance of missing persons document"^^xsd:string ;
+    echr:followsProceeding doc:trialSawoniuk ;
+    echr:hasCourt doc:courtPotts ;
+    echr:hasDecisionDate "1999-03-24"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partProsecutionProvenance ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "The prosecution made an application to the judge to call evidence to prove the provenance of the missing persons document in order to rebut the allegation of fabrication. On 24 March 1999, the judge refused the application."^^xsd:string .
+
+doc:applicationStay a echr:DomesticProceeding ;
+    rdfs:label "Application to stay trial"^^xsd:string ;
+    echr:hasCourt doc:courtPotts ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeOther ;
+    echr:hasSupportingQuote "the trial should be stayed as an abuse on the basis that due inter alia to the lapse of time since events the applicant could not obtain a fair trial. The application was refused by the trial judge"^^xsd:string .
+
+doc:courtOfAppealUk a echr:DomesticAuthority ;
+    rdfs:label "Court of Appeal"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Court of Appeal"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string ;
+    echr:hasSupportingQuote "The applicant appealed against conviction to the Court of Appeal."^^xsd:string .
+
+doc:decisionJuryEvidence a echr:DomesticProceeding ;
+    rdfs:label "Decision on evidence before jury"^^xsd:string ;
+    echr:followsProceeding doc:applicationEvidenceExclusion ;
+    echr:hasCourt doc:courtPotts ;
+    echr:hasDecisionDate "1999-02-26"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "on 26 February 1999, that it should go before the jury"^^xsd:string .
+
+doc:decisionReinstateBail a echr:DomesticProceeding ;
+    rdfs:label "Decision to reinstate bail"^^xsd:string ;
+    echr:followsProceeding doc:highCourtBailReview ;
+    echr:hasCourt doc:courtPotts ;
+    echr:hasDecisionDate "1999-03-29"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "the trial judge reinstated bail"^^xsd:string .
+
+doc:decisionWithdrawBail a echr:DomesticProceeding ;
+    rdfs:label "Decision to withdraw bail"^^xsd:string ;
+    echr:followsProceeding doc:applicationProvenance ;
+    echr:hasAdjournment doc:adjournmentWeekend ;
+    echr:hasCourt doc:courtPotts ;
+    echr:hasDecisionDate "1999-03-25"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partSawoniukBail ;
+    echr:hasPreTrialDetention doc:detentionBelmarsh ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 25 March 1999... the judge after consulting counsel decided to withdraw the applicant’s bail."^^xsd:string .
+
+doc:detentionBelmarsh a echr:PreTrialDetention ;
+    rdfs:label "Detention at Belmarsh prison"^^xsd:string ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:sawoniuk ;
+    echr:hasSupportingQuote "he would be held in the hospital wing of Belmarsh prison"^^xsd:string .
+
+doc:fedorZan a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Fedor Zan"^^xsd:string ;
+    echr:hasPersonName "Fedor Zan"^^xsd:string ;
+    echr:hasSupportingQuote "the evidence of Fedor Zan"^^xsd:string .
+
+doc:highCourtBailReview a echr:DomesticProceeding ;
+    rdfs:label "High Court review of bail"^^xsd:string ;
+    echr:followsProceeding doc:decisionWithdrawBail ;
+    echr:hasCourt doc:highCourtUk ;
+    echr:hasDecisionDate "1999-03-26"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partSawoniukHighCourt ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "An application was made to the High Court to review bail on 26 March 1999. It was refused."^^xsd:string .
+
+doc:highCourtUk a echr:DomesticAuthority ;
+    rdfs:label "High Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "High Court"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string ;
+    echr:hasSupportingQuote "An application was made to the High Court"^^xsd:string .
+
+doc:homeSecretaryUk a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Home Secretary"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Home Secretary"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string ;
+    echr:hasSupportingQuote "The Home Secretary has yet to fix the tariff."^^xsd:string .
+
+doc:houseOfLordsUk a echr:DomesticAuthority ;
+    rdfs:label "House of Lords"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "House of Lords"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string ;
+    echr:hasSupportingQuote "the House of Lords refused the petition for leave to appeal"^^xsd:string .
+
+doc:legalRepSawoniuk a echr:LegalRepresentative ;
+    rdfs:label "Counsel and solicitors"^^xsd:string ;
+    echr:hasSupportingQuote "represented by senior and junior counsel and solicitors"^^xsd:string .
+
+doc:lordChiefJustice a echr:DomesticAuthority ;
+    rdfs:label "Lord Chief Justice"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Lord Chief Justice"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string .
+
+doc:partProsecutionProvenance a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "The prosecution made an application to the judge to call evidence"^^xsd:string ;
+    echr:participatingParty doc:prosecutionUk .
+
+doc:partProsecutionTrial a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the prosecution case was that the applicant had been a willing volunteer"^^xsd:string ;
+    echr:participatingParty doc:prosecutionUk .
+
+doc:partSawoniukAppeal a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "The applicant appealed against conviction to the Court of Appeal."^^xsd:string ;
+    echr:participatingParty doc:sawoniuk .
+
+doc:partSawoniukBail a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "decided to withdraw the applicant’s bail"^^xsd:string ;
+    echr:participatingParty doc:sawoniuk .
+
+doc:partSawoniukHighCourt a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "An application was made to the High Court to review bail"^^xsd:string ;
+    echr:participatingParty doc:sawoniuk .
+
+doc:partSawoniukHouseOfLords a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the House of Lords refused the petition for leave to appeal"^^xsd:string ;
+    echr:participatingParty doc:sawoniuk .
+
+doc:partSawoniukTrial a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the applicant was represented by senior and junior counsel and solicitors"^^xsd:string ;
+    echr:participatingParty doc:sawoniuk .
+
+doc:partZanTrial a echr:Participation ;
+    echr:hasExtractionNote "Distance of witness from scene calculated as 127 or 128 paces."^^xsd:string,
+        "Witness estimated no fewer than 15 Jewish women were present."^^xsd:string,
+        "Witness observed the event for 4-5 minutes."^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the core of the prosecution case on count three was contained in the evidence of Fedor Zan"^^xsd:string ;
+    echr:participatingParty doc:fedorZan .
+
+doc:police_interview_1996 a echr:AdministrativeAction ;
+    rdfs:label "Police interviews of Anthony Sawoniuk"^^xsd:string ;
+    echr:hasCourt doc:britishPolice ;
+    echr:hasProceedingStartDate "1996-04-01"^^xsd:date ;
+    echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police"^^xsd:string .
+
+doc:trialConviction a echr:DomesticProceeding ;
+    rdfs:label "Conviction and sentencing of Anthony Sawoniuk"^^xsd:string ;
+    echr:followsProceeding doc:decisionReinstateBail ;
+    echr:hasCourt doc:courtPotts ;
+    echr:hasDecisionDate "1999-04-01"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 1 April 1999, the jury convicted the applicant of counts 1 and 3. The applicant was sentenced to a mandatory term of life imprisonment."^^xsd:string .
+
+doc:britishPolice a echr:DomesticAuthority ;
+    rdfs:label "British police"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "British police"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string .
+
+doc:prosecutionUk a echr:Party ;
+    rdfs:label "The Prosecution"^^xsd:string ;
+    echr:hasPartyName "the prosecution"^^xsd:string .
+
+doc:trialSawoniuk a echr:DomesticProceeding ;
+    rdfs:label "Trial of Anthony Sawoniuk"^^xsd:string ;
+    echr:followsProceeding doc:decisionJuryEvidence,
+        doc:police_interview_1996 ;
+    echr:hasCourt doc:courtPotts ;
+    echr:hasDecisionDate "1999-04-01"^^xsd:date ;
+    echr:hasExtractionNote "Identification made 56 years after the event."^^xsd:string,
+        "Witness was a 13 year old boy at the time of the event."^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:partProsecutionTrial,
+        doc:partSawoniukTrial,
+        doc:partZanTrial ;
+    echr:hasProceedingStartDate "1999-02-08"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "In the trial which took place between 8 February and 1 April 1999, before Mr Justice Potts and a jury"^^xsd:string .
+
+doc:sawoniuk a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Anthony SAWONIUK"^^xsd:string ;
+    echr:hasPersonName "Anthony SAWONIUK"^^xsd:string ;
+    echr:isRepresentedBy doc:legalRepSawoniuk .
+
+doc:courtPotts a echr:DomesticAuthority ;
+    rdfs:label "Court of Mr Justice Potts"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Mr Justice Potts and a jury"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string .
+

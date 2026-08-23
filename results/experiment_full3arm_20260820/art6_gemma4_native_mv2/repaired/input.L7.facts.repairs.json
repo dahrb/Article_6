@@ -1,0 +1,50 @@
+{
+  "source": "results/experiment_full3arm_20260820/art6_gemma4_native_mv2/repaired/input.L7.facts.ttl",
+  "operations": [
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both describe the Court of Appeal proceeding; doc:appeal_proceeding_1 contains the specific decision date (2000-02-10) and a more complete quote.",
+      "action": "merge",
+      "keep": "doc:appeal_proceeding_1",
+      "drop": "doc:appeal_1",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 0,
+        "self_loops_dropped": 0,
+        "properties_moved": 4,
+        "survivor_value_kept": 4
+      },
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both describe the trial of the applicant; doc:trial_proceeding_1 contains the decision date and outcome.",
+      "action": "merge",
+      "keep": "doc:trial_proceeding_1",
+      "drop": "doc:trial_1",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 2,
+        "self_loops_dropped": 0,
+        "properties_moved": 4,
+        "survivor_value_kept": 4
+      },
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both describe the trial before Mr Justice Potts; doc:trial_proceeding_1 is the primary trial node with the outcome.",
+      "action": "merge",
+      "keep": "doc:trial_proceeding_1",
+      "drop": "doc:trialSawoniuk",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 0,
+        "properties_moved": 5,
+        "survivor_value_kept": 5
+      },
+      "pass": 1
+    }
+  ]
+}

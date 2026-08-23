@@ -1,0 +1,628 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/42daa4a6ebe0/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/42daa4a6ebe0> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:7"^^xsd:string .
+
+doc:case_doc_1 a echr:CaseDocument ;
+    rdfs:label "Case document (extracted proceedings)"^^xsd:string,
+        "ECHR case document"^^xsd:string,
+        "Strasbourg judgment (source text)"^^xsd:string,
+        "case document"^^xsd:string ;
+    echr:hasApplicant doc:applicant_1,
+        doc:partyApplicant ;
+    echr:hasDomesticProceeding doc:coa_appeal_2000_02_10,
+        doc:proc_court_of_appeal_1,
+        doc:proc_house_of_lords_1,
+        doc:proc_trial_1,
+        doc:proceedingPoliceOfficerEvidence,
+        doc:proceedingPretrialStayApplication,
+        doc:proceedingSiteVisitDomachevo,
+        doc:proceeding_acquittal_counts_2_4,
+        doc:proceeding_admissibility_19990208,
+        doc:proceeding_appeal_1,
+        doc:proceeding_evidence_to_jury_19990226,
+        doc:proceeding_trial_1,
+        doc:trial_1999_03_29 ;
+    echr:hasSupportingQuote "As regards the judge’s failure to stay the proceedings for abuse, the Court of Appeal found that he had correctly applied his discretion on the basis that the reliability of the evidence could be properly and fairly tested in the trial and subject to his powers of direction as trial judge and that it had not been established that the continuance of the proceedings would deny the applicant a fair trial."^^xsd:string,
+        "The judgment concluded:"^^xsd:string .
+
+doc:case_document_63716_00 a echr:CaseDocument ;
+    rdfs:label "Application no. 63716/00 by Anthony SAWONIUK against the United Kingdom"^^xsd:string ;
+    echr:hasApplicant doc:partyAnthonySawoniuk ;
+    echr:hasApplicationNumber "63716/00"^^xsd:string ;
+    echr:hasDomesticProceeding doc:admin_interview_1996_04_01,
+        doc:admin_interview_1996_04_03,
+        doc:procChargedOnIndictment,
+        doc:proc_trial_1999 ;
+    echr:hasExtractionNote "According to German records, on 19 to 20 September 1942, 2,900 Jewish people were massacred in Domachevo."^^xsd:string,
+        "application introduced on 5 December 2000"^^xsd:string,
+        "application registered on 11 December 2000"^^xsd:string ;
+    echr:hasJudgmentDate "2001-05-29"^^xsd:date ;
+    echr:hasRespondentState "United Kingdom"^^xsd:string ;
+    echr:hasSupportingQuote "According to German records, on 19 to 20 September 1942, 2,900 Jewish people were massacred in Domachevo."^^xsd:string,
+        "Having regard to the above application introduced on 5 December 2000 and registered on 11 December 2000,"^^xsd:string,
+        "The European Court of Human Rights (Third Section), sitting on 29 May 2001 as a Chamber composed of"^^xsd:string .
+
+doc:proceeding_high_court_26mar1999 a echr:DomesticProceeding ;
+    rdfs:label "proceeding_high_court_26mar1999"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_bail_withdrawal_25mar1999 ;
+    echr:hasCourt doc:authorityHighCourt ;
+    echr:hasDecisionDate "1999-03-26"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelSupervisoryReview ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasParticipation doc:participationApplicantHighcourt ;
+    echr:hasSupportingQuote "An application was made to the High Court to review bail on 26 March 1999. It was refused."^^xsd:string .
+
+doc:trial_judge_1 a echr:NaturalPerson ;
+    rdfs:label "the trial judge"^^xsd:string ;
+    echr:hasPersonName "the trial judge"^^xsd:string ;
+    echr:hasSupportingQuote "the trial judge reinstated bail"^^xsd:string .
+
+doc:adjournmentWeekend a echr:Adjournment ;
+    rdfs:label "adjournment_weekend"^^xsd:string ;
+    echr:hasSupportingQuote "a long adjournment over a weekend"^^xsd:string .
+
+doc:adjournment_1999_03_29 a echr:Adjournment ;
+    rdfs:label "overnight adjournment of the trial"^^xsd:string ;
+    echr:hasAdjournmentDate "1999-03-29"^^xsd:date ;
+    echr:hasSupportingQuote "the shortness of the overnight adjournment of the trial"^^xsd:string .
+
+doc:authorityHighCourt a echr:DomesticAuthority ;
+    rdfs:label "High Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "High Court"^^xsd:string ;
+    echr:hasSupportingQuote "An application was made to the High Court to review bail on 26 March 1999."^^xsd:string .
+
+doc:authorityTrialMrJusticePotts a echr:DomesticAuthority ;
+    rdfs:label "Mr Justice Potts and a jury"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Mr Justice Potts and a jury"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string ;
+    echr:hasSupportingQuote "In the trial which took place between 8 February and 1 April 1999, before Mr Justice Potts and a jury, the applicant was represented by senior and junior counsel and solicitors."^^xsd:string .
+
+doc:coa_appeal_2000_02_10 a echr:DomesticProceeding ;
+    rdfs:label "Court of Appeal judgment (10 February 2000)"^^xsd:string ;
+    echr:followsProceeding doc:trial_1999_03_29 ;
+    echr:hasCourt doc:court_of_appeal_1 ;
+    echr:hasDecisionDate "2000-02-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_appeal_applicant_1 ;
+    echr:hasSupportingQuote "In its judgment of 10 February 2000, the Court of Appeal rejected the applicant’s appeal."^^xsd:string,
+        "The applicant appealed against conviction to the Court of Appeal."^^xsd:string .
+
+doc:domauthCourtOfAppeal a echr:DomesticAuthority ;
+    rdfs:label "Court of Appeal"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasSupportingQuote "The Court of Appeal refused leave of appeal to the House of Lords but certified two points of law of general importance"^^xsd:string .
+
+doc:domauthFirstInstance a echr:DomesticAuthority ;
+    rdfs:label "first-instance court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasSupportingQuote "we conclude that the jury was in a very advantageous position having seen the site and heard the evidence, to form a reliable judgment on count three."^^xsd:string .
+
+doc:domauthHouseOfLords a echr:DomesticAuthority ;
+    rdfs:label "House of Lords"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasSupportingQuote "On 15 June 2000, the House of Lords refused the petition for leave to appeal."^^xsd:string .
+
+doc:legalRepSolicitorsAndCounsel a echr:LegalRepresentative ;
+    rdfs:label "senior and junior counsel and solicitors"^^xsd:string ;
+    echr:hasPersonName "senior and junior counsel and solicitors"^^xsd:string ;
+    echr:hasSupportingQuote "the applicant was represented by senior and junior counsel and solicitors"^^xsd:string .
+
+doc:legal_rep_1 a echr:LegalRepresentative ;
+    rdfs:label "defence counsel"^^xsd:string ;
+    echr:hasPersonName "defence counsel"^^xsd:string ;
+    echr:hasSupportingQuote "defence counsel made representations"^^xsd:string .
+
+doc:legal_rep_counsel_1 a echr:LegalRepresentative ;
+    rdfs:label "counsel for the applicant"^^xsd:string ;
+    echr:hasPersonName "counsel for the applicant"^^xsd:string ;
+    echr:hasSupportingQuote "During the evidence of a police officer, counsel for the applicant posed questions concerning the applicant’s claim that he had served in the Polish Free Army"^^xsd:string .
+
+doc:part_appeal_applicant_1 a echr:Participation ;
+    rdfs:label "participation of the applicant in the Court of Appeal (initiating)"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "The applicant appealed against conviction to the Court of Appeal."^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:part_trial_applicant_1 a echr:Participation ;
+    rdfs:label "participation of the applicant at the trial (responding)"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 1 April 1999, the jury convicted the applicant of counts 1 and 3."^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participationApplicantBail a echr:Participation ;
+    rdfs:label "participation_applicant_bail"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 25 March 1999, before the closing speeches were due to begin and a long adjournment over a weekend, the judge after consulting counsel decided to withdraw the applicant’s bail."^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participationApplicantCharged a echr:Participation ;
+    rdfs:label "participation: applicant at charging"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "The applicant was charged on an indictment with four counts of murder:"^^xsd:string ;
+    echr:participatingParty doc:partyAnthonySawoniuk .
+
+doc:participationApplicantHighcourt a echr:Participation ;
+    rdfs:label "participation_applicant_highcourt"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "An application was made to the High Court to review bail on 26 March 1999. It was refused."^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participationApplicantRefusal a echr:Participation ;
+    rdfs:label "participation_applicant_refusal"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "He considered that at this late stage of the trial any evidence as to the origin of the document might in those circumstances have a disproportionate effect on the consideration of jury of the evidence as a whole."^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participationApplicantTrial a echr:Participation ;
+    rdfs:label "participation_applicant_trial"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "When the applicant gave evidence, he referred to his service in the Polish army, again with reference to the Polish records, and stated that he had in fact left Domachevo at the end of 1943, not during 1944 as had been part of a formal admission by his legal representatives."^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participationProsecutionBail a echr:Participation ;
+    rdfs:label "participation_prosecution_bail"^^xsd:string ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "On 25 March 1999, before the closing speeches were due to begin and a long adjournment over a weekend, the judge after consulting counsel decided to withdraw the applicant’s bail."^^xsd:string ;
+    echr:participatingParty doc:partyProsecution .
+
+doc:participationProsecutionCharged a echr:Participation ;
+    rdfs:label "participation: prosecution at charging"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "The applicant was charged on an indictment with four counts of murder:"^^xsd:string ;
+    echr:participatingParty doc:partyProsecution .
+
+doc:participationProsecutionRefusal a echr:Participation ;
+    rdfs:label "participation_prosecution_refusal"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "The prosecution made an application to the judge to call evidence to prove the provenance of the missing persons document in order to rebut the allegation of fabrication."^^xsd:string ;
+    echr:participatingParty doc:partyProsecution .
+
+doc:participationProsecutionTrial a echr:Participation ;
+    rdfs:label "participation_prosecution_trial"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "Prosecution counsel asked him whether he had ever served in the German army and he denied it very emphatically."^^xsd:string ;
+    echr:participatingParty doc:partyProsecution .
+
+doc:participation_acquittal_applicant_1 a echr:Participation ;
+    rdfs:label "participation of the applicant in judge's mid-trial ruling on counts 2 and 4"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "At the close of the prosecution case, the judge ruled that there was insufficient evidence as a matter of law to support a conviction on counts 2 and 4 and that the applicant should be acquitted."^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_acquittal_prosecution_1 a echr:Participation ;
+    rdfs:label "participation of the prosecution in judge's mid-trial ruling on counts 2 and 4"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "At the close of the prosecution case, the judge ruled that there was insufficient evidence as a matter of law to support a conviction on counts 2 and 4"^^xsd:string ;
+    echr:participatingParty doc:party_prosecution_1 .
+
+doc:participation_admissibility_applicant_19990208 a echr:Participation ;
+    rdfs:label "participation of the applicant in admissibility ruling of 1999-02-08"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "The defence also made an application that the evidence of two witnesses, Ivan Baglay and Evgeny Melianuk, be excluded as inadmissible."^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_admissibility_prosecution_19990208 a echr:Participation ;
+    rdfs:label "participation of the prosecution in admissibility ruling of 1999-02-08"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 8 February 1999, the judge ruled that the evidence of both witnesses was relevant and admissible"^^xsd:string ;
+    echr:participatingParty doc:party_prosecution_1 .
+
+doc:participation_applicant_appeal_1 a echr:Participation ;
+    rdfs:label "participation of applicant at appeal"^^xsd:string ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "As regards the judge’s failure to stay the proceedings for abuse, the Court of Appeal found that he had correctly applied his discretion..."^^xsd:string ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_applicant_trial_1 a echr:Participation ;
+    rdfs:label "participation of applicant at trial"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "These directions, he said, were given by the [applicant]."^^xsd:string ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_applicant_trial_1999 a echr:Participation ;
+    rdfs:label "participation: applicant at trial 1999"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "In the trial which took place between 8 February and 1 April 1999, before Mr Justice Potts and a jury, the applicant was represented by senior and junior counsel and solicitors."^^xsd:string ;
+    echr:participatingParty doc:partyAnthonySawoniuk .
+
+doc:participation_court_of_appeal_applicant_1 a echr:Participation ;
+    rdfs:label "participation of applicant in Court of Appeal"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "The Court of Appeal refused leave of appeal to the House of Lords"^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_hol_applicant_1 a echr:Participation ;
+    rdfs:label "participation of applicant in House of Lords petition"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 15 June 2000, the House of Lords refused the petition for leave to appeal."^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_police_applicant_1 a echr:Participation ;
+    rdfs:label "participation of the applicant during police officer evidence"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "During the evidence of a police officer, counsel for the applicant posed questions concerning the applicant’s claim that he had served in the Polish Free Army"^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_police_prosecution_1 a echr:Participation ;
+    rdfs:label "participation of the prosecution during police officer evidence"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "The police officer also made reference to a missing persons document, obtained from German records, which referred to the applicant as going missing from a Waffen SS unit in late November 1944."^^xsd:string ;
+    echr:participatingParty doc:party_prosecution_1 .
+
+doc:participation_pretrial_applicant_1 a echr:Participation ;
+    rdfs:label "participation of the applicant in pre-trial stay application"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "Before the commencement of the proceedings, the defence made a number of applications: that the trial should be stayed as an abuse on the basis that due inter alia to the lapse of time since events the applicant could not obtain a fair trial."^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_pretrial_prosecution_1 a echr:Participation ;
+    rdfs:label "participation of the prosecution in pre-trial stay application"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "The application was refused by the trial judge who considered that it was entirely speculative as to whether the unavailability of witnesses was a detriment or a bonus, that the evidence of the eye-witnesses called by the prosecution could be properly and rigorously tested within the confines of the trial process"^^xsd:string ;
+    echr:participatingParty doc:party_prosecution_1 .
+
+doc:participation_prosecution_appeal_1 a echr:Participation ;
+    rdfs:label "participation of prosecution at appeal"^^xsd:string ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "The Court of Appeal found no basis to fault the judge’s approach to the evidence concerning Mr Zan’s identification of the applicant."^^xsd:string ;
+    echr:participatingParty doc:fedorZan .
+
+doc:participation_prosecution_trial_1 a echr:Participation ;
+    rdfs:label "participation of prosecution at trial"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "The core of the prosecution case on count three was contained in the evidence of Fedor Zan."^^xsd:string ;
+    echr:participatingParty doc:fedorZan .
+
+doc:participation_prosecution_trial_1999 a echr:Participation ;
+    rdfs:label "participation: prosecution at trial 1999"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "In the trial which took place between 8 February and 1 April 1999, before Mr Justice Potts and a jury, the applicant was represented by senior and junior counsel and solicitors."^^xsd:string ;
+    echr:participatingParty doc:partyProsecution .
+
+doc:participation_sitevisit_applicant_1 a echr:Participation ;
+    rdfs:label "participation of the applicant in site visit at Domachevo"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "During the trial the judge and jury visited the location at Domachevo"^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_sitevisit_prosecution_1 a echr:Participation ;
+    rdfs:label "participation of the prosecution in site visit at Domachevo"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "During the trial the judge and jury visited the location at Domachevo"^^xsd:string ;
+    echr:participatingParty doc:party_prosecution_1 .
+
+doc:participation_to_jury_applicant_19990226 a echr:Participation ;
+    rdfs:label "participation of the applicant in decision of 1999-02-26 to send evidence to jury"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "and, on 26 February 1999, that it should go before the jury."^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_to_jury_prosecution_19990226 a echr:Participation ;
+    rdfs:label "participation of the prosecution in decision of 1999-02-26 to send evidence to jury"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "and, on 26 February 1999, that it should go before the jury."^^xsd:string ;
+    echr:participatingParty doc:party_prosecution_1 .
+
+doc:participation_trial_applicant_1 a echr:Participation ;
+    rdfs:label "participation of applicant in trial"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "grave consequences of conviction to the appellant"^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_witness_zan_trial_1 a echr:Participation ;
+    rdfs:label "participation of Fedor Zan at trial"^^xsd:string ;
+    echr:hasPartySide echr:SideThirdParty ;
+    echr:hasSupportingQuote "He said that as he was walking through the woods he heard crying and shouting. He hid himself in the bushes and observed what happened."^^xsd:string ;
+    echr:participatingParty doc:fedorZan .
+
+doc:proc_house_of_lords_1 a echr:DomesticProceeding ;
+    rdfs:label "House of Lords petition for leave to appeal (refused)"^^xsd:string ;
+    echr:followsProceeding doc:proc_court_of_appeal_1 ;
+    echr:hasCourt doc:domauthHouseOfLords ;
+    echr:hasDecisionDate "2000-06-15"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_hol_applicant_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 15 June 2000, the House of Lords refused the petition for leave to appeal. No reasons were given."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:proc_trial_1999 a echr:DomesticProceeding ;
+    rdfs:label "trial before Mr Justice Potts and a jury (8 February - 1 April 1999)"^^xsd:string ;
+    echr:followsProceeding doc:procChargedOnIndictment ;
+    echr:hasCourt doc:authorityTrialMrJusticePotts ;
+    echr:hasDecisionDate "1999-04-01"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participation_applicant_trial_1999,
+        doc:participation_prosecution_trial_1999 ;
+    echr:hasProceedingStartDate "1999-02-08"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "In the trial which took place between 8 February and 1 April 1999, before Mr Justice Potts and a jury, the applicant was represented by senior and junior counsel and solicitors."^^xsd:string .
+
+doc:proceedingPoliceOfficerEvidence a echr:DomesticProceeding ;
+    rdfs:label "evidence of a police officer and judge's hearsay direction"^^xsd:string ;
+    echr:followsProceeding doc:proceedingSiteVisitDomachevo ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participation_police_applicant_1,
+        doc:participation_police_prosecution_1 ;
+    echr:hasSupportingQuote "During the evidence of a police officer, counsel for the applicant posed questions concerning the applicant’s claim that he had served in the Polish Free Army and reference was made to Polish military records which were never formally proved but which by agreement were before the jury. The police officer also made reference to a missing persons document, obtained from German records, which referred to the applicant as going missing from a Waffen SS unit in late November 1944. This document had not been put in evidence. The judge directed the jury that hearsay was not evidence, that the document to which the officer had referred had not been prepared by him and that, accordingly, the document was not evidence."^^xsd:string .
+
+doc:proceedingTrialEvidence a echr:DomesticProceeding ;
+    rdfs:label "trial_hearing_evidence"^^xsd:string ;
+    echr:hasCourt doc:authorityTrial ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participationApplicantTrial,
+        doc:participationProsecutionTrial ;
+    echr:hasSupportingQuote "When the applicant gave evidence, he referred to his service in the Polish army, again with reference to the Polish records, and stated that he had in fact left Domachevo at the end of 1943, not during 1944 as had been part of a formal admission by his legal representatives."^^xsd:string .
+
+doc:proceeding_acquittal_counts_2_4 a echr:DomesticProceeding ;
+    rdfs:label "judge ruled insufficient evidence to support a conviction on counts 2 and 4 and ordered acquittal"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_evidence_to_jury_19990226 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeAcquittal ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_acquittal_applicant_1,
+        doc:participation_acquittal_prosecution_1 ;
+    echr:hasSupportingQuote "At the close of the prosecution case, the judge ruled that there was insufficient evidence as a matter of law to support a conviction on counts 2 and 4 and that the applicant should be acquitted."^^xsd:string .
+
+doc:proceeding_appeal_1 a echr:DomesticProceeding ;
+    rdfs:label "Court of Appeal decision"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_trial_1 ;
+    echr:hasCourt doc:court_of_appeal_1 ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasParticipation doc:participation_applicant_appeal_1,
+        doc:participation_prosecution_appeal_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "The Court of Appeal found no basis to fault the judge’s approach to the evidence concerning Mr Zan’s identification of the applicant."^^xsd:string .
+
+doc:proceeding_bail_withdrawal_25mar1999 a echr:DomesticProceeding ;
+    rdfs:label "proceeding_bail_withdrawal_25mar1999"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_refusal_24mar1999 ;
+    echr:hasAdjournment doc:adjournmentWeekend ;
+    echr:hasCourt doc:authorityTrial ;
+    echr:hasDecisionDate "1999-03-25"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeasureImposed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationApplicantBail,
+        doc:participationProsecutionBail ;
+    echr:hasSupportingQuote "On 25 March 1999, before the closing speeches were due to begin and a long adjournment over a weekend, the judge after consulting counsel decided to withdraw the applicant’s bail."^^xsd:string .
+
+doc:proceeding_refusal_24mar1999 a echr:DomesticProceeding ;
+    rdfs:label "proceeding_refusal_24mar1999"^^xsd:string ;
+    echr:followsProceeding doc:proceedingTrialEvidence ;
+    echr:hasCourt doc:authorityTrial ;
+    echr:hasDecisionDate "1999-03-24"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasParticipation doc:participationApplicantRefusal,
+        doc:participationProsecutionRefusal ;
+    echr:hasSupportingQuote "On 24 March 1999, the judge refused the application."^^xsd:string .
+
+doc:repApplicantLegalRepresentatives a echr:LegalRepresentative ;
+    rdfs:label "his legal representatives"^^xsd:string ;
+    echr:hasPersonName "his legal representatives"^^xsd:string ;
+    echr:hasSupportingQuote "not during 1944 as had been part of a formal admission by his legal representatives."^^xsd:string .
+
+doc:repProsecutionCounsel a echr:LegalRepresentative ;
+    rdfs:label "Prosecution counsel"^^xsd:string ;
+    echr:hasPersonName "Prosecution counsel"^^xsd:string ;
+    echr:hasSupportingQuote "Prosecution counsel asked him whether he had ever served in the German army and he denied it very emphatically."^^xsd:string .
+
+doc:admin_interview_1996_04_01 a echr:AdministrativeAction ;
+    rdfs:label "interview by British police 1 April 1996"^^xsd:string ;
+    echr:hasCourt doc:partyApplicant ;
+    echr:hasParticipation doc:participation_applicant_interview_1996_04_01,
+        doc:participation_police_interview_1996_04_01 ;
+    echr:hasProceedingStartDate "1996-04-01"^^xsd:date ;
+    echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation."^^xsd:string .
+
+doc:admin_interview_1996_04_03 a echr:AdministrativeAction ;
+    rdfs:label "interview by British police 3 April 1996"^^xsd:string ;
+    echr:followsProceeding doc:admin_interview_1996_04_01 ;
+    echr:hasCourt doc:partyApplicant ;
+    echr:hasParticipation doc:participation_applicant_interview_1996_04_01,
+        doc:participation_police_interview_1996_04_01 ;
+    echr:hasProceedingStartDate "1996-04-03"^^xsd:date ;
+    echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation."^^xsd:string .
+
+doc:court_of_appeal_1 a echr:DomesticAuthority ;
+    rdfs:label "Court of Appeal"^^xsd:string,
+        "the Court of Appeal"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "the Court of Appeal"^^xsd:string ;
+    echr:hasSupportingQuote "In its judgment of 10 February 2000, the Court of Appeal rejected the applicant’s appeal."^^xsd:string,
+        "The Court of Appeal found that he had correctly applied his discretion on the basis that the reliability of the evidence could be properly and fairly tested in the trial"^^xsd:string .
+
+doc:participation_applicant_interview_1996_04_01 a echr:Participation ;
+    rdfs:label "participation: applicant at interview 1996-04-01"^^xsd:string,
+        "participation: applicant at interview 1996-04-03"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation."^^xsd:string ;
+    echr:participatingParty doc:partyAnthonySawoniuk .
+
+doc:participation_police_interview_1996_04_01 a echr:Participation ;
+    rdfs:label "participation: police at interview 1996-04-01"^^xsd:string,
+        "participation: police at interview 1996-04-03"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation."^^xsd:string ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:procChargedOnIndictment a echr:DomesticProceeding ;
+    rdfs:label "charged on an indictment (four counts)"^^xsd:string ;
+    echr:followsProceeding doc:admin_interview_1996_04_03 ;
+    echr:hasExtractionNote "Count 1: that between 19 and 27 September 1942 he had murdered a Jewess in Domachevo in circumstances constituting a violation of the laws and customs of war"^^xsd:string,
+        "Count 4: that between 19 and 31 December 1942 he had murdered a Jew known as Mir Barlas in Domachevo in circumstances constituting a violation of the laws and customs of war"^^xsd:string ;
+    echr:hasParticipation doc:participationApplicantCharged,
+        doc:participationProsecutionCharged ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "Count 1: that between 19 and 27 September 1942 he had murdered a Jewess in Domachevo in circumstances constituting a violation of the laws and customs of war; ... Count 4: that between 19 and 31 December 1942 he had murdered a Jew known as Mir Barlas in Domachevo in circumstances constituting a violation of the laws and customs of war."^^xsd:string,
+        "The applicant was charged on an indictment with four counts of murder:"^^xsd:string .
+
+doc:proc_court_of_appeal_1 a echr:DomesticProceeding ;
+    rdfs:label "Court of Appeal decision (refused leave; certified points)"^^xsd:string ;
+    echr:followsProceeding doc:proc_trial_1 ;
+    echr:hasCourt doc:domauthCourtOfAppeal ;
+    echr:hasExtractionNote "point 1: Whether evidence of other criminal activity, not charged in the indictment, allegedly committed by the defendant is admissible to prove that the defendant is one of a group of people, one of whom must have committed the offence charged or under a broader basis, by which the jury ought to have had evidence of the whole background to the offence in order to enable them to see the offences charged in context."^^xsd:string,
+        "point 2: If such evidence was admissible, must the jury be instructed in terms that they must not treat the evidence as proof of propensity."^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeRefusedExamination ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_court_of_appeal_applicant_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "The Court of Appeal refused leave of appeal to the House of Lords but certified two points of law of general importance, namely:"^^xsd:string .
+
+doc:proc_trial_1 a echr:DomesticProceeding ;
+    rdfs:label "first-instance trial"^^xsd:string ;
+    echr:hasCourt doc:domauthFirstInstance ;
+    echr:hasExtractionNote "13 year old"^^xsd:string,
+        "56 years"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_trial_applicant_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "Given the unique circumstances of this case and the grave consequences of conviction to the appellant, we have considered with care whether there is any more general ground upon which these convictions could be regarded as unsafe."^^xsd:string .
+
+doc:proceedingPretrialStayApplication a echr:DomesticProceeding ;
+    rdfs:label "application that the trial should be stayed as an abuse"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participation_pretrial_applicant_1,
+        doc:participation_pretrial_prosecution_1 ;
+    echr:hasSupportingQuote "Before the commencement of the proceedings, the defence made a number of applications: that the trial should be stayed as an abuse on the basis that due inter alia to the lapse of time since events the applicant could not obtain a fair trial. The application was refused by the trial judge who considered that it was entirely speculative as to whether the unavailability of witnesses was a detriment or a bonus, that the evidence of the eye-witnesses called by the prosecution could be properly and rigorously tested within the confines of the trial process, and that any points which the defence might have about the reliability of the evidence could be fairly accommodated within the trial process."^^xsd:string .
+
+doc:proceedingSiteVisitDomachevo a echr:DomesticProceeding ;
+    rdfs:label "judge and jury site visit at Domachevo"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_evidence_to_jury_19990226 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participation_sitevisit_applicant_1,
+        doc:participation_sitevisit_prosecution_1 ;
+    echr:hasSupportingQuote "During the trial the judge and jury visited the location at Domachevo, including the site in a forest where one witness, Fedor Zan, claimed to have seen the applicant execute a number of Jewish women, including the victim specified in Count 3."^^xsd:string .
+
+doc:proceeding_admissibility_19990208 a echr:DomesticProceeding ;
+    rdfs:label "judge ruled that the evidence of both witnesses was relevant and admissible"^^xsd:string ;
+    echr:followsProceeding doc:proceedingPretrialStayApplication ;
+    echr:hasDecisionDate "1999-02-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participation_admissibility_applicant_19990208,
+        doc:participation_admissibility_prosecution_19990208 ;
+    echr:hasSupportingQuote "On 8 February 1999, the judge ruled that the evidence of both witnesses was relevant and admissible"^^xsd:string .
+
+doc:proceeding_trial_1 a echr:DomesticProceeding ;
+    rdfs:label "trial (first instance)"^^xsd:string ;
+    echr:hasCourt doc:trial_court_1 ;
+    echr:hasExtractionNote "127 or 128 paces"^^xsd:string,
+        "4-5 minutes"^^xsd:string,
+        "no fewer than 15 Jewish women"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeUnknown ;
+    echr:hasParticipation doc:participation_applicant_trial_1,
+        doc:participation_prosecution_trial_1,
+        doc:participation_witness_zan_trial_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "He hid himself in the bushes and observed what happened. The [applicant] had a submachine gun. The women turned to face the pit and the [applicant] mowed them down with the machine gun."^^xsd:string .
+
+doc:trial_1999_03_29 a echr:DomesticProceeding ;
+    rdfs:label "the trial"^^xsd:string ;
+    echr:hasAdjournment doc:adjournment_1999_03_29 ;
+    echr:hasCourt doc:trial_court_1 ;
+    echr:hasDecisionDate "1999-04-01"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_trial_applicant_1 ;
+    echr:hasSupportingQuote "On 1 April 1999, the jury convicted the applicant of counts 1 and 3."^^xsd:string,
+        "On hearing re-assurances from defence counsel that arrangements would be made for transporting the applicant to and from the court room and for ensuring his welfare in his own home, and having regard to the shortness of the overnight adjournment of the trial, the trial judge reinstated bail."^^xsd:string,
+        "The Home Secretary has yet to fix the tariff."^^xsd:string,
+        "The Lord Chief Justice recommended a tariff (the period to be served for retribution and deterrence) of five years."^^xsd:string,
+        "The applicant was sentenced to a mandatory term of life imprisonment."^^xsd:string .
+
+doc:trial_court_1 a echr:DomesticAuthority ;
+    rdfs:label "the trial court"^^xsd:string,
+        "trial judge"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "the judge"^^xsd:string,
+        "the trial judge"^^xsd:string ;
+    echr:hasSupportingQuote "the judge’s failure to stay the proceedings"^^xsd:string .
+
+doc:applicant_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the [applicant]"^^xsd:string ;
+    echr:hasPersonName "the [applicant]"^^xsd:string ;
+    echr:hasSupportingQuote "These directions, he said, were given by the [applicant]."^^xsd:string .
+
+doc:authorityTrial a echr:DomesticAuthority ;
+    rdfs:label "the judge"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "the judge"^^xsd:string ;
+    echr:hasSupportingQuote "The judge ruled that it was permissible to put to him questions concerning the Polish military records and permitted prosecution counsel to ask the applicant to look at the missing persons document and put questions on that document."^^xsd:string .
+
+doc:fedorZan a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Fedor Zan"^^xsd:string,
+        "the prosecution"^^xsd:string ;
+    echr:hasPartyName "the prosecution"^^xsd:string ;
+    echr:hasPersonName "Fedor Zan"^^xsd:string ;
+    echr:hasSupportingQuote "The core of the prosecution case on count three was contained in the evidence of Fedor Zan."^^xsd:string .
+
+doc:proceeding_evidence_to_jury_19990226 a echr:DomesticProceeding ;
+    rdfs:label "decision that the evidence should go before the jury"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_admissibility_19990208 ;
+    echr:hasDecisionDate "1999-02-26"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participation_to_jury_applicant_19990226,
+        doc:participation_to_jury_prosecution_19990226 ;
+    echr:hasSupportingQuote "and, on 26 February 1999, that it should go before the jury."^^xsd:string .
+
+doc:partyAnthonySawoniuk a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Anthony SAWONIUK"^^xsd:string ;
+    echr:hasPersonName "Anthony SAWONIUK"^^xsd:string ;
+    echr:hasSupportingQuote "Application no. 63716/00 by Anthony SAWONIUK against the United Kingdom"^^xsd:string ;
+    echr:isRepresentedBy doc:legalRepSolicitorsAndCounsel .
+
+doc:partyProsecution a echr:Party ;
+    rdfs:label "the prosecution"^^xsd:string ;
+    echr:hasPartyName "the prosecution"^^xsd:string ;
+    echr:hasSupportingQuote "In essence, the prosecution case was that the applicant had been a willing volunteer in the local police force and engaged in the search and kill operation carried out after the massacre of the Jewish inhabitants of the ghetto in Domachevo on 19-20 September 1942."^^xsd:string,
+        "Prosecution counsel asked him whether he had ever served in the German army and he denied it very emphatically."^^xsd:string ;
+    echr:isRepresentedBy doc:repProsecutionCounsel .
+
+doc:party_prosecution_1 a echr:Party ;
+    rdfs:label "the prosecution"^^xsd:string ;
+    echr:hasPartyName "the prosecution"^^xsd:string ;
+    echr:hasSupportingQuote "Witnesses for the prosecution alleged that they had seen the applicant engaged in acts of violence against Jewish persons and that he had been involved in executions."^^xsd:string .
+
+doc:partyApplicant a echr:DomesticAuthority,
+        echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "British police"^^xsd:string,
+        "the applicant"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "British police"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string ;
+    echr:hasPartyName "the applicant"^^xsd:string ;
+    echr:hasPersonName "the applicant"^^xsd:string ;
+    echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation."^^xsd:string,
+        "When the applicant gave evidence, he referred to his service in the Polish army, again with reference to the Polish records, and stated that he had in fact left Domachevo at the end of 1943, not during 1944 as had been part of a formal admission by his legal representatives."^^xsd:string,
+        "Witnesses for the prosecution alleged that they had seen the applicant engaged in acts of violence against Jewish persons and that he had been involved in executions."^^xsd:string,
+        "grave consequences of conviction to the appellant"^^xsd:string,
+        "the applicant"^^xsd:string ;
+    echr:isRepresentedBy doc:legal_rep_1,
+        doc:legal_rep_counsel_1,
+        doc:repApplicantLegalRepresentatives .
+

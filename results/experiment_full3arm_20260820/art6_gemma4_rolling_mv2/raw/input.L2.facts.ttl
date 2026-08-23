@@ -1,0 +1,311 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/1d3abbb7e196/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/1d3abbb7e196> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:2"^^xsd:string .
+
+doc:caseBeerRegan a echr:CaseDocument ;
+    rdfs:label "Beer and Regan v. Germany"^^xsd:string ;
+    echr:hasApplicant doc:karlheinzBeer,
+        doc:philipRegan ;
+    echr:hasApplicationNumber "28934/95"^^xsd:string ;
+    echr:hasCaseName "Beer and Regan v. Germany"^^xsd:string ;
+    echr:hasDomesticProceeding doc:application_lodged_1995,
+        doc:commissionAdmissibilityDecision,
+        doc:commission_opinion_1997,
+        doc:proceedingDismissalTi,
+        doc:proceedingStatusEsa ;
+    echr:hasJudgmentDate "1999-02-18"^^xsd:date ;
+    echr:hasRespondentState "Federal Republic of Germany"^^xsd:string .
+
+doc:esaAppealsBoardProceeding a echr:DomesticProceeding ;
+    rdfs:label "Potential recourse to ESA Appeals Board"^^xsd:string ;
+    echr:hasCourt doc:appealsBoardEsa ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasParticipation doc:partBeerAppeals,
+        doc:partReganAppeals ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "the remedies available to the applicants were in particular an appeal to the ESA Appeals Board if they wished to assert contractual rights"^^xsd:string .
+
+doc:esa_staff_regulations_33_1 a echr:AdministrativeAction ;
+    rdfs:label "ESA Staff Regulation 33 § 1"^^xsd:string ;
+    echr:hasSupportingQuote "Regulation 33 § 1 of the ESA Staff Regulations"^^xsd:string .
+
+doc:esa_staff_regulations_33_6 a echr:AdministrativeAction ;
+    rdfs:label "ESA Staff Regulation 33 § 6"^^xsd:string ;
+    echr:hasSupportingQuote "Regulation 33 § 6 of the ESA Staff Regulations"^^xsd:string .
+
+doc:esoc a echr:DomesticAuthority ;
+    rdfs:label "European Space Operations Centre"^^xsd:string ;
+    echr:hasAuthorityName "European Space Operations Centre"^^xsd:string ;
+    echr:hasSupportingQuote "establishing a European Space Operations Centre"^^xsd:string .
+
+doc:esro a echr:Party ;
+    rdfs:label "ESRO"^^xsd:string ;
+    echr:hasPartyName "ESRO"^^xsd:string ;
+    echr:hasSupportingQuote "concluded between the Government of the Federal Republic of Germany and ESRO"^^xsd:string .
+
+doc:eventBeerSettlement a echr:AdministrativeAction ;
+    rdfs:label "Settlement between Mr Karlheinz Beer and Company T"^^xsd:string ;
+    echr:hasDecisionDate "1995-06-20"^^xsd:date ;
+    echr:hasExtractionNote "Settlement amounts: DEM 14,000 for lawyer's fees and DEM 305,000 for loss of job"^^xsd:string ;
+    echr:hasParticipation doc:partBeerSettlement,
+        doc:partTSettlement ;
+    echr:hasSupportingQuote "Under the terms of an agreement concluded on 20 June 1995 with the first applicant, terminating his contract of employment on 30 June 1995, the company T. undertook to pay to the first applicant the sum of DEM 14,000 for lawyer’s fees incurred in labour court proceedings concerning his dismissal and DEM 305,000 for the loss of his job."^^xsd:string .
+
+doc:eventEsaPlacement a echr:AdministrativeAction ;
+    rdfs:label "Placement at European Space Agency"^^xsd:string ;
+    echr:hasDecisionDate "1982"^^xsd:gYear ;
+    echr:hasSupportingQuote "In 1982 the first applicant, a civil engineer by profession and employed by the French company S., was placed at the disposal of the European Space Agency"^^xsd:string .
+
+doc:eventReganPlacement a echr:AdministrativeAction ;
+    rdfs:label "Placement of Mr Philip Regan at ESA"^^xsd:string ;
+    echr:hasDecisionDate "1991"^^xsd:gYear ;
+    echr:hasSupportingQuote "The second applicant, a systems programmer and employed by the Italian company T.I., was placed at the disposal of the European Space Agency to perform services at the European Space Operations Centre in Darmstadt in 1991."^^xsd:string .
+
+doc:eventReganSettlement a echr:AdministrativeAction ;
+    rdfs:label "Settlement between Mr Philip Regan and Company T.I."^^xsd:string ;
+    echr:hasDecisionDate "1994-09-06"^^xsd:date ;
+    echr:hasExtractionNote "Settlement amount: 22,000 DEM for loss of job"^^xsd:string ;
+    echr:hasParticipation doc:partReganTi,
+        doc:partTiSettlement ;
+    echr:hasSupportingQuote "According to this settlement, the second applicant’s employment with the company T.I. had terminated on 31 December 1993, and the company T.I. undertook to pay to the second applicant the sum of 22,000 marks (DEM) for loss of job."^^xsd:string .
+
+doc:foreignFirmClaims a echr:DomesticProceeding ;
+    rdfs:label "Potential claims against hiring foreign firms"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:partBeerFirms,
+        doc:partReganFirms ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "the applicants were also left with other possibilities, such as claiming compensation from the foreign firm which had hired them out"^^xsd:string .
+
+doc:governmentGermany a echr:Party ;
+    rdfs:label "Government of the Federal Republic of Germany"^^xsd:string ;
+    echr:hasPartyName "Government of the Federal Republic of Germany"^^xsd:string ;
+    echr:hasSupportingQuote "the Government of the Federal Republic of Germany"^^xsd:string .
+
+doc:appealsBoardEsa a echr:DomesticAuthority ;
+    rdfs:label "Appeals Board of the Agency"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Appeals Board"^^xsd:string ;
+    echr:hasSupportingQuote "There shall be set up an Appeals Board, independent of the Agency, to hear disputes relating to any explicit or implicit decision taken by the Agency"^^xsd:string .
+
+doc:application_lodged_1995 a echr:DomesticProceeding ;
+    rdfs:label "Application to the Commission"^^xsd:string ;
+    echr:hasParticipation doc:part_beer_1995,
+        doc:part_regan_1995 ;
+    echr:hasProceedingStartDate "1995-09-13"^^xsd:date ;
+    echr:hasSupportingQuote "lodged with the Commission under former Article 25 by a German national, Mr Karlheinz Beer, and by a British national, Mr Philip Regan, on 13 September 1995."^^xsd:string .
+
+doc:commission_opinion_1997 a echr:DomesticProceeding ;
+    rdfs:label "Commission Opinion on Violation"^^xsd:string ;
+    echr:followsProceeding doc:commissionAdmissibilityDecision ;
+    echr:hasDecisionDate "1997-12-02"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasSupportingQuote "In its report of 2 December 1997 (former Article 31 of the Convention) it expressed the opinion that there had been no violation of Article 6 § 1 of the Convention"^^xsd:string .
+
+doc:committeeStaffRepresentatives a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Committee of Staff Representatives of the Coordinated Organisations"^^xsd:string ;
+    echr:hasPartyName "Committee of Staff Representatives of the Coordinated Organisations"^^xsd:string ;
+    echr:hasSupportingQuote "The Committee of Staff Representatives of the Coordinated Organisations in their written comments"^^xsd:string .
+
+doc:companyT a echr:Party ;
+    rdfs:label "Company T"^^xsd:string ;
+    echr:hasPartyName "T"^^xsd:string ;
+    echr:hasSupportingQuote "the French company T"^^xsd:string .
+
+doc:eventReganDismissal a echr:AdministrativeAction ;
+    rdfs:label "Dismissal of Mr Philip Regan by T.I."^^xsd:string ;
+    echr:hasDecisionDate "1993-09-27"^^xsd:date ;
+    echr:hasSupportingQuote "by letter of 27 September 1993, his employer T.I. had dismissed him."^^xsd:string .
+
+doc:federalLabourCourt a echr:DomesticAuthority ;
+    rdfs:label "Federal Labour Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Federal Labour Court"^^xsd:string ;
+    echr:hasJurisdictionState "Germany"^^xsd:string .
+
+doc:germanCourts a echr:DomesticAuthority ;
+    rdfs:label "German courts"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "German courts"^^xsd:string ;
+    echr:hasSupportingQuote "the German courts did not exceed their margin of appreciation"^^xsd:string .
+
+doc:partBeerAppeals a echr:Participation ;
+    rdfs:label "Participation of Mr Karlheinz Beer in ESA Appeals Board recourse"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:karlheinzBeer .
+
+doc:partBeerEsa a echr:Participation ;
+    rdfs:label "Participation of Mr Karlheinz Beer in ESA status proceeding"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:karlheinzBeer .
+
+doc:partBeerFirms a echr:Participation ;
+    rdfs:label "Participation of Mr Karlheinz Beer in claims against firms"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:karlheinzBeer .
+
+doc:partBeerSettlement a echr:Participation ;
+    rdfs:label "Participation of Mr Karlheinz Beer in settlement with Company T"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:karlheinzBeer .
+
+doc:partCommitteeStaff a echr:Participation ;
+    rdfs:label "Participation of Committee of Staff Representatives in proceedings"^^xsd:string ;
+    echr:hasPartySide echr:SideThirdParty ;
+    echr:participatingParty doc:committeeStaffRepresentatives .
+
+doc:partEsaEsa a echr:Participation ;
+    rdfs:label "Participation of ESA in status proceeding"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:esa .
+
+doc:partReganAppeals a echr:Participation ;
+    rdfs:label "Participation of Mr Philip Regan in ESA Appeals Board recourse"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:philipRegan .
+
+doc:partReganFirms a echr:Participation ;
+    rdfs:label "Participation of Mr Philip Regan in claims against firms"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:philipRegan .
+
+doc:partTSettlement a echr:Participation ;
+    rdfs:label "Participation of Company T in settlement with Mr Karlheinz Beer"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:companyT .
+
+doc:partTiSettlement a echr:Participation ;
+    rdfs:label "Participation of Company T.I. in settlement with Mr Philip Regan"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:companyTi .
+
+doc:partTiTi a echr:Participation ;
+    rdfs:label "Participation of T.I. in dismissal proceeding"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:companyTi .
+
+doc:part_beer_1995 a echr:Participation ;
+    rdfs:label "Participation of Mr Karlheinz Beer in application 1995"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:karlheinzBeer .
+
+doc:part_esa_status_2 a echr:Participation ;
+    rdfs:label "Participation of ESA in status proceeding (defendant)"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:esa .
+
+doc:part_regan_1995 a echr:Participation ;
+    rdfs:label "Participation of Mr Philip Regan in application 1995"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:philipRegan .
+
+doc:proceedingDismissalTi a echr:DomesticProceeding ;
+    rdfs:label "Proceedings against T.I. for dismissal"^^xsd:string ;
+    echr:followsProceeding doc:eventReganDismissal ;
+    echr:hasCourt doc:darmstadtLabourCourt ;
+    echr:hasDecisionDate "1994-09-06"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeSettled ;
+    echr:hasOutcomeDirection echr:DirectionMixed ;
+    echr:hasParticipation doc:partReganTi,
+        doc:partTiTi ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "In the proceedings instituted by the second applicant against his dismissal by the company T.I.... a settlement had been reached in the Darmstadt Labour Court on 6 September 1994."^^xsd:string .
+
+doc:proceedingStatusEsa a echr:DomesticProceeding ;
+    rdfs:label "Proceedings against ESA for employee status"^^xsd:string ;
+    echr:followsProceeding doc:proceedingWaiteKennedy ;
+    echr:hasCourt doc:darmstadtLabourCourt,
+        doc:germanCourts ;
+    echr:hasDecisionDate "1995-03-21"^^xsd:date ;
+    echr:hasExtractionNote "Action brought under the German Provision of Labour (Temporary Staff) Act"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partBeerEsa,
+        doc:partCommitteeStaff,
+        doc:partEsaEsa,
+        doc:partReganTi,
+        doc:part_esa_status_2 ;
+    echr:hasProceedingStartDate "1993-10"^^xsd:gYearMonth ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "In October and November 1993 the applicants instituted proceedings before the Darmstadt Labour Court ( Arbeitsgericht ) against ESA... On 21 March 1995 the Darmstadt Labour Court... declared the applicants’ respective actions inadmissible."^^xsd:string,
+        "The Labour Court considered that ESA enjoyed immunity from jurisdiction according to the ESA Convention and its Annex I."^^xsd:string,
+        "The applicants had access to the Darmstadt Labour Court, only to be told that their action was barred by operation of law."^^xsd:string,
+        "the Darmstadt Labour Court concluded that the conditions under section 20(2) of the German Courts Act for finding that the applicants’ action was inadmissible were fulfilled."^^xsd:string .
+
+doc:proceedingWaiteKennedy a echr:DomesticProceeding ;
+    rdfs:label "Federal Labour Court decision in Waite and Kennedy case"^^xsd:string ;
+    echr:hasCourt doc:federalLabourCourt ;
+    echr:hasDecisionDate "1993-11-10"^^xsd:date ;
+    echr:hasSupportingQuote "the decision of the Federal Labour Court of 10 November 1993 in the case concerning Mr Waite and Mr Kennedy"^^xsd:string .
+
+doc:commissionAdmissibilityDecision a echr:DomesticProceeding ;
+    rdfs:label "Commission Admissibility Decision"^^xsd:string ;
+    echr:hasDecisionDate "1997-02-24"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeClaimGranted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasSupportingQuote "On 24 February 1997 the Commission declared the application (no. 28934/95) admissible."^^xsd:string .
+
+doc:companyTi a echr:Party ;
+    rdfs:label "Company T.I."^^xsd:string ;
+    echr:hasPartyName "T.I."^^xsd:string ;
+    echr:hasSupportingQuote "the Italian company T.I."^^xsd:string .
+
+doc:darmstadtLabourCourt a echr:DomesticAuthority ;
+    rdfs:label "Darmstadt Labour Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Darmstadt Labour Court"^^xsd:string ;
+    echr:hasJurisdictionState "Germany"^^xsd:string ;
+    echr:hasSupportingQuote "Darmstadt Labour Court ( Arbeitsgericht )"^^xsd:string .
+
+doc:eHabscheid a echr:LegalRepresentative ;
+    rdfs:label "Mr E. Habscheid"^^xsd:string ;
+    echr:hasPersonName "Mr E. Habscheid"^^xsd:string ;
+    echr:hasSupportingQuote "Mr E. Habscheid , of the Dresden Bar, Adviser"^^xsd:string .
+
+doc:esa a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "European Space Agency"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "European Space Agency"^^xsd:string ;
+    echr:hasSupportingQuote "The European Space Agency (\"ESA\")"^^xsd:string .
+
+doc:wjHabscheid a echr:LegalRepresentative ;
+    rdfs:label "Mr W.J. Habscheid"^^xsd:string ;
+    echr:hasPersonName "Mr W.J. Habscheid"^^xsd:string ;
+    echr:hasSupportingQuote "for the applicants Mr W.J. Habscheid , of the Kempten Bar, Counsel"^^xsd:string .
+
+doc:partReganTi a echr:Participation ;
+    rdfs:label "Participation of Mr Philip Regan in ESA status proceeding"^^xsd:string,
+        "Participation of Mr Philip Regan in T.I. dismissal proceeding"^^xsd:string,
+        "Participation of Mr Philip Regan in settlement with T.I."^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:philipRegan .
+
+doc:philipRegan a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Philip Regan"^^xsd:string ;
+    rdfs:comment "born in 1960"^^xsd:string ;
+    echr:hasPersonName "Mr Philip Regan"^^xsd:string ;
+    echr:isRepresentedBy doc:eHabscheid,
+        doc:wjHabscheid .
+
+doc:karlheinzBeer a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Karlheinz Beer"^^xsd:string ;
+    rdfs:comment "born in 1952"^^xsd:string ;
+    echr:hasPersonName "Mr Karlheinz Beer"^^xsd:string ;
+    echr:isRepresentedBy doc:eHabscheid,
+        doc:wjHabscheid .
+

@@ -1,0 +1,304 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/89bc30c1867e/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/89bc30c1867e> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:9"^^xsd:string .
+
+doc:case_1 a echr:CaseDocument ;
+    echr:hasApplicant doc:applicant_1 ;
+    echr:hasDomesticProceeding doc:proceeding_1 .
+
+doc:case_18720_08 a echr:CaseDocument ;
+    echr:hasApplicant doc:baduashvili_1 ;
+    echr:hasApplicationNumber "18720/08"^^xsd:string ;
+    echr:hasCaseName "Malkhaz BADUASHVILI against Georgia"^^xsd:string ;
+    echr:hasDomesticProceeding doc:investigation_1 ;
+    echr:hasRespondentState "Georgia"^^xsd:string .
+
+doc:case_document_1 a echr:CaseDocument ;
+    echr:hasApplicant doc:applicant_1 ;
+    echr:hasDomesticProceeding doc:criminal_proceeding_mt_1,
+        doc:criminal_proceeding_zt_1,
+        doc:ill_treatment_investigation_1,
+        doc:supreme_court_appeal_1,
+        doc:trialFirstInstance .
+
+doc:proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "appeal proceeding"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:courtAppeal ;
+    echr:hasDecisionDate "2007-06-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_2 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction"^^xsd:string .
+
+doc:prosecutorial_review_1 a echr:ProsecutorialReview ;
+    rdfs:label "Appeal against refusal to re-question M.T."^^xsd:string ;
+    echr:followsProceeding doc:investigation_1 ;
+    echr:hasCourt doc:regional_prosecutor_1 ;
+    echr:hasParticipation doc:participation_mt_1 ;
+    echr:hasProceedingStartDate "2005-11-03"^^xsd:date ;
+    echr:hasSupportingQuote "On 3 November 2005 M.T. appealed to the regional prosecutor’s office against the investigator’s refusal to question him again."^^xsd:string .
+
+doc:abuladze_1 a echr:LegalRepresentative ;
+    rdfs:label "Ms S. Abuladze"^^xsd:string ;
+    echr:hasPersonName "Ms S. Abuladze"^^xsd:string .
+
+doc:admin_action_confrontation_1 a echr:AdministrativeAction ;
+    rdfs:label "rejection of first confrontation request"^^xsd:string ;
+    echr:hasCourt doc:investigator_1 ;
+    echr:hasDecisionDate "2005-11-03"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1,
+        doc:participation_2 ;
+    echr:hasSupportingQuote "On 3 November 2005 the applicant asked to confront M.T. His request was rejected by the investigator"^^xsd:string .
+
+doc:admin_action_confrontation_2 a echr:AdministrativeAction ;
+    rdfs:label "rejection of second confrontation request"^^xsd:string ;
+    echr:followsProceeding doc:admin_action_confrontation_1 ;
+    echr:hasCourt doc:investigator_1 ;
+    echr:hasDecisionDate "2005-11-16"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_3,
+        doc:participation_4 ;
+    echr:hasSupportingQuote "A second request by the applicant to have a confrontation with M.T., dated 15 November 2005, was rejected by the investigator on 16 November 2005"^^xsd:string .
+
+doc:authorityNationalForensicBureau a echr:DomesticAuthority ;
+    rdfs:label "National Forensic Bureau"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "National Forensic Bureau"^^xsd:string ;
+    echr:hasJurisdictionState "Georgia"^^xsd:string .
+
+doc:chief_inspector_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "chief inspector of the prison’s security unit"^^xsd:string ;
+    echr:hasPersonName "chief inspector of the prison’s security unit"^^xsd:string .
+
+doc:chief_prosecutor_1 a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Chief Prosecutor"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Chief Prosecutor"^^xsd:string .
+
+doc:courtAppeal a echr:DomesticAuthority ;
+    rdfs:label "Tbilisi Court of Appeal"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Tbilisi Court of Appeal"^^xsd:string .
+
+doc:criminal_proceeding_mt_1 a echr:DomesticProceeding ;
+    rdfs:label "Criminal proceedings against M.T."^^xsd:string ;
+    echr:hasDecisionDate "2006-12-26"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasParticipation doc:participation_mt_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 26 December 2006... they were convicted at first instance of obstructing justice by giving false testimony."^^xsd:string .
+
+doc:criminal_proceeding_zt_1 a echr:DomesticProceeding ;
+    rdfs:label "Criminal proceedings against Z.T."^^xsd:string ;
+    echr:hasDecisionDate "2007-01-23"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasParticipation doc:participation_zt_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On... 23 January 2007 respectively they were convicted at first instance of obstructing justice by giving false testimony."^^xsd:string .
+
+doc:detention_1 a echr:PreTrialDetention ;
+    rdfs:label "Pre-trial detention of Malkhaz Baduashvili"^^xsd:string ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:baduashvili_1 ;
+    echr:hasDetentionStartDate "2005-07-27"^^xsd:date ;
+    echr:hasSupportingQuote "He was arrested and remanded in custody on 27 July 2005."^^xsd:string .
+
+doc:ill_treatment_investigation_1 a echr:DomesticProceeding ;
+    rdfs:label "Investigation into allegations of ill-treatment"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participation_applicant_sc_1,
+        doc:participation_prosecutor_inv_1 ;
+    echr:hasProceedingStartDate "2010-08-31"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 31 August 2010 an investigation was opened into the applicant’s allegations."^^xsd:string .
+
+doc:investigating_authorities_1 a echr:DomesticAuthority ;
+    rdfs:label "Investigating Authorities"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "investigating authorities"^^xsd:string ;
+    echr:hasJurisdictionState "Georgia"^^xsd:string .
+
+doc:participation_prosecutor_inv_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:chief_prosecutor_1 .
+
+doc:participation_zt_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:zt_1 .
+
+doc:prison_governor_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "prison governor"^^xsd:string ;
+    echr:hasPersonName "prison governor"^^xsd:string .
+
+doc:regional_prosecutor_1 a echr:DomesticAuthority ;
+    rdfs:label "Regional Prosecutor's Office"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "regional prosecutor’s office"^^xsd:string ;
+    echr:hasJurisdictionState "Georgia"^^xsd:string .
+
+doc:representative_1 a echr:LegalRepresentative ;
+    rdfs:label "applicant's representative"^^xsd:string ;
+    echr:hasPersonName "applicant's representative"^^xsd:string .
+
+doc:supreme_court_1 a echr:DomesticAuthority ;
+    rdfs:label "Supreme Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Supreme Court"^^xsd:string .
+
+doc:supreme_court_appeal_1 a echr:DomesticProceeding ;
+    rdfs:label "Supreme Court appeal on points of law"^^xsd:string ;
+    echr:hasCourt doc:supreme_court_1 ;
+    echr:hasDecisionDate "2008-02-20"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeDeclaredInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_applicant_sc_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant inadmissible."^^xsd:string .
+
+doc:trialFirstInstance a echr:DomesticProceeding ;
+    rdfs:label "first-instance trial"^^xsd:string ;
+    echr:followsProceeding doc:admin_action_confrontation_2 ;
+    echr:hasCourt doc:courtFirstInstance ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participation_5,
+        doc:participation_6 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "during the trial at the first ‐ instance court"^^xsd:string .
+
+doc:zt_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Z.T."^^xsd:string ;
+    echr:hasPersonName "Z.T."^^xsd:string .
+
+doc:courtFirstInstance a echr:DomesticAuthority ;
+    rdfs:label "court of first instance"^^xsd:string,
+        "first-instance court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "court of first instance"^^xsd:string,
+        "first-instance court"^^xsd:string .
+
+doc:doctor_hospital_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "doctor who had examined the applicant upon his admission to Kutaisi Prison no. 2"^^xsd:string,
+        "doctor who had examined the applicant upon his admission to the prison hospital"^^xsd:string ;
+    echr:hasPersonName "doctor"^^xsd:string .
+
+doc:investigation_1 a echr:DomesticProceeding ;
+    rdfs:label "Criminal investigation into the murder of V.T."^^xsd:string,
+        "investigation into allegations of ill-treatment"^^xsd:string ;
+    echr:hasCourt doc:investigating_authorities_1 ;
+    echr:hasDecisionDate "2011-04-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participation_1,
+        doc:participation_2,
+        doc:participation_3,
+        doc:participation_4,
+        doc:participation_5,
+        doc:participation_6 ;
+    echr:hasPreTrialDetention doc:detention_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "Criminal proceedings against the applicant (a) Investigation"^^xsd:string,
+        "On 27 April 2011 the doctor, nurse and duty officer... were questioned as part of the investigation into his allegations."^^xsd:string,
+        "investigation into his allegations"^^xsd:string .
+
+doc:mT a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "M.T."^^xsd:string ;
+    echr:hasPersonName "M.T."^^xsd:string .
+
+doc:participation_3 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating,
+        echr:SideResponding ;
+    echr:participatingParty doc:applicant_1,
+        doc:prison_governor_1 .
+
+doc:participation_4 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:chief_inspector_1,
+        doc:investigator_1 .
+
+doc:participation_5 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1,
+        doc:doctor_hospital_1 .
+
+doc:participation_6 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding,
+        echr:SideThirdParty ;
+    echr:hasSupportingQuote "M.T. and Z.T. changed their testimony"^^xsd:string ;
+    echr:participatingParty doc:doctor_hospital_1,
+        doc:mT .
+
+doc:participation_applicant_sc_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_mt_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating,
+        echr:SideResponding ;
+    echr:hasSupportingQuote "M.T. appealed to the regional prosecutor’s office"^^xsd:string ;
+    echr:participatingParty doc:mT .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "first instance trial"^^xsd:string ;
+    echr:hasCourt doc:courtFirstInstance ;
+    echr:hasDecisionDate "2006-12-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 8 December 2006 the court of first instance convicted the applicant of aggravated murder and the illegal acquisition, possession and carrying of firearms"^^xsd:string .
+
+doc:baduashvili_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Malkhaz Baduashvili"^^xsd:string ;
+    echr:hasPersonName "Mr Malkhaz Baduashvili"^^xsd:string ;
+    echr:isRepresentedBy doc:abuladze_1 .
+
+doc:participation_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating,
+        echr:SideResponding ;
+    echr:hasSupportingQuote "Criminal proceedings against the applicant"^^xsd:string ;
+    echr:participatingParty doc:applicant_1,
+        doc:baduashvili_1 .
+
+doc:participation_2 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating,
+        echr:SideResponding ;
+    echr:participatingParty doc:applicant_1,
+        doc:authorityNationalForensicBureau,
+        doc:investigator_1 .
+
+doc:investigator_1 a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "the investigator"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "the investigator"^^xsd:string .
+
+doc:applicant_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicant"^^xsd:string ;
+    echr:hasPersonName "the applicant"^^xsd:string ;
+    echr:isRepresentedBy doc:representative_1 .
+

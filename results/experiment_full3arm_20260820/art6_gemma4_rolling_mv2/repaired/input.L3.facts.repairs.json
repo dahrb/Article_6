@@ -1,0 +1,20 @@
+{
+  "source": "results/experiment_full3arm_20260820/art6_gemma4_rolling_mv2/repaired/input.L3.facts.ttl",
+  "operations": [
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both nodes describe the same decision by the 13th Chamber of the Supreme Administrative Court on 2014-12-09. doc:proceeding_sac_chamber_13 is kept as it has more inbound links.",
+      "action": "merge",
+      "keep": "doc:proceeding_sac_chamber_13",
+      "drop": "doc:proceeding_sac_13_chamber",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 0,
+        "self_loops_dropped": 0,
+        "properties_moved": 4,
+        "survivor_value_kept": 6
+      },
+      "pass": 1
+    }
+  ]
+}

@@ -221,6 +221,11 @@ async def _run(args: argparse.Namespace) -> int:
 
         enable_response_repair()
 
+    if not args.no_turtle_repair:
+        from art6.ontology.turtle_repair import enable as enable_turtle_repair
+
+        enable_turtle_repair()
+
     config = Config()
     config.validate_llm_config()
 
@@ -561,6 +566,15 @@ def main() -> int:
             "Do not repair malformed facts-render JSON (mismatched bracket "
             "closers). Without repair these replies are dropped entirely -- "
             "see art6/ontology/response_repair.py -- so this is for A/B only."
+        ),
+    )
+    ap.add_argument(
+        "--no-turtle-repair",
+        action="store_true",
+        help=(
+            "Do not repair a premature '.' before a bare property "
+            "continuation in generated Turtle -- see "
+            "art6/ontology/turtle_repair.py -- so this is for A/B only."
         ),
     )
     ap.add_argument("--report", help="Write the run summary as JSON to this path.")

@@ -1,0 +1,799 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/15ef9b3a7c03/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/15ef9b3a7c03> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:4"^^xsd:string .
+
+doc:adminAdmissionSggh a echr:AdministrativeAction ;
+    rdfs:label "On 6 April 1995, soon after his release, the applicant was admitted to the Slovenj Gradec General Hospital where he stayed until 7 p.m."^^xsd:string ;
+    echr:hasParticipation doc:participationApplicantAdmissionSggh ;
+    echr:hasProceedingStartDate "1995-04-06"^^xsd:date ;
+    echr:hasSupportingQuote "On 6 April 1995, soon after his release, the applicant was admitted to the Slovenj Gradec General Hospital where he stayed until 7 p.m."^^xsd:string .
+
+doc:adminMedicalMaribor a echr:AdministrativeAction ;
+    rdfs:label "Next day, 7 April 1995, the applicant sought medical aid in the Maribor General Hospital."^^xsd:string ;
+    echr:hasParticipation doc:participationApplicantMedicalMaribor ;
+    echr:hasProceedingStartDate "1995-04-07"^^xsd:date ;
+    echr:hasSupportingQuote "Next day, 7 April 1995, the applicant sought medical aid in the Maribor General Hospital."^^xsd:string .
+
+doc:complaint_1995_04_12 a echr:AdministrativeAction ;
+    rdfs:label "criminal complaint lodged by the Slovenj Gradec Police on 12 April 1995"^^xsd:string ;
+    echr:hasParticipation doc:participationPoliceComplaintApplicant,
+        doc:participationPoliceComplaintPolice ;
+    echr:hasProceedingStartDate "1995-04-12"^^xsd:date ;
+    echr:hasSupportingQuote "On 12 April 1995 the Slovenj Gradec Police lodged a criminal complaint against the applicant for the criminal offence of “obstructing an official in the course of his duties” under section 302, paragraph 4-1 of the Slovenian Criminal Code, which referred to the same incident as the applicant’s criminal complaint."^^xsd:string .
+
+doc:criminalComplaintByApplicantNotice a echr:AdministrativeAction ;
+    rdfs:label "the applicant’s criminal complaint (mentioned as lodged)"^^xsd:string ;
+    echr:hasSupportingQuote "From the facts described above and from the contents of the criminal complaint [lodged against the applicant] it is evident that there exists a reasonable suspicion [ utemeljeni sum ] that Matko Aleksander on 5 April at 20.30 committed the criminal offence of obstructing an official in the course of his duties within the meaning of section 302/II of the Criminal Code of the Republic of Slovenia."^^xsd:string .
+
+doc:criminalComplaintSlovenjGradecPolice a echr:AdministrativeAction ;
+    rdfs:label "the criminal complaint of the Slovenj Gradec Police"^^xsd:string ;
+    echr:hasSupportingQuote "The criminal complaint of the Slovenj Gradec Police states that Aleksander Matko sustained injuries as a result of the use of force."^^xsd:string .
+
+doc:criminal_proceedings_1995_1998 a echr:DomesticProceeding ;
+    rdfs:label "criminal proceedings (pre-1998)"^^xsd:string ;
+    echr:followsProceeding doc:pretrial_investigation_1995 ;
+    echr:hasParticipation doc:participation_criminal_applicant_1995_1998,
+        doc:participation_criminal_state_1995_1998 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "the criminal proceedings had been unfair and excessively long (Article 6 of the Convention)."^^xsd:string ;
+    echr:isPending true .
+
+doc:domesticAuthorityMinistryInternalAffairs a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Ministry of Internal Affairs (MIA)"^^xsd:string ;
+    echr:hasAuthorityName "Ministry of Internal Affairs (\"the MIA\")"^^xsd:string ;
+    echr:hasSupportingQuote "On 4 and 5 April 1995 a Special Unit ( Specialna enota ), which was under the direct control of the Ministry of Internal Affairs (\"the MIA\") in cooperation with officers from the Slovenj Gradec Internal Affairs Administration ( Uprava za notranje zadeve – hereinafter referred as the \"Slovenj Gradec Police\") undertook a large-scale operation against the activities of a criminal organisation presumed to be operating on the territory of the town of Slovenj Gradec."^^xsd:string .
+
+doc:investigation_request_1997_01_17 a echr:DomesticProceeding ;
+    rdfs:label "a request for an investigation against Matko Aleksander was lodged with the investigating judge in the Slovenj Gradec District Court"^^xsd:string ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participationInvestigationApplicant,
+        doc:participationInvestigationPublicProsecutor ;
+    echr:hasProceedingStartDate "1997-01-17"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "In addition, on 17 January 1997, a request for an investigation against Matko Aleksander was lodged with the investigating judge in the Slovenj Gradec District Court, for, among other matters, obstructing an official in the course of his duties (...)."^^xsd:string .
+
+doc:objection_1999_01_27 a echr:DomesticProceeding ;
+    rdfs:label "applicant filed an objection to the indictment 27 January 1999"^^xsd:string ;
+    echr:followsProceeding doc:indictment_1998_12_28 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participationObjectionApplicant,
+        doc:participationObjectionPp ;
+    echr:hasProceedingStartDate "1999-01-27"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 27 January 1999 the applicant filed an objection to the indictment."^^xsd:string .
+
+doc:policeReportSlovenjGradec a echr:AdministrativeAction ;
+    rdfs:label "The Slovenj Gradec Police report"^^xsd:string ;
+    echr:hasSupportingQuote "The Slovenj Gradec Police report finds, inter alia , that D.P. and J.K. stopped the applicant’s car and that the Special Unit’s officers were under the command of M.J."^^xsd:string .
+
+doc:police_use_of_force_1995_04_05 a echr:EnforcementAction ;
+    rdfs:label "On 5 April 1995, at 20.30, physical force and handcuffs were used against Matko"^^xsd:string ;
+    echr:hasProceedingStartDate "1995-04-05"^^xsd:date ;
+    echr:hasSupportingQuote "On 5 April 1995, at 20.30, Aleksander Matko actively resisted the lawful procedure against him with the intention of preventing criminal police investigators from performing their official duties. Since their official duty could not be carried out otherwise, physical force and handcuffs were used against Matko in accordance with police powers."^^xsd:string .
+
+doc:proc_lawyer_sought_info_1997_01_06 a echr:ProsecutorialReview ;
+    rdfs:label "On 6 January 1997 the applicant’s lawyer sought information from the Public Prosecutor’s Office"^^xsd:string ;
+    echr:followsProceeding doc:proc_lawyer_sought_info_1996_10_21 ;
+    echr:hasParticipation doc:participation_lawyer_query_1996,
+        doc:participation_lawyer_query_prosecutor_1996 ;
+    echr:hasProceedingStartDate "1997-01-06"^^xsd:date ;
+    echr:hasSupportingQuote "On 21 October 1996 and 6 January 1997 the applicant’s lawyer sought information from the Public Prosecutor’s Office about the state of progress in the proceedings."^^xsd:string .
+
+doc:prosecutorial_review_1 a echr:ProsecutorialReview ;
+    rdfs:label "criminal investigation"^^xsd:string ;
+    echr:hasCourt doc:applicant ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participationInvestigationApplicant,
+        doc:participation_officer_dp_review_1,
+        doc:participation_officer_ig_review_1,
+        doc:participation_officer_mf_review_1,
+        doc:participation_slovenj_police_review_1,
+        doc:participation_special_unit_review_1 ;
+    echr:hasSupportingQuote "Officer M.F. stated in the same criminal investigation:"^^xsd:string .
+
+doc:public_prosecutor_decision_1997_01_17 a echr:ProsecutorialReview ;
+    rdfs:label "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."^^xsd:string ;
+    echr:hasCourt doc:applicant ;
+    echr:hasDecisionDate "1997-01-17"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasParticipation doc:participationProsecutorreviewApplicant,
+        doc:participationProsecutorreviewDP,
+        doc:participationProsecutorreviewJK,
+        doc:participationProsecutorreviewMJ ;
+    echr:hasSupportingQuote "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint. It was served on the applicant’s lawyer on 22 January 1997."^^xsd:string .
+
+doc:search_car_1 a echr:EnforcementAction ;
+    rdfs:label "the police searched the applicant’s car"^^xsd:string ;
+    echr:hasSupportingQuote "In the meantime, the police also searched the applicant’s car."^^xsd:string .
+
+doc:xray_report_19apr a echr:AdministrativeAction ;
+    rdfs:label "The report of an x-ray examination on 19 April 1995 indicated that there was a hairline fracture ( fissur a)."^^xsd:string ;
+    echr:hasParticipation doc:participation_applicant_xray_19apr ;
+    echr:hasProceedingStartDate "1995-04-19"^^xsd:date ;
+    echr:hasSupportingQuote "The report of an x-ray examination on 19 April 1995 indicated that there was a hairline fracture ( fissur a)."^^xsd:string .
+
+doc:admin_mia_appointed_working_group_1995_04_20 a echr:AdministrativeAction ;
+    rdfs:label "on 20 April 1995, the MIA had appointed a “working group” ( delovna skupina )"^^xsd:string ;
+    echr:followsProceeding doc:admin_oral_complaint_1995_04_07 ;
+    echr:hasParticipation doc:participationApplicantAdmissionSggh ;
+    echr:hasProceedingStartDate "1995-04-20"^^xsd:date ;
+    echr:hasSupportingQuote "on 20 April 1995, the MIA had appointed a “working group” ( delovna skupina ) consisting of officers from the Slovenj Gradec Police and the MIA to assess the lawfulness of the procedures carried out by the Special Unit and the Slovenj Gradec Police."^^xsd:string .
+
+doc:admin_mia_report_1995_11_15 a echr:AdministrativeAction ;
+    rdfs:label "MIA report submitted on 15 November 1995"^^xsd:string ;
+    echr:followsProceeding doc:proc_request_identify_officers_1995_07_14 ;
+    echr:hasParticipation doc:participationMiaReport,
+        doc:participationMiaReportProsecutor ;
+    echr:hasProceedingStartDate "1995-11-15"^^xsd:date ;
+    echr:hasSupportingQuote """"Further to the analysis of procedures and activities which had taken place on 4 and 5 April 1995, the working group established that all the measures and procedures were lawful and in accordance with legal powers and professional rules.
+(...)
+The procedure against Aleksander Matko was carried out by criminal investigators D.P., J.K., M.F, T.G, I.G. and officers of the MIA’s Special Unit, who were headed by M.J (...).\""""^^xsd:string .
+
+doc:admin_oral_complaint_1995_04_07 a echr:AdministrativeAction ;
+    rdfs:label "On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint"^^xsd:string ;
+    echr:followsProceeding doc:case_document_1 ;
+    echr:hasParticipation doc:participation_oral_1995_04_07_applicant,
+        doc:participation_oral_1995_04_07_police ;
+    echr:hasProceedingStartDate "1995-04-07"^^xsd:date ;
+    echr:hasSupportingQuote "On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint against the officers of the Special Unit concerning the events of 5 April 1995."^^xsd:string .
+
+doc:admin_police_report_1996_02_05 a echr:AdministrativeAction ;
+    rdfs:label "Slovenj Gradec Police report submitted on 5 February 1996"^^xsd:string ;
+    echr:followsProceeding doc:admin_mia_report_1995_11_15 ;
+    echr:hasParticipation doc:participationPoliceReport,
+        doc:participationPoliceReportProsecutor ;
+    echr:hasProceedingStartDate "1996-02-05"^^xsd:date ;
+    echr:hasSupportingQuote "and one by the Slovenj Gradec Police on 5 February 1996."^^xsd:string .
+
+doc:admin_written_complaint_1995_05_15 a echr:AdministrativeAction ;
+    rdfs:label "On 15 May 1995 the applicant lodged, through his lawyer, a written criminal complaint ( kazenska ovadba ) with the Slovenj Gradec Police"^^xsd:string ;
+    echr:followsProceeding doc:admin_mia_appointed_working_group_1995_04_20 ;
+    echr:hasParticipation doc:participationApplicantAdmissionSggh,
+        doc:participation_written_1995_05_15_police ;
+    echr:hasProceedingStartDate "1995-05-15"^^xsd:date ;
+    echr:hasSupportingQuote "On 15 May 1995 the applicant lodged, through his lawyer, a written criminal complaint ( kazenska ovadba ) with the Slovenj Gradec Police against unidentified police officers for causing minor bodily harm ( lahka telesna poškodba ) and an unlawful deprivation of liberty ( protipraven odvzem prostosti )."^^xsd:string .
+
+doc:appeal_1997_05_12 a echr:DomesticProceeding ;
+    rdfs:label "Public Prosecutor appeal against district court decision (Maribor Higher Court decision 4 December 1997)"^^xsd:string ;
+    echr:followsProceeding doc:district_decision_1997_05_08 ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "1997-12-04"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationAppealApplicant,
+        doc:participationAppealPp ;
+    echr:hasProceedingStartDate "1997-05-12"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 4 December 1997 the Maribor Higher Court upheld her appeal finding that, despite the shortcomings mentioned in the first-instance decision, there were sufficient grounds for suspicion that the applicant had committed the alleged offence. Accordingly, it changed the first-instance court’s decision and opened a criminal investigation against the applicant."^^xsd:string .
+
+doc:arrest_1995_04_05 a echr:EnforcementAction ;
+    rdfs:label "arrest 5 April 1995"^^xsd:string ;
+    echr:followsProceeding doc:police_operation_1995_04_04_05 ;
+    echr:hasSupportingQuote "On 5 April 1995 at about 8.30 p.m. the applicant, driving a car, was arrested in Slovenj Gradec by officers of the Special Unit and the Slovenj Gradec Police."^^xsd:string .
+
+doc:case_document_1 a echr:CaseDocument ;
+    rdfs:label "The applicant’s criminal complaint and the subsequent investigation"^^xsd:string,
+        "an application with the Court"^^xsd:string,
+        "judgment of 12 February 2001"^^xsd:string ;
+    echr:hasApplicant doc:applicant ;
+    echr:hasDomesticProceeding doc:investigation_1,
+        doc:proceeding_appeal_maribor_2000_01_05,
+        doc:proceeding_appeal_maribor_2001_03_12,
+        doc:proceeding_costs_order_2001_10_11,
+        doc:proceeding_objection_1999_02_16,
+        doc:proceeding_retrial_2001_02_12,
+        doc:proceeding_trial_1,
+        doc:proceeding_trial_1999_11_22 ;
+    echr:hasJudgmentDate "2001-02-12"^^xsd:date ;
+    echr:hasSupportingQuote "The applicant’s criminal complaint and the subsequent investigation"^^xsd:string,
+        "The judgment of 12 February 2001 issued in the proceedings instituted against the applicant (see paragraph 48)"^^xsd:string .
+
+doc:district_decision_1997_05_08 a echr:DomesticProceeding ;
+    rdfs:label "Slovenj Gradec District Court decision not to open investigation 8 May 1997"^^xsd:string ;
+    echr:followsProceeding doc:investigative_proceeding_1997 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "1997-05-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participationDistrictDecisionApplicant,
+        doc:participationDistrictDecisionPp ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 8 May 1997, further to a proposal of the investigating judge, the Slovenj Gradec District Court decided not to open a criminal investigation against the applicant. The court pointed out, inter alia, that the officers who were allegedly attacked by the applicant had not been identified and that the Ministry’s report, stating that a special operation for the investigation of serious crimes was in progress at that time, and the Public Prosecutor’s request for the investigation, which stated that the applicant was arrested because of his excessive speed, were contradictory."^^xsd:string .
+
+doc:domesticAuthoritySpecialUnit a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Special Unit (Specialna enota)"^^xsd:string ;
+    echr:hasAuthorityName "Special Unit ( Specialna enota )"^^xsd:string ;
+    echr:hasSupportingQuote "On 4 and 5 April 1995 a Special Unit ( Specialna enota ), which was under the direct control of the Ministry of Internal Affairs (\"the MIA\") in cooperation with officers from the Slovenj Gradec Internal Affairs Administration ( Uprava za notranje zadeve – hereinafter referred as the \"Slovenj Gradec Police\") undertook a large-scale operation against the activities of a criminal organisation presumed to be operating on the territory of the town of Slovenj Gradec."^^xsd:string .
+
+doc:indictment_1998_12_28 a echr:DomesticProceeding ;
+    rdfs:label "Public Prosecutor filed an indictment 28 December 1998"^^xsd:string ;
+    echr:followsProceeding doc:investigation_conclusion_1998_03_17 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participationIndictmentApplicant,
+        doc:participationIndictmentPp ;
+    echr:hasProceedingStartDate "1998-12-28"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 28 December 1998 the Public Prosecutor filed an indictment against the applicant for “attempting to obstruct an official in the course of his duties” ( poskus kaznivega dejanja preprečitve uradnega dejanja uradni osebi )."^^xsd:string .
+
+doc:investigation_conclusion_1998_03_17 a echr:DomesticProceeding ;
+    rdfs:label "criminal investigation concluded 17 March 1998 (exclusion of documents)"^^xsd:string ;
+    echr:followsProceeding doc:appeal_1997_05_12 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "1998-03-17"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnknown ;
+    echr:hasParticipation doc:participationIndictmentPp,
+        doc:participationInvestigationApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 17 March 1998 the criminal investigation was concluded with the investigating judge’s decision ordering the exclusion of certain documents from the case-file in accordance with section 83, paragraph 3, of the Criminal Procedure Act. It is not known when that decision was served on the applicant."^^xsd:string .
+
+doc:investigative_proceeding_1997 a echr:DomesticProceeding ;
+    rdfs:label "criminal investigation (investigating judge questioned the applicant 8 April 1997)"^^xsd:string ;
+    echr:followsProceeding doc:prosecutor_request_1997_01_17 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participationInvestigationApplicant,
+        doc:participationInvestigationPp ;
+    echr:hasProceedingStartDate "1997-01-17"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 8 April 1997 the investigating judge questioned the applicant. The applicant denied having committed any offence and complained that he had been beaten and ill-treated by the police. He pointed out that he had medical reports proving his injuries. The reports were included in the file."^^xsd:string .
+
+doc:legalRepHisLawyer a echr:LegalRepresentative ;
+    rdfs:label "his lawyer"^^xsd:string ;
+    echr:hasPersonName "his lawyer"^^xsd:string ;
+    echr:hasSupportingQuote "On 15 May 1995 the applicant lodged, through his lawyer, a written criminal complaint ( kazenska ovadba ) with the Slovenj Gradec Police"^^xsd:string .
+
+doc:mJ a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "M.J."^^xsd:string ;
+    echr:hasSupportingQuote "the Special Unit’s officers were under the command of M.J."^^xsd:string .
+
+doc:officerDp a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Officer D.P."^^xsd:string ;
+    echr:hasPersonName "Officer D.P."^^xsd:string ;
+    echr:hasSupportingQuote "Officer D.P. explained in his testimony in the above mentioned criminal investigation:"^^xsd:string .
+
+doc:officerMf a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Officer M.F."^^xsd:string ;
+    echr:hasPersonName "Officer M.F."^^xsd:string ;
+    echr:hasSupportingQuote "Officer M.F. stated in the same criminal investigation:"^^xsd:string .
+
+doc:participationAppealApplicant a echr:Participation ;
+    rdfs:label "participation: applicant respondent in Maribor appeal 1997"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant .
+
+doc:participationAppealPp a echr:Participation ;
+    rdfs:label "participation: Public Prosecutor appellant in Maribor appeal 1997"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participationApplicantMedicalMaribor a echr:Participation ;
+    rdfs:label "the applicant (sought medical aid)"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participationDepositionAddedApplicant a echr:Participation ;
+    rdfs:label "participation: applicant in deposition added 1995-06-20"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "which he did on 20 June 1995."^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participationDepositionAddedProsecutor a echr:Participation ;
+    rdfs:label "participation: prosecutor in deposition added 1995-06-20"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "which he did on 20 June 1995."^^xsd:string ;
+    echr:participatingParty doc:authoritySlovenjGradecDistrictPublicProsecutorOffice .
+
+doc:participationDistrictDecisionApplicant a echr:Participation ;
+    rdfs:label "participation: applicant in district court decision 1997-05-08"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant .
+
+doc:participationDistrictDecisionPp a echr:Participation ;
+    rdfs:label "participation: Public Prosecutor in district court decision 1997-05-08"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participationIndictmentApplicant a echr:Participation ;
+    rdfs:label "participation: applicant responding to indictment 1998-12-28"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant .
+
+doc:participationInvestigationPp a echr:Participation ;
+    rdfs:label "participation: Public Prosecutor in investigation (investigating judge phase)"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participationInvestigationPublicProsecutor a echr:Participation ;
+    rdfs:label "participation (Public Prosecutor) in investigation request 1997-01-17"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participationMiaReport a echr:Participation ;
+    rdfs:label "participation: MIA in report 1995-11-15"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "one by the MIA on 15 November 1995"^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participationMiaReportProsecutor a echr:Participation ;
+    rdfs:label "participation: prosecutor receiving MIA report 1995-11-15"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "one by the MIA on 15 November 1995"^^xsd:string ;
+    echr:participatingParty doc:authoritySlovenjGradecDistrictPublicProsecutorOffice .
+
+doc:participationObjectionApplicant a echr:Participation ;
+    rdfs:label "participation: applicant initiating objection 1999-01-27"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participationObjectionPp a echr:Participation ;
+    rdfs:label "participation: Public Prosecutor responding to objection 1999-01-27"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant .
+
+doc:participationPoliceComplaintApplicant a echr:Participation ;
+    rdfs:label "participation: applicant responding to complaint 1995-04-12"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant .
+
+doc:participationPoliceReport a echr:Participation ;
+    rdfs:label "participation: Slovenj Gradec Police in report 1996-02-05"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "and one by the Slovenj Gradec Police on 5 February 1996."^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participationPoliceReportProsecutor a echr:Participation ;
+    rdfs:label "participation: prosecutor receiving police report 1996-02-05"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "and one by the Slovenj Gradec Police on 5 February 1996."^^xsd:string ;
+    echr:participatingParty doc:authoritySlovenjGradecDistrictPublicProsecutorOffice .
+
+doc:participationPpRequestApplicant a echr:Participation ;
+    rdfs:label "participation: applicant responding to prosecutor request 1997-01-17"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant .
+
+doc:participationPpRequestPp a echr:Participation ;
+    rdfs:label "participation: Public Prosecutor initiating request 1997-01-17"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participationProcRequestDepositionApplicant a echr:Participation ;
+    rdfs:label "participation: applicant in prosecutor request to add deposition 1995-06-15"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 15 June 1995 the Slovenj Gradec District Public Prosecutor’s Office ... asked the applicant’s lawyer to add his client’s deposition to the file"^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participationProcRequestDepositionProsecutor a echr:Participation ;
+    rdfs:label "participation: prosecutor requested deposition 1995-06-15"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 15 June 1995 the Slovenj Gradec District Public Prosecutor’s Office ... asked the applicant’s lawyer to add his client’s deposition to the file"^^xsd:string ;
+    echr:participatingParty doc:authoritySlovenjGradecDistrictPublicProsecutorOffice .
+
+doc:participationProsecutorreviewApplicant a echr:Participation ;
+    rdfs:label "participation (applicant) in prosecutorial decision 1997-01-17"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participationProsecutorreviewDP a echr:Participation ;
+    rdfs:label "participation (D.P.) in prosecutorial decision 1997-01-17"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:dP .
+
+doc:participationProsecutorreviewJK a echr:Participation ;
+    rdfs:label "participation (J.K.) in prosecutorial decision 1997-01-17"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:dP .
+
+doc:participationProsecutorreviewMJ a echr:Participation ;
+    rdfs:label "participation (M.J.) in prosecutorial decision 1997-01-17"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:mJ .
+
+doc:participationRequestIdentifyPolice a echr:Participation ;
+    rdfs:label "participation: police in request to identify 1995-07-14"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 14 July 1995, the Slovenj Gradec District Public Prosecutor ... requested the Slovenj Gradec Police to identify the officers"^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participationRequestIdentifyProsecutor a echr:Participation ;
+    rdfs:label "participation: prosecutor requesting identification 1995-07-14"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 14 July 1995, the Slovenj Gradec District Public Prosecutor ... requested the Slovenj Gradec Police to identify the officers"^^xsd:string ;
+    echr:participatingParty doc:authoritySlovenjGradecDistrictPublicProsecutorOffice .
+
+doc:participationTrialApplicant a echr:Participation ;
+    rdfs:label "participation of the applicant in the proceedings concluded 12 February 2001"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "The judgment of 12 February 2001 issued in the proceedings instituted against the applicant (see paragraph 48)"^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_applicant_xray_19apr a echr:Participation ;
+    rdfs:label "the applicant (x-ray)"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_costs_applicant_2001_10_11 a echr:Participation ;
+    rdfs:label "participation - the applicant (costs order 11 October 2001)"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_criminal_applicant_1995_1998 a echr:Participation ;
+    rdfs:label "participation: applicant in criminal proceedings pre-1998"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the criminal proceedings had been unfair and excessively long (Article 6 of the Convention)."^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_criminal_state_1995_1998 a echr:Participation ;
+    rdfs:label "participation: Republic of Slovenia in criminal proceedings pre-1998"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the criminal proceedings had been unfair and excessively long (Article 6 of the Convention)."^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_objection_applicant_1999_02_16 a echr:Participation ;
+    rdfs:label "participation - the applicant (objection rejected 16 February 1999)"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_officer_dp_review_1 a echr:Participation ;
+    rdfs:label "explained in his testimony in the above mentioned criminal investigation"^^xsd:string ;
+    echr:hasPartySide echr:SideThirdParty ;
+    echr:participatingParty doc:officerDp .
+
+doc:participation_officer_ig_review_1 a echr:Participation ;
+    rdfs:label "was also questioned in the criminal investigation"^^xsd:string ;
+    echr:hasPartySide echr:SideThirdParty ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_officer_mf_review_1 a echr:Participation ;
+    rdfs:label "stated in the same criminal investigation"^^xsd:string ;
+    echr:hasPartySide echr:SideThirdParty ;
+    echr:participatingParty doc:officerMf .
+
+doc:participation_oral_1995_04_07_applicant a echr:Participation ;
+    rdfs:label "participation: applicant in oral complaint 1995-04-07"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint"^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_oral_1995_04_07_police a echr:Participation ;
+    rdfs:label "participation: Slovenj Gradec Police in oral complaint 1995-04-07"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint"^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_pretrial_applicant_1995 a echr:Participation ;
+    rdfs:label "participation: applicant in pre-trial investigation 1995"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 5 April 1995 at about 8.30 p.m. the applicant, driving a car, was arrested in Slovenj Gradec by officers of the Special Unit and the Slovenj Gradec Police."^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_pretrial_special_unit_1995 a echr:Participation ;
+    rdfs:label "participation: Special Unit in pre-trial investigation 1995"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 5 April 1995 at about 8.30 p.m. the applicant, driving a car, was arrested in Slovenj Gradec by officers of the Special Unit and the Slovenj Gradec Police."^^xsd:string ;
+    echr:participatingParty doc:domesticAuthoritySpecialUnit .
+
+doc:participation_slovenj_police_review_1 a echr:Participation ;
+    rdfs:label "at the scene"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_special_unit_review_1 a echr:Participation ;
+    rdfs:label "at the scene"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:specialUnit .
+
+doc:participation_trial_applicant_1999_11_22 a echr:Participation ;
+    rdfs:label "participation - the applicant (trial concluded 22 November 1999)"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_written_1995_05_15_police a echr:Participation ;
+    rdfs:label "participation: Slovenj Gradec Police in written complaint 1995-05-15"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 15 May 1995 the applicant lodged, through his lawyer, a written criminal complaint ( kazenska ovadba ) with the Slovenj Gradec Police"^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:police_operation_1995_04_04_05 a echr:EnforcementAction ;
+    rdfs:label "police operation 4-5 April 1995"^^xsd:string ;
+    echr:hasSupportingQuote "On 4 and 5 April 1995 a Special Unit ( Specialna enota ), which was under the direct control of the Ministry of Internal Affairs (\"the MIA\") in cooperation with officers from the Slovenj Gradec Internal Affairs Administration ( Uprava za notranje zadeve – hereinafter referred as the \"Slovenj Gradec Police\") undertook a large-scale operation against the activities of a criminal organisation presumed to be operating on the territory of the town of Slovenj Gradec."^^xsd:string .
+
+doc:pretrial_detention_1 a echr:PreTrialDetention ;
+    rdfs:label "room for provisional detention ( prostor za pridržanje )"^^xsd:string ;
+    echr:hasCustodialMeasure echr:MeasurePoliceCustody ;
+    echr:hasDetainee doc:applicant ;
+    echr:hasSupportingQuote "At the police station, he was put in the room for provisional detention ( prostor za pridržanje ) where one of the officers untied him at his request."^^xsd:string .
+
+doc:pretrial_detention_1995_04_05_06 a echr:PreTrialDetention ;
+    rdfs:label "pre-trial detention 5-6 April 1995"^^xsd:string ;
+    echr:hasCustodialMeasure echr:MeasurePoliceCustody ;
+    echr:hasDetainee doc:applicant ;
+    echr:hasDetentionEndDate "1995-04-06"^^xsd:date ;
+    echr:hasDetentionStartDate "1995-04-05"^^xsd:date ;
+    echr:hasSupportingQuote "He was brought to the Slovenj Gradec Police Station for having allegedly failed to comply with the police orders. He was questioned by the police and released on 6 April 1995 at approximately half past midnight."^^xsd:string .
+
+doc:pretrial_investigation_1995 a echr:DomesticProceeding ;
+    rdfs:label "pre-trial investigation (1995)"^^xsd:string ;
+    echr:followsProceeding doc:arrest_1995_04_05 ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participationPoliceComplaintPolice,
+        doc:participation_pretrial_applicant_1995,
+        doc:participation_pretrial_special_unit_1995 ;
+    echr:hasPreTrialDetention doc:pretrial_detention_1995_04_05_06 ;
+    echr:hasProceedingStartDate "1995-04-05"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "the investigation into his allegations had not been effective."^^xsd:string .
+
+doc:proc_deposition_added_1995_06_20 a echr:ProsecutorialReview ;
+    rdfs:label "the applicant’s lawyer added his client’s deposition to the file on 20 June 1995"^^xsd:string ;
+    echr:followsProceeding doc:proc_request_add_deposition_1995_06_15 ;
+    echr:hasParticipation doc:participationDepositionAddedApplicant,
+        doc:participationDepositionAddedProsecutor ;
+    echr:hasProceedingStartDate "1995-06-20"^^xsd:date ;
+    echr:hasSupportingQuote "which he did on 20 June 1995."^^xsd:string .
+
+doc:proc_lawyer_sought_info_1996_10_21 a echr:ProsecutorialReview ;
+    rdfs:label "On 21 October 1996 the applicant’s lawyer sought information from the Public Prosecutor’s Office"^^xsd:string ;
+    echr:followsProceeding doc:admin_police_report_1996_02_05 ;
+    echr:hasParticipation doc:participation_lawyer_query_1996,
+        doc:participation_lawyer_query_prosecutor_1996 ;
+    echr:hasProceedingStartDate "1996-10-21"^^xsd:date ;
+    echr:hasSupportingQuote "On 21 October 1996 and 6 January 1997 the applicant’s lawyer sought information from the Public Prosecutor’s Office about the state of progress in the proceedings."^^xsd:string .
+
+doc:proc_request_add_deposition_1995_06_15 a echr:ProsecutorialReview ;
+    rdfs:label "On 15 June 1995 the Slovenj Gradec District Public Prosecutor’s Office asked the applicant’s lawyer to add his client’s deposition to the file"^^xsd:string ;
+    echr:followsProceeding doc:admin_written_complaint_1995_05_15 ;
+    echr:hasParticipation doc:participationProcRequestDepositionApplicant,
+        doc:participationProcRequestDepositionProsecutor ;
+    echr:hasProceedingStartDate "1995-06-15"^^xsd:date ;
+    echr:hasSupportingQuote "On 15 June 1995 the Slovenj Gradec District Public Prosecutor’s Office ( Okrožno državno tožilstvo ) asked the applicant’s lawyer to add his client’s deposition to the file"^^xsd:string .
+
+doc:proc_request_identify_officers_1995_07_14 a echr:ProsecutorialReview ;
+    rdfs:label "On 14 July 1995 the Slovenj Gradec District Public Prosecutor requested the Slovenj Gradec Police to identify the officers and to conduct an interview with them"^^xsd:string ;
+    echr:followsProceeding doc:proc_deposition_added_1995_06_20 ;
+    echr:hasParticipation doc:participationRequestIdentifyPolice,
+        doc:participationRequestIdentifyProsecutor ;
+    echr:hasProceedingStartDate "1995-07-14"^^xsd:date ;
+    echr:hasSupportingQuote "On 14 July 1995, the Slovenj Gradec District Public Prosecutor (the “Public Prosecutor”) requested the Slovenj Gradec Police to identify the officers who had participated in the procedure against the applicant and to conduct an interview with them."^^xsd:string .
+
+doc:proceeding_costs_order_2001_10_11 a echr:DomesticProceeding ;
+    rdfs:label "Lastly, on 11 October 2001 the Slovenj Gradec District Court ordered the applicant to pay an additional sum to cover the costs of one of the witnesses heard during the proceedings."^^xsd:string ;
+    echr:followsProceeding doc:proceeding_appeal_maribor_2001_03_12 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "2001-10-11"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_costs_applicant_2001_10_11 ;
+    echr:hasSupportingQuote "Lastly, on 11 October 2001 the Slovenj Gradec District Court ordered the applicant to pay an additional sum to cover the costs of one of the witnesses heard during the proceedings. On that day, the proceedings were “finally concluded” ( pravnomo~cno končan postopek )."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:proceeding_objection_1999_02_16 a echr:DomesticProceeding ;
+    rdfs:label "His objection was rejected by the Slovenj Gradec District Court on 16 February 1999."^^xsd:string ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "1999-02-16"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeClaimDismissed ;
+    echr:hasParticipation doc:participation_objection_applicant_1999_02_16 ;
+    echr:hasSupportingQuote "His objection was rejected by the Slovenj Gradec District Court on 16 February 1999."^^xsd:string .
+
+doc:proceeding_trial_1 a echr:DomesticProceeding ;
+    rdfs:label "proceedings instituted against the applicant (judgment of 12 February 2001)"^^xsd:string ;
+    echr:followsProceeding doc:investigation_1 ;
+    echr:hasDecisionDate "2001-02-12"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelUnknown ;
+    echr:hasParticipation doc:participationTrialApplicant ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "The judgment of 12 February 2001 issued in the proceedings instituted against the applicant (see paragraph 48)"^^xsd:string .
+
+doc:prosecutor_request_1997_01_17 a echr:ProsecutorialReview ;
+    rdfs:label "Public Prosecutor request to open investigation 17 January 1997"^^xsd:string ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasParticipation doc:participationPpRequestApplicant,
+        doc:participationPpRequestPp ;
+    echr:hasProceedingStartDate "1997-01-17"^^xsd:date ;
+    echr:hasSupportingQuote "On 17 January 1997 the Public Prosecutor requested the Slovenj Gradec District Court to open a criminal investigation against the applicant."^^xsd:string .
+
+doc:specialUnit a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "the Special Unit"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "the Special Unit"^^xsd:string ;
+    echr:hasJurisdictionState "Slovenia"^^xsd:string ;
+    echr:hasSupportingQuote "the Special Unit"^^xsd:string,
+        "the Special Unit’s officers were under the command of M.J."^^xsd:string .
+
+doc:dP a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "D.P."^^xsd:string,
+        "J.K."^^xsd:string ;
+    echr:hasSupportingQuote "D.P. and J.K. stopped the applicant’s car"^^xsd:string .
+
+doc:investigation_1 a echr:DomesticProceeding ;
+    rdfs:label "criminal investigation instituted against the applicant"^^xsd:string ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participationInvestigationApplicant ;
+    echr:hasPreTrialDetention doc:pretrial_detention_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "criminal investigation instituted against the applicant"^^xsd:string .
+
+doc:participationIndictmentPp a echr:Participation ;
+    rdfs:label "participation: Public Prosecutor filing indictment 1998-12-28"^^xsd:string,
+        "participation: Public Prosecutor in investigation conclusion 1998-03-17"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participationPoliceComplaintPolice a echr:Participation ;
+    rdfs:label "participation: Slovenj Gradec Police in pre-trial investigation 1995"^^xsd:string,
+        "participation: Slovenj Gradec Police initiating complaint 1995-04-12"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 5 April 1995 at about 8.30 p.m. the applicant, driving a car, was arrested in Slovenj Gradec by officers of the Special Unit and the Slovenj Gradec Police."^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_lawyer_query_1996 a echr:Participation ;
+    rdfs:label "participation: applicant in lawyer inquiry 1996-10-21"^^xsd:string,
+        "participation: applicant in lawyer inquiry 1997-01-06"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 21 October 1996 and 6 January 1997 the applicant’s lawyer sought information from the Public Prosecutor’s Office about the state of progress in the proceedings."^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_lawyer_query_prosecutor_1996 a echr:Participation ;
+    rdfs:label "participation: prosecutor in lawyer inquiry 1996-10-21"^^xsd:string,
+        "participation: prosecutor in lawyer inquiry 1997-01-06"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 21 October 1996 and 6 January 1997 the applicant’s lawyer sought information from the Public Prosecutor’s Office about the state of progress in the proceedings."^^xsd:string ;
+    echr:participatingParty doc:authoritySlovenjGradecDistrictPublicProsecutorOffice .
+
+doc:proceeding_appeal_maribor_2000_01_05 a echr:DomesticProceeding ;
+    rdfs:label "On 5 January 2000 the Public Prosecutor appealed against the judgment"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_trial_1999_11_22 ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "2000-09-27"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeQuashedAndRemitted ;
+    echr:hasParticipation doc:participation_appeal_applicant_2000_01_05,
+        doc:participation_appeal_pp_2000_01_05 ;
+    echr:hasProceedingStartDate "2000-01-05"^^xsd:date ;
+    echr:hasSupportingQuote "On 5 January 2000 the Public Prosecutor appealed against the judgment and on 27 September 2000 the Maribor Higher Court quashed the judgment and remitted the case to a new panel for retrial."^^xsd:string .
+
+doc:proceeding_appeal_maribor_2001_03_12 a echr:DomesticProceeding ;
+    rdfs:label "On 12 March 2001 the Public Prosecutor appealed against this judgment"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_retrial_2001_02_12 ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "2001-05-09"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeUpheldOnAppeal ;
+    echr:hasParticipation doc:participation_appeal_applicant_2000_01_05,
+        doc:participation_appeal_pp_2000_01_05 ;
+    echr:hasProceedingStartDate "2001-03-12"^^xsd:date ;
+    echr:hasSupportingQuote "On 9 May 2001 the Maribor Higher Court upheld the conviction but amended the judgment with respect to the costs of the proceedings."^^xsd:string .
+
+doc:proceeding_retrial_2001_02_12 a echr:DomesticProceeding ;
+    rdfs:label "During the retrial, hearings were held on 15 December and 12 February 2001."^^xsd:string ;
+    echr:followsProceeding doc:proceeding_appeal_maribor_2000_01_05 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "2001-02-12"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeConviction ;
+    echr:hasParticipation doc:participation_appeal_applicant_2000_01_05,
+        doc:participation_appeal_pp_2000_01_05 ;
+    echr:hasProceedingStartDate "2000-12-15"^^xsd:date ;
+    echr:hasSupportingQuote "By a judgment of 12 February 2001, the Slovenj Gradec District Court convicted the applicant as charged and sentenced him to 3 months’ imprisonment, suspended for 3 years."^^xsd:string .
+
+doc:proceeding_trial_1999_11_22 a echr:DomesticProceeding ;
+    rdfs:label "By a judgment of 22 November 1999 the court acquitted the applicant."^^xsd:string ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "1999-11-22"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeAcquittal ;
+    echr:hasParticipation doc:participation_trial_applicant_1999_11_22 ;
+    echr:hasProceedingStartDate "1999-09-13"^^xsd:date ;
+    echr:hasSupportingQuote "By a judgment of 22 November 1999 the court acquitted the applicant."^^xsd:string .
+
+doc:mariborHigherCourt a echr:DomesticAuthority ;
+    rdfs:label "Maribor Higher Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Maribor Higher Court"^^xsd:string .
+
+doc:participationApplicantAdmissionSggh a echr:Participation ;
+    rdfs:label "participation: MIA appointed working group 1995-04-20"^^xsd:string,
+        "participation: applicant in written complaint 1995-05-15"^^xsd:string,
+        "the applicant (admitted)"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 15 May 1995 the applicant lodged, through his lawyer, a written criminal complaint ( kazenska ovadba ) with the Slovenj Gradec Police"^^xsd:string,
+        "on 20 April 1995, the MIA had appointed a “working group” ( delovna skupina )"^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_appeal_applicant_2000_01_05 a echr:Participation ;
+    rdfs:label "participation - the applicant (appeal 12 March 2001)"^^xsd:string,
+        "participation - the applicant (appeal 5 January 2000)"^^xsd:string,
+        "participation - the applicant (retrial 12 February 2001)"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant .
+
+doc:participation_appeal_pp_2000_01_05 a echr:Participation ;
+    rdfs:label "participation - Public Prosecutor (appeal 12 March 2001)"^^xsd:string,
+        "participation - Public Prosecutor (appeal 5 January 2000)"^^xsd:string,
+        "participation - Public Prosecutor (retrial 2001)"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant .
+
+doc:participationInvestigationApplicant a echr:Participation ;
+    rdfs:label "after the applicant was stopped"^^xsd:string,
+        "participation (applicant) in investigation request 1997-01-17"^^xsd:string,
+        "participation: applicant in investigation (investigating judge questioned)"^^xsd:string,
+        "participation: applicant in investigation conclusion 1998-03-17"^^xsd:string,
+        "the applicant was questioned"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "The applicant was questioned and told that he had failed to comply with the police order to stop his vehicle."^^xsd:string ;
+    echr:participatingParty doc:applicant .
+
+doc:authoritySlovenjGradecDistrictPublicProsecutorOffice a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "the Slovenj Gradec District Public Prosecutor’s Office ( Okrožno državno tožilstvo )"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Slovenj Gradec District Public Prosecutor’s Office ( Okrožno državno tožilstvo )"^^xsd:string ;
+    echr:hasSupportingQuote "On 15 June 1995 the Slovenj Gradec District Public Prosecutor’s Office ( Okrožno državno tožilstvo ) asked the applicant’s lawyer to add his client’s deposition to the file"^^xsd:string .
+
+doc:slovenjGradecDistrictCourt a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec District Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Slovenj Gradec District Court"^^xsd:string ;
+    echr:hasSupportingQuote "a request for an investigation against Matko Aleksander was lodged with the investigating judge in the Slovenj Gradec District Court"^^xsd:string .
+
+doc:applicant a echr:DomesticAuthority,
+        echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Aleksander Matko"^^xsd:string,
+        "I.G."^^xsd:string,
+        "Mr Aleksander Matko"^^xsd:string,
+        "Public Prosecutor"^^xsd:string,
+        "Republic of Slovenia"^^xsd:string,
+        "Slovenj Gradec Police"^^xsd:string,
+        "the MIA"^^xsd:string,
+        "the Public Prosecutor"^^xsd:string,
+        "the applicant"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative,
+        echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Public Prosecutor"^^xsd:string,
+        "Slovenj Gradec Police"^^xsd:string,
+        "the MIA"^^xsd:string,
+        "the Public Prosecutor"^^xsd:string ;
+    echr:hasJurisdictionState "Slovenia"^^xsd:string ;
+    echr:hasPartyName "Public Prosecutor"^^xsd:string,
+        "Republic of Slovenia"^^xsd:string,
+        "Slovenj Gradec Police"^^xsd:string,
+        "the applicant"^^xsd:string ;
+    echr:hasPersonName "Aleksander Matko"^^xsd:string,
+        "I.G."^^xsd:string,
+        "Mr Aleksander Matko"^^xsd:string,
+        "the applicant"^^xsd:string ;
+    echr:hasSupportingQuote "Aleksander Matko"^^xsd:string,
+        "Another officer from the Slovenj Gradec Police, I.G., who had arrived at the scene with the officers of the Special Unit and was also questioned in the criminal investigation, stated that there were 20 officers of the Special Unit and Slovenj Gradec Police at the scene, and that five of them had had direct contact with the applicant."^^xsd:string,
+        "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."^^xsd:string,
+        "On 4 and 5 April 1995 a Special Unit ( Specialna enota ), which was under the direct control of the Ministry of Internal Affairs (\"the MIA\") in cooperation with officers from the Slovenj Gradec Internal Affairs Administration ( Uprava za notranje zadeve – hereinafter referred as the \"Slovenj Gradec Police\") undertook a large-scale operation against the activities of a criminal organisation presumed to be operating on the territory of the town of Slovenj Gradec."^^xsd:string,
+        "On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint against the officers of the Special Unit concerning the events of 5 April 1995."^^xsd:string,
+        "Slovenj Gradec Police"^^xsd:string,
+        "The case originated in an application (no. 43393/98) against the Republic of Slovenia lodged with the European Commission of Human Rights (\"the Commission\") under former Article 25 of the Convention for the Protection of Human Rights and Fundamental Freedoms (\"the Convention\") by a Slovenian national, Mr Aleksander Matko (\"the applicant\"), on 22 July 1998."^^xsd:string,
+        "The criminal complaint of the Slovenj Gradec Police states that Aleksander Matko sustained injuries as a result of the use of force."^^xsd:string,
+        "The procedure against Aleksander Matko was carried out by criminal investigators D.P., J.K., M.F, T.G, I.G. and officers of the MIA’s Special Unit, who were headed by M.J (...)"^^xsd:string,
+        "on 20 April 1995, the MIA had appointed a “working group” ( delovna skupina ) consisting of officers from the Slovenj Gradec Police and the MIA to assess the lawfulness of the procedures carried out by the Special Unit and the Slovenj Gradec Police."^^xsd:string,
+        "one of them was Aleksander Matko"^^xsd:string,
+        "the applicant"^^xsd:string,
+        "the applicant was placed in an off-road vehicle and taken to the police station."^^xsd:string ;
+    echr:isRepresentedBy doc:legalRepHisLawyer .
+

@@ -1,0 +1,88 @@
+{
+  "source": "input.jsonl",
+  "conformance": {
+    "shacl_evaluated": null,
+    "conforms": null,
+    "findings": 5,
+    "errors": 5,
+    "warnings": 0,
+    "by_kind": {
+      "suspect_multi_value": 5
+    },
+    "shacl_violations": 0,
+    "shacl_by_constraint": {},
+    "shacl_by_shape": {},
+    "repairs_applied": {}
+  },
+  "gate_repairs": [],
+  "findings": [
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/263d4524fc5a/aliens_appeals_board_1> points at 2 objects via <https://growgraph.dev/echr#hasAuthorityKind>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/263d4524fc5a/aliens_appeals_board_1",
+      "predicate": "https://growgraph.dev/echr#hasAuthorityKind",
+      "values": [
+        "https://growgraph.dev/echr#AuthorityAdministrative",
+        "https://growgraph.dev/echr#AuthorityJudicial"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/263d4524fc5a/part_1_app> points at 2 objects via <https://growgraph.dev/echr#hasPartySide>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/263d4524fc5a/part_1_app",
+      "predicate": "https://growgraph.dev/echr#hasPartySide",
+      "values": [
+        "https://growgraph.dev/echr#SideInitiating",
+        "https://growgraph.dev/echr#SideResponding"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/263d4524fc5a/part_3_state> points at 2 objects via <https://growgraph.dev/echr#hasPartySide>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/263d4524fc5a/part_3_state",
+      "predicate": "https://growgraph.dev/echr#hasPartySide",
+      "values": [
+        "https://growgraph.dev/echr#SideInitiating",
+        "https://growgraph.dev/echr#SideResponding"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/263d4524fc5a/participation_1> points at 2 objects via <https://growgraph.dev/echr#hasPartySide>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/263d4524fc5a/participation_1",
+      "predicate": "https://growgraph.dev/echr#hasPartySide",
+      "values": [
+        "https://growgraph.dev/echr#SideInitiating",
+        "https://growgraph.dev/echr#SideResponding"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/263d4524fc5a/participation_1> points at 5 objects via <https://growgraph.dev/echr#participatingParty>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/263d4524fc5a/participation_1",
+      "predicate": "https://growgraph.dev/echr#participatingParty",
+      "values": [
+        "https://growgraph.dev/doc/263d4524fc5a/aliensOffice",
+        "https://growgraph.dev/doc/263d4524fc5a/applicant_1",
+        "https://growgraph.dev/doc/263d4524fc5a/applicant_group_1",
+        "https://growgraph.dev/doc/263d4524fc5a/applicants_1",
+        "https://growgraph.dev/doc/263d4524fc5a/belgianState"
+      ],
+      "component": "",
+      "source_shape": ""
+    }
+  ]
+}

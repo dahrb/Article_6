@@ -1,0 +1,80 @@
+{
+  "source": "results/experiment_full3arm_20260820/art6_gemma4_rolling_mv1/repaired/input.L10.facts.ttl",
+  "operations": [
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both are appeals on points of law decided by the Conseil d'Etat on the same day. While they target different lower judgments, the text describes them as a single set of dismissals on the same date; the applicants' appeal node is more complete (marked as final).",
+      "action": "merge",
+      "keep": "doc:cassationAppealApplicants",
+      "drop": "doc:cassationAppealState",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 0,
+        "self_loops_dropped": 0,
+        "properties_moved": 3,
+        "survivor_value_kept": 7
+      },
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both are appeals on points of law decided by the Conseil d'Etat on 17 May 2018 regarding the same 24 March 2017 decisions (challenge and stay lifting). These are part of the same proceeding.",
+      "action": "merge",
+      "keep": "doc:cassation_appeal_challenge_2",
+      "drop": "doc:cassation_appeal_lifting_2",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 0,
+        "self_loops_dropped": 0,
+        "properties_moved": 3,
+        "survivor_value_kept": 7
+      },
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both refer to the Brussels Court of Appeal judgment of 7 December 2016. The appealTpiDecision node is more detailed.",
+      "action": "merge",
+      "keep": "doc:appealTpiDecision",
+      "drop": "doc:judgment_brussels_appeal_dec_2016",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 0,
+        "self_loops_dropped": 0,
+        "properties_moved": 2,
+        "survivor_value_kept": 5
+      },
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both refer to the Aliens Appeals Board's action on 20 October 2016. The urgent_stay_proceeding_3 node is more detailed.",
+      "action": "merge",
+      "keep": "doc:urgent_stay_proceeding_3",
+      "drop": "doc:judgment_board_oct_2016",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 0,
+        "properties_moved": 1,
+        "survivor_value_kept": 5
+      },
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both refer to the Aliens Appeals Board's judgment of 24 March 2017 which both dismissed the application to set aside and lifted the stay. This is one proceeding.",
+      "action": "merge",
+      "keep": "doc:urgent_stay_lifting_proceeding_2",
+      "drop": "doc:visa_challenge_proceeding_2",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 0,
+        "properties_moved": 3,
+        "survivor_value_kept": 7
+      },
+      "pass": 1
+    }
+  ]
+}

@@ -8,15 +8,15 @@ Everything here is computed from the graphs alone (plus the source text for
 evidence anchoring), with no LLM in the loop, so a report's numbers can always
 be regenerated and diffed. The class and property inventories, the closed
 vocabularies and the functional-property set are all read live from the
-ontology file, so pointing this at echr_2.ttl measures echr_2.ttl's surface --
-not the previous schema's.
+ontology file, so pointing this at a different snapshot measures that
+snapshot's surface -- not the previous schema's.
 
 Usage:
-  uv run python -m art6.ontology.quality_metrics \\
+  uv run python -m art6.ontology.diagnostics.quality_metrics \\
       --experiment-dir results/experiment_echr2_20260819_122533
 
   # compare against an older run
-  uv run python -m art6.ontology.quality_metrics \\
+  uv run python -m art6.ontology.diagnostics.quality_metrics \\
       --experiment-dir results/experiment_echr2_20260819_122533 \\
       --compare-dir results/experiment_ttl_20260818_161537
 """
@@ -37,7 +37,7 @@ from art6.paths import REPO_ROOT, relative
 
 ECHR = Namespace("https://growgraph.dev/echr#")
 ONTOLOGY_TTL = Path(
-    os.environ.get("ART6_ONTOLOGY_TTL", REPO_ROOT / "ontology" / "echr_2.ttl")
+    os.environ.get("ART6_ONTOLOGY_TTL", REPO_ROOT / "ontology" / "echr.ttl")
 )
 LINE_RE = re.compile(r"\.L(\d+)\.facts\.ttl$")
 

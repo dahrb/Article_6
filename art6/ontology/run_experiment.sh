@@ -31,7 +31,7 @@
 # EXPERIMENT DESIGN
 # ---------------------------------------------------------------------------
 # Held constant across all four models (the only intended variable is the LLM):
-#   ontology            ${ONTOLOGY_TTL}, default ontology/echr_2.ttl
+#   ontology            ${ONTOLOGY_TTL}, default ontology/echr.ttl
 #   facts prompt        art6/ontology/prompts/facts.txt
 #   chunking            CHUNK_SECTION_CLASSIFIER=off, MIN=5000, MAX=15000
 #                       -- classifier off keeps the whole document; the section
@@ -133,12 +133,12 @@ REPAIR_PASSES="${REPAIR_PASSES:-4}"
 # Placeholder credential for the local vLLM servers, which do not check it.
 VLLM_API_KEY="${VLLM_API_KEY:-token-abc123}"
 
-# The ontology snapshot copied alongside the outputs. echr_2.ttl is the current
-# schema; echr.ttl was retired to ontology/old/ after the 2026-08-18 comparison.
-# This is the snapshot only -- OntoCast reads the ontology from its Fuseki
-# catalog, so the catalog entry for ONTOLOGY_CONTEXT_FIXED_ONTOLOGY_ID=echr must
-# be loaded from the SAME file, or the snapshot will not describe the run.
-ONTOLOGY_TTL="${ONTOLOGY_TTL:-${REPO_ROOT}/ontology/echr_2.ttl}"
+# The ontology snapshot copied alongside the outputs. ontology/echr.ttl is the
+# current schema. This is the snapshot only -- OntoCast reads the ontology
+# from its Fuseki catalog, so the catalog entry for
+# ONTOLOGY_CONTEXT_FIXED_ONTOLOGY_ID=echr must be loaded from the SAME file,
+# or the snapshot will not describe the run.
+ONTOLOGY_TTL="${ONTOLOGY_TTL:-${REPO_ROOT}/ontology/echr.ttl}"
 
 # ============================================================================
 # END EDIT ME

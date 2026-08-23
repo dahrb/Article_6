@@ -3,7 +3,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
-# SHACL validation layer for echr_2.ttl (v3.3.0).
+# SHACL validation layer for echr.ttl (v3.5.0).
 #
 # Targets the hallucination classes named in extraction_quality_report.md /
 # extraction_fixes_evaluation.md:
@@ -62,8 +62,8 @@ echr:DomesticEventAtomicShape a sh:NodeShape ;
         sh:path echr:hasInstanceLevel ;
         sh:maxCount 1 ;
         sh:in ( echr:LevelInvestigative echr:LevelAdministrativeReview echr:LevelFirstInstance
-                echr:LevelAppeal echr:LevelCassation echr:LevelConstitutional
-                echr:LevelSupervisoryReview echr:LevelReopening echr:LevelEnforcement
+                echr:LevelAppeal echr:LevelCassation
+                echr:LevelSupervisoryReview echr:LevelReopening
                 echr:LevelUnknown ) ;
         sh:message "hasInstanceLevel must be a single value from the closed InstanceLevel vocabulary" ;
     ] ;
@@ -77,12 +77,8 @@ echr:DomesticEventAtomicShape a sh:NodeShape ;
     sh:property [
         sh:path echr:hasOutcome ;
         sh:maxCount 1 ;
-        sh:in ( echr:OutcomeConviction echr:OutcomeAcquittal echr:OutcomeClaimGranted
-                echr:OutcomeClaimDismissed echr:OutcomeClaimPartlyGranted
-                echr:OutcomeDeclaredInadmissible echr:OutcomeRefusedExamination
-                echr:OutcomeDiscontinued echr:OutcomeSettled echr:OutcomeQuashedAndRemitted
-                echr:OutcomeUpheldOnAppeal echr:OutcomeMeasureImposed
-                echr:OutcomeMeasureSubstituted echr:OutcomeOther echr:OutcomeUnknown ) ;
+        sh:in ( echr:OutcomeMeritsDecided echr:OutcomeInadmissible echr:OutcomeSettledOrWithdrawn
+                echr:OutcomeRemitted echr:OutcomeOther echr:OutcomeUnknown ) ;
         sh:message "hasOutcome must be a single value from the closed ProceedingOutcome vocabulary" ;
     ] ;
     sh:property [
@@ -128,8 +124,7 @@ echr:AuthorityAtomicShape a sh:NodeShape ;
         sh:path echr:hasAuthorityKind ;
         sh:maxCount 1 ;
         sh:in ( echr:AuthorityJudicial echr:AuthorityProsecutorial echr:AuthorityAdministrative
-                echr:AuthorityDisciplinary echr:AuthorityMunicipal echr:AuthoritySocialWelfare
-                echr:AuthorityUnknown ) ;
+                echr:AuthorityDisciplinary echr:AuthorityUnknown ) ;
         sh:message "hasAuthorityKind must be a single value from the closed AuthorityKind vocabulary" ;
     ] ;
     sh:property [
@@ -160,6 +155,15 @@ echr:ParticipationAtomicShape a sh:NodeShape ;
         sh:message "hasPartySide must be a single value from the closed PartySide vocabulary" ;
     ] .
 
+echr:NaturalPersonAtomicShape a sh:NodeShape ;
+    sh:targetClass echr:NaturalPerson ;
+    sh:property [
+        sh:path echr:hasGender ;
+        sh:maxCount 1 ;
+        sh:in ( echr:GenderMale echr:GenderFemale echr:GenderOther ) ;
+        sh:message "hasGender must be a single value from the closed Gender vocabulary" ;
+    ] .
+
 # False-merge guard, not specific to DomesticAuthority: a node carrying more
 # than one rdfs:label is asserting that two distinct things it was told apart
 # in the source text (e.g. "Constitutional Court" and "İstanbul Administrative
@@ -175,7 +179,7 @@ echr:SingleLabelShape a sh:NodeShape ;
     sh:targetClass echr:DomesticAuthority, echr:DomesticProceeding, echr:AdministrativeAction,
         echr:EnforcementAction, echr:ProsecutorialReview, echr:CaseDocument,
         echr:InactivityPeriod, echr:Adjournment, echr:Party, echr:NaturalPerson,
-        echr:LegalRepresentative ;
+        echr:LegalRepresentative, echr:PreTrialDetention ;
     sh:property [
         sh:path rdfs:label ;
         sh:maxCount 1 ;
@@ -187,8 +191,7 @@ echr:InactivityAtomicShape a sh:NodeShape ;
     sh:property [
         sh:path echr:hasInactivityCause ;
         sh:maxCount 1 ;
-        sh:in ( echr:DelayAttributedToAuthorities echr:DelayAttributedToApplicant
-                echr:DelayAttributedToComplexity echr:DelayUnattributed ) ;
+        sh:in ( echr:DelayAttributedToAuthorities echr:DelayAttributedToApplicant echr:DelayUnattributed ) ;
         sh:message "hasInactivityCause must be a single value from the closed DelayAttribution vocabulary" ;
     ] ;
     sh:property [
@@ -207,8 +210,7 @@ echr:AdjournmentAtomicShape a sh:NodeShape ;
     sh:property [
         sh:path echr:hasAdjournmentCause ;
         sh:maxCount 1 ;
-        sh:in ( echr:DelayAttributedToAuthorities echr:DelayAttributedToApplicant
-                echr:DelayAttributedToComplexity echr:DelayUnattributed ) ;
+        sh:in ( echr:DelayAttributedToAuthorities echr:DelayAttributedToApplicant echr:DelayUnattributed ) ;
         sh:message "hasAdjournmentCause must be a single value from the closed DelayAttribution vocabulary" ;
     ] ;
     sh:property [
@@ -229,13 +231,55 @@ echr:CaseDocumentAtomicShape a sh:NodeShape ;
     sh:property [ sh:path echr:hasRespondentState ; sh:maxCount 1 ] ;
     sh:property [ sh:path echr:hasJudgmentDate ; sh:maxCount 1 ] .
 
+# The pre-trial detention module (echr:PreTrialDetention, echr:CustodialMeasure)
+# has carried five owl:FunctionalProperty datatype/object properties since it
+# was added, with no shape ever enforcing the cardinality OWL itself does not
+# -- the same silent-clobbering gap this whole file exists to close for every
+# other class. Mirrors InactivityAtomicShape/AdjournmentAtomicShape.
+echr:PreTrialDetentionAtomicShape a sh:NodeShape ;
+    sh:targetClass echr:PreTrialDetention ;
+    sh:property [
+        sh:path echr:hasDetainee ;
+        sh:maxCount 1 ;
+        sh:class echr:NaturalPerson ;
+        sh:message "a pre-trial detention must record at most one detainee" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasCustodialMeasure ;
+        sh:maxCount 1 ;
+        sh:in ( echr:MeasurePoliceCustody echr:MeasureRemandInCustody echr:MeasureHouseArrest
+                echr:MeasurePsychiatricConfinement echr:MeasureOther echr:MeasureUnknown ) ;
+        sh:message "hasCustodialMeasure must be a single value from the closed CustodialMeasure vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasDetentionStartDate ;
+        sh:maxCount 1 ;
+        sh:message "a pre-trial detention may have at most one start date" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasDetentionEndDate ;
+        sh:maxCount 1 ;
+        sh:message "a pre-trial detention may have at most one end date" ;
+    ] ;
+    sh:property [
+        sh:path echr:isStillDetained ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:boolean ;
+        sh:message "isStillDetained must be a single boolean" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasStatedDetentionDuration ;
+        sh:maxCount 1 ;
+        sh:message "a pre-trial detention may have at most one stated duration" ;
+    ] .
+
 ################################################################
 # 2. Evidence anchoring -- flag proceedings/events with no anchor
 ################################################################
 
 echr:EvidenceAnchoringShape a sh:NodeShape ;
     sh:targetClass echr:DomesticProceeding, echr:AdministrativeAction, echr:EnforcementAction,
-        echr:ProsecutorialReview, echr:InactivityPeriod, echr:Adjournment ;
+        echr:ProsecutorialReview, echr:InactivityPeriod, echr:Adjournment, echr:PreTrialDetention ;
     sh:property [
         sh:path echr:hasSupportingQuote ;
         sh:minCount 1 ;

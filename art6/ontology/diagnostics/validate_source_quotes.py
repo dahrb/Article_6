@@ -34,16 +34,16 @@ backslashes and newlines that would be unsafe to splice into a Turtle
 literal by hand.
 
 Usage:
-  uv run python -m art6.ontology.validate_source_quotes \\
+  uv run python -m art6.ontology.diagnostics.validate_source_quotes \\
       --facts-dir results/experiment_ttl_20260818_161537/gemma4/repaired \\
       --input-json results/experiment_ttl_20260818_161537/gemma4/input.json
 
   # every model in an experiment directory, one summary table
-  uv run python -m art6.ontology.validate_source_quotes \\
+  uv run python -m art6.ontology.diagnostics.validate_source_quotes \\
       --experiment-dir results/experiment_ttl_20260818_161537
 
   # keep the generated shapes for inspection / reuse in CI
-  uv run python -m art6.ontology.validate_source_quotes ... --write-shapes
+  uv run python -m art6.ontology.diagnostics.validate_source_quotes ... --write-shapes
 """
 
 from __future__ import annotations
@@ -99,7 +99,6 @@ class FileReport:
     verified: list[str] = field(default_factory=list)
     unverified: list[str] = field(default_factory=list)
     shacl_conforms: bool = True
-    shacl_text: str = ""
 
     @property
     def bad(self) -> int:
@@ -210,7 +209,7 @@ def check_file(
             shapes_graph.serialize(format="turtle"), encoding="utf-8"
         )
 
-    conforms, _, text_report = shacl_validate(
+    conforms, _, _ = shacl_validate(
         data_graph,
         shacl_graph=shapes_graph,
         advanced=False,
@@ -219,7 +218,6 @@ def check_file(
         meta_shacl=False,
     )
     report.shacl_conforms = conforms
-    report.shacl_text = text_report
     return report
 
 

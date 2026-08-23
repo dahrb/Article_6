@@ -16,7 +16,7 @@ Answers three questions the audit logs alone cannot:
 Edit RUNS and MODELS below to point at other experiment directories.
 
 Usage:
-  uv run python -m art6.ontology.repair_impact
+  uv run python -m art6.ontology.diagnostics.repair_impact
 """
 
 from __future__ import annotations

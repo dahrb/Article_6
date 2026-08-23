@@ -12,9 +12,10 @@ This script re-reads the merged graph as a whole and asks one LLM call per
 document to fix exactly the defects that shape of mistake produces:
 
   1. missing echr:followsProceeding links between domestic proceedings,
-     flagged deterministically wherever hasOutcome is one of the "reviews a
-     decision below" outcomes (echr:OutcomeUpheldOnAppeal,
-     echr:OutcomeQuashedAndRemitted) and no link is present;
+     flagged deterministically wherever hasInstanceLevel places the proceeding
+     at an appeal-shaped level (echr:LevelAppeal, echr:LevelCassation,
+     echr:LevelSupervisoryReview, echr:LevelReopening) or hasOutcome is
+     echr:OutcomeRemitted, and no link is present;
   2. echr:isFinalDomesticDecision asserted true on more than one proceeding
      in the same document;
   3. entities that describe a domestic authority's decision but were typed
@@ -84,12 +85,11 @@ from art6.paths import REPO_ROOT, relative
 # Overridable so a run can be pinned to the same snapshot it extracted against:
 #   ART6_ONTOLOGY_TTL=results/<run>/echr.ttl.snapshot uv run python -m art6.ontology.repair_facts ...
 ONTOLOGY_TTL = Path(
-    os.environ.get("ART6_ONTOLOGY_TTL", REPO_ROOT / "ontology" / "echr_2.ttl")
+    os.environ.get("ART6_ONTOLOGY_TTL", REPO_ROOT / "ontology" / "echr.ttl")
 )
 KEYS_FILE = REPO_ROOT / "keys.env"
 
 ECHR = Namespace("https://growgraph.dev/echr#")
-RDFS_NS = Namespace("http://www.w3.org/2000/01/rdf-schema#")
 SH = Namespace("http://www.w3.org/ns/shacl#")
 
 
@@ -97,7 +97,7 @@ SH = Namespace("http://www.w3.org/ns/shacl#")
 def functional_properties() -> frozenset[URIRef]:
     """Properties the ontology declares owl:FunctionalProperty.
 
-    Read from echr_2.ttl rather than hardcoded, so a schema edit cannot leave
+    Read from the ontology file rather than hardcoded, so a schema edit cannot leave
     the merge logic silently applying the previous version's cardinalities.
     Merging two nodes has to know which predicates take exactly one value: for
     those the surviving node's value wins and the duplicate's is dropped, and
@@ -153,9 +153,27 @@ def unknown_echr_terms(*candidates: str) -> list[str]:
 
 # Outcomes that presuppose a decision below, per the ontology's own
 # scope note on echr:DomesticProceeding (see the 2026-08-18 edit).
+#
+# Consolidated 2026-08-23: echr:OutcomeQuashedAndRemitted became
+# echr:OutcomeRemitted, and echr:OutcomeUpheldOnAppeal was folded into the new
+# echr:OutcomeMeritsDecided with no distinct term -- ProceedingOutcome now
+# records disposition-type only, not appellate direction (that lives in
+# echr:hasOutcomeDirection). Outcome alone can therefore no longer tell "this
+# merits decision affirmed something below" apart from "this merits decision
+# is the first one in the case", so echr:hasInstanceLevel is now the primary
+# signal: a proceeding the facts place at one of these levels is reviewing a
+# decision below BY DEFINITION of the level itself, regardless of which way
+# the outcome cut. echr:OutcomeRemitted is kept as a second, level-independent
+# trigger -- a remittal is appeal-shaped even on the rare graph where the
+# level was never captured.
+APPEAL_SHAPED_LEVELS = {
+    ECHR.LevelAppeal,
+    ECHR.LevelCassation,
+    ECHR.LevelSupervisoryReview,
+    ECHR.LevelReopening,
+}
 APPEAL_SHAPED_OUTCOMES = {
-    ECHR.OutcomeUpheldOnAppeal,
-    ECHR.OutcomeQuashedAndRemitted,
+    ECHR.OutcomeRemitted,
 }
 
 # Heuristic only -- surfaces candidates for the model to judge, never applied
@@ -287,6 +305,7 @@ class ProceedingSummary:
     decision_date: str | None
     start_date: str | None
     outcome: str | None
+    instance_level: str | None
     is_final: bool | None
     follows: list[str]
     quotes: list[str]
@@ -314,6 +333,7 @@ def summarize_proceedings(graph: Graph) -> list[ProceedingSummary]:
     for s in graph.subjects(RDF.type, ECHR.DomesticProceeding):
         court = next(graph.objects(s, ECHR.hasCourt), None)
         outcome = next(graph.objects(s, ECHR.hasOutcome), None)
+        instance_level = next(graph.objects(s, ECHR.hasInstanceLevel), None)
         is_final = next(graph.objects(s, ECHR.isFinalDomesticDecision), None)
         out.append(
             ProceedingSummary(
@@ -328,6 +348,11 @@ def summarize_proceedings(graph: Graph) -> list[ProceedingSummary]:
                     None,
                 ),
                 outcome=_curie(graph, outcome) if outcome is not None else None,
+                instance_level=(
+                    _curie(graph, instance_level)
+                    if instance_level is not None
+                    else None
+                ),
                 is_final=bool(is_final) if is_final is not None else None,
                 follows=[
                     _curie(graph, o) for o in graph.objects(s, ECHR.followsProceeding)
@@ -371,6 +396,9 @@ def find_mistyped_candidates(graph: Graph) -> list[dict]:
 
 APPEAL_SHAPED_OUTCOME_CURIES = {
     "echr:" + str(o).split("#")[-1] for o in APPEAL_SHAPED_OUTCOMES
+}
+APPEAL_SHAPED_LEVEL_CURIES = {
+    "echr:" + str(o).split("#")[-1] for o in APPEAL_SHAPED_LEVELS
 }
 
 
@@ -462,7 +490,11 @@ def find_appeal_shaped_gaps(summaries: list[ProceedingSummary]) -> list[str]:
     return [
         p.curie
         for p in summaries
-        if p.outcome in APPEAL_SHAPED_OUTCOME_CURIES and not p.follows
+        if not p.follows
+        and (
+            p.instance_level in APPEAL_SHAPED_LEVEL_CURIES
+            or p.outcome in APPEAL_SHAPED_OUTCOME_CURIES
+        )
     ]
 
 
@@ -783,13 +815,34 @@ def _is_wrong_token_param_error(exc: Exception) -> bool:
     return "max_tokens" in text and "max_completion_tokens" in text
 
 
+class RepairTruncated(RuntimeError):
+    """The model hit the output cap without closing the patch.
+
+    A distinct type because this failure means something different from every
+    other one, and the difference is actionable: a timeout or a refusal says
+    "this document could not be repaired", whereas truncation says "the cap is
+    too low for this document" -- the model was working and got cut off. The
+    2026-08-20 experiment lost 14 of 50 gemma documents this way at a 3,000
+    cap, and because the driver counted them alongside genuine failures the
+    signal that the CAP was the problem never surfaced. main() now tallies
+    these separately and names the fix in its summary line.
+    """
+
+    def __init__(self, max_tokens: int) -> None:
+        super().__init__(
+            f"generation hit the {max_tokens}-token output cap without closing "
+            "the patch -- raise --max-tokens for this document"
+        )
+        self.max_tokens = max_tokens
+
+
 def call_repair_model(
     client: OpenAI,
     model: str,
     user_prompt: str,
     *,
     temperature: float = 0.4,
-    max_tokens: int = 3000,
+    max_tokens: int = 8000,
     max_attempts: int = 2,
 ) -> RepairPatch:
     """One repair patch, retried once against a runaway-generation failure.
@@ -806,14 +859,22 @@ def call_repair_model(
     Two guards, matched to that failure shape:
     - `max_tokens` bounds a runaway draw to a fast, cheap failure (seconds,
       not the full request timeout) instead of a silent multi-minute hang.
-      3000 is generous headroom over any patch actually observed here (the
-      largest real repair patch measured was a few hundred completion
-      tokens); it exists purely as a backstop, not a working limit.
+      It is a BACKSTOP and must be set well clear of real work: at 3000 it
+      stopped being one. The 2026-08-20 experiment hit it on 4/10, 6/10 and
+      4/10 documents in gemma native mv1, native mv2 and rolling mv2 -- 14 of
+      50 documents lost their repair pass not to a decoding pathology but to
+      a cap set below what a 25-finding document legitimately needs. 8000
+      restores the headroom; a runaway draw still fails in seconds rather
+      than burning the full --timeout.
     - `max_attempts` retries once on ANY failure (timeout, truncation, empty
       patch) before giving up, because this is drawn from noisy sampling: the
       same prompt produced a good patch on one run and nothing on the next
       with no change to the input. One extra draw is cheap insurance against
       a bad one, and a real inability to help still surfaces after that.
+
+    Truncation raises RepairTruncated rather than a bare RuntimeError, so the
+    driver can separate "the cap was too low" from "this document could not be
+    repaired" -- see that class.
     """
     last_error: Exception | None = None
     token_kwargs = _token_limit_kwargs(model, max_tokens)
@@ -846,10 +907,7 @@ def call_repair_model(
             continue
         choice = completion.choices[0]
         if choice.finish_reason == "length":
-            last_error = RuntimeError(
-                f"generation hit max_tokens={max_tokens} without closing the "
-                "patch (runaway generation, not a real answer)"
-            )
+            last_error = RepairTruncated(max_tokens)
             continue
         parsed = choice.message.parsed
         if parsed is None:
@@ -1166,7 +1224,7 @@ def repair_one(
     dry_run: bool,
     temperature: float = 0.4,
     passes: int = 1,
-    max_tokens: int = 3000,
+    max_tokens: int = 8000,
 ) -> None:
     """Repair one facts graph, optionally over several model calls.
 
@@ -1411,16 +1469,18 @@ def main() -> int:
     parser.add_argument(
         "--max-tokens",
         type=int,
-        default=3000,
+        default=8000,
         help=(
             "Completion token cap per repair call. Guided decoding "
             "(response_format=RepairPatch) occasionally never closes the "
             "rationale field and pads with whitespace until something stops "
             "it -- observed 2026-08-20 burning the full --timeout on a 5.6k- "
             "token prompt for zero output. This turns that into a fast, "
-            "cheap failure (a few seconds) instead of a multi-minute hang; "
-            "3000 is well above any real patch seen so far and exists purely "
-            "as a backstop. call_repair_model retries once on hitting it."
+            "cheap failure (a few seconds) instead of a multi-minute hang. "
+            "It is a BACKSTOP, not a working limit: at the previous default "
+            "of 3000 it became one, costing 14 of 50 gemma documents their "
+            "repair pass across the 2026-08-20 arms. Documents truncated at "
+            "this cap are reported separately at the end of the run."
         ),
     )
     parser.add_argument(
@@ -1449,6 +1509,7 @@ def main() -> int:
     warm_up_grammar(client, args.model)
 
     failures = 0
+    truncated: list[Path] = []
     for facts_ttl in facts_files:
         try:
             repair_one(
@@ -1465,11 +1526,26 @@ def main() -> int:
             # experiment needs whatever repaired output is obtainable, and the
             # failure itself is a result worth recording per model.
             failures += 1
+            if isinstance(exc, RepairTruncated):
+                truncated.append(facts_ttl)
             print(
                 f"  FAILED {relative(facts_ttl)}: {type(exc).__name__}: {str(exc)[:300]}"
             )
     if failures:
         print(f"  {failures}/{len(facts_files)} document(s) failed to repair")
+    if truncated:
+        # Named separately and with the remedy attached, because this failure
+        # class is a CONFIGURATION problem, not a model one: the patch was
+        # being written correctly and got cut off. Folded into the generic
+        # failure count on 2026-08-20, it read as "the model cannot repair
+        # these documents" for 14 of 50 documents whose only defect was a cap
+        # set too low.
+        print(
+            f"  of those, {len(truncated)} hit the {args.max_tokens}-token output "
+            f"cap mid-patch -- re-run these with a higher --max-tokens:"
+        )
+        for path in truncated:
+            print(f"    {relative(path)}")
     # Exit non-zero so a driver script cannot record a repair phase as clean
     # when it repaired nothing. On 2026-08-20 every gpt-5-mini repair call
     # 400'd on an unsupported parameter, all ten documents failed, and this

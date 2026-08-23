@@ -37,7 +37,7 @@ from art6.paths import REPO_ROOT, relative
 SH = Namespace("http://www.w3.org/ns/shacl#")
 SHAPES_PATH = REPO_ROOT / "ontology" / "echr-shapes.ttl"
 ONTOLOGY_TTL = Path(
-    os.environ.get("ART6_ONTOLOGY_TTL", REPO_ROOT / "ontology" / "echr_2.ttl")
+    os.environ.get("ART6_ONTOLOGY_TTL", REPO_ROOT / "ontology" / "echr.ttl")
 )
 ECHR_NS = "https://growgraph.dev/echr#"
 

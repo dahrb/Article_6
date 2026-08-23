@@ -467,6 +467,13 @@ async def _run(args: argparse.Namespace) -> int:
         record_seconds = time.perf_counter() - t_record
         if record_failed or out_path is None:
             failures += 1
+        # Named the same as run_native.py's own per-document accounting, so
+        # the three assembly strategies are comparable on content loss without
+        # a per-arm special case. A record is NOT done just because a file was
+        # written: a chunk that failed is text the graph is missing, and
+        # nothing downstream -- not SHACL, not the validator, not the file's
+        # own existence -- says so. See run_native.units_lost_by_document.
+        units_lost = sum(1 for c in chunk_rows if c["status"] != str(Status.SUCCESS))
         summary.append(
             {
                 "record": label,
@@ -475,6 +482,12 @@ async def _run(args: argparse.Namespace) -> int:
                 "final_triples": len(state.aggregated_facts or ()),
                 "seconds": round(record_seconds, 1),
                 "output": out_path.name if out_path else None,
+                "units_total": len(units),
+                "units_lost": units_lost,
+                "units_lost_fraction": (
+                    round(units_lost / len(units), 3) if units else 0.0
+                ),
+                "complete": units_lost == 0 and out_path is not None,
                 "chunk_detail": chunk_rows,
             }
         )
@@ -529,6 +542,20 @@ async def _run(args: argparse.Namespace) -> int:
             json.dumps(report_out, indent=2), encoding="utf-8"
         )
         print(f"\nreport written to {args.report}")
+
+    incomplete = [row for row in summary if not row["complete"]]
+    if incomplete:
+        print(
+            f"\nINCOMPLETE: {len(incomplete)}/{len(summary)} record(s) lost content "
+            f"({sum(r['units_lost'] for r in incomplete)} chunk(s) total). These "
+            f"outputs exist and look clean; they are missing text:"
+        )
+        for row in incomplete:
+            state = "no output" if row["output"] is None else "partial"
+            print(
+                f"    {row['record']:<8} {row['units_lost']}/{row['units_total']} "
+                f"chunk(s) lost ({row['units_lost_fraction']:.0%})  [{state}]"
+            )
 
     print(f"\n{len(summary)} record(s) processed, {failures} failure(s)")
     return 1 if failures else 0

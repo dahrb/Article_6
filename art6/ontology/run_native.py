@@ -69,6 +69,53 @@ def _fmt(seconds: float) -> str:
     return f"{seconds:,.1f}s" if seconds < 120 else f"{seconds / 60:,.1f}m"
 
 
+# One content unit can time out or render malformed, and the pipeline
+# aggregates the survivors and reports the record as DONE -- with an output
+# file, a validation report and a run manifest, all of them clean.
+#
+# The 2026-08-21 evaluation is what this exists for. `gpt5mini_native_mv1`'s L1
+# is 519 triples, fully quote-anchored, SHACL-conformant, and missing the
+# entire Article 6 core of the case, because the one chunk carrying section D
+# timed out and was dropped. Nothing in the pipeline noticed, and nothing in
+# the output says so. Worse, in the same experiment two graphs that PASSED
+# every shape were the best and the worst extraction in the run: shape
+# conformance measures whether what you extracted is well-formed, never
+# whether you extracted it, so it goes UP when the extractor fails hardest.
+#
+# These two signatures are the only place the loss is currently recorded, and
+# only in a log nobody reads. Attribution is by position: ontocast processes
+# records sequentially, so every loss line belongs to the next document whose
+# run manifest is written. The manifest is the right boundary marker rather
+# than the facts graph, because a document that loses ALL its units still gets
+# a manifest but never gets a .facts.ttl -- which is exactly the case that
+# most needs to be counted.
+_UNIT_LOSS_RE = re.compile(
+    r"Parallel facts map failed without usable output for (\d+)/(\d+) unit\(s\)"
+)
+_MANIFEST_RE = re.compile(r"Dumped run manifest to \S*?([^/\s]+)\.run\.json")
+
+
+def units_lost_by_document(log_text: str) -> dict[str, dict[str, int]]:
+    """Per-document unit loss, keyed by output stem (e.g. ``input.L4``)."""
+    per_doc: dict[str, dict[str, int]] = {}
+    pending_lost = pending_total = 0
+    for line in log_text.splitlines():
+        if match := _UNIT_LOSS_RE.search(line):
+            pending_lost += int(match.group(1))
+            # The denominator is the document's unit count, not a running sum:
+            # a document can log this line more than once (native retries a
+            # unit under MAX_VISITS>1) and each line reports the same total.
+            pending_total = max(pending_total, int(match.group(2)))
+            continue
+        if match := _MANIFEST_RE.search(line):
+            per_doc[match.group(1)] = {
+                "units_total": pending_total,
+                "units_lost": pending_lost,
+            }
+            pending_lost = pending_total = 0
+    return per_doc
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(
         description="Run `ontocast process` in-process with response_repair installed."
@@ -88,6 +135,15 @@ def main() -> int:
         "--no-turtle-repair",
         action="store_true",
         help="Skip the premature-period-before-property fix, for A/B only -- see turtle_repair.py.",
+    )
+    ap.add_argument(
+        "--allow-unit-loss",
+        action="store_true",
+        help=(
+            "Exit 0 even when documents lost content units. By default a run "
+            "that dropped a unit exits 2, because the output of such a run "
+            "looks clean at every other checkpoint -- see units_lost_by_document."
+        ),
     )
     args, passthrough = ap.parse_known_args()
 
@@ -163,6 +219,45 @@ def main() -> int:
 
     out_dir = pathlib.Path(args.output_dir)
     facts_files = sorted(out_dir.glob("*.facts.ttl"))
+
+    # Per-document unit accounting. The log gives the loss; the per-document
+    # run manifest gives the authoritative unit count (retrieval_metrics.
+    # facts_anchor_units), which is the only source that is right for a
+    # document that lost every unit and therefore never logged a denominator
+    # worth trusting.
+    loss_by_doc = units_lost_by_document(log_text)
+    documents = []
+    for manifest_path in sorted(out_dir.glob("*.run.json")):
+        stem = manifest_path.name.removesuffix(".run.json")
+        loss = loss_by_doc.get(stem, {"units_total": 0, "units_lost": 0})
+        units_total = loss["units_total"]
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            units_total = (
+                manifest.get("retrieval_metrics", {}).get("facts_anchor_units")
+                or units_total
+            )
+        except (OSError, ValueError):
+            manifest = {}
+        units_lost = loss["units_lost"]
+        documents.append(
+            {
+                "document": stem,
+                "units_total": units_total,
+                "units_lost": units_lost,
+                "units_lost_fraction": (
+                    round(units_lost / units_total, 3) if units_total else 0.0
+                ),
+                "facts_triples": manifest.get("facts_triples"),
+                "output_written": (out_dir / f"{stem}.facts.ttl").exists(),
+                # The whole point: a record is NOT done just because a file
+                # was written. Anything that lost a unit is incomplete, and
+                # anything that produced no file at all is a total loss.
+                "complete": units_lost == 0
+                and (out_dir / f"{stem}.facts.ttl").exists(),
+            }
+        )
+    incomplete = [d for d in documents if not d["complete"]]
     # Best-effort per-document timing: ontocast's own CLI does not expose a
     # per-record hook the way carry_forward.py's own loop does, so this reads
     # each output file's own mtime relative to run start. That is coarse
@@ -188,6 +283,10 @@ def main() -> int:
         "turtle_repair_recoveries": turtle_repaired,
         "parse_failures_unrecovered": parse_failures,
         "chunk_render_failures": chunk_failures,
+        "documents": documents,
+        "documents_total": len(documents),
+        "documents_incomplete": len(incomplete),
+        "units_lost_total": sum(d["units_lost"] for d in documents),
         "output_files": per_file,
     }
     print(
@@ -199,11 +298,33 @@ def main() -> int:
         f"recovered, {parse_failures} unrecovered parse failure(s), "
         f"{chunk_failures} chunk render failure(s) logged"
     )
+    if incomplete:
+        print(
+            f"\nINCOMPLETE: {len(incomplete)}/{len(documents)} document(s) lost "
+            f"content ({report['units_lost_total']} unit(s) total). These files "
+            f"exist and look clean; they are missing text:"
+        )
+        for d in incomplete:
+            state = "no output" if not d["output_written"] else "partial"
+            print(
+                f"    {d['document']:<16} {d['units_lost']}/{d['units_total']} "
+                f"unit(s) lost ({d['units_lost_fraction']:.0%})  [{state}]"
+            )
+    else:
+        print(f"complete: all {len(documents)} document(s) kept every unit")
     if args.report:
         pathlib.Path(args.report).write_text(
             json.dumps(report, indent=2), encoding="utf-8"
         )
         print(f"report written to {args.report}")
+
+    if incomplete and not args.allow_unit_loss and exit_code == 0:
+        # Fail the RUN, not just the record, so a driver script cannot log a
+        # clean extraction phase over documents that silently lost text. The
+        # experiment driver already treats a non-zero extraction as a flag
+        # rather than an abort ("WARNING: ... continuing to next model"), so
+        # this surfaces the problem without costing the remaining runs.
+        exit_code = 2
 
     return exit_code
 

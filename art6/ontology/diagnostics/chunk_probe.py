@@ -1,20 +1,10 @@
 """
+### DELETE IN FUTURE
 chunk_probe.py
 --------------
 Offline probe of OntoCast's chunking and section classification on the Art. 6
 test set. Answers "how would this document be split, and what would each piece
 be labelled?" without spending a single LLM token.
-
-It imports OntoCast directly, so it must run INSIDE THE ONTOCAST CHECKOUT, not
-this repo's venv:
-
-    cd ../../ontocast
-    env -u VIRTUAL_ENV uv run python \
-        ../article_6/domestic_proceedings/art6/ontology/chunk_probe.py \
-        ../article_6/domestic_proceedings/data/art6_domestic_test_set.json
-
-    # one scenario group at a time: baseline | nochunk | heading
-    ... chunk_probe.py <test_set.json> nochunk
 
 Only the deterministic classifier tiers are exercised ('off', 'heading',
 'heuristic'); 'llm' needs a ToolBox and would cost money, which defeats the

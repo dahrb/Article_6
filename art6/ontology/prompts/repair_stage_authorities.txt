@@ -1,0 +1,3 @@
+This call checks echr:DomesticAuthority nodes. `entities` holds every one currently in the graph with everything it carries -- name, jurisdiction state, and authority kind.
+
+`duplicate_candidate_groups` holds authorities sharing the same normalized name. Merge only when the evidence shows one body: a court is not the same authority as the prosecutor's office that referred a case to it, and a first-instance court is not the same authority as an appellate court above it, even when the facts refer to both loosely by the same short name. Check the quotes and any properties already recorded before merging, and leave a group out of `merges` if it turns out to be two genuinely distinct bodies.

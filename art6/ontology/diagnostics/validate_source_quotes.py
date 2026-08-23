@@ -4,13 +4,6 @@ validate_source_quotes.py
 SHACL check that every ``echr:hasSupportingQuote`` is actually present in the
 document the facts were extracted from.
 
-Motivation: extraction_fixes_evaluation.md cites "quote fidelity ... checked
-by substring match" as a benchmark, but no such check exists in this repo --
-it referred to a one-off measurement, not a reusable tool. This is the
-reusable tool. The legal set of valid values is a property of the *document*,
-not the schema, so the SHACL shapes graph is GENERATED per document rather
-than written once and shared.
-
 HOW IT WORKS
 ------------
     1. normalize the document text and every asserted quote the same way

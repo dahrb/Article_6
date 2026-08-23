@@ -8,36 +8,56 @@ OntoCast's own pipeline processes content units independently and in parallel
 (see the "chunking" investigation in this project's history) so it cannot
 notice that two nodes it minted in separate calls should be linked, and even
 within one call it does not reliably apply relations it has full context for.
-This script re-reads the merged graph as a whole and asks one LLM call per
-document to fix exactly the defects that shape of mistake produces:
+This script re-reads the merged graph as a whole and repairs it in SEQUENTIAL
+STAGES, one LLM call per stage per document, each scoped to one region of the
+ontology so every call only sees the classes, properties and findings that are
+actually relevant to it (see `STAGES` below). A later stage sees whatever an
+earlier stage already fixed, since they share one graph in memory and the
+patch from each stage is applied before the next stage's findings are derived.
 
-  1. missing echr:followsProceeding links between domestic proceedings,
-     flagged deterministically wherever hasInstanceLevel places the proceeding
-     at an appeal-shaped level (echr:LevelAppeal, echr:LevelCassation,
-     echr:LevelSupervisoryReview, echr:LevelReopening) or hasOutcome is
-     echr:OutcomeRemitted, and no link is present;
-  2. echr:isFinalDomesticDecision asserted true on more than one proceeding
-     in the same document;
-  3. entities that describe a domestic authority's decision but were typed
-     outside echr:DomesticProceeding (heuristically surfaced by keyword, not
-     assumed -- the model decides whether each candidate is really one);
-  4. whatever the SHACL-lite validator already flagged in the sibling
-     `<stem>.facts.validation.json` (dangling_reference, suspect_multi_value),
-     PLUS whatever ontology/echr-shapes.ttl flags on the graph directly --
-     the multi-label false-merge shape in particular exists specifically so
-     this pass can fix what it names (added 2026-08-19, see
-     `find_shape_violations` below);
-  5. DUPLICATE ENTITIES -- one real proceeding or authority extracted as two
-     nodes, surfaced deterministically (same court + same decision date; same
-     authority name) and confirmed by the model.
+  STAGE 1: domestic proceedings
+    1. missing echr:followsProceeding links between domestic proceedings,
+       flagged deterministically wherever hasInstanceLevel places the
+       proceeding at an appeal-shaped level (echr:LevelAppeal,
+       echr:LevelCassation, echr:LevelSupervisoryReview, echr:LevelReopening)
+       or hasOutcome is echr:OutcomeRemitted, and no link is present;
+    2. echr:isFinalDomesticDecision asserted true on more than one proceeding
+       in the same document;
+    3. entities that describe a domestic authority's decision but were typed
+       outside echr:DomesticProceeding (heuristically surfaced by keyword,
+       not assumed -- the model decides whether each candidate is really
+       one);
+    4. duplicate proceedings (same court + same decision date).
 
-DUPLICATES ARE MERGED AND DELETED, NOT LEFT ORPHANED. The model only names the
-pair and which node survives; `merge_nodes` does the work -- it re-points every
-inbound edge onto the survivor, moves across any property the survivor lacks
-(the survivor's own value wins for anything the ontology declares
-owl:FunctionalProperty, so a merge can never manufacture the multi-value
-contradiction it exists to remove), and then deletes every triple mentioning
-the duplicate. Nothing is left behind for a later pass to clean up.
+  STAGE 2: persons and participation
+    1. duplicate echr:NaturalPerson nodes (same normalized name);
+    2. domestic-event nodes (proceedings, administrative actions, enforcement
+       actions, prosecutorial reviews) with no echr:hasParticipation link to
+       any party at all;
+    3. echr:NaturalPerson nodes never connected to any event through an
+       echr:Participation node.
+
+  STAGE 3: domestic authorities
+    1. duplicate echr:DomesticAuthority nodes (same normalized name).
+
+  EVERY STAGE also gets, scoped to its own classes:
+    - whatever the SHACL-lite validator already flagged in the sibling
+      `<stem>.facts.validation.json` (dangling_reference, suspect_multi_value)
+      on its first pass, PLUS whatever ontology/echr-shapes.ttl flags on the
+      graph directly on every pass -- the multi-label false-merge shape in
+      particular exists specifically so this pass can fix what it names
+      (added 2026-08-19, see `find_shape_violations` below);
+    - the full, unfiltered set of triples on every doc: instance of its
+      classes (`entity_dump` below) -- not a curated subset, so nothing in
+      that region of the graph is hidden from the stage responsible for it.
+
+DUPLICATE ENTITIES ARE MERGED AND DELETED, NOT LEFT ORPHANED. The model only
+names the pair and which node survives; `merge_nodes` does the work -- it
+re-points every inbound edge onto the survivor, moves across any property the
+survivor lacks (the survivor's own value wins for anything the ontology
+declares owl:FunctionalProperty, so a merge can never manufacture the
+multi-value contradiction it exists to remove), and then deletes every triple
+mentioning the duplicate. Nothing is left behind for a later pass to clean up.
 
 A final `sweep_stub_orphans` deletes typed nodes that carry nothing but
 rdf:type/rdfs:label and have no inbound reference. It is deliberately narrow:
@@ -151,21 +171,6 @@ def unknown_echr_terms(*candidates: str) -> list[str]:
     return bad
 
 
-# Outcomes that presuppose a decision below, per the ontology's own
-# scope note on echr:DomesticProceeding (see the 2026-08-18 edit).
-#
-# Consolidated 2026-08-23: echr:OutcomeQuashedAndRemitted became
-# echr:OutcomeRemitted, and echr:OutcomeUpheldOnAppeal was folded into the new
-# echr:OutcomeMeritsDecided with no distinct term -- ProceedingOutcome now
-# records disposition-type only, not appellate direction (that lives in
-# echr:hasOutcomeDirection). Outcome alone can therefore no longer tell "this
-# merits decision affirmed something below" apart from "this merits decision
-# is the first one in the case", so echr:hasInstanceLevel is now the primary
-# signal: a proceeding the facts place at one of these levels is reviewing a
-# decision below BY DEFINITION of the level itself, regardless of which way
-# the outcome cut. echr:OutcomeRemitted is kept as a second, level-independent
-# trigger -- a remittal is appeal-shaped even on the rare graph where the
-# level was never captured.
 APPEAL_SHAPED_LEVELS = {
     ECHR.LevelAppeal,
     ECHR.LevelCassation,
@@ -176,9 +181,6 @@ APPEAL_SHAPED_OUTCOMES = {
     ECHR.OutcomeRemitted,
 }
 
-# Heuristic only -- surfaces candidates for the model to judge, never applied
-# automatically. A schema:*-typed node whose label/description reads like an
-# authority's decision is worth a second look against echr:DomesticProceeding.
 DECISION_LANGUAGE_KEYWORDS = (
     "refus",
     "uph",
@@ -213,7 +215,7 @@ def load_openai_api_key() -> str:
 
 
 # ---------------------------------------------------------------------------
-# Patch schema -- what the model is allowed to say, nothing looser.
+# Patch schema
 # ---------------------------------------------------------------------------
 
 
@@ -363,6 +365,31 @@ def summarize_proceedings(graph: Graph) -> list[ProceedingSummary]:
     return out
 
 
+def entity_dump(graph: Graph, classes: tuple[URIRef, ...], doc_ns: str) -> list[dict]:
+    """Every triple on every doc: instance of `classes`, in full.
+
+    Unlike ProceedingSummary above, this is not a curated subset of fields --
+    it is whatever the extraction actually put on the node, rendered as one
+    dict per instance with every predicate (CURIE) mapped to its list of
+    values (CURIE for a URI object, plain text for a literal). That is the
+    point: a repair stage scoped to a class should see everything about its
+    instances, not just the properties someone thought to add a field for.
+    """
+    out = []
+    for s in sorted(
+        {n for cls in classes for n in graph.subjects(RDF.type, cls)}, key=str
+    ):
+        if not str(s).startswith(doc_ns):
+            continue
+        props: dict[str, list[str]] = {}
+        for p, o in graph.predicate_objects(s):
+            if p == RDF.type:
+                continue
+            props.setdefault(_curie(graph, p), []).append(_render(graph, o))
+        out.append({"curie": _curie(graph, s), **props})
+    return out
+
+
 def find_mistyped_candidates(graph: Graph) -> list[dict]:
     """schema:*-typed doc: nodes whose text reads like an authority's decision."""
 
@@ -418,6 +445,11 @@ def find_duplicate_candidates(graph: Graph) -> list[dict]:
                           cannot decide the same case twice on one day, so a
                           collision here is a duplicate rather than a coincidence.
       DomesticAuthority   same normalized hasAuthorityName / rdfs:label.
+      NaturalPerson       same normalized hasPersonName / rdfs:label. Weaker
+                          than the other two keys -- two distinct people can
+                          share a name (a father and son, two co-accused) --
+                          so this one leans harder on the model actually
+                          checking the quotes before merging.
 
     Each group is returned with enough context -- label, dates, outcome, quotes,
     and how many triples the node carries -- for the model to pick which node to
@@ -483,7 +515,79 @@ def find_duplicate_candidates(graph: Graph) -> list[dict]:
                     "members": _members(nodes),
                 }
             )
+
+    by_person_name: dict[str, list[URIRef]] = {}
+    for s_ in graph.subjects(RDF.type, ECHR.NaturalPerson):
+        if not str(s_).startswith(doc_ns):
+            continue
+        name = next(graph.objects(s_, ECHR.hasPersonName), None) or next(
+            graph.objects(s_, RDFS.label), None
+        )
+        if name is None:
+            continue
+        by_person_name.setdefault(_normalize_name(name), []).append(s_)
+    for name, nodes in by_person_name.items():
+        if len(nodes) > 1:
+            groups.append(
+                {
+                    "class": "echr:NaturalPerson",
+                    "matched_on": f"same person name {name!r}",
+                    "members": _members(nodes),
+                }
+            )
     return groups
+
+
+@lru_cache(maxsize=1)
+def domestic_event_classes() -> frozenset[URIRef]:
+    """echr:DomesticEvent and every class transitively subClassOf it.
+
+    Read from the ontology rather than hardcoded, for the same reason as
+    `functional_properties` above: a new DomesticEvent subclass should not
+    need this file edited to be covered by the missing-participation check.
+    """
+    g = Graph()
+    g.parse(ONTOLOGY_TTL)
+    return frozenset(g.transitive_subjects(RDFS.subClassOf, ECHR.DomesticEvent)) | {
+        ECHR.DomesticEvent
+    }
+
+
+def find_missing_participation(graph: Graph, doc_ns: str) -> list[str]:
+    """DomesticEvent-shaped nodes with no echr:hasParticipation link at all.
+
+    A proceeding, administrative action, enforcement action or prosecutorial
+    review with zero recorded participants is very likely missing an
+    echr:Participation node the source text supports, not an event nobody
+    took part in.
+    """
+    out = []
+    for cls in domestic_event_classes():
+        for s in graph.subjects(RDF.type, cls):
+            if not str(s).startswith(doc_ns):
+                continue
+            if (s, ECHR.hasParticipation, None) not in graph:
+                out.append(_curie(graph, s))
+    return sorted(set(out))
+
+
+def find_unlinked_persons(graph: Graph, doc_ns: str) -> list[str]:
+    """echr:NaturalPerson nodes never named as an echr:Participation's party.
+
+    Surfaced, not assumed wrong: a legal representative is linked via
+    echr:isRepresentedBy on the party they act for, not a Participation node,
+    so this is deterministic surfacing for the model to judge, exactly like
+    every other finding here -- someone mentioned only in passing, with no
+    procedural role, legitimately has no link to add.
+    """
+    linked = set(graph.objects(None, ECHR.participatingParty))
+    out = []
+    for s in graph.subjects(RDF.type, ECHR.NaturalPerson):
+        if not str(s).startswith(doc_ns):
+            continue
+        if s not in linked:
+            out.append(_curie(graph, s))
+    return sorted(set(out))
 
 
 def find_appeal_shaped_gaps(summaries: list[ProceedingSummary]) -> list[str]:
@@ -582,28 +686,26 @@ def find_shape_violations(graph: Graph) -> list[dict]:
     return findings
 
 
-def load_ontology_context() -> str:
-    """The DomesticProceeding-relevant fragment of echr.ttl, read live so this
-    script can never drift out of sync with the ontology's own definitions."""
+def load_ontology_fragment(classes: tuple[URIRef, ...]) -> str:
+    """The fragment of echr.ttl relevant to `classes`, read live so this
+    script can never drift out of sync with the ontology's own definitions.
+
+    Includes each class's own definition plus every property whose
+    rdfs:domain is one of `classes` -- so a repair stage scoped to, say,
+    echr:NaturalPerson sees echr:hasGender and echr:hasPersonName without
+    also being handed the whole ontology.
+    """
     g = Graph()
     g.parse(ONTOLOGY_TTL)
-    relevant_classes = [
-        ECHR.DomesticProceeding,
-        ECHR.ProceedingOutcome,
-        ECHR.ProceedingType,
-        ECHR.InstanceLevel,
-    ]
     lines: list[str] = []
-    for cls in relevant_classes:
+    for cls in classes:
         for s, p, o in g.triples((cls, None, None)):
             lines.append(
                 f"{g.namespace_manager.qname(s)} {g.namespace_manager.qname(p)} {_render(g, o)} ."
             )
     for prop_s in g.subjects(None, None):
-        for domain in g.objects(
-            prop_s, URIRef("http://www.w3.org/2000/01/rdf-schema#domain")
-        ):
-            if domain == ECHR.DomesticProceeding:
+        for domain in g.objects(prop_s, RDFS.domain):
+            if domain in classes:
                 for p, o in g.predicate_objects(prop_s):
                     lines.append(
                         f"{g.namespace_manager.qname(prop_s)} {g.namespace_manager.qname(p)} {_render(g, o)} ."
@@ -621,138 +723,175 @@ def _render(g: Graph, o) -> str:
     return f'"{o}"'
 
 
+def _resolve_subject(graph: Graph, subject: str) -> URIRef | None:
+    """A finding's `subject` field, which is either a full URI (from the
+    extraction-time validator's validation.json) or a CURIE (from
+    `find_shape_violations`), back to a node -- so both finding sources can
+    be filtered by class the same way."""
+    if not subject:
+        return None
+    if subject.startswith("http"):
+        return URIRef(subject)
+    try:
+        return graph.namespace_manager.expand_curie(subject)
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _finding_in_classes(
+    graph: Graph, finding: dict, classes: tuple[URIRef, ...]
+) -> bool:
+    """Whether `finding["subject"]` is rdf:type one of `classes` in `graph`.
+
+    Scopes a graph-wide finding (SHACL violation, extraction-time validator
+    entry) to one repair stage. A subject the resolver cannot place -- an
+    unresolvable CURIE, or a bare property-only SPARQL finding with no
+    focusNode -- is kept rather than dropped, so a stage never silently loses
+    a finding it has no way to attribute elsewhere.
+    """
+    node = _resolve_subject(graph, finding.get("subject", ""))
+    if node is None:
+        return True
+    types = set(graph.objects(node, RDF.type))
+    if not types:
+        return True
+    return bool(types & set(classes))
+
+
 # ---------------------------------------------------------------------------
 # LLM call
 # ---------------------------------------------------------------------------
 
-SYSTEM_PROMPT = """\
-You are doing a final consistency pass over an already-extracted RDF facts \
-graph for one ECHR judgment, under the echr: ontology (definitions provided \
-below, read live from the ontology file so they cannot drift).
+SYSTEM_PROMPT_PATH = (
+    Path(__file__).resolve().parent / "prompts" / "repair_system_prompt.txt"
+)
+STAGE_GUIDANCE_DIR = Path(__file__).resolve().parent / "prompts"
 
-You will be given, for one document:
-- every echr:DomesticProceeding node currently in the graph, with its court, \
-dates, outcome, isFinalDomesticDecision flag, existing followsProceeding \
-links, and supporting quotes;
-- candidate nodes typed outside echr:DomesticProceeding that may actually \
-describe a domestic authority's decision and belong under it instead;
-- deterministically-flagged gaps: proceedings whose outcome presupposes a \
-decision below but have no followsProceeding link, and any case where more \
-than one proceeding is marked isFinalDomesticDecision true;
-- structural findings a separate validator already raised on this graph.
 
-Fix only what the evidence in the quotes and fields supports. Do not invent \
-a link between two proceedings that merely happened around the same time -- \
-two separately-initiated avenues on the same underlying grievance (e.g. a \
-complaint to a prosecutor and a parallel court application) are not a chain \
-unless one decision is actually about reviewing the other. Where you retype \
-a candidate node into echr:DomesticProceeding, also add whatever standard \
-properties (hasCourt, hasDecisionDate, hasOutcome, ...) its existing label/ \
-description already supports -- do not leave it a bare rdf:type change.
+def load_system_prompt() -> str:
+    """The current contents of prompts/repair_system_prompt.txt.
 
-echr:DomesticProceeding is scoped to proceedings IN THIS APPLICANT'S OWN \
-case, as narrated in the facts. A court decision from a different, unrelated \
-case that this judgment's facts mention only as case-law authority -- \
-"cited as a precedent", "referred to in support of", and similar -- is NOT a \
-domestic proceeding in this case and must NOT be retyped into it, no matter \
-how decision-like its own label reads. If a candidate's description marks it \
-as a citation rather than a step in this applicant's own proceedings, leave \
-it exactly as it is and do not include it in your patch.
+    Read fresh on every call, not cached: this is the model's instructions,
+    edited by hand far more often than the code around it, and a stale
+    in-process copy would mean a mid-session edit silently not taking effect.
+    """
+    if not SYSTEM_PROMPT_PATH.is_file():
+        raise SystemExit(f"repair system prompt not found: {SYSTEM_PROMPT_PATH}")
+    text = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8").strip()
+    if not text:
+        raise SystemExit(f"repair system prompt is empty: {SYSTEM_PROMPT_PATH}")
+    return text
 
-Every subject you touch must be an existing doc: node, or (only for a newly \
-minted echr:DomesticProceeding standing in for a decision the facts mention \
-but no node yet exists for) a brand-new doc: node with a lowercase_snake_case \
-local name. Never write a triple whose subject is in the echr:, schema:, \
-rdf:, or rdfs: namespace -- those are read-only vocabulary.
 
-INVENTED VOCABULARY. Some findings say a term "is not a term the ontology \
-defines". The ontology is CLOSED: if a class, property or individual is not in \
-the fragment below, it does not exist, however sensible its name looks. These \
-findings name the offending term in their `values` field, and you must clear \
-every one of them:
-- an invented PREDICATE (echr:hasGender, echr:hasHonorific): if a defined \
-property carries the same meaning, `remove` the triple and `add` the same \
-value under the defined property. If none does -- the ontology genuinely does \
-not model this -- `remove` the triple outright. Do not keep it.
-- an invented OBJECT or rdf:type (echr:TypeGuardianship, echr:GenderMale): \
-replace it with the closest member of the relevant closed vocabulary, using \
-the ...Other or ...Unknown member when nothing fits. If the whole property is \
-undefined too, remove the triple instead.
-Never substitute one invented term for another; the replacement must appear \
-verbatim in the ontology fragment below. Emit these as ordinary add/remove \
-operations, one RepairGroup per node you clean up. When you are deleting an \
-invented predicate and only want it gone, leave `object` as an empty string: \
-that removes every value the subject holds under that predicate, and you do \
-not have to reproduce a literal you cannot see in full.
+def load_stage_guidance(filename: str) -> str:
+    """The current contents of one prompts/repair_stage_*.txt file.
 
-DUPLICATE ENTITIES. You are also given groups of nodes that share a \
-distinguishing key -- two proceedings with the same court AND the same \
-decision date, or two authorities with the same name. One court does not \
-decide the same case twice on one day, so such a group is usually one entity \
-the extraction split in two. For each group that really is one entity, emit a \
-`merges` entry naming which node to KEEP and which to DROP. Keep the node \
-carrying the most evidence -- more properties, a fuller supporting quote, a \
-more specific label. Do NOT hand-write add/remove triples to do the merging \
-yourself: naming the pair is enough, and the pipeline moves the properties \
-and the inbound links and deletes the duplicate for you. If a group turns out \
-to be two genuinely distinct steps that happen to share a date, leave it out \
-of `merges` entirely.
+    Read fresh on every call, for the same reason as `load_system_prompt`.
+    """
+    path = STAGE_GUIDANCE_DIR / filename
+    if not path.is_file():
+        raise SystemExit(f"repair stage guidance not found: {path}")
+    text = path.read_text(encoding="utf-8").strip()
+    if not text:
+        raise SystemExit(f"repair stage guidance is empty: {path}")
+    return text
 
-EVERY OTHER STRUCTURAL FINDING. The two categories above are the common \
-cases, but `validator_findings` can carry any shape violation the graph has, \
-and you are expected to look at EVERY entry in it, not just the ones matching \
-a category above, and attempt a fix for each. Each finding gives you a \
-`message` describing the defect, plus `subject`/`predicate`/`values` pointing \
-at exactly where it is -- `values`, when present, usually already names the \
-offending value. General approach, judged against the quotes and existing \
-fields on the node:
-- A "may have at most one X" cardinality finding means the subject has too \
-many values for that property. Decide which value the evidence actually \
-supports (the fuller quote, the more specific/correct one) and `remove` the \
-rest -- `values` usually names the extra one directly.
-- A "must have exactly one X" or "must record exactly one X" finding where \
-the node is missing the right typing or link (e.g. a participatingParty node \
-that is not typed echr:Party) means you probably need to `add` the missing \
-type or link rather than remove anything -- check what the node already is \
-before deciding.
-- A finding about a node having more than one value where the ontology or \
-common sense says it should be singular (two labels, two names) usually means \
-picking the better value and removing the other(s).
-If a finding does not fit any pattern above, use your own judgment from the \
-message text and the node's existing properties -- attempt a fix rather than \
-skipping it, but only where the quotes and fields actually support your fix; \
-leave a finding out of your patch only when you genuinely cannot tell what \
-the correct value should be.
 
-Return a patch: one RepairGroup per finding you act on, each carrying the \
-rationale and the exact add/remove operations, plus a `merges` list for \
-duplicate entities. If a candidate, gap or duplicate group does not hold up \
-under the quotes, leave it out rather than forcing an edge.
-"""
+@dataclass(frozen=True)
+class RepairStage:
+    """One scoped region of the ontology, checked by its own LLM call.
+
+    `ontology_classes` bounds what `load_ontology_fragment` shows the model;
+    `dump_classes` bounds what `entity_dump` shows it about the actual graph;
+    `filter_classes` bounds which graph-wide findings (SHACL violations,
+    extraction-time validator entries, duplicate groups) get shown at all --
+    kept separate from the other two because a finding can legitimately
+    attach to a class this stage cares about without that class needing its
+    own ontology fragment or entity dump (e.g. echr:Party for stage 2).
+    """
+
+    key: str
+    name: str
+    guidance_file: str
+    ontology_classes: tuple[URIRef, ...]
+    dump_classes: tuple[URIRef, ...]
+    filter_classes: tuple[URIRef, ...]
+    duplicate_classes: frozenset[str]
+    check_mistyped: bool = False
+
+
+STAGES: tuple[RepairStage, ...] = (
+    RepairStage(
+        key="proceedings",
+        name="domestic proceedings",
+        guidance_file="repair_stage_proceedings.txt",
+        ontology_classes=(
+            ECHR.DomesticProceeding,
+            ECHR.ProceedingOutcome,
+            ECHR.ProceedingType,
+            ECHR.InstanceLevel,
+        ),
+        dump_classes=(ECHR.DomesticProceeding,),
+        filter_classes=(ECHR.DomesticProceeding,),
+        duplicate_classes=frozenset({"echr:DomesticProceeding"}),
+        check_mistyped=True,
+    ),
+    RepairStage(
+        key="persons",
+        name="persons and participation",
+        guidance_file="repair_stage_persons.txt",
+        ontology_classes=(
+            ECHR.NaturalPerson,
+            ECHR.LegalRepresentative,
+            ECHR.Participation,
+            ECHR.Party,
+            ECHR.PartySide,
+            ECHR.Gender,
+        ),
+        dump_classes=(ECHR.NaturalPerson, ECHR.LegalRepresentative, ECHR.Participation),
+        filter_classes=(
+            ECHR.NaturalPerson,
+            ECHR.LegalRepresentative,
+            ECHR.Participation,
+            ECHR.Party,
+        ),
+        duplicate_classes=frozenset({"echr:NaturalPerson"}),
+    ),
+    RepairStage(
+        key="authorities",
+        name="domestic authorities",
+        guidance_file="repair_stage_authorities.txt",
+        ontology_classes=(ECHR.DomesticAuthority, ECHR.AuthorityKind),
+        dump_classes=(ECHR.DomesticAuthority,),
+        filter_classes=(ECHR.DomesticAuthority,),
+        duplicate_classes=frozenset({"echr:DomesticAuthority"}),
+    ),
+)
 
 
 def build_user_prompt(
     *,
     doc_curie_prefix: str,
+    stage: RepairStage,
     ontology_context: str,
-    summaries: list[ProceedingSummary],
+    entities: list[dict],
     candidates: list[dict],
     duplicate_groups: list[dict],
-    appeal_gaps: list[str],
-    final_conflicts: list[str],
+    structural_gaps: dict[str, list[str]],
     validator_findings: list[dict],
 ) -> str:
     payload = {
-        "domestic_proceedings": [vars(p) for p in summaries],
+        "entities": entities,
         "mistyped_candidates": candidates,
         "duplicate_candidate_groups": duplicate_groups,
-        "flagged_missing_followsProceeding_for": appeal_gaps,
-        "flagged_isFinalDomesticDecision_conflict": final_conflicts,
+        **structural_gaps,
         "validator_findings": validator_findings,
     }
     return (
         f"Document namespace prefix: {doc_curie_prefix}\n\n"
-        f"Relevant ontology fragment (echr.ttl, DomesticProceeding-related):\n"
+        f"Repair stage: {stage.name}\n"
+        f"{load_stage_guidance(stage.guidance_file)}\n\n"
+        f"Relevant ontology fragment (echr.ttl, {stage.name}-related):\n"
         f"{ontology_context}\n\n"
         f"Current graph state and flagged findings:\n"
         f"{json.dumps(payload, indent=2, ensure_ascii=False)}\n"
@@ -784,20 +923,6 @@ def warm_up_grammar(client: OpenAI, model: str) -> None:
         print(f"  grammar warm-up skipped: {type(exc).__name__}: {str(exc)[:150]}")
 
 
-# OpenAI's reasoning models (the gpt-5 family) reject `max_tokens` outright
-# with a 400 -- "Unsupported parameter: 'max_tokens' is not supported with this
-# model. Use 'max_completion_tokens' instead." -- because the cap has to cover
-# reasoning tokens as well as visible output. vLLM-served models accept
-# `max_tokens` and not the newer name. There is no single spelling that works
-# everywhere, so pick by model and fall back on the 400 if a future model
-# changes sides.
-#
-# This cost the 2026-08-20 experiment ALL FOUR gpt-5-mini repair runs: the cap
-# was added as a runaway-generation guard, tested only against vLLM, and every
-# hosted repair call 400'd on the first request. `repair_facts.py` caught the
-# exception per document, printed "N/N document(s) failed to repair", and
-# exited 0 -- so the driver logged a clean finish and the repaired/ trees were
-# byte-identical copies of raw/. See the report's "Repair" section.
 _REASONING_TOKEN_PARAM_PREFIXES = ("gpt-5", "o1", "o3", "o4")
 
 
@@ -883,7 +1008,7 @@ def call_repair_model(
             completion = client.chat.completions.parse(
                 model=model,
                 messages=[
-                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "system", "content": load_system_prompt()},
                     {"role": "user", "content": user_prompt},
                 ],
                 response_format=RepairPatch,
@@ -1216,86 +1341,113 @@ def apply_patch(
 # ---------------------------------------------------------------------------
 
 
-def repair_one(
+def _stage_structural_gaps(
+    stage: RepairStage, graph: Graph, doc_ns: str
+) -> dict[str, list[str]]:
+    """The stage-specific deterministic gap lists shown alongside duplicates
+    and validator findings -- the checks that need typed access to specific
+    properties (follows/outcome/instance level, participation links) rather
+    than a generic class/finding filter."""
+    if stage.key == "proceedings":
+        summaries = summarize_proceedings(graph)
+        return {
+            "flagged_missing_followsProceeding_for": find_appeal_shaped_gaps(summaries),
+            "flagged_isFinalDomesticDecision_conflict": find_final_decision_conflicts(
+                summaries
+            ),
+        }
+    if stage.key == "persons":
+        return {
+            "flagged_events_missing_participation": find_missing_participation(
+                graph, doc_ns
+            ),
+            "flagged_unlinked_persons": find_unlinked_persons(graph, doc_ns),
+        }
+    return {}
+
+
+def _run_stage(
+    graph: Graph,
+    stage: RepairStage,
     facts_ttl: Path,
     client: OpenAI,
     model: str,
     *,
-    dry_run: bool,
-    temperature: float = 0.4,
-    passes: int = 1,
-    max_tokens: int = 8000,
-) -> None:
-    """Repair one facts graph, optionally over several model calls.
+    doc_ns: str,
+    temperature: float,
+    passes: int,
+    max_tokens: int,
+) -> tuple[Graph, bool, list[dict], list[str]]:
+    """Run one stage's repair loop against `graph`, optionally over several
+    model calls. Returns the (possibly replaced) graph, whether anything
+    changed, the audit trail, and the curies of any stub nodes swept.
 
     One call is rarely enough. The model reliably fixes a subset of what it is
     shown and leaves the rest, and applying a patch changes the graph, so the
     NEXT round of findings is different -- a merge can expose a functional-
     property collision that was invisible while the two nodes were separate.
     The 2026-08-19 cfcmp run needed four hand-run invocations for this reason.
-
     So re-derive the findings from the working graph on every pass rather than
-    reusing the first pass's list, and stop as soon as the graph is clean or a
-    pass changes nothing. The file is written ONCE at the end, from the final
-    graph: writing per pass would make pass 2 find a backup that differs from
-    the file it is about to back up, which the guard below (correctly) refuses.
+    reusing the first pass's list, and stop as soon as this stage's region of
+    the graph is clean or a pass changes nothing.
     """
-    graph = Graph()
-    graph.parse(facts_ttl)
-    doc_ns = str(next((ns for prefix, ns in graph.namespaces() if prefix == "doc"), ""))
-    if not doc_ns:
-        print(f"  skip {relative(facts_ttl)}: no doc: namespace bound")
-        return
-
-    if len(summarize_proceedings(graph)) < 2:
-        print(f"  skip {relative(facts_ttl)}: fewer than 2 DomesticProceeding nodes")
-        return
-
-    ontology_context = load_ontology_context()
+    ontology_context = load_ontology_fragment(stage.ontology_classes)
     audit: list[dict] = []
-    total_swept: list[str] = []
+    swept_all: list[str] = []
     changed = False
 
     for pass_no in range(1, passes + 1):
-        summaries = summarize_proceedings(graph)
-        candidates = find_mistyped_candidates(graph)
-        duplicate_groups = find_duplicate_candidates(graph)
-        appeal_gaps = find_appeal_shaped_gaps(summaries)
-        final_conflicts = find_final_decision_conflicts(summaries)
+        entities = entity_dump(graph, stage.dump_classes, doc_ns)
+        candidates = find_mistyped_candidates(graph) if stage.check_mistyped else []
+        duplicate_groups = [
+            g
+            for g in find_duplicate_candidates(graph)
+            if g["class"] in stage.duplicate_classes
+        ]
+        structural_gaps = _stage_structural_gaps(stage, graph, doc_ns)
+
         # Graph-derived findings are recomputed every pass; the extraction-time
         # validator report is a fixed artefact of the original file, so it only
         # goes in on pass 1 -- re-showing findings a later pass already fixed
         # invites the model to "fix" them a second time.
-        shape_findings = find_shape_violations(graph)
+        shape_findings = [
+            f
+            for f in find_shape_violations(graph)
+            if _finding_in_classes(graph, f, stage.filter_classes)
+        ]
         # Counted before the patch so the no-progress check below compares like
         # with like: shape violations only, never the fixed extraction-time
         # report, which no repair can shrink.
         before_count = len(shape_findings)
         validator_findings = shape_findings
         if pass_no == 1:
-            validator_findings = load_validator_findings(facts_ttl) + shape_findings
+            extraction_findings = [
+                f
+                for f in load_validator_findings(facts_ttl)
+                if _finding_in_classes(graph, f, stage.filter_classes)
+            ]
+            validator_findings = extraction_findings + shape_findings
 
         if not (
             candidates
             or duplicate_groups
-            or appeal_gaps
-            or final_conflicts
+            or any(structural_gaps.values())
             or validator_findings
         ):
             if pass_no == 1:
-                print(f"  clean {relative(facts_ttl)}: nothing flagged")
-                return
-            print(f"    pass {pass_no}: nothing left to flag - stopping")
+                print(f"  [{stage.name}] {relative(facts_ttl)}: nothing flagged")
+                return graph, False, audit, swept_all
+            print(f"    [{stage.name}] pass {pass_no}: nothing left to flag - stopping")
             break
 
         prompt = build_user_prompt(
             doc_curie_prefix="doc",
+            stage=stage,
             ontology_context=ontology_context,
-            summaries=summaries,
+            entities=entities,
             candidates=candidates,
             duplicate_groups=duplicate_groups,
-            appeal_gaps=appeal_gaps,
-            final_conflicts=final_conflicts,
+            structural_gaps=structural_gaps,
             validator_findings=validator_findings,
         )
         patch = call_repair_model(
@@ -1303,7 +1455,11 @@ def repair_one(
         )
 
         proposed_ops = sum(1 for g in patch.groups for op in g.ops)
-        label = f"  {relative(facts_ttl)}" if pass_no == 1 else f"    pass {pass_no}"
+        label = (
+            f"  [{stage.name}] {relative(facts_ttl)}"
+            if pass_no == 1
+            else f"    [{stage.name}] pass {pass_no}"
+        )
         print(
             f"{label}: {len(validator_findings)} finding(s) in; model proposed "
             f"{len(patch.groups)} group(s), {proposed_ops} op(s), "
@@ -1313,7 +1469,7 @@ def repair_one(
         graph, pass_audit = apply_patch(graph, patch, doc_ns)
         swept = sweep_stub_orphans(graph, doc_ns)
         if swept:
-            total_swept.extend(swept)
+            swept_all.extend(swept)
             pass_audit.append(
                 {
                     "finding": "stub_orphan_sweep",
@@ -1327,6 +1483,7 @@ def repair_one(
                 }
             )
         for entry in pass_audit:
+            entry["stage"] = stage.key
             entry["pass"] = pass_no
         audit.extend(pass_audit)
 
@@ -1336,8 +1493,8 @@ def repair_one(
             1 for a in pass_audit if a["action"] == "merge" and a["status"] == "applied"
         )
         print(
-            f"    pass {pass_no}: applied {applied} (of which {merged} merge(s)), "
-            f"skipped {len(skipped)}, stub orphans swept {len(swept)}"
+            f"    [{stage.name}] pass {pass_no}: applied {applied} (of which "
+            f"{merged} merge(s)), skipped {len(skipped)}, stub orphans swept {len(swept)}"
         )
         for a in skipped:
             if a["action"] == "merge":
@@ -1351,7 +1508,9 @@ def repair_one(
         if not applied:
             # Nothing landed. Another identical call would see the same graph
             # and the same findings, so spending it is pure cost.
-            print(f"    pass {pass_no}: no operations applied - stopping")
+            print(
+                f"    [{stage.name}] pass {pass_no}: no operations applied - stopping"
+            )
             break
 
         changed = True
@@ -1360,20 +1519,75 @@ def repair_one(
         # editing around the problem rather than closing it, and a further pass
         # tends to keep doing that. Same signal OntoCast's own facts_gate uses
         # ("repair pass 1 did not reduce merge-signature errors (8 -> 8)").
-        remaining = len(find_shape_violations(graph))
+        remaining = len(
+            [
+                f
+                for f in find_shape_violations(graph)
+                if _finding_in_classes(graph, f, stage.filter_classes)
+            ]
+        )
         if pass_no < passes and remaining >= before_count:
             print(
-                f"    pass {pass_no}: {applied} op(s) applied but findings did not "
-                f"fall ({before_count} -> {remaining}) - stopping"
+                f"    [{stage.name}] pass {pass_no}: {applied} op(s) applied but "
+                f"findings did not fall ({before_count} -> {remaining}) - stopping"
             )
             break
 
+    return graph, changed, audit, swept_all
+
+
+def repair_one(
+    facts_ttl: Path,
+    client: OpenAI,
+    model: str,
+    *,
+    dry_run: bool,
+    temperature: float = 0.4,
+    passes: int = 1,
+    max_tokens: int = 8000,
+) -> None:
+    """Repair one facts graph, one LLM call per STAGES entry per pass.
+
+    Each stage runs its own `_run_stage` loop of up to `passes` calls, scoped
+    to its own region of the ontology (see the module docstring and `STAGES`).
+    Stages run in order and share one graph, so a later stage sees whatever an
+    earlier one already fixed. The file is written ONCE at the end, across all
+    stages: writing per stage would make the next stage find a backup that
+    differs from the file it is about to back up, which the guard below
+    (correctly) refuses.
+    """
+    graph = Graph()
+    graph.parse(facts_ttl)
+    doc_ns = str(next((ns for prefix, ns in graph.namespaces() if prefix == "doc"), ""))
+    if not doc_ns:
+        print(f"  skip {relative(facts_ttl)}: no doc: namespace bound")
+        return
+
+    audit: list[dict] = []
+    total_swept: list[str] = []
+    changed = False
+
+    for stage in STAGES:
+        graph, stage_changed, stage_audit, stage_swept = _run_stage(
+            graph,
+            stage,
+            facts_ttl,
+            client,
+            model,
+            doc_ns=doc_ns,
+            temperature=temperature,
+            passes=passes,
+            max_tokens=max_tokens,
+        )
+        audit.extend(stage_audit)
+        total_swept.extend(stage_swept)
+        changed = changed or stage_changed
+
     if not changed:
-        print("    no net change across all passes; leaving the file untouched")
+        print("    no net change across all stages; leaving the file untouched")
         return
 
     repaired_graph = graph
-    swept = total_swept
     audit_path = facts_ttl.parent / (
         facts_ttl.name.removesuffix(".ttl") + ".repairs.json"
     )
@@ -1459,11 +1673,12 @@ def main() -> int:
         type=int,
         default=1,
         help=(
-            "Maximum repair calls per file (default 1). Findings are "
-            "re-derived from the working graph before each pass, and the loop "
-            "stops early as soon as the graph is clean or a pass applies "
-            "nothing -- so N passes is a ceiling, not a fixed cost. The file "
-            "is written once, at the end."
+            "Maximum repair calls PER STAGE per file (default 1; see STAGES "
+            "in the module docstring for what runs). Findings are re-derived "
+            "from the working graph before each pass, and each stage's loop "
+            "stops early as soon as its region of the graph is clean or a "
+            "pass applies nothing -- so N passes is a per-stage ceiling, not "
+            "a fixed cost. The file is written once, after every stage."
         ),
     )
     parser.add_argument(
@@ -1534,23 +1749,13 @@ def main() -> int:
     if failures:
         print(f"  {failures}/{len(facts_files)} document(s) failed to repair")
     if truncated:
-        # Named separately and with the remedy attached, because this failure
-        # class is a CONFIGURATION problem, not a model one: the patch was
-        # being written correctly and got cut off. Folded into the generic
-        # failure count on 2026-08-20, it read as "the model cannot repair
-        # these documents" for 14 of 50 documents whose only defect was a cap
-        # set too low.
         print(
             f"  of those, {len(truncated)} hit the {args.max_tokens}-token output "
             f"cap mid-patch -- re-run these with a higher --max-tokens:"
         )
         for path in truncated:
             print(f"    {relative(path)}")
-    # Exit non-zero so a driver script cannot record a repair phase as clean
-    # when it repaired nothing. On 2026-08-20 every gpt-5-mini repair call
-    # 400'd on an unsupported parameter, all ten documents failed, and this
-    # returned 0 -- the run looked finished and the "repaired" output was an
-    # unmodified copy of raw. The count was in the log; nothing acted on it.
+
     return 1 if failures else 0
 
 

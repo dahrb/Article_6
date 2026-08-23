@@ -1,6 +1,6 @@
 TASK: Extract the chronological chain of domestic legal proceedings from the provided European Court of Human Rights (ECHR) text.
 Ensure that you model only domestic proceedings and events inc. related administrative procedures related to the case. DO NOT model legal precedent or other legal cases which did not DIRECTLY affect the applicants in the case under consideration.
-The ultimate is to be able to construct a timeline of key events and legal procedures which led up to the legal decision or judgment rendered by the ECtHR
+The ultimate goal is to be able to construct a timeline of key events and legal procedures which led up to the legal decision or judgment rendered by the ECtHR
 
 STRICT SCHEMA CONSTRAINTS:
 
@@ -14,9 +14,9 @@ EXTRACTION RULES:
 
     Map the Procedural Chain: ECHR facts often feature multiple ongoing, parallel legal processes (e.g., simultaneous criminal and civil tracks). You must make the chronological and appellate connections between these proceedings explicit by linking them using the echr:followsProceeding property.
 
-    Anchor All Evidence: Every extracted entity must be grounded in the source text. You must populate echr:hasSupportingQuote with the exact verbatim substring from the text.
+    Anchor All Evidence: Every extracted entity must be grounded in the source text. You must populate echr:hasSupportingQuote with an exact, verbatim substring extracted directly from the text. Do not paraphrase, truncate, or alter the quote in any way.
 
-    No entity should have more than one label, ensure different IRIs for different courts for instance.
+    Ensure distinct real-world entities are assigned strictly unique IRIs. Do not merge distinct courts, persons, or proceedings into a single node. An entity should generally have only one rdfs:label string.
 
     A single echr:DomesticProceeding represents exactly ONE jurisdictional instance (i.e. trial or appeal)
         - It is strictly forbidden for a proceeding to have more than one echr:hasCourt or more than one echr:hasDecisionDate.

@@ -4,29 +4,6 @@ validate_dates.py
 SHACL check that every date asserted in a facts graph is actually *stated* in
 the document the facts were extracted from.
 
-Motivation: the 2026-08-21 evaluation found a class of defect that passes every
-check this repo has. gemma writes
-
-    doc:admin_action_3  echr:hasDecisionDate "2009-03-03"^^xsd:date .
-
-where the source says **3 February 2009** -- in four of its five runs. The
-literal is a well-formed xsd:date, so the malformed-literal check is clean. It
-carries a correct verbatim echr:hasSupportingQuote, so validate_source_quotes
-passes it. No shape constrains a date's *value*, only its cardinality. It is a
-plain factual error sitting inside a graph that passes everything, in a project
-whose entire subject is proceeding chronology.
-
-This is the check that closes that hole. It is the date analogue of
-validate_source_quotes.py and deliberately shares its shape: same
-normalization, same per-document generated shapes graph, same CLI, same report
-format -- so the two can be run over the same directory and read together.
-
-WHICH PROPERTIES ARE DATES is read live from the ontology (every property whose
-rdfs:range is echr:PartialDate) rather than hardcoded, so adding a date
-property to the schema does not silently leave it unvalidated. echr:PartialDate
-is a union of xsd:date, xsd:gYearMonth and xsd:gYear -- "a date as precise as
-the text allows" -- and each precision is checked at its own granularity.
-
 HOW A DATE IS VERIFIED
 ----------------------
 A date does not appear in a judgment as an ISO string; it appears as "3

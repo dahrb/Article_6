@@ -32,7 +32,8 @@ Two facts about OntoCast make this possible without touching that repo:
 The one gap is prompt semantics: that path's built-in wording assumes graph and
 text describe the same content. ``UnitFactsState.facts_user_instruction`` is a
 first-class per-run override that lands in the prompt above both chapters, so
-the carry-forward framing goes there (see CARRY_FORWARD_INSTRUCTION).
+the carry-forward framing goes there (see load_carry_forward_instruction()
+and prompts/carry_forward_instruction.txt).
 
 Nothing in the ontocast checkout is modified; it is imported as a library. Like
 chunk_probe.py, this must run where ontocast is importable:
@@ -65,22 +66,6 @@ import time
 
 logger = logging.getLogger("carry_forward")
 
-# ---------------------------------------------------------------------------
-# The domain prompt, read live.
-#
-# ``expand_input_to_states`` picks ``facts_user_instruction`` out of each JSONL
-# record, because that is how ``ontocast process`` receives it. run_data.sh
-# regenerates the JSONL from prompts/facts.txt on every run, so that path is
-# never stale -- but carry_forward.py is normally pointed at a JSONL somebody
-# built earlier, and then the embedded prompt is a COPY frozen at build time.
-# That is exactly how the 2026-08-19 cfcmp run shipped a 1,783-byte facts.txt
-# that predated the 3.3.0 ontology: the file on disk had moved on, the JSONL
-# had not.
-#
-# So read the file itself, every run, and let it win over whatever the record
-# carries. There is no second copy to keep in sync and no way for a stale JSONL
-# to silently steer an experiment.
-# ---------------------------------------------------------------------------
 FACTS_PROMPT_PATH = pathlib.Path(__file__).resolve().parent / "prompts" / "facts.txt"
 
 
@@ -94,43 +79,31 @@ def load_facts_prompt() -> str:
     return text
 
 
-# ---------------------------------------------------------------------------
-# The carry-forward framing.
-#
-# Lands in the "# USER INSTRUCTION" slot, which the template places BEFORE both
-# the ontology/text chapters and the "# SEMANTIC GRAPH OF FACTS" chapter -- hence
-# the forward references ("below"). Three things it has to do at once:
-#   - re-frame the graph as coming from EARLIER text, not from this chunk;
-#   - make IRI reuse the explicit, named goal (the whole point of the exercise);
-#   - stop the model treating a non-empty graph as "already done" and
-#     under-extracting the new text, which is the obvious failure mode of
-#     reusing an update-shaped prompt for a fresh-content task.
-# ---------------------------------------------------------------------------
-CARRY_FORWARD_INSTRUCTION = """\
-This document is being processed in sequential parts. The "SEMANTIC GRAPH OF \
-FACTS" shown below was extracted from EARLIER PARTS of this same document. It \
-was NOT extracted from the text shown below, which is new and has not been \
-processed yet.
+CARRY_FORWARD_INSTRUCTION_PATH = (
+    pathlib.Path(__file__).resolve().parent
+    / "prompts"
+    / "carry_forward_instruction.txt"
+)
 
-Your task is to extract the facts in the NEW text, continuing the existing graph:
 
-1. REUSE EXISTING IRIs. If the new text refers to an entity that already appears \
-in the graph below -- the same court, authority, party, person or proceeding -- \
-you MUST reuse that entity's existing IRI. Do not mint a second IRI for \
-something already present. Entities are frequently referred to more loosely on \
-later mention ("the court", "the applicant", "the Regional Court") than on \
-first mention; match them to the existing entity anyway.
-2. ADD the new facts. The new text contains material not yet in the graph. \
-Extract it fully, with the same level of detail as the existing graph. Do not \
-treat the existing graph as complete, and do not stop early because the graph \
-already looks substantial.
-3. EXTEND existing entities. If the new text adds information about an entity \
-already in the graph (a decision date, an outcome, an appeal), attach those new \
-triples to the EXISTING IRI.
-4. DO NOT delete or rewrite existing triples unless the new text positively \
-contradicts them. Facts from earlier parts stay, even where the new text does \
-not mention them.
-"""
+def load_carry_forward_instruction() -> str:
+    """The current contents of prompts/carry_forward_instruction.txt.
+
+    Read fresh on every call, not cached: mirrors load_facts_prompt() above,
+    for the same reason -- this is hand-edited far more often than the code
+    around it, and a stale in-process copy would mean a mid-session edit
+    silently not taking effect.
+    """
+    if not CARRY_FORWARD_INSTRUCTION_PATH.is_file():
+        raise SystemExit(
+            f"carry-forward instruction not found: {CARRY_FORWARD_INSTRUCTION_PATH}"
+        )
+    text = CARRY_FORWARD_INSTRUCTION_PATH.read_text(encoding="utf-8").strip()
+    if not text:
+        raise SystemExit(
+            f"carry-forward instruction is empty: {CARRY_FORWARD_INSTRUCTION_PATH}"
+        )
+    return text
 
 
 def _load_env_file(path: pathlib.Path) -> int:
@@ -353,14 +326,8 @@ async def _run(args: argparse.Namespace) -> int:
                     description="Placeholder until resolve_unit_ontology_context runs.",
                 ),
                 ontology_patch_sources=[],
-                # The carry-forward framing SUPPLEMENTS the domain prompt, it
-                # does not stand in for it. Replacing it stripped every rule in
-                # facts.txt -- evidence anchoring, no-precedent, one-court-per-
-                # proceeding, one-label-per-entity -- from chunks 2..N, which is
-                # what produced the cfcmp run's missing hasSupportingQuote layer
-                # (4 quotes across L1/L2/L6/L10; 115 once this was fixed).
                 facts_user_instruction=(
-                    f"{state.facts_user_instruction}\n\n{CARRY_FORWARD_INSTRUCTION}"
+                    f"{state.facts_user_instruction}\n\n{load_carry_forward_instruction()}"
                     if carried
                     else state.facts_user_instruction
                 ),

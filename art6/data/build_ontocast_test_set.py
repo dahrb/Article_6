@@ -15,7 +15,7 @@ Output:
       - a JSON array of {"case_id", "text"}, one entry per case
 
 Usage:
-  uv run python -m art6.ontology.build_ontocast_test_set
+  uv run python -m art6.data.build_ontocast_test_set
 """
 
 from __future__ import annotations

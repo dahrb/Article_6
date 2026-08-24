@@ -92,6 +92,7 @@ import re
 import shutil
 import sys
 import time
+from collections.abc import Iterator
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -1275,6 +1276,159 @@ class RepairTruncated(RuntimeError):
         self.max_tokens = max_tokens
 
 
+# A stalled generation emits legal JSON whitespace forever, so this is the
+# length of an unbroken whitespace run that is taken as proof the model has
+# stopped producing content. Sized off the measured failure: a stalled L10
+# proceedings draw was 56,018 characters of which 55,731 were whitespace, and a
+# healthy patch never contains a whitespace run longer than an indent. 400 is
+# far beyond any pretty-printer and reached within a second of the stall.
+STALL_WHITESPACE_RUN = 400
+
+# Cut points to try when salvaging a truncated patch, newest first. Bounded so
+# a 56k-character stall does not turn into 56k validation attempts.
+MAX_SALVAGE_CANDIDATES = 400
+
+_CURIE_RE = re.compile(r"^[A-Za-z][\w.-]*:\S+$")
+
+
+def _stream_patch_text(
+    client: OpenAI,
+    model: str,
+    messages: list[dict],
+    *,
+    temperature: float,
+    token_kwargs: dict,
+) -> tuple[str, str | None, bool]:
+    """Stream one patch, aborting the moment the generation stalls.
+
+    Returns (raw_text, finish_reason, stalled).
+
+    Streaming exists here purely to make the stall CHEAP. The pathology cannot
+    be prevented from the client -- see the note above the patch schema for the
+    three grammar-level attempts that failed, and disable_any_whitespace is
+    silently ignored by vLLM 0.27.1 -- but it can be detected the instant it
+    starts. Measured 2026-08-24: a stalled draw runs 88s to the 8,000-token cap
+    and 173s to 16,000, and on one 10-document run roughly 500 of 921 seconds
+    were spent generating whitespace. Cutting the request at the stall turns
+    that into about a second and hands back the prefix, which is what the
+    salvage below needs anyway.
+    """
+    parts: list[str] = []
+    finish_reason: str | None = None
+    stalled = False
+    trailing_ws = 0
+
+    with client.chat.completions.stream(
+        model=model,
+        messages=messages,
+        response_format=RepairPatch,
+        temperature=temperature,
+        **token_kwargs,
+    ) as stream:
+        for event in stream:
+            if event.type == "chunk":
+                for choice in event.chunk.choices:
+                    if choice.finish_reason:
+                        finish_reason = choice.finish_reason
+                continue
+            if event.type != "content.delta":
+                continue
+            delta = event.delta
+            parts.append(delta)
+            stripped = delta.strip()
+            if stripped:
+                # Only whitespace AFTER the last real character counts, so an
+                # indented pretty-printed patch never accumulates a run.
+                trailing_ws = len(delta) - len(delta.rstrip())
+            else:
+                trailing_ws += len(delta)
+            if trailing_ws >= STALL_WHITESPACE_RUN:
+                stalled = True
+                break
+
+    return "".join(parts), finish_reason, stalled
+
+
+def _salvage_candidates(raw: str) -> Iterator[str]:
+    """Progressively shorter prefixes of `raw`, each closed into valid JSON.
+
+    Walks the text once, tracking bracket depth and string state, and records
+    every position where a value is complete: after a closing bracket, and
+    after the closing quote of a string. Each such position becomes a candidate
+    -- the prefix up to it, plus the brackets needed to close whatever is still
+    open. Newest first, because the longest salvageable prefix keeps the most
+    work.
+
+    One extra candidate is offered per position: the same prefix with
+    `object_is_literal` supplied. That field is required on every TripleOp and
+    is exactly where the observed stall lands -- the model wrote action,
+    subject, predicate and object, which is the entire triple, and stopped
+    before the one boolean that makes it parseable. Its value is inferred from
+    the object rather than guessed: a CURIE is a URI reference, anything else
+    is a literal. Without this the L10 stall salvages nothing at all, because
+    its single operation never closed.
+    """
+    stack: list[str] = []
+    in_string = escaped = False
+    cuts: list[tuple[int, tuple[str, ...], str | None]] = []
+    last_string: str | None = None
+    string_start = 0
+
+    for i, ch in enumerate(raw):
+        if in_string:
+            if escaped:
+                escaped = False
+            elif ch == "\\":
+                escaped = True
+            elif ch == '"':
+                in_string = False
+                last_string = raw[string_start:i]
+                cuts.append((i + 1, tuple(stack), last_string))
+            continue
+        if ch == '"':
+            in_string = True
+            string_start = i + 1
+        elif ch in "{[":
+            stack.append(ch)
+        elif ch in "}]":
+            if stack:
+                stack.pop()
+            cuts.append((i + 1, tuple(stack), None))
+
+    for index, open_stack, string_value in reversed(cuts[-MAX_SALVAGE_CANDIDATES:]):
+        closers = "".join("}" if b == "{" else "]" for b in reversed(open_stack))
+        prefix = raw[:index]
+        yield prefix + closers
+        if string_value is not None and open_stack and open_stack[-1] == "{":
+            is_literal = "false" if _CURIE_RE.match(string_value) else "true"
+            yield f'{prefix},"object_is_literal":{is_literal}{closers}'
+
+
+def salvage_truncated_patch(raw: str) -> RepairPatch | None:
+    """The largest well-formed patch recoverable from a truncated generation.
+
+    A stalled draw is not garbage: it contains complete, correct operations
+    before the padding starts, and discarding the whole stage throws them away.
+    That mattered most on the one document that needed repair most -- L10 holds
+    all 19 of its arm's courtless proceedings and stalls on every attempt, so
+    without salvage it is the single document guaranteed to get nothing.
+
+    Returns None when nothing parses, which is a real outcome: a draw that
+    stalls inside the very first key has nothing to recover.
+    """
+    raw = raw.strip()
+    if not raw:
+        return None
+    for candidate in _salvage_candidates(raw):
+        try:
+            patch = RepairPatch.model_validate_json(candidate)
+        except Exception:  # noqa: BLE001,S112 - most candidates fail by design
+            continue
+        if patch.groups or patch.merges:
+            return patch
+    return None
+
+
 def call_repair_model(
     client: OpenAI,
     model: str,
@@ -1319,15 +1473,15 @@ def call_repair_model(
     token_kwargs = _token_limit_kwargs(model, max_tokens)
     for attempt in range(1, max_attempts + 1):
         try:
-            completion = client.chat.completions.parse(
-                model=model,
-                messages=[
+            raw, finish_reason, stalled = _stream_patch_text(
+                client,
+                model,
+                [
                     {"role": "system", "content": load_system_prompt()},
                     {"role": "user", "content": user_prompt},
                 ],
-                response_format=RepairPatch,
                 temperature=temperature,
-                **token_kwargs,
+                token_kwargs=token_kwargs,
             )
         except Exception as exc:  # noqa: BLE001
             # LengthFinishReasonError comes out of .parse() itself, BEFORE the
@@ -1357,18 +1511,29 @@ def call_repair_model(
                     token_kwargs = other
                     max_attempts += 1
             continue
-        choice = completion.choices[0]
-        # Kept as a backstop for clients that RETURN a truncated completion
-        # instead of raising: the OpenAI SDK's .parse() raises (handled above),
-        # but a plain .create() or another provider's client may not.
-        if choice.finish_reason == "length":
-            last_error = RepairTruncated(max_tokens)
+        if not stalled and finish_reason != "length":
+            try:
+                return RepairPatch.model_validate_json(raw.strip())
+            except Exception as exc:  # noqa: BLE001
+                last_error = RuntimeError(
+                    f"model returned no parseable patch: {type(exc).__name__}"
+                )
+                continue
+
+        # Stalled or hit the cap. Retry first -- the pathology is drawn from
+        # sampling and a clean draw usually follows -- and only salvage on the
+        # LAST attempt, so a recoverable fragment is never preferred over a
+        # complete patch that one more draw would have produced.
+        last_error = RepairTruncated(max_tokens)
+        if attempt < max_attempts:
             continue
-        parsed = choice.message.parsed
-        if parsed is None:
-            last_error = RuntimeError("model refused or returned no parseable patch")
-            continue
-        return parsed
+        if (salvaged := salvage_truncated_patch(raw)) is not None:
+            ops = sum(len(g.ops) for g in salvaged.groups)
+            print(
+                f"    RECOVERED {len(salvaged.groups)} group(s), {ops} op(s) "
+                f"from a {'stalled' if stalled else 'truncated'} generation"
+            )
+            return salvaged
     assert last_error is not None
     raise last_error
 

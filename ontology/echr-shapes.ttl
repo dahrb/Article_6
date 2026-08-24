@@ -155,6 +155,29 @@ echr:ParticipationAtomicShape a sh:NodeShape ;
         sh:message "hasPartySide must be a single value from the closed PartySide vocabulary" ;
     ] .
 
+# One participation node, one event. echr:Participation exists to isolate a
+# party's role AT ONE INSTANCE (echr.ttl: "Create exactly one instance per
+# party, per echr:DomesticEvent"), and echr:hasPartySide is functional -- so a
+# node shared by several events can hold only one side value and silently
+# forces it onto all of them. Observed 2026-08-24: doc:part_stanev_2 was the
+# target of four echr:hasParticipation links spanning a judicial review, an
+# administrative action, an incapacity appeal and a prosecutorial review, all
+# necessarily recorded as echr:SideInitiating.
+#
+# Watched on the INVERSE path deliberately. The atomic shape below already caps
+# echr:participatingParty at one, which caught the older form of this defect
+# (several parties on one node); extraction then stopped using
+# echr:participatesIn entirely and expressed the same error through inbound
+# echr:hasParticipation, where nothing was looking. The defect did not get
+# fixed, it moved -- so the guard belongs on the direction it moved to.
+echr:ParticipationSingleEventShape a sh:NodeShape ;
+    sh:targetClass echr:Participation ;
+    sh:property [
+        sh:path [ sh:inversePath echr:hasParticipation ] ;
+        sh:maxCount 1 ;
+        sh:message "a participation records one party at ONE event; several events pointing at one participation collapses the per-event side distinction the class exists to make" ;
+    ] .
+
 echr:NaturalPersonAtomicShape a sh:NodeShape ;
     sh:targetClass echr:NaturalPerson ;
     sh:property [

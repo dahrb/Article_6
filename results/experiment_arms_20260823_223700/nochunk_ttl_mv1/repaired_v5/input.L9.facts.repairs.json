@@ -1,0 +1,64 @@
+{
+  "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L9.facts.ttl",
+  "timings": {
+    "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L9.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 3.5,
+    "seconds_model_calls": 3.4,
+    "seconds_deterministic": 0.1,
+    "model_calls": 1,
+    "by_stage": {
+      "persons": {
+        "passes": 1,
+        "seconds": 3.4,
+        "seconds_model_call": 3.4
+      }
+    },
+    "passes": [
+      {
+        "stage": "persons",
+        "pass": 1,
+        "seconds_total": 3.4,
+        "seconds_model_call": 3.4,
+        "seconds_deterministic": 0.0,
+        "findings_in": 1,
+        "ops_proposed": 2,
+        "ops_applied": 2,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "doc:applicant_1 has an honorific 'Mr' in its person name, which indicates male gender.",
+      "rationale": "The person name 'Mr Malkhaz Baduashvili' contains the honorific 'Mr', which is a strong cue for echr:GenderMale.",
+      "action": "add",
+      "subject": "doc:applicant_1",
+      "predicate": "echr:hasGender",
+      "object": "echr:GenderMale",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    },
+    {
+      "finding": "doc:lawyer_1 has an honorific 'Ms' in its person name, which indicates female gender.",
+      "rationale": "The person name 'Ms S. Abuladze' contains the honorific 'Ms', which is a strong cue for echr:GenderFemale.",
+      "action": "add",
+      "subject": "doc:lawyer_1",
+      "predicate": "echr:hasGender",
+      "object": "echr:GenderFemale",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    }
+  ]
+}

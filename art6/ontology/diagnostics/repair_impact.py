@@ -173,7 +173,10 @@ def report_arm(arm_dir: Path, raw_subdir: str, repaired_subdir: str) -> bool:
             files_touched += 1
             for op in d.get("operations", []):
                 st = op.get("status", "?")
-                if st == "applied":
+                # startswith, not equality: an applied op may qualify its
+                # status (e.g. "applied (removed 1 quote(s) by index)"), and
+                # matching exactly filed those under skipped ops.
+                if st.startswith("applied"):
                     ops_applied[(op["action"], op.get("predicate", ""))] += 1
                 else:
                     ops_skipped[(st, op["action"], op.get("predicate", ""))] += 1

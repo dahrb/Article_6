@@ -1,0 +1,110 @@
+repairing 10 file(s) under results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5
+  model: gemma-4-31b @ http://localhost:8000/v1 (temperature 0.4, timeout 300.0s)
+  source text: results/experiment_arms_20260823_223700/nochunk_ttl_mv1/input.jsonl (quote stage enabled)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L1.facts.ttl: 3 finding(s) in; model proposed 2 group(s), 8 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 8 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [11.2s, 11.0s in the model]
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L1.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.4s, 0.4s in the model]
+    [domestic proceedings] pass 1: no operations applied - stopping
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L1.facts.ttl: 3 finding(s) in; model proposed 2 group(s), 2 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 2 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [3.5s, 3.5s in the model]
+    [persons and participation] pass 1: 2 op(s) applied but findings did not fall (3 -> 3) - stopping
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L1.facts.ttl: nothing flagged
+    document total: 15.2s across 3 model call(s) (14.9s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L1.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/backup/input.L1.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L10.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 1 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [3.0s, 2.9s in the model]
+    SKIPPED [The node doc:belgianState is typed as a DomesticAuthority but lacks an echr:hasAuthorityName. Looking at its properties, it has echr:hasPartyName "Belgian State", which suggests this node is actually a Party (the respondent State) rather than a deciding authority. Since it does not function as a domestic authority in this context, it should not be in this class.] remove doc:belgianState echr:hasPartyName "Belgian State": skipped: triple not present
+    [domestic authorities] pass 2: nothing left to flag - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L10.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [6.0s, 6.0s in the model]
+    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L10.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [6.2s, 6.2s in the model]
+    [persons and participation] pass 1: 1 op(s) applied but findings did not fall (1 -> 1) - stopping
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L10.facts.ttl: 3 finding(s) in; model proposed 3 group(s), 0 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [3.0s, 3.0s in the model]
+    [source quote fidelity] pass 1: no operations applied - stopping
+    document total: 18.3s across 4 model call(s) (18.1s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L10.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/backup/input.L10.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L2.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L2.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L2.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L2.facts.ttl: nothing flagged
+    document total: 0.1s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L3.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L3.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.5s, 0.5s in the model]
+    [domestic proceedings] pass 1: no operations applied - stopping
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L3.facts.ttl: 4 finding(s) in; model proposed 2 group(s), 2 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 2 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [5.3s, 5.3s in the model]
+    [persons and participation] pass 1: 2 op(s) applied but findings did not fall (4 -> 4) - stopping
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L3.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [3.4s, 3.4s in the model]
+    SKIPPED [The quote for doc:proceedingSaleAnnulmentRectification is a paraphrase/summary of paragraphs 37 and 38. I have replaced it with the verbatim span from paragraph 38 which confirms the annulment of the sale.] remove doc:proceedingSaleAnnulmentRectification echr:hasSupportingQuote On 30 June 2017, the 13th Chamber of the Supreme Administrative Court granted the request... and annulled the sale in question.: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 9.4s across 3 model call(s) (9.2s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L3.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/backup/input.L3.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L4.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L4.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L4.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L4.facts.ttl: nothing flagged
+    document total: 0.1s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L5.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L5.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L5.facts.ttl: 1 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.4s, 0.4s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L5.facts.ttl: nothing flagged
+    document total: 0.5s across 1 model call(s) (0.4s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L6.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L6.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L6.facts.ttl: 2 finding(s) in; model proposed 3 group(s), 4 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 3 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [10.7s, 10.7s in the model]
+    SKIPPED [The node doc:scholzAg is typed as an echr:NaturalPerson (via its properties) but its name 'Scholz AG' indicates it is a legal entity (Aktiengesellschaft).] remove doc:scholzAg echr:hasPersonName  "Scholz AG": skipped: triple not present
+    [persons and participation] pass 1: 3 op(s) applied but findings did not fall (2 -> 2) - stopping
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L6.facts.ttl: nothing flagged
+    document total: 10.8s across 1 model call(s) (10.7s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L6.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/backup/input.L6.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L7.facts.ttl: 2 finding(s) in; model proposed 2 group(s), 4 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 4 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [5.3s, 5.3s in the model]
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L7.facts.ttl: 1 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.4s, 0.4s in the model]
+    [domestic proceedings] pass 1: no operations applied - stopping
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L7.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L7.facts.ttl: nothing flagged
+    document total: 5.9s across 2 model call(s) (5.7s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L7.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/backup/input.L7.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L8.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L8.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L8.facts.ttl: 0 finding(s) in; model proposed 8 group(s), 4 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 4 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [11.9s, 11.9s in the model]
+    [persons and participation] pass 1: 4 op(s) applied but findings did not fall (0 -> 0) - stopping
+    RECOVERED 1 group(s), 2 op(s) from a stalled generation
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L8.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [9.5s, 9.5s in the model]
+    SKIPPED [The quote 'provided for the purchase of the Stavanger for 2.5 million US dollars' is a paraphrase. The source text contains the verbatim span 'provided for the purchase by the Port of the Stavanger for 2.5 million US dollars'.] remove doc:admin_action_2 echr:hasSupportingQuote provided for the purchase of the Stavanger for 2.5 million US dollars: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 21.5s across 2 model call(s) (21.4s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L8.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/backup/input.L8.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L9.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L9.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L9.facts.ttl: 1 finding(s) in; model proposed 2 group(s), 2 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 2 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [3.4s, 3.4s in the model]
+    [persons and participation] pass 1: 2 op(s) applied but findings did not fall (1 -> 1) - stopping
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L9.facts.ttl: nothing flagged
+    document total: 3.5s across 1 model call(s) (3.4s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/input.L9.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v5/backup/input.L9.facts.ttl)
+
+  repair total: 85.3s over 10 document(s), 17 model call(s) (83.8s in the model, 1.5s deterministic)
+    authorities      3 call(s)     19.5s  (19.2s in the model)
+    proceedings      4 call(s)      7.3s  (7.3s in the model)
+    persons          7 call(s)     41.4s  (41.4s in the model)
+    quotes           3 call(s)     15.9s  (15.9s in the model)

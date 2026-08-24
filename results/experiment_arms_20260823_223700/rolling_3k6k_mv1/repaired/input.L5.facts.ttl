@@ -1,0 +1,284 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/c82f3c269504/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/c82f3c269504> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:5"^^xsd:string .
+
+doc:case_69358_13 a echr:CaseDocument ;
+    rdfs:label "Martynovskiy v. Ukraine"^^xsd:string ;
+    echr:hasApplicant doc:applicantMartynovskiy ;
+    echr:hasApplicationNumber "69358/13"^^xsd:string ;
+    echr:hasRespondentState "Ukraine"^^xsd:string .
+
+doc:proceeding_bar_appeals_1 a echr:DomesticProceeding ;
+    rdfs:label "Appeals against the decision of 17 April 2013"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_qdc_chamber_1 ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasParticipation doc:part_bar_1,
+        doc:part_martynovskiy_5 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "his appeals against the decision of 17 April 2013 had not had a suspensive effect"^^xsd:string .
+
+doc:proceeding_kyiv_admin_appeal_1 a echr:DomesticProceeding ;
+    rdfs:label "Appeal to Kyiv Administrative Court of Appeal against Podilskyy decision"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_podilskyy_dist_1 ;
+    echr:hasCourt doc:kyivAdminAppealCourt ;
+    echr:hasDecisionDate "2017-03-06"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeRemitted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:part_martynovskiy_5 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 6 March 2017 the Kyiv Administrative Court of Appeal quashed the decision of 22 December 2016."^^xsd:string .
+
+doc:proceeding_qdc_1 a echr:DomesticProceeding ;
+    rdfs:label "Examination of complaint by QDC of Zakarpattya"^^xsd:string ;
+    echr:followsProceeding doc:transfer_action_1 ;
+    echr:hasCourt doc:qdcZakarpattya ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:part_d_2,
+        doc:part_martynovskiy_1 ;
+    echr:hasProceedingType echr:TypeDisciplinary ;
+    echr:hasSupportingQuote "In February 2013 the applicant learned that the QDC of Zakarpattya was examining a complaint against him"^^xsd:string .
+
+doc:proceeding_supreme_court_1 a echr:DomesticProceeding ;
+    rdfs:label "Supreme Court final decision"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_kyiv_dist_admin_1 ;
+    echr:hasCourt doc:supremeCourt ;
+    echr:hasDecisionDate "2021-12-09"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_martynovskiy_5 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "The applicant’s appeals were rejected (final decision of the Supreme Court of 9 December 2021)."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:rulesProfessionalConductPublication a echr:AdministrativeAction ;
+    rdfs:label "Publication of Rules of Professional Conduct"^^xsd:string ;
+    echr:followsProceeding doc:rulesProfessionalConductAdoption ;
+    echr:hasDecisionDate "2013-01-18"^^xsd:date ;
+    echr:hasSupportingQuote "had only been made public on 18 January 2013"^^xsd:string .
+
+doc:suspension_period_1 a echr:PreTrialDetention ;
+    rdfs:label "Suspension of licence"^^xsd:string ;
+    echr:hasDetainee doc:applicantMartynovskiy ;
+    echr:hasStatedDetentionDuration "P6M"^^xsd:duration ;
+    echr:hasSupportingQuote "the applicant’s suspension was temporary and lasted for six months"^^xsd:string .
+
+doc:adjournment_hqdcb_1 a echr:Adjournment ;
+    rdfs:label "Cancelled hearing 2015"^^xsd:string ;
+    echr:hasAdjournmentCause echr:DelayUnattributed ;
+    echr:hasAdjournmentDate "2015"^^xsd:gYear ;
+    echr:hasSupportingQuote "A hearing planned for 2015 was cancelled owing to a change of rapporteur in the applicant’s case"^^xsd:string .
+
+doc:barAssociation a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "The Bar"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "the Bar"^^xsd:string .
+
+doc:complaint_action_1 a echr:AdministrativeAction ;
+    rdfs:label "Complaint by Lawyer D to HQDCB"^^xsd:string ;
+    echr:hasParticipation doc:part_d_1,
+        doc:part_martynovskiy_1 ;
+    echr:hasSupportingQuote "Lawyer D. complained to the HQDCB that by failing to attend the meeting of 7 December 2012 the applicant had violated Article 62 of the Rules of Professional Conduct"^^xsd:string .
+
+doc:congressAdvocates a echr:DomesticAuthority ;
+    rdfs:label "Congress of Advocates"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Congress of Advocates"^^xsd:string .
+
+doc:inactivity_kyiv_admin_1 a echr:InactivityPeriod ;
+    rdfs:label "Suspension of Kyiv District Administrative Court proceedings"^^xsd:string ;
+    echr:hasInactivityCause echr:DelayUnattributed ;
+    echr:hasInactivityEndDate "2018-05-01"^^xsd:date ;
+    echr:hasInactivityStartDate "2017-02-01"^^xsd:date ;
+    echr:hasSupportingQuote "in February 2017 the Kyiv District Administrative Court suspended the examination of the applicant’s case... the delay in the resumption of the proceedings between March 2017 and May 2018 was attributable to the applicant or to the Government"^^xsd:string .
+
+doc:kyivAdminAppealCourt a echr:DomesticAuthority ;
+    rdfs:label "Kyiv Administrative Court of Appeal"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Kyiv Administrative Court of Appeal"^^xsd:string .
+
+doc:kyivDistAdminCourt a echr:DomesticAuthority ;
+    rdfs:label "Kyiv District Administrative Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Kyiv District Administrative Court"^^xsd:string .
+
+doc:lawyerKikkas a echr:LegalRepresentative ;
+    rdfs:label "Mr M. Kikkas"^^xsd:string ;
+    echr:hasPersonName "Mr M. Kikkas"^^xsd:string .
+
+doc:lawyerYakovlev a echr:LegalRepresentative ;
+    rdfs:label "Mr A.V. Yakovlev"^^xsd:string ;
+    echr:hasPersonName "Mr A.V. Yakovlev"^^xsd:string .
+
+doc:part_bar_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "The Government submitted that the Bar is an independent body"^^xsd:string ;
+    echr:participatingParty doc:barAssociation .
+
+doc:part_d_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:lawyerD .
+
+doc:part_d_2 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:lawyerD .
+
+doc:part_d_3 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:lawyerD .
+
+doc:part_hqdcb_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:hqdcb .
+
+doc:part_martynovskiy_12 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the applicant instituted proceedings before the Kyiv District Administrative Court on 5 October 2016"^^xsd:string ;
+    echr:participatingParty doc:applicantMartynovskiy .
+
+doc:podilskyyDistCourt a echr:DomesticAuthority ;
+    rdfs:label "Podilskyy District Court of Kyiv"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Podilskyy District Court of Kyiv"^^xsd:string .
+
+doc:proceeding_hqdcb_appeal_1 a echr:DomesticProceeding ;
+    rdfs:label "Appeal to HQDCB against QDC Zakarpattya decisions"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_qdc_full_1 ;
+    echr:hasAdjournment doc:adjournment_hqdcb_1 ;
+    echr:hasCourt doc:hqdcb ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasParticipation doc:part_d_3,
+        doc:part_martynovskiy_5 ;
+    echr:hasProceedingType echr:TypeDisciplinary ;
+    echr:hasSupportingQuote "The applicant appealed against the decisions of 17 April and 16 May 2013 to the HQDCB"^^xsd:string .
+
+doc:proceeding_kyiv_dist_admin_1 a echr:DomesticProceeding ;
+    rdfs:label "Appeal to Kyiv District Administrative Court 2016"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_hqdcb_decision_2016 ;
+    echr:hasCourt doc:kyivDistAdminCourt ;
+    echr:hasDecisionDate "2021-12-09"^^xsd:date ;
+    echr:hasInactivityPeriod doc:inactivity_kyiv_admin_1 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_hqdcb_1,
+        doc:part_martynovskiy_12,
+        doc:part_martynovskiy_5 ;
+    echr:hasProceedingStartDate "2016-10-05"^^xsd:date ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 5 October 2016 the applicant lodged an appeal with the Kyiv District Administrative Court against the decisions of the Zakarpattya Bar and the decision of the HQDCB."^^xsd:string,
+        "The final decision in the case was delivered on 9 December 2021."^^xsd:string .
+
+doc:proceeding_podilskyy_dist_1 a echr:DomesticProceeding ;
+    rdfs:label "Appeal to Podilskyy District Court of Kyiv 2016"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_hqdcb_decision_2016 ;
+    echr:hasCourt doc:podilskyyDistCourt ;
+    echr:hasDecisionDate "2016-12-22"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_martynovskiy_5 ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 22 December 2016 the Podilskyy District Court decided not to examine the applicant’s appeal."^^xsd:string .
+
+doc:proceeding_qdc_full_1 a echr:DomesticProceeding ;
+    rdfs:label "QDC of Zakarpattya review of Chamber decision"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_qdc_chamber_1 ;
+    echr:hasCourt doc:qdcZakarpattya ;
+    echr:hasDecisionDate "2013-05-16"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_martynovskiy_1 ;
+    echr:hasProceedingType echr:TypeDisciplinary ;
+    echr:hasSupportingQuote "On 16 May the QDC of Zakarpattya upheld the decision of 17 April 2013"^^xsd:string .
+
+doc:qdcZakarpattyaChamber a echr:DomesticAuthority ;
+    rdfs:label "Disciplinary Chamber of the QDC of Zakarpattya"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityDisciplinary ;
+    echr:hasAuthorityName "Disciplinary Chamber of the QDC of Zakarpattya"^^xsd:string .
+
+doc:rulesProfessionalConductAdoption a echr:AdministrativeAction ;
+    rdfs:label "Adoption of Rules of Professional Conduct"^^xsd:string ;
+    echr:hasCourt doc:congressAdvocates ;
+    echr:hasDecisionDate "2012-11-17"^^xsd:date ;
+    echr:hasSupportingQuote "the Rules of Professional Conduct had been adopted by the Congress of Advocates on 17 November 2012"^^xsd:string .
+
+doc:supremeCourt a echr:DomesticAuthority ;
+    rdfs:label "Supreme Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Supreme Court"^^xsd:string .
+
+doc:transfer_action_1 a echr:AdministrativeAction ;
+    rdfs:label "Transfer of complaint to QDC of Zakarpattya"^^xsd:string ;
+    echr:followsProceeding doc:complaint_action_1 ;
+    echr:hasDecisionDate "2013-01-24"^^xsd:date ;
+    echr:hasSupportingQuote "On 24 January 2013 the head of the HQDCB transferred D.’s complaint to the Qualification and Disciplinary Commission of the Regional Bar of Zakarpattya"^^xsd:string .
+
+doc:proceeding_hqdcb_decision_2016 a echr:DomesticProceeding ;
+    rdfs:label "HQDCB decision on appeal 2016"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_hqdcb_appeal_1 ;
+    echr:hasCourt doc:hqdcb ;
+    echr:hasDecisionDate "2016-07-22"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_martynovskiy_5 ;
+    echr:hasProceedingType echr:TypeDisciplinary ;
+    echr:hasSupportingQuote "On 22 July 2016 the draft decision was put to vote at a HQDCB meeting... the draft decision was rejected and the decisions suspending the applicant’s licence remained valid."^^xsd:string .
+
+doc:proceeding_qdc_chamber_1 a echr:DomesticProceeding ;
+    rdfs:label "Disciplinary Chamber of the QDC of Zakarpattya decision"^^xsd:string ;
+    echr:hasCourt doc:qdcZakarpattyaChamber ;
+    echr:hasDecisionDate "2013-04-17"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_martynovskiy_1 ;
+    echr:hasProceedingType echr:TypeDisciplinary ;
+    echr:hasStatusApplied echr:StatusOther ;
+    echr:hasSupportingQuote "On 17 April 2013, in the applicant’s absence, the Disciplinary Chamber of the QDC of Zakarpattya suspended the applicant’s licence to practise as an advocate for six months"^^xsd:string,
+        "the Disciplinary Chamber of the QDC of Zakarpattya suspended the applicant’s licence to practise as an advocate for six months"^^xsd:string .
+
+doc:qdcZakarpattya a echr:DomesticAuthority ;
+    rdfs:label "Qualification and Disciplinary Commission of the Regional Bar of Zakarpattya"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityDisciplinary ;
+    echr:hasAuthorityName "Qualification and Disciplinary Commission of the Regional Bar of Zakarpattya"^^xsd:string .
+
+doc:hqdcb a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Higher Qualification and Disciplinary Commission of the Bar"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityDisciplinary ;
+    echr:hasAuthorityName "Higher Qualification and Disciplinary Commission of the Bar"^^xsd:string .
+
+doc:lawyerD a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Lawyer D."^^xsd:string ;
+    echr:hasPersonName "Lawyer D."^^xsd:string .
+
+doc:part_martynovskiy_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicantMartynovskiy .
+
+doc:applicantMartynovskiy a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Roman Yuryevich Martynovskiy"^^xsd:string ;
+    echr:hasPersonName "Mr Roman Yuryevich Martynovskiy"^^xsd:string ;
+    echr:isRepresentedBy doc:lawyerKikkas,
+        doc:lawyerYakovlev .
+
+doc:part_martynovskiy_5 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "his appeals against the decision of 17 April 2013"^^xsd:string ;
+    echr:participatingParty doc:applicantMartynovskiy .
+

@@ -1,0 +1,115 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/f076ead4d7ae/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/f076ead4d7ae> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:4"^^xsd:string .
+
+doc:appeal_2 a echr:DomesticProceeding ;
+    rdfs:label "Final appeal on conviction"@en ;
+    echr:followsProceeding doc:criminalProceedingRetrial ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "2001-05-09"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasSupportingQuote "On 9 May 2001 the Maribor Higher Court upheld the conviction"@en ;
+    echr:isFinalDomesticDecision true .
+
+doc:caseMatko a echr:CaseDocument ;
+    echr:hasApplicant doc:aleksanderMatko ;
+    echr:hasApplicationNumber "43393/98"@en ;
+    echr:hasCaseName "Matko v. Slovenia"@en ;
+    echr:hasDomesticProceeding doc:criminalProceedingRetrial,
+        doc:criminal_proceeding_1 ;
+    echr:hasRespondentState "Slovenia"@en .
+
+doc:complaintInvestigation a echr:ProsecutorialReview ;
+    rdfs:label "Investigation into applicant's criminal complaint"@en ;
+    echr:hasCourt doc:slovenjGradecProsecutorOffice ;
+    echr:hasDecisionDate "1997-01-17"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partComplaintMatko ;
+    echr:hasSupportingQuote "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."@en .
+
+doc:slovenjGradecPolice a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Slovenj Gradec Police"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Slovenj Gradec Police"@en ;
+    echr:hasJurisdictionState "Slovenia"@en .
+
+doc:appeal_1 a echr:DomesticProceeding ;
+    rdfs:label "First appeal by Public Prosecutor"@en ;
+    echr:followsProceeding doc:criminal_proceeding_1 ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "2000-09-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeRemitted ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasSupportingQuote "on 27 September 2000 the Maribor Higher Court quashed the judgment and remitted the case to a new panel for retrial."@en .
+
+doc:partComplaintMatko a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_crim1_matko a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_crim1_prosecutor a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecProsecutorOffice .
+
+doc:criminalProceedingRetrial a echr:DomesticProceeding ;
+    rdfs:label "Retrial of criminal proceeding"@en ;
+    echr:followsProceeding doc:appeal_1 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "2001-02-12"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelReopening ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasSupportingQuote "By a judgment of 12 February 2001, the Slovenj Gradec District Court convicted the applicant as charged"@en ;
+    echr:isFinalDomesticDecision false .
+
+doc:criminal_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "First instance criminal proceeding against Matko"@en ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "1999-11-22"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:part_crim1_matko,
+        doc:part_crim1_prosecutor ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "By a judgment of 22 November 1999 the court acquitted the applicant."@en .
+
+doc:mariborHigherCourt a echr:DomesticAuthority ;
+    rdfs:label "Maribor Higher Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Maribor Higher Court"@en ;
+    echr:hasJurisdictionState "Slovenia"@en .
+
+doc:slovenjGradecDistrictCourt a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec District Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Slovenj Gradec District Court"@en ;
+    echr:hasJurisdictionState "Slovenia"@en .
+
+doc:slovenjGradecProsecutorOffice a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Slovenj Gradec District Public Prosecutor’s Office"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Slovenj Gradec District Public Prosecutor’s Office"@en .
+
+doc:aleksanderMatko a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Aleksander Matko"@en ;
+    echr:hasPersonName "Mr Aleksander Matko"@en .
+

@@ -85,11 +85,13 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
 import os
 import re
 import shutil
 import sys
+import time
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -590,6 +592,71 @@ def find_unlinked_persons(graph: Graph, doc_ns: str) -> list[str]:
     return sorted(set(out))
 
 
+@lru_cache(maxsize=64)
+def load_source_text(input_path: Path, line_number: int | None) -> str | None:
+    """The source text one facts file was extracted from, normalized.
+
+    `input_path` is the run's `input.jsonl` (or `.json`); `line_number` is the N
+    in `<stem>.L<N>.facts.ttl`, 1-based, matching how run_data.sh and
+    carry_forward.py name their outputs. A single-record run has no `.L<N>` and
+    takes the only record.
+    """
+    if not input_path.is_file():
+        return None
+    text = input_path.read_text(encoding="utf-8")
+    if input_path.suffix == ".jsonl":
+        records = [json.loads(line) for line in text.splitlines() if line.strip()]
+    else:
+        records = json.loads(text)
+    if not isinstance(records, list) or not records:
+        return None
+    if line_number is None:
+        record = records[0] if len(records) == 1 else None
+    else:
+        record = records[line_number - 1] if line_number <= len(records) else None
+    if record is None:
+        return None
+    return record.get("text")
+
+
+def find_unverified_quotes(graph: Graph, source_text: str) -> list[dict]:
+    """Every echr:hasSupportingQuote whose text is not in the source document.
+
+    Uses the SAME check the standalone validator applies
+    (`diagnostics.validate_source_quotes.quote_verifies`), imported rather than
+    reimplemented so the repair pass can never disagree with the report about
+    what counts as verified: curly quotes folded to straight, whitespace runs
+    collapsed, and each ellipsis-delimited segment required to appear.
+
+    Each finding carries the FULL triple, because the fix is a remove of that
+    exact literal and the model cannot reproduce a long quote from memory --
+    the 2026-08-23 sweep skipped repair ops for precisely that reason.
+    """
+    from art6.ontology.diagnostics.validate_source_quotes import (
+        normalize,
+        quote_verifies,
+    )
+
+    normalized = normalize(source_text)
+    out: list[dict] = []
+    for s, _, o in graph.triples((None, ECHR.hasSupportingQuote, None)):
+        quote = str(o)
+        if quote_verifies(quote, normalized):
+            continue
+        out.append(
+            {
+                "subject": _curie(graph, s),
+                "predicate": "echr:hasSupportingQuote",
+                "quote": quote,
+                "subject_types": sorted(
+                    _curie(graph, t) for t in graph.objects(s, RDF.type)
+                ),
+                "subject_label": _label(graph, s),
+            }
+        )
+    return out
+
+
 def find_appeal_shaped_gaps(summaries: list[ProceedingSummary]) -> list[str]:
     return [
         p.curie
@@ -690,27 +757,63 @@ def load_ontology_fragment(classes: tuple[URIRef, ...]) -> str:
     """The fragment of echr.ttl relevant to `classes`, read live so this
     script can never drift out of sync with the ontology's own definitions.
 
-    Includes each class's own definition plus every property whose
-    rdfs:domain is one of `classes` -- so a repair stage scoped to, say,
-    echr:NaturalPerson sees echr:hasGender and echr:hasPersonName without
-    also being handed the whole ontology.
+    Three things go in, and the third one is load-bearing:
+
+    1. each class's own definition;
+    2. every property whose rdfs:domain is one of `classes` -- so a stage
+       scoped to echr:NaturalPerson sees echr:hasGender and echr:hasPersonName
+       without being handed the whole ontology;
+    3. THE MEMBERS of every closed vocabulary reachable from those properties'
+       rdfs:range, e.g. echr:GenderMale / echr:GenderFemale / echr:GenderOther
+       for echr:hasGender.
+
+    Point 3 exists because leaving it out is actively destructive, not merely
+    unhelpful. The system prompt tells the model the ontology is CLOSED and
+    that anything absent from this fragment "does not exist, however sensible
+    its name looks", with instructions to remove it. A fragment that names
+    echr:Gender as a class but never lists its individuals therefore reads as
+    proof that echr:GenderMale is invented -- and the correct, evidence-backed
+    triple gets deleted. Measured on the 2026-08-23 smoke test: the model spent
+    its entire 8,000-token budget reasoning in circles about whether
+    echr:GenderMale was real, truncating every one of three draws, and the
+    patch it did produce removed the valid gender triple. Both symptoms are
+    this omission.
+
+    Note the range expansion is one hop, deliberately. A vocabulary member's
+    own type is a vocabulary class, so following ranges transitively would
+    walk most of the ontology back into every stage and undo the scoping.
     """
     g = Graph()
     g.parse(ONTOLOGY_TTL)
+    nsm = g.namespace_manager
     lines: list[str] = []
+
+    def emit(subject: URIRef) -> None:
+        for p, o in g.predicate_objects(subject):
+            lines.append(f"{nsm.qname(subject)} {nsm.qname(p)} {_render(g, o)} .")
+
+    in_scope = set(classes)
     for cls in classes:
-        for s, p, o in g.triples((cls, None, None)):
-            lines.append(
-                f"{g.namespace_manager.qname(s)} {g.namespace_manager.qname(p)} {_render(g, o)} ."
-            )
-    for prop_s in g.subjects(None, None):
-        for domain in g.objects(prop_s, RDFS.domain):
-            if domain in classes:
-                for p, o in g.predicate_objects(prop_s):
-                    lines.append(
-                        f"{g.namespace_manager.qname(prop_s)} {g.namespace_manager.qname(p)} {_render(g, o)} ."
-                    )
-                break
+        emit(cls)
+
+    # Properties whose domain is in scope, plus the range classes they reach.
+    for prop_s in set(g.subjects(RDFS.domain, None)):
+        domains = set(g.objects(prop_s, RDFS.domain))
+        if not domains & set(classes):
+            continue
+        emit(prop_s)
+        for rng in g.objects(prop_s, RDFS.range):
+            if isinstance(rng, URIRef):
+                in_scope.add(rng)
+
+    # Every named individual of an in-scope class: the closed vocabularies'
+    # actual members, which is what makes the fragment usable as the closed
+    # world the system prompt claims it is.
+    for cls in in_scope:
+        for member in g.subjects(RDF.type, cls):
+            if isinstance(member, URIRef) and member != cls:
+                emit(member)
+
     return "\n".join(sorted(set(lines)))
 
 
@@ -818,9 +921,35 @@ class RepairStage:
     filter_classes: tuple[URIRef, ...]
     duplicate_classes: frozenset[str]
     check_mistyped: bool = False
+    # When true the stage is handed the document's full source text and the list
+    # of quotes that do not appear in it. Only the quotes stage sets this: source
+    # text is large, and a stage that cannot act on it should not pay for it.
+    needs_source_text: bool = False
 
 
+# ORDER MATTERS, and authorities comes FIRST for a measured reason.
+#
+# With proceedings first (the 2026-08-23 sweep), the authorities stage minted four
+# complete echr:DomesticAuthority nodes -- correct type, name, kind, jurisdiction --
+# and nothing ever linked them to the proceedings that lacked a court. The measured
+# result was `proceedings without hasCourt` unchanged at 19 -> 19 while singleton
+# nodes rose 39 -> 43: the graph gained four correct entities and ZERO new edges,
+# because by the time the authority existed no stage revisited the proceeding.
+#
+# Running authorities first inverts that. The proceedings stage now opens with every
+# authority already present in the graph, so `add echr:hasCourt` has a real object to
+# point at -- and apply_patch's referential-integrity guard, which skips an add whose
+# doc: object does not exist, stops rejecting exactly the edges that close the gap.
 STAGES: tuple[RepairStage, ...] = (
+    RepairStage(
+        key="authorities",
+        name="domestic authorities",
+        guidance_file="repair_stage_authorities.txt",
+        ontology_classes=(ECHR.DomesticAuthority, ECHR.AuthorityKind),
+        dump_classes=(ECHR.DomesticAuthority,),
+        filter_classes=(ECHR.DomesticAuthority,),
+        duplicate_classes=frozenset({"echr:DomesticAuthority"}),
+    ),
     RepairStage(
         key="proceedings",
         name="domestic proceedings",
@@ -830,8 +959,11 @@ STAGES: tuple[RepairStage, ...] = (
             ECHR.ProceedingOutcome,
             ECHR.ProceedingType,
             ECHR.InstanceLevel,
+            # In scope so the stage can SEE the authorities the previous stage
+            # just minted, and link hasCourt to them.
+            ECHR.DomesticAuthority,
         ),
-        dump_classes=(ECHR.DomesticProceeding,),
+        dump_classes=(ECHR.DomesticProceeding, ECHR.DomesticAuthority),
         filter_classes=(ECHR.DomesticProceeding,),
         duplicate_classes=frozenset({"echr:DomesticProceeding"}),
         check_mistyped=True,
@@ -858,13 +990,19 @@ STAGES: tuple[RepairStage, ...] = (
         duplicate_classes=frozenset({"echr:NaturalPerson"}),
     ),
     RepairStage(
-        key="authorities",
-        name="domestic authorities",
-        guidance_file="repair_stage_authorities.txt",
-        ontology_classes=(ECHR.DomesticAuthority, ECHR.AuthorityKind),
-        dump_classes=(ECHR.DomesticAuthority,),
-        filter_classes=(ECHR.DomesticAuthority,),
-        duplicate_classes=frozenset({"echr:DomesticAuthority"}),
+        key="quotes",
+        name="source quote fidelity",
+        guidance_file="repair_stage_quotes.txt",
+        # Quote repair is not scoped to a class: echr:hasSupportingQuote hangs off
+        # anything. The finder below supplies the affected triples directly, and
+        # this stage is the only one handed the document's FULL SOURCE TEXT --
+        # every other stage works from the graph alone, and a quote can only be
+        # checked against the text it claims to come from.
+        ontology_classes=(),
+        dump_classes=(),
+        filter_classes=(),
+        duplicate_classes=frozenset(),
+        needs_source_text=True,
     ),
 )
 
@@ -1016,7 +1154,20 @@ def call_repair_model(
                 **token_kwargs,
             )
         except Exception as exc:  # noqa: BLE001
-            last_error = exc
+            # LengthFinishReasonError comes out of .parse() itself, BEFORE the
+            # finish_reason check below can ever run -- which is why that check
+            # is unreachable for this client and why RepairTruncated never
+            # fired in the 2026-08-20 run. The report there recorded 14 gemma
+            # documents lost to "LengthFinishReasonError at exactly 3,000
+            # completion tokens" and counted every one as a generic failure, so
+            # the signal that the CAP was the problem never reached the
+            # summary. Converting here is what makes main()'s truncation tally
+            # real rather than decorative.
+            last_error = (
+                RepairTruncated(max_tokens)
+                if type(exc).__name__ == "LengthFinishReasonError"
+                else exc
+            )
             if _is_wrong_token_param_error(exc):
                 # Wrong spelling for this endpoint: swap it and retry WITHOUT
                 # consuming a sampling attempt -- nothing was sampled, the
@@ -1031,6 +1182,9 @@ def call_repair_model(
                     max_attempts += 1
             continue
         choice = completion.choices[0]
+        # Kept as a backstop for clients that RETURN a truncated completion
+        # instead of raising: the OpenAI SDK's .parse() raises (handled above),
+        # but a plain .create() or another provider's client may not.
         if choice.finish_reason == "length":
             last_error = RepairTruncated(max_tokens)
             continue
@@ -1377,10 +1531,11 @@ def _run_stage(
     temperature: float,
     passes: int,
     max_tokens: int,
-) -> tuple[Graph, bool, list[dict], list[str]]:
+) -> tuple[Graph, bool, list[dict], list[str], list[dict]]:
     """Run one stage's repair loop against `graph`, optionally over several
     model calls. Returns the (possibly replaced) graph, whether anything
-    changed, the audit trail, and the curies of any stub nodes swept.
+    changed, the audit trail, the curies of any stub nodes swept, and one
+    timing record per pass.
 
     One call is rarely enough. The model reliably fixes a subset of what it is
     shown and leaves the rest, and applying a patch changes the graph, so the
@@ -1390,13 +1545,20 @@ def _run_stage(
     So re-derive the findings from the working graph on every pass rather than
     reusing the first pass's list, and stop as soon as this stage's region of
     the graph is clean or a pass changes nothing.
+
+    Timing is recorded per pass, splitting the model call out from the
+    deterministic work around it. Staging multiplied the call count by the
+    number of stages, so "what does repair cost" stopped being answerable from
+    a single run total -- `timings` is what makes the per-stage cost visible.
     """
     ontology_context = load_ontology_fragment(stage.ontology_classes)
     audit: list[dict] = []
     swept_all: list[str] = []
+    timings: list[dict] = []
     changed = False
 
     for pass_no in range(1, passes + 1):
+        t_pass = time.perf_counter()
         entities = entity_dump(graph, stage.dump_classes, doc_ns)
         candidates = find_mistyped_candidates(graph) if stage.check_mistyped else []
         duplicate_groups = [
@@ -1436,7 +1598,7 @@ def _run_stage(
         ):
             if pass_no == 1:
                 print(f"  [{stage.name}] {relative(facts_ttl)}: nothing flagged")
-                return graph, False, audit, swept_all
+                return graph, False, audit, swept_all, timings
             print(f"    [{stage.name}] pass {pass_no}: nothing left to flag - stopping")
             break
 
@@ -1450,9 +1612,11 @@ def _run_stage(
             structural_gaps=structural_gaps,
             validator_findings=validator_findings,
         )
+        t_call = time.perf_counter()
         patch = call_repair_model(
             client, model, prompt, temperature=temperature, max_tokens=max_tokens
         )
+        call_seconds = time.perf_counter() - t_call
 
         proposed_ops = sum(1 for g in patch.groups for op in g.ops)
         label = (
@@ -1492,9 +1656,26 @@ def _run_stage(
         merged = sum(
             1 for a in pass_audit if a["action"] == "merge" and a["status"] == "applied"
         )
+        pass_seconds = time.perf_counter() - t_pass
+        # Recorded here, before either early-exit below, so a pass that stops
+        # the loop is still costed -- it made the same model call as any other.
+        timings.append(
+            {
+                "stage": stage.key,
+                "pass": pass_no,
+                "seconds_total": round(pass_seconds, 1),
+                "seconds_model_call": round(call_seconds, 1),
+                "seconds_deterministic": round(pass_seconds - call_seconds, 1),
+                "findings_in": len(validator_findings),
+                "ops_proposed": proposed_ops,
+                "ops_applied": applied,
+                "merges_applied": merged,
+            }
+        )
         print(
             f"    [{stage.name}] pass {pass_no}: applied {applied} (of which "
-            f"{merged} merge(s)), skipped {len(skipped)}, stub orphans swept {len(swept)}"
+            f"{merged} merge(s)), skipped {len(skipped)}, stub orphans swept "
+            f"{len(swept)} [{pass_seconds:.1f}s, {call_seconds:.1f}s in the model]"
         )
         for a in skipped:
             if a["action"] == "merge":
@@ -1533,7 +1714,7 @@ def _run_stage(
             )
             break
 
-    return graph, changed, audit, swept_all
+    return graph, changed, audit, swept_all, timings
 
 
 def repair_one(
@@ -1545,7 +1726,7 @@ def repair_one(
     temperature: float = 0.4,
     passes: int = 1,
     max_tokens: int = 8000,
-) -> None:
+) -> dict:
     """Repair one facts graph, one LLM call per STAGES entry per pass.
 
     Each stage runs its own `_run_stage` loop of up to `passes` calls, scoped
@@ -1555,51 +1736,99 @@ def repair_one(
     stages: writing per stage would make the next stage find a backup that
     differs from the file it is about to back up, which the guard below
     (correctly) refuses.
+
+    Returns this document's timing record. Returned rather than only printed
+    because a document that ends up UNCHANGED still spent its model calls, and
+    that cost has to reach the run total -- the early return below skips the
+    audit file, so the audit file cannot be the only place timing lives.
     """
+    t_doc = time.perf_counter()
     graph = Graph()
     graph.parse(facts_ttl)
     doc_ns = str(next((ns for prefix, ns in graph.namespaces() if prefix == "doc"), ""))
     if not doc_ns:
         print(f"  skip {relative(facts_ttl)}: no doc: namespace bound")
-        return
+        return {"source": str(relative(facts_ttl)), "skipped": "no doc: namespace"}
 
     audit: list[dict] = []
     total_swept: list[str] = []
+    stage_timings: list[dict] = []
+    stage_failures: list[dict] = []
     changed = False
 
     for stage in STAGES:
-        graph, stage_changed, stage_audit, stage_swept = _run_stage(
-            graph,
-            stage,
-            facts_ttl,
-            client,
-            model,
-            doc_ns=doc_ns,
-            temperature=temperature,
-            passes=passes,
-            max_tokens=max_tokens,
-        )
+        try:
+            graph, stage_changed, stage_audit, stage_swept, stage_times = _run_stage(
+                graph,
+                stage,
+                facts_ttl,
+                client,
+                model,
+                doc_ns=doc_ns,
+                temperature=temperature,
+                passes=passes,
+                max_tokens=max_tokens,
+            )
+        except Exception as exc:  # noqa: BLE001
+            # One stage failing must not discard the other two. Stages are
+            # independent regions of the graph, and the shared `graph` is only
+            # rebound on success -- so a truncated persons pass leaves the
+            # proceedings fixes that already landed fully intact. Before this,
+            # the exception escaped repair_one entirely and the document was
+            # written off whole, losing work that had nothing to do with the
+            # failure. The 2026-08-23 smoke test hit exactly that: proceedings
+            # came back clean, persons hit the token cap, and the document was
+            # reported as a total failure.
+            stage_failures.append(
+                {
+                    "stage": stage.key,
+                    "error": type(exc).__name__,
+                    "message": str(exc)[:300],
+                }
+            )
+            print(
+                f"    [{stage.name}] FAILED: {type(exc).__name__}: {str(exc)[:200]}"
+                "\n    continuing to the next stage; earlier stages' work is kept"
+            )
+            continue
         audit.extend(stage_audit)
         total_swept.extend(stage_swept)
+        stage_timings.extend(stage_times)
         changed = changed or stage_changed
+
+    timing = _document_timing(
+        facts_ttl, stage_timings, t_doc, changed=changed, failures=stage_failures
+    )
+    print(
+        f"    document total: {timing['seconds_total']}s across "
+        f"{timing['model_calls']} model call(s) "
+        f"({timing['seconds_model_calls']}s in the model)"
+    )
 
     if not changed:
         print("    no net change across all stages; leaving the file untouched")
-        return
+        return timing
 
     repaired_graph = graph
     audit_path = facts_ttl.parent / (
         facts_ttl.name.removesuffix(".ttl") + ".repairs.json"
     )
     audit_path.write_text(
-        json.dumps({"source": str(relative(facts_ttl)), "operations": audit}, indent=2)
+        json.dumps(
+            {
+                "source": str(relative(facts_ttl)),
+                "timings": timing,
+                "operations": audit,
+            },
+            indent=2,
+        )
     )
 
     if dry_run:
         print(
             f"    dry-run: not writing {relative(facts_ttl)} or {relative(audit_path)} contents applied"
         )
-        return
+        return timing
 
     backup_dir = facts_ttl.parent / "backup"
     backup_dir.mkdir(exist_ok=True)
@@ -1614,6 +1843,50 @@ def repair_one(
 
     repaired_graph.serialize(destination=str(facts_ttl), format="turtle")
     print(f"    wrote {relative(facts_ttl)} (backup at {relative(backup_path)})")
+    return timing
+
+
+def _document_timing(
+    facts_ttl: Path,
+    stage_timings: list[dict],
+    t_doc: float,
+    *,
+    changed: bool,
+    failures: list[dict] | None = None,
+) -> dict:
+    """Roll per-pass records up into one document-level timing summary.
+
+    `failures` carries any stage that raised. A failed stage still consumed
+    wall clock and (usually) a model call, so it belongs in the cost record --
+    counting only successful stages would understate what the run actually
+    spent, which is precisely the mistake the truncation tally used to make.
+    """
+    model_seconds = sum(t["seconds_model_call"] for t in stage_timings)
+    total_seconds = time.perf_counter() - t_doc
+    by_stage: dict[str, dict] = {}
+    for t in stage_timings:
+        entry = by_stage.setdefault(
+            t["stage"], {"passes": 0, "seconds": 0.0, "seconds_model_call": 0.0}
+        )
+        entry["passes"] += 1
+        entry["seconds"] = round(entry["seconds"] + t["seconds_total"], 1)
+        entry["seconds_model_call"] = round(
+            entry["seconds_model_call"] + t["seconds_model_call"], 1
+        )
+    return {
+        "source": str(relative(facts_ttl)),
+        "changed": changed,
+        "stage_failures": failures or [],
+        "seconds_total": round(total_seconds, 1),
+        "seconds_model_calls": round(model_seconds, 1),
+        # Everything that is not a model call: parsing, SHACL, finding
+        # derivation, patch application. Worth separating -- SHACL runs once
+        # per pass per stage, so staging multiplied it too, not just the calls.
+        "seconds_deterministic": round(total_seconds - model_seconds, 1),
+        "model_calls": len(stage_timings),
+        "by_stage": by_stage,
+        "passes": stage_timings,
+    }
 
 
 def main() -> int:
@@ -1723,18 +1996,23 @@ def main() -> int:
     )
     warm_up_grammar(client, args.model)
 
+    t_run = time.perf_counter()
+    run_started = datetime.datetime.now(datetime.UTC)
     failures = 0
     truncated: list[Path] = []
+    doc_timings: list[dict] = []
     for facts_ttl in facts_files:
         try:
-            repair_one(
-                facts_ttl,
-                client,
-                args.model,
-                passes=max(1, args.passes),
-                dry_run=args.dry_run,
-                temperature=args.temperature,
-                max_tokens=args.max_tokens,
+            doc_timings.append(
+                repair_one(
+                    facts_ttl,
+                    client,
+                    args.model,
+                    passes=max(1, args.passes),
+                    dry_run=args.dry_run,
+                    temperature=args.temperature,
+                    max_tokens=args.max_tokens,
+                )
             )
         except Exception as exc:  # noqa: BLE001
             # One document failing must not abandon the remaining nine: the
@@ -1746,17 +2024,105 @@ def main() -> int:
             print(
                 f"  FAILED {relative(facts_ttl)}: {type(exc).__name__}: {str(exc)[:300]}"
             )
+
+    # A stage that failed no longer raises out of repair_one -- it is recorded
+    # and the document keeps going -- so PARTIAL failures have to be counted
+    # from the timing records rather than from an exception that never arrives.
+    partial = [t for t in doc_timings if t.get("stage_failures")]
+    for t in partial:
+        if any(f["error"] == "RepairTruncated" for f in t["stage_failures"]):
+            truncated.append(Path(t["source"]))
+
     if failures:
         print(f"  {failures}/{len(facts_files)} document(s) failed to repair")
+    if partial:
+        print(
+            f"  {len(partial)}/{len(facts_files)} document(s) lost at least one "
+            f"stage but kept the others:"
+        )
+        for t in partial:
+            for f in t["stage_failures"]:
+                print(f"    {t['source']}  [{f['stage']}] {f['error']}")
     if truncated:
         print(
-            f"  of those, {len(truncated)} hit the {args.max_tokens}-token output "
-            f"cap mid-patch -- re-run these with a higher --max-tokens:"
+            f"  {len(truncated)} document/stage(s) hit the {args.max_tokens}-token "
+            f"output cap mid-patch -- re-run these with a higher --max-tokens:"
         )
         for path in truncated:
-            print(f"    {relative(path)}")
+            print(f"    {path}")
 
+    _print_and_write_run_timings(
+        args.facts_dir, doc_timings, t_run, run_started, args=args
+    )
     return 1 if failures else 0
+
+
+def _print_and_write_run_timings(
+    facts_dir: Path,
+    doc_timings: list[dict],
+    t_run: float,
+    run_started: datetime.datetime,
+    *,
+    args: argparse.Namespace,
+) -> None:
+    """Summarise the run's cost, and drop it beside the repaired files.
+
+    Written to `repair_timings.json` in the facts directory rather than only
+    printed, so an experiment driver can read the cost of a repair pass without
+    having to parse the log. Staging made this worth doing: repair used to be
+    one call per document and is now up to `3 * passes`, which is a large
+    enough share of a run's total that it has to be measurable on its own.
+    """
+    run_seconds = time.perf_counter() - t_run
+    timed = [t for t in doc_timings if "model_calls" in t]
+    calls = sum(t["model_calls"] for t in timed)
+    model_seconds = sum(t["seconds_model_calls"] for t in timed)
+    by_stage: dict[str, dict] = {}
+    for t in timed:
+        for stage_key, entry in t.get("by_stage", {}).items():
+            agg = by_stage.setdefault(
+                stage_key, {"passes": 0, "seconds": 0.0, "seconds_model_call": 0.0}
+            )
+            agg["passes"] += entry["passes"]
+            agg["seconds"] = round(agg["seconds"] + entry["seconds"], 1)
+            agg["seconds_model_call"] = round(
+                agg["seconds_model_call"] + entry["seconds_model_call"], 1
+            )
+
+    payload = {
+        "facts_dir": str(relative(facts_dir)),
+        "started": run_started.isoformat(timespec="seconds"),
+        "finished": datetime.datetime.now(datetime.UTC).isoformat(timespec="seconds"),
+        "model": args.model,
+        "base_url": args.base_url or "api.openai.com",
+        "temperature": args.temperature,
+        "passes_per_stage": args.passes,
+        "stages": [s.key for s in STAGES],
+        "documents": len(doc_timings),
+        "documents_timed": len(timed),
+        "seconds_total": round(run_seconds, 1),
+        "seconds_model_calls": round(model_seconds, 1),
+        "seconds_deterministic": round(run_seconds - model_seconds, 1),
+        "model_calls": calls,
+        "seconds_per_document": (round(run_seconds / len(timed), 1) if timed else None),
+        "seconds_per_model_call": round(model_seconds / calls, 1) if calls else None,
+        "by_stage": by_stage,
+        "by_document": doc_timings,
+    }
+
+    if not args.dry_run:
+        (facts_dir / "repair_timings.json").write_text(json.dumps(payload, indent=2))
+
+    print(
+        f"\n  repair total: {payload['seconds_total']}s over {len(timed)} document(s), "
+        f"{calls} model call(s) ({payload['seconds_model_calls']}s in the model, "
+        f"{payload['seconds_deterministic']}s deterministic)"
+    )
+    for stage_key, entry in by_stage.items():
+        print(
+            f"    {stage_key:<14} {entry['passes']:>3} call(s)  "
+            f"{entry['seconds']:>7}s  ({entry['seconds_model_call']}s in the model)"
+        )
 
 
 if __name__ == "__main__":

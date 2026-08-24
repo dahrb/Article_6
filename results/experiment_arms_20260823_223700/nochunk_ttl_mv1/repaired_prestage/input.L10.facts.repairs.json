@@ -1,0 +1,44 @@
+{
+  "source": "/home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_prestage/input.L10.facts.ttl",
+  "operations": [
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The Belgian State is an authority and requires a formal name. Based on the label and quotes, the name is 'Belgian State'.",
+      "action": "add",
+      "subject": "doc:belgianState",
+      "predicate": "echr:hasAuthorityName",
+      "object": "Belgian State",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": "en",
+      "status": "applied",
+      "pass": 1
+    },
+    {
+      "finding": "a participation must record exactly one party",
+      "rationale": "The participation node for the applicants in the refusal proceeding is missing its link to the party. Based on the node name 'doc:participation_refusal_1_applicants', it should link to the applicants.",
+      "action": "add",
+      "subject": "doc:participation_refusal_1_applicants",
+      "predicate": "echr:participatingParty",
+      "object": "doc:applicants",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "skipped: object node does not exist in the graph or this patch",
+      "pass": 1
+    },
+    {
+      "finding": "a participation must record exactly one party",
+      "rationale": "The participation node for the applicants in the refusal proceedings is missing its link to the party entity.",
+      "action": "add",
+      "subject": "doc:participation_refusal_1_applicants",
+      "predicate": "echr:participatingParty",
+      "object": "doc:applicants",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "skipped: object node does not exist in the graph or this patch",
+      "pass": 2
+    }
+  ]
+}

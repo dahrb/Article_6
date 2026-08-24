@@ -1,0 +1,340 @@
+{
+  "facts_dir": "results/experiment_arms_20260823_223700/nochunk_ttl_mv2/repaired",
+  "started": "2026-08-23T23:55:58+00:00",
+  "finished": "2026-08-24T00:00:45+00:00",
+  "model": "gemma-4-31b",
+  "base_url": "http://localhost:8000/v1",
+  "temperature": 0.4,
+  "passes_per_stage": 2,
+  "stages": [
+    "proceedings",
+    "persons",
+    "authorities"
+  ],
+  "documents": 10,
+  "documents_timed": 10,
+  "seconds_total": 287.4,
+  "seconds_model_calls": 93.0,
+  "seconds_deterministic": 194.4,
+  "model_calls": 11,
+  "seconds_per_document": 28.7,
+  "seconds_per_model_call": 8.5,
+  "by_stage": {
+    "persons": {
+      "passes": 9,
+      "seconds": 58.7,
+      "seconds_model_call": 3.8
+    },
+    "proceedings": {
+      "passes": 2,
+      "seconds": 100.1,
+      "seconds_model_call": 89.2
+    }
+  },
+  "by_document": [
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv2/repaired/input.L1.facts.ttl",
+      "changed": false,
+      "stage_failures": [],
+      "seconds_total": 27.4,
+      "seconds_model_calls": 0.5,
+      "seconds_deterministic": 26.9,
+      "model_calls": 1,
+      "by_stage": {
+        "persons": {
+          "passes": 1,
+          "seconds": 9.6,
+          "seconds_model_call": 0.5
+        }
+      },
+      "passes": [
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 9.6,
+          "seconds_model_call": 0.5,
+          "seconds_deterministic": 9.1,
+          "findings_in": 0,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv2/repaired/input.L10.facts.ttl",
+      "changed": false,
+      "stage_failures": [],
+      "seconds_total": 22.2,
+      "seconds_model_calls": 0.5,
+      "seconds_deterministic": 21.7,
+      "model_calls": 1,
+      "by_stage": {
+        "persons": {
+          "passes": 1,
+          "seconds": 7.7,
+          "seconds_model_call": 0.5
+        }
+      },
+      "passes": [
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 7.7,
+          "seconds_model_call": 0.5,
+          "seconds_deterministic": 7.2,
+          "findings_in": 2,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv2/repaired/input.L2.facts.ttl",
+      "changed": false,
+      "stage_failures": [],
+      "seconds_total": 13.1,
+      "seconds_model_calls": 0.4,
+      "seconds_deterministic": 12.7,
+      "model_calls": 1,
+      "by_stage": {
+        "persons": {
+          "passes": 1,
+          "seconds": 4.6,
+          "seconds_model_call": 0.4
+        }
+      },
+      "passes": [
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 4.6,
+          "seconds_model_call": 0.4,
+          "seconds_deterministic": 4.3,
+          "findings_in": 1,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv2/repaired/input.L3.facts.ttl",
+      "changed": false,
+      "stage_failures": [],
+      "seconds_total": 106.0,
+      "seconds_model_calls": 86.9,
+      "seconds_deterministic": 19.1,
+      "model_calls": 2,
+      "by_stage": {
+        "proceedings": {
+          "passes": 1,
+          "seconds": 92.9,
+          "seconds_model_call": 86.5
+        },
+        "persons": {
+          "passes": 1,
+          "seconds": 6.7,
+          "seconds_model_call": 0.4
+        }
+      },
+      "passes": [
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 92.9,
+          "seconds_model_call": 86.5,
+          "seconds_deterministic": 6.4,
+          "findings_in": 1,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 6.7,
+          "seconds_model_call": 0.4,
+          "seconds_deterministic": 6.3,
+          "findings_in": 0,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv2/repaired/input.L4.facts.ttl",
+      "changed": false,
+      "stage_failures": [],
+      "seconds_total": 18.5,
+      "seconds_model_calls": 0.4,
+      "seconds_deterministic": 18.1,
+      "model_calls": 1,
+      "by_stage": {
+        "persons": {
+          "passes": 1,
+          "seconds": 6.3,
+          "seconds_model_call": 0.4
+        }
+      },
+      "passes": [
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 6.3,
+          "seconds_model_call": 0.4,
+          "seconds_deterministic": 5.9,
+          "findings_in": 0,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv2/repaired/input.L5.facts.ttl",
+      "changed": false,
+      "stage_failures": [],
+      "seconds_total": 21.8,
+      "seconds_model_calls": 0.4,
+      "seconds_deterministic": 21.4,
+      "model_calls": 1,
+      "by_stage": {
+        "persons": {
+          "passes": 1,
+          "seconds": 7.5,
+          "seconds_model_call": 0.4
+        }
+      },
+      "passes": [
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 7.5,
+          "seconds_model_call": 0.4,
+          "seconds_deterministic": 7.1,
+          "findings_in": 0,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv2/repaired/input.L6.facts.ttl",
+      "changed": false,
+      "stage_failures": [],
+      "seconds_total": 23.8,
+      "seconds_model_calls": 0,
+      "seconds_deterministic": 23.8,
+      "model_calls": 0,
+      "by_stage": {},
+      "passes": []
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv2/repaired/input.L7.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 21.1,
+      "seconds_model_calls": 3.1,
+      "seconds_deterministic": 18.0,
+      "model_calls": 2,
+      "by_stage": {
+        "proceedings": {
+          "passes": 1,
+          "seconds": 7.2,
+          "seconds_model_call": 2.7
+        },
+        "persons": {
+          "passes": 1,
+          "seconds": 4.8,
+          "seconds_model_call": 0.4
+        }
+      },
+      "passes": [
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 7.2,
+          "seconds_model_call": 2.7,
+          "seconds_deterministic": 4.6,
+          "findings_in": 1,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 4.8,
+          "seconds_model_call": 0.4,
+          "seconds_deterministic": 4.5,
+          "findings_in": 0,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv2/repaired/input.L8.facts.ttl",
+      "changed": false,
+      "stage_failures": [],
+      "seconds_total": 19.2,
+      "seconds_model_calls": 0.4,
+      "seconds_deterministic": 18.8,
+      "model_calls": 1,
+      "by_stage": {
+        "persons": {
+          "passes": 1,
+          "seconds": 6.6,
+          "seconds_model_call": 0.4
+        }
+      },
+      "passes": [
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 6.6,
+          "seconds_model_call": 0.4,
+          "seconds_deterministic": 6.2,
+          "findings_in": 0,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv2/repaired/input.L9.facts.ttl",
+      "changed": false,
+      "stage_failures": [],
+      "seconds_total": 14.1,
+      "seconds_model_calls": 0.4,
+      "seconds_deterministic": 13.7,
+      "model_calls": 1,
+      "by_stage": {
+        "persons": {
+          "passes": 1,
+          "seconds": 4.9,
+          "seconds_model_call": 0.4
+        }
+      },
+      "passes": [
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 4.9,
+          "seconds_model_call": 0.4,
+          "seconds_deterministic": 4.5,
+          "findings_in": 0,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        }
+      ]
+    }
+  ]
+}

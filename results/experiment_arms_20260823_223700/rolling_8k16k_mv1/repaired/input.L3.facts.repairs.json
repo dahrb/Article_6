@@ -1,0 +1,229 @@
+{
+  "source": "results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L3.facts.ttl",
+  "timings": {
+    "source": "results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L3.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 52.7,
+    "seconds_model_calls": 9.5,
+    "seconds_deterministic": 43.2,
+    "model_calls": 2,
+    "by_stage": {
+      "persons": {
+        "passes": 1,
+        "seconds": 9.2,
+        "seconds_model_call": 0.4
+      },
+      "authorities": {
+        "passes": 1,
+        "seconds": 17.5,
+        "seconds_model_call": 9.1
+      }
+    },
+    "passes": [
+      {
+        "stage": "persons",
+        "pass": 1,
+        "seconds_total": 9.2,
+        "seconds_model_call": 0.4,
+        "seconds_deterministic": 8.8,
+        "findings_in": 2,
+        "ops_proposed": 0,
+        "ops_applied": 1,
+        "merges_applied": 0
+      },
+      {
+        "stage": "authorities",
+        "pass": 1,
+        "seconds_total": 17.5,
+        "seconds_model_call": 9.1,
+        "seconds_deterministic": 8.4,
+        "findings_in": 2,
+        "ops_proposed": 12,
+        "ops_applied": 8,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "stub_orphan_sweep",
+      "rationale": "Typed nodes carrying nothing but rdf:type/rdfs:label with no inbound reference; nothing downstream can use them.",
+      "action": "delete_node",
+      "nodes": [
+        "doc:companyA"
+      ],
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    },
+    {
+      "finding": "doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.",
+      "rationale": "The node doc:adminCourt violates the functional property constraint for echr:hasAuthorityName and the uniqueness constraint for rdfs:label. These names refer to different judicial tiers/bodies.",
+      "action": "remove",
+      "subject": "doc:adminCourt",
+      "predicate": "echr:hasAuthorityName",
+      "object": "\"administrative court\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "skipped: triple not present",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.",
+      "rationale": "The node doc:adminCourt violates the functional property constraint for echr:hasAuthorityName and the uniqueness constraint for rdfs:label. These names refer to different judicial tiers/bodies.",
+      "action": "remove",
+      "subject": "doc:adminCourt",
+      "predicate": "echr:hasAuthorityName",
+      "object": "\"General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "skipped: triple not present",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.",
+      "rationale": "The node doc:adminCourt violates the functional property constraint for echr:hasAuthorityName and the uniqueness constraint for rdfs:label. These names refer to different judicial tiers/bodies.",
+      "action": "remove",
+      "subject": "doc:adminCourt",
+      "predicate": "rdfs:label",
+      "object": "\"Administrative Court\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "skipped: triple not present",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.",
+      "rationale": "The node doc:adminCourt violates the functional property constraint for echr:hasAuthorityName and the uniqueness constraint for rdfs:label. These names refer to different judicial tiers/bodies.",
+      "action": "remove",
+      "subject": "doc:adminCourt",
+      "predicate": "rdfs:label",
+      "object": "\"General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "skipped: triple not present",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.",
+      "rationale": "The node doc:adminCourt violates the functional property constraint for echr:hasAuthorityName and the uniqueness constraint for rdfs:label. These names refer to different judicial tiers/bodies.",
+      "action": "add",
+      "subject": "doc:administrative_court",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticAuthority",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.",
+      "rationale": "The node doc:adminCourt violates the functional property constraint for echr:hasAuthorityName and the uniqueness constraint for rdfs:label. These names refer to different judicial tiers/bodies.",
+      "action": "add",
+      "subject": "doc:administrative_court",
+      "predicate": "echr:hasAuthorityName",
+      "object": "\"administrative court\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.",
+      "rationale": "The node doc:adminCourt violates the functional property constraint for echr:hasAuthorityName and the uniqueness constraint for rdfs:label. These names refer to different judicial tiers/bodies.",
+      "action": "add",
+      "subject": "doc:administrative_court",
+      "predicate": "echr:hasAuthorityKind",
+      "object": "echr:AuthorityJudicial",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.",
+      "rationale": "The node doc:adminCourt violates the functional property constraint for echr:hasAuthorityName and the uniqueness constraint for rdfs:label. These names refer to different judicial tiers/bodies.",
+      "action": "add",
+      "subject": "doc:administrative_court",
+      "predicate": "rdfs:label",
+      "object": "\"Administrative Court\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.",
+      "rationale": "The node doc:adminCourt violates the functional property constraint for echr:hasAuthorityName and the uniqueness constraint for rdfs:label. These names refer to different judicial tiers/bodies.",
+      "action": "add",
+      "subject": "doc:general_assembly_sac",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticAuthority",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.",
+      "rationale": "The node doc:adminCourt violates the functional property constraint for echr:hasAuthorityName and the uniqueness constraint for rdfs:label. These names refer to different judicial tiers/bodies.",
+      "action": "add",
+      "subject": "doc:general_assembly_sac",
+      "predicate": "echr:hasAuthorityName",
+      "object": "\"General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.",
+      "rationale": "The node doc:adminCourt violates the functional property constraint for echr:hasAuthorityName and the uniqueness constraint for rdfs:label. These names refer to different judicial tiers/bodies.",
+      "action": "add",
+      "subject": "doc:general_assembly_sac",
+      "predicate": "echr:hasAuthorityKind",
+      "object": "echr:AuthorityJudicial",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.",
+      "rationale": "The node doc:adminCourt violates the functional property constraint for echr:hasAuthorityName and the uniqueness constraint for rdfs:label. These names refer to different judicial tiers/bodies.",
+      "action": "add",
+      "subject": "doc:general_assembly_sac",
+      "predicate": "rdfs:label",
+      "object": "\"General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    }
+  ]
+}

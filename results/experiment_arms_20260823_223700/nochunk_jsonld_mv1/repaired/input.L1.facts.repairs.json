@@ -1,0 +1,120 @@
+{
+  "source": "results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired/input.L1.facts.ttl",
+  "timings": {
+    "source": "results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired/input.L1.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 132.6,
+    "seconds_model_calls": 96.5,
+    "seconds_deterministic": 36.1,
+    "model_calls": 2,
+    "by_stage": {
+      "persons": {
+        "passes": 1,
+        "seconds": 7.5,
+        "seconds_model_call": 0.5
+      },
+      "authorities": {
+        "passes": 1,
+        "seconds": 103.6,
+        "seconds_model_call": 96.0
+      }
+    },
+    "passes": [
+      {
+        "stage": "persons",
+        "pass": 1,
+        "seconds_total": 7.5,
+        "seconds_model_call": 0.5,
+        "seconds_deterministic": 7.0,
+        "findings_in": 2,
+        "ops_proposed": 0,
+        "ops_applied": 0,
+        "merges_applied": 0
+      },
+      {
+        "stage": "authorities",
+        "pass": 1,
+        "seconds_total": 103.6,
+        "seconds_model_call": 96.0,
+        "seconds_deterministic": 7.6,
+        "findings_in": 5,
+        "ops_proposed": 5,
+        "ops_applied": 5,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node has a label 'Dupnitsa District Court' but is missing the required echr:hasAuthorityName property.",
+      "action": "add",
+      "subject": "doc:courtDupnitsaDistrict",
+      "predicate": "echr:hasAuthorityName",
+      "object": "Dupnitsa District Court",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node has a label 'Ruse Municipal Council' but is missing the required echr:hasAuthorityName property.",
+      "action": "add",
+      "subject": "doc:councilRuseMunicipal",
+      "predicate": "echr:hasAuthorityName",
+      "object": "Ruse Municipal Council",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node has a label 'Mayor of Rila' but is missing the required echr:hasAuthorityName property.",
+      "action": "add",
+      "subject": "doc:mayorRila",
+      "predicate": "echr:hasAuthorityName",
+      "object": "Mayor of Rila",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node has a label 'Ruse regional prosecutor' but is missing the required echr:hasAuthorityName property.",
+      "action": "add",
+      "subject": "doc:prosecutorRuseRegional",
+      "predicate": "echr:hasAuthorityName",
+      "object": "Ruse regional prosecutor",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node has a label 'Regional Prosecutor' but is missing the required echr:hasAuthorityName property.",
+      "action": "add",
+      "subject": "doc:prosecutorRegionalRuse",
+      "predicate": "echr:hasAuthorityName",
+      "object": "Regional Prosecutor",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    }
+  ]
+}

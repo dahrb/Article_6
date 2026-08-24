@@ -1,0 +1,145 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/2e9688b7249b/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/2e9688b7249b> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:8"^^xsd:string .
+
+doc:admin_action_1 a echr:AdministrativeAction ;
+    rdfs:label "Election invalidation"@en ;
+    echr:hasCourt doc:authorityElectoralCommittee ;
+    echr:hasDecisionDate "1998-04-01"^^xsd:date ;
+    echr:hasSupportingQuote "On 1 April 1998 the local electoral committee declared the elections invalid"@en .
+
+doc:case_46503_99 a echr:CaseDocument ;
+    echr:hasApplicant doc:klimentyev ;
+    echr:hasApplicationNumber "46503/99"@en ;
+    echr:hasCaseName "Andrey Anatolyevitch KLIMENTYEV against Russia"@en ;
+    echr:hasDomesticProceeding doc:proceeding_1,
+        doc:proceeding_2,
+        doc:proceeding_3 ;
+    echr:hasRespondentState "Russia"@en .
+
+doc:detention_1 a echr:PreTrialDetention ;
+    rdfs:label "Pre-trial detention 1995-1997"@en ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:klimentyev ;
+    echr:hasDetentionStartDate "1995-03-07"^^xsd:date ;
+    echr:hasSupportingQuote "the time he had already spent in pre-trial detention"@en .
+
+doc:detention_2 a echr:PreTrialDetention ;
+    rdfs:label "Detention during retrial 1998"@en ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:klimentyev ;
+    echr:hasDetentionEndDate "2000-10-01"^^xsd:date ;
+    echr:hasDetentionStartDate "1998-04-02"^^xsd:date ;
+    echr:hasSupportingQuote "On 2 April 1998 the Nizhniy Novgorod Regional Court granted the prosecutor’s renewed motion for detention"@en .
+
+doc:proceeding_4 a echr:DomesticProceeding ;
+    rdfs:label "Final Cassation at Supreme Court"@en ;
+    echr:followsProceeding doc:proceeding_3 ;
+    echr:hasCourt doc:courtSupreme ;
+    echr:hasDecisionDate "1998-08-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_2_klimentyev ;
+    echr:hasSupportingQuote "On 10 August 1998 the Supreme Court confirmed the judgment of the Nizhniy Novgorod Regional Court"@en ;
+    echr:isFinalDomesticDecision true .
+
+doc:prosecutorNizhnijNovgorod a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Nizhniy Novgorod prosecutor’s office"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Nizhniy Novgorod prosecutor’s office"@en ;
+    echr:hasJurisdictionState "Russia"@en .
+
+doc:authorityElectoralCommittee a echr:DomesticAuthority ;
+    rdfs:label "Local electoral committee"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "local electoral committee"@en .
+
+doc:lawyerBaum a echr:LegalRepresentative ;
+    rdfs:label "Mr Gerhart R. Baum"@en ;
+    echr:hasPersonName "Mr Gerhart R. Baum"@en .
+
+doc:lawyerK a echr:LegalRepresentative ;
+    rdfs:label "Mr. K."@en ;
+    echr:hasPersonName "Mr. K."@en .
+
+doc:lawyerMoskalenko a echr:LegalRepresentative ;
+    rdfs:label "Mrs Moskalenko"@en ;
+    echr:hasPersonName "Mrs Moskalenko"@en .
+
+doc:lawyerO a echr:LegalRepresentative ;
+    rdfs:label "Mr. O."@en ;
+    echr:hasPersonName "Mr. O."@en .
+
+doc:courtNizhnijNovgorod a echr:DomesticAuthority ;
+    rdfs:label "Nizhniy Novgorod Regional Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Nizhniy Novgorod Regional Court"@en ;
+    echr:hasJurisdictionState "Russia"@en .
+
+doc:courtSupreme a echr:DomesticAuthority ;
+    rdfs:label "Supreme Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Supreme Court"@en ;
+    echr:hasJurisdictionState "Russia"@en .
+
+doc:part_1_klimentyev a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:klimentyev .
+
+doc:part_2_klimentyev a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:klimentyev .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "First trial at Nizhniy Novgorod Regional Court"@en ;
+    echr:hasCourt doc:courtNizhnijNovgorod ;
+    echr:hasDecisionDate "1997-04-21"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_1_klimentyev ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 21 April 1997 the Nizhniy Novgorod Regional Court found the applicant guilty on some of the charges"@en .
+
+doc:proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "Appeal to the Supreme Court"@en ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:courtSupreme ;
+    echr:hasDecisionDate "1997-07-01"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeRemitted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:part_2_klimentyev ;
+    echr:hasSupportingQuote "In July 1997 the Supreme Court quashed the conviction on the applicant’s appeal and remitted the case to the Nizhniy Novgorod Regional Court"@en .
+
+doc:proceeding_3 a echr:DomesticProceeding ;
+    rdfs:label "Retrial at Nizhniy Novgorod Regional Court"@en ;
+    echr:followsProceeding doc:proceeding_2 ;
+    echr:hasCourt doc:courtNizhnijNovgorod ;
+    echr:hasDecisionDate "1998-05-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelReopening ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_1_klimentyev ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 27 May 1998 the Nizhniy Novgorod Regional Court found the applicant guilty on charges of misappropriation and embezzlement"@en .
+
+doc:klimentyev a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Andrey Anatolyevich Klimentyev"@en ;
+    echr:hasPersonName "Andrey Anatolyevich Klimentyev"@en ;
+    echr:isRepresentedBy doc:lawyerBaum,
+        doc:lawyerK,
+        doc:lawyerMoskalenko,
+        doc:lawyerO .
+

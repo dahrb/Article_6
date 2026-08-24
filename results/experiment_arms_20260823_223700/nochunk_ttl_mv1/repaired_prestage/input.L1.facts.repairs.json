@@ -1,0 +1,31 @@
+{
+  "source": "/home/dahrb/Projects/article_6/domestic_proceedings/results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_prestage/input.L1.facts.ttl",
+  "operations": [
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The authority doc:mayorRila is missing a required echr:hasAuthorityName. I will promote its rdfs:label to echr:hasAuthorityName to satisfy the constraint.",
+      "action": "add",
+      "subject": "doc:mayorRila",
+      "predicate": "echr:hasAuthorityName",
+      "object": "Mayor of Rila",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": "en",
+      "status": "applied",
+      "pass": 1
+    },
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The authority doc:ruseRegionalProsecutor is missing a required echr:hasAuthorityName. I will promote its rdfs:label to echr:hasAuthorityName to satisfy the constraint.",
+      "action": "add",
+      "subject": "doc:ruseRegionalProsecutor",
+      "predicate": "echr:hasAuthorityName",
+      "object": "Ruse Regional Prosecutor",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": "en",
+      "status": "applied",
+      "pass": 1
+    }
+  ]
+}

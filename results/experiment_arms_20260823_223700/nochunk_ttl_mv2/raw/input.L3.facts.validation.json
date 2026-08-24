@@ -1,0 +1,33 @@
+{
+  "source": "input.jsonl",
+  "conformance": {
+    "shacl_evaluated": null,
+    "conforms": null,
+    "findings": 1,
+    "errors": 1,
+    "warnings": 0,
+    "by_kind": {
+      "suspect_multi_value": 1
+    },
+    "shacl_violations": 0,
+    "shacl_by_constraint": {},
+    "shacl_by_shape": {},
+    "repairs_applied": {}
+  },
+  "gate_repairs": [],
+  "findings": [
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/6cb3461d1cd1/proceedingSaleAnnulmentRectification> points at 2 objects via <https://growgraph.dev/echr#followsProceeding>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/6cb3461d1cd1/proceedingSaleAnnulmentRectification",
+      "predicate": "https://growgraph.dev/echr#followsProceeding",
+      "values": [
+        "https://growgraph.dev/doc/6cb3461d1cd1/proceedingSaleAnnulmentAppeal",
+        "https://growgraph.dev/doc/6cb3461d1cd1/proceedingValuationAppeal"
+      ],
+      "component": "",
+      "source_shape": ""
+    }
+  ]
+}

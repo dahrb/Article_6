@@ -1,0 +1,115 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/4998862e1798/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/4998862e1798> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:9"^^xsd:string .
+
+doc:case_18720_08 a echr:CaseDocument ;
+    echr:hasApplicant doc:baduashvili ;
+    echr:hasApplicationNumber "18720/08"@en ;
+    echr:hasCaseName "Malkhaz BADUASHVILI against Georgia"@en ;
+    echr:hasDomesticProceeding doc:appealSupremeCourt,
+        doc:appealTbilisi,
+        doc:investigation_1,
+        doc:trialFirstInstance ;
+    echr:hasRespondentState "Georgia"@en .
+
+doc:abuladze a echr:LegalRepresentative ;
+    rdfs:label "S. Abuladze"@en ;
+    echr:hasPersonName "Ms S. Abuladze"@en .
+
+doc:appealSupremeCourt a echr:DomesticProceeding ;
+    rdfs:label "Supreme Court appeal on points of law"@en ;
+    echr:followsProceeding doc:appealTbilisi ;
+    echr:hasCourt doc:supremeCourt ;
+    echr:hasDecisionDate "2008-02-20"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partBaduashviliSupreme ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant inadmissible"@en ;
+    echr:isFinalDomesticDecision true .
+
+doc:courtFirstInstance a echr:DomesticAuthority ;
+    rdfs:label "Court of First Instance"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "court of first instance"@en .
+
+doc:detention_1 a echr:PreTrialDetention ;
+    rdfs:label "Pre-trial detention of Malkhaz Baduashvili"@en ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:baduashvili ;
+    echr:hasDetentionStartDate "2005-07-27"^^xsd:date ;
+    echr:hasSupportingQuote "He was arrested and remanded in custody on 27 July 2005"@en .
+
+doc:partBaduashviliAppeal a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:baduashvili .
+
+doc:partBaduashviliInv a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:baduashvili .
+
+doc:partBaduashviliSupreme a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:baduashvili .
+
+doc:partBaduashviliTrial a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:baduashvili .
+
+doc:supremeCourt a echr:DomesticAuthority ;
+    rdfs:label "Supreme Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Supreme Court"@en .
+
+doc:tbilisiCourtAppeal a echr:DomesticAuthority ;
+    rdfs:label "Tbilisi Court of Appeal"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Tbilisi Court of Appeal"@en .
+
+doc:appealTbilisi a echr:DomesticProceeding ;
+    rdfs:label "Tbilisi Court of Appeal proceeding"@en ;
+    echr:followsProceeding doc:trialFirstInstance ;
+    echr:hasCourt doc:tbilisiCourtAppeal ;
+    echr:hasDecisionDate "2007-06-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partBaduashviliAppeal ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction"@en .
+
+doc:investigation_1 a echr:DomesticProceeding ;
+    rdfs:label "Investigation into the murder of V.T."@en ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:partBaduashviliInv ;
+    echr:hasPreTrialDetention doc:detention_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "Criminal proceedings against the applicant (a) Investigation"@en .
+
+doc:trialFirstInstance a echr:DomesticProceeding ;
+    rdfs:label "First instance trial"@en ;
+    echr:followsProceeding doc:investigation_1 ;
+    echr:hasCourt doc:courtFirstInstance ;
+    echr:hasDecisionDate "2006-12-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partBaduashviliTrial ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 8 December 2006 the court of first instance convicted the applicant of aggravated murder"@en .
+
+doc:baduashvili a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Malkhaz Baduashvili"@en ;
+    echr:hasPersonName "Mr Malkhaz Baduashvili"@en ;
+    echr:isRepresentedBy doc:abuladze .
+

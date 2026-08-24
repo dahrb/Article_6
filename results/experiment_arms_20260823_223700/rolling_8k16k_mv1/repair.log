@@ -1,0 +1,102 @@
+repairing 10 file(s) under results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired
+  model: gemma-4-31b @ http://localhost:8000/v1 (temperature 0.4, timeout 300.0s)
+  [domestic proceedings] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L1.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L1.facts.ttl: 4 finding(s) in; model proposed 3 group(s), 9 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 6 (of which 0 merge(s)), skipped 3, stub orphans swept 0 [23.8s, 12.8s in the model]
+    SKIPPED [doc:pastraHome has multiple rdfs:labels ('Director of the Pastra social care home', 'Director of the Pastra social care home (as guardian)', 'Pastra social care home').] remove doc:pastraHome rdfs:label "Director of the Pastra social care home": skipped: triple not present
+    SKIPPED [doc:pastraHome has multiple rdfs:labels ('Director of the Pastra social care home', 'Director of the Pastra social care home (as guardian)', 'Pastra social care home').] remove doc:pastraHome rdfs:label "Director of the Pastra social care home (as guardian)": skipped: triple not present
+    SKIPPED [doc:pastraHome has multiple rdfs:labels ('Director of the Pastra social care home', 'Director of the Pastra social care home (as guardian)', 'Pastra social care home').] remove doc:pastraHome echr:hasPersonName "Director of the Pastra social care home": skipped: triple not present
+    [persons and participation] pass 2: 2 finding(s) in; model proposed 3 group(s), 4 op(s), 0 merge(s)
+    [persons and participation] pass 2: applied 2 (of which 0 merge(s)), skipped 2, stub orphans swept 0 [19.3s, 7.8s in the model]
+    SKIPPED [doc:pastraHome has multiple rdfs:labels, suggesting a conflation between the institution and its Director acting as guardian.] remove doc:pastraHome rdfs:label "Director of the Pastra social care home (as guardian)": skipped: triple not present
+    SKIPPED [doc:pastraHome has multiple rdfs:labels, suggesting a conflation between the institution and its Director acting as guardian.] remove doc:pastraHome rdfs:label "Director of the Pastra social care home": skipped: triple not present
+  [domestic authorities] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L1.facts.ttl: 2 finding(s) in; model proposed 2 group(s), 4 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 0 (of which 0 merge(s)), skipped 4, stub orphans swept 0 [16.9s, 5.4s in the model]
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:regionalProsecutorRila rdfs:label "Ruse regional prosecutor": skipped: triple not present
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:pastraHome rdfs:label "Director of the Pastra social care home (as guardian)": skipped: triple not present
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:pastraHome rdfs:label "Director of the Pastra social care home": skipped: triple not present
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:pastraHome echr:hasPersonName "Director of the Pastra social care home": skipped: triple not present
+    [domestic authorities] pass 1: no operations applied - stopping
+    document total: 94.1s across 3 model call(s) (26.0s in the model)
+    wrote results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L1.facts.ttl (backup at results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/backup/input.L1.facts.ttl)
+  [domestic proceedings] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L10.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [17.3s, 0.8s in the model]
+    [domestic proceedings] pass 1: no operations applied - stopping
+  [persons and participation] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L10.facts.ttl: 2 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [17.2s, 0.5s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+  [domestic authorities] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L10.facts.ttl: nothing flagged
+    document total: 51.0s across 2 model call(s) (1.3s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic proceedings] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L2.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 1 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 1 merge(s)), skipped 0, stub orphans swept 0 [6.5s, 1.4s in the model]
+    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
+  [persons and participation] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L2.facts.ttl: 1 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [5.4s, 0.5s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+  [domestic authorities] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L2.facts.ttl: nothing flagged
+    document total: 21.5s across 2 model call(s) (1.9s in the model)
+    wrote results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L2.facts.ttl (backup at results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/backup/input.L2.facts.ttl)
+  [domestic proceedings] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L3.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L3.facts.ttl: 2 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 1 [9.2s, 0.4s in the model]
+    [persons and participation] pass 1: 1 op(s) applied but findings did not fall (2 -> 2) - stopping
+  [domestic authorities] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L3.facts.ttl: 2 finding(s) in; model proposed 1 group(s), 12 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 8 (of which 0 merge(s)), skipped 4, stub orphans swept 0 [17.5s, 9.1s in the model]
+    SKIPPED [doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.] remove doc:adminCourt echr:hasAuthorityName "administrative court": skipped: triple not present
+    SKIPPED [doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.] remove doc:adminCourt echr:hasAuthorityName "General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court": skipped: triple not present
+    SKIPPED [doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.] remove doc:adminCourt rdfs:label "Administrative Court": skipped: triple not present
+    SKIPPED [doc:adminCourt has multiple labels and authority names, indicating it has been incorrectly merged. The evidence suggests three distinct levels/bodies: a general 'administrative court', the 'Supreme Administrative Court', and the 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court'.] remove doc:adminCourt rdfs:label "General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court": skipped: triple not present
+    [domestic authorities] pass 1: 8 op(s) applied but findings did not fall (2 -> 2) - stopping
+    document total: 52.7s across 2 model call(s) (9.5s in the model)
+    wrote results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L3.facts.ttl (backup at results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/backup/input.L3.facts.ttl)
+    [domestic proceedings] FAILED: RepairTruncated: generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document
+    continuing to the next stage; earlier stages' work is kept
+  [persons and participation] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L4.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [10.6s, 0.5s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+  [domestic authorities] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L4.facts.ttl: nothing flagged
+    document total: 203.4s across 1 model call(s) (0.5s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic proceedings] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L5.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L5.facts.ttl: nothing flagged
+  [domestic authorities] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L5.facts.ttl: nothing flagged
+    document total: 21.1s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic proceedings] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L6.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L6.facts.ttl: nothing flagged
+  [domestic authorities] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L6.facts.ttl: nothing flagged
+    document total: 24.1s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic proceedings] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L7.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L7.facts.ttl: nothing flagged
+  [domestic authorities] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L7.facts.ttl: nothing flagged
+    document total: 15.0s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic proceedings] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L8.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.4s, 0.5s in the model]
+    [domestic proceedings] pass 1: no operations applied - stopping
+  [persons and participation] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L8.facts.ttl: 1 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.6s, 0.5s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+  [domestic authorities] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L8.facts.ttl: nothing flagged
+    document total: 22.1s across 2 model call(s) (1.0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic proceedings] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L9.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 0 op(s), 1 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 1 merge(s)), skipped 0, stub orphans swept 0 [9.3s, 2.1s in the model]
+    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (1 -> 1) - stopping
+  [persons and participation] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L9.facts.ttl: 1 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.4s, 0.4s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+  [domestic authorities] results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L9.facts.ttl: nothing flagged
+    document total: 30.7s across 2 model call(s) (2.5s in the model)
+    wrote results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L9.facts.ttl (backup at results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/backup/input.L9.facts.ttl)
+  1/10 document(s) lost at least one stage but kept the others:
+    results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L4.facts.ttl  [proceedings] RepairTruncated
+  1 document/stage(s) hit the 8000-token output cap mid-patch -- re-run these with a higher --max-tokens:
+    results/experiment_arms_20260823_223700/rolling_8k16k_mv1/repaired/input.L4.facts.ttl
+
+  repair total: 535.6s over 10 document(s), 14 model call(s) (42.7s in the model, 492.9s deterministic)
+    persons          8 call(s)    100.5s  (23.4s in the model)
+    authorities      2 call(s)     34.4s  (14.5s in the model)
+    proceedings      4 call(s)     40.5s  (4.8s in the model)

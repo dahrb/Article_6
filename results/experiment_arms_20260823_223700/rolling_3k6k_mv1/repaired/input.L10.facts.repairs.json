@@ -1,0 +1,130 @@
+{
+  "source": "results/experiment_arms_20260823_223700/rolling_3k6k_mv1/repaired/input.L10.facts.ttl",
+  "timings": {
+    "source": "results/experiment_arms_20260823_223700/rolling_3k6k_mv1/repaired/input.L10.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 107.5,
+    "seconds_model_calls": 6.9,
+    "seconds_deterministic": 100.6,
+    "model_calls": 2,
+    "by_stage": {
+      "proceedings": {
+        "passes": 1,
+        "seconds": 32.6,
+        "seconds_model_call": 6.3
+      },
+      "persons": {
+        "passes": 1,
+        "seconds": 25.5,
+        "seconds_model_call": 0.6
+      }
+    },
+    "passes": [
+      {
+        "stage": "proceedings",
+        "pass": 1,
+        "seconds_total": 32.6,
+        "seconds_model_call": 6.3,
+        "seconds_deterministic": 26.3,
+        "findings_in": 0,
+        "ops_proposed": 0,
+        "ops_applied": 5,
+        "merges_applied": 5
+      },
+      {
+        "stage": "persons",
+        "pass": 1,
+        "seconds_total": 25.5,
+        "seconds_model_call": 0.6,
+        "seconds_deterministic": 24.9,
+        "findings_in": 0,
+        "ops_proposed": 0,
+        "ops_applied": 0,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both refer to a single judgment of the Conseil d'\u00c9tat on 17 May 2018 dismissing an appeal on points of law. doc:appeal_points_law_10oct has a more descriptive label.",
+      "action": "merge",
+      "keep": "doc:appeal_points_law_10oct",
+      "drop": "doc:appealPointsLawStayLifting",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 0,
+        "self_loops_dropped": 0,
+        "properties_moved": 2,
+        "survivor_value_kept": 7
+      },
+      "stage": "proceedings",
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both refer to the Brussels Court of Appeal judgment of 7 December 2016. doc:appealTpiToCourtAppeal is more detailed and has more inbound links.",
+      "action": "merge",
+      "keep": "doc:appealTpiToCourtAppeal",
+      "drop": "doc:brussels_court_appeal_judgment_7dec",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 0,
+        "self_loops_dropped": 0,
+        "properties_moved": 3,
+        "survivor_value_kept": 5
+      },
+      "stage": "proceedings",
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Wait, looking closer at the quotes: doc:cassationAppealApplicants is against the judgment of 6 March 2017, while doc:cassationAppealState is against the judgment of 7 October 2016. These are two distinct appeals decided on the same day. I will not merge them.",
+      "action": "merge",
+      "keep": "doc:cassationAppealApplicants",
+      "drop": "doc:cassationAppealState",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 0,
+        "self_loops_dropped": 0,
+        "properties_moved": 2,
+        "survivor_value_kept": 7
+      },
+      "stage": "proceedings",
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both refer to the Aliens Appeals Board judgment of 20 October 2016 ordering a stay of execution. doc:stay_execution_proceeding_20oct is more complete.",
+      "action": "merge",
+      "keep": "doc:stay_execution_proceeding_20oct",
+      "drop": "doc:aliens_appeals_board_judgment_20oct",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 0,
+        "properties_moved": 3,
+        "survivor_value_kept": 5
+      },
+      "stage": "proceedings",
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "The quotes show that the judgment of 24 March 2017 both dismissed the application to set aside the decisions and ordered the stay to be lifted. These are the same proceeding.",
+      "action": "merge",
+      "keep": "doc:stay_lifting_proceeding_24mar",
+      "drop": "doc:challenge_10oct_decisions",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 0,
+        "properties_moved": 6,
+        "survivor_value_kept": 7
+      },
+      "stage": "proceedings",
+      "pass": 1
+    }
+  ]
+}

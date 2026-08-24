@@ -1,0 +1,162 @@
+{
+  "source": "results/experiment_arms_20260823_223700/rolling_3k6k_mv1/repaired/input.L7.facts.ttl",
+  "timings": {
+    "source": "results/experiment_arms_20260823_223700/rolling_3k6k_mv1/repaired/input.L7.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 65.9,
+    "seconds_model_calls": 11.6,
+    "seconds_deterministic": 54.3,
+    "model_calls": 2,
+    "by_stage": {
+      "persons": {
+        "passes": 1,
+        "seconds": 16.9,
+        "seconds_model_call": 7.7
+      },
+      "authorities": {
+        "passes": 1,
+        "seconds": 12.9,
+        "seconds_model_call": 3.9
+      }
+    },
+    "passes": [
+      {
+        "stage": "persons",
+        "pass": 1,
+        "seconds_total": 16.9,
+        "seconds_model_call": 7.7,
+        "seconds_deterministic": 9.2,
+        "findings_in": 1,
+        "ops_proposed": 4,
+        "ops_applied": 4,
+        "merges_applied": 0
+      },
+      {
+        "stage": "authorities",
+        "pass": 1,
+        "seconds_total": 12.9,
+        "seconds_model_call": 3.9,
+        "seconds_deterministic": 9.0,
+        "findings_in": 1,
+        "ops_proposed": 4,
+        "ops_applied": 4,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "doc:witnessZan has multiple rdfs:labels and is conflating a natural person (Fedor Zan) with an authority (British police).",
+      "rationale": "The node doc:witnessZan contains properties for both a person (hasPersonName 'Fedor Zan') and an authority (hasAuthorityName 'British police'). The supporting quote 'Mr Zan first described this incident to British police' clearly distinguishes the witness from the police. The police are a domestic authority, not a natural person. I will remove the authority-related properties and the incorrect label from the person node.",
+      "action": "remove",
+      "subject": "doc:witnessZan",
+      "predicate": "rdfs:label",
+      "object": "British police",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    },
+    {
+      "finding": "doc:witnessZan has multiple rdfs:labels and is conflating a natural person (Fedor Zan) with an authority (British police).",
+      "rationale": "The node doc:witnessZan contains properties for both a person (hasPersonName 'Fedor Zan') and an authority (hasAuthorityName 'British police'). The supporting quote 'Mr Zan first described this incident to British police' clearly distinguishes the witness from the police. The police are a domestic authority, not a natural person. I will remove the authority-related properties and the incorrect label from the person node.",
+      "action": "remove",
+      "subject": "doc:witnessZan",
+      "predicate": "echr:hasAuthorityKind",
+      "object": "echr:AuthorityProsecutorial",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    },
+    {
+      "finding": "doc:witnessZan has multiple rdfs:labels and is conflating a natural person (Fedor Zan) with an authority (British police).",
+      "rationale": "The node doc:witnessZan contains properties for both a person (hasPersonName 'Fedor Zan') and an authority (hasAuthorityName 'British police'). The supporting quote 'Mr Zan first described this incident to British police' clearly distinguishes the witness from the police. The police are a domestic authority, not a natural person. I will remove the authority-related properties and the incorrect label from the person node.",
+      "action": "remove",
+      "subject": "doc:witnessZan",
+      "predicate": "echr:hasAuthorityName",
+      "object": "British police",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    },
+    {
+      "finding": "doc:partProsecutionTrial links to doc:witnessZan as the initiating party, but the quote refers to the prosecution case generally.",
+      "rationale": "The quote 'the prosecution case was that the applicant had been a willing volunteer' refers to the prosecution as an entity, not specifically to the witness Fedor Zan. While Zan provided evidence, the 'initiating party' in a criminal trial is the prosecution. Since the prosecution is not explicitly modeled as a separate Party node in the provided entities, and doc:witnessZan is a witness (not the prosecution itself), this link is misleading. However, without a specific Prosecution node, I will correct the participation to reflect the witness's role if possible, but the current link suggests Zan *is* the prosecution. I will remove this specific participation as it misidentifies the party.",
+      "action": "remove",
+      "subject": "doc:partProsecutionTrial",
+      "predicate": "echr:participatingParty",
+      "object": "doc:witnessZan",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    },
+    {
+      "finding": "The node doc:witnessZan is typed as a DomesticAuthority (implied by its presence in this stage's entities and the validator finding), but the supporting quote \"Mr Zan first described this incident to British police in February 1996.\" and the property echr:hasPersonName indicate this is a person (a witness), not a domestic authority. It should be removed from the graph as it does not belong to the DomesticAuthority class.",
+      "rationale": "Evidence shows the node represents a person, not an organization or authority.",
+      "action": "remove",
+      "subject": "doc:witnessZan",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticAuthority",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "The node doc:witnessZan is typed as a DomesticAuthority (implied by its presence in this stage's entities and the validator finding), but the supporting quote \"Mr Zan first described this incident to British police in February 1996.\" and the property echr:hasPersonName indicate this is a person (a witness), not a domestic authority. It should be removed from the graph as it does not belong to the DomesticAuthority class.",
+      "rationale": "Evidence shows the node represents a person, not an organization or authority.",
+      "action": "remove",
+      "subject": "doc:witnessZan",
+      "predicate": "echr:hasPersonName",
+      "object": "",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied (1 value(s))",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "The node doc:witnessZan is typed as a DomesticAuthority (implied by its presence in this stage's entities and the validator finding), but the supporting quote \"Mr Zan first described this incident to British police in February 1996.\" and the property echr:hasPersonName indicate this is a person (a witness), not a domestic authority. It should be removed from the graph as it does not belong to the DomesticAuthority class.",
+      "rationale": "Evidence shows the node represents a person, not an organization or authority.",
+      "action": "remove",
+      "subject": "doc:witnessZan",
+      "predicate": "rdfs:label",
+      "object": "",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied (1 value(s))",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "The node doc:witnessZan is typed as a DomesticAuthority (implied by its presence in this stage's entities and the validator finding), but the supporting quote \"Mr Zan first described this incident to British police in February 1996.\" and the property echr:hasPersonName indicate this is a person (a witness), not a domestic authority. It should be removed from the graph as it does not belong to the DomesticAuthority class.",
+      "rationale": "Evidence shows the node represents a person, not an organization or authority.",
+      "action": "remove",
+      "subject": "doc:witnessZan",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "status": "applied (1 value(s))",
+      "stage": "authorities",
+      "pass": 1
+    }
+  ]
+}

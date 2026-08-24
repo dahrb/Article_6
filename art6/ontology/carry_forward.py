@@ -199,6 +199,11 @@ async def _run(args: argparse.Namespace) -> int:
 
         enable_turtle_repair()
 
+    if not args.no_envelope_repair:
+        from art6.ontology.envelope_repair import enable as enable_envelope_repair
+
+        enable_envelope_repair()
+
     config = Config()
     config.validate_llm_config()
 
@@ -569,6 +574,15 @@ def main() -> int:
             "Do not repair a premature '.' before a bare property "
             "continuation in generated Turtle -- see "
             "art6/ontology/turtle_repair.py -- so this is for A/B only."
+        ),
+    )
+    ap.add_argument(
+        "--no-envelope-repair",
+        action="store_true",
+        help=(
+            "Do not re-wrap a facts response that arrived as a bare JSON-LD "
+            "document without its FactsRenderReport envelope -- see "
+            "art6/ontology/envelope_repair.py -- so this is for A/B only."
         ),
     )
     ap.add_argument("--report", help="Write the run summary as JSON to this path.")

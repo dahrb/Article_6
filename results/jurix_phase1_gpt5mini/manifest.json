@@ -1,0 +1,67 @@
+{
+  "started": "2026-08-24T21:57:47",
+  "arms_run": [
+    "o2_large_jsonld",
+    "o2_med_jsonld",
+    "o2_low_jsonld",
+    "o2_cf_med_jsonld",
+    "o2_cf_low_jsonld"
+  ],
+  "arm_specs": {
+    "o2_large_jsonld": {
+      "mode": "native",
+      "chunk_min_size": 20000,
+      "chunk_max_size": 50000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    },
+    "o2_med_jsonld": {
+      "mode": "native",
+      "chunk_min_size": 8000,
+      "chunk_max_size": 16000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    },
+    "o2_low_jsonld": {
+      "mode": "native",
+      "chunk_min_size": 3000,
+      "chunk_max_size": 6000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    },
+    "o2_cf_med_jsonld": {
+      "mode": "rolling",
+      "chunk_min_size": 8000,
+      "chunk_max_size": 16000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    },
+    "o2_cf_low_jsonld": {
+      "mode": "rolling",
+      "chunk_min_size": 3000,
+      "chunk_max_size": 6000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    }
+  },
+  "limit": "all",
+  "model": "gpt-5-mini",
+  "base_url": "https://api.openai.com/v1",
+  "temperature": 1.0,
+  "repair_passes_per_stage": 2,
+  "legacy_repair_arm": null,
+  "held_constant": {
+    "ontology": "/home/dahrb/Projects/article_6/domestic_proceedings/ontology/echr.ttl (snapshot alongside)",
+    "ontology_version": "3.5.0",
+    "facts_prompt": "art6/ontology/prompts/facts.txt (snapshot alongside)",
+    "chunk_section_classifier": "off",
+    "ontology_context_mode": "fixed_single_ontology",
+    "ontology_context_fixed_ontology_id": "echr",
+    "render_mode": "facts",
+    "llm_cache_enabled": false,
+    "response_repair": true,
+    "turtle_repair": true
+  },
+  "git_head": "2f7210644570254879e945973e509176a02ffc01",
+  "git_dirty": true
+}

@@ -1,0 +1,347 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/74b9574ba48f/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/74b9574ba48f> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:4"^^xsd:string .
+
+doc:district_court_order_costs_2001_10_11 a echr:EnforcementAction ;
+    rdfs:label "Slovenj Gradec District Court order to pay witness costs (11 October 2001)"@en ;
+    echr:followsProceeding doc:maribor_higher_court_upheld_conviction_2001_05_09 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "2001-10-11"^^xsd:date ;
+    echr:hasParticipation doc:participation_district_order_costs_2001_10_11_applicant,
+        doc:participation_district_order_costs_2001_10_11_court ;
+    echr:hasSupportingQuote "Lastly, on 11 October 2001 the Slovenj Gradec District Court ordered the applicant to pay an additional sum to cover the costs of one of the witnesses heard during the proceedings. On that day, the proceedings were “finally concluded” ( pravnomočno končan postopek )."@en .
+
+doc:mia_appointed_working_group_1995_04_20 a echr:AdministrativeAction ;
+    rdfs:label "MIA appointed working group (20 April 1995)"@en ;
+    echr:hasCourt doc:mia ;
+    echr:hasDecisionDate "1995-04-20"^^xsd:date ;
+    echr:hasParticipation doc:participation_mia_appointed_working_group_1995_04_20 ;
+    echr:hasSupportingQuote "on 20 April 1995, the MIA had appointed a “working group” ( delovna skupina ) consisting of officers from the Slovenj Gradec Police and the MIA to assess the lawfulness of the procedures"@en .
+
+doc:mia_report_1995_11_15 a echr:AdministrativeAction ;
+    rdfs:label "MIA report on 4-5 April operation (15 November 1995)"@en ;
+    echr:hasCourt doc:mia ;
+    echr:hasDecisionDate "1995-11-15"^^xsd:date ;
+    echr:hasParticipation doc:participation_mia_report_1995_11_15 ;
+    echr:hasSupportingQuote "Further to the analysis of procedures and activities which had taken place on 4 and 5 April 1995, the working group established that all the measures and procedures were lawful and in accordance with legal powers and professional rules."@en .
+
+doc:police_lodged_complaint_against_applicant_1995_04_12 a echr:AdministrativeAction ;
+    rdfs:label "Slovenj Gradec Police lodged criminal complaint against the applicant (12 April 1995)"@en ;
+    echr:hasCourt doc:slovenjGradecPolice ;
+    echr:hasDecisionDate "1995-04-12"^^xsd:date ;
+    echr:hasParticipation doc:participation_police_lodged_complaint_1995_04_12_applicant,
+        doc:participation_police_lodged_complaint_1995_04_12_police ;
+    echr:hasSupportingQuote "On 12 April 1995 the Slovenj Gradec Police lodged a criminal complaint against the applicant"@en .
+
+doc:public_prosecutor_dismissed_complaint_1997_01_17 a echr:ProsecutorialReview ;
+    rdfs:label "Public Prosecutor decision dismissing applicant's criminal complaint (17 January 1997)"@en ;
+    echr:hasCourt doc:slovenjGradecPublicProsecutor ;
+    echr:hasDecisionDate "1997-01-17"^^xsd:date ;
+    echr:hasParticipation doc:participation_public_prosecutor_dismissed_complaint_1997_01_17_applicant,
+        doc:participation_public_prosecutor_dismissed_complaint_1997_01_17_prosecutor ;
+    echr:hasSupportingQuote "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."@en .
+
+doc:slovenj_gradec_police_report_1996_02_05 a echr:AdministrativeAction ;
+    rdfs:label "Slovenj Gradec Police report (5 February 1996)"@en ;
+    echr:hasCourt doc:slovenjGradecPolice ;
+    echr:hasDecisionDate "1996-02-05"^^xsd:date ;
+    echr:hasParticipation doc:participation_slovenj_gradec_police_report_1996_02_05 ;
+    echr:hasSupportingQuote "one by the MIA on 15 November 1995 and one by the Slovenj Gradec Police on 5 February 1996"@en .
+
+doc:district_court_acquittal_1999_11_22 a echr:DomesticProceeding ;
+    rdfs:label "Slovenj Gradec District Court acquittal (22 November 1999)"@en ;
+    echr:followsProceeding doc:district_court_rejected_objection_to_indictment_1999_02_16 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "1999-11-22"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_district_acquittal_1999_11_22_applicant,
+        doc:participation_district_acquittal_1999_11_22_prosecutor ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "By a judgment of 22 November 1999 the court acquitted the applicant."@en .
+
+doc:district_court_not_open_investigation_1997_05_08 a echr:DomesticProceeding ;
+    rdfs:label "Slovenj Gradec District Court decision not to open criminal investigation (8 May 1997)"@en ;
+    echr:followsProceeding doc:public_prosecutor_request_identify_officers_1995_07_14 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "1997-05-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participation_district_court_not_open_1997_05_08_applicant,
+        doc:participation_district_court_not_open_1997_05_08_prosecutor ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 8 May 1997, further to a proposal of the investigating judge, the Slovenj Gradec District Court decided not to open a criminal investigation against the applicant."@en .
+
+doc:district_court_rejected_objection_to_indictment_1999_02_16 a echr:DomesticProceeding ;
+    rdfs:label "Slovenj Gradec District Court rejected objection to indictment (16 February 1999)"@en ;
+    echr:followsProceeding doc:public_prosecutor_filed_indictment_1998_12_28 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "1999-02-16"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:participation_district_reject_objection_1999_02_16_applicant,
+        doc:participation_district_reject_objection_1999_02_16_prosecutor ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "His objection was rejected by the Slovenj Gradec District Court on 16 February 1999."@en .
+
+doc:district_court_retrial_conviction_2001_02_12 a echr:DomesticProceeding ;
+    rdfs:label "Slovenj Gradec District Court retrial conviction (12 February 2001)"@en ;
+    echr:followsProceeding doc:maribor_higher_court_quashed_and_remitted_2000_09_27 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "2001-02-12"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_district_retrial_convict_2001_02_12_applicant,
+        doc:participation_district_retrial_convict_2001_02_12_prosecutor ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "By a judgment of 12 February 2001, the Slovenj Gradec District Court convicted the applicant as charged and sentenced him to 3 months’ imprisonment, suspended for 3 years."@en .
+
+doc:investigating_judge_concluded_investigation_1998_03_17 a echr:DomesticProceeding ;
+    rdfs:label "Investigating judge concluded criminal investigation (17 March 1998)"@en ;
+    echr:followsProceeding doc:maribor_higher_court_appeal_open_investigation_1997_12_04 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "1998-03-17"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participation_investigation_concluded_1998_03_17_applicant,
+        doc:participation_investigation_concluded_1998_03_17_prosecutor ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 17 March 1998 the criminal investigation was concluded with the investigating judge’s decision ordering the exclusion of certain documents from the case-file"@en .
+
+doc:maribor_higher_court_appeal_open_investigation_1997_12_04 a echr:DomesticProceeding ;
+    rdfs:label "Maribor Higher Court appeal decision opening criminal investigation (4 December 1997)"@en ;
+    echr:followsProceeding doc:district_court_not_open_investigation_1997_05_08 ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "1997-12-04"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasParticipation doc:participation_maribor_1997_12_04_applicant,
+        doc:participation_maribor_1997_12_04_prosecutor ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 12 May 1997 the Public Prosecutor appealed against this decision. On 4 December 1997 the Maribor Higher Court upheld her appeal finding that, despite the shortcomings mentioned in the first-instance decision, there were sufficient grounds for suspicion ... it changed the first-instance court’s decision and opened a criminal investigation against the applicant."@en .
+
+doc:maribor_higher_court_quashed_and_remitted_2000_09_27 a echr:DomesticProceeding ;
+    rdfs:label "Maribor Higher Court quashed judgment and remitted for retrial (27 September 2000)"@en ;
+    echr:followsProceeding doc:district_court_acquittal_1999_11_22 ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "2000-09-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeRemitted ;
+    echr:hasParticipation doc:participation_maribor_quash_2000_09_27_applicant,
+        doc:participation_maribor_quash_2000_09_27_prosecutor ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "on 27 September 2000 the Maribor Higher Court quashed the judgment and remitted the case to a new panel for retrial."@en .
+
+doc:maribor_higher_court_upheld_conviction_2001_05_09 a echr:DomesticProceeding ;
+    rdfs:label "Maribor Higher Court upheld conviction (9 May 2001)"@en ;
+    echr:followsProceeding doc:district_court_retrial_conviction_2001_02_12 ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "2001-05-09"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_maribor_upheld_2001_05_09_applicant,
+        doc:participation_maribor_upheld_2001_05_09_prosecutor ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 9 May 2001 the Maribor Higher Court upheld the conviction but amended the judgment with respect to the costs of the proceedings."@en .
+
+doc:participation_district_acquittal_1999_11_22_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Aleksander Matko in District Court acquittal (22 November 1999)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:participation_district_acquittal_1999_11_22_prosecutor a echr:Participation ;
+    rdfs:label "Participation of Public Prosecutor in District Court acquittal (22 November 1999)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecPublicProsecutor .
+
+doc:participation_district_court_not_open_1997_05_08_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Aleksander Matko in District Court decision not to open investigation (8 May 1997)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:participation_district_court_not_open_1997_05_08_prosecutor a echr:Participation ;
+    rdfs:label "Participation of Public Prosecutor in District Court decision not to open investigation (8 May 1997)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecPublicProsecutor .
+
+doc:participation_district_order_costs_2001_10_11_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Aleksander Matko in District Court order to pay costs (11 October 2001)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:participation_district_order_costs_2001_10_11_court a echr:Participation ;
+    rdfs:label "Participation of Slovenj Gradec District Court in ordering costs (11 October 2001)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecDistrictCourt .
+
+doc:participation_district_reject_objection_1999_02_16_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Aleksander Matko in objection rejection (16 February 1999)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:participation_district_reject_objection_1999_02_16_prosecutor a echr:Participation ;
+    rdfs:label "Participation of Public Prosecutor in objection rejection (16 February 1999)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecPublicProsecutor .
+
+doc:participation_district_retrial_convict_2001_02_12_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Aleksander Matko in retrial conviction (12 February 2001)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:participation_district_retrial_convict_2001_02_12_prosecutor a echr:Participation ;
+    rdfs:label "Participation of Public Prosecutor in retrial conviction (12 February 2001)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecPublicProsecutor .
+
+doc:participation_investigation_concluded_1998_03_17_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Aleksander Matko in conclusion of investigation (17 March 1998)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:participation_investigation_concluded_1998_03_17_prosecutor a echr:Participation ;
+    rdfs:label "Participation of Public Prosecutor in conclusion of investigation (17 March 1998)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecPublicProsecutor .
+
+doc:participation_maribor_1997_12_04_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Aleksander Matko in Maribor Higher Court appeal (4 December 1997)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:participation_maribor_1997_12_04_prosecutor a echr:Participation ;
+    rdfs:label "Participation of Public Prosecutor in Maribor Higher Court appeal (4 December 1997)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecPublicProsecutor .
+
+doc:participation_maribor_quash_2000_09_27_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Aleksander Matko in Maribor Higher Court quashing (27 September 2000)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:participation_maribor_quash_2000_09_27_prosecutor a echr:Participation ;
+    rdfs:label "Participation of Public Prosecutor in Maribor Higher Court quashing (27 September 2000)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecPublicProsecutor .
+
+doc:participation_maribor_upheld_2001_05_09_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Aleksander Matko in Maribor appeal upholding conviction (9 May 2001)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:participation_maribor_upheld_2001_05_09_prosecutor a echr:Participation ;
+    rdfs:label "Participation of Public Prosecutor in Maribor appeal upholding conviction (9 May 2001)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecPublicProsecutor .
+
+doc:participation_mia_appointed_working_group_1995_04_20 a echr:Participation ;
+    rdfs:label "Participation of MIA in appointment of working group (20 April 1995)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:mia .
+
+doc:participation_mia_report_1995_11_15 a echr:Participation ;
+    rdfs:label "Participation of MIA in MIA report (15 November 1995)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:mia .
+
+doc:participation_police_lodged_complaint_1995_04_12_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Aleksander Matko in lodging of complaint against him (12 April 1995)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:participation_police_lodged_complaint_1995_04_12_police a echr:Participation ;
+    rdfs:label "Participation of Slovenj Gradec Police in lodging complaint (12 April 1995)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecPolice .
+
+doc:participation_public_prosecutor_dismissed_complaint_1997_01_17_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Aleksander Matko in dismissal of his complaint (17 January 1997)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:participation_public_prosecutor_dismissed_complaint_1997_01_17_prosecutor a echr:Participation ;
+    rdfs:label "Participation of Public Prosecutor in dismissal of applicant's complaint (17 January 1997)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecPublicProsecutor .
+
+doc:participation_public_prosecutor_filed_indictment_1998_12_28_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Aleksander Matko in indictment filing (28 December 1998)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:participation_public_prosecutor_filed_indictment_1998_12_28_prosecutor a echr:Participation ;
+    rdfs:label "Participation of Public Prosecutor in filing indictment (28 December 1998)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecPublicProsecutor .
+
+doc:participation_public_prosecutor_request_identify_1995_07_14_police a echr:Participation ;
+    rdfs:label "Participation of Slovenj Gradec Police in request to identify officers (14 July 1995)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:slovenjGradecPolice .
+
+doc:participation_public_prosecutor_request_identify_1995_07_14_prosecutor a echr:Participation ;
+    rdfs:label "Participation of Public Prosecutor in request to identify officers (14 July 1995)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecPublicProsecutor .
+
+doc:participation_slovenj_gradec_police_report_1996_02_05 a echr:Participation ;
+    rdfs:label "Participation of Slovenj Gradec Police in police report (5 February 1996)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecPolice .
+
+doc:public_prosecutor_filed_indictment_1998_12_28 a echr:AdministrativeAction ;
+    rdfs:label "Public Prosecutor filed an indictment against the applicant (28 December 1998)"@en ;
+    echr:followsProceeding doc:investigating_judge_concluded_investigation_1998_03_17 ;
+    echr:hasCourt doc:slovenjGradecPublicProsecutor ;
+    echr:hasDecisionDate "1998-12-28"^^xsd:date ;
+    echr:hasParticipation doc:participation_public_prosecutor_filed_indictment_1998_12_28_applicant,
+        doc:participation_public_prosecutor_filed_indictment_1998_12_28_prosecutor ;
+    echr:hasSupportingQuote "On 28 December 1998 the Public Prosecutor filed an indictment against the applicant"@en .
+
+doc:public_prosecutor_request_identify_officers_1995_07_14 a echr:ProsecutorialReview ;
+    rdfs:label "Public Prosecutor requested identification of officers (14 July 1995)"@en ;
+    echr:hasCourt doc:slovenjGradecPublicProsecutor ;
+    echr:hasDecisionDate "1995-07-14"^^xsd:date ;
+    echr:hasParticipation doc:participation_public_prosecutor_request_identify_1995_07_14_police,
+        doc:participation_public_prosecutor_request_identify_1995_07_14_prosecutor ;
+    echr:hasSupportingQuote "on 14 July 1995, the Slovenj Gradec District Public Prosecutor (the “Public Prosecutor”) requested the Slovenj Gradec Police to identify the officers who had participated in the procedure"@en .
+
+doc:mariborHigherCourt a echr:DomesticAuthority ;
+    rdfs:label "Maribor Higher Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial .
+
+doc:mia a echr:DomesticAuthority ;
+    rdfs:label "Ministry of Internal Affairs (the MIA)"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasSupportingQuote "Ministry of Internal Affairs (“the MIA”)"@en .
+
+doc:slovenjGradecPolice a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec Police"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasSupportingQuote "the Slovenj Gradec Police on 5 February 1996"@en .
+
+doc:slovenjGradecDistrictCourt a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec District Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial .
+
+doc:aleksanderMatko a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Aleksander Matko"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr Aleksander Matko"@en ;
+    echr:hasSupportingQuote "Mr Aleksander Matko (“the applicant”), on 22 July 1998."@en .
+
+doc:slovenjGradecPublicProsecutor a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Slovenj Gradec District Public Prosecutor"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "the Slovenj Gradec District Public Prosecutor’s Office ( Okrožno državno tožilstvo )"@en ;
+    echr:hasSupportingQuote "the Slovenj Gradec District Public Prosecutor’s Office ( Okrožno državno tožilstvo )"@en .
+

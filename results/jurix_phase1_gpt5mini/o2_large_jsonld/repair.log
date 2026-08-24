@@ -1,0 +1,19 @@
+repairing 10 file(s) under results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired
+  model: gpt-5-mini @ https://api.openai.com/v1 (temperature 1.0, timeout 300.0s)
+  source text: results/jurix_phase1_gpt5mini/input.jsonl (quote stage enabled)
+  [domestic authorities] results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L1.facts.ttl: 9 finding(s) in; model proposed 9 group(s), 9 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 9 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [48.2s, 48.1s in the model]
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L1.facts.ttl: nothing flagged
+    [persons and participation] FAILED: RepairTruncated: generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document
+    continuing to the next stage; earlier stages' work is kept
+  [source quote fidelity] results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L1.facts.ttl: 2 finding(s) in; model proposed 2 group(s), 4 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 4 (of which 0 merge(s)), skipped 2, stub orphans swept 0 [26.7s, 26.7s in the model]
+    SKIPPED [supporting quote not verbatim] remove doc:proceeding_dupnitsa_district_2005_09_28_2006_03_10 echr:hasSupportingQuote The Dupnitsa District Court gave judgment on 10 March 2006. As to the merits, the court dismissed the application... Since the judgment was not subject to appeal, it became final.: applied (removed 1 quote(s) by index)
+    SKIPPED [supporting quote not verbatim] remove doc:authorityPastraSocialCareHome echr:hasSupportingQuote the Pastra social care home, an institution under the responsibility of the Ministry of Labour and Social Policy.: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 233.3s across 3 model call(s) (233.0s in the model)
+    wrote results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L1.facts.ttl (backup at results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/backup/input.L1.facts.ttl)
+  [domestic authorities] results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L10.facts.ttl: 9 finding(s) in; model proposed 6 group(s), 6 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 6 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [20.3s, 20.3s in the model]
+    [domestic authorities] pass 2: nothing left to flag - stopping

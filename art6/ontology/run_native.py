@@ -137,6 +137,11 @@ def main() -> int:
         help="Skip the premature-period-before-property fix, for A/B only -- see turtle_repair.py.",
     )
     ap.add_argument(
+        "--no-envelope-repair",
+        action="store_true",
+        help="Skip re-wrapping a bare JSON-LD facts response, for A/B only -- see envelope_repair.py.",
+    )
+    ap.add_argument(
         "--allow-unit-loss",
         action="store_true",
         help=(
@@ -156,6 +161,11 @@ def main() -> int:
         from art6.ontology.turtle_repair import enable as enable_turtle_repair
 
         enable_turtle_repair()
+
+    if not args.no_envelope_repair:
+        from art6.ontology.envelope_repair import enable as enable_envelope_repair
+
+        enable_envelope_repair()
 
     from ontocast.cli.server import cli
 

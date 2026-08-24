@@ -12,13 +12,13 @@
 <https://growgraph.dev/echr> a owl:Ontology ;
     rdfs:label "ECHR Art. 6 — Domestic Proceedings Extraction Schema (Streamlined)"@en ;
     dcterms:title "ECHR Art. 6 — Domestic Proceedings Extraction Schema"@en ;
-    dcterms:description """Extraction schema focused primarily on the domestic 
-(national) procedural history narrated in the facts of European Court of Human Rights 
+    dcterms:description """Extraction schema focused primarily on the domestic
+(national) procedural history narrated in the facts of European Court of Human Rights
 cases.
 
-Designed specifically for information extraction: every class corresponds to an observable 
-entity in the factual narrative, every link direction is canonical, and controlled 
-vocabularies are strictly closed by explicit owl:oneOf enumerations with explicit escape 
+Designed specifically for information extraction: every class corresponds to an observable
+entity in the factual narrative, every link direction is canonical, and controlled
+vocabularies are strictly closed by explicit owl:oneOf enumerations with explicit escape
 values (echr:LevelUnknown, echr:TypeOther, echr:OutcomeOther, etc.)."""@en ;
     dcterms:created "2026-07-24T00:00:00+00:00"^^xsd:dateTime ;
     dcterms:modified "2026-08-23T00:00:00+00:00"^^xsd:dateTime ;
@@ -150,10 +150,9 @@ echr:Participation a owl:Class ;
                   echr:PreTrialDetention ) .
 
 [] a owl:AllDisjointClasses ;
-    owl:members ( echr:InstanceLevel echr:ProceedingType echr:ProceedingOutcome 
-                  echr:OutcomeDirection echr:AuthorityKind echr:DelayAttribution 
-                  echr:StatusAlteration echr:PartySide echr:Gender echr:GenderCue
-                  echr:CustodialMeasure ) .
+    owl:members ( echr:InstanceLevel echr:ProceedingType echr:ProceedingOutcome
+                  echr:OutcomeDirection echr:AuthorityKind echr:DelayAttribution
+                  echr:StatusAlteration echr:PartySide echr:Gender echr:CustodialMeasure ) .
 
 ################################################################
 # 2. Vocabulary Container Classes
@@ -213,13 +212,6 @@ echr:Gender a owl:Class ;
     rdfs:label "Gender"@en ;
     skos:definition "Controlled vocabulary: the gender a case document marks a natural person with, through its own language (honorific, pronoun, gendered noun)."@en ;
     skos:scopeNote "Documentary gender marking, not gender identity. Assert only what the text itself supports, and anchor it with echr:hasSupportingQuote like any other extracted fact -- this is a closed three-way choice with no Unknown escape value, so an unmarked person simply gets no echr:hasGender triple at all rather than a guessed one."@en ;
-    rdfs:subClassOf skos:Concept ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
-echr:GenderCue a owl:Class ;
-    rdfs:label "Gender Cue"@en ;
-    skos:definition "Controlled vocabulary: the kind of textual marker a echr:hasGender assertion was read from -- an honorific, a pronoun, or a gendered noun."@en ;
-    skos:scopeNote "Provenance for echr:hasGender, not a fact about the person. It exists because documentary gender marking is decided by an explicit cue and nothing else, and an assertion whose cue cannot be named is one that was guessed. Closed at the same three kinds the extraction rule recognises, with no Other or Unknown escape: a person the text marks in none of these ways gets no echr:hasGender triple, and so has no cue to record."@en ;
     rdfs:subClassOf skos:Concept ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
@@ -360,14 +352,6 @@ echr:hasGender a owl:ObjectProperty, owl:FunctionalProperty ;
     rdfs:range echr:Gender ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
-echr:hasGenderCue a owl:ObjectProperty, owl:FunctionalProperty ;
-    rdfs:label "has gender cue"@en ;
-    skos:definition "Which kind of textual marker the echr:hasGender assertion on this person was read from."@en ;
-    skos:scopeNote "Assert together with echr:hasGender and echr:hasGenderCueText, never alone: the three make the marking auditable, so a reader can check the reading rather than trust it. Functional because it records the one cue actually relied on, not an inventory of every cue in the document."@en ;
-    rdfs:domain echr:NaturalPerson ;
-    rdfs:range echr:GenderCue ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
 ################################################################
 # 4. Datatype Properties
 ################################################################
@@ -427,14 +411,6 @@ echr:hasPartyName a owl:DatatypeProperty ;
 echr:hasPersonName a owl:DatatypeProperty ;
     rdfs:label "has person name"@en ;
     skos:definition "Full designation of a natural person as written in the case text, including any honorific: \"Mr Rusi Kosev Stanev\", \"Ms A. Genova\", \"the applicant\"."@en ;
-    rdfs:domain echr:NaturalPerson ;
-    rdfs:range xsd:string ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
-echr:hasGenderCueText a owl:DatatypeProperty, owl:FunctionalProperty ;
-    rdfs:label "has gender cue text"@en ;
-    skos:definition "The verbatim span carrying the cue that echr:hasGender was read from: the honorific phrase (\"Ms A. Genova\"), the pronoun in its clause (\"she was informed\"), or the gendered noun (\"his half-sister\")."@en ;
-    skos:scopeNote "Copied exactly from the source, on the same terms as echr:hasSupportingQuote -- not paraphrased, not reconstructed from the name. Kept separate from echr:hasSupportingQuote because the cue may sit far from the passage that evidences the person's role: a party introduced as \"R.P.\" and called \"she\" twenty paragraphs later is echr:GenderFemale on the strength of the later span, and it is that span which belongs here."@en ;
     rdfs:domain echr:NaturalPerson ;
     rdfs:range xsd:string ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
@@ -691,7 +667,7 @@ echr:ProceedingOutcomeScheme a skos:ConceptScheme ;
     rdfs:label "Proceeding outcome vocabulary"@en .
 
 echr:ProceedingOutcome owl:equivalentClass [ a owl:Class ;
-    owl:oneOf ( echr:OutcomeMeritsDecided echr:OutcomeInadmissible echr:OutcomeSettledOrWithdrawn 
+    owl:oneOf ( echr:OutcomeMeritsDecided echr:OutcomeInadmissible echr:OutcomeSettledOrWithdrawn
                 echr:OutcomeRemitted echr:OutcomeOther echr:OutcomeUnknown ) ] .
 
 
@@ -863,27 +839,6 @@ echr:GenderScheme a skos:ConceptScheme ;
 
 echr:Gender owl:equivalentClass [ a owl:Class ;
     owl:oneOf ( echr:GenderMale echr:GenderFemale echr:GenderOther ) ] .
-
-echr:GenderCueHonorific a echr:GenderCue ;
-    skos:prefLabel "honorific"@en ;
-    skos:definition "A title placed before the name: Mr, Ms, Mrs, Miss, and their equivalents in the document's own language."@en ;
-    skos:inScheme echr:GenderCueScheme .
-
-echr:GenderCuePronoun a echr:GenderCue ;
-    skos:prefLabel "pronoun"@en ;
-    skos:definition "A gendered personal or possessive pronoun used of the person: he, she, his, her. Counts wherever it appears, not only beside the first mention."@en ;
-    skos:inScheme echr:GenderCueScheme .
-
-echr:GenderCueGenderedNoun a echr:GenderCue ;
-    skos:prefLabel "gendered noun"@en ;
-    skos:definition "A noun that carries the marking itself: \"his half-sister\", \"the applicant's widow\", \"her guardian\"."@en ;
-    skos:inScheme echr:GenderCueScheme .
-
-echr:GenderCueScheme a skos:ConceptScheme ;
-    rdfs:label "Gender cue vocabulary"@en .
-
-echr:GenderCue owl:equivalentClass [ a owl:Class ;
-    owl:oneOf ( echr:GenderCueHonorific echr:GenderCuePronoun echr:GenderCueGenderedNoun ) ] .
 
 #---------------------------------------------------------------
 # 6.10 Custodial measures

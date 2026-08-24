@@ -1,0 +1,290 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/977d9c04d52a/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/977d9c04d52a> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:8"^^xsd:string .
+
+doc:admin_election_invalid_1998_04_01 a echr:AdministrativeAction ;
+    rdfs:label "Local electoral committee invalidates mayoral election (1 April 1998)"@en ;
+    echr:hasCourt doc:authLocalElectoralCommittee ;
+    echr:hasParticipation doc:part_admin_election_invalid_1998_04_01_applicant ;
+    echr:hasProceedingStartDate "1998-04-01"^^xsd:date ;
+    echr:hasSupportingQuote "On 1 April 1998 the local electoral committee declared the elections invalid on the ground of irregularities committed during the campaign by some candidates, including the applicant."@en .
+
+doc:admin_freeze_1995_10_05 a echr:AdministrativeAction ;
+    rdfs:label "Freeze order: Stavanger and drydock (5 October 1995)"@en ;
+    echr:hasCourt doc:partyNizhniyProsecutor ;
+    echr:hasParticipation doc:part_admin_freeze_1995_10_05_prosecution ;
+    echr:hasProceedingStartDate "1995-10-05"^^xsd:date ;
+    echr:hasSupportingQuote "on 5 October 1995 property belonging to the applicant - the ship Stavanger and a floating drydock - was frozen on the order of the Nizhniy Novgorod prosecutor’s office."@en .
+
+doc:admin_freeze_proceeds_1996_03_11 a echr:AdministrativeAction ;
+    rdfs:label "Proceeds frozen (11 March 1996)"@en ;
+    echr:hasCourt doc:partyNizhniyProsecutor ;
+    echr:hasParticipation doc:part_admin_freeze_proceeds_1996_03_11_prosecution ;
+    echr:hasProceedingStartDate "1996-03-11"^^xsd:date ;
+    echr:hasSupportingQuote "on 11 March 1996 the proceeds from the ship sale were frozen on the order of the Nizhniy Novgorod prosecutor’s office."@en .
+
+doc:admin_order_amended_judgment_1998_07_08 a echr:AdministrativeAction ;
+    rdfs:label "Regional Court ordered applicant be given amended judgment (8 July 1998)"@en ;
+    echr:hasCourt doc:courtNizhniyRegional ;
+    echr:hasParticipation doc:part_admin_order_amended_judgment_1998_07_08_applicant ;
+    echr:hasProceedingStartDate "1998-07-08"^^xsd:date ;
+    echr:hasSupportingQuote "It appears that on 8 July 1998 the Regional Court ordered that the applicant should be given the amended version, but he claims that he did not receive it."@en .
+
+doc:admin_service_judgment_1998_06_03 a echr:AdministrativeAction ;
+    rdfs:label "Applicant received copy of judgment (3 June 1998)"@en ;
+    echr:hasCourt doc:courtNizhniyRegional ;
+    echr:hasParticipation doc:part_regional_21apr1997_applicant ;
+    echr:hasProceedingStartDate "1998-06-03"^^xsd:date ;
+    echr:hasSupportingQuote "The applicant received a copy of the trial court judgment on 3 June 1998."@en .
+
+doc:admin_stavanger_freed_1996_01_19 a echr:AdministrativeAction ;
+    rdfs:label "Stavanger freed from arrest (19 January 1996)"@en ;
+    echr:hasCourt doc:partyNizhniyProsecutor ;
+    echr:hasParticipation doc:part_admin_stavanger_freed_1996_01_19_prosecution ;
+    echr:hasProceedingStartDate "1996-01-19"^^xsd:date ;
+    echr:hasSupportingQuote "On 19 January 1996 the Stavanger was freed from arrest"@en .
+
+doc:admin_unfreeze_transfer_1996_05_18 a echr:AdministrativeAction ;
+    rdfs:label "Unfreeze and transfer to \"Oka\" (18 May 1996)"@en ;
+    echr:hasCourt doc:partyNizhniyProsecutor ;
+    echr:hasParticipation doc:part_admin_unfreeze_transfer_1996_05_18_prosecution ;
+    echr:hasProceedingStartDate "1996-05-18"^^xsd:date ;
+    echr:hasSupportingQuote "On 18 May 1996 the Nizhniy Novgorod prosecutor’s office unfroze the account and transferred the money to the yard."@en .
+
+doc:case_46503_99 a echr:CaseDocument ;
+    rdfs:label "Application no. 46503/99 by Andrey Anatolyevitch KLIMENTYEV against Russia"@en ;
+    echr:hasApplicant doc:partyAndreyKlimentyev ;
+    echr:hasApplicationNumber "46503/99"^^xsd:string .
+
+doc:civilDefender a echr:LegalRepresentative ;
+    rdfs:label "the applicant's \"civil defender\""@en ;
+    echr:hasPersonName "the applicant's \"civil defender\""@en ;
+    echr:hasSupportingQuote "The applicant’s “civil defender”, who participated in the process with a status similar to that of a lawyer, lodged with the Supreme Court an appeal against the court order of 2 April to detain the applicant."@en .
+
+doc:lrMoskalenko a echr:LegalRepresentative ;
+    rdfs:label "Mrs Moskalenko"@en ;
+    echr:hasPersonName "Mrs Moskalenko"@en ;
+    echr:hasSupportingQuote "He is represented before the Court by Mrs Moskalenko, a lawyer practising in Moscow, Russia and Mr Gerhart R. Baum, a lawyer practising in Koln, Germany."@en .
+
+doc:lrMrO a echr:LegalRepresentative ;
+    rdfs:label "Mr O."@en ;
+    echr:hasPersonName "Mr. O."@en ;
+    echr:hasSupportingQuote "An appeal to the Supreme Court by the applicant’s lawyer, Mr. O., challenged the judgment on a number of points."@en .
+
+doc:proc_charge_7_mar_1995 a echr:ProsecutorialReview ;
+    rdfs:label "Charges instituted (7 March 1995)"@en ;
+    echr:hasParticipation doc:part_proc_charge_7mar1995_applicant,
+        doc:part_proc_charge_7mar1995_prosecutor ;
+    echr:hasProceedingStartDate "1995-03-07"^^xsd:date ;
+    echr:hasSupportingQuote "was charged with embezzlement and other economic crimes on 7 March 1995."@en .
+
+doc:proc_regional_motions_1998_05_19 a echr:DomesticProceeding ;
+    rdfs:label "Regional Court decisions on motions (19 May 1998)"@en ;
+    echr:hasCourt doc:courtNizhniyRegional ;
+    echr:hasDecisionDate "1998-05-19"^^xsd:date ;
+    echr:hasParticipation doc:part_regional_motions_1998_05_19_applicant ;
+    echr:hasSupportingQuote "On 19 May the applicant’s “civil defender” requested the Regional Court to dismiss the judge presiding in the case for bias. On the same day the applicant requested to admit Mrs Moskalenko as his lawyer in the trial ... Both requests were rejected by the Regional Court."@en .
+
+doc:proc_regional_newtrial_1998_03_30 a echr:DomesticProceeding ;
+    rdfs:label "Nizhniy Novgorod Regional Court - new trial (30 March 1998)"@en ;
+    echr:followsProceeding doc:proc_supreme_jul_1997 ;
+    echr:hasCourt doc:courtNizhniyRegional ;
+    echr:hasParticipation doc:part_regional_21apr1997_applicant,
+        doc:part_regional_21apr1997_prosecutor ;
+    echr:hasProceedingStartDate "1998-03-30"^^xsd:date ;
+    echr:hasSupportingQuote "On 30 March 1998, during the new trial, the prosecutor applied to the court to detain the applicant for violations of the undertaking not to leave the city during the trial and obstruction of justice. The Regional Court rejected the motion as unsubstantiated."@en .
+
+doc:proc_supreme_10_aug_1998 a echr:DomesticProceeding ;
+    rdfs:label "Supreme Court cassation decision (10 August 1998)"@en ;
+    echr:followsProceeding doc:proc_regional_27_may_1998 ;
+    echr:hasCourt doc:courtSupreme ;
+    echr:hasDecisionDate "1998-08-10"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_supreme_10aug1998_applicant,
+        doc:part_supreme_jul1997_prosecutor ;
+    echr:hasSupportingQuote "On 10 August 1998 the Supreme Court confirmed the judgment of the Nizhniy Novgorod Regional Court, with some alterations."@en ;
+    echr:isFinalDomesticDecision true .
+
+doc:proc_supreme_appeal_1998_04_23 a echr:DomesticProceeding ;
+    rdfs:label "Appeal to Supreme Court against detention order (23 April 1998; reply 19 May 1998)"@en ;
+    echr:followsProceeding doc:proc_regional_detention_1998_04_02 ;
+    echr:hasDecisionDate "1998-05-19"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasParticipation doc:part_supreme_appeal_1998_04_23_applicant ;
+    echr:hasProceedingStartDate "1998-04-23"^^xsd:date ;
+    echr:hasSupportingQuote "The reply from the Supreme Court, dated 19 May 1998, stated that the national law did not allow appeals against that type of trial court orders separately from appeals against judgments."@en .
+
+doc:authLocalElectoralCommittee a echr:DomesticAuthority ;
+    rdfs:label "local electoral committee"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasSupportingQuote "On 1 April 1998 the local electoral committee declared the elections invalid on the ground of irregularities committed during the campaign by some candidates, including the applicant."@en .
+
+doc:part_admin_election_invalid_1998_04_01_applicant a echr:Participation ;
+    rdfs:label "Participation: applicant in election invalidation 1 Apr 1998"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyAndreyKlimentyev .
+
+doc:part_admin_freeze_1995_10_05_prosecution a echr:Participation ;
+    rdfs:label "Participation: prosecutor in freeze 5 Oct 1995"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyNizhniyProsecutor .
+
+doc:part_admin_freeze_proceeds_1996_03_11_prosecution a echr:Participation ;
+    rdfs:label "Participation: prosecutor in freeze proceeds 11 Mar 1996"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyNizhniyProsecutor .
+
+doc:part_admin_order_amended_judgment_1998_07_08_applicant a echr:Participation ;
+    rdfs:label "Participation: applicant re amended judgment order 8 Jul 1998"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyAndreyKlimentyev .
+
+doc:part_admin_stavanger_freed_1996_01_19_prosecution a echr:Participation ;
+    rdfs:label "Participation: prosecutor in Stavanger freed 19 Jan 1996"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyNizhniyProsecutor .
+
+doc:part_admin_unfreeze_transfer_1996_05_18_prosecution a echr:Participation ;
+    rdfs:label "Participation: prosecutor in unfreeze/transfer 18 May 1996"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyNizhniyProsecutor .
+
+doc:part_proc_charge_7mar1995_applicant a echr:Participation ;
+    rdfs:label "Participation: applicant in charges 7 Mar 1995"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyAndreyKlimentyev .
+
+doc:part_proc_charge_7mar1995_prosecutor a echr:Participation ;
+    rdfs:label "Participation: prosecutor in charges 7 Mar 1995"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyNizhniyProsecutor .
+
+doc:part_regional_detention_1998_04_02_applicant a echr:Participation ;
+    rdfs:label "Participation: applicant at detention hearing 2 Apr 1998"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyAndreyKlimentyev .
+
+doc:part_regional_detention_1998_04_02_prosecutor a echr:Participation ;
+    rdfs:label "Participation: prosecutor at detention hearing 2 Apr 1998"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyNizhniyProsecutor .
+
+doc:part_regional_motions_1998_05_19_applicant a echr:Participation ;
+    rdfs:label "Participation: applicant in motions at Regional Court 19 May 1998"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyAndreyKlimentyev .
+
+doc:part_supreme_10aug1998_applicant a echr:Participation ;
+    rdfs:label "Participation: applicant (appellant) at Supreme Court 10 Aug 1998"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyAndreyKlimentyev .
+
+doc:part_supreme_appeal_1998_04_23_applicant a echr:Participation ;
+    rdfs:label "Participation: applicant (via civil defender) in appeal to Supreme Court 23 Apr 1998"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyAndreyKlimentyev .
+
+doc:part_supreme_jul1997_applicant a echr:Participation ;
+    rdfs:label "Participation: applicant at Supreme Court July 1997"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyAndreyKlimentyev .
+
+doc:pretrial_detention_1998_04_02 a echr:PreTrialDetention ;
+    rdfs:label "Pre-trial detention ordered 2 April 1998"@en ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:partyAndreyKlimentyev ;
+    echr:hasDetentionStartDate "1998-04-02"^^xsd:date ;
+    echr:hasSupportingQuote "On 2 April 1998 the Nizhniy Novgorod Regional Court granted the prosecutor’s renewed motion for detention ... and the applicant was arrested in the course of the hearing."@en .
+
+doc:proc_regional_21_apr_1997 a echr:DomesticProceeding ;
+    rdfs:label "Nizhniy Novgorod Regional Court judgment (21 April 1997)"@en ;
+    echr:hasCourt doc:courtNizhniyRegional ;
+    echr:hasDecisionDate "1997-04-21"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasParticipation doc:part_regional_21apr1997_applicant,
+        doc:part_regional_21apr1997_prosecutor ;
+    echr:hasSupportingQuote "On 21 April 1997 the Nizhniy Novgorod Regional Court found the applicant guilty on some of the charges, and not guilty on most."@en .
+
+doc:proc_regional_27_may_1998 a echr:DomesticProceeding ;
+    rdfs:label "Nizhniy Novgorod Regional Court judgment (27 May 1998)"@en ;
+    echr:hasCourt doc:courtNizhniyRegional ;
+    echr:hasDecisionDate "1998-05-27"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasParticipation doc:part_regional_21apr1997_applicant,
+        doc:part_regional_21apr1997_prosecutor ;
+    echr:hasSupportingQuote "On 27 May 1998 the Nizhniy Novgorod Regional Court found the applicant guilty on charges of misappropriation and embezzlement, larceny, bribery and attempt not to return money from abroad."@en .
+
+doc:proc_regional_detention_1998_04_02 a echr:DomesticProceeding ;
+    rdfs:label "Regional Court order to detain (2 April 1998)"@en ;
+    echr:hasCourt doc:courtNizhniyRegional ;
+    echr:hasParticipation doc:part_regional_detention_1998_04_02_applicant,
+        doc:part_regional_detention_1998_04_02_prosecutor ;
+    echr:hasPreTrialDetention doc:pretrial_detention_1998_04_02 ;
+    echr:hasProceedingStartDate "1998-04-02"^^xsd:date ;
+    echr:hasSupportingQuote "On 2 April 1998 the Nizhniy Novgorod Regional Court granted the prosecutor’s renewed motion for detention on grounds of obstruction of justice and violations of the undertaking not to leave the city, and the applicant was arrested in the course of the hearing."@en .
+
+doc:proc_supreme_jul_1997 a echr:DomesticProceeding ;
+    rdfs:label "Supreme Court cassation (July 1997)"@en ;
+    echr:followsProceeding doc:proc_regional_21_apr_1997 ;
+    echr:hasCourt doc:courtSupreme ;
+    echr:hasDecisionDate "1997-07"^^xsd:gYearMonth ;
+    echr:hasOutcome echr:OutcomeRemitted ;
+    echr:hasParticipation doc:part_supreme_jul1997_applicant,
+        doc:part_supreme_jul1997_prosecutor ;
+    echr:hasSupportingQuote "In July 1997 the Supreme Court quashed the conviction on the applicant’s appeal and remitted the case to the Nizhniy Novgorod Regional Court."@en .
+
+doc:courtSupreme a echr:DomesticAuthority ;
+    rdfs:label "Supreme Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasSupportingQuote "In July 1997 the Supreme Court quashed the conviction on the applicant’s appeal and remitted the case to the Nizhniy Novgorod Regional Court."@en .
+
+doc:part_supreme_jul1997_prosecutor a echr:Participation ;
+    rdfs:label "Participation: prosecutor at Supreme Court 10 Aug 1998"@en,
+        "Participation: prosecutor at Supreme Court July 1997"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyNizhniyProsecutor .
+
+doc:part_regional_21apr1997_prosecutor a echr:Participation ;
+    rdfs:label "Participation: prosecutor at new trial 30 Mar 1998"@en,
+        "Participation: prosecutor at regional judgment 21 Apr 1997"@en,
+        "Participation: prosecutor at regional judgment 27 May 1998"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyNizhniyProsecutor .
+
+doc:part_regional_21apr1997_applicant a echr:Participation ;
+    rdfs:label "Participation: applicant at new trial 30 Mar 1998"@en,
+        "Participation: applicant at regional judgment 21 Apr 1997"@en,
+        "Participation: applicant at regional judgment 27 May 1998"@en,
+        "Participation: applicant receipt of judgment 3 Jun 1998"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyAndreyKlimentyev .
+
+doc:courtNizhniyRegional a echr:DomesticAuthority ;
+    rdfs:label "Nizhniy Novgorod Regional Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasSupportingQuote "On 21 April 1997 the Nizhniy Novgorod Regional Court found the applicant guilty on some of the charges, and not guilty on most."@en .
+
+doc:partyAndreyKlimentyev a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Andrey Anatolyevich Klimentyev"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPartyName "the applicant"@en ;
+    echr:hasPersonName "Andrey Anatolyevich Klimentyev"@en ;
+    echr:hasSupportingQuote "The applicant, Andrey Anatolyevich Klimentyev, is a Russian national, who was born in 1954 and lives in Nizhniy Novgorod."@en .
+
+doc:partyNizhniyProsecutor a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Nizhniy Novgorod prosecutor's office"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasPartyName "Nizhniy Novgorod prosecutor’s office"@en ;
+    echr:hasSupportingQuote "on 5 October 1995 property belonging to the applicant - the ship Stavanger and a floating drydock - was frozen on the order of the Nizhniy Novgorod prosecutor’s office."@en .
+

@@ -185,6 +185,46 @@ echr:NaturalPersonAtomicShape a sh:NodeShape ;
         sh:maxCount 1 ;
         sh:in ( echr:GenderMale echr:GenderFemale echr:GenderOther ) ;
         sh:message "hasGender must be a single value from the closed Gender vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasGenderCue ;
+        sh:maxCount 1 ;
+        sh:in ( echr:GenderCueHonorific echr:GenderCuePronoun echr:GenderCueGenderedNoun ) ;
+        sh:message "hasGenderCue must be a single value from the closed GenderCue vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasGenderCueText ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "hasGenderCueText must be a single verbatim string" ;
+    ] .
+
+# Gender provenance travels as a set or not at all. A cue kind with no cue text
+# cannot be checked against the source, and cue text with no kind does not say
+# what was read from it -- either alone is provenance that cannot be audited,
+# which is the one thing these two properties exist to prevent. The converse
+# direction is deliberately NOT constrained: hasGender without a cue is caught
+# by the extraction prompt, not here, because a valid prior graph may predate
+# the cue properties entirely.
+echr:GenderCuePairShape a sh:NodeShape ;
+    sh:targetSubjectsOf echr:hasGenderCue ;
+    sh:property [
+        sh:path echr:hasGenderCueText ;
+        sh:minCount 1 ;
+        sh:message "hasGenderCue asserted without hasGenderCueText: the cue kind cannot be checked against the source without the span it was read from" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasGender ;
+        sh:minCount 1 ;
+        sh:message "hasGenderCue asserted without hasGender: a cue recorded for an assertion that was never made" ;
+    ] .
+
+echr:GenderCueTextShape a sh:NodeShape ;
+    sh:targetSubjectsOf echr:hasGenderCueText ;
+    sh:property [
+        sh:path echr:hasGenderCue ;
+        sh:minCount 1 ;
+        sh:message "hasGenderCueText asserted without hasGenderCue: the span is recorded but not what was read from it" ;
     ] .
 
 # False-merge guard, not specific to DomesticAuthority: a node carrying more

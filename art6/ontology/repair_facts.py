@@ -1121,8 +1121,28 @@ STAGES: tuple[RepairStage, ...] = (
             # just minted, and link hasCourt to them.
             ECHR.DomesticAuthority,
         ),
-        dump_classes=(ECHR.DomesticProceeding, ECHR.DomesticAuthority),
-        filter_classes=(ECHR.DomesticProceeding,),
+        # Every DomesticEvent subclass is dumped, not just DomesticProceeding,
+        # because find_proceedings_missing_court flags across all of them. With
+        # only DomesticProceeding here the stage named doc:actionPlacementHome
+        # and two prosecutorial reviews as missing a court and then showed the
+        # model NOTHING about them -- no label, no type, no date, no supporting
+        # quote, just three bare CURIEs. Measured on L1 2026-08-24: the model
+        # returned {"groups": [], "merges": []}, which read like a considered
+        # decline and was nothing of the sort. A finding the model cannot see
+        # the evidence for is not a finding, it is noise with a name attached.
+        dump_classes=(
+            ECHR.DomesticProceeding,
+            ECHR.AdministrativeAction,
+            ECHR.EnforcementAction,
+            ECHR.ProsecutorialReview,
+            ECHR.DomesticAuthority,
+        ),
+        filter_classes=(
+            ECHR.DomesticProceeding,
+            ECHR.AdministrativeAction,
+            ECHR.EnforcementAction,
+            ECHR.ProsecutorialReview,
+        ),
         duplicate_classes=frozenset({"echr:DomesticProceeding"}),
         check_mistyped=True,
     ),
@@ -1138,7 +1158,22 @@ STAGES: tuple[RepairStage, ...] = (
             ECHR.PartySide,
             ECHR.Gender,
         ),
-        dump_classes=(ECHR.NaturalPerson, ECHR.LegalRepresentative, ECHR.Participation),
+        # The DomesticEvent subclasses are dumped for the same reason the
+        # proceedings stage dumps them: find_missing_participation flags events
+        # with no echr:hasParticipation, and an event the model is told about
+        # but shown nothing of is a finding it cannot act on. Adding a
+        # participation also REQUIRES seeing the event -- the new node has to
+        # hang off it -- so without this the stage was asking for something it
+        # had withheld the means to do.
+        dump_classes=(
+            ECHR.NaturalPerson,
+            ECHR.LegalRepresentative,
+            ECHR.Participation,
+            ECHR.DomesticProceeding,
+            ECHR.AdministrativeAction,
+            ECHR.EnforcementAction,
+            ECHR.ProsecutorialReview,
+        ),
         filter_classes=(
             ECHR.NaturalPerson,
             ECHR.LegalRepresentative,

@@ -1,0 +1,34 @@
+{
+  "condition": "o0",
+  "model": "gemma-4-31b",
+  "base_url": "http://localhost:8000/v1",
+  "temperature": 0.4,
+  "max_tokens": 16000,
+  "input": "data/art6_domestic_test_set.json",
+  "documents": 2,
+  "failures": 0,
+  "started_at": "2026-08-24T12:40:07.419476+00:00",
+  "seconds_total": 9.7,
+  "prompt_sha_source": "art6/conditions/prompts/o0_no_schema.txt",
+  "prompt_verbatim": "Identify the domestic proceedings described in this document and what happened in each.",
+  "documents_detail": [
+    {
+      "line": 1,
+      "case_id": "001-108690",
+      "seconds": 4.7,
+      "finish_reason": "stop",
+      "prompt_tokens": 5452,
+      "completion_tokens": 384,
+      "truncated": false
+    },
+    {
+      "line": 2,
+      "case_id": "001-58299",
+      "seconds": 5.0,
+      "finish_reason": "stop",
+      "prompt_tokens": 7698,
+      "completion_tokens": 420,
+      "truncated": false
+    }
+  ]
+}

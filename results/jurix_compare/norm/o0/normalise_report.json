@@ -1,0 +1,105 @@
+{
+  "condition": "o0",
+  "instrument": "llm",
+  "model": "gemma-4-31b",
+  "temperature": 0.0,
+  "in_dir": "results/jurix_compare/o0",
+  "documents": 10,
+  "failures": 0,
+  "proceedings_total": 70,
+  "seconds_total": 90.5,
+  "generated_at": "2026-08-24T12:58:14.001367+00:00",
+  "prompt_verbatim": "You are converting the output of an information-extraction system into a fixed comparison format. The output below describes the chain of domestic legal proceedings found in a judgment of the European Court of Human Rights.\n\nYou are a FORMAT CONVERTER, not an extractor. Everything you emit must already be present in the extraction output in front of you. You do not have the original judgment and cannot check anything against it.\n\n  - Do not add proceedings the extraction output does not contain, however obvious the gap looks.\n  - Do not drop proceedings because they look wrong, incomplete, duplicated or out of order. A duplicate in the input is a duplicate in the output.\n  - Do not correct, complete or improve a value. If a date is malformed, carry it across as given. If a deciding body is named only by a role (\"the investigator\"), that is the value.\n  - Where the input genuinely does not carry a field, emit null. Never substitute a plausible value, and never copy a value across from a different proceeding.\n\nThe input may arrive in any of several shapes -- an RDF graph, a JSON array, or ordinary prose -- because several systems are being compared and this converter is applied identically to all of them. Read whatever you are given on its own terms and map it onto the fields below. The shape of the input tells you nothing about how much to trust it; convert what is there, exactly as it is there.\n\nFIELDS\n\n  order             1-based position in the chain, earliest first. If the input states or implies an order, keep it. If it does not, order by date. If there are no dates, keep the order the input presents.\n  deciding_body     The court, tribunal, prosecutor's office or administrative body that decided the step. Where the input identifies it indirectly -- an identifier pointing at a named entity elsewhere in the same input -- resolve it to the name. Null if absent.\n  decision_date     ISO date: YYYY-MM-DD, or YYYY-MM or YYYY where the input is less precise. Carry across what the input holds; do not compute a date from surrounding narrative. Null if absent.\n  instance_level    Where the step sits in the hierarchy. Free text. If the input uses a coded term, render it as the ordinary English phrase it stands for and change nothing else. Null if absent.\n  outcome           What the body decided. Free text, same handling as instance_level. Null if absent.\n  supporting_quote  The evidencing span, copied across exactly as the input holds it. Do not re-quote from anything else, do not trim, do not repair. Null if absent.\n\nOne entry per proceeding in the input. If the input contains no domestic proceedings at all, return an empty list -- that is a valid and meaningful result.",
+  "documents_detail": [
+    {
+      "document": "input.L1",
+      "proceedings": 6,
+      "seconds": 7.7,
+      "finish_reason": "stop",
+      "input_chars": 2026,
+      "completion_tokens": 650,
+      "instrument": "llm"
+    },
+    {
+      "document": "input.L10",
+      "proceedings": 15,
+      "seconds": 19.3,
+      "finish_reason": "stop",
+      "input_chars": 3425,
+      "completion_tokens": 1833,
+      "instrument": "llm"
+    },
+    {
+      "document": "input.L2",
+      "proceedings": 3,
+      "seconds": 3.8,
+      "finish_reason": "stop",
+      "input_chars": 1755,
+      "completion_tokens": 360,
+      "instrument": "llm"
+    },
+    {
+      "document": "input.L3",
+      "proceedings": 8,
+      "seconds": 9.6,
+      "finish_reason": "stop",
+      "input_chars": 2622,
+      "completion_tokens": 900,
+      "instrument": "llm"
+    },
+    {
+      "document": "input.L4",
+      "proceedings": 7,
+      "seconds": 7.9,
+      "finish_reason": "stop",
+      "input_chars": 2524,
+      "completion_tokens": 747,
+      "instrument": "llm"
+    },
+    {
+      "document": "input.L5",
+      "proceedings": 7,
+      "seconds": 9.8,
+      "finish_reason": "stop",
+      "input_chars": 1937,
+      "completion_tokens": 923,
+      "instrument": "llm"
+    },
+    {
+      "document": "input.L6",
+      "proceedings": 7,
+      "seconds": 8.9,
+      "finish_reason": "stop",
+      "input_chars": 3004,
+      "completion_tokens": 833,
+      "instrument": "llm"
+    },
+    {
+      "document": "input.L7",
+      "proceedings": 4,
+      "seconds": 5.2,
+      "finish_reason": "stop",
+      "input_chars": 1926,
+      "completion_tokens": 485,
+      "instrument": "llm"
+    },
+    {
+      "document": "input.L8",
+      "proceedings": 6,
+      "seconds": 9.1,
+      "finish_reason": "stop",
+      "input_chars": 2897,
+      "completion_tokens": 864,
+      "instrument": "llm"
+    },
+    {
+      "document": "input.L9",
+      "proceedings": 7,
+      "seconds": 9.2,
+      "finish_reason": "stop",
+      "input_chars": 2138,
+      "completion_tokens": 875,
+      "instrument": "llm"
+    }
+  ]
+}

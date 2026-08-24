@@ -1,0 +1,302 @@
+{
+  "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v6/input.L10.facts.ttl",
+  "timings": {
+    "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v6/input.L10.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 40.6,
+    "seconds_model_calls": 40.3,
+    "seconds_deterministic": 0.3,
+    "model_calls": 6,
+    "by_stage": {
+      "authorities": {
+        "passes": 1,
+        "seconds": 3.9,
+        "seconds_model_call": 3.9
+      },
+      "proceedings": {
+        "passes": 1,
+        "seconds": 5.5,
+        "seconds_model_call": 5.5
+      },
+      "persons": {
+        "passes": 1,
+        "seconds": 6.3,
+        "seconds_model_call": 6.3
+      },
+      "quotes": {
+        "passes": 3,
+        "seconds": 24.8,
+        "seconds_model_call": 24.6
+      }
+    },
+    "passes": [
+      {
+        "stage": "authorities",
+        "pass": 1,
+        "seconds_total": 3.9,
+        "seconds_model_call": 3.9,
+        "seconds_deterministic": 0.0,
+        "findings_in": 1,
+        "ops_proposed": 3,
+        "ops_applied": 1,
+        "merges_applied": 0
+      },
+      {
+        "stage": "proceedings",
+        "pass": 1,
+        "seconds_total": 5.5,
+        "seconds_model_call": 5.5,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 1,
+        "ops_applied": 1,
+        "merges_applied": 0
+      },
+      {
+        "stage": "persons",
+        "pass": 1,
+        "seconds_total": 6.3,
+        "seconds_model_call": 6.3,
+        "seconds_deterministic": 0.0,
+        "findings_in": 1,
+        "ops_proposed": 1,
+        "ops_applied": 1,
+        "merges_applied": 0
+      },
+      {
+        "stage": "quotes",
+        "pass": 1,
+        "seconds_total": 5.2,
+        "seconds_model_call": 5.1,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 2,
+        "ops_applied": 2,
+        "merges_applied": 0
+      },
+      {
+        "stage": "quotes",
+        "pass": 2,
+        "seconds_total": 12.1,
+        "seconds_model_call": 12.0,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 2,
+        "ops_applied": 2,
+        "merges_applied": 0
+      },
+      {
+        "stage": "quotes",
+        "pass": 3,
+        "seconds_total": 7.5,
+        "seconds_model_call": 7.5,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 2,
+        "ops_applied": 2,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "The node doc:belgianState is typed as a DomesticAuthority but lacks an echr:hasAuthorityName. Looking at its properties, it has echr:hasPartyName \"Belgian State\", which strongly suggests this node is actually a Party (the respondent State) rather than a deciding domestic authority. Since it does not represent a court, prosecutor, or administrative body that decided a proceeding, it should not be in the graph as a DomesticAuthority.",
+      "rationale": "The node represents the State as a party to the proceedings, not a deciding authority.",
+      "action": "remove",
+      "subject": "doc:belgianState",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticAuthority",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "The node doc:belgianState is typed as a DomesticAuthority but lacks an echr:hasAuthorityName. Looking at its properties, it has echr:hasPartyName \"Belgian State\", which strongly suggests this node is actually a Party (the respondent State) rather than a deciding domestic authority. Since it does not represent a court, prosecutor, or administrative body that decided a proceeding, it should not be in the graph as a DomesticAuthority.",
+      "rationale": "The node represents the State as a party to the proceedings, not a deciding authority.",
+      "action": "remove",
+      "subject": "doc:belgianState",
+      "predicate": "echr:hasPartyName",
+      "object": "\"Belgian State\"",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "skipped: triple not present",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "The node doc:belgianState is typed as a DomesticAuthority but lacks an echr:hasAuthorityName. Looking at its properties, it has echr:hasPartyName \"Belgian State\", which strongly suggests this node is actually a Party (the respondent State) rather than a deciding domestic authority. Since it does not represent a court, prosecutor, or administrative body that decided a proceeding, it should not be in the graph as a DomesticAuthority.",
+      "rationale": "The node represents the State as a party to the proceedings, not a deciding authority.",
+      "action": "remove",
+      "subject": "doc:belgianState",
+      "predicate": "rdfs:label",
+      "object": "\"Belgian State\"",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "skipped: triple not present",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "doc:action_visa_refusal_1 is missing echr:hasCourt; evidence names 'Aliens Office'.",
+      "rationale": "The supporting quote explicitly states 'the Aliens Office... refused to grant', and doc:aliensOffice exists in the graph.",
+      "action": "add",
+      "subject": "doc:action_visa_refusal_1",
+      "predicate": "echr:hasCourt",
+      "object": "doc:aliensOffice",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "proceedings",
+      "pass": 1
+    },
+    {
+      "finding": "doc:lawyerLambert is missing gender",
+      "rationale": "The person's name 'Ms L. Lambert' contains the honorific 'Ms', which is a clear cue for female gender.",
+      "action": "add",
+      "subject": "doc:lawyerLambert",
+      "predicate": "echr:hasGender",
+      "object": "echr:GenderFemale",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    },
+    {
+      "finding": "The quote for doc:proceedingEnforcementJudgeDutch is slightly different from the source text (missing a hyphen in 'Dutch-language').",
+      "rationale": "Corrected to match the source text verbatim: 'the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI'.",
+      "action": "remove",
+      "subject": "doc:proceedingEnforcementJudgeDutch",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": null,
+      "quote_index": 0,
+      "status": "applied (removed 1 quote(s) by index)",
+      "stage": "quotes",
+      "pass": 1
+    },
+    {
+      "finding": "The quote for doc:proceedingEnforcementJudgeDutch is slightly different from the source text (missing a hyphen in 'Dutch-language').",
+      "rationale": "Corrected to match the source text verbatim: 'the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI'.",
+      "action": "add",
+      "subject": "doc:proceedingEnforcementJudgeDutch",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI",
+      "object_is_literal": true,
+      "datatype": "rdf:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "skipped: quote does not appear verbatim in the source document",
+      "stage": "quotes",
+      "pass": 1
+    },
+    {
+      "finding": "stub_orphan_sweep",
+      "rationale": "Typed nodes carrying nothing but rdf:type/rdfs:label with no inbound reference; nothing downstream can use them.",
+      "action": "delete_node",
+      "nodes": [
+        "doc:proceedingEnforcementJudgeDutch"
+      ],
+      "status": "applied",
+      "stage": "quotes",
+      "pass": 1
+    },
+    {
+      "finding": "The quote for doc:proceedingTpiDutchStay contains a minor punctuation difference ('Dutch-speaking' vs 'Dutch \u2013 speaking') compared to the source text.",
+      "rationale": "Corrected the quote to match the source text exactly, including the specific dash used in 'Dutch \u2013 speaking'.",
+      "action": "remove",
+      "subject": "doc:proceedingTpiDutchStay",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "lodged a unilateral action to that effect with the President of the Brussels Dutch-speaking TPI on 13 December 2016, but was unsuccessful",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": "en",
+      "quote_index": 0,
+      "status": "applied (removed 1 quote(s) by index)",
+      "stage": "quotes",
+      "pass": 2
+    },
+    {
+      "finding": "The quote for doc:proceedingTpiDutchStay contains a minor punctuation difference ('Dutch-speaking' vs 'Dutch \u2013 speaking') compared to the source text.",
+      "rationale": "Corrected the quote to match the source text exactly, including the specific dash used in 'Dutch \u2013 speaking'.",
+      "action": "add",
+      "subject": "doc:proceedingTpiDutchStay",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "lodged a unilateral action to that effect with the President of the Brussels Dutch \u2013 speaking TPI on 13 December 2016, but was unsuccessful",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": "en",
+      "quote_index": null,
+      "status": "skipped: quote does not appear verbatim in the source document",
+      "stage": "quotes",
+      "pass": 2
+    },
+    {
+      "finding": "stub_orphan_sweep",
+      "rationale": "Typed nodes carrying nothing but rdf:type/rdfs:label with no inbound reference; nothing downstream can use them.",
+      "action": "delete_node",
+      "nodes": [
+        "doc:proceedingTpiDutchStay"
+      ],
+      "status": "applied",
+      "stage": "quotes",
+      "pass": 2
+    },
+    {
+      "finding": "The quote for doc:proceedingTpiInterPartes is almost verbatim but missing the comma after '2016'.",
+      "rationale": "The source text contains a comma after the date: 'On 7 November 2016, another judge...'.",
+      "action": "remove",
+      "subject": "doc:proceedingTpiInterPartes",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "On 7 November 2016 another judge acting as president of the French-language TPI declared their application admissible but unfounded",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": null,
+      "quote_index": 0,
+      "status": "applied (removed 1 quote(s) by index)",
+      "stage": "quotes",
+      "pass": 3
+    },
+    {
+      "finding": "The quote for doc:proceedingTpiInterPartes is almost verbatim but missing the comma after '2016'.",
+      "rationale": "The source text contains a comma after the date: 'On 7 November 2016, another judge...'.",
+      "action": "add",
+      "subject": "doc:proceedingTpiInterPartes",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "On 7 November 2016 another judge acting as president of the French \u2013 language TPI declared their application admissible but unfounded",
+      "object_is_literal": true,
+      "datatype": "rdf:literal",
+      "lang": null,
+      "quote_index": null,
+      "status": "skipped: quote does not appear verbatim in the source document",
+      "stage": "quotes",
+      "pass": 3
+    },
+    {
+      "finding": "stub_orphan_sweep",
+      "rationale": "Typed nodes carrying nothing but rdf:type/rdfs:label with no inbound reference; nothing downstream can use them.",
+      "action": "delete_node",
+      "nodes": [
+        "doc:proceedingTpiInterPartes"
+      ],
+      "status": "applied",
+      "stage": "quotes",
+      "pass": 3
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v6/input.L5.facts.ttl",
+  "timings": {
+    "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v6/input.L5.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 7.9,
+    "seconds_model_calls": 7.8,
+    "seconds_deterministic": 0.1,
+    "model_calls": 1,
+    "by_stage": {
+      "persons": {
+        "passes": 1,
+        "seconds": 7.8,
+        "seconds_model_call": 7.8
+      }
+    },
+    "passes": [
+      {
+        "stage": "persons",
+        "pass": 1,
+        "seconds_total": 7.8,
+        "seconds_model_call": 7.8,
+        "seconds_deterministic": 0.0,
+        "findings_in": 1,
+        "ops_proposed": 3,
+        "ops_applied": 3,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "The natural person doc:romanMartynovskiy has a name starting with 'Mr', which is a clear indicator of male gender.",
+      "rationale": "The honorific 'Mr' in the person's name is a strong documentary cue for gender.",
+      "action": "add",
+      "subject": "doc:romanMartynovskiy",
+      "predicate": "echr:hasGender",
+      "object": "echr:GenderMale",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    },
+    {
+      "finding": "The natural person doc:lawyerKikkas has a name starting with 'Mr', which is a clear indicator of male gender.",
+      "rationale": "The honorific 'Mr' in the person's name is a strong documentary cue for gender.",
+      "action": "add",
+      "subject": "doc:lawyerKikkas",
+      "predicate": "echr:hasGender",
+      "object": "echr:GenderMale",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    },
+    {
+      "finding": "The natural person doc:lawyerYakovlev has a name starting with 'Mr', which is a clear indicator of male gender.",
+      "rationale": "The honorific 'Mr' in the person's name is a strong documentary cue for gender.",
+      "action": "add",
+      "subject": "doc:lawyerYakovlev",
+      "predicate": "echr:hasGender",
+      "object": "echr:GenderMale",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    }
+  ]
+}

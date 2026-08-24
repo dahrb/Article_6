@@ -94,6 +94,59 @@ Runs 1–5 are the primary experiment; 6–7 are the engineering ablation, kept 
 
 7 runs × 240 documents = **1,680 extractions**. If cutting is needed: cut run 3 first (O0 is least informative), then run 6.
 
+### The O2 configuration is settled by a pilot, not by the main sweep
+
+Runs 1, 6 and 7 need a specific O2 assembly configuration, and picking it inside the 240-document sweep would spend the sweep answering an engineering question. Settle it first on the 10-document pilot, where 8 arms cost less than one 240-document run.
+
+**Eight pilot arms — 4 assembly modes × 2 graph formats:**
+
+| mode | `run_arms.sh` spec | turtle | jsonld |
+|---|---|:-:|:-:|
+| whole-document | `native`, 20000/50000 | ✓ | ✓ |
+| fan-out | `native`, 8000/16000 | ✓ | ✓ |
+| carry-forward, moderate | `rolling`, 8000/16000 | ✓ | ✓ |
+| carry-forward, aggressive | `rolling`, 3000/6000 | ✓ | ✓ |
+
+Format is crossed with assembly rather than fixed, because there is a mechanism for an interaction: jsonld costs 2.5× the tokens of turtle for the same graph (57,374 vs 22,897 measured on the unpruned ontology), and in `rolling` mode the accumulated graph is re-injected into every subsequent prompt. Format therefore determines how much context the carried graph consumes and how much is left for document text — an effect that does not exist at whole-document, where the graph is never fed back. The 2026-08-23 sweep settled on jsonld on connectivity and conformance grounds, with no recall measure involved; on the same ten documents turtle produced 31% more events and 50% more persons. That disagreement is worth resolving, once, on the pilot.
+
+Fan-out is included for one reason: without it, carry-forward's result confounds "smaller units help" with "seeing the prior graph helps", and those imply different fixes.
+
+**`max_visits` is not an axis.** Already measured: mv2 cost +54% wall clock, ended at the same conformance with one more violation after repair, and neither arm lost a single unit. There is nothing for a retry to recover when nothing failed.
+
+**Selection rule.** The pilot is scored with the *same* instruments as the main study — automated metrics at both checkpoints, the same judge rubric on the same normalised form, and human annotation on the 5 pilot documents that have it (*Stanev* plus the 4 Events Matter overlap cases). Pilot judging costs about £2, so there is no reason to select on a weaker instrument than the one that decides the paper.
+
+Select the winner on **recall at `raw/`**, with precision at `repaired/` as a constraint rather than an objective — an arm is eligible if its duplicate rate is under 10% and its quote-verbatim rate is within 3 points of the best arm's. Ranking on precision would select the wrong arms: on the 2026-08-23 pilot, taking the top three by duplicate rate selects all three whole-document arms and excludes both chunked ones — that is, it excludes exactly the arms with 2-3× the recall. Precision is near-saturated across every arm (94-100% quote fidelity, 1-6% duplicates) while recall spans 58 to 159 events, so ranking on the flat axis to choose which arms get measured on the varying axis inverts the information content.
+
+Selection happens on the pilot and evaluation on the 240, so selection and evaluation sets are disjoint and the winner's curse does not apply. One sentence in Methods and the objection never gets raised.
+
+### Score every run at two checkpoints
+
+The pipeline writes `raw/` (extraction) and `repaired/` (after the repair stages). **Score both.** It costs nothing on runs already done — the scorers just point at a second directory — and it is what makes the repair stage measurable at all.
+
+The reason is that one number after both stages cannot distinguish a chunking win at extraction from a repair failure afterwards, and that ambiguity has already cost us a sweep: in the 2026-08-23 arms the repair stage correctly diagnosed a node that conflated two authorities, and every one of its `remove` operations silently no-opped because the model returned Turtle literal syntax into a plain-text field. Adds landed, removes did not, and the result was an orphaned node and a stale label that looked like model weakness. It read as a repair-quality problem in the aggregate score and was a one-line applier bug (`unwrap_literal`, fixed 24 Aug).
+
+Concretely: **recall is a property of `raw/`, precision is a property of `repaired/`.** Report both columns for every run. This also gives the repair stage its own evidence, which the current design has no way to produce.
+
+**Before the full sweep, confirm this on a pilot.** Re-run one chunked and one whole-document arm over the 10-document set with the `unwrap_literal` fix in, and score both checkpoints. Half an hour of GPU, and it answers whether repair actually closes the duplicate gap — which is the assumption H7 rests on and the thing that decides how runs 6–7 are framed. Cheaper to find out now than to discover it in the 240-document results.
+
+### Track duplicate rate as a Tier 1 metric
+
+Deterministic, no judge needed: count domestic events sharing a `(echr:hasCourt, echr:hasDecisionDate)` key. Cheap to compute and it is the one structural metric that moves with document assembly.
+
+Pilot evidence, five arms × 10 documents, gemma-4-31b (2026-08-23 sweep):
+
+| arm | events | persons | quotes verbatim | dup rate |
+|---|---:|---:|---:|---:|
+| nochunk (ttl, mv1) | 76 | 15 | 94% | 1.3% |
+| nochunk (jsonld, mv1) | 58 | 10 | 100% | 3.4% |
+| nochunk (ttl, mv2) | 84 | 14 | 97% | 1.2% |
+| rolling 8k/16k | 104 | 25 | 95% | 5.8% |
+| rolling 3k/6k | 159 | 42 | 96% | 4.4% |
+
+Two things follow, and both matter for how runs 6–7 get written up. **Chunking does not degrade span-level fidelity** — quote-verbatim rate is flat at 94–100% across every arm. And the errors it *does* introduce are asymmetric: a duplicate is two nodes sharing a court and a date, which the repair stage already keys on and can merge, whereas a missed proceeding is unrecoverable by anything downstream. Chunking roughly doubles recall for a duplicate rate that stays under 6%.
+
+State this asymmetry explicitly in Results. It reframes runs 6–7 from "cost of chunking" to a question worth asking on its own terms: is recall best bought at extraction and precision bought back at aggregation?
+
 **Sample:** 240 documents — 140 judgments, 100 decisions — stratified by court level nested within document type, spanning a 26-fold median-length gradient from `ADMISSIBILITYCOM` (3.8k chars) to Grand Chamber (98k). Roughly 70 forced to carry an Art. 35-1 exhaustion label so the sample seeds the follow-on analysis paper. Freeze the ID list on day 2.
 
 ---
@@ -125,10 +178,42 @@ The bulk corpus is deliberately *not* a headline contribution — it appears in 
 - **Conditions.** The three ontology levels and the seven runs.
 - **Normalisation for fair comparison.** The common comparison form, and the rule that comparative measures are computed on it while ontology-dependent measures describe O2 only. *Give this its own subsection* — it is a contribution, not a technicality.
 - **Evaluation, three tiers.**
-  - **Automated**, all 1,680 graphs: content loss, chain integrity, entity resolution, terminal identification, plus SHACL and vocabulary conformance for O2.
-  - **LLM-as-judge**, a nested subsample: proceeding-level faithfulness (precision) and chain-level omission (recall — the only instrument that measures it). Blind to condition; judged by a third model, not by either extractor; order randomised; intra-judge reliability reported.
+  - **Automated**, all 1,680 graphs, computed at both the `raw/` and `repaired/` checkpoints: content loss, chain integrity, entity resolution, duplicate rate on the `(hasCourt, hasDecisionDate)` key, quote-verbatim rate, terminal identification, plus SHACL and vocabulary conformance for O2.
+  - **LLM-as-judge**, the full 240 documents × the three ontology conditions (O0, O1, O2-at-the-winning-configuration): proceeding-level faithfulness (precision) and chain-level omission (recall — the only instrument that measures it). Blind to condition; judged by two models that are neither extractor; order randomised; intra-judge reliability reported. **The judge sees the normalised form, never the graph** — measured on *Stanev*, the repaired Turtle is 2,231 tokens against 332 for the normalised proceeding list, and a judge shown Turtle for O2 and flat JSON for O1 can identify the condition, which forfeits the blinding.
   - **Human annotation**, 20–30 documents nested inside the judge subsample: the full list of domestic proceedings per document. Annotate *before* seeing any extraction output.
 - **Judge validation.** Agreement between judge and human on the annotated subset, reported as κ and as precision/recall. This gates how much weight the judge tier can carry — state it as a gate, not buried.
+
+**Division of labour between the tiers.** Automated metrics screen for precision and structure, because that is what deterministic checks can see. The judge adjudicates recall and semantic faithfulness, because nothing else can. The two must not be chained: using an automated precision ranking to select the judge's inputs makes the selection and the measurement the same act. Hence the judge tier carries the **ontology axis** (O0/O1/O2), fixed by design, while the O2 **configuration** question is settled separately on the pilot.
+
+**Judge-tier costing.** Priced against the pilot's mean document length (25,163 chars ≈ 6,300 tokens), at $1.25/M input and $10/M output — *verify current rates before committing, Gemini's in particular, which tiers above 200k context*:
+
+| design | 1 judge | 2 judges |
+|---|---:|---:|
+| independent scoring, capped reasoning | £14 | **£28** |
+| independent, document prefix cached | £11 | £22 |
+| bundled — 3 conditions per call | £5 | £10 |
+| independent, **uncapped reasoning** | £51 | **£101** |
+
+Three conditions is not the cost driver; output tokens are. Capping reasoning effort is a 3.6× saving and is the only lever that matters — uncapped, the same design costs the entire £100 budget before a single retry.
+
+**Bundling the three conditions into one call is rejected despite being 2.8× cheaper.** It converts independent scoring into comparative ranking: absolute per-condition faithfulness scores are lost, contrast effects are introduced, and κ against human annotation stops measuring the same thing. At £28 against £10 that is £18 for methodological cleanliness, which is worth paying.
+
+**Family overlap is balanced by construction, which is what makes it estimable.** The extractors are gemma-4-31b (Google) and gpt-5-mini (OpenAI); the judges are Gemini (Google) and GPT-5 (OpenAI). Every judge is therefore same-family with exactly one extractor and cross-family with the other:
+
+| | gemma-4-31b extractions (runs 1,2,3,6,7) | gpt-5-mini extractions (runs 4,5) |
+|---|:-:|:-:|
+| **Gemini judge** | same family | cross family |
+| **GPT-5 judge** | cross family | same family |
+
+There is no neutral judge in the set, and *that is fine* — a fully crossed 2×2 identifies self-preference as an interaction term, which an unbalanced design with one "clean" judge could not. The control is: does each judge score its own family's extractions higher than the other judge does? Two same-family cells on opposite diagonals means the effect is measured twice, in opposite directions, and a genuine self-preference bias shows up as a symmetric interaction rather than a main effect that could be mistaken for one model simply extracting better.
+
+**One asymmetry to state rather than paper over:** gpt-5 ↔ gpt-5-mini is a tighter relationship — same family, same generation, plausibly shared post-training — than gemini ↔ gemma, which share a lineage and data provenance but are separately trained model families. The two same-family cells are therefore not equally intense, so the interaction estimate is conservative for the Google diagonal. Say so in Methods in one sentence; a reviewer who knows the model families will notice, and pre-empting it costs nothing.
+
+**The human annotation tier is the neutral anchor.** Judge-human κ computed *separately for each judge* is what converts the interaction from a suggestive number into a validated one, and it is already in the design. If κ diverges sharply between judges on the same documents, that is the self-preference finding, independent of the interaction estimate.
+
+*Optional, ~£4:* a third judge from neither family, run only over the 20-30 human-annotated documents, gives a family-neutral reference point for the κ comparison. Worth it only if the interaction comes out non-null — do not run it pre-emptively.
+
+Budget allocation against £100: pilot judging ~£2, main tier with both judges on the full corpus £28, and ~£20 held for rubric iteration, retries and judge-human disagreement re-checks. Committed ~£50, leaving headroom. Because two judges on all 240 fits, run both on the whole corpus rather than subsampling the second — that upgrades the self-preference control from a spot check to a full second measurement.
 
 ### 4 · Results (~2.5 pages)
 
@@ -139,7 +224,8 @@ The bulk corpus is deliberately *not* a headline contribution — it appears in 
 | H1 | Formalisation improves structural fidelity — entity resolution and chain integrity — more than it improves factual precision. | run 1 vs 2 |
 | H2 | Any target structure beats none by a wide margin; the increment from schema-light to full ontology is smaller than the increment from nothing to schema-light. | 3 vs 2 vs 1 |
 | H3 | The weaker model benefits more from formalisation. | (1−2) vs (4−5) |
-| H4 | Chunking degrades structure while leaving span-level fidelity intact. | 1 vs 6, 7 |
+| H4 | Chunking degrades structure while leaving span-level fidelity intact — specifically, it raises duplicate rate without lowering quote-verbatim rate. | 1 vs 6, 7 |
+| H7 | Repair recovers the precision chunking costs, so the chunked configuration wins overall once both stages have run. | 6, 7 at `raw/` vs `repaired/` |
 | H5 | Automated conformance is a poor proxy for completeness — a graph can pass every check and be missing the operative section. | all runs, Tier 1 vs judge |
 | H6 | Judge and human agree well enough for the judge tier to carry inferential weight. | gate on H1–H5 |
 
@@ -206,9 +292,9 @@ An interactive tool is a genuine stretch goal: build it only if the paper is dra
 | 3 | Mon 24 Aug | Launch all 7 runs, cache disabled. Start Tier 3 human annotation — begin with the 4 Events Matter cases. |
 | 4 | Tue 25 Aug | Active monitoring: check each run's early output for the pilot's failure signatures (parse failures, timeout loss, malformed Turtle) and intervene same-day. Continue annotation. |
 | 5 | Wed 26 Aug | **Likely bottleneck day.** gpt-5-mini and gemma-rolling are the slow configs; if either is badly behind, this is when to trim rather than let it eat the week. |
-| 6 | Thu 27 Aug | Automated Tier 1 metrics on all 7 configs, full 240. This ranking picks the third judge-tier slot (base O2 and O1 are fixed in by design). Build and run the Events Matter alignment script on the 4 overlap cases. |
+| 6 | Thu 27 Aug | Automated Tier 1 metrics on all 7 configs, full 240, **at both checkpoints** (`raw/` and `repaired/`) and including duplicate rate. This ranking picks the third judge-tier slot (base O2 and O1 are fixed in by design). Build and run the Events Matter alignment script on the 4 overlap cases. |
 | 7 | Fri 28 Aug | Finish Tier 3 annotation (24–30 documents, before seeing any extraction output). Pilot the judge on *Stanev* plus the Events Matter overlap. |
-| 8 | Sat 29 Aug | Run the judge tier: full 240-document corpus × the 3 selected configs, primary judge (GPT-5.6, batched, cached, capped reasoning effort). Self-preference control on a subsample with a second judge model. |
+| 8 | Sat 29 Aug | Run the judge tier on the normalised form: full 240 documents × O0/O1/O2, **both judges (Gemini, GPT-5) on the whole corpus** — neither is family-neutral, so both are needed for the crossed design — batched, cached, **capped reasoning effort**. Compute the judge × extractor-family interaction as the self-preference control. |
 | 9 | Sun 30 Aug | **Compute judge–human agreement (κ) first, before anything else.** This gates how much weight Tier 2 carries in Results. Chase down any straggling run. |
 | 10 | Mon 31 Aug | Analysis: H1–H7 paired differences, win/tie/loss tables, stratified-by-court-level breakdowns, the Events Matter external-recall figure. Freeze all numbers and figures. |
 | 11 | Tue 1 Sep | Build the timeline visualisation figure. Launch the bulk exhaustion-labelled extraction (≥2,400 docs) in the background, unattended. |

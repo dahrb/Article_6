@@ -221,6 +221,46 @@ def load_openai_api_key() -> str:
 # ---------------------------------------------------------------------------
 
 
+# NOT a grammar cap. Three attempts to stop the output-cap truncations by
+# constraining the decoding grammar were made on 2026-08-24 and all three
+# failed; this comment exists so the fourth is not attempted from scratch.
+#
+#   maxLength on the rationale     truncations went 0 -> 2 on nochunk_ttl_mv1
+#   + maxItems on groups and ops   truncations went 2 -> 5
+#   removing the quote_index field no effect, stalls identically
+#
+# vLLM does enforce both keywords -- a prompt demanding a 200-group patch came
+# back terminated at the ceiling with finish_reason "stop" -- so the constraints
+# work and simply do not address the failure.
+#
+# What the failure actually is, from dumping a raw L10 proceedings generation:
+# the model emits ONE correct operation, stalls immediately after the `object`
+# value, and then pads with whitespace for the entire remaining budget. The
+# output was 56,018 characters of which 55,731 -- 99.5% -- were whitespace. The
+# JSON grammar permits arbitrary whitespace between tokens, so a stalled model
+# has a legal token to emit forever, and neither a shorter string field nor a
+# shorter list can take that away. vLLM's disable_any_whitespace option is the
+# right shape of fix but was silently ignored by this server version.
+#
+# This is the same pathology response_repair.py documents for facts-render.
+# It is reliably reproducible on L10's proceedings prompt and is a decoding
+# bug, not a prompt or schema defect. Leave --max-tokens as the backstop.
+
+# How many entries of any one structural-gap list go into a single pass.
+#
+# The multi-pass loop re-derives every finding from the working graph before
+# each pass, so a list longer than this is deferred rather than dropped and the
+# next pass picks up what is outstanding. Batching keeps any single patch to a
+# reviewable size.
+#
+# Honest about what this does NOT do: it was added to fix L10, whose
+# proceedings stage must add nineteen hasCourt links and truncates every time,
+# and it did not. Cutting that stage's input to eight gaps produced exactly the
+# same whitespace stall (see the block above). Keep it for the bounded patches,
+# not as a truncation remedy.
+MAX_GAP_ENTRIES_PER_PASS = 8
+
+
 class TripleOp(BaseModel):
     action: Literal["add", "remove"]
     subject: str = Field(
@@ -246,6 +286,17 @@ class TripleOp(BaseModel):
     lang: str | None = Field(
         default=None, description="Language tag for a plain-text literal, e.g. 'en'."
     )
+    quote_index: int | None = Field(
+        default=None,
+        description=(
+            "QUOTE-FIDELITY STAGE ONLY. The `index` of the `unverified_quotes` "
+            "entry this operation targets. Set it on a `remove` of "
+            "echr:hasSupportingQuote and leave `object` empty: the pipeline "
+            "looks the exact literal up by index and deletes that one value. "
+            "Do NOT retype the quote text -- naming the index is both shorter "
+            "and exact. Omit this field on every other kind of operation."
+        ),
+    )
 
     @model_validator(mode="after")
     def _lang_and_datatype_are_exclusive(self) -> TripleOp:
@@ -259,7 +310,10 @@ class RepairGroup(BaseModel):
         description="Which of the four defect categories this addresses."
     )
     rationale: str = Field(
-        description="Why, citing the supporting quote or field that justifies it."
+        description=(
+            "Why, citing the supporting quote or field that justifies it. "
+            "Two sentences at most."
+        ),
     )
     ops: list[TripleOp]
 
@@ -280,7 +334,10 @@ class MergeOp(BaseModel):
         description="CURIE of the duplicate to fold into `keep` and delete entirely."
     )
     rationale: str = Field(
-        description="Why these are the same entity, citing the label/date/quote."
+        description=(
+            "Why these are the same entity, citing the label/date/quote. "
+            "Two sentences at most."
+        ),
     )
 
 
@@ -573,6 +630,37 @@ def find_missing_participation(graph: Graph, doc_ns: str) -> list[str]:
     return sorted(set(out))
 
 
+def find_proceedings_missing_court(graph: Graph, doc_ns: str) -> list[str]:
+    """DomesticEvent-shaped nodes with no echr:hasCourt link at all.
+
+    This finder exists because the defect it names was invisible to the entire
+    repair pass. Measured 2026-08-24 on the nochunk_ttl_mv1 arm: 19 of 60
+    proceedings carried no deciding authority, and the number was UNCHANGED by
+    repair -- not because the model declined to fix it, but because nothing
+    ever told it. The proceedings stage reported "nothing flagged" on 8 of 10
+    documents and made 2 model calls in the whole run.
+
+    Nor would SHACL have caught it. `echr-shapes.ttl` constrains hasCourt with
+    sh:maxCount 1 and no sh:minCount, so a courtless proceeding is perfectly
+    conformant -- deliberately, because some events genuinely have no deciding
+    authority. That makes this exactly the kind of finding that has to be
+    SURFACED for a model to judge rather than asserted as an error: an
+    administrative action taken by a mayor has no court and should keep none.
+
+    Scoped to DomesticEvent subclasses for the same reason
+    `find_missing_participation` is: they share the property vocabulary, and a
+    new subclass should be covered without editing this file.
+    """
+    out = []
+    for cls in domestic_event_classes():
+        for s in graph.subjects(RDF.type, cls):
+            if not str(s).startswith(doc_ns):
+                continue
+            if (s, ECHR.hasCourt, None) not in graph:
+                out.append(_curie(graph, s))
+    return sorted(set(out))
+
+
 def find_unlinked_persons(graph: Graph, doc_ns: str) -> list[str]:
     """echr:NaturalPerson nodes never named as an echr:Participation's party.
 
@@ -645,6 +733,9 @@ def find_unverified_quotes(graph: Graph, source_text: str) -> list[dict]:
             continue
         out.append(
             {
+                # Stable handle for this exact literal, so a `remove` can name it
+                # by number instead of reproducing it. See TripleOp.quote_index.
+                "index": len(out),
                 "subject": _curie(graph, s),
                 "predicate": "echr:hasSupportingQuote",
                 "quote": quote,
@@ -686,8 +777,8 @@ def load_validator_findings(facts_ttl: Path) -> list[dict]:
     return data.get("findings", [])
 
 
-@lru_cache(maxsize=1)
-def _shapes_graph() -> Graph:
+@lru_cache(maxsize=2)
+def _shapes_graph(*, include_undefined_term_shape: bool = True) -> Graph:
     """The static shapes plus the generated undefined-term shape.
 
     Goes through validate_shapes.load_shapes() rather than parsing SHAPES_PATH
@@ -700,7 +791,25 @@ def _shapes_graph() -> Graph:
     """
     from art6.ontology.validate_shapes import load_shapes
 
-    return load_shapes()
+    return load_shapes(include_undefined_term_shape=include_undefined_term_shape)
+
+
+def _graph_fingerprint(graph: Graph) -> str:
+    """Content hash of a graph, for the SHACL cache below.
+
+    Hashes every triple, not just `len(graph)`: a patch that removes one triple
+    and adds another leaves the count identical while changing what validates.
+    Cost is linear and tiny next to a SHACL run -- microseconds against seconds.
+    """
+    import hashlib
+
+    h = hashlib.blake2b(digest_size=16)
+    for triple in sorted(graph, key=lambda t: (str(t[0]), str(t[1]), str(t[2]))):
+        h.update(repr(triple).encode("utf-8"))
+    return h.hexdigest()
+
+
+_SHAPE_VIOLATION_CACHE: dict[str, list[dict]] = {}
 
 
 def find_shape_violations(graph: Graph) -> list[dict]:
@@ -713,21 +822,62 @@ def find_shape_violations(graph: Graph) -> list[dict]:
     false-merge defect (a node with two rdfs:label values) that neither the
     functional-property nor the vocabulary checks can see, and this function
     is what gets that finding in front of the model that can fix it.
+
+    RUNS AS CORE SHACL, with the vocabulary check done in Python beside it.
+    This is what stopped SHACL being the repair pass's dominant cost. Every
+    shape in echr-shapes.ttl is Core; the only SHACL-AF in the shapes graph is
+    the pair of SPARQL constraints in the generated undefined-term shape, and
+    `advanced=True` -- needed solely to reach those two -- multiplied the cost
+    of the whole validation by 360x. Measured 2026-08-24 over 20 documents of
+    the sweep: 115.5s with it on, 0.2s with it off, identical Core findings.
+    `validate_shapes.find_undefined_terms` recovers the two SPARQL constraints
+    as a set-membership loop, so nothing is given up: verified on every
+    document of the 2026-08-23 sweep to produce exactly the same rows.
+
+    Before this the pass was dominated by validation rather than inference --
+    92% of repair wall clock on the worst arm (492.9s of 535.6s, against 42.7s
+    of actual inference), and 946.1s of rolling_3k6k's 1090.8s.
+
+    STILL MEMOIZED ON GRAPH CONTENT, because the loop calls this TWICE per pass
+    (once to derive findings, once for the no-progress check) x passes x stages
+    -- up to 12 runs per document -- and most of those validate a byte-identical
+    graph: the no-progress check at the end of pass N sees exactly what pass N+1
+    re-derives, and stage N+1 opens on exactly what stage N closed with. Keyed
+    on content rather than object identity because apply_patch returns a NEW
+    Graph every time.
     """
     from pyshacl import validate as shacl_validate
 
+    from art6.ontology.validate_shapes import find_undefined_terms
+
+    fingerprint = _graph_fingerprint(graph)
+    if (cached := _SHAPE_VIOLATION_CACHE.get(fingerprint)) is not None:
+        return list(cached)
+
     conforms, results_graph, _ = shacl_validate(
         graph,
-        shacl_graph=_shapes_graph(),
-        advanced=True,
+        shacl_graph=_shapes_graph(include_undefined_term_shape=False),
+        advanced=False,
         inference="none",
         abort_on_first=False,
         meta_shacl=False,
     )
-    if conforms:
-        return []
 
-    findings = []
+    findings = [
+        {
+            "kind": "shacl_violation",
+            "severity": "error",
+            "message": message,
+            "subject": _curie(graph, URIRef(focus)) if focus else "",
+            "predicate": _curie(graph, URIRef(path)) if path else "",
+            "values": [],
+        }
+        for focus, path, message in find_undefined_terms(graph)
+    ]
+    if conforms:
+        _SHAPE_VIOLATION_CACHE[fingerprint] = list(findings)
+        return findings
+
     for result in results_graph.subjects(RDF.type, SH.ValidationResult):
         severity = next(results_graph.objects(result, SH.resultSeverity), None)
         message = next(results_graph.objects(result, SH.resultMessage), None)
@@ -750,6 +900,7 @@ def find_shape_violations(graph: Graph) -> list[dict]:
                 "values": [_curie(graph, value)] if value is not None else [],
             }
         )
+    _SHAPE_VIOLATION_CACHE[fingerprint] = list(findings)
     return findings
 
 
@@ -927,19 +1078,25 @@ class RepairStage:
     needs_source_text: bool = False
 
 
-# ORDER MATTERS, and authorities comes FIRST for a measured reason.
+# ORDER: authorities, then proceedings, then persons, then quotes.
 #
-# With proceedings first (the 2026-08-23 sweep), the authorities stage minted four
-# complete echr:DomesticAuthority nodes -- correct type, name, kind, jurisdiction --
-# and nothing ever linked them to the proceedings that lacked a court. The measured
-# result was `proceedings without hasCourt` unchanged at 19 -> 19 while singleton
-# nodes rose 39 -> 43: the graph gained four correct entities and ZERO new edges,
-# because by the time the authority existed no stage revisited the proceeding.
+# The original reason given for putting authorities first was that the
+# proceedings stage could then link hasCourt to authorities that already exist,
+# closing the measured 19 -> 19 gap in `proceedings without hasCourt`. THAT
+# EXPLANATION WAS WRONG and is recorded here so it is not re-derived. Tested
+# 2026-08-24 on nochunk_ttl_mv1 with identical raw input and only the order
+# changed: proc_no_court stayed at 19, singletons improved by exactly one node.
 #
-# Running authorities first inverts that. The proceedings stage now opens with every
-# authority already present in the graph, so `add echr:hasCourt` has a real object to
-# point at -- and apply_patch's referential-integrity guard, which skips an add whose
-# doc: object does not exist, stops rejecting exactly the edges that close the gap.
+# The real cause of that gap was that nothing ever told the model about it --
+# the proceedings stage had no missing-court finder and reported "nothing
+# flagged" on 8 of 10 documents, and echr-shapes.ttl constrains hasCourt with
+# sh:maxCount and no sh:minCount, so SHACL is silent too. See
+# find_proceedings_missing_court, which is the actual fix.
+#
+# Authorities-first is kept anyway, on the weaker but sound ground that a stage
+# which mints authority nodes should run before the stage that wants to point
+# at them: apply_patch's referential-integrity guard skips an add whose doc:
+# object does not exist yet.
 STAGES: tuple[RepairStage, ...] = (
     RepairStage(
         key="authorities",
@@ -1017,6 +1174,8 @@ def build_user_prompt(
     duplicate_groups: list[dict],
     structural_gaps: dict[str, list[str]],
     validator_findings: list[dict],
+    unverified_quotes: list[dict] | None = None,
+    source_text: str | None = None,
 ) -> str:
     payload = {
         "entities": entities,
@@ -1025,15 +1184,32 @@ def build_user_prompt(
         **structural_gaps,
         "validator_findings": validator_findings,
     }
-    return (
-        f"Document namespace prefix: {doc_curie_prefix}\n\n"
-        f"Repair stage: {stage.name}\n"
-        f"{load_stage_guidance(stage.guidance_file)}\n\n"
-        f"Relevant ontology fragment (echr.ttl, {stage.name}-related):\n"
-        f"{ontology_context}\n\n"
-        f"Current graph state and flagged findings:\n"
+    if unverified_quotes is not None:
+        payload["unverified_quotes"] = unverified_quotes
+
+    parts = [
+        f"Document namespace prefix: {doc_curie_prefix}\n",
+        f"Repair stage: {stage.name}\n{load_stage_guidance(stage.guidance_file)}\n",
+    ]
+    if ontology_context:
+        parts.append(
+            f"Relevant ontology fragment (echr.ttl, {stage.name}-related):\n"
+            f"{ontology_context}\n"
+        )
+    # The source text goes LAST, immediately before the findings that reference
+    # it, so the model reads the evidence and the claims about it together
+    # rather than with the whole ontology wedged in between.
+    if source_text:
+        parts.append(
+            "FULL SOURCE TEXT of the document these facts were extracted from. "
+            "A supporting quote is verified only if it appears here verbatim:\n"
+            f"<<<SOURCE\n{source_text}\nSOURCE\n"
+        )
+    parts.append(
+        "Current graph state and flagged findings:\n"
         f"{json.dumps(payload, indent=2, ensure_ascii=False)}\n"
     )
+    return "\n".join(parts)
 
 
 def warm_up_grammar(client: OpenAI, model: str) -> None:
@@ -1202,6 +1378,30 @@ def call_repair_model(
 # ---------------------------------------------------------------------------
 
 
+def unwrap_literal(value: str) -> str:
+    """Strip Turtle literal syntax the model copied into a plain-text field.
+
+    `TripleOp.object` is documented as "the literal value as plain text", but a
+    model reading a Turtle-serialized graph hands back the SYNTAX it was shown --
+    `"Ruse Municipal Council"`, quote marks included -- and rdflib then stores
+    those marks as part of the string. Measured on the 2026-08-23 five-arm sweep:
+    26 literals across the run, all from the authorities stage
+    (echr:hasAuthorityName, echr:hasJurisdictionState, rdfs:label), and none in
+    the pre-repair graphs, so repair is the only source.
+
+    Only a single matched pair wrapping the WHOLE value is removed, and only
+    when the interior holds no straight double quote of its own. A supporting
+    quote that legitimately opens and closes on a straight quote is therefore
+    left alone -- ECHR texts mark quotations with curly quotes, so the wrapped
+    form is the artefact, not the data.
+    """
+    if len(value) > 1 and value[0] == '"' and value[-1] == '"':
+        inner = value[1:-1]
+        if '"' not in inner:
+            return inner
+    return value
+
+
 def resolve_term(
     graph: Graph,
     curie_or_literal: str,
@@ -1229,7 +1429,7 @@ def resolve_term(
         ns = dict(graph.namespaces()).get(prefix)
         if ns is not None:
             dt = URIRef(str(ns) + local)
-    return RDFLiteral(curie_or_literal, datatype=dt, lang=lang)
+    return RDFLiteral(unwrap_literal(curie_or_literal), datatype=dt, lang=lang)
 
 
 def merge_nodes(graph: Graph, keep: URIRef, drop: URIRef) -> dict:
@@ -1314,12 +1514,74 @@ def sweep_stub_orphans(graph: Graph, doc_ns: str) -> list[str]:
     return removed
 
 
+def _match_unverified_quote(
+    subject: str, proposed: str, unverified_quotes: list[dict]
+) -> int | None:
+    """Which listed unverified quote a retyped `remove` was aiming at.
+
+    Only ever considers quotes already flagged as unverified ON THAT SUBJECT,
+    so the worst case is deleting a quote that was going to be reported as
+    broken anyway -- never a good anchor on a node the model did not name.
+
+    One candidate resolves outright: if a subject has exactly one bad quote and
+    the model asked to remove a quote from that subject, there is nothing else
+    it could have meant. With several, the closest normalized match wins and
+    only above a high similarity floor, because a near-miss between two
+    genuinely different quotes should fail loudly rather than delete the wrong
+    evidence.
+    """
+    import difflib
+
+    from art6.ontology.diagnostics.validate_source_quotes import normalize
+
+    candidates = [q for q in unverified_quotes if q.get("subject") == subject]
+    if not candidates:
+        return None
+    if len(candidates) == 1:
+        return candidates[0]["index"]
+
+    target = normalize(proposed)
+    best, best_ratio = None, 0.0
+    for candidate in candidates:
+        ratio = difflib.SequenceMatcher(
+            None, target, normalize(candidate["quote"])
+        ).ratio()
+        if ratio > best_ratio:
+            best, best_ratio = candidate, ratio
+    return best["index"] if best is not None and best_ratio >= 0.75 else None
+
+
 def apply_patch(
-    graph: Graph, patch: RepairPatch, doc_ns: str
+    graph: Graph,
+    patch: RepairPatch,
+    doc_ns: str,
+    source_text: str | None = None,
+    unverified_quotes: list[dict] | None = None,
 ) -> tuple[Graph, list[dict]]:
     """Returns a NEW graph with the patch applied, plus an audit trail. Every
     op is checked against the two-namespace contract and, for removes,
     against what actually exists before it is applied.
+
+    When `source_text` is supplied, an `add` of echr:hasSupportingQuote is
+    additionally checked against it and REJECTED unless the quote appears
+    verbatim. Repair must never be able to introduce an evidence anchor that
+    does not anchor anything. Observed 2026-08-24 on L10: the quotes stage
+    proposed a remove/add pair to correct a paraphrased quote, the remove was
+    skipped because the model could not reproduce the original literal exactly,
+    the add landed anyway -- and the "corrected" quote did not verify either.
+    Unverified quotes went 3 -> 4, so the stage built to fix them made them
+    worse. This guard makes that outcome impossible: the stage can now only
+    remove bad anchors or add genuinely verifiable ones.
+
+    `unverified_quotes` is the finding list the quote stage was shown. When an
+    op carries a `quote_index`, its object is resolved from that list here
+    rather than from the text the model retyped. This closes the OTHER half of
+    the same L10 failure: a remove could only land if the model reproduced a
+    ~107-character literal character for character, and when it paraphrased
+    instead the op was skipped as "triple not present". The same skip is
+    visible outside this stage -- four consecutive ones on doc:administrativeCourt
+    in the rolling_3k6k L3 log. Naming the index makes the remove exact and
+    costs the model a couple of tokens instead of a hundred.
 
     Also guards referential integrity for `add` ops: a doc:-namespaced URI
     object must already be a real node -- either present in the input graph
@@ -1346,14 +1608,98 @@ def apply_patch(
                 if subj_prefix == "doc":
                     known_doc_nodes.add(doc_ns + subj_local)
 
+    quotes_by_index = {q["index"]: q for q in (unverified_quotes or []) if "index" in q}
+
     audit: list[dict] = []
     for group in patch.groups:
         for op in group.ops:
+            index_note: str | None = None
+            resolved_quote_target: dict | None = None
+            if (
+                op.quote_index is None
+                and op.action == "remove"
+                and op.predicate == "echr:hasSupportingQuote"
+                and op.object.strip()
+            ):
+                # The model was told to name the quote by index and did not.
+                # Measured 2026-08-24 on L10: it retyped all three literals,
+                # every remove missed on a punctuation difference it had itself
+                # described as "minor" in the rationale, and the three adds
+                # landed on top of the bad anchors they were meant to replace.
+                # Recovering the index here rather than relying on compliance
+                # is the difference between a stage that works and a stage that
+                # depends on the model doing something optional.
+                recovered = _match_unverified_quote(
+                    op.subject.strip(), op.object, unverified_quotes or []
+                )
+                if recovered is not None:
+                    op.quote_index = recovered
+
+            # SCOPED to hasSupportingQuote, and that scoping is load-bearing.
+            # quote_index is optional and meant only for this stage, but the
+            # model sets it to 0 on unrelated operations -- measured 2026-08-24,
+            # where 19 perfectly good `add echr:hasCourt` ops arrived carrying
+            # quote_index 0 and an unscoped guard rejected every one of them,
+            # silently discarding the entire output of the missing-court
+            # finder. A field the model may fill in spuriously must never be
+            # able to veto an operation it does not describe.
+            if op.quote_index is not None and op.predicate == "echr:hasSupportingQuote":
+                target = quotes_by_index.get(op.quote_index)
+                if target is None:
+                    index_note = (
+                        f"quote_index {op.quote_index} does not name a listed "
+                        "unverified quote"
+                    )
+                elif target["subject"] != op.subject.strip():
+                    # Refusing the mismatch rather than trusting the index is
+                    # deliberate: silently retargeting the op to the indexed
+                    # subject would delete a quote off a node the model never
+                    # meant to touch.
+                    index_note = (
+                        f"quote_index {op.quote_index} belongs to "
+                        f"{target['subject']}, not {op.subject.strip()}"
+                    )
+                else:
+                    op.object = target["quote"]
+                    op.object_is_literal = True
+                    resolved_quote_target = target
             record = {
                 "finding": group.finding,
                 "rationale": group.rationale,
                 **op.model_dump(),
             }
+            if index_note is not None:
+                record["status"] = f"skipped: {index_note}"
+                audit.append(record)
+                continue
+
+            if resolved_quote_target is not None and op.action == "remove":
+                # Delete the LITERAL TERM ITSELF rather than rebuilding one from
+                # its text. Extraction writes these quotes as "..."^^xsd:string,
+                # and rdflib does not consider Literal(x) equal to
+                # Literal(x, datatype=XSD.string) -- so a remove reconstructed
+                # through resolve_term misses a triple that is plainly there.
+                # Measured 2026-08-24: every indexed quote remove resolved to
+                # the right finding and was then discarded as "triple not
+                # present", which looked exactly like the model retyping the
+                # quote badly and was nothing of the sort.
+                subject_term = resolve_term(
+                    working, op.subject, is_literal=False, datatype=None, lang=None
+                )
+                removed = [
+                    obj
+                    for obj in working.objects(subject_term, ECHR.hasSupportingQuote)
+                    if str(obj) == resolved_quote_target["quote"]
+                ]
+                for obj in removed:
+                    working.remove((subject_term, ECHR.hasSupportingQuote, obj))
+                record["status"] = (
+                    f"applied (removed {len(removed)} quote(s) by index)"
+                    if removed
+                    else "skipped: indexed quote no longer in the graph"
+                )
+                audit.append(record)
+                continue
             try:
                 subj_prefix, _, _ = op.subject.partition(":")
                 subj_ns = dict(working.namespaces()).get(subj_prefix)
@@ -1404,6 +1750,26 @@ def apply_patch(
                         )
                         audit.append(record)
                         continue
+                    # An evidence anchor that is not in the evidence is not an
+                    # anchor. See this function's docstring for the L10 case
+                    # this exists to prevent.
+                    if (
+                        source_text
+                        and op.predicate == "echr:hasSupportingQuote"
+                        and op.object_is_literal
+                    ):
+                        from art6.ontology.diagnostics.validate_source_quotes import (
+                            normalize,
+                            quote_verifies,
+                        )
+
+                        if not quote_verifies(op.object, normalize(source_text)):
+                            record["status"] = (
+                                "skipped: quote does not appear verbatim in the "
+                                "source document"
+                            )
+                            audit.append(record)
+                            continue
                 if op.action == "add" and not op.object_is_literal:
                     obj_prefix, _, obj_local = op.object.strip().partition(":")
                     if (
@@ -1509,6 +1875,9 @@ def _stage_structural_gaps(
             "flagged_isFinalDomesticDecision_conflict": find_final_decision_conflicts(
                 summaries
             ),
+            "flagged_missing_hasCourt_for": find_proceedings_missing_court(
+                graph, doc_ns
+            ),
         }
     if stage.key == "persons":
         return {
@@ -1531,6 +1900,7 @@ def _run_stage(
     temperature: float,
     passes: int,
     max_tokens: int,
+    source_text: str | None = None,
 ) -> tuple[Graph, bool, list[dict], list[str], list[dict]]:
     """Run one stage's repair loop against `graph`, optionally over several
     model calls. Returns the (possibly replaced) graph, whether anything
@@ -1566,7 +1936,10 @@ def _run_stage(
             for g in find_duplicate_candidates(graph)
             if g["class"] in stage.duplicate_classes
         ]
-        structural_gaps = _stage_structural_gaps(stage, graph, doc_ns)
+        structural_gaps = {
+            key: value[:MAX_GAP_ENTRIES_PER_PASS]
+            for key, value in _stage_structural_gaps(stage, graph, doc_ns).items()
+        }
 
         # Graph-derived findings are recomputed every pass; the extraction-time
         # validator report is a fixed artefact of the original file, so it only
@@ -1590,11 +1963,22 @@ def _run_stage(
             ]
             validator_findings = extraction_findings + shape_findings
 
+        unverified_quotes = None
+        if stage.needs_source_text:
+            if not source_text:
+                print(
+                    f"  [{stage.name}] {relative(facts_ttl)}: skipped, no source "
+                    "text available (pass --input-jsonl)"
+                )
+                return graph, False, audit, swept_all, timings
+            unverified_quotes = find_unverified_quotes(graph, source_text)
+
         if not (
             candidates
             or duplicate_groups
             or any(structural_gaps.values())
             or validator_findings
+            or unverified_quotes
         ):
             if pass_no == 1:
                 print(f"  [{stage.name}] {relative(facts_ttl)}: nothing flagged")
@@ -1611,6 +1995,8 @@ def _run_stage(
             duplicate_groups=duplicate_groups,
             structural_gaps=structural_gaps,
             validator_findings=validator_findings,
+            unverified_quotes=unverified_quotes,
+            source_text=source_text if stage.needs_source_text else None,
         )
         t_call = time.perf_counter()
         patch = call_repair_model(
@@ -1625,12 +2011,19 @@ def _run_stage(
             else f"    [{stage.name}] pass {pass_no}"
         )
         print(
-            f"{label}: {len(validator_findings)} finding(s) in; model proposed "
+            f"{label}: {len(validator_findings) + len(unverified_quotes or [])} "
+            f"finding(s) in; model proposed "
             f"{len(patch.groups)} group(s), {proposed_ops} op(s), "
             f"{len(patch.merges)} merge(s)"
         )
 
-        graph, pass_audit = apply_patch(graph, patch, doc_ns)
+        graph, pass_audit = apply_patch(
+            graph,
+            patch,
+            doc_ns,
+            source_text if stage.needs_source_text else None,
+            unverified_quotes=unverified_quotes,
+        )
         swept = sweep_stub_orphans(graph, doc_ns)
         if swept:
             swept_all.extend(swept)
@@ -1700,13 +2093,22 @@ def _run_stage(
         # editing around the problem rather than closing it, and a further pass
         # tends to keep doing that. Same signal OntoCast's own facts_gate uses
         # ("repair pass 1 did not reduce merge-signature errors (8 -> 8)").
-        remaining = len(
-            [
-                f
-                for f in find_shape_violations(graph)
-                if _finding_in_classes(graph, f, stage.filter_classes)
-            ]
-        )
+        #
+        # The quotes stage measures progress on UNVERIFIED QUOTES, not shape
+        # violations: it targets no class, so the shape count is 0 both sides
+        # and every pass would read as "did not fall" regardless of what it
+        # actually fixed.
+        if stage.needs_source_text:
+            before_count = len(unverified_quotes or [])
+            remaining = len(find_unverified_quotes(graph, source_text or ""))
+        else:
+            remaining = len(
+                [
+                    f
+                    for f in find_shape_violations(graph)
+                    if _finding_in_classes(graph, f, stage.filter_classes)
+                ]
+            )
         if pass_no < passes and remaining >= before_count:
             print(
                 f"    [{stage.name}] pass {pass_no}: {applied} op(s) applied but "
@@ -1726,6 +2128,7 @@ def repair_one(
     temperature: float = 0.4,
     passes: int = 1,
     max_tokens: int = 8000,
+    input_path: Path | None = None,
 ) -> dict:
     """Repair one facts graph, one LLM call per STAGES entry per pass.
 
@@ -1750,6 +2153,15 @@ def repair_one(
         print(f"  skip {relative(facts_ttl)}: no doc: namespace bound")
         return {"source": str(relative(facts_ttl)), "skipped": "no doc: namespace"}
 
+    # `<stem>.L<N>.facts.ttl` -> record N of the run's input file. Resolved once
+    # per document; the loader itself is cached across documents.
+    source_text = None
+    if input_path is not None:
+        match = re.search(r"\.L(\d+)\.facts\.ttl$", facts_ttl.name)
+        source_text = load_source_text(
+            input_path, int(match.group(1)) if match else None
+        )
+
     audit: list[dict] = []
     total_swept: list[str] = []
     stage_timings: list[dict] = []
@@ -1757,6 +2169,7 @@ def repair_one(
     changed = False
 
     for stage in STAGES:
+        t_stage = time.perf_counter()
         try:
             graph, stage_changed, stage_audit, stage_swept, stage_times = _run_stage(
                 graph,
@@ -1768,8 +2181,31 @@ def repair_one(
                 temperature=temperature,
                 passes=passes,
                 max_tokens=max_tokens,
+                source_text=source_text,
             )
         except Exception as exc:  # noqa: BLE001
+            # Bill the failed stage's wall clock to the MODEL, not to
+            # deterministic work. A stage that dies raises out of _run_stage
+            # before it can return its timing records, so before this the time
+            # vanished from `seconds_model_calls` while still counting in the
+            # document total -- and the difference between the two is what gets
+            # reported as deterministic. The effect was badly misleading: the
+            # 2026-08-24 run showed "347.7s deterministic" for a pass whose
+            # per-stage rows added up to 0.7s, because two runaway generations
+            # were being reported as if they were SHACL. A truncated draw is
+            # the model generating for three minutes; the timing must say so.
+            stage_timings.append(
+                {
+                    "stage": stage.key,
+                    "pass": 0,
+                    "seconds_total": round(time.perf_counter() - t_stage, 1),
+                    "seconds_model_call": round(time.perf_counter() - t_stage, 1),
+                    "seconds_deterministic": 0.0,
+                    "findings_in": 0,
+                    "ops_applied": 0,
+                    "failed": type(exc).__name__,
+                }
+            )
             # One stage failing must not discard the other two. Stages are
             # independent regions of the graph, and the shared `graph` is only
             # rebound on success -- so a truncated persons pass leaves the
@@ -1972,6 +2408,18 @@ def main() -> int:
         ),
     )
     parser.add_argument(
+        "--input-jsonl",
+        type=Path,
+        default=None,
+        help=(
+            "The run's input.jsonl (or .json), so the quote-fidelity stage can "
+            "check echr:hasSupportingQuote against the text it claims to come "
+            "from. Defaults to input.jsonl / input.json beside --facts-dir or "
+            "its parent. Without it that stage is skipped and every other "
+            "stage runs unchanged."
+        ),
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Propose and audit-log, but do not write .ttl files",
@@ -1994,6 +2442,23 @@ def main() -> int:
         f"  model: {args.model} @ {endpoint} "
         f"(temperature {args.temperature}, timeout {args.timeout}s)"
     )
+    # Look beside the facts dir first (run_arms.sh copies it there), then in the
+    # experiment root above it, matching where the standalone quote and date
+    # validators already look for their own input.
+    input_path = args.input_jsonl
+    if input_path is None:
+        for base in (args.facts_dir, args.facts_dir.parent):
+            for name in ("input.jsonl", "input.json"):
+                if (candidate := base / name).is_file():
+                    input_path = candidate
+                    break
+            if input_path is not None:
+                break
+    if input_path is not None:
+        print(f"  source text: {relative(input_path)} (quote stage enabled)")
+    else:
+        print("  source text: not found - the quote-fidelity stage will be skipped")
+
     warm_up_grammar(client, args.model)
 
     t_run = time.perf_counter()
@@ -2012,6 +2477,7 @@ def main() -> int:
                     dry_run=args.dry_run,
                     temperature=args.temperature,
                     max_tokens=args.max_tokens,
+                    input_path=input_path,
                 )
             )
         except Exception as exc:  # noqa: BLE001

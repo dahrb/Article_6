@@ -1,0 +1,80 @@
+{
+  "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L3.facts.ttl",
+  "timings": {
+    "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L3.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 5.3,
+    "seconds_model_calls": 5.1,
+    "seconds_deterministic": 0.2,
+    "model_calls": 2,
+    "by_stage": {
+      "proceedings": {
+        "passes": 1,
+        "seconds": 0.6,
+        "seconds_model_call": 0.6
+      },
+      "quotes": {
+        "passes": 1,
+        "seconds": 4.5,
+        "seconds_model_call": 4.5
+      }
+    },
+    "passes": [
+      {
+        "stage": "proceedings",
+        "pass": 1,
+        "seconds_total": 0.6,
+        "seconds_model_call": 0.6,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 0,
+        "ops_applied": 0,
+        "merges_applied": 0
+      },
+      {
+        "stage": "quotes",
+        "pass": 1,
+        "seconds_total": 4.5,
+        "seconds_model_call": 4.5,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 2,
+        "ops_applied": 1,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "The quote for doc:proceedingSaleAnnulmentRectification is a paraphrase/summary that merges multiple sentences and omits text. It must be replaced by the verbatim span from the source.",
+      "rationale": "The original quote 'On 30 June 2017, the 13th Chamber of the Supreme Administrative Court granted the request... and annulled the sale in question.' is not verbatim. The source text contains this information across paragraphs 37 and 38.",
+      "action": "remove",
+      "subject": "doc:proceedingSaleAnnulmentRectification",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "On 30 June 2017, the 13th Chamber of the Supreme Administrative Court granted the request... and annulled the sale in question.",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": "en",
+      "quote_index": 0,
+      "status": "skipped: triple not present",
+      "stage": "quotes",
+      "pass": 1
+    },
+    {
+      "finding": "The quote for doc:proceedingSaleAnnulmentRectification is a paraphrase/summary that merges multiple sentences and omits text. It must be replaced by the verbatim span from the source.",
+      "rationale": "The original quote 'On 30 June 2017, the 13th Chamber of the Supreme Administrative Court granted the request... and annulled the sale in question.' is not verbatim. The source text contains this information across paragraphs 37 and 38.",
+      "action": "add",
+      "subject": "doc:proceedingSaleAnnulmentRectification",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "On 30 June 2017, the 13 th Chamber of the Supreme Administrative Court granted the request, referring to the ruling of the General Assembly of 7 July 2015 which had annulled the Fund\u2019s decision of 13 January 2011 concerning the valuation of Viva TV-Radio Viva (see paragraph 29 above). The court held that the annulment in that judgment necessitated a fresh judicial review of the case.",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": "en",
+      "quote_index": null,
+      "status": "applied",
+      "stage": "quotes",
+      "pass": 1
+    }
+  ]
+}

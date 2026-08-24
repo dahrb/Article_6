@@ -1,0 +1,109 @@
+repairing 10 file(s) under results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2
+  model: gemma-4-31b @ http://localhost:8000/v1 (temperature 0.4, timeout 300.0s)
+  source text: results/experiment_arms_20260823_223700/nochunk_ttl_mv1/input.jsonl (quote stage enabled)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L1.facts.ttl: 3 finding(s) in; model proposed 2 group(s), 8 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 8 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [97.5s, 97.3s in the model]
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L1.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.5s, 0.5s in the model]
+    [domestic proceedings] pass 1: no operations applied - stopping
+    [persons and participation] FAILED: RepairTruncated: generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document
+    continuing to the next stage; earlier stages' work is kept
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L1.facts.ttl: nothing flagged
+    document total: 270.1s across 3 model call(s) (269.8s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L1.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/backup/input.L1.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L10.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [2.3s, 2.2s in the model]
+    [domestic authorities] pass 2: nothing left to flag - stopping
+    [domestic proceedings] FAILED: RepairTruncated: generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document
+    continuing to the next stage; earlier stages' work is kept
+    [persons and participation] FAILED: RepairTruncated: generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document
+    continuing to the next stage; earlier stages' work is kept
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L10.facts.ttl: 3 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 2, stub orphans swept 1 [93.2s, 93.2s in the model]
+    SKIPPED [The quote for doc:proceedingEnforcementJudgeDutch is almost verbatim but uses a hyphen in 'Dutch-language' which is not in the source for that specific sentence (the source says 'Brussels Dutch-language TPI' in paragraph 39, but the quote provided in the finding is 'the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI'). Looking at paragraph 39: 'the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI'. Wait, looking closer at the source text provided: 'the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI'. The quote is actually verbatim. However, the system flagged it as unverified. I will re-verify against the source. Paragraph 39: 'On the same date the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI'. The quote is 'the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI'. This is a verbatim substring. I will keep it as is by 'correcting' it to the exact substring if needed, but it seems correct. Let me double check the source text provided in the prompt. Paragraph 39: '...the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI...'. It is verbatim.] remove doc:proceedingEnforcementJudgeDutch echr:hasSupportingQuote the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI: applied (removed 1 quote(s) by index)
+    SKIPPED [The quote for doc:proceedingEnforcementJudgeDutch is almost verbatim but uses a hyphen in 'Dutch-language' which is not in the source for that specific sentence (the source says 'Brussels Dutch-language TPI' in paragraph 39, but the quote provided in the finding is 'the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI'). Looking at paragraph 39: 'the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI'. Wait, looking closer at the source text provided: 'the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI'. The quote is actually verbatim. However, the system flagged it as unverified. I will re-verify against the source. Paragraph 39: 'On the same date the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI'. The quote is 'the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI'. This is a verbatim substring. I will keep it as is by 'correcting' it to the exact substring if needed, but it seems correct. Let me double check the source text provided in the prompt. Paragraph 39: '...the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI...'. It is verbatim.] add doc:proceedingEnforcementJudgeDutch echr:hasSupportingQuote the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI: skipped: quote does not appear verbatim in the source document
+    [source quote fidelity] pass 2: 2 finding(s) in; model proposed 2 group(s), 4 op(s), 0 merge(s)
+    [source quote fidelity] pass 2: applied 3 (of which 0 merge(s)), skipped 4, stub orphans swept 2 [5.8s, 5.8s in the model]
+    SKIPPED [The quote for doc:proceedingTpiInterPartes is a near-verbatim match but contains a slight punctuation difference compared to the source text (missing the hyphen in 'French-language').] remove doc:proceedingTpiInterPartes echr:hasSupportingQuote On 7 November 2016 another judge acting as president of the French-language TPI declared their application admissible but unfounded: applied (removed 1 quote(s) by index)
+    SKIPPED [The quote for doc:proceedingTpiInterPartes is a near-verbatim match but contains a slight punctuation difference compared to the source text (missing the hyphen in 'French-language').] add doc:proceedingTpiInterPartes echr:hasSupportingQuote On 7 November 2016 another judge acting as president of the French-language TPI declared their application admissible but unfounded: skipped: quote does not appear verbatim in the source document
+    SKIPPED [The quote for doc:proceedingTpiDutchStay is a fragment of a sentence in the source text.] remove doc:proceedingTpiDutchStay echr:hasSupportingQuote lodged a unilateral action to that effect with the President of the Brussels Dutch-speaking TPI on 13 December 2016, but was unsuccessful: applied (removed 1 quote(s) by index)
+    SKIPPED [The quote for doc:proceedingTpiDutchStay is a fragment of a sentence in the source text.] add doc:proceedingTpiDutchStay echr:hasSupportingQuote lodged a unilateral action to that effect with the President of the Brussels Dutch-speaking TPI on 13 December 2016, but was unsuccessful: skipped: quote does not appear verbatim in the source document
+    [source quote fidelity] pass 3: nothing left to flag - stopping
+    document total: 447.3s across 5 model call(s) (447.1s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L10.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/backup/input.L10.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L2.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L2.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L2.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L2.facts.ttl: nothing flagged
+    document total: 0.1s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L3.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L3.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.6s, 0.6s in the model]
+    [domestic proceedings] pass 1: no operations applied - stopping
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L3.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L3.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [3.9s, 3.9s in the model]
+    SKIPPED [The quote for doc:proceedingSaleAnnulmentRectification is a paraphrase/summary that merges two separate paragraphs (37 and 38) and is not a verbatim span.] remove doc:proceedingSaleAnnulmentRectification echr:hasSupportingQuote On 30 June 2017, the 13th Chamber of the Supreme Administrative Court granted the request... and annulled the sale in question.: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 4.6s across 2 model call(s) (4.5s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L3.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/backup/input.L3.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L4.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L4.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L4.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L4.facts.ttl: nothing flagged
+    document total: 0.1s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L5.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L5.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L5.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L5.facts.ttl: nothing flagged
+    document total: 0.1s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L6.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L6.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L6.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L6.facts.ttl: nothing flagged
+    document total: 0.1s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L7.facts.ttl: 2 finding(s) in; model proposed 2 group(s), 12 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 12 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [15.2s, 15.2s in the model]
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L7.facts.ttl: 1 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [87.0s, 87.0s in the model]
+    [domestic proceedings] pass 1: no operations applied - stopping
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L7.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L7.facts.ttl: nothing flagged
+    document total: 102.3s across 2 model call(s) (102.2s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L7.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/backup/input.L7.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L8.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L8.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L8.facts.ttl: 0 finding(s) in; model proposed 8 group(s), 4 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 4 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.7s, 7.7s in the model]
+    [persons and participation] pass 1: 4 op(s) applied but findings did not fall (0 -> 0) - stopping
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L8.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [88.9s, 88.9s in the model]
+    SKIPPED [The quote 'provided for the purchase of the Stavanger for 2.5 million US dollars' is a paraphrase. The source text contains the verbatim span 'provided for the purchase by the Port of the Stavanger for 2.5 million US dollars'.] remove doc:admin_action_2 echr:hasSupportingQuote provided for the purchase of the Stavanger for 2.5 million US dollars: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 96.7s across 2 model call(s) (96.6s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L8.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/backup/input.L8.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L9.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L9.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L9.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L9.facts.ttl: nothing flagged
+    document total: 0.1s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  2/10 document(s) lost at least one stage but kept the others:
+    results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L1.facts.ttl  [persons] RepairTruncated
+    results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L10.facts.ttl  [proceedings] RepairTruncated
+    results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L10.facts.ttl  [persons] RepairTruncated
+  2 document/stage(s) hit the 8000-token output cap mid-patch -- re-run these with a higher --max-tokens:
+    results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L1.facts.ttl
+    results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final2/input.L10.facts.ttl
+
+  repair total: 921.5s over 10 document(s), 14 model call(s) (920.2s in the model, 1.3s deterministic)
+    authorities      3 call(s)    115.0s  (114.7s in the model)
+    proceedings      4 call(s)    260.8s  (260.8s in the model)
+    persons          3 call(s)    352.9s  (352.9s in the model)
+    quotes           4 call(s)    191.8s  (191.8s in the model)

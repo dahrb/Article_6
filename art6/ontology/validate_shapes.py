@@ -103,6 +103,54 @@ def defined_terms() -> frozenset[str]:
     return frozenset(t for t in terms if t.startswith(ECHR_NS))
 
 
+def find_undefined_terms(graph: Graph) -> list[tuple[str, str, str]]:
+    """Invented echr: vocabulary in `graph`, as (focus, path, message) rows.
+
+    A pure-Python twin of the two SPARQL constraints in
+    `undefined_term_shape()`, and the reason it exists is cost, not taste.
+    Every shape in echr-shapes.ttl is Core SHACL; those two constraints are the
+    only SHACL-AF in the whole shapes graph, and running pyshacl with
+    `advanced=True` to reach them is what made SHACL the repair pass's dominant
+    expense. Measured 2026-08-24 over 20 documents: 115.5s with advanced=True
+    against 0.2s with it off -- a 360x multiplier to evaluate two filters that
+    are a set membership test.
+
+    Both this and the SPARQL template read `defined_terms()`, so they cannot
+    disagree about what the ontology defines. Verified equivalent across every
+    document of the 2026-08-23 sweep.
+    """
+    allowed = defined_terms()
+    rows: list[tuple[str, str, str]] = []
+    for subj, pred, obj in graph:
+        if str(pred).startswith(ECHR_NS) and str(pred) not in allowed:
+            rows.append(
+                (
+                    str(subj),
+                    str(pred),
+                    (
+                        f"predicate {pred} is not a term the ontology "
+                        "defines - invented vocabulary"
+                    ),
+                )
+            )
+        if (
+            isinstance(obj, URIRef)
+            and str(obj).startswith(ECHR_NS)
+            and str(obj) not in allowed
+        ):
+            rows.append(
+                (
+                    str(subj),
+                    "",
+                    (
+                        f"object {obj} is not a term the ontology defines "
+                        "- invented vocabulary"
+                    ),
+                )
+            )
+    return sorted(set(rows))
+
+
 def undefined_term_shape() -> Graph:
     """A SHACL shape flagging any echr: term the ontology does not define.
 
@@ -135,15 +183,23 @@ def undefined_term_shape() -> Graph:
     return g
 
 
-def load_shapes(shapes_path: Path | None = None) -> Graph:
+def load_shapes(
+    shapes_path: Path | None = None, *, include_undefined_term_shape: bool = True
+) -> Graph:
     """The static shapes file plus the generated undefined-term shape.
 
     Every consumer goes through here rather than parsing SHAPES_PATH directly,
     so the vocabulary check is never silently absent from a validation run.
+
+    `include_undefined_term_shape=False` returns Core-SHACL-only shapes, for a
+    caller that runs `find_undefined_terms()` itself and can therefore validate
+    with `advanced=False`. That is not a way to skip the vocabulary check -- it
+    is a way to run it 360x faster; see `find_undefined_terms`.
     """
     g = Graph()
     g.parse(shapes_path or SHAPES_PATH, format="turtle")
-    g += undefined_term_shape()
+    if include_undefined_term_shape:
+        g += undefined_term_shape()
     return g
 
 

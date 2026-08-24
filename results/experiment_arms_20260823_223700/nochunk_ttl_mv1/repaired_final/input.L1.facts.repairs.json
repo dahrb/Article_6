@@ -1,0 +1,186 @@
+{
+  "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final/input.L1.facts.ttl",
+  "timings": {
+    "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_final/input.L1.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 97.3,
+    "seconds_model_calls": 97.1,
+    "seconds_deterministic": 0.2,
+    "model_calls": 3,
+    "by_stage": {
+      "authorities": {
+        "passes": 1,
+        "seconds": 9.2,
+        "seconds_model_call": 9.1
+      },
+      "proceedings": {
+        "passes": 1,
+        "seconds": 0.4,
+        "seconds_model_call": 0.4
+      },
+      "persons": {
+        "passes": 1,
+        "seconds": 87.6,
+        "seconds_model_call": 87.6
+      }
+    },
+    "passes": [
+      {
+        "stage": "authorities",
+        "pass": 1,
+        "seconds_total": 9.2,
+        "seconds_model_call": 9.1,
+        "seconds_deterministic": 0.1,
+        "findings_in": 3,
+        "ops_proposed": 8,
+        "ops_applied": 8,
+        "merges_applied": 0
+      },
+      {
+        "stage": "proceedings",
+        "pass": 1,
+        "seconds_total": 0.4,
+        "seconds_model_call": 0.4,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 0,
+        "ops_applied": 0,
+        "merges_applied": 0
+      },
+      {
+        "stage": "persons",
+        "pass": 1,
+        "seconds_total": 87.6,
+        "seconds_model_call": 87.6,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 0,
+        "ops_applied": 0,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:mayorRila contains labels for both the 'Mayor of Rila' and the 'Ruse Municipal Council'. These are distinct administrative bodies. I am keeping the Mayor of Rila as the primary identity for this node and creating a new node for the Ruse Municipal Council.",
+      "action": "remove",
+      "subject": "doc:mayorRila",
+      "predicate": "rdfs:label",
+      "object": "\"Ruse Municipal Council\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:mayorRila contains labels for both the 'Mayor of Rila' and the 'Ruse Municipal Council'. These are distinct administrative bodies. I am keeping the Mayor of Rila as the primary identity for this node and creating a new node for the Ruse Municipal Council.",
+      "action": "add",
+      "subject": "doc:ruse_municipal_council",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticAuthority",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:mayorRila contains labels for both the 'Mayor of Rila' and the 'Ruse Municipal Council'. These are distinct administrative bodies. I am keeping the Mayor of Rila as the primary identity for this node and creating a new node for the Ruse Municipal Council.",
+      "action": "add",
+      "subject": "doc:ruse_municipal_council",
+      "predicate": "rdfs:label",
+      "object": "\"Ruse Municipal Council\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:mayorRila contains labels for both the 'Mayor of Rila' and the 'Ruse Municipal Council'. These are distinct administrative bodies. I am keeping the Mayor of Rila as the primary identity for this node and creating a new node for the Ruse Municipal Council.",
+      "action": "add",
+      "subject": "doc:ruse_municipal_council",
+      "predicate": "echr:hasAuthorityName",
+      "object": "\"Ruse Municipal Council\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:mayorRila contains labels for both the 'Mayor of Rila' and the 'Ruse Municipal Council'. These are distinct administrative bodies. I am keeping the Mayor of Rila as the primary identity for this node and creating a new node for the Ruse Municipal Council.",
+      "action": "add",
+      "subject": "doc:ruse_municipal_council",
+      "predicate": "echr:hasAuthorityKind",
+      "object": "echr:AuthorityAdministrative",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:mayorRila contains labels for both the 'Mayor of Rila' and the 'Ruse Municipal Council'. These are distinct administrative bodies. I am keeping the Mayor of Rila as the primary identity for this node and creating a new node for the Ruse Municipal Council.",
+      "action": "add",
+      "subject": "doc:ruse_municipal_council",
+      "predicate": "echr:hasJurisdictionState",
+      "object": "\"Bulgaria\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node doc:mayorRila is missing the required echr:hasAuthorityName property; promoting the remaining label to the name.",
+      "action": "add",
+      "subject": "doc:mayorRila",
+      "predicate": "echr:hasAuthorityName",
+      "object": "\"Mayor of Rila\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node doc:ruseRegionalProsecutor is missing the required echr:hasAuthorityName property; promoting the label to the name.",
+      "action": "add",
+      "subject": "doc:ruseRegionalProsecutor",
+      "predicate": "echr:hasAuthorityName",
+      "object": "\"Ruse regional prosecutor\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+repairing 10 file(s) under results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed
+  model: gemma-4-31b @ http://localhost:8000/v1 (temperature 0.4, timeout 300.0s)
+  source text: results/experiment_arms_20260823_223700/nochunk_ttl_mv1/input.jsonl (quote stage enabled)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L1.facts.ttl: 3 finding(s) in; model proposed 3 group(s), 8 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 7 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [12.2s, 12.0s in the model]
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:mayorRila rdfs:label "Ruse Municipal Council": skipped: triple not present
+    [domestic authorities] pass 2: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic authorities] pass 2: applied 0 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [2.1s, 2.1s in the model]
+    SKIPPED [The node doc:mayorRila has two distinct labels: "Ruse Municipal Council" and "Mayor of Rila". The evidence in the name and the label "Mayor of Rila" suggests this node represents the Mayor. "Ruse Municipal Council" is a separate administrative body (already existing as doc:ruse_municipal_council).] remove doc:mayorRila rdfs:label "Ruse Municipal Council": skipped: triple not present
+    [domestic authorities] pass 2: no operations applied - stopping
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L1.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.7s, 0.7s in the model]
+    [domestic proceedings] pass 1: no operations applied - stopping
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L1.facts.ttl: 1 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.4s, 0.4s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L1.facts.ttl: nothing flagged
+    document total: 15.5s across 4 model call(s) (15.2s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L1.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/backup/input.L1.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L10.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [2.5s, 2.5s in the model]
+    [domestic authorities] pass 2: nothing left to flag - stopping
+    [domestic proceedings] FAILED: RepairTruncated: generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document
+    continuing to the next stage; earlier stages' work is kept
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L10.facts.ttl: 1 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.4s, 0.4s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L10.facts.ttl: 3 finding(s) in; model proposed 3 group(s), 6 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 3 (of which 0 merge(s)), skipped 3, stub orphans swept 0 [9.0s, 9.0s in the model]
+    SKIPPED [The quote for doc:proceedingTpiDutchStay contains a minor punctuation discrepancy (hyphen vs space-hyphen-space) compared to the source text.] remove doc:proceedingTpiDutchStay echr:hasSupportingQuote lodged a unilateral action to that effect with the President of the Brussels Dutch-speaking TPI on 13 December 2016, but was unsuccessful: skipped: triple not present
+    SKIPPED [The quote for doc:proceedingEnforcementJudgeDutch is missing the date mentioned in the source sentence.] remove doc:proceedingEnforcementJudgeDutch echr:hasSupportingQuote the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI: skipped: triple not present
+    SKIPPED [The quote for doc:proceedingTpiInterPartes contains a minor punctuation discrepancy (hyphen vs space-hyphen-space) compared to the source text.] remove doc:proceedingTpiInterPartes echr:hasSupportingQuote On 7 November 2016 another judge acting as president of the French-language TPI declared their application admissible but unfounded: skipped: triple not present
+    [source quote fidelity] pass 1: 3 op(s) applied but findings did not fall (3 -> 3) - stopping
+    document total: 186.1s across 3 model call(s) (11.9s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L10.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/backup/input.L10.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L2.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L2.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L2.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L2.facts.ttl: nothing flagged
+    document total: 0.1s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L3.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L3.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.6s, 0.6s in the model]
+    [domestic proceedings] pass 1: no operations applied - stopping
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L3.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L3.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 1 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [4.5s, 4.5s in the model]
+    SKIPPED [The quote for doc:proceedingSaleAnnulmentRectification is a paraphrase/summary that merges multiple sentences and omits text. It must be replaced by the verbatim span from the source.] remove doc:proceedingSaleAnnulmentRectification echr:hasSupportingQuote On 30 June 2017, the 13th Chamber of the Supreme Administrative Court granted the request... and annulled the sale in question.: skipped: triple not present
+    [source quote fidelity] pass 1: 1 op(s) applied but findings did not fall (1 -> 1) - stopping
+    document total: 5.3s across 2 model call(s) (5.1s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L3.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/backup/input.L3.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L4.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L4.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L4.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L4.facts.ttl: nothing flagged
+    document total: 0.1s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L5.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L5.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L5.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L5.facts.ttl: nothing flagged
+    document total: 0.1s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L6.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L6.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L6.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L6.facts.ttl: nothing flagged
+    document total: 0.1s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L7.facts.ttl: 2 finding(s) in; model proposed 2 group(s), 4 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 1 (of which 0 merge(s)), skipped 3, stub orphans swept 0 [5.1s, 5.1s in the model]
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:courtPotts rdfs:label "Court of Appeal": skipped: triple not present
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:courtPotts rdfs:label "High Court of the United Kingdom": skipped: triple not present
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:courtPotts rdfs:label "House of Lords": skipped: triple not present
+    [domestic authorities] pass 2: 1 finding(s) in; model proposed 1 group(s), 18 op(s), 0 merge(s)
+    [domestic authorities] pass 2: applied 15 (of which 0 merge(s)), skipped 3, stub orphans swept 0 [14.1s, 14.1s in the model]
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:courtPotts rdfs:label "House of Lords": skipped: triple not present
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:courtPotts rdfs:label "High Court of the United Kingdom": skipped: triple not present
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:courtPotts rdfs:label "Court of Appeal": skipped: triple not present
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L7.facts.ttl: 1 finding(s) in; model proposed 3 group(s), 9 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 6 (of which 0 merge(s)), skipped 3, stub orphans swept 0 [14.0s, 13.9s in the model]
+    SKIPPED [The node doc:courtPotts has multiple labels that belong to other entities, and its name 'Mr Justice Potts and a jury' only describes the trial court.] remove doc:courtPotts rdfs:label "House of Lords": skipped: triple not present
+    SKIPPED [The node doc:courtPotts has multiple labels that belong to other entities, and its name 'Mr Justice Potts and a jury' only describes the trial court.] remove doc:courtPotts rdfs:label "High Court of the United Kingdom": skipped: triple not present
+    SKIPPED [The node doc:courtPotts has multiple labels that belong to other entities, and its name 'Mr Justice Potts and a jury' only describes the trial court.] remove doc:courtPotts rdfs:label "Court of Appeal": skipped: triple not present
+    [domestic proceedings] pass 1: 6 op(s) applied but findings did not fall (0 -> 0) - stopping
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L7.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L7.facts.ttl: nothing flagged
+    document total: 33.3s across 3 model call(s) (33.1s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L7.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/backup/input.L7.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L8.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L8.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L8.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.4s, 0.4s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+    [source quote fidelity] FAILED: RepairTruncated: generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document
+    continuing to the next stage; earlier stages' work is kept
+    document total: 172.8s across 1 model call(s) (0.4s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L9.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L9.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L9.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L9.facts.ttl: nothing flagged
+    document total: 0.1s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  2/10 document(s) lost at least one stage but kept the others:
+    results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L10.facts.ttl  [proceedings] RepairTruncated
+    results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L8.facts.ttl  [quotes] RepairTruncated
+  2 document/stage(s) hit the 8000-token output cap mid-patch -- re-run these with a higher --max-tokens:
+    results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L10.facts.ttl
+    results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L8.facts.ttl
+
+  repair total: 413.4s over 10 document(s), 13 model call(s) (65.7s in the model, 347.7s deterministic)
+    authorities      5 call(s)     36.0s  (35.8s in the model)
+    proceedings      3 call(s)     15.3s  (15.2s in the model)
+    persons          3 call(s)      1.2s  (1.2s in the model)
+    quotes           2 call(s)     13.5s  (13.5s in the model)

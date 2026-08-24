@@ -1,0 +1,88 @@
+repairing 10 file(s) under results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder
+  model: gemma-4-31b @ http://localhost:8000/v1 (temperature 0.4, timeout 300.0s)
+  source text: not found - the quote-fidelity stage will be skipped
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L1.facts.ttl: 5 finding(s) in; model proposed 5 group(s), 5 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 5 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [13.4s, 7.3s in the model]
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L1.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L1.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.6s, 0.5s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L1.facts.ttl: skipped, no source text available (pass --input-jsonl)
+    document total: 20.0s across 2 model call(s) (7.8s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L1.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/backup/input.L1.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L10.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L10.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L10.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 1 [0.4s, 0.4s in the model]
+    [persons and participation] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L10.facts.ttl: skipped, no source text available (pass --input-jsonl)
+    document total: 13.8s across 1 model call(s) (0.4s in the model)
+    wrote results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L10.facts.ttl (backup at results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/backup/input.L10.facts.ttl)
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L2.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L2.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.5s, 0.5s in the model]
+    [domestic proceedings] pass 1: no operations applied - stopping
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L2.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L2.facts.ttl: skipped, no source text available (pass --input-jsonl)
+    document total: 4.8s across 1 model call(s) (0.5s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L3.facts.ttl: 2 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 0 (of which 0 merge(s)), skipped 2, stub orphans swept 0 [8.5s, 3.1s in the model]
+    SKIPPED [The node doc:supremeAdminCourt has multiple values for echr:hasAuthorityName and rdfs:label. The evidence suggests these refer to the same body (the Supreme Administrative Court and its General Assembly), but the ontology requires a single functional name. The more specific name 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court' is the precise deciding body in this context.] remove doc:supremeAdminCourt echr:hasAuthorityName "Supreme Administrative Court": skipped: triple not present
+    SKIPPED [The node doc:supremeAdminCourt has multiple values for echr:hasAuthorityName and rdfs:label. The evidence suggests these refer to the same body (the Supreme Administrative Court and its General Assembly), but the ontology requires a single functional name. The more specific name 'General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court' is the precise deciding body in this context.] remove doc:supremeAdminCourt rdfs:label "Supreme Administrative Court": skipped: triple not present
+    [domestic authorities] pass 1: no operations applied - stopping
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L3.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.4s, 0.4s in the model]
+    [domestic proceedings] pass 1: no operations applied - stopping
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L3.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.3s, 0.3s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L3.facts.ttl: skipped, no source text available (pass --input-jsonl)
+    document total: 9.3s across 3 model call(s) (3.8s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L4.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L4.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L4.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.3s, 0.3s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L4.facts.ttl: skipped, no source text available (pass --input-jsonl)
+    document total: 4.2s across 1 model call(s) (0.3s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L5.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L5.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L5.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L5.facts.ttl: skipped, no source text available (pass --input-jsonl)
+    document total: 6.2s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L6.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L6.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L6.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L6.facts.ttl: skipped, no source text available (pass --input-jsonl)
+    document total: 7.9s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L7.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L7.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L7.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L7.facts.ttl: skipped, no source text available (pass --input-jsonl)
+    document total: 4.4s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L8.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L8.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L8.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.5s, 0.4s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L8.facts.ttl: skipped, no source text available (pass --input-jsonl)
+    document total: 6.0s across 1 model call(s) (0.4s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L9.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L9.facts.ttl: nothing flagged
+  [persons and participation] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L9.facts.ttl: nothing flagged
+  [source quote fidelity] results/experiment_arms_20260823_223700/nochunk_jsonld_mv1/repaired_reorder/input.L9.facts.ttl: skipped, no source text available (pass --input-jsonl)
+    document total: 4.4s across 0 model call(s) (0s in the model)
+    no net change across all stages; leaving the file untouched
+
+  repair total: 80.9s over 10 document(s), 9 model call(s) (13.2s in the model, 67.7s deterministic)
+    authorities      2 call(s)     21.9s  (10.4s in the model)
+    persons          5 call(s)      2.1s  (1.9s in the model)
+    proceedings      2 call(s)      0.9s  (0.9s in the model)

@@ -1,0 +1,247 @@
+{
+  "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v3/input.L1.facts.ttl",
+  "timings": {
+    "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v3/input.L1.facts.ttl",
+    "changed": true,
+    "stage_failures": [
+      {
+        "stage": "proceedings",
+        "error": "RepairTruncated",
+        "message": "generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document"
+      }
+    ],
+    "seconds_total": 190.2,
+    "seconds_model_calls": 190.0,
+    "seconds_deterministic": 0.2,
+    "model_calls": 4,
+    "by_stage": {
+      "authorities": {
+        "passes": 2,
+        "seconds": 11.2,
+        "seconds_model_call": 11.1
+      },
+      "proceedings": {
+        "passes": 1,
+        "seconds": 175.4,
+        "seconds_model_call": 175.4
+      },
+      "persons": {
+        "passes": 1,
+        "seconds": 3.5,
+        "seconds_model_call": 3.5
+      }
+    },
+    "passes": [
+      {
+        "stage": "authorities",
+        "pass": 1,
+        "seconds_total": 8.9,
+        "seconds_model_call": 8.8,
+        "seconds_deterministic": 0.1,
+        "findings_in": 3,
+        "ops_proposed": 8,
+        "ops_applied": 7,
+        "merges_applied": 0
+      },
+      {
+        "stage": "authorities",
+        "pass": 2,
+        "seconds_total": 2.3,
+        "seconds_model_call": 2.3,
+        "seconds_deterministic": 0.0,
+        "findings_in": 1,
+        "ops_proposed": 1,
+        "ops_applied": 0,
+        "merges_applied": 0
+      },
+      {
+        "stage": "proceedings",
+        "pass": 0,
+        "seconds_total": 175.4,
+        "seconds_model_call": 175.4,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_applied": 0,
+        "failed": "RepairTruncated"
+      },
+      {
+        "stage": "persons",
+        "pass": 1,
+        "seconds_total": 3.5,
+        "seconds_model_call": 3.5,
+        "seconds_deterministic": 0.0,
+        "findings_in": 1,
+        "ops_proposed": 2,
+        "ops_applied": 2,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:mayorRila contains labels for both the 'Mayor of Rila' and the 'Ruse Municipal Council'. These are distinct administrative bodies. I am keeping the Mayor of Rila in the existing node and creating a new node for the Ruse Municipal Council.",
+      "action": "remove",
+      "subject": "doc:mayorRila",
+      "predicate": "rdfs:label",
+      "object": "\"Ruse Municipal Council\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "skipped: triple not present",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:mayorRila contains labels for both the 'Mayor of Rila' and the 'Ruse Municipal Council'. These are distinct administrative bodies. I am keeping the Mayor of Rila in the existing node and creating a new node for the Ruse Municipal Council.",
+      "action": "add",
+      "subject": "doc:ruse_municipal_council",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticAuthority",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:mayorRila contains labels for both the 'Mayor of Rila' and the 'Ruse Municipal Council'. These are distinct administrative bodies. I am keeping the Mayor of Rila in the existing node and creating a new node for the Ruse Municipal Council.",
+      "action": "add",
+      "subject": "doc:ruse_municipal_council",
+      "predicate": "rdfs:label",
+      "object": "\"Ruse Municipal Council\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:mayorRila contains labels for both the 'Mayor of Rila' and the 'Ruse Municipal Council'. These are distinct administrative bodies. I am keeping the Mayor of Rila in the existing node and creating a new node for the Ruse Municipal Council.",
+      "action": "add",
+      "subject": "doc:ruse_municipal_council",
+      "predicate": "echr:hasAuthorityName",
+      "object": "\"Ruse Municipal Council\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:mayorRila contains labels for both the 'Mayor of Rila' and the 'Ruse Municipal Council'. These are distinct administrative bodies. I am keeping the Mayor of Rila in the existing node and creating a new node for the Ruse Municipal Council.",
+      "action": "add",
+      "subject": "doc:ruse_municipal_council",
+      "predicate": "echr:hasAuthorityKind",
+      "object": "echr:AuthorityAdministrative",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:mayorRila contains labels for both the 'Mayor of Rila' and the 'Ruse Municipal Council'. These are distinct administrative bodies. I am keeping the Mayor of Rila in the existing node and creating a new node for the Ruse Municipal Council.",
+      "action": "add",
+      "subject": "doc:ruse_municipal_council",
+      "predicate": "echr:hasJurisdictionState",
+      "object": "\"Bulgaria\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node doc:ruseRegionalProsecutor is missing an echr:hasAuthorityName. I am promoting the rdfs:label to the required property.",
+      "action": "add",
+      "subject": "doc:ruseRegionalProsecutor",
+      "predicate": "echr:hasAuthorityName",
+      "object": "\"Ruse regional prosecutor\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node doc:mayorRila is missing an echr:hasAuthorityName. I am promoting the remaining rdfs:label to the required property.",
+      "action": "add",
+      "subject": "doc:mayorRila",
+      "predicate": "echr:hasAuthorityName",
+      "object": "\"Mayor of Rila\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "The node doc:mayorRila has two labels: \"Mayor of Rila\" and \"Ruse Municipal Council\". These are clearly distinct administrative authorities. Since the node's other properties (name, kind) align with the Mayor of Rila, the Ruse Municipal Council label must be removed. A separate node for the Ruse Municipal Council already exists (doc:ruse_municipal_council).",
+      "rationale": "Cardinality violation on rdfs:label; the labels refer to different entities.",
+      "action": "remove",
+      "subject": "doc:mayorRila",
+      "predicate": "rdfs:label",
+      "object": "\"Ruse Municipal Council\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "skipped: triple not present",
+      "stage": "authorities",
+      "pass": 2
+    },
+    {
+      "finding": "doc:lawyerGenova is a NaturalPerson with an honorific 'Ms' in the name, which indicates female gender.",
+      "rationale": "The name 'Ms A. Genova' contains the honorific 'Ms', which is an explicit cue for echr:GenderFemale.",
+      "action": "add",
+      "subject": "doc:lawyerGenova",
+      "predicate": "echr:hasGender",
+      "object": "echr:GenderFemale",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    },
+    {
+      "finding": "doc:stanev is a NaturalPerson with an honorific 'Mr' in the name, which indicates male gender.",
+      "rationale": "The name 'Mr Rusi Kosev Stanev' contains the honorific 'Mr', which is an explicit cue for echr:GenderMale.",
+      "action": "add",
+      "subject": "doc:stanev",
+      "predicate": "echr:hasGender",
+      "object": "echr:GenderMale",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    }
+  ]
+}

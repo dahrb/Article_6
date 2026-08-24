@@ -1,0 +1,166 @@
+{
+  "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v3/input.L7.facts.ttl",
+  "timings": {
+    "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_v3/input.L7.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 11.2,
+    "seconds_model_calls": 11.1,
+    "seconds_deterministic": 0.1,
+    "model_calls": 3,
+    "by_stage": {
+      "authorities": {
+        "passes": 2,
+        "seconds": 10.6,
+        "seconds_model_call": 10.6
+      },
+      "proceedings": {
+        "passes": 1,
+        "seconds": 0.5,
+        "seconds_model_call": 0.5
+      }
+    },
+    "passes": [
+      {
+        "stage": "authorities",
+        "pass": 1,
+        "seconds_total": 7.1,
+        "seconds_model_call": 7.1,
+        "seconds_deterministic": 0.0,
+        "findings_in": 2,
+        "ops_proposed": 4,
+        "ops_applied": 1,
+        "merges_applied": 0
+      },
+      {
+        "stage": "authorities",
+        "pass": 2,
+        "seconds_total": 3.5,
+        "seconds_model_call": 3.5,
+        "seconds_deterministic": 0.0,
+        "findings_in": 1,
+        "ops_proposed": 3,
+        "ops_applied": 0,
+        "merges_applied": 0
+      },
+      {
+        "stage": "proceedings",
+        "pass": 1,
+        "seconds_total": 0.5,
+        "seconds_model_call": 0.5,
+        "seconds_deterministic": 0.0,
+        "findings_in": 1,
+        "ops_proposed": 0,
+        "ops_applied": 0,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:courtPotts contains labels for multiple distinct judicial levels (High Court, Court of Appeal, House of Lords). These are separate authorities. I will keep the label and name associated with Mr Justice Potts (the trial court) and remove the others. Since the ontology for this stage focuses on DomesticAuthority, and I cannot create new nodes without specific instructions for 'candidate nodes to retype' or 'gaps' (which are empty here), I am cleaning the existing node to represent the specific authority it was primarily named after.",
+      "action": "remove",
+      "subject": "doc:courtPotts",
+      "predicate": "rdfs:label",
+      "object": "\"Court of Appeal\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "skipped: triple not present",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:courtPotts contains labels for multiple distinct judicial levels (High Court, Court of Appeal, House of Lords). These are separate authorities. I will keep the label and name associated with Mr Justice Potts (the trial court) and remove the others. Since the ontology for this stage focuses on DomesticAuthority, and I cannot create new nodes without specific instructions for 'candidate nodes to retype' or 'gaps' (which are empty here), I am cleaning the existing node to represent the specific authority it was primarily named after.",
+      "action": "remove",
+      "subject": "doc:courtPotts",
+      "predicate": "rdfs:label",
+      "object": "\"High Court of the United Kingdom\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "skipped: triple not present",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:courtPotts contains labels for multiple distinct judicial levels (High Court, Court of Appeal, House of Lords). These are separate authorities. I will keep the label and name associated with Mr Justice Potts (the trial court) and remove the others. Since the ontology for this stage focuses on DomesticAuthority, and I cannot create new nodes without specific instructions for 'candidate nodes to retype' or 'gaps' (which are empty here), I am cleaning the existing node to represent the specific authority it was primarily named after.",
+      "action": "remove",
+      "subject": "doc:courtPotts",
+      "predicate": "rdfs:label",
+      "object": "\"House of Lords\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "skipped: triple not present",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node doc:prosecutionUk is missing the required echr:hasAuthorityName property. I will promote its rdfs:label to the official authority name.",
+      "action": "add",
+      "subject": "doc:prosecutionUk",
+      "predicate": "echr:hasAuthorityName",
+      "object": "\"British Prosecution\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:courtPotts contains labels for multiple distinct judicial bodies (Court of Appeal, House of Lords, High Court). Based on the authority name 'Mr Justice Potts and a jury', this node specifically represents the trial court. I am removing the labels belonging to the appellate courts.",
+      "action": "remove",
+      "subject": "doc:courtPotts",
+      "predicate": "rdfs:label",
+      "object": "\"Court of Appeal\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "skipped: triple not present",
+      "stage": "authorities",
+      "pass": 2
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:courtPotts contains labels for multiple distinct judicial bodies (Court of Appeal, House of Lords, High Court). Based on the authority name 'Mr Justice Potts and a jury', this node specifically represents the trial court. I am removing the labels belonging to the appellate courts.",
+      "action": "remove",
+      "subject": "doc:courtPotts",
+      "predicate": "rdfs:label",
+      "object": "\"House of Lords\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "skipped: triple not present",
+      "stage": "authorities",
+      "pass": 2
+    },
+    {
+      "finding": "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice",
+      "rationale": "The node doc:courtPotts contains labels for multiple distinct judicial bodies (Court of Appeal, House of Lords, High Court). Based on the authority name 'Mr Justice Potts and a jury', this node specifically represents the trial court. I am removing the labels belonging to the appellate courts.",
+      "action": "remove",
+      "subject": "doc:courtPotts",
+      "predicate": "rdfs:label",
+      "object": "\"High Court of the United Kingdom\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "skipped: triple not present",
+      "stage": "authorities",
+      "pass": 2
+    }
+  ]
+}

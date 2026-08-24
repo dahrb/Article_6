@@ -63,18 +63,70 @@ ONTOCAST_REPO="${ONTOCAST_REPO:-$(cd "${REPO_ROOT}/../.." && pwd)/ontocast}"
 
 # key|mode|chunk_min|chunk_max|max_visits|graph_format
 #
-# Each arm below varies exactly ONE field from nochunk_ttl_mv1, which is the
-# baseline. Read the table top to bottom as: baseline, format, max-visits,
-# then the two rolling chunk sizes.
+# STATUS: the 2026-08-23 defaults are PENDING RE-DECISION on the JURIX config
+# pilot (docs/jurix_plan.md, "The O2 configuration is settled by a pilot").
+# They were chosen on connectivity, conformance and cost, with NO recall
+# measure involved -- and recall is the axis that actually varies. On the same
+# ten documents, counted 2026-08-24:
+#
+#            events  persons  quote-verbatim  dup rate
+#   nochunk ttl          76       15              94%      1.3%
+#   nochunk jsonld       58       10             100%      3.4%
+#   rolling 3k/6k       159       42              96%      4.4%
+#
+# turtle found 31% more events and 50% more persons than jsonld at nochunk,
+# and the chunk size deprioritised as expensive found 2x the events of either.
+# Precision is near-saturated everywhere (94-100% quote fidelity, 1-6%
+# duplicates) while recall spans 58->159, so the earlier ranking optimised the
+# flat axis. Do not treat the notes below as settled until the pilot re-runs.
+#
+# WHAT THE 2026-08-23 SWEEP DID SETTLE, and still stands:
+#   max_visits  1. mv2 cost +54% wall clock at nochunk and ended at the same
+#               conformance with one MORE violation after repair. Nothing to
+#               recover: both arms lost zero units. NOT a pilot axis.
+#
+# WHAT IT DID NOT SETTLE, now crossed in the pilot:
+#   format      jsonld was preferred on graph connectivity (1 proceeding
+#               without a court against turtle's 19) and conformance. But
+#               jsonld costs 2.5x turtle's tokens for the same graph (57,374
+#               vs 22,897, unpruned ontology), and in `rolling` mode the
+#               carried graph is re-injected every prompt -- so format decides
+#               how much context is left for document text. That interaction
+#               cannot exist at nochunk, where the graph is never fed back,
+#               which is why format is crossed with assembly rather than fixed.
+#   chunk       8000/16000 was 41% cheaper to extract, 61% cheaper to repair
+#               and halved SHACL violations against 3000/6000 -- all precision
+#               and cost measures. 3000/6000 found 2x the events. Both stay in.
+#
+# THE EIGHT PILOT ARMS: 4 assembly modes x 2 graph formats, max_visits fixed
+# at 1. Selection is on RECALL at the raw/ checkpoint, with precision at
+# repaired/ as a constraint (duplicate rate < 10%, quote-verbatim within 3
+# points of the best arm) -- never as the objective. Ranking these by
+# precision selects all the whole-document arms and excludes every chunked
+# one, i.e. it excludes exactly the arms with 2-3x the recall.
 ARM_SPECS=(
-    "nochunk_ttl_mv1|native|20000|50000|1|turtle"
+    "pilot_nochunk_ttl|native|20000|50000|1|turtle"
+    "pilot_nochunk_jsonld|native|20000|50000|1|jsonld"
+    "pilot_fanout_8k16k_ttl|native|8000|16000|1|turtle"
+    "pilot_fanout_8k16k_jsonld|native|8000|16000|1|jsonld"
+    "pilot_rolling_8k16k_ttl|rolling|8000|16000|1|turtle"
+    "pilot_rolling_8k16k_jsonld|rolling|8000|16000|1|jsonld"
+    "pilot_rolling_3k6k_ttl|rolling|3000|6000|1|turtle"
+    "pilot_rolling_3k6k_jsonld|rolling|3000|6000|1|jsonld"
+
+    # The 2026-08-23 sweep, kept verbatim so it stays re-runnable.
     "nochunk_jsonld_mv1|native|20000|50000|1|jsonld"
+    "rolling_8k16k_jsonld_mv1|rolling|8000|16000|1|jsonld"
+    "nochunk_ttl_mv1|native|20000|50000|1|turtle"
     "nochunk_ttl_mv2|native|20000|50000|2|turtle"
     "rolling_3k6k_mv1|rolling|3000|6000|1|turtle"
     "rolling_8k16k_mv1|rolling|8000|16000|1|turtle"
 )
 
-ARMS="${ARMS:-nochunk_ttl_mv1 nochunk_jsonld_mv1 nochunk_ttl_mv2 rolling_3k6k_mv1 rolling_8k16k_mv1}"
+# Default is the eight-arm config pilot. Until it runs there is no settled
+# configuration to default to -- naming one would re-assert the very choice
+# the pilot exists to re-decide. ARMS="..." names any subset.
+ARMS="${ARMS:-pilot_nochunk_ttl pilot_nochunk_jsonld pilot_fanout_8k16k_ttl pilot_fanout_8k16k_jsonld pilot_rolling_8k16k_ttl pilot_rolling_8k16k_jsonld pilot_rolling_3k6k_ttl pilot_rolling_3k6k_jsonld}"
 
 # The single model every arm uses. Arms vary the pipeline, never the LLM.
 MODEL_NAME="${MODEL_NAME:-gemma-4-31b}"
@@ -86,10 +138,10 @@ PROJECT_BASE="${PROJECT_BASE:-art6_gemma4}"
 # 1-op answer, an empty decline, and a runaway generation that never closed).
 TEMPERATURE="${TEMPERATURE:-0.4}"
 
-# Repair passes PER STAGE. repair_facts.py now runs three staged calls
-# (proceedings / persons / authorities), so --passes N costs up to 3N calls per
-# document, not N. run_experiment.sh's default of 4 would mean a ceiling of 12
-# calls/document; 2 keeps the worst case at 6. The loop stops early on a clean
+# Repair passes PER STAGE. repair_facts.py runs FOUR staged calls (authorities /
+# proceedings / persons / quotes), so --passes N costs up to 4N calls per
+# document, not N. run_experiment.sh's default of 4 would mean a ceiling of 16
+# calls/document; 2 keeps the worst case at 8. The loop stops early on a clean
 # stage or a no-op pass, so this is a ceiling rather than a fixed cost.
 REPAIR_PASSES="${REPAIR_PASSES:-2}"
 
@@ -401,6 +453,7 @@ for arm in ${ARMS}; do
         --base-url "${BASE_URL}" \
         --api-key "${VLLM_API_KEY}" \
         --temperature "${TEMPERATURE}" \
+        --input-jsonl "${INPUT_JSONL}" \
         --passes "${REPAIR_PASSES}") 2>&1 | tee "${arm_dir}/repair.log"
     repair_rc=${PIPESTATUS[0]}
     set -e

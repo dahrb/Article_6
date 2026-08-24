@@ -1,0 +1,125 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/2113a3694307/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/2113a3694307> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:7"^^xsd:string .
+
+doc:appealHouseLords a echr:DomesticProceeding ;
+    rdfs:label "Petition to the House of Lords"^^xsd:string ;
+    echr:followsProceeding doc:appealCourtAppeal ;
+    echr:hasCourt doc:house_of_lords_uk ;
+    echr:hasDecisionDate "2000-06-15"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partLordsSawoniuk ;
+    echr:hasSupportingQuote "On 15 June 2000, the House of Lords refused the petition for leave to appeal."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:bailReviewHighCourt a echr:DomesticProceeding ;
+    rdfs:label "High Court Bail Review"^^xsd:string ;
+    echr:followsProceeding doc:trialSawoniuk ;
+    echr:hasCourt doc:high_court_uk ;
+    echr:hasDecisionDate "1999-03-26"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partBailSawoniuk ;
+    echr:hasSupportingQuote "An application was made to the High Court to review bail on 26 March 1999. It was refused."^^xsd:string .
+
+doc:case_63716_00 a echr:CaseDocument ;
+    echr:hasApplicant doc:sawoniuk ;
+    echr:hasApplicationNumber "63716/00"^^xsd:string ;
+    echr:hasCaseName "Anthony SAWONIUK against the United Kingdom"^^xsd:string ;
+    echr:hasDomesticProceeding doc:trialSawoniuk ;
+    echr:hasRespondentState "United Kingdom"^^xsd:string .
+
+doc:appealCourtAppeal a echr:DomesticProceeding ;
+    rdfs:label "Appeal to the Court of Appeal"^^xsd:string ;
+    echr:followsProceeding doc:trialSawoniuk ;
+    echr:hasCourt doc:court_of_appeal_uk ;
+    echr:hasDecisionDate "2000-02-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partAppealSawoniuk ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "In its judgment of 10 February 2000, the Court of Appeal rejected the applicant’s appeal."^^xsd:string .
+
+doc:courtPotts a echr:DomesticAuthority ;
+    rdfs:label "Court before Mr Justice Potts"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Mr Justice Potts and a jury"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string .
+
+doc:court_of_appeal_uk a echr:DomesticAuthority ;
+    rdfs:label "Court of Appeal"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Court of Appeal"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string .
+
+doc:high_court_uk a echr:DomesticAuthority ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "High Court" .
+
+doc:house_of_lords_uk a echr:DomesticAuthority ;
+    rdfs:label "House of Lords"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "House of Lords"^^xsd:string ;
+    echr:hasJurisdictionState "United Kingdom"^^xsd:string .
+
+doc:lee a echr:LegalRepresentative ;
+    rdfs:label "Mr M. Lee"^^xsd:string ;
+    echr:hasPersonName "Mr M. Lee"^^xsd:string .
+
+doc:partAppealSawoniuk a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:sawoniuk .
+
+doc:partBailSawoniuk a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:sawoniuk .
+
+doc:partLordsSawoniuk a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:sawoniuk .
+
+doc:partTrialProsecution a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:prosecutionUk .
+
+doc:partTrialSawoniuk a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:sawoniuk .
+
+doc:prosecutionUk a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "British Prosecution"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "British Prosecution"^^xsd:string .
+
+doc:trialSawoniuk a echr:DomesticProceeding ;
+    rdfs:label "Trial of Anthony Sawoniuk"^^xsd:string ;
+    echr:hasCourt doc:courtPotts ;
+    echr:hasDecisionDate "1999-04-01"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partTrialProsecution,
+        doc:partTrialSawoniuk ;
+    echr:hasProceedingStartDate "1999-02-08"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "In the trial which took place between 8 February and 1 April 1999, before Mr Justice Potts and a jury"^^xsd:string .
+
+doc:sawoniuk a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Anthony SAWONIUK"^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Anthony SAWONIUK"^^xsd:string ;
+    echr:isRepresentedBy doc:lee .
+

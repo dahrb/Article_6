@@ -1,0 +1,377 @@
+{
+  "facts_dir": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed",
+  "started": "2026-08-24T10:19:29+00:00",
+  "finished": "2026-08-24T10:26:22+00:00",
+  "model": "gemma-4-31b",
+  "base_url": "http://localhost:8000/v1",
+  "temperature": 0.4,
+  "passes_per_stage": 2,
+  "stages": [
+    "authorities",
+    "proceedings",
+    "persons",
+    "quotes"
+  ],
+  "documents": 10,
+  "documents_timed": 10,
+  "seconds_total": 413.4,
+  "seconds_model_calls": 65.7,
+  "seconds_deterministic": 347.7,
+  "model_calls": 13,
+  "seconds_per_document": 41.3,
+  "seconds_per_model_call": 5.1,
+  "by_stage": {
+    "authorities": {
+      "passes": 5,
+      "seconds": 36.0,
+      "seconds_model_call": 35.8
+    },
+    "proceedings": {
+      "passes": 3,
+      "seconds": 15.3,
+      "seconds_model_call": 15.2
+    },
+    "persons": {
+      "passes": 3,
+      "seconds": 1.2,
+      "seconds_model_call": 1.2
+    },
+    "quotes": {
+      "passes": 2,
+      "seconds": 13.5,
+      "seconds_model_call": 13.5
+    }
+  },
+  "by_document": [
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L1.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 15.5,
+      "seconds_model_calls": 15.2,
+      "seconds_deterministic": 0.3,
+      "model_calls": 4,
+      "by_stage": {
+        "authorities": {
+          "passes": 2,
+          "seconds": 14.3,
+          "seconds_model_call": 14.1
+        },
+        "proceedings": {
+          "passes": 1,
+          "seconds": 0.7,
+          "seconds_model_call": 0.7
+        },
+        "persons": {
+          "passes": 1,
+          "seconds": 0.4,
+          "seconds_model_call": 0.4
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 12.2,
+          "seconds_model_call": 12.0,
+          "seconds_deterministic": 0.1,
+          "findings_in": 3,
+          "ops_proposed": 8,
+          "ops_applied": 7,
+          "merges_applied": 0
+        },
+        {
+          "stage": "authorities",
+          "pass": 2,
+          "seconds_total": 2.1,
+          "seconds_model_call": 2.1,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 1,
+          "ops_applied": 0,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 0.7,
+          "seconds_model_call": 0.7,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 0.4,
+          "seconds_model_call": 0.4,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L10.facts.ttl",
+      "changed": true,
+      "stage_failures": [
+        {
+          "stage": "proceedings",
+          "error": "RepairTruncated",
+          "message": "generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document"
+        }
+      ],
+      "seconds_total": 186.1,
+      "seconds_model_calls": 11.9,
+      "seconds_deterministic": 174.2,
+      "model_calls": 3,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 2.5,
+          "seconds_model_call": 2.5
+        },
+        "persons": {
+          "passes": 1,
+          "seconds": 0.4,
+          "seconds_model_call": 0.4
+        },
+        "quotes": {
+          "passes": 1,
+          "seconds": 9.0,
+          "seconds_model_call": 9.0
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 2.5,
+          "seconds_model_call": 2.5,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 0.4,
+          "seconds_model_call": 0.4,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 9.0,
+          "seconds_model_call": 9.0,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 6,
+          "ops_applied": 3,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L2.facts.ttl",
+      "changed": false,
+      "stage_failures": [],
+      "seconds_total": 0.1,
+      "seconds_model_calls": 0,
+      "seconds_deterministic": 0.1,
+      "model_calls": 0,
+      "by_stage": {},
+      "passes": []
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L3.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 5.3,
+      "seconds_model_calls": 5.1,
+      "seconds_deterministic": 0.2,
+      "model_calls": 2,
+      "by_stage": {
+        "proceedings": {
+          "passes": 1,
+          "seconds": 0.6,
+          "seconds_model_call": 0.6
+        },
+        "quotes": {
+          "passes": 1,
+          "seconds": 4.5,
+          "seconds_model_call": 4.5
+        }
+      },
+      "passes": [
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 0.6,
+          "seconds_model_call": 0.6,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 4.5,
+          "seconds_model_call": 4.5,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 2,
+          "ops_applied": 1,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L4.facts.ttl",
+      "changed": false,
+      "stage_failures": [],
+      "seconds_total": 0.1,
+      "seconds_model_calls": 0,
+      "seconds_deterministic": 0.1,
+      "model_calls": 0,
+      "by_stage": {},
+      "passes": []
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L5.facts.ttl",
+      "changed": false,
+      "stage_failures": [],
+      "seconds_total": 0.1,
+      "seconds_model_calls": 0,
+      "seconds_deterministic": 0.1,
+      "model_calls": 0,
+      "by_stage": {},
+      "passes": []
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L6.facts.ttl",
+      "changed": false,
+      "stage_failures": [],
+      "seconds_total": 0.1,
+      "seconds_model_calls": 0,
+      "seconds_deterministic": 0.1,
+      "model_calls": 0,
+      "by_stage": {},
+      "passes": []
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L7.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 33.3,
+      "seconds_model_calls": 33.1,
+      "seconds_deterministic": 0.2,
+      "model_calls": 3,
+      "by_stage": {
+        "authorities": {
+          "passes": 2,
+          "seconds": 19.2,
+          "seconds_model_call": 19.2
+        },
+        "proceedings": {
+          "passes": 1,
+          "seconds": 14.0,
+          "seconds_model_call": 13.9
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 5.1,
+          "seconds_model_call": 5.1,
+          "seconds_deterministic": 0.0,
+          "findings_in": 2,
+          "ops_proposed": 4,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "authorities",
+          "pass": 2,
+          "seconds_total": 14.1,
+          "seconds_model_call": 14.1,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 18,
+          "ops_applied": 15,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 14.0,
+          "seconds_model_call": 13.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 9,
+          "ops_applied": 6,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L8.facts.ttl",
+      "changed": false,
+      "stage_failures": [
+        {
+          "stage": "quotes",
+          "error": "RepairTruncated",
+          "message": "generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document"
+        }
+      ],
+      "seconds_total": 172.8,
+      "seconds_model_calls": 0.4,
+      "seconds_deterministic": 172.4,
+      "model_calls": 1,
+      "by_stage": {
+        "persons": {
+          "passes": 1,
+          "seconds": 0.4,
+          "seconds_model_call": 0.4
+        }
+      },
+      "passes": [
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 0.4,
+          "seconds_model_call": 0.4,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/experiment_arms_20260823_223700/nochunk_ttl_mv1/repaired_fixed/input.L9.facts.ttl",
+      "changed": false,
+      "stage_failures": [],
+      "seconds_total": 0.1,
+      "seconds_model_calls": 0,
+      "seconds_deterministic": 0.1,
+      "model_calls": 0,
+      "by_stage": {},
+      "passes": []
+    }
+  ]
+}

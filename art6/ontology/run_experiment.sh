@@ -100,7 +100,7 @@ TEMPERATURE="${TEMPERATURE:-0.4}"
 # That is a large prefill saving per call. It is NOT known to be quality-neutral
 # -- ontology_vllm.env notes jsonld was chosen only to match prior_results -- so
 # a format change is a genuine experimental variable, not a free optimisation.
-GRAPH_FORMAT="${GRAPH_FORMAT:-turtle}"
+GRAPH_FORMAT="${GRAPH_FORMAT:-jsonld}"
 
 # Appended to each model's Fuseki project name. Runs that differ in any setting
 # MUST NOT share a project: doc_iri is a hash of the document, so a re-run

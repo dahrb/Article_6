@@ -7,7 +7,7 @@
 #   ./art6/ontology/run_arms.sh                 # every arm in ARMS
 #   ./art6/ontology/run_arms.sh --dry-run       # preflight only, run nothing
 #   LIMIT=1 ./art6/ontology/run_arms.sh         # smoke test, 1 case per arm
-#   ARMS=nochunk_ttl_mv1 ./art6/ontology/run_arms.sh
+#   ARMS=o2_large_jsonld ./art6/ontology/run_arms.sh
 #
 # WHY THIS EXISTS, SEPARATELY FROM run_experiment.sh
 # ---------------------------------------------------
@@ -98,35 +98,52 @@ ONTOCAST_REPO="${ONTOCAST_REPO:-$(cd "${REPO_ROOT}/../.." && pwd)/ontocast}"
 #               and halved SHACL violations against 3000/6000 -- all precision
 #               and cost measures. 3000/6000 found 2x the events. Both stay in.
 #
-# THE EIGHT PILOT ARMS: 4 assembly modes x 2 graph formats, max_visits fixed
-# at 1. Selection is on RECALL at the raw/ checkpoint, with precision at
-# repaired/ as a constraint (duplicate rate < 10%, quote-verbatim within 3
-# points of the best arm) -- never as the objective. Ranking these by
-# precision selects all the whole-document arms and excludes every chunked
-# one, i.e. it excludes exactly the arms with 2-3x the recall.
+# PHASE 1 PILOT (docs/jurix_plan.md §3). Ten arms, gemma only, max_visits 1:
+# five assembly configurations fully crossed with two serialisations.
+#
+#   o2_large / o2_med / o2_low   the three configurations the MAIN STUDY runs,
+#                                all fan-out (`native`) so they differ only in
+#                                chunk size. o2_large is whole-document.
+#   x turtle / jsonld            the serialisation ablation, crossed with all
+#                                three sizes because the format effect is not
+#                                assumed constant across them.
+#   o2_cf_med / o2_cf_low        the carry-forward ablation, each matched to
+#                                the fan-out arm at the SAME chunk size and the
+#                                same format. That pairing is the whole point:
+#                                without it, rolling's recall confounds "smaller
+#                                units help" with "seeing the prior graph
+#                                helps", and those imply different fixes.
+#                                Crossed with format like every other arm. The
+#                                format effect is expected to be LARGEST here:
+#                                in carry-forward the accumulated graph is
+#                                re-injected into every subsequent prompt, so
+#                                serialisation decides how much context is left
+#                                for document text -- an interaction that cannot
+#                                exist at whole-document, where the graph is
+#                                never fed back.
+#
+# Selection is on RECALL at the raw/ checkpoint, with precision at repaired/ as
+# a CONSTRAINT (duplicate rate < 10%, quote-verbatim within 3 points of the
+# best arm) -- never as the objective. Ranking these by precision selects every
+# whole-document arm and excludes every chunked one, i.e. it excludes exactly
+# the arms with 2-3x the recall.
+#
+# PHASE 1 PILOT RESOLVED THE SERIALISATION AXIS (docs/phase1_pilot_report.md,
+# 2026-08-24): jsonld beat turtle on body coverage in 4/5 matched pairs and on
+# quote fidelity in 5/5, with recall a wash. turtle arms are REMOVED, not just
+# deprioritised -- there is no plan to re-run them. jsonld is the only format
+# from here on.
 ARM_SPECS=(
-    "pilot_nochunk_ttl|native|20000|50000|1|turtle"
-    "pilot_nochunk_jsonld|native|20000|50000|1|jsonld"
-    "pilot_fanout_8k16k_ttl|native|8000|16000|1|turtle"
-    "pilot_fanout_8k16k_jsonld|native|8000|16000|1|jsonld"
-    "pilot_rolling_8k16k_ttl|rolling|8000|16000|1|turtle"
-    "pilot_rolling_8k16k_jsonld|rolling|8000|16000|1|jsonld"
-    "pilot_rolling_3k6k_ttl|rolling|3000|6000|1|turtle"
-    "pilot_rolling_3k6k_jsonld|rolling|3000|6000|1|jsonld"
-
-    # The 2026-08-23 sweep, kept verbatim so it stays re-runnable.
-    "nochunk_jsonld_mv1|native|20000|50000|1|jsonld"
-    "rolling_8k16k_jsonld_mv1|rolling|8000|16000|1|jsonld"
-    "nochunk_ttl_mv1|native|20000|50000|1|turtle"
-    "nochunk_ttl_mv2|native|20000|50000|2|turtle"
-    "rolling_3k6k_mv1|rolling|3000|6000|1|turtle"
-    "rolling_8k16k_mv1|rolling|8000|16000|1|turtle"
+    "o2_large_jsonld|native|20000|50000|1|jsonld"
+    "o2_med_jsonld|native|8000|16000|1|jsonld"
+    "o2_low_jsonld|native|3000|6000|1|jsonld"
+    "o2_cf_med_jsonld|rolling|8000|16000|1|jsonld"
+    "o2_cf_low_jsonld|rolling|3000|6000|1|jsonld"
 )
 
-# Default is the eight-arm config pilot. Until it runs there is no settled
-# configuration to default to -- naming one would re-assert the very choice
-# the pilot exists to re-decide. ARMS="..." names any subset.
-ARMS="${ARMS:-pilot_nochunk_ttl pilot_nochunk_jsonld pilot_fanout_8k16k_ttl pilot_fanout_8k16k_jsonld pilot_rolling_8k16k_ttl pilot_rolling_8k16k_jsonld pilot_rolling_3k6k_ttl pilot_rolling_3k6k_jsonld}"
+# The five jsonld-only configurations from the phase 1 pilot. ARMS="..."
+# names any subset.
+ARMS="${ARMS:-o2_large_jsonld o2_med_jsonld o2_low_jsonld o2_cf_med_jsonld o2_cf_low_jsonld}"
 
 # The single model every arm uses. Arms vary the pipeline, never the LLM.
 MODEL_NAME="${MODEL_NAME:-gemma-4-31b}"
@@ -148,12 +165,24 @@ REPAIR_PASSES="${REPAIR_PASSES:-2}"
 # Arm that additionally gets a `repaired_legacy/` tree built by the repair
 # implementation at git HEAD, for a like-for-like comparison against the staged
 # repair from identical raw/ input. Empty disables the comparison entirely.
-LEGACY_REPAIR_ARM="${LEGACY_REPAIR_ARM-nochunk_ttl_mv1}"
+LEGACY_REPAIR_ARM="${LEGACY_REPAIR_ARM-o2_large_jsonld}"
 
 # Records from the top of the test set. Empty means ALL (10 cases).
 LIMIT="${LIMIT-}"
 
 EXPERIMENT_DIR="${EXPERIMENT_DIR:-${REPO_ROOT}/results/experiment_arms_$(date +%Y%m%d_%H%M%S)}"
+# Absolutised immediately, because extraction runs with cwd set to
+# ONTOCAST_REPO and every path handed to run_native.py / carry_forward.py
+# resolves THERE. A relative EXPERIMENT_DIR sends --input-path into the
+# ontocast checkout, where the file does not exist -- and the failure is
+# silent: OntoCast finds no documents, prints "complete: all 0 document(s)
+# kept every unit", and the arm ends in one second with an empty raw/.
+# Observed 2026-08-24 with EXPERIMENT_DIR=results/jurix_phase1, which wrote
+# three arm directories into ~/Projects/ontocast before it was caught. The
+# built-in default is absolute, which is why an override was needed to expose
+# this.
+mkdir -p "${EXPERIMENT_DIR}"
+EXPERIMENT_DIR="$(cd "${EXPERIMENT_DIR}" && pwd)"
 
 # Appended to every arm's Fuseki project name. MUST differ between runs that
 # should not see each other's triples: doc_iri is a hash of the document, so a
@@ -162,7 +191,13 @@ EXPERIMENT_DIR="${EXPERIMENT_DIR:-${REPO_ROOT}/results/experiment_arms_$(date +%
 # they cannot contaminate the real sweep.
 PROJECT_SUFFIX="${PROJECT_SUFFIX:-}"
 
+# Credential for the model endpoint. The local vLLM servers do not check it, so
+# the placeholder is fine there; a hosted endpoint (api.openai.com) needs a real
+# key. Prefer sourcing it rather than pasting it on the command line:
+#   set -a; source keys.env; set +a; API_KEY="${OPENAI_API_KEY}" ./run_arms.sh
+# keys.env is gitignored. VLLM_API_KEY is kept as the older spelling.
 VLLM_API_KEY="${VLLM_API_KEY:-token-abc123}"
+API_KEY="${API_KEY:-${VLLM_API_KEY}}"
 ONTOLOGY_TTL="${ONTOLOGY_TTL:-${REPO_ROOT}/ontology/echr.ttl}"
 BASE_ENV_FILE="${BASE_ENV_FILE:-${REPO_ROOT}/ontology/ontology_vllm.env}"
 
@@ -223,11 +258,16 @@ printf '=== preflight ===\n'
 [[ -f "${SCRIPT_DIR}/run_native.py"    ]] || die "run_native.py missing"
 [[ -f "${SCRIPT_DIR}/carry_forward.py" ]] || die "carry_forward.py missing"
 
-served=$(curl -s -m 10 "${BASE_URL}/models" \
+# Authorization is sent unconditionally: vLLM ignores it, a hosted endpoint
+# requires it. Without the header this check 401s against api.openai.com and
+# reports it as "not answering", which is a confusing way to say "no key".
+served=$(curl -s -m 15 -H "Authorization: Bearer ${API_KEY}" "${BASE_URL}/models" \
     | python3 -c 'import json,sys; print(" ".join(m["id"] for m in json.load(sys.stdin)["data"]))' 2>/dev/null || true)
-[[ -n "${served}" ]] || die "${BASE_URL} is not answering"
+[[ -n "${served}" ]] || die "${BASE_URL} is not answering (or the API key was rejected)"
+# Only the first few ids are echoed: a hosted endpoint lists ~100 models and
+# dumping all of them buries the actual error.
 [[ " ${served} " == *" ${MODEL_NAME} "* ]] \
-    || die "${BASE_URL} serves '${served}', not '${MODEL_NAME}'"
+    || die "${BASE_URL} does not serve '${MODEL_NAME}' (it serves $(printf '%s' "${served}" | cut -d' ' -f1-6) ...)"
 printf '  model:    %s @ %s (reachable)\n' "${MODEL_NAME}" "${BASE_URL}"
 
 curl -fsS -m 5 -o /dev/null "${FUSEKI_URI}/\$/ping" 2>/dev/null \
@@ -370,7 +410,7 @@ for arm in ${ARMS}; do
         # A LITERAL key, never ${OPENAI_API_KEY}: carry_forward.py's
         # _load_env_file skips any value containing '${' with a warning, so an
         # interpolated key silently becomes no key at all.
-        printf 'LLM_API_KEY=%s\n' "${VLLM_API_KEY}"
+        printf 'LLM_API_KEY=%s\n' "${API_KEY}"
         printf 'LLM_MAX_INFLIGHT=4\n'
         # Forced off so wall clock and call counts mean something. See header.
         printf 'LLM_CACHE_ENABLED=false\n'
@@ -451,7 +491,7 @@ for arm in ${ARMS}; do
         --facts-dir "${repaired_dir}" \
         --model "${MODEL_NAME}" \
         --base-url "${BASE_URL}" \
-        --api-key "${VLLM_API_KEY}" \
+        --api-key "${API_KEY}" \
         --temperature "${TEMPERATURE}" \
         --input-jsonl "${INPUT_JSONL}" \
         --passes "${REPAIR_PASSES}") 2>&1 | tee "${arm_dir}/repair.log"
@@ -485,7 +525,7 @@ for arm in ${ARMS}; do
                 --facts-dir "${legacy_dir}" \
                 --model "${MODEL_NAME}" \
                 --base-url "${BASE_URL}" \
-                --api-key "${VLLM_API_KEY}" \
+                --api-key "${API_KEY}" \
                 --temperature "${TEMPERATURE}" \
                 --passes "${REPAIR_PASSES}") 2>&1 | tee "${arm_dir}/repair_legacy.log"
             set -e

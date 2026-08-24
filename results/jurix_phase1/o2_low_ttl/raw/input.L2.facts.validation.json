@@ -1,0 +1,61 @@
+{
+  "source": "input.jsonl",
+  "conformance": {
+    "shacl_evaluated": null,
+    "conforms": null,
+    "findings": 3,
+    "errors": 3,
+    "warnings": 0,
+    "by_kind": {
+      "suspect_multi_value": 3
+    },
+    "shacl_violations": 0,
+    "shacl_by_constraint": {},
+    "shacl_by_shape": {},
+    "repairs_applied": {}
+  },
+  "gate_repairs": [],
+  "findings": [
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/aa2bb14a2d16/participation_1> points at 2 objects via <https://growgraph.dev/echr#hasPartySide>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/aa2bb14a2d16/participation_1",
+      "predicate": "https://growgraph.dev/echr#hasPartySide",
+      "values": [
+        "https://growgraph.dev/echr#SideInitiating",
+        "https://growgraph.dev/echr#SideResponding"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/aa2bb14a2d16/participation_1> points at 3 objects via <https://growgraph.dev/echr#participatingParty>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/aa2bb14a2d16/participation_1",
+      "predicate": "https://growgraph.dev/echr#participatingParty",
+      "values": [
+        "https://growgraph.dev/doc/aa2bb14a2d16/applicant_1",
+        "https://growgraph.dev/doc/aa2bb14a2d16/applicant_group_1",
+        "https://growgraph.dev/doc/aa2bb14a2d16/applicants_1"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/aa2bb14a2d16/participation_2> points at 3 objects via <https://growgraph.dev/echr#participatingParty>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/aa2bb14a2d16/participation_2",
+      "predicate": "https://growgraph.dev/echr#participatingParty",
+      "values": [
+        "https://growgraph.dev/doc/aa2bb14a2d16/companyT",
+        "https://growgraph.dev/doc/aa2bb14a2d16/esa",
+        "https://growgraph.dev/doc/aa2bb14a2d16/esa_1"
+      ],
+      "component": "",
+      "source_shape": ""
+    }
+  ]
+}

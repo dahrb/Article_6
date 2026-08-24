@@ -1,0 +1,409 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/20da45f99e52/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/20da45f99e52> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:10"^^xsd:string .
+
+doc:admin_action_visa_refusal_2 a echr:AdministrativeAction ;
+    rdfs:label "rejection of long-stay visa application December 2016"^^xsd:string ;
+    echr:hasCourt doc:aliensOffice ;
+    echr:hasDecisionDate "2016-12"^^xsd:gYearMonth ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_refusal_2_applicants ;
+    echr:hasSupportingQuote "which was rejected by the Belgian authorities in December 2016"^^xsd:string .
+
+doc:admin_action_visa_refusal_oct10 a echr:AdministrativeAction ;
+    rdfs:label "refusal of visas 10 October 2016"^^xsd:string ;
+    echr:hasCourt doc:aliensOffice ;
+    echr:hasParticipation doc:participation_refusal_oct10_applicants ;
+    echr:hasSupportingQuote "the Aliens Office issued new decisions, dated 10 October 2016, refusing to grant the visas"^^xsd:string .
+
+doc:admin_action_visa_refusal_oct17 a echr:AdministrativeAction ;
+    rdfs:label "refusal of visas 17 October 2016"^^xsd:string ;
+    echr:hasParticipation doc:participation_refusal_oct17_applicants ;
+    echr:hasSupportingQuote "On 17 October 2016 the Aliens Office again took decisions refusing to issue the visas"^^xsd:string .
+
+doc:case_3599_18 a echr:CaseDocument ;
+    echr:hasApplicant doc:applicantMn,
+        doc:applicantSpouse,
+        doc:applicant_child_1,
+        doc:applicant_child_2 ;
+    echr:hasApplicationNumber "3599/18"^^xsd:string ;
+    echr:hasCaseName "M.N. and Others against Belgium"^^xsd:string ;
+    echr:hasRespondentState "Belgium"^^xsd:string .
+
+doc:conseilEtat a echr:DomesticAuthority ;
+    rdfs:label "Conseil d’État"^^xsd:string ;
+    echr:hasAuthorityName "Conseil d’État"^^xsd:string ;
+    echr:hasSupportingQuote "the Conseil d’État dismissed an appeal"^^xsd:string .
+
+doc:lawyerCassation a echr:LegalRepresentative ;
+    rdfs:label "Lawyer at the Court of Cassation"^^xsd:string ;
+    echr:hasSupportingQuote "the lawyer at the Court of Cassation assigned to their case by the Legal Aid Board"^^xsd:string .
+
+doc:proceedingAppealLawPending a echr:DomesticProceeding ;
+    rdfs:label "Belgian State appeal on points of law February 2017"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_appeal_dec7 ;
+    echr:hasParticipation doc:participationPendingState ;
+    echr:hasProceedingStartDate "2017-02-27"^^xsd:date ;
+    echr:hasSupportingQuote "On 27 February 2017 the Belgian State lodged an appeal on points of law against the court of appeal’s judgment of 7 December 2016. Those proceedings are currently pending."^^xsd:string ;
+    echr:isPending true .
+
+doc:proceedingLiftStay a echr:DomesticProceeding ;
+    rdfs:label "decision to lift stay of execution"^^xsd:string ;
+    echr:followsProceeding doc:proceedingUrgentStay ;
+    echr:hasCourt doc:aliensAppealsBoard ;
+    echr:hasDecisionDate "2017-03-06"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationLiftApplicants ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 6 March 2017 the Aliens Appeals Board... decided in consequence to lift the stay of execution"^^xsd:string .
+
+doc:proceeding_appeal_law_jun30 a echr:DomesticProceeding ;
+    rdfs:label "Brussels Court of Appeal judgment 30 June 2017"^^xsd:string ;
+    echr:hasCourt doc:brusselsCourtAppeal ;
+    echr:hasDecisionDate "2017-06-30"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_jun30_applicants,
+        doc:participation_jun30_state ;
+    echr:hasSupportingQuote "By a judgment of 30 June 2017 a Dutch-language division of the Court of Appeal held that the Aliens Appeals Boards’ judgment of 20 October 2016 was no longer operative"^^xsd:string .
+
+doc:proceeding_appeal_stay_dec14 a echr:DomesticProceeding ;
+    rdfs:label "Appeal against stay refusal 14 December 2016"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_stay_unilateral_dec13 ;
+    echr:hasCourt doc:brusselsCourtAppeal ;
+    echr:hasDecisionDate "2016-12-14"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationAppealStayState ;
+    echr:hasSupportingQuote "on an appeal by the Belgian State, the court of appeal varied the decision of the first-instance court in a judgment of 14 December 2016"^^xsd:string .
+
+doc:proceeding_board_set_aside_mar24 a echr:DomesticProceeding ;
+    rdfs:label "Aliens Appeals Board dismissal 24 March 2017"^^xsd:string ;
+    echr:hasParticipation doc:participation_board_set_aside_mar24_applicants ;
+    echr:hasSupportingQuote "On 24 March 2017 the Aliens Appeals Board dismissed the application to have those decisions set aside"^^xsd:string .
+
+doc:proceeding_board_set_aside_mar24_2 a echr:DomesticProceeding ;
+    rdfs:label "Aliens Appeals Board dismissal of 17 Oct decisions 24 March 2017"^^xsd:string ;
+    echr:hasParticipation doc:participation_board_set_aside_mar24_applicants ;
+    echr:hasSupportingQuote "By a judgment of 24 March 2017 the Aliens Appeals Board dismissed the application to have the decisions set aside"^^xsd:string .
+
+doc:proceeding_ce_appeal_feb8 a echr:DomesticProceeding ;
+    rdfs:label "Conseil d’État appeal dismissal 8 February 2018"^^xsd:string ;
+    echr:hasParticipation doc:participation_ce_feb8_applicants ;
+    echr:hasSupportingQuote "On 8 February 2018 the Conseil d’État dismissed an appeal on points of law by the applicants against the judgment of 6 March 2017"^^xsd:string .
+
+doc:proceeding_ce_appeal_may17_1 a echr:DomesticProceeding ;
+    rdfs:label "Conseil d’État appeal dismissal 17 May 2018 (1)"^^xsd:string ;
+    echr:hasSupportingQuote "An administrative appeal on points of law lodged by the applicants against that judgment was dismissed by the Conseil d’État on 17 May 2018"^^xsd:string .
+
+doc:proceeding_ce_appeal_may17_2 a echr:DomesticProceeding ;
+    rdfs:label "Conseil d’État appeal dismissal 17 May 2018 (2)"^^xsd:string ;
+    echr:hasSupportingQuote "An appeal on points of law against this judgment was dismissed by the Conseil d’État in a judgment of 17 May 2018"^^xsd:string .
+
+doc:proceeding_ce_appeal_state_feb8 a echr:DomesticProceeding ;
+    rdfs:label "Conseil d’État appeal dismissal (Belgian State) 8 February 2018"^^xsd:string ;
+    echr:hasParticipation doc:participation_ce_feb8_state ;
+    echr:hasSupportingQuote "On the same date the Conseil d’État dismissed an appeal on points of law brought by the Belgian State against the judgment of 7 October 2016"^^xsd:string .
+
+doc:proceeding_enforcement_action_dec15_state a echr:DomesticProceeding ;
+    rdfs:label "Belgian State action before enforcement judge 15 December 2016"^^xsd:string ;
+    echr:hasCourt doc:enforcementJudgeDutch ;
+    echr:hasParticipation doc:participation_enforcement_dec15_applicants_resp,
+        doc:participation_enforcement_dec15_state_init ;
+    echr:hasProceedingStartDate "2016-12-15"^^xsd:date .
+
+doc:proceeding_enforcement_final_dec20 a echr:DomesticProceeding ;
+    rdfs:label "Enforcement judge decision 20 December 2017"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_enforcement_action_dec15_applicants ;
+    echr:hasCourt doc:enforcementJudgeFrench ;
+    echr:hasDecisionDate "2017-12-20"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeOther ;
+    echr:hasOutcomeDirection echr:DirectionUnknown ;
+    echr:hasSupportingQuote "On 20 December 2017 the French-language enforcement judge... found that the case had become devoid of purpose"^^xsd:string .
+
+doc:proceeding_stay_oct20 a echr:DomesticProceeding ;
+    rdfs:label "stay of execution and order for visas 20 October 2016"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_board_judgment_oct20 ;
+    echr:hasSupportingQuote "By a judgment of 20 October 2016 the Aliens Appeals Board... ordered a stay of execution of the refusal decisions of 17 October 2016"^^xsd:string .
+
+doc:proceeding_tpi_inter_partes_nov7 a echr:DomesticProceeding ;
+    rdfs:label "TPI inter partes action 7 November 2016"^^xsd:string ;
+    echr:hasSupportingQuote "On 7 November 2016 another judge acting as president of the French ‑ language TPI declared their application admissible but unfounded" .
+
+doc:proceeding_tpi_urgent_oct25 a echr:DomesticProceeding ;
+    rdfs:label "TPI urgent order 25 October 2016"^^xsd:string ;
+    echr:hasSupportingQuote "By an order of 25 October 2016... the acting president of the French-language TPI ordered the State, as an urgent measure, to comply with the Board’s judgment of 20 October 2016"^^xsd:string .
+
+doc:proceeding_urgent_stay_oct14 a echr:DomesticProceeding ;
+    rdfs:label "urgent stay of execution 14 October 2016"^^xsd:string ;
+    echr:hasSupportingQuote "By a judgment of 14 October 2016 the Aliens Appeals Board, acting under the extremely urgent procedure, again ordered a stay of execution of the decision of 10 October 2016"^^xsd:string .
+
+doc:tpiBrussels a echr:DomesticAuthority ;
+    rdfs:label "Brussels French-language Court of First Instance"^^xsd:string ;
+    echr:hasAuthorityName "Brussels French-language Court of First Instance"^^xsd:string ;
+    echr:hasSupportingQuote "President of the Brussels French-language Court of First Instance (\"TPI\")"^^xsd:string .
+
+doc:tpiBrusselsFrench a echr:DomesticAuthority ;
+    rdfs:label "Brussels French-language TPI"^^xsd:string ;
+    echr:hasAuthorityName "Brussels French-language TPI"^^xsd:string ;
+    echr:hasSupportingQuote "Brussels French-language TPI"^^xsd:string .
+
+doc:admin_action_visa_refusal_1 a echr:AdministrativeAction ;
+    rdfs:label "refusal of humanitarian visas September 2016"^^xsd:string ;
+    echr:hasCourt doc:aliensOffice ;
+    echr:hasDecisionDate "2016-09-13"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_refusal_1_applicants,
+        doc:participation_refusal_1_child1,
+        doc:participation_refusal_1_child2,
+        doc:participation_refusal_1_spouse ;
+    echr:hasSupportingQuote "On 13 September 2016 the Aliens Office... refused to grant “humanitarian visas” to the applicants"^^xsd:string .
+
+doc:enforcementJudgeDutch a echr:DomesticAuthority ;
+    rdfs:label "Dutch-language enforcement judge"^^xsd:string ;
+    echr:hasAuthorityName "Dutch-language enforcement judge"^^xsd:string .
+
+doc:participationAppealStayState a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "dismissed an appeal on points of law brought by the Belgian State"^^xsd:string,
+        "on an appeal by the Belgian State"^^xsd:string ;
+    echr:participatingParty doc:belgianState .
+
+doc:participationLiftApplicants a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "decided in consequence to lift the stay of execution"^^xsd:string ;
+    echr:participatingParty doc:applicantMn .
+
+doc:participationPendingState a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the Belgian State lodged an appeal"^^xsd:string ;
+    echr:participatingParty doc:belgianState .
+
+doc:participationStayApplicants a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "The applicants lodged an application under the extremely urgent procedure"^^xsd:string ;
+    echr:participatingParty doc:applicantMn .
+
+doc:participationStayState a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "instructed the Belgian State to take new decisions"^^xsd:string ;
+    echr:participatingParty doc:belgianState .
+
+doc:participationStayUnilateralState a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the Belgian State... lodged a unilateral action"^^xsd:string ;
+    echr:participatingParty doc:belgianState .
+
+doc:participation_appeal_dec7_applicants a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicantMn .
+
+doc:participation_board_oct20_applicants a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicantMn .
+
+doc:participation_ce_feb8_applicants a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "dismissed an appeal on points of law by the applicants"^^xsd:string ;
+    echr:participatingParty doc:applicantMn .
+
+doc:participation_ce_feb8_state a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On the same date the Conseil d’État dismissed an appeal on points of law brought by the Belgian State against the judgment of 7 October 2016" ;
+    echr:participatingParty doc:belgianState .
+
+doc:participation_enforcement_dec15_applicants a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the applicants brought an action"^^xsd:string ;
+    echr:participatingParty doc:applicantMn .
+
+doc:participation_enforcement_dec15_applicants_resp a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "brought proceedings against the applicants"^^xsd:string ;
+    echr:participatingParty doc:applicantMn .
+
+doc:participation_enforcement_dec15_state a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "brought an action against the Belgian State"^^xsd:string ;
+    echr:participatingParty doc:belgianState .
+
+doc:participation_enforcement_dec15_state_init a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the Belgian State brought proceedings"^^xsd:string ;
+    echr:participatingParty doc:belgianState .
+
+doc:participation_jun30_applicants a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the applicants had not lodged an application"^^xsd:string ;
+    echr:participatingParty doc:applicantMn .
+
+doc:participation_jun30_state a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the action lodged by the Belgian State... was the first to be examined"^^xsd:string ;
+    echr:participatingParty doc:belgianState .
+
+doc:participation_refusal_1_applicants a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "refused to grant “humanitarian visas” to the applicants"^^xsd:string ;
+    echr:participatingParty doc:applicantMn .
+
+doc:participation_refusal_1_child1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_child_1 .
+
+doc:participation_refusal_1_child2 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_child_2 .
+
+doc:participation_refusal_1_spouse a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicantSpouse .
+
+doc:participation_refusal_2_applicants a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicantMn .
+
+doc:participation_refusal_oct10_applicants a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicantMn .
+
+doc:participation_refusal_oct17_applicants a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicantMn .
+
+doc:proceedingUrgentStay a echr:DomesticProceeding ;
+    rdfs:label "urgent procedure for stay of execution"^^xsd:string ;
+    echr:followsProceeding doc:admin_action_visa_refusal_1 ;
+    echr:hasCourt doc:aliensAppealsBoard ;
+    echr:hasDecisionDate "2016-10-07"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participationStayApplicants,
+        doc:participationStayState ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 7 October 2016 the Aliens Appeals Board, acting under the extremely urgent procedure, ordered a stay of execution"^^xsd:string .
+
+doc:proceeding_appeal_dec7 a echr:DomesticProceeding ;
+    rdfs:label "Brussels Court of Appeal judgment 7 December 2016"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_board_judgment_oct20 ;
+    echr:hasParticipation doc:participation_appeal_dec7_applicants ;
+    echr:hasSupportingQuote "the Brussels Court of Appeal delivered a judgment on 7 December 2016 varying the order of 7 November 2016"^^xsd:string .
+
+doc:proceeding_enforcement_action_dec15_applicants a echr:DomesticProceeding ;
+    rdfs:label "Applicants action before enforcement judge 15 December 2016"^^xsd:string ;
+    echr:hasCourt doc:enforcementJudgeFrench ;
+    echr:hasParticipation doc:participation_enforcement_dec15_applicants,
+        doc:participation_enforcement_dec15_state ;
+    echr:hasProceedingStartDate "2016-12-15"^^xsd:date ;
+    echr:hasSupportingQuote "On 15 December 2016 the applicants brought an action against the Belgian State before the enforcement judge at the Brussels French-language TPI"^^xsd:string .
+
+doc:proceeding_stay_unilateral_dec13 a echr:DomesticProceeding ;
+    rdfs:label "Belgian State unilateral action for stay 13 December 2016"^^xsd:string ;
+    echr:hasCourt doc:tpiBrusselsDutch ;
+    echr:hasDecisionDate "2016-12-13"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationStayUnilateralState .
+
+doc:tpiBrusselsDutch a echr:DomesticAuthority ;
+    rdfs:label "Brussels Dutch-speaking TPI"^^xsd:string ;
+    echr:hasAuthorityName "Brussels Dutch-speaking TPI"^^xsd:string .
+
+doc:applicantSpouse a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "spouse of M.N."^^xsd:string ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasPersonName "spouse of M.N."^^xsd:string ;
+    echr:hasSupportingQuote "a married couple"^^xsd:string ;
+    echr:isRepresentedBy doc:lawyerLambert,
+        doc:lawyerStein .
+
+doc:applicant_child_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "child 1 of M.N."^^xsd:string ;
+    echr:hasPersonName "child 1 of M.N."^^xsd:string ;
+    echr:hasSupportingQuote "their two minor children"^^xsd:string .
+
+doc:applicant_child_2 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "child 2 of M.N."^^xsd:string ;
+    echr:hasPersonName "child 2 of M.N."^^xsd:string ;
+    echr:hasSupportingQuote "their two minor children"^^xsd:string .
+
+doc:brusselsCourtAppeal a echr:DomesticAuthority ;
+    rdfs:label "Brussels Court of Appeal"^^xsd:string ;
+    echr:hasAuthorityName "Brussels Court of Appeal"^^xsd:string ;
+    echr:hasSupportingQuote "the Brussels Court of Appeal delivered a judgment"^^xsd:string .
+
+doc:enforcementJudgeFrench a echr:DomesticAuthority ;
+    rdfs:label "French-language enforcement judge"^^xsd:string ;
+    echr:hasAuthorityName "French-language enforcement judge"^^xsd:string ;
+    echr:hasSupportingQuote "the French-language enforcement judge"^^xsd:string .
+
+doc:lawyerLambert a echr:LegalRepresentative ;
+    rdfs:label "Ms L. Lambert"^^xsd:string ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasPersonName "Ms L. Lambert"^^xsd:string ;
+    echr:hasSupportingQuote "Ms L. Lambert"^^xsd:string .
+
+doc:lawyerStein a echr:LegalRepresentative ;
+    rdfs:label "Mr O. Stein"^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr O. Stein"^^xsd:string ;
+    echr:hasSupportingQuote "Mr O. Stein"^^xsd:string .
+
+doc:participation_board_set_aside_mar24_applicants a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicantMn .
+
+doc:proceeding_board_judgment_oct20 a echr:DomesticProceeding ;
+    rdfs:label "Aliens Appeals Board judgment 20 October 2016"^^xsd:string ;
+    echr:hasCourt doc:aliensAppealsBoard ;
+    echr:hasDecisionDate "2016-10-20"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_board_oct20_applicants ;
+    echr:hasSupportingQuote "the Aliens Appeals Board’s judgment of 20 October 2016, which had instructed the Belgian authorities to issue them with the visas they had requested"^^xsd:string .
+
+doc:aliensAppealsBoard a echr:DomesticAuthority ;
+    rdfs:label "Aliens Appeals Board"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Aliens Appeals Board"^^xsd:string ;
+    echr:hasJurisdictionState "Belgium"^^xsd:string ;
+    echr:hasSupportingQuote "the Aliens Appeals Board – the judicial appeal body against decisions by the Aliens Office"^^xsd:string .
+
+doc:aliensOffice a echr:DomesticAuthority ;
+    rdfs:label "Aliens Office"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Aliens Office"^^xsd:string ;
+    echr:hasJurisdictionState "Belgium"^^xsd:string ;
+    echr:hasSupportingQuote "the Aliens Office, the administrative body responsible for issuing visas"^^xsd:string .
+
+doc:belgianState a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Belgian State"^^xsd:string ;
+    echr:hasAuthorityName "Belgian State"^^xsd:string ;
+    echr:hasSupportingQuote "the Belgian State opposed"^^xsd:string .
+
+doc:applicantMn a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "M.N."^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "M.N."^^xsd:string ;
+    echr:hasSupportingQuote "M.N. and Others against Belgium"^^xsd:string ;
+    echr:isRepresentedBy doc:lawyerLambert,
+        doc:lawyerStein .
+

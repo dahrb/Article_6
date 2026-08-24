@@ -1,0 +1,190 @@
+repairing 10 file(s) under results/jurix_phase1/o2_med_jsonld/repaired
+  model: gemma-4-31b @ http://localhost:8000/v1 (temperature 0.4, timeout 300.0s)
+  source text: results/jurix_phase1/input.jsonl (quote stage enabled)
+  [domestic authorities] results/jurix_phase1/o2_med_jsonld/repaired/input.L1.facts.ttl: 2 finding(s) in; model proposed 2 group(s), 2 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 2 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [3.7s, 3.6s in the model]
+    [domestic authorities] pass 2: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic authorities] pass 2: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.3s, 0.3s in the model]
+    [domestic authorities] pass 2: no operations applied - stopping
+  [domestic proceedings] results/jurix_phase1/o2_med_jsonld/repaired/input.L1.facts.ttl: 5 finding(s) in; model proposed 2 group(s), 17 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 15 (of which 0 merge(s)), skipped 2, stub orphans swept 0 [21.9s, 21.9s in the model]
+    SKIPPED [doc:prosecutorial_review_2 is a conflation of two distinct prosecutorial reviews (Appellate Prosecutor and Chief Public Prosecutor).] remove doc:prosecutorial_review_2 rdfs:label Chief Public Prosecutor's review: skipped: triple not present
+    SKIPPED [doc:prosecutorial_review_2 is a conflation of two distinct prosecutorial reviews (Appellate Prosecutor and Chief Public Prosecutor).] remove doc:prosecutorial_review_2 echr:hasDecisionDate 2005-11-29: skipped: triple not present
+    [domestic proceedings] pass 2: 2 finding(s) in; model proposed 3 group(s), 7 op(s), 0 merge(s)
+    [domestic proceedings] pass 2: applied 6 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [11.2s, 11.2s in the model]
+    SKIPPED [doc:prosecutorial_review_2 has multiple labels and decision dates, indicating it conflates two distinct prosecutorial reviews (Appellate and Chief).] remove doc:prosecutorial_review_2 echr:hasDecisionDate 2005-11-29: skipped: triple not present
+    [domestic proceedings] pass 3: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 3: applied 0 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [7.1s, 7.1s in the model]
+    SKIPPED [a domestic event may have at most one decision date] remove doc:prosecutorial_review_2 echr:hasDecisionDate 2005-11-29: skipped: triple not present
+    [domestic proceedings] pass 3: no operations applied - stopping
+  [persons and participation] results/jurix_phase1/o2_med_jsonld/repaired/input.L1.facts.ttl: 2 finding(s) in; model proposed 4 group(s), 31 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 31 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [35.7s, 35.7s in the model]
+    SKIPPED [The participation node doc:participation_1 is linked to four different domestic events (administrative_action_1, domestic_proceeding_1, prosecutorial_review_1, prosecutorial_review_2, prosecutorial_review_chief), which violates the requirement that a Participation instance represents one party's involvement in one specific event.] remove doc:participation_1 rdf:type : applied (1 value(s))
+    [persons and participation] pass 2: 1 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 2: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.4s, 0.4s in the model]
+    [persons and participation] pass 2: no operations applied - stopping
+  [source quote fidelity] results/jurix_phase1/o2_med_jsonld/repaired/input.L1.facts.ttl: nothing flagged
+    document total: 80.5s across 7 model call(s) (80.2s in the model)
+    wrote results/jurix_phase1/o2_med_jsonld/repaired/input.L1.facts.ttl (backup at results/jurix_phase1/o2_med_jsonld/repaired/backup/input.L1.facts.ttl)
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [domestic authorities] results/jurix_phase1/o2_med_jsonld/repaired/input.L10.facts.ttl: 8 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 0 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [6.6s, 6.6s in the model]
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:belgianState rdfs:label "the Belgian State": skipped: triple not present
+    [domestic authorities] pass 1: no operations applied - stopping
+  [domestic proceedings] results/jurix_phase1/o2_med_jsonld/repaired/input.L10.facts.ttl: 9 finding(s) in; model proposed 3 group(s), 15 op(s), 2 merge(s)
+    [domestic proceedings] pass 1: applied 12 (of which 1 merge(s)), skipped 5, stub orphans swept 0 [22.4s, 22.4s in the model]
+    SKIPPED [doc:proceeding_1 has multiple courts, labels, and decision dates, indicating it conflates two distinct events.] remove doc:proceeding_1 echr:hasDecisionDate "2016-10-20": skipped: triple not present
+    SKIPPED [doc:proceeding_1 has multiple courts, labels, and decision dates, indicating it conflates two distinct events.] remove doc:proceeding_1 rdfs:label "Aliens Appeals Board proceeding": skipped: triple not present
+    SKIPPED [doc:proceeding_2 conflates two distinct proceedings: one by the Aliens Appeals Board (20 Oct) and one by the Court of Appeal (7 Dec).] remove doc:proceeding_2 echr:hasDecisionDate "2016-10-20": skipped: triple not present
+    SKIPPED [doc:proceeding_2 conflates two distinct proceedings: one by the Aliens Appeals Board (20 Oct) and one by the Court of Appeal (7 Dec).] remove doc:proceeding_2 rdfs:label "Proceeding before Aliens Appeals Board (20 Oct 2016)": skipped: triple not present
+    SKIPPED merge doc:aliensAppealsBoard <- doc:aliens_appeals_board_1: skipped: doc:aliens_appeals_board_1 is not a node in the graph
+    [domestic proceedings] pass 2: 2 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [domestic proceedings] pass 2: applied 0 (of which 0 merge(s)), skipped 2, stub orphans swept 0 [4.5s, 4.4s in the model]
+    SKIPPED [doc:proceeding_1 has multiple decision dates and labels, indicating it conflates two distinct proceedings (14 Oct and 20 Oct).] remove doc:proceeding_1 echr:hasDecisionDate "2016-10-20": skipped: triple not present
+    SKIPPED [doc:proceeding_1 has multiple decision dates and labels, indicating it conflates two distinct proceedings (14 Oct and 20 Oct).] remove doc:proceeding_1 rdfs:label "Aliens Appeals Board proceeding": skipped: triple not present
+    [domestic proceedings] pass 2: no operations applied - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [persons and participation] results/jurix_phase1/o2_med_jsonld/repaired/input.L10.facts.ttl: 11 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [6.3s, 6.2s in the model]
+    SKIPPED [doc:applicants has multiple rdfs:labels] remove doc:applicants rdfs:label "the applicants": skipped: triple not present
+    [persons and participation] pass 1: no operations applied - stopping
+    RECOVERED 1 group(s), 2 op(s) from a stalled generation
+  [source quote fidelity] results/jurix_phase1/o2_med_jsonld/repaired/input.L10.facts.ttl: 3 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [10.3s, 10.3s in the model]
+    SKIPPED [The quote for doc:proceeding_4 is slightly paraphrased; it omits the comma after '2016' and the word 'considering' that follows 'unfounded' in the source text, though the core phrase is present. I will correct it to match the source verbatim.] remove doc:proceeding_4 echr:hasSupportingQuote On 7 November 2016 another judge acting as president of the French-language TPI declared their application admissible but unfounded: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 50.1s across 5 model call(s) (49.9s in the model)
+    wrote results/jurix_phase1/o2_med_jsonld/repaired/input.L10.facts.ttl (backup at results/jurix_phase1/o2_med_jsonld/repaired/backup/input.L10.facts.ttl)
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [domestic authorities] results/jurix_phase1/o2_med_jsonld/repaired/input.L2.facts.ttl: 5 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 0 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [15.5s, 15.5s in the model]
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:courtDarmstadt rdfs:label "Labour Court": skipped: triple not present
+    [domestic authorities] pass 1: no operations applied - stopping
+  [domestic proceedings] results/jurix_phase1/o2_med_jsonld/repaired/input.L2.facts.ttl: nothing flagged
+  [persons and participation] results/jurix_phase1/o2_med_jsonld/repaired/input.L2.facts.ttl: 6 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [2.3s, 2.3s in the model]
+    [persons and participation] pass 2: 4 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 2: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.3s, 0.3s in the model]
+    [persons and participation] pass 2: no operations applied - stopping
+  [source quote fidelity] results/jurix_phase1/o2_med_jsonld/repaired/input.L2.facts.ttl: nothing flagged
+    document total: 18.2s across 3 model call(s) (18.1s in the model)
+    wrote results/jurix_phase1/o2_med_jsonld/repaired/input.L2.facts.ttl (backup at results/jurix_phase1/o2_med_jsonld/repaired/backup/input.L2.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_med_jsonld/repaired/input.L3.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 1 merge(s)
+    [domestic authorities] pass 1: applied 2 (of which 1 merge(s)), skipped 0, stub orphans swept 0 [2.3s, 2.3s in the model]
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/jurix_phase1/o2_med_jsonld/repaired/input.L3.facts.ttl: 10 finding(s) in; model proposed 2 group(s), 12 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 10 (of which 0 merge(s)), skipped 2, stub orphans swept 0 [11.4s, 11.4s in the model]
+    SKIPPED [a proceeding may have at most one deciding authority] remove doc:proceeding_3 echr:hasDecisionDate "2017-06-30": skipped: triple not present
+    SKIPPED [a proceeding may have at most one deciding authority] remove doc:proceeding_3 rdfs:label "General Assembly of the Administrative Proceedings Divisions proceeding": skipped: triple not present
+    [domestic proceedings] pass 2: 8 finding(s) in; model proposed 5 group(s), 16 op(s), 0 merge(s)
+    [domestic proceedings] pass 2: applied 9 (of which 0 merge(s)), skipped 7, stub orphans swept 0 [22.0s, 22.0s in the model]
+    SKIPPED [doc:proceeding_4 conflates a rectification request (Supreme Administrative Court) and an individual application (Constitutional Court). These are distinct proceedings.] remove doc:proceeding_4 echr:hasDecisionDate 2016-01-25: skipped: triple not present
+    SKIPPED [doc:proceeding_4 conflates a rectification request (Supreme Administrative Court) and an individual application (Constitutional Court). These are distinct proceedings.] remove doc:proceeding_4 rdfs:label Rectification Request proceeding: skipped: triple not present
+    SKIPPED [doc:proceeding_1 has multiple start dates.] remove doc:proceeding_1 echr:hasProceedingStartDate 2011-02-07: skipped: triple not present
+    SKIPPED [doc:proceeding_1 has multiple start dates.] remove doc:proceeding_1 rdfs:label Administrative Court proceedings: skipped: triple not present
+    SKIPPED [doc:proceeding_3 has multiple decision dates and labels.] remove doc:proceeding_3 echr:hasDecisionDate 2017-06-30: skipped: triple not present
+    SKIPPED [doc:proceeding_3 has multiple decision dates and labels.] remove doc:proceeding_3 rdfs:label General Assembly of the Administrative Proceedings Divisions proceeding: skipped: triple not present
+    SKIPPED [doc:proceeding_2 has multiple labels.] remove doc:proceeding_2 rdfs:label Appeal to Supreme Administrative Court: skipped: triple not present
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+    [domestic proceedings] pass 3: 7 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 3: applied 0 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [7.3s, 7.3s in the model]
+    SKIPPED [a domestic event may have at most one start date] remove doc:proceeding_1 echr:hasProceedingStartDate 2011-02-07: skipped: triple not present
+    [domestic proceedings] pass 3: no operations applied - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [persons and participation] results/jurix_phase1/o2_med_jsonld/repaired/input.L3.facts.ttl: 5 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [6.7s, 6.7s in the model]
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:applicant_1 rdfs:label "the applicant": skipped: triple not present
+    [persons and participation] pass 1: no operations applied - stopping
+  [source quote fidelity] results/jurix_phase1/o2_med_jsonld/repaired/input.L3.facts.ttl: nothing flagged
+    document total: 49.8s across 5 model call(s) (49.7s in the model)
+    wrote results/jurix_phase1/o2_med_jsonld/repaired/input.L3.facts.ttl (backup at results/jurix_phase1/o2_med_jsonld/repaired/backup/input.L3.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_med_jsonld/repaired/input.L4.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 0 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [2.2s, 2.2s in the model]
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:policeSlovenjGradec rdfs:label "Slovenj Gradec Police": skipped: 'The validator flagged multiple labels. Since they are identical, removing one resolves the structural error without losing information.' is not a valid language tag!
+    [domestic authorities] pass 1: no operations applied - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [domestic proceedings] results/jurix_phase1/o2_med_jsonld/repaired/input.L4.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.8s, 7.8s in the model]
+    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [persons and participation] results/jurix_phase1/o2_med_jsonld/repaired/input.L4.facts.ttl: 6 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [7.1s, 7.1s in the model]
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:lawyerMatko rdfs:label "Lawyer of Matko": skipped: triple not present
+    [persons and participation] pass 1: no operations applied - stopping
+  [source quote fidelity] results/jurix_phase1/o2_med_jsonld/repaired/input.L4.facts.ttl: nothing flagged
+    document total: 17.2s across 3 model call(s) (17.1s in the model)
+    wrote results/jurix_phase1/o2_med_jsonld/repaired/input.L4.facts.ttl (backup at results/jurix_phase1/o2_med_jsonld/repaired/backup/input.L4.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_med_jsonld/repaired/input.L5.facts.ttl: 6 finding(s) in; model proposed 3 group(s), 6 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 5 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [10.2s, 10.2s in the model]
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:courtPodilskyy echr:hasAuthorityName "Podilskyy Court": skipped: triple not present
+    [domestic authorities] pass 2: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic authorities] pass 2: applied 0 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [2.1s, 2.1s in the model]
+    SKIPPED [The node doc:courtPodilskyy has two values for the functional property echr:hasAuthorityName ("Podilskyy District Court of Kyiv" and "Podilskyy Court"). The more specific name should be retained.] remove doc:courtPodilskyy echr:hasAuthorityName "Podilskyy Court": skipped: triple not present
+    [domestic authorities] pass 2: no operations applied - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [domestic proceedings] results/jurix_phase1/o2_med_jsonld/repaired/input.L5.facts.ttl: 3 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [8.9s, 8.9s in the model]
+    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
+  [persons and participation] results/jurix_phase1/o2_med_jsonld/repaired/input.L5.facts.ttl: 2 finding(s) in; model proposed 3 group(s), 10 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 10 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [13.7s, 13.7s in the model]
+    [persons and participation] pass 2: nothing left to flag - stopping
+  [source quote fidelity] results/jurix_phase1/o2_med_jsonld/repaired/input.L5.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 1 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [3.2s, 3.2s in the model]
+    SKIPPED [The quote 'the applicant’s appeal against the decision of 22 December 2016 had been rejected [on 6 March 2017]' is a paraphrase/summary and does not appear verbatim in the source text. The source text in paragraph 50 refers to the 'decision of 6 March 2017' which 'quashed the decision of 22 December 2016' (as seen in paragraph 25), but the specific phrasing in the quote is not present.] remove doc:proceeding_podilskyy_1 echr:hasSupportingQuote the applicant’s appeal against the decision of 22 December 2016 had been rejected [on 6 March 2017]: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 38.3s across 5 model call(s) (38.1s in the model)
+    wrote results/jurix_phase1/o2_med_jsonld/repaired/input.L5.facts.ttl (backup at results/jurix_phase1/o2_med_jsonld/repaired/backup/input.L5.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_med_jsonld/repaired/input.L6.facts.ttl: nothing flagged
+  [domestic proceedings] results/jurix_phase1/o2_med_jsonld/repaired/input.L6.facts.ttl: nothing flagged
+  [persons and participation] results/jurix_phase1/o2_med_jsonld/repaired/input.L6.facts.ttl: 2 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.6s, 0.6s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+  [source quote fidelity] results/jurix_phase1/o2_med_jsonld/repaired/input.L6.facts.ttl: nothing flagged
+    document total: 0.7s across 1 model call(s) (0.6s in the model)
+    no net change across all stages; leaving the file untouched
+  [domestic authorities] results/jurix_phase1/o2_med_jsonld/repaired/input.L7.facts.ttl: 5 finding(s) in; model proposed 5 group(s), 5 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 5 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.8s, 7.8s in the model]
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/jurix_phase1/o2_med_jsonld/repaired/input.L7.facts.ttl: 1 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.5s, 0.5s in the model]
+    [domestic proceedings] pass 1: no operations applied - stopping
+  [persons and participation] results/jurix_phase1/o2_med_jsonld/repaired/input.L7.facts.ttl: 1 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.5s, 0.5s in the model]
+    [persons and participation] pass 1: no operations applied - stopping
+  [source quote fidelity] results/jurix_phase1/o2_med_jsonld/repaired/input.L7.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [8.5s, 8.5s in the model]
+    SKIPPED [The quote for doc:pretrial_detention_1 is a stitched-together summary rather than a verbatim span. I have replaced it with the specific verbatim passage describing the withdrawal of bail.] remove doc:pretrial_detention_1 echr:hasSupportingQuote On 25 March 1999... decided to withdraw the applicant’s bail... the trial judge reinstated bail [on 29 March 1999]: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 17.4s across 4 model call(s) (17.3s in the model)
+    wrote results/jurix_phase1/o2_med_jsonld/repaired/input.L7.facts.ttl (backup at results/jurix_phase1/o2_med_jsonld/repaired/backup/input.L7.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_med_jsonld/repaired/input.L8.facts.ttl: 6 finding(s) in; model proposed 6 group(s), 6 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 6 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.7s, 7.7s in the model]
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/jurix_phase1/o2_med_jsonld/repaired/input.L8.facts.ttl: 1 finding(s) in; model proposed 0 group(s), 0 op(s), 1 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 1 merge(s)), skipped 0, stub orphans swept 0 [1.4s, 1.4s in the model]
+    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
+  [persons and participation] results/jurix_phase1/o2_med_jsonld/repaired/input.L8.facts.ttl: 2 finding(s) in; model proposed 5 group(s), 19 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 19 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [25.2s, 25.2s in the model]
+    [persons and participation] pass 2: nothing left to flag - stopping
+  [source quote fidelity] results/jurix_phase1/o2_med_jsonld/repaired/input.L8.facts.ttl: nothing flagged
+    document total: 34.5s across 3 model call(s) (34.3s in the model)
+    wrote results/jurix_phase1/o2_med_jsonld/repaired/input.L8.facts.ttl (backup at results/jurix_phase1/o2_med_jsonld/repaired/backup/input.L8.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_med_jsonld/repaired/input.L9.facts.ttl: nothing flagged
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [domestic proceedings] results/jurix_phase1/o2_med_jsonld/repaired/input.L9.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.0s, 6.9s in the model]
+    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [persons and participation] results/jurix_phase1/o2_med_jsonld/repaired/input.L9.facts.ttl: 3 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [6.5s, 6.5s in the model]
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:partyMt rdfs:label "M.T.": skipped: triple not present
+    [persons and participation] pass 1: no operations applied - stopping
+  [source quote fidelity] results/jurix_phase1/o2_med_jsonld/repaired/input.L9.facts.ttl: nothing flagged
+    document total: 13.7s across 2 model call(s) (13.4s in the model)
+    wrote results/jurix_phase1/o2_med_jsonld/repaired/input.L9.facts.ttl (backup at results/jurix_phase1/o2_med_jsonld/repaired/backup/input.L9.facts.ttl)
+
+  repair total: 320.6s over 10 document(s), 38 model call(s) (318.7s in the model, 1.9s deterministic)
+    authorities     10 call(s)     58.4s  (58.3s in the model)
+    proceedings     13 call(s)    133.4s  (133.2s in the model)
+    persons         12 call(s)    105.3s  (105.2s in the model)
+    quotes           3 call(s)     22.0s  (22.0s in the model)

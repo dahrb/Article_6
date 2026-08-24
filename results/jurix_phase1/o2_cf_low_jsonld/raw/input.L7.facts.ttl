@@ -1,0 +1,212 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/16dfa9c59dff/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/16dfa9c59dff> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:7"^^xsd:string .
+
+doc:alexanderBaglay a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Alexander Baglay"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Alexander Baglay"@en ;
+    echr:hasSupportingQuote "Alexander Baglay"@en .
+
+doc:bail_reinstatement_1999 a echr:AdministrativeAction ;
+    rdfs:label "Reinstatement of bail for Anthony Sawoniuk"^^xsd:string ;
+    echr:hasCourt doc:courtJusticePotts ;
+    echr:hasDecisionDate "1999-03-29"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participationSawoniukBailReinstatement ;
+    echr:hasSupportingQuote "On 29 March 1999... the trial judge reinstated bail"@en .
+
+doc:benZionBlustein a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Ben Zion Blustein"@en ;
+    echr:hasPersonName "Ben Zion Blustein"@en ;
+    echr:hasSupportingQuote "Ben Zion Blustein"@en .
+
+doc:case_63716_00 a echr:CaseDocument ;
+    echr:hasApplicant doc:anthonySawoniuk ;
+    echr:hasApplicationNumber "63716/00"@en ;
+    echr:hasCaseName "Anthony SAWONIUK against the United Kingdom"@en ;
+    echr:hasDomesticProceeding doc:appealConvictionSawoniuk,
+        doc:petitionLeaveAppealLords,
+        doc:trial_sawoniuk_1999 .
+
+doc:highCourtBailReview a echr:DomesticProceeding ;
+    rdfs:label "High Court review of bail"^^xsd:string ;
+    echr:followsProceeding doc:bail_withdrawal_1999 ;
+    echr:hasCourt doc:highCourtUk ;
+    echr:hasDecisionDate "1999-03-26"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationSawoniukHighCourt ;
+    echr:hasSupportingQuote "An application was made to the High Court to review bail on 26 March 1999. It was refused."@en .
+
+doc:ivanStepaniuk a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Ivan Stepaniuk"@en ;
+    echr:hasPersonName "Ivan Stepaniuk"@en ;
+    echr:hasSupportingQuote "Ivan Stepaniuk"@en .
+
+doc:pretrialDetentionBelmarsh a echr:PreTrialDetention ;
+    rdfs:label "Detention at Belmarsh prison"^^xsd:string ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:anthonySawoniuk ;
+    echr:hasDetentionStartDate "1999-03-25"^^xsd:date ;
+    echr:hasSupportingQuote "if bail was withdrawn, he would be held in the hospital wing of Belmarsh prison"@en .
+
+doc:valodiaMelianuk a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Valodia Melianuk"@en ;
+    echr:hasPersonName "Valodia Melianuk"@en ;
+    echr:hasSupportingQuote "Valodia Melianuk"@en .
+
+doc:bail_withdrawal_1999 a echr:AdministrativeAction ;
+    rdfs:label "Withdrawal of bail for Anthony Sawoniuk"^^xsd:string ;
+    echr:hasCourt doc:courtJusticePotts ;
+    echr:hasDecisionDate "1999-03-25"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationSawoniukBail ;
+    echr:hasSupportingQuote "on 25 March 1999... the judge after consulting counsel decided to withdraw the applicant’s bail"@en .
+
+doc:britishProsecution a echr:Party ;
+    rdfs:label "British Prosecution"@en ;
+    echr:hasSupportingQuote "the prosecution case"@en .
+
+doc:courtOfAppealUk a echr:DomesticAuthority ;
+    rdfs:label "Court of Appeal"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Court of Appeal"@en ;
+    echr:hasSupportingQuote "the Court of Appeal"@en .
+
+doc:defenceCounselSawoniuk a echr:LegalRepresentative ;
+    rdfs:label "Defence Counsel for Anthony Sawoniuk"^^xsd:string ;
+    echr:hasSupportingQuote "defence counsel"@en .
+
+doc:evgenyMelianuk a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Evgeny Melianuk"@en ;
+    echr:hasPersonName "Evgeny Melianuk"@en ;
+    echr:hasSupportingQuote "Evgeny Melianuk"@en .
+
+doc:fedorZan a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Fedor Zan"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Fedor Zan"@en ;
+    echr:hasSupportingQuote "Fedor Zan"@en,
+        "Mr Zan"@en .
+
+doc:highCourtUk a echr:DomesticAuthority ;
+    rdfs:label "High Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "High Court"@en ;
+    echr:hasSupportingQuote "the High Court"@en .
+
+doc:houseOfLordsUk a echr:DomesticAuthority ;
+    rdfs:label "House of Lords"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "House of Lords"@en ;
+    echr:hasSupportingQuote "the House of Lords"@en .
+
+doc:ivanBaglay a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Ivan Baglay"@en ;
+    echr:hasPersonName "Ivan Baglay"@en ;
+    echr:hasSupportingQuote "Ivan Baglay"@en .
+
+doc:participationBaglayTrial a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:ivanBaglay .
+
+doc:participationFedorZanTrial a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:fedorZan .
+
+doc:participationMelianukTrial a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:evgenyMelianuk .
+
+doc:participationProsecutionTrial a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:britishProsecution .
+
+doc:participationSawoniukAppeal a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:anthonySawoniuk .
+
+doc:participationSawoniukBailReinstatement a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:anthonySawoniuk .
+
+doc:participationSawoniukHighCourt a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:anthonySawoniuk .
+
+doc:participationSawoniukLords a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:anthonySawoniuk .
+
+doc:petitionLeaveAppealLords a echr:DomesticProceeding ;
+    rdfs:label "Petition for leave to appeal to the House of Lords"@en ;
+    echr:followsProceeding doc:appealConvictionSawoniuk ;
+    echr:hasCourt doc:houseOfLordsUk ;
+    echr:hasDecisionDate "2000-06-15"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationSawoniukLords ;
+    echr:hasSupportingQuote "On 15 June 2000, the House of Lords refused the petition for leave to appeal"@en .
+
+doc:appealConvictionSawoniuk a echr:DomesticProceeding ;
+    rdfs:label "Appeal against conviction by Anthony Sawoniuk"^^xsd:string ;
+    echr:followsProceeding doc:trial_sawoniuk_1999 ;
+    echr:hasCourt doc:courtOfAppealUk ;
+    echr:hasDecisionDate "2000-02-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationSawoniukAppeal ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "In its judgment of 10 February 2000, the Court of Appeal rejected the applicant’s appeal"@en .
+
+doc:participationSawoniukBail a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:anthonySawoniuk .
+
+doc:trial_sawoniuk_1999 a echr:DomesticProceeding ;
+    rdfs:label "Trial of Anthony Sawoniuk 1999"@en ;
+    echr:hasCourt doc:courtJusticePotts ;
+    echr:hasDecisionDate "1999-04-01"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasParticipation doc:participationBaglayTrial,
+        doc:participationFedorZanTrial,
+        doc:participationMelianukTrial,
+        doc:participationProsecutionTrial,
+        doc:participationSawoniukBail ;
+    echr:hasProceedingStartDate "1999-02-08"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "In the trial which took place between 8 February and 1 April 1999, before Mr Justice Potts and a jury"@en,
+        "On 1 April 1999, the jury convicted the applicant of counts 1 and 3"@en .
+
+doc:courtJusticePotts a echr:DomesticAuthority ;
+    rdfs:label "Court of Mr Justice Potts"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Mr Justice Potts"@en ;
+    echr:hasSupportingQuote "before Mr Justice Potts and a jury"@en .
+
+doc:anthonySawoniuk a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Anthony SAWONIUK"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Anthony SAWONIUK"@en ;
+    echr:hasSupportingQuote "Anthony SAWONIUK"@en ;
+    echr:isRepresentedBy doc:defenceCounselSawoniuk .
+

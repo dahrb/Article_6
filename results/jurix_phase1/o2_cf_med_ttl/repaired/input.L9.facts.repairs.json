@@ -1,0 +1,80 @@
+{
+  "source": "results/jurix_phase1/o2_cf_med_ttl/repaired/input.L9.facts.ttl",
+  "timings": {
+    "source": "results/jurix_phase1/o2_cf_med_ttl/repaired/input.L9.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 5.4,
+    "seconds_model_calls": 5.3,
+    "seconds_deterministic": 0.1,
+    "model_calls": 2,
+    "by_stage": {
+      "proceedings": {
+        "passes": 1,
+        "seconds": 0.5,
+        "seconds_model_call": 0.5
+      },
+      "quotes": {
+        "passes": 1,
+        "seconds": 4.8,
+        "seconds_model_call": 4.8
+      }
+    },
+    "passes": [
+      {
+        "stage": "proceedings",
+        "pass": 1,
+        "seconds_total": 0.5,
+        "seconds_model_call": 0.5,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 0,
+        "ops_applied": 0,
+        "merges_applied": 0
+      },
+      {
+        "stage": "quotes",
+        "pass": 1,
+        "seconds_total": 4.8,
+        "seconds_model_call": 4.8,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 2,
+        "ops_applied": 1,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "The quote 'during the trial at the first \u2013 instance court' contains a non-standard dash character that does not match the source text exactly.",
+      "rationale": "The source text uses a hyphen in 'first-instance court' (though the source provided in the prompt shows 'first \u2013 instance' with a space and an en-dash, I must copy the exact characters from the <<<SOURCE block provided). Looking at paragraph 15: 'during the trial at the first \u2013 instance court'. Wait, the source text provided actually contains 'first \u2013 instance'. Let me re-examine. Paragraph 15: 'during the trial at the first \u2013 instance court'. The quote in the graph is 'during the trial at the first \u2013 instance court'. These appear identical. However, the validator flagged it as unverified. Checking the source block again: 'during the trial at the first \u2013 instance court'. It seems the issue might be the specific unicode character for the dash. I will copy the exact span from the source.",
+      "action": "remove",
+      "subject": "doc:participation_trial_1",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "during the trial at the first \u2010 instance court",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": null,
+      "quote_index": 0,
+      "status": "applied (removed 1 quote(s) by index)",
+      "stage": "quotes",
+      "pass": 1
+    },
+    {
+      "finding": "The quote 'during the trial at the first \u2013 instance court' contains a non-standard dash character that does not match the source text exactly.",
+      "rationale": "The source text uses a hyphen in 'first-instance court' (though the source provided in the prompt shows 'first \u2013 instance' with a space and an en-dash, I must copy the exact characters from the <<<SOURCE block provided). Looking at paragraph 15: 'during the trial at the first \u2013 instance court'. Wait, the source text provided actually contains 'first \u2013 instance'. Let me re-examine. Paragraph 15: 'during the trial at the first \u2013 instance court'. The quote in the graph is 'during the trial at the first \u2013 instance court'. These appear identical. However, the validator flagged it as unverified. Checking the source block again: 'during the trial at the first \u2013 instance court'. It seems the issue might be the specific unicode character for the dash. I will copy the exact span from the source.",
+      "action": "add",
+      "subject": "doc:participation_trial_1",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "during the trial at the first \u2013 instance court",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "skipped: quote does not appear verbatim in the source document",
+      "stage": "quotes",
+      "pass": 1
+    }
+  ]
+}

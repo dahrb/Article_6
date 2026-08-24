@@ -1,0 +1,142 @@
+{
+  "started": "2026-08-24T17:08:57",
+  "arms_run": [
+    "o2_large_ttl",
+    "o2_large_jsonld",
+    "o2_med_ttl",
+    "o2_med_jsonld",
+    "o2_low_ttl",
+    "o2_low_jsonld",
+    "o2_cf_med_ttl",
+    "o2_cf_med_jsonld",
+    "o2_cf_low_ttl",
+    "o2_cf_low_jsonld"
+  ],
+  "arm_specs": {
+    "o2_large_ttl": {
+      "mode": "native",
+      "chunk_min_size": 20000,
+      "chunk_max_size": 50000,
+      "max_visits": 1,
+      "llm_graph_format": "turtle"
+    },
+    "o2_large_jsonld": {
+      "mode": "native",
+      "chunk_min_size": 20000,
+      "chunk_max_size": 50000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    },
+    "o2_med_ttl": {
+      "mode": "native",
+      "chunk_min_size": 8000,
+      "chunk_max_size": 16000,
+      "max_visits": 1,
+      "llm_graph_format": "turtle"
+    },
+    "o2_med_jsonld": {
+      "mode": "native",
+      "chunk_min_size": 8000,
+      "chunk_max_size": 16000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    },
+    "o2_low_ttl": {
+      "mode": "native",
+      "chunk_min_size": 3000,
+      "chunk_max_size": 6000,
+      "max_visits": 1,
+      "llm_graph_format": "turtle"
+    },
+    "o2_low_jsonld": {
+      "mode": "native",
+      "chunk_min_size": 3000,
+      "chunk_max_size": 6000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    },
+    "o2_cf_med_ttl": {
+      "mode": "rolling",
+      "chunk_min_size": 8000,
+      "chunk_max_size": 16000,
+      "max_visits": 1,
+      "llm_graph_format": "turtle"
+    },
+    "o2_cf_med_jsonld": {
+      "mode": "rolling",
+      "chunk_min_size": 8000,
+      "chunk_max_size": 16000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    },
+    "o2_cf_low_ttl": {
+      "mode": "rolling",
+      "chunk_min_size": 3000,
+      "chunk_max_size": 6000,
+      "max_visits": 1,
+      "llm_graph_format": "turtle"
+    },
+    "o2_cf_low_jsonld": {
+      "mode": "rolling",
+      "chunk_min_size": 3000,
+      "chunk_max_size": 6000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    },
+    "nochunk_jsonld_mv1": {
+      "mode": "native",
+      "chunk_min_size": 20000,
+      "chunk_max_size": 50000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    },
+    "nochunk_ttl_mv1": {
+      "mode": "native",
+      "chunk_min_size": 20000,
+      "chunk_max_size": 50000,
+      "max_visits": 1,
+      "llm_graph_format": "turtle"
+    },
+    "nochunk_ttl_mv2": {
+      "mode": "native",
+      "chunk_min_size": 20000,
+      "chunk_max_size": 50000,
+      "max_visits": 2,
+      "llm_graph_format": "turtle"
+    },
+    "rolling_3k6k_mv1": {
+      "mode": "rolling",
+      "chunk_min_size": 3000,
+      "chunk_max_size": 6000,
+      "max_visits": 1,
+      "llm_graph_format": "turtle"
+    },
+    "rolling_8k16k_mv1": {
+      "mode": "rolling",
+      "chunk_min_size": 8000,
+      "chunk_max_size": 16000,
+      "max_visits": 1,
+      "llm_graph_format": "turtle"
+    }
+  },
+  "limit": "all",
+  "model": "gemma-4-31b",
+  "base_url": "http://localhost:8000/v1",
+  "temperature": 0.4,
+  "repair_passes_per_stage": 3,
+  "legacy_repair_arm": null,
+  "held_constant": {
+    "ontology": "/home/dahrb/Projects/article_6/domestic_proceedings/ontology/echr.ttl (snapshot alongside)",
+    "ontology_version": "3.5.0",
+    "facts_prompt": "art6/ontology/prompts/facts.txt (snapshot alongside)",
+    "chunk_section_classifier": "off",
+    "ontology_context_mode": "fixed_single_ontology",
+    "ontology_context_fixed_ontology_id": "echr",
+    "render_mode": "facts",
+    "llm_cache_enabled": false,
+    "response_repair": true,
+    "turtle_repair": true
+  },
+  "git_head": "6e8a511ba62cccdc69048f5f953672fd287ce6f6",
+  "git_dirty": true
+}

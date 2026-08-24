@@ -1,0 +1,209 @@
+{
+  "source": "results/jurix_phase1/o2_low_jsonld/repaired/input.L7.facts.ttl",
+  "timings": {
+    "source": "results/jurix_phase1/o2_low_jsonld/repaired/input.L7.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 43.9,
+    "seconds_model_calls": 43.6,
+    "seconds_deterministic": 0.3,
+    "model_calls": 6,
+    "by_stage": {
+      "authorities": {
+        "passes": 1,
+        "seconds": 3.5,
+        "seconds_model_call": 3.5
+      },
+      "proceedings": {
+        "passes": 2,
+        "seconds": 14.2,
+        "seconds_model_call": 14.2
+      },
+      "persons": {
+        "passes": 2,
+        "seconds": 14.0,
+        "seconds_model_call": 13.9
+      },
+      "quotes": {
+        "passes": 1,
+        "seconds": 12.0,
+        "seconds_model_call": 12.0
+      }
+    },
+    "passes": [
+      {
+        "stage": "authorities",
+        "pass": 1,
+        "seconds_total": 3.5,
+        "seconds_model_call": 3.5,
+        "seconds_deterministic": 0.0,
+        "findings_in": 2,
+        "ops_proposed": 2,
+        "ops_applied": 2,
+        "merges_applied": 0
+      },
+      {
+        "stage": "proceedings",
+        "pass": 1,
+        "seconds_total": 7.2,
+        "seconds_model_call": 7.2,
+        "seconds_deterministic": 0.0,
+        "findings_in": 4,
+        "ops_proposed": 1,
+        "ops_applied": 1,
+        "merges_applied": 0
+      },
+      {
+        "stage": "proceedings",
+        "pass": 2,
+        "seconds_total": 7.0,
+        "seconds_model_call": 7.0,
+        "seconds_deterministic": 0.0,
+        "findings_in": 2,
+        "ops_proposed": 1,
+        "ops_applied": 1,
+        "merges_applied": 0
+      },
+      {
+        "stage": "persons",
+        "pass": 1,
+        "seconds_total": 13.6,
+        "seconds_model_call": 13.6,
+        "seconds_deterministic": 0.0,
+        "findings_in": 3,
+        "ops_proposed": 1,
+        "ops_applied": 1,
+        "merges_applied": 0
+      },
+      {
+        "stage": "persons",
+        "pass": 2,
+        "seconds_total": 0.4,
+        "seconds_model_call": 0.3,
+        "seconds_deterministic": 0.0,
+        "findings_in": 2,
+        "ops_proposed": 0,
+        "ops_applied": 0,
+        "merges_applied": 0
+      },
+      {
+        "stage": "quotes",
+        "pass": 1,
+        "seconds_total": 12.0,
+        "seconds_model_call": 12.0,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 2,
+        "ops_applied": 2,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node doc:prosecution_1 is missing a name; the rdfs:label 'Prosecution' is the only available identifier and is supported by the quote 'Prosecution counsel asked him'.",
+      "action": "add",
+      "subject": "doc:prosecution_1",
+      "predicate": "echr:hasAuthorityName",
+      "object": "\"Prosecution\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node doc:high_court_1 is missing a name; the rdfs:label 'High Court' is the only available identifier.",
+      "action": "add",
+      "subject": "doc:high_court_1",
+      "predicate": "echr:hasAuthorityName",
+      "object": "\"High Court\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "doc:trial_1 has multiple courts (doc:courtPotts and doc:trial_court_1). The quote 'before Mr Justice Potts and a jury' supports doc:courtPotts as the specific authority.",
+      "rationale": "The proceeding should have a single deciding authority. doc:courtPotts is more specific than the generic doc:trial_court_1.",
+      "action": "remove",
+      "subject": "doc:trial_1",
+      "predicate": "echr:hasCourt",
+      "object": "doc:trial_court_1",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "proceedings",
+      "pass": 1
+    },
+    {
+      "finding": "doc:proceeding_appeal_1 is flagged as missing a followsProceeding link. The evidence shows it is a Court of Appeal proceeding following the trial.",
+      "rationale": "The node doc:proceeding_appeal_1 is an appeal proceeding. In the domestic chain, this follows the first instance trial (doc:trial_proceeding_1).",
+      "action": "add",
+      "subject": "doc:proceeding_appeal_1",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:trial_proceeding_1",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "proceedings",
+      "pass": 2
+    },
+    {
+      "finding": "SHACL violation: doc:participationApplicantTrial is linked to both doc:trial_1 and doc:trial_proceeding_1.",
+      "rationale": "The graph has duplicated the trial event as doc:trial_1 and doc:trial_proceeding_1. Since doc:trial_proceeding_1 is the more detailed node (with outcome, date, and authority kind), I will remove the link from the redundant doc:trial_1 to avoid the participation collapse.",
+      "action": "remove",
+      "subject": "doc:trial_1",
+      "predicate": "echr:hasParticipation",
+      "object": "doc:participationApplicantTrial",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    },
+    {
+      "finding": "The quote for doc:detention_1 is a stitched-together paraphrase. I have replaced it with the verbatim span from the source text that covers the decision to withdraw bail and the location of detention.",
+      "rationale": "The original quote used ellipses to merge separate sentences and was not a verbatim span. I found the exact wording in the source text.",
+      "action": "remove",
+      "subject": "doc:detention_1",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "on 25 March 1999... the judge after consulting counsel decided to withdraw the applicant\u2019s bail... he would be held in the hospital wing of Belmarsh prison",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": "en",
+      "quote_index": 0,
+      "status": "applied (removed 1 quote(s) by index)",
+      "stage": "quotes",
+      "pass": 1
+    },
+    {
+      "finding": "The quote for doc:detention_1 is a stitched-together paraphrase. I have replaced it with the verbatim span from the source text that covers the decision to withdraw bail and the location of detention.",
+      "rationale": "The original quote used ellipses to merge separate sentences and was not a verbatim span. I found the exact wording in the source text.",
+      "action": "add",
+      "subject": "doc:detention_1",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "On 25 March 1999, before the closing speeches were due to begin and a long adjournment over a weekend, the judge after consulting counsel decided to withdraw the applicant\u2019s bail. He stated that this was due to two concerns: his concern for the ordinary continuance of the trial, as that concept was defined in the Bail Act as failing to surrender to custody, and the welfare of the applicant. He took note of the applicant\u2019s advanced age, his problems of health, the fact that he lived alone at an address known to the press and that, if bail was withdrawn, he would be held in the hospital wing of Belmarsh prison with medical attention and a carer to oversee his welfare.",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": "en",
+      "quote_index": null,
+      "status": "applied",
+      "stage": "quotes",
+      "pass": 1
+    }
+  ]
+}

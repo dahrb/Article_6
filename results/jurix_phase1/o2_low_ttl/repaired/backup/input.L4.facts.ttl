@@ -1,0 +1,411 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/b83dff192347/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/b83dff192347> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:4"^^xsd:string .
+
+doc:caseDoc a echr:CaseDocument ;
+    echr:hasApplicant doc:applicant_1 ;
+    echr:hasDomesticProceeding doc:proceeding_1,
+        doc:proceeding_4,
+        doc:proceeding_5 .
+
+doc:caseMatkoSlovenia a echr:CaseDocument ;
+    rdfs:label "Matko v. Slovenia"^^xsd:string ;
+    echr:hasApplicant doc:partyMatko ;
+    echr:hasApplicationNumber "43393/98"^^xsd:string ;
+    echr:hasRespondentState "Republic of Slovenia"^^xsd:string .
+
+doc:case_doc_1 a echr:CaseDocument ;
+    echr:hasApplicant doc:applicant_1 ;
+    echr:hasDomesticProceeding doc:proceeding_1 .
+
+doc:case_document_1 a echr:CaseDocument ;
+    echr:hasApplicant doc:applicant_1,
+        doc:partyMatko ;
+    echr:hasDomesticProceeding doc:prosecutorial_review_1 .
+
+doc:criminal_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "criminal proceedings against the applicant"^^xsd:string ;
+    echr:followsProceeding doc:police_procedure_1 ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasDecisionDate "2001-02-12"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasParticipation doc:part_2 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "The judgment of 12 February 2001 issued in the proceedings instituted against the applicant"^^xsd:string .
+
+doc:detention_matko_1 a echr:PreTrialDetention ;
+    rdfs:label "Detention of Aleksander Matko April 1995"^^xsd:string ;
+    echr:hasCustodialMeasure echr:MeasurePoliceCustody ;
+    echr:hasDetainee doc:partyMatko ;
+    echr:hasDetentionEndDate "1995-04-06"^^xsd:date ;
+    echr:hasDetentionStartDate "1995-04-05"^^xsd:date ;
+    echr:hasSupportingQuote "arrested in Slovenj Gradec by officers of the Special Unit and the Slovenj Gradec Police. He was brought to the Slovenj Gradec Police Station... and released on 6 April 1995"^^xsd:string .
+
+doc:eventMiaWorkingGroup a echr:AdministrativeAction ;
+    rdfs:label "MIA working group assessment"^^xsd:string ;
+    echr:hasCourt doc:mia ;
+    echr:hasDecisionDate "1995-04-20"^^xsd:date ;
+    echr:hasParticipation doc:partMiaMia ;
+    echr:hasSupportingQuote "on 20 April 1995, the MIA had appointed a “working group” ( delovna skupina ) ... to assess the lawfulness of the procedures"^^xsd:string .
+
+doc:eventProsecutorialInvestigation a echr:ProsecutorialReview ;
+    rdfs:label "prosecutorial investigation by Slovenj Gradec District Public Prosecutor"^^xsd:string ;
+    echr:followsProceeding doc:eventWrittenComplaint ;
+    echr:hasCourt doc:slovenjGradecProsecutorOffice ;
+    echr:hasParticipation doc:partProsApp,
+        doc:partProsProsecutor ;
+    echr:hasProceedingStartDate "1995-06-15"^^xsd:date ;
+    echr:hasSupportingQuote "On 15 June 1995 the Slovenj Gradec District Public Prosecutor’s Office ( Okrožno državno tožilstvo ) asked the applicant’s lawyer to add his client’s deposition to the file"^^xsd:string .
+
+doc:slovenjGradecPoliceStationEvent a echr:AdministrativeAction ;
+    rdfs:label "Police procedure and detention of Aleksander Matko"^^xsd:string ;
+    echr:hasCourt doc:authority_1 ;
+    echr:hasDecisionDate "1995-04-06"^^xsd:date ;
+    echr:hasParticipation doc:participationMatkoPoliceEvent ;
+    echr:hasSupportingQuote "He was brought to the Slovenj Gradec Police Station for having allegedly failed to comply with the police orders. He was questioned by the police and released on 6 April 1995"^^xsd:string .
+
+doc:courtSlovenjGradec a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec District Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Slovenj Gradec District Court"^^xsd:string ;
+    echr:hasJurisdictionState "Slovenia"^^xsd:string .
+
+doc:eventOralComplaint a echr:AdministrativeAction ;
+    rdfs:label "oral complaint of 7 April 1995"^^xsd:string ;
+    echr:hasDecisionDate "1995-04-07"^^xsd:date ;
+    echr:hasParticipation doc:partOralApp,
+        doc:partOralPolice ;
+    echr:hasSupportingQuote "On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint"^^xsd:string .
+
+doc:eventWrittenComplaint a echr:DomesticProceeding ;
+    rdfs:label "written criminal complaint of 15 May 1995"^^xsd:string ;
+    echr:followsProceeding doc:eventOralComplaint ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:partWrittenApp,
+        doc:partWrittenPolice ;
+    echr:hasProceedingStartDate "1995-05-15"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 15 May 1995 the applicant lodged, through his lawyer, a written criminal complaint"^^xsd:string .
+
+doc:lawyer_1 a echr:LegalRepresentative ;
+    rdfs:label "the applicant's lawyer"^^xsd:string ;
+    echr:hasPersonName "the applicant's lawyer"^^xsd:string .
+
+doc:officerDp a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Officer D.P."^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Officer D.P."^^xsd:string ;
+    echr:hasSupportingQuote "Officer D.P."^^xsd:string .
+
+doc:officerIg a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Officer I.G."^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Officer I.G."^^xsd:string ;
+    echr:hasSupportingQuote "Another officer from the Slovenj Gradec Police, I.G."^^xsd:string .
+
+doc:officerMf a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Officer M.F."^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Officer M.F."^^xsd:string ;
+    echr:hasSupportingQuote "Officer M.F."^^xsd:string .
+
+doc:partMiaMia a echr:Participation ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:participatingParty doc:mia .
+
+doc:partOralApp a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:partOralPolice a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:authority_1 .
+
+doc:partProsApp a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:partProsProsecutor a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:slovenjGradecProsecutorOffice .
+
+doc:partWrittenApp a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:partWrittenPolice a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:authority_1 .
+
+doc:part_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:part_2 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participationMatkoPoliceEvent a echr:Participation ;
+    rdfs:label "Participation of Aleksander Matko in police procedure"^^xsd:string ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyMatko .
+
+doc:participation_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "Aleksander Matko, whom I did not know"^^xsd:string ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_2 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "Officer M.F. stated in the same criminal investigation"^^xsd:string ;
+    echr:participatingParty doc:officerMf .
+
+doc:participation_3 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "Officer D.P. explained in his testimony"^^xsd:string ;
+    echr:participatingParty doc:officerDp .
+
+doc:participation_4 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "was also questioned in the criminal investigation"^^xsd:string ;
+    echr:participatingParty doc:officerIg .
+
+doc:participation_dp_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the accused D.P."^^xsd:string ;
+    echr:participatingParty doc:partyDp .
+
+doc:participation_jk_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the accused... J.K."^^xsd:string ;
+    echr:participatingParty doc:partyJk .
+
+doc:participation_matko_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "dismissing the applicant’s criminal complaint"^^xsd:string ;
+    echr:participatingParty doc:partyMatko .
+
+doc:participation_mj_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the accused... M.J."^^xsd:string ;
+    echr:participatingParty doc:partyMj .
+
+doc:partyDp a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "D.P."^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "D.P."^^xsd:string ;
+    echr:hasSupportingQuote "the accused D.P."^^xsd:string .
+
+doc:partyJk a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "J.K."^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "J.K."^^xsd:string ;
+    echr:hasSupportingQuote "the accused... J.K."^^xsd:string .
+
+doc:partyMj a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "M.J."^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "M.J."^^xsd:string ;
+    echr:hasSupportingQuote "the accused... M.J."^^xsd:string .
+
+doc:police_procedure_1 a echr:AdministrativeAction ;
+    rdfs:label "police procedure"^^xsd:string ;
+    echr:hasCourt doc:police_station_1 ;
+    echr:hasParticipation doc:part_1 ;
+    echr:hasSupportingQuote "informed him that this was a police procedure"^^xsd:string .
+
+doc:police_station_1 a echr:DomesticAuthority ;
+    rdfs:label "police station"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "police station"^^xsd:string ;
+    echr:hasJurisdictionState "Slovenia"^^xsd:string .
+
+doc:proceeding_5 a echr:DomesticProceeding ;
+    rdfs:label "Second appeal"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_4 ;
+    echr:hasCourt doc:courtMaribor ;
+    echr:hasDecisionDate "2001-05-09"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_1_app,
+        doc:part_3_pros ;
+    echr:hasProceedingStartDate "2001-03-12"^^xsd:date ;
+    echr:hasSupportingQuote "On 9 May 2001 the Maribor Higher Court upheld the conviction"^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:prosecutorial_review_1 a echr:ProsecutorialReview ;
+    rdfs:label "Prosecutor's decision dismissing Matko's complaint"^^xsd:string ;
+    echr:hasCourt doc:prosecutor_1 ;
+    echr:hasDecisionDate "1997-01-17"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_dp_1,
+        doc:participation_jk_1,
+        doc:participation_matko_1,
+        doc:participation_mj_1 ;
+    echr:hasSupportingQuote "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint"^^xsd:string .
+
+doc:courtMaribor a echr:DomesticAuthority ;
+    rdfs:label "Maribor Higher Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Maribor Higher Court"^^xsd:string ;
+    echr:hasJurisdictionState "Slovenia"^^xsd:string .
+
+doc:mia a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "MIA"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "MIA"^^xsd:string .
+
+doc:part_1_court a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:courtDistrictSlovenjGradec .
+
+doc:part_1_pros a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:prosecutor_1 .
+
+doc:part_3_pros a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:prosecutor_1 .
+
+doc:proceeding_4 a echr:DomesticProceeding ;
+    rdfs:label "Indictment and Objection"^^xsd:string,
+        "Retrial"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:courtDistrictSlovenjGradec ;
+    echr:hasDecisionDate "1999-01-27"^^xsd:date,
+        "2001-02-12"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance,
+        echr:LevelReopening ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_1_app,
+        doc:part_1_court,
+        doc:part_1_pros ;
+    echr:hasProceedingStartDate "1998-12-28"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "By a judgment of 12 February 2001, the Slovenj Gradec District Court convicted the applicant as charged"^^xsd:string,
+        "On 27 January 1999 the applicant filed an objection to the indictment."^^xsd:string,
+        "the Public Prosecutor filed an indictment against the applicant"^^xsd:string .
+
+doc:slovenjGradecProsecutorOffice a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Slovenj Gradec District Public Prosecutor’s Office"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Slovenj Gradec District Public Prosecutor’s Office"^^xsd:string .
+
+doc:courtDistrictSlovenjGradec a echr:DomesticAuthority ;
+    rdfs:label "Slovenj Gradec District Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Slovenj Gradec District Court"^^xsd:string .
+
+doc:part_1_app a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating,
+        echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:prosecutor_1 a echr:DomesticAuthority,
+        echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Public Prosecutor"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Public Prosecutor"^^xsd:string ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasJurisdictionState "Slovenia"^^xsd:string ;
+    echr:hasSupportingQuote "her request was based on"^^xsd:string .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "Appeal against decision not to open investigation"^^xsd:string,
+        "Conclusion of criminal investigation"^^xsd:string,
+        "Decision not to open criminal investigation"^^xsd:string,
+        "First appeal"^^xsd:string,
+        "First instance trial"^^xsd:string,
+        "Objection proceeding"^^xsd:string,
+        "criminal investigation into organised crime"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:authority_1,
+        doc:courtDistrictSlovenjGradec,
+        doc:courtMaribor,
+        doc:courtSlovenjGradec ;
+    echr:hasDecisionDate "1997-05-08"^^xsd:date,
+        "1997-12-04"^^xsd:date,
+        "1998-03-17"^^xsd:date,
+        "1999-02-16"^^xsd:date,
+        "1999-11-22"^^xsd:date,
+        "2000-09-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal,
+        echr:LevelFirstInstance,
+        echr:LevelInvestigative ;
+    echr:hasOutcome echr:OutcomeInadmissible,
+        echr:OutcomeMeritsDecided,
+        echr:OutcomeRemitted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant,
+        echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_1_app,
+        doc:part_1_court,
+        doc:part_1_pros,
+        doc:part_3_pros,
+        doc:participation_1,
+        doc:participation_2,
+        doc:participation_3,
+        doc:participation_4 ;
+    echr:hasProceedingStartDate "1999-09-13"^^xsd:date,
+        "2000-01-05"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "By a judgment of 22 November 1999 the court acquitted the applicant."^^xsd:string,
+        "His objection was rejected by the Slovenj Gradec District Court on 16 February 1999."^^xsd:string,
+        "criminal investigation"^^xsd:string,
+        "on 27 September 2000 the Maribor Higher Court quashed the judgment and remitted the case to a new panel for retrial."^^xsd:string,
+        "the Maribor Higher Court upheld her appeal... and opened a criminal investigation"^^xsd:string,
+        "the Slovenj Gradec District Court decided not to open a criminal investigation against the applicant"^^xsd:string,
+        "the criminal investigation was concluded with the investigating judge’s decision"^^xsd:string .
+
+doc:authority_1 a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Slovenj Gradec Police"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Slovenj Gradec Internal Affairs Administration"^^xsd:string,
+        "Slovenj Gradec Police"^^xsd:string ;
+    echr:hasJurisdictionState "Slovenia"^^xsd:string ;
+    echr:hasSupportingQuote "Slovenj Gradec Police"^^xsd:string .
+
+doc:partyMatko a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Aleksander Matko"^^xsd:string,
+        "Mr Aleksander Matko"^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Aleksander Matko"^^xsd:string,
+        "Mr Aleksander Matko"^^xsd:string ;
+    echr:hasSupportingQuote "Aleksander Matko actively resisted the lawful procedure against him"^^xsd:string .
+
+doc:applicant_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Aleksander Matko"^^xsd:string,
+        "the applicant"^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Aleksander Matko"^^xsd:string,
+        "the applicant"^^xsd:string ;
+    echr:hasSupportingQuote "Aleksander Matko"^^xsd:string,
+        "He did not avail himself of this opportunity."^^xsd:string,
+        "He pointed out that he had been ill-treated"^^xsd:string,
+        "In his statement, the applicant alleged"^^xsd:string,
+        "dragged him out of the car"^^xsd:string ;
+    echr:isRepresentedBy doc:lawyer_1 .
+

@@ -1,0 +1,106 @@
+{
+  "source": "results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L7.facts.ttl",
+  "timings": {
+    "source": "results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L7.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 31.2,
+    "seconds_model_calls": 31.0,
+    "seconds_deterministic": 0.2,
+    "model_calls": 3,
+    "by_stage": {
+      "persons": {
+        "passes": 2,
+        "seconds": 19.7,
+        "seconds_model_call": 19.7
+      },
+      "quotes": {
+        "passes": 1,
+        "seconds": 11.3,
+        "seconds_model_call": 11.3
+      }
+    },
+    "passes": [
+      {
+        "stage": "persons",
+        "pass": 1,
+        "seconds_total": 7.6,
+        "seconds_model_call": 7.6,
+        "seconds_deterministic": 0.0,
+        "findings_in": 1,
+        "ops_proposed": 1,
+        "ops_applied": 1,
+        "merges_applied": 0
+      },
+      {
+        "stage": "persons",
+        "pass": 2,
+        "seconds_total": 12.1,
+        "seconds_model_call": 12.1,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 0,
+        "ops_applied": 0,
+        "merges_applied": 0
+      },
+      {
+        "stage": "quotes",
+        "pass": 1,
+        "seconds_total": 11.3,
+        "seconds_model_call": 11.3,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 2,
+        "ops_applied": 2,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "doc:participationSawoniukBail is linked to both doc:bail_withdrawal_1999 and doc:trial_sawoniuk_1999. A Participation node must be unique to one event to prevent collapsing party side distinctions.",
+      "rationale": "The validator flagged doc:participationSawoniukBail for being shared across multiple events. It belongs to the bail withdrawal event (where Sawoniuk was the responding party to the judge's decision). A new Participation node is needed for the trial, where Sawoniuk was the accused (responding party).",
+      "action": "remove",
+      "subject": "doc:trial_sawoniuk_1999",
+      "predicate": "echr:hasParticipation",
+      "object": "doc:participationSawoniukBail",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    },
+    {
+      "finding": "The quote 'on 25 March 1999... the judge after consulting counsel decided to withdraw the applicant\u2019s bail' contains an ellipsis and is not a verbatim span from the source text.",
+      "rationale": "The source text contains the full sentence without an ellipsis. I have replaced the paraphrased quote with the exact verbatim span.",
+      "action": "remove",
+      "subject": "doc:bail_withdrawal_1999",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "on 25 March 1999... the judge after consulting counsel decided to withdraw the applicant\u2019s bail",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": null,
+      "quote_index": 0,
+      "status": "applied (removed 1 quote(s) by index)",
+      "stage": "quotes",
+      "pass": 1
+    },
+    {
+      "finding": "The quote 'on 25 March 1999... the judge after consulting counsel decided to withdraw the applicant\u2019s bail' contains an ellipsis and is not a verbatim span from the source text.",
+      "rationale": "The source text contains the full sentence without an ellipsis. I have replaced the paraphrased quote with the exact verbatim span.",
+      "action": "add",
+      "subject": "doc:bail_withdrawal_1999",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "On 25 March 1999, before the closing speeches were due to begin and a long adjournment over a weekend, the judge after consulting counsel decided to withdraw the applicant\u2019s bail.",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": "en",
+      "quote_index": null,
+      "status": "applied",
+      "stage": "quotes",
+      "pass": 1
+    }
+  ]
+}

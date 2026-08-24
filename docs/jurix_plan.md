@@ -86,13 +86,15 @@ Purpose: finesse the prompts and the architecture, and settle three configuratio
 
 | Question | Arms | Decides |
 |---|---|---|
-| Serialisation | turtle vs jsonld at whole-document | Which format O2 uses throughout |
+| Serialisation | turtle vs jsonld, all five phase 1 arms | Which format O2 uses throughout |
 | Chunk sizes | ~3k/6k, ~8k/16k, whole-document | The three O2 sizes for the main study |
-| Does carry-forward earn a place? | rolling 3k/6k against fan-out at the same size | Whether `rolling` enters the main study at all |
+| Does carry-forward earn a place? | rolling 3k/6k and 8k/16k against fan-out at the same size | Whether `rolling` enters the main study at all |
 
-**On serialisation.** Existing evidence disagrees with itself and is under-powered: one jsonld draw gave 58 proceedings with 97% deciding-body coverage and 100% quote fidelity; one turtle draw gave 76 proceedings with 64% coverage and 95% fidelity — opposite directions on recall and precision, from single samples. Take **three draws each** and decide on recall at `raw/`. Note the cost asymmetry is prefill-only: 10k tokens of ontology context per call for turtle against 26.5k for jsonld, which at six chunks per document across 240 documents × 2 models is roughly 24M extra input tokens on the smallest-chunk arm alone.
-
-**On carry-forward.** The instinct to drop it is probably right but is not yet evidenced. `rolling 3k/6k` has the highest recall of any arm run so far — 164 proceedings against whole-document's 58–76 — but **fan-out at small chunks has never been run**, so "smaller units help" and "seeing the prior graph helps" remain confounded, and they imply different fixes. The pilot's `O2-low` arm *is* fan-out at small chunks, so one extra rolling arm settles it for about fifteen minutes of GPU. If fan-out matches rolling at the same chunk size, drop rolling with evidence.
+**Resolved 2026-08-24** (`docs/phase1_pilot_report.md`, ten-document pilot, all five configurations × both formats):
+- **Serialisation → jsonld.** Mixed on recall, but jsonld won body coverage in 4/5 matched pairs and quote fidelity in 5/5 (turtle's worst arm, `o2_med`, had 71% body coverage against jsonld's 94% at the same chunk size). **jsonld only from here on** — the turtle arms have been removed from `run_arms.sh` and `run_experiment.sh`'s default flipped to jsonld.
+- **Chunk size → recall rises as chunks shrink**, confirming the move off the original 5k/15k default.
+- **Carry-forward → keep, paired with the smallest chunk size only.** At 8k/16k it is a wash against fan-out (104 vs 112 events); at 3k/6k it beats fan-out by ~40% (171–174 vs 118–125). The gain is an interaction with chunk size, not a main effect, which only became visible once fan-out was also run at 3k/6k.
+- Winning configuration on the pilot's stated selection rule (recall at `raw/`, dup < 10%, quote within 3 points of best): **`o2_cf_low` (carry-forward, 3k/6k, jsonld)** — 174 raw events, 7% dup, 99%/100% quote fidelity.
 
 ### Phase 2 · Main study (240 documents)
 
@@ -296,8 +298,8 @@ Fifteen days. The pilot is not a study day — it is the gate.
 
 | Day | Work |
 |---|---|
-| 1 | **Gate day.** Run the pilot: turtle vs jsonld (3 draws each), the three chunk sizes, and the one rolling arm. Verify the live fixes on both models — `max_completion_tokens` on gpt-5-mini, `turtle_repair`, `response_repair`, the whitespace-stall salvage. Confirm the normalisation projection runs end-to-end on both conditions. Do not proceed until every configuration has produced at least one clean document. |
-| 2 | Settle serialisation, chunk sizes and rolling from the pilot. **Freeze the 240-document sample** — stratified, ~70 forced exhaustion-labelled, ~60 forced reasonable-time-formula, the 4 Events Matter overlap cases forced in. Write the ID list to a file and stop touching it. Finalise judge prompts. |
+| 1 | **Gate day — done 2026-08-24.** Ran the pilot: jsonld vs turtle, all five configurations, ten documents. Verified the live fixes on gemma — `turtle_repair`, `response_repair`, the whitespace-stall salvage. Every configuration produced 10/10 clean documents. See `docs/phase1_pilot_report.md`. |
+| 2 | **Serialisation, chunk sizes and carry-forward settled** — jsonld, three O2 sizes (large/med/low), carry-forward kept paired with the smallest chunk only (see resolution above). **Next:** freeze the 240-document sample — stratified, ~70 forced exhaustion-labelled, ~60 forced reasonable-time-formula, the 4 Events Matter overlap cases forced in. Write the ID list to a file and stop touching it. Finalise judge prompts. |
 | 3 | Launch all 8 runs, cache disabled. Start human annotation — begin with the 4 Events Matter cases. |
 | 4 | Active monitoring: check each run's early output for known failure signatures (parse failures, timeout loss, malformed Turtle) and intervene same-day. Continue annotation. |
 | 5 | **Likely bottleneck.** gpt-5-mini and the small-chunk arms are the slow configurations; if either is badly behind, trim here rather than let it eat the week. |

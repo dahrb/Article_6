@@ -1,0 +1,163 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/3c9a1e0dbd58/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/3c9a1e0dbd58> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:1"^^xsd:string .
+
+doc:caseStanevBulgaria a echr:CaseDocument ;
+    echr:hasApplicant doc:applicantStanev ;
+    echr:hasApplicationNumber "36760/06"@en ;
+    echr:hasCaseName "Stanev v. Bulgaria"@en ;
+    echr:hasDomesticProceeding doc:actionGuardianAppointmentRila,
+        doc:actionGuardianAppointmentRuse,
+        doc:actionMayorRefusalRila,
+        doc:actionPlacementPastra,
+        doc:proceedingAppealIncapacityVelikoTarnovo,
+        doc:proceedingIncapacityRuse,
+        doc:proceedingJudicialReviewDupnitsa,
+        doc:reviewCapacityAppellateProsecutor,
+        doc:reviewCapacityRegionalProsecutor,
+        doc:reviewCapacitySupremeProsecutor ;
+    echr:hasRespondentState "Republic of Bulgaria"@en .
+
+doc:actionGuardianAppointmentRila a echr:AdministrativeAction ;
+    rdfs:label "Guardian appointment by Rila Municipal Council"@en ;
+    echr:hasCourt doc:councilRilaMunicipal ;
+    echr:hasDecisionDate "2005-02-02"^^xsd:date ;
+    echr:hasSupportingQuote "the Municipal Council had decided on 2 February 2005 to appoint the Director of the Pastra social care home as the applicant’s guardian"@en .
+
+doc:actionPlacementPastra a echr:AdministrativeAction ;
+    rdfs:label "Placement in Pastra social care home"@en ;
+    echr:followsProceeding doc:actionGuardianAppointmentRuse ;
+    echr:hasDecisionDate "2002-12-10"^^xsd:date ;
+    echr:hasSupportingQuote "On 10 December 2002 a welfare-placement agreement was signed"@en .
+
+doc:courtDupnitsaDistrict a echr:DomesticAuthority ;
+    rdfs:label "Dupnitsa District Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial .
+
+doc:courtRuseRegional a echr:DomesticAuthority ;
+    rdfs:label "Ruse Regional Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Ruse Regional Court ( Окръжен съд )"@en ;
+    echr:hasJurisdictionState "Bulgaria"@en .
+
+doc:courtVelikoTarnovoAppeal a echr:DomesticAuthority ;
+    rdfs:label "Veliko Tarnovo Court of Appeal"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Veliko Tarnovo Court of Appeal ( Апелативен съд )"@en .
+
+doc:lawyerGenova a echr:LegalRepresentative ;
+    rdfs:label "Ms A. Genova"@en ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasPersonName "Ms A. Genova"@en ;
+    echr:hasSupportingQuote "Ms A. Genova, a lawyer practising in Sofia"@en .
+
+doc:mayorRila a echr:DomesticAuthority ;
+    rdfs:label "Mayor of Rila"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative .
+
+doc:partStanevDupnitsa a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicantStanev .
+
+doc:partStanevRuse a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicantStanev .
+
+doc:partStanevVeliko a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicantStanev .
+
+doc:proceedingJudicialReviewDupnitsa a echr:DomesticProceeding ;
+    rdfs:label "Judicial review at Dupnitsa District Court"@en ;
+    echr:followsProceeding doc:actionMayorRefusalRila ;
+    echr:hasCourt doc:courtDupnitsaDistrict ;
+    echr:hasDecisionDate "2006-03-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partStanevDupnitsa ;
+    echr:hasSupportingQuote "The Dupnitsa District Court gave judgment on 10 March 2006... the court dismissed the application"@en ;
+    echr:isFinalDomesticDecision true .
+
+doc:prosecutorRuseRegional a echr:DomesticAuthority ;
+    rdfs:label "Ruse Regional Prosecutor"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial .
+
+doc:reviewCapacitySupremeProsecutor a echr:ProsecutorialReview ;
+    rdfs:label "Chief Public Prosecutor's Office review"@en ;
+    echr:followsProceeding doc:reviewCapacityAppellateProsecutor ;
+    echr:hasDecisionDate "2005-11-29"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasSupportingQuote "and subsequently on 29 November 2005 by the Chief Public Prosecutor’s Office at the Supreme Court of Cassation"@en .
+
+doc:actionGuardianAppointmentRuse a echr:AdministrativeAction ;
+    rdfs:label "Guardian appointment by Ruse Municipal Council"@en ;
+    echr:followsProceeding doc:proceedingAppealIncapacityVelikoTarnovo ;
+    echr:hasCourt doc:councilRilaMunicipal ;
+    echr:hasDecisionDate "2002-05-23"^^xsd:date ;
+    echr:hasSupportingQuote "on 23 May 2002 the Municipal Council appointed Ms R.P., a council officer, as the applicant’s guardian"@en .
+
+doc:actionMayorRefusalRila a echr:AdministrativeAction ;
+    rdfs:label "Mayor of Rila refusal of court action"@en ;
+    echr:hasCourt doc:mayorRila ;
+    echr:hasDecisionDate "2005-09-16"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasSupportingQuote "In a letter of 16 September 2005, the mayor of Rila refused his request"@en .
+
+doc:councilRilaMunicipal a echr:DomesticAuthority ;
+    rdfs:label "Rila Municipal Council"@en,
+        "Ruse Municipal Council"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative .
+
+doc:proceedingAppealIncapacityVelikoTarnovo a echr:DomesticProceeding ;
+    rdfs:label "Appeal at Veliko Tarnovo Court of Appeal"@en ;
+    echr:followsProceeding doc:proceedingIncapacityRuse ;
+    echr:hasCourt doc:courtVelikoTarnovoAppeal ;
+    echr:hasDecisionDate "2001-04-12"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partStanevVeliko ;
+    echr:hasSupportingQuote "That judgment was upheld in a judgment of 12 April 2001 by the Veliko Tarnovo Court of Appeal"@en .
+
+doc:proceedingIncapacityRuse a echr:DomesticProceeding ;
+    rdfs:label "Incapacity proceeding at Ruse Regional Court"@en ;
+    echr:hasCourt doc:courtRuseRegional ;
+    echr:hasDecisionDate "2000-11-20"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partStanevRuse ;
+    echr:hasStatusApplied echr:StatusPartialIncapacity ;
+    echr:hasSupportingQuote "In a judgment of 20 November 2000, the court declared the applicant to be partially incapacitated"@en .
+
+doc:reviewCapacityAppellateProsecutor a echr:ProsecutorialReview ;
+    rdfs:label "Appellate Prosecutor review of capacity"@en ;
+    echr:followsProceeding doc:reviewCapacityRegionalProsecutor ;
+    echr:hasDecisionDate "2005-10-11"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasSupportingQuote "the regional prosecutor’s refusal was upheld on 11 October 2005 by the appellate prosecutor"@en .
+
+doc:reviewCapacityRegionalProsecutor a echr:ProsecutorialReview ;
+    rdfs:label "Regional Prosecutor review of capacity"@en ;
+    echr:hasCourt doc:prosecutorRuseRegional ;
+    echr:hasDecisionDate "2005-08-10"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasSupportingQuote "On 10 August 2005 the regional prosecutor refused to bring an action for restoration of the applicant’s legal capacity"@en .
+
+doc:applicantStanev a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Rusi Kosev Stanev"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr Rusi Kosev Stanev"@en ;
+    echr:hasSupportingQuote "Mr Rusi Kosev Stanev (“the applicant”)"@en ;
+    echr:isRepresentedBy doc:lawyerGenova .
+

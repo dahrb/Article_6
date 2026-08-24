@@ -1,0 +1,175 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/f0db2bcd6652/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/f0db2bcd6652> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:8"^^xsd:string .
+
+doc:admin_action_unfreeze_1 a echr:AdministrativeAction ;
+    rdfs:label "Unfreezing of Stavanger proceeds"^^xsd:string ;
+    echr:followsProceeding doc:admin_action_freeze_1 ;
+    echr:hasCourt doc:prosecutorNn ;
+    echr:hasDecisionDate "1996-05-18"^^xsd:date ;
+    echr:hasParticipation doc:participation_unfreeze_applicant ;
+    echr:hasSupportingQuote "On 18 May 1996 the Nizhniy Novgorod prosecutor’s office unfroze the account"@en .
+
+doc:case_46503_99 a echr:CaseDocument ;
+    echr:hasApplicant doc:klimentyev ;
+    echr:hasApplicationNumber "46503/99"^^xsd:string ;
+    echr:hasDomesticProceeding doc:proceeding_1,
+        doc:proceeding_2,
+        doc:proceeding_3 .
+
+doc:case_document_1 a echr:CaseDocument ;
+    rdfs:label "Case of the Applicant vs Russia"^^xsd:string ;
+    echr:hasApplicant doc:applicant_1 ;
+    echr:hasDomesticProceeding doc:proceeding_3,
+        doc:proceeding_supreme_court_1 .
+
+doc:lawyerO a echr:LegalRepresentative,
+        echr:Party ;
+    rdfs:label "Mr. O."^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr. O."@en .
+
+doc:prosecutorial_review_1 a echr:ProsecutorialReview ;
+    rdfs:label "Quashing of 1982 conviction"^^xsd:string ;
+    echr:hasCourt doc:prosecutorNn ;
+    echr:hasDecisionDate "1999-02"^^xsd:string ;
+    echr:hasOutcome echr:OutcomeRemitted ;
+    echr:hasParticipation doc:participation_review_applicant ;
+    echr:hasSupportingQuote "In February 1999 the applicant’s first (1982) conviction was quashed, and the file in that case was closed by the Nizhniy Novgorod regional prosecutor’s office"@en .
+
+doc:admin_action_freeze_1 a echr:AdministrativeAction ;
+    rdfs:label "Freezing of Stavanger"^^xsd:string ;
+    echr:hasCourt doc:prosecutorNn ;
+    echr:hasDecisionDate "1995-10-05"^^xsd:date ;
+    echr:hasParticipation doc:participation_freeze_applicant ;
+    echr:hasSupportingQuote "on 5 October 1995 property belonging to the applicant - the ship Stavanger and a floating drydock - was frozen on the order of the Nizhniy Novgorod prosecutor’s office"@en .
+
+doc:participationApplicantRegional a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participationApplicantSupreme a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participationMoskalenkoSupreme a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:lawyerMoskalenko .
+
+doc:participation_1_klimentyev a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:klimentyev .
+
+doc:participation_2_klimentyev a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:klimentyev .
+
+doc:participation_freeze_applicant a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_retrial_klimentyev a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:klimentyev .
+
+doc:participation_review_applicant a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_unfreeze_applicant a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:proceeding_supreme_court_1 a echr:DomesticProceeding ;
+    rdfs:label "Supreme Court Appeal"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_3 ;
+    echr:hasCourt doc:courtSupreme ;
+    echr:hasDecisionDate "1998-08-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasParticipation doc:participationApplicantSupreme,
+        doc:participationMoskalenkoSupreme ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 10 August 1998 the Supreme Court confirmed the judgment"@en .
+
+doc:courtSupreme a echr:DomesticAuthority ;
+    rdfs:label "Supreme Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Supreme Court"@en ;
+    echr:hasJurisdictionState "Russia"@en .
+
+doc:lawyerMoskalenko a echr:LegalRepresentative,
+        echr:Party ;
+    rdfs:label "Mrs Moskalenko"@en ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasPersonName "Mrs Moskalenko"@en .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "First Trial at Nizhniy Novgorod Regional Court"@en ;
+    echr:hasCourt doc:regionalCourtNn ;
+    echr:hasDecisionDate "1997-04-21"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1_klimentyev ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 21 April 1997 the Nizhniy Novgorod Regional Court found the applicant guilty on some of the charges"^^xsd:string .
+
+doc:proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "Appeal to Supreme Court"@en ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:courtSupreme ;
+    echr:hasDecisionDate "1997-07"^^xsd:string ;
+    echr:hasOutcome echr:OutcomeRemitted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_2_klimentyev ;
+    echr:hasSupportingQuote "In July 1997 the Supreme Court quashed the conviction on the applicant’s appeal and remitted the case to the Nizhniy Novgorod Regional Court"^^xsd:string .
+
+doc:regionalCourtNn a echr:DomesticAuthority ;
+    rdfs:label "Nizhniy Novgorod Regional Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Nizhniy Novgorod Regional Court"@en ;
+    echr:hasJurisdictionState "Russia"@en .
+
+doc:proceeding_3 a echr:DomesticProceeding ;
+    rdfs:label "Retrial at Nizhniy Novgorod Regional Court"@en ;
+    echr:followsProceeding doc:proceeding_2 ;
+    echr:hasCourt doc:regionalCourtNn ;
+    echr:hasDecisionDate "1998-05-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationApplicantRegional,
+        doc:participation_retrial_klimentyev ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 27 May 1998 the Nizhniy Novgorod Regional Court found the applicant guilty on charges of misappropriation and embezzlement"^^xsd:string,
+        "On 27 May 1998 the Regional Court made a number of further orders"@en .
+
+doc:prosecutorNn a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Nizhniy Novgorod prosecutor’s office"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Nizhniy Novgorod prosecutor’s office"@en .
+
+doc:klimentyev a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Andrey Anatolyevitch Klimentyev"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Andrey Anatolyevitch Klimentyev"^^xsd:string ;
+    echr:isRepresentedBy doc:lawyerMoskalenko .
+
+doc:applicant_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicant"^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "the applicant"@en ;
+    echr:hasSupportingQuote "The applicant claims that he was not informed"@en .
+

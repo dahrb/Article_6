@@ -1,0 +1,59 @@
+{
+  "source": "input.jsonl",
+  "conformance": {
+    "shacl_evaluated": null,
+    "conforms": null,
+    "findings": 3,
+    "errors": 3,
+    "warnings": 0,
+    "by_kind": {
+      "suspect_multi_value": 3
+    },
+    "shacl_violations": 0,
+    "shacl_by_constraint": {},
+    "shacl_by_shape": {},
+    "repairs_applied": {}
+  },
+  "gate_repairs": [],
+  "findings": [
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/20da45f99e52/proceeding_1> points at 2 objects via <https://growgraph.dev/echr#hasCourt>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/20da45f99e52/proceeding_1",
+      "predicate": "https://growgraph.dev/echr#hasCourt",
+      "values": [
+        "https://growgraph.dev/doc/20da45f99e52/aliensAppealsBoard",
+        "https://growgraph.dev/doc/20da45f99e52/aliens_appeals_board_1"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/20da45f99e52/proceeding_2> points at 2 objects via <https://growgraph.dev/echr#followsProceeding>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/20da45f99e52/proceeding_2",
+      "predicate": "https://growgraph.dev/echr#followsProceeding",
+      "values": [
+        "https://growgraph.dev/doc/20da45f99e52/admin_action_2",
+        "https://growgraph.dev/doc/20da45f99e52/proceeding_1"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/20da45f99e52/proceeding_2> points at 2 objects via <https://growgraph.dev/echr#hasCourt>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/20da45f99e52/proceeding_2",
+      "predicate": "https://growgraph.dev/echr#hasCourt",
+      "values": [
+        "https://growgraph.dev/doc/20da45f99e52/aliensAppealsBoard",
+        "https://growgraph.dev/doc/20da45f99e52/brusselsCourtAppeal"
+      ],
+      "component": "",
+      "source_shape": ""
+    }
+  ]
+}

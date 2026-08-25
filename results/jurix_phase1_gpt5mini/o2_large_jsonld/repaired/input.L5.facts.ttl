@@ -37,7 +37,7 @@ doc:inform_2013_04_22 a echr:AdministrativeAction ;
     echr:followsProceeding doc:disciplinary_decision_2013_04_17 ;
     echr:hasCourt doc:qdcZakarpattya ;
     echr:hasDecisionDate "2013-04-22"^^xsd:date ;
-    echr:hasParticipation doc:partQdcexamApplicant ;
+    echr:hasParticipation doc:part_qdcexam_applicant_2013_04_22 ;
     echr:hasSupportingQuote "On 22 April 2013 the applicant was informed of the meeting and the decision of 17 April 2013."@en .
 
 doc:appeal_to_hqdcb_2013 a echr:DomesticProceeding ;
@@ -54,6 +54,7 @@ doc:appeal_to_hqdcb_2013 a echr:DomesticProceeding ;
 doc:disciplinaryChamberQdcZakarpattya a echr:DomesticAuthority ;
     rdfs:label "Disciplinary Chamber of the QDC of Zakarpattya"@en ;
     echr:hasAuthorityKind echr:AuthorityDisciplinary ;
+    echr:hasAuthorityName "Disciplinary Chamber of the QDC of Zakarpattya" ;
     echr:hasSupportingQuote "On 17 April 2013, in the applicant’s absence, the Disciplinary Chamber of the QDC of Zakarpattya suspended the applicant’s licence to practise as an advocate for six months for his failure to attend the meeting of 7 December 2012 and violating Article 62 of the Rules of Professional Conduct."@en .
 
 doc:partAppealHqdcbApplicant a echr:Participation ;
@@ -75,6 +76,14 @@ doc:partComplaintD a echr:Participation ;
     rdfs:label "Participation of Lawyer D. in complaint to HQDCB"@en ;
     echr:hasPartySide echr:SideInitiating ;
     echr:participatingParty doc:lawyerD .
+
+doc:partQdcexamApplicant a echr:Participation ;
+    rdfs:label "Participation of the applicant (informed on 22 April 2013)"@en,
+        "Participation of the applicant in QDC decision of 16 May 2013"@en,
+        "Participation of the applicant in QDC examination"@en,
+        "Participation of the applicant in the 17 April 2013 disciplinary decision"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicantMartynovskiy .
 
 doc:partQdcexamD a echr:Participation ;
     rdfs:label "Participation of Lawyer D. in QDC examination"@en ;
@@ -111,6 +120,21 @@ doc:part_letter_2013_03_05_applicant a echr:Participation ;
     echr:hasPartySide echr:SideInitiating ;
     echr:participatingParty doc:applicantMartynovskiy .
 
+doc:part_qdcexam_applicant_2013_04_17 a echr:Participation ;
+    rdfs:label "Participation of the applicant in the 17 April 2013 disciplinary decision" ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicantMartynovskiy .
+
+doc:part_qdcexam_applicant_2013_04_22 a echr:Participation ;
+    rdfs:label "Participation of the applicant (informed on 22 April 2013)" ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicantMartynovskiy .
+
+doc:part_qdcexam_applicant_2013_05_16 a echr:Participation ;
+    rdfs:label "Participation of the applicant in QDC decision of 16 May 2013" ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicantMartynovskiy .
+
 doc:qdc_examination_feb_2013 a echr:DomesticProceeding ;
     rdfs:label "Examination of D.'s complaint by the QDC of Zakarpattya (February 2013)"@en ;
     echr:followsProceeding doc:transfer_2013_01_24 ;
@@ -126,8 +150,8 @@ doc:qdc_upheld_2013_05_16 a echr:DomesticProceeding ;
     echr:hasCourt doc:qdcZakarpattya ;
     echr:hasDecisionDate "2013-05-16"^^xsd:date ;
     echr:hasOutcome echr:OutcomeMeritsDecided ;
-    echr:hasParticipation doc:partQdcexamApplicant,
-        doc:part_16may_d ;
+    echr:hasParticipation doc:part_16may_d,
+        doc:part_qdcexam_applicant_2013_05_16 ;
     echr:hasProceedingType echr:TypeDisciplinary ;
     echr:hasSupportingQuote "On 16 May the QDC of Zakarpattya upheld the decision of 17 April 2013."@en .
 
@@ -145,31 +169,16 @@ doc:disciplinary_decision_2013_04_17 a echr:DomesticProceeding ;
     echr:hasCourt doc:disciplinaryChamberQdcZakarpattya ;
     echr:hasDecisionDate "2013-04-17"^^xsd:date ;
     echr:hasOutcome echr:OutcomeMeritsDecided ;
-    echr:hasParticipation doc:partQdcexamApplicant,
-        doc:part_17apr_d ;
+    echr:hasParticipation doc:part_17apr_d,
+        doc:part_qdcexam_applicant_2013_04_17 ;
     echr:hasProceedingType echr:TypeDisciplinary ;
     echr:hasSupportingQuote "On 17 April 2013, in the applicant’s absence, the Disciplinary Chamber of the QDC of Zakarpattya suspended the applicant’s licence to practise as an advocate for six months for his failure to attend the meeting of 7 December 2012 and violating Article 62 of the Rules of Professional Conduct."@en .
-
-doc:partQdcexamApplicant a echr:Participation ;
-    rdfs:label "Participation of the applicant (informed on 22 April 2013)"@en,
-        "Participation of the applicant in QDC decision of 16 May 2013"@en,
-        "Participation of the applicant in QDC examination"@en,
-        "Participation of the applicant in the 17 April 2013 disciplinary decision"@en ;
-    echr:hasPartySide echr:SideResponding ;
-    echr:participatingParty doc:applicantMartynovskiy .
 
 doc:qdcZakarpattya a echr:DomesticAuthority ;
     rdfs:label "Qualification and Disciplinary Commission of the Regional Bar of Zakarpattya (QDC of Zakarpattya)"@en ;
     echr:hasAuthorityKind echr:AuthorityDisciplinary ;
     echr:hasAuthorityName "Qualification and Disciplinary Commission of the Regional Bar of Zakarpattya (QDC of Zakarpattya)"@en ;
     echr:hasSupportingQuote "the Qualification and Disciplinary Commission of the Regional Bar of Zakarpattya (“the QDC of Zakarpattya”)."@en .
-
-doc:applicantMartynovskiy a echr:NaturalPerson,
-        echr:Party ;
-    rdfs:label "Mr Roman Yuryevich Martynovskiy"@en ;
-    echr:hasGender echr:GenderMale ;
-    echr:hasPersonName "Mr Roman Yuryevich Martynovskiy"@en ;
-    echr:hasSupportingQuote "a Ukrainian national, Mr Roman Yuryevich Martynovskiy (“the applicant”), who was born in 1965, lives in Kyiv and was represented by Mr A.V. Yakovlev and Mr M. Kikkas, lawyers practising in Kyiv;"@en .
 
 doc:hqdcb a echr:DomesticAuthority,
         echr:Party ;
@@ -183,4 +192,11 @@ doc:lawyerD a echr:NaturalPerson,
     rdfs:label "Lawyer D."@en ;
     echr:hasPersonName "Lawyer D."@en ;
     echr:hasSupportingQuote "Lawyer D. complained to the HQDCB that by failing to attend the meeting of 7 December 2012 the applicant had violated Article 62 of the Rules of Professional Conduct, adopted by the Congress of Advocates on 17 November 2012 and published on 18 January 2012, which provided that advocates elected to self-government bodies should abstain from actions which might result in blocking the work of those bodies."@en .
+
+doc:applicantMartynovskiy a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Roman Yuryevich Martynovskiy"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr Roman Yuryevich Martynovskiy"@en ;
+    echr:hasSupportingQuote "a Ukrainian national, Mr Roman Yuryevich Martynovskiy (“the applicant”), who was born in 1965, lives in Kyiv and was represented by Mr A.V. Yakovlev and Mr M. Kikkas, lawyers practising in Kyiv;"@en .
 

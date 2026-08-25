@@ -1,0 +1,116 @@
+{
+  "source": "results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L5.facts.ttl",
+  "timings": {
+    "source": "results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L5.facts.ttl",
+    "changed": true,
+    "stage_failures": [
+      {
+        "stage": "persons",
+        "error": "RepairTruncated",
+        "message": "generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document"
+      }
+    ],
+    "seconds_total": 173.7,
+    "seconds_model_calls": 173.5,
+    "seconds_deterministic": 0.2,
+    "model_calls": 3,
+    "by_stage": {
+      "proceedings": {
+        "passes": 1,
+        "seconds": 12.0,
+        "seconds_model_call": 12.0
+      },
+      "persons": {
+        "passes": 1,
+        "seconds": 152.1,
+        "seconds_model_call": 152.1
+      },
+      "quotes": {
+        "passes": 1,
+        "seconds": 9.5,
+        "seconds_model_call": 9.4
+      }
+    },
+    "passes": [
+      {
+        "stage": "proceedings",
+        "pass": 1,
+        "seconds_total": 12.0,
+        "seconds_model_call": 12.0,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 2,
+        "ops_applied": 2,
+        "merges_applied": 0
+      },
+      {
+        "stage": "persons",
+        "pass": 0,
+        "seconds_total": 152.1,
+        "seconds_model_call": 152.1,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_applied": 0,
+        "failed": "RepairTruncated"
+      },
+      {
+        "stage": "quotes",
+        "pass": 1,
+        "seconds_total": 9.5,
+        "seconds_model_call": 9.4,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 1,
+        "ops_applied": 1,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "missing followsProceeding",
+      "rationale": "The node's supporting quote states that the applicant \"appealed against the decisions of 17 April and 16 May 2013 to the HQDCB\", so the HQDCB appeal proceeding should follow the decisions of those dates.",
+      "action": "add",
+      "subject": "doc:proceeding_hqdcb_appeal_2013",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:proceeding_qdc_2013_04_17",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "proceedings",
+      "pass": 1
+    },
+    {
+      "finding": "missing followsProceeding",
+      "rationale": "The node's supporting quote states that the applicant \"appealed against the decisions of 17 April and 16 May 2013 to the HQDCB\", so the HQDCB appeal proceeding should follow the decisions of those dates.",
+      "action": "add",
+      "subject": "doc:proceeding_hqdcb_appeal_2013",
+      "predicate": "echr:followsProceeding",
+      "object": "doc:proceeding_qdc_2013_05_16",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "proceedings",
+      "pass": 1
+    },
+    {
+      "finding": "unverified supporting quote",
+      "rationale": "The exact passage appears in the source at paragraph 57: \"The courts examined them using the proper procedure and established that the procedure before the bodies of the Bar had been lawful.\" Nonetheless this unverified quote entry must be removed from the node's supporting quotes.",
+      "action": "remove",
+      "subject": "doc:kyiv_proceeding_2016_10_05",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "the courts examined them using the proper procedure and established that the procedure before the bodies of the Bar had been lawful",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": null,
+      "quote_index": 0,
+      "status": "applied (removed 1 quote(s) by index)",
+      "stage": "quotes",
+      "pass": 1
+    }
+  ]
+}

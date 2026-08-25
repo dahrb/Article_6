@@ -1,0 +1,59 @@
+{
+  "source": "input.jsonl",
+  "conformance": {
+    "shacl_evaluated": null,
+    "conforms": null,
+    "findings": 3,
+    "errors": 3,
+    "warnings": 0,
+    "by_kind": {
+      "suspect_multi_value": 3
+    },
+    "shacl_violations": 0,
+    "shacl_by_constraint": {},
+    "shacl_by_shape": {},
+    "repairs_applied": {}
+  },
+  "gate_repairs": [],
+  "findings": [
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/87b4387b7f0a/investigation_1> points at 2 objects via <https://growgraph.dev/echr#hasCourt>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/87b4387b7f0a/investigation_1",
+      "predicate": "https://growgraph.dev/echr#hasCourt",
+      "values": [
+        "https://growgraph.dev/doc/87b4387b7f0a/investigating_authorities_1",
+        "https://growgraph.dev/doc/87b4387b7f0a/investigative_authority_1"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/87b4387b7f0a/participation_mt_1> points at 2 objects via <https://growgraph.dev/echr#hasPartySide>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/87b4387b7f0a/participation_mt_1",
+      "predicate": "https://growgraph.dev/echr#hasPartySide",
+      "values": [
+        "https://growgraph.dev/echr#SideInitiating",
+        "https://growgraph.dev/echr#SideResponding"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/87b4387b7f0a/participation_mt_1> points at 2 objects via <https://growgraph.dev/echr#participatingParty>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/87b4387b7f0a/participation_mt_1",
+      "predicate": "https://growgraph.dev/echr#participatingParty",
+      "values": [
+        "https://growgraph.dev/doc/87b4387b7f0a/mt",
+        "https://growgraph.dev/doc/87b4387b7f0a/partyMt"
+      ],
+      "component": "",
+      "source_shape": ""
+    }
+  ]
+}

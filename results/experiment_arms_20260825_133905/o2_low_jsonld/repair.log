@@ -1,0 +1,27 @@
+repairing 1 file(s) under results/experiment_arms_20260825_133905/o2_low_jsonld/repaired
+  model: gemma-4-31b @ http://localhost:8000/v1 (temperature 0.4, timeout 300.0s)
+  source text: results/experiment_arms_20260825_133905/input.jsonl (quote stage enabled)
+  [domestic authorities] results/experiment_arms_20260825_133905/o2_low_jsonld/repaired/input.facts.ttl: nothing flagged
+  [domestic proceedings] results/experiment_arms_20260825_133905/o2_low_jsonld/repaired/input.facts.ttl: 20 finding(s) in; model proposed 5 group(s), 9 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 8 (of which 0 merge(s)), skipped 3, stub orphans swept 0 [28.3s, 28.3s in the model]
+    SKIPPED [doc:administrative_action_1 has multiple labels and decision dates, indicating it conflates two distinct events: the mayor's refusal and the police request.] remove doc:administrative_action_1 rdfs:label "Request for search and transfer of applicant": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [doc:administrative_action_1 has multiple labels and decision dates, indicating it conflates two distinct events: the mayor's refusal and the police request.] remove doc:administrative_action_1 echr:hasDecisionDate "2006-10-13": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [Create a separate node for the police request for search and transfer.] add doc:admin_action_police_search echr:hasSupportingQuote "the Director of the home wrote to the Ruse municipal police on 13 October 2006, asking them to search for the applicant and transfer him to Sofia": skipped: repair may not add evidence anchors, only remove or reuse them
+    [domestic proceedings] pass 1: 8 op(s) applied but findings did not fall (10 -> 11) - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [persons and participation] results/experiment_arms_20260825_133905/o2_low_jsonld/repaired/input.facts.ttl: 21 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [20.8s, 20.7s in the model]
+    [persons and participation] pass 2: 9 finding(s) in; model proposed 6 group(s), 16 op(s), 1 merge(s)
+    [persons and participation] pass 2: applied 17 (of which 1 merge(s)), skipped 2, stub orphans swept 0 [64.5s, 64.4s in the model]
+    SKIPPED [doc:guardian_1, doc:lawyer_1, and doc:applicant_1 have multiple rdfs:labels.] remove doc:guardian_1 rdfs:label applicant's guardian: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [doc:guardian_1, doc:lawyer_1, and doc:applicant_1 have multiple rdfs:labels.] remove doc:lawyer_1 rdfs:label applicant's lawyer: applied (matched 1 literal(s) by lexical form)
+  [source quote fidelity] results/experiment_arms_20260825_133905/o2_low_jsonld/repaired/input.facts.ttl: 1 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [33.7s, 33.7s in the model]
+    [source quote fidelity] pass 1: no operations applied - stopping
+    document total: 148.4s across 4 model call(s) (147.1s in the model)
+    wrote results/experiment_arms_20260825_133905/o2_low_jsonld/repaired/input.facts.ttl (backup at results/experiment_arms_20260825_133905/o2_low_jsonld/repaired/backup/input.facts.ttl)
+
+  repair total: 148.4s over 1 document(s), 4 model call(s) (147.1s in the model, 1.3s deterministic)
+    proceedings      1 call(s)     28.3s  (28.3s in the model)
+    persons          2 call(s)     85.3s  (85.1s in the model)
+    quotes           1 call(s)     33.7s  (33.7s in the model)

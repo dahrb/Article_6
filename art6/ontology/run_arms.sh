@@ -199,6 +199,11 @@ PROJECT_SUFFIX="${PROJECT_SUFFIX:-}"
 VLLM_API_KEY="${VLLM_API_KEY:-token-abc123}"
 API_KEY="${API_KEY:-${VLLM_API_KEY}}"
 ONTOLOGY_TTL="${ONTOLOGY_TTL:-${REPO_ROOT}/ontology/echr.ttl}"
+# SHACL shapes handed to OntoCast's OWN validation gate (FACTS_SHAPES_DIR).
+# Empty disables the gate and restores the pre-2026-08-25 behaviour, where
+# every validation.json reported shacl_evaluated:null -- which reads as
+# "clean" and actually means "never checked".
+SHAPES_TTL="${SHAPES_TTL:-${REPO_ROOT}/ontology/echr-shapes.ttl}"
 BASE_ENV_FILE="${BASE_ENV_FILE:-${REPO_ROOT}/ontology/ontology_vllm.env}"
 
 FUSEKI_URI="${FUSEKI_URI:-http://localhost:3032}"
@@ -246,12 +251,84 @@ fuseki_create_ds() {
         'http://localhost:3030/$/datasets' >/dev/null 2>&1 || true
 }
 
+# OntoCast's seed scanner loads EVERY *.ttl in ONTOCAST_ONTOLOGY_DIRECTORY as a
+# candidate ontology. A shapes file has no owl:Ontology declaration, so it syncs
+# under a null IRI ("Cannot add ontology without valid IRI"), and the next fetch
+# fails with "Fetched 1 of 2 ontology graphs; 1 failed. The catalog is
+# incomplete" -- which discards the WHOLE assembled ontology context, silently.
+# This script therefore stages the ontology and the shapes into two separate
+# single-file directories rather than pointing either at ontology/.
+#
+# The damage also persists: those null-IRI graphs are content-addressed and stay
+# in the Fuseki ontologies dataset across runs, because the fetch step lists
+# every named graph in the dataset rather than only the current seed set. So a
+# project polluted once stays broken until the graphs are deleted by URI, which
+# is what this does.
+#
+# Deletion goes through python3, not curl: the graph URIs contain '#', which
+# curl treats as a fragment delimiter and strips, so the DELETE lands on the
+# wrong URI and 404s while looking like it worked.
+fuseki_purge_foreign_ontology_graphs() {
+    local ds="$1"
+    FUSEKI_URI="${FUSEKI_URI}" FUSEKI_USERPASS="${FUSEKI_USERPASS}" DS="${ds}" \
+    python3 - <<'PYPURGE'
+import base64, json, os, urllib.error, urllib.parse, urllib.request
+
+base = os.environ["FUSEKI_URI"].rstrip("/")
+dataset = os.environ["DS"]
+auth = base64.b64encode(os.environ["FUSEKI_USERPASS"].encode()).decode()
+headers = {"Authorization": f"Basic {auth}"}
+
+
+def request(url, method="GET", extra_headers=None):
+    req = urllib.request.Request(
+        url, method=method, headers={**headers, **(extra_headers or {})}
+    )
+    return urllib.request.urlopen(req, timeout=15)
+
+
+query = urllib.parse.urlencode(
+    {"query": "SELECT DISTINCT ?g WHERE { GRAPH ?g { ?s ?p ?o } }"}
+)
+try:
+    with request(
+        f"{base}/{dataset}/sparql?{query}",
+        extra_headers={"Accept": "application/sparql-results+json"},
+    ) as response:
+        rows = json.load(response)["results"]["bindings"]
+except Exception as error:  # dataset may be brand new and empty
+    print(f"  fuseki:   {dataset} (could not list graphs: {error})")
+    raise SystemExit(0)
+
+# Keep only graphs belonging to the echr catalog; anything else in an
+# ONTOLOGIES dataset got there by the seed-scanner accident above.
+stale = [r["g"]["value"] for r in rows if "/echr#" not in r["g"]["value"]]
+for graph in stale:
+    target = f"{base}/{dataset}/data?{urllib.parse.urlencode({'graph': graph})}"
+    try:
+        with request(target, method="DELETE") as response:
+            print(f"  fuseki:   purged stale ontology graph {graph} ({response.status})")
+    except urllib.error.HTTPError as error:
+        print(f"  fuseki:   FAILED to purge {graph}: {error.code}")
+if not stale:
+    print(f"  fuseki:   {dataset} (no stale ontology graphs)")
+PYPURGE
+}
+
 # --- preflight -------------------------------------------------------------
 
 printf '=== preflight ===\n'
 
 [[ -f "${BASE_ENV_FILE}"     ]] || die "base env not found: ${BASE_ENV_FILE}"
 [[ -f "${ONTOLOGY_TTL}"      ]] || die "ontology not found: ${ONTOLOGY_TTL}"
+if [[ -n "${SHAPES_TTL}" ]]; then
+    [[ -f "${SHAPES_TTL}" ]] || die "shapes not found: ${SHAPES_TTL}"
+    # pyshacl lives in the ONTOCAST venv, not ours: the gate runs inside
+    # ontocast. Without the extra it logs a warning and reports nothing, which
+    # is the same silent "clean" this change exists to remove.
+    (cd "${ONTOCAST_REPO}" && env -u VIRTUAL_ENV uv run python -c 'import pyshacl' 2>/dev/null) \
+        || die "ontocast venv lacks pyshacl - run: (cd ${ONTOCAST_REPO} && uv sync --extra shacl)"
+fi
 [[ -f "${TEST_SET_JSON}"     ]] || die "test set not found: ${TEST_SET_JSON}"
 [[ -f "${FACTS_PROMPT_FILE}" ]] || die "facts prompt not found: ${FACTS_PROMPT_FILE}"
 [[ -d "${ONTOCAST_REPO}"     ]] || die "ontocast checkout not found: ${ONTOCAST_REPO}"
@@ -289,6 +366,9 @@ for arm in ${ARMS}; do
                 printf '  fuseki:   %s (created)\n' "${ds}"
             fi
         fi
+        if [[ "${suffix}" == "ontologies" && -n "${SHAPES_TTL}" ]]; then
+            fuseki_purge_foreign_ontology_graphs "${ds}"
+        fi
     done
 done
 
@@ -307,6 +387,24 @@ fi
 
 mkdir -p "${EXPERIMENT_DIR}"
 cp "${ONTOLOGY_TTL}" "${EXPERIMENT_DIR}/echr.ttl.snapshot"
+
+# Two SINGLE-FILE staging directories, because OntoCast globs *.ttl in each.
+# Pointing ONTOCAST_ONTOLOGY_DIRECTORY at ontology/ silently destroys the whole
+# ontology context (see fuseki_purge_foreign_ontology_graphs above). Staged
+# under EXPERIMENT_DIR so the run records exactly which ontology and which
+# shapes it used.
+ONTOLOGY_SEED_DIR="${EXPERIMENT_DIR}/ontology_seed"
+SHAPES_DIR="${EXPERIMENT_DIR}/shapes"
+rm -rf "${ONTOLOGY_SEED_DIR}" "${SHAPES_DIR}"
+mkdir -p "${ONTOLOGY_SEED_DIR}"
+cp "${ONTOLOGY_TTL}" "${ONTOLOGY_SEED_DIR}/"
+if [[ -n "${SHAPES_TTL}" ]]; then
+    mkdir -p "${SHAPES_DIR}"
+    cp "${SHAPES_TTL}" "${SHAPES_DIR}/"
+    printf '  shapes:   %s -> OntoCast facts gate\n' "${SHAPES_TTL#${REPO_ROOT}/}"
+else
+    printf '  shapes:   <disabled> (OntoCast gate reports no SHACL)\n'
+fi
 cp "${FACTS_PROMPT_FILE}" "${EXPERIMENT_DIR}/facts.prompt.snapshot"
 cp "${SCRIPT_DIR}/prompts/repair_system_prompt.txt" "${EXPERIMENT_DIR}/repair_system_prompt.snapshot"
 
@@ -366,6 +464,9 @@ print(json.dumps({
     "held_constant": {
         "ontology": "${ONTOLOGY_TTL} (snapshot alongside)",
         "ontology_version": "${ontology_version}",
+        "shacl_shapes": "${SHAPES_TTL}" or None,
+        "shacl_gate": "ontocast facts gate (FACTS_SHAPES_DIR)" if "${SHAPES_TTL}" else "disabled",
+        "shacl_autofix": "prune" if "${SHAPES_TTL}" else None,
         "facts_prompt": "art6/ontology/prompts/facts.txt (snapshot alongside)",
         "chunk_section_classifier": "off",
         "ontology_context_mode": "fixed_single_ontology",
@@ -420,6 +521,27 @@ for arm in ${ARMS}; do
         printf 'CHUNK_MAX_SIZE=%s\n' "${chunk_max}"
         printf 'MAX_VISITS=%s\n' "${max_visits}"
         printf 'ONTOLOGY_CONTEXT_FIXED_ONTOLOGY_ID=echr\n'
+        # Overrides the base env's ontology/ path: that directory also holds
+        # echr-shapes.ttl, which the seed scanner would load as a second,
+        # null-IRI ontology and thereby discard the whole catalog.
+        printf 'ONTOCAST_ONTOLOGY_DIRECTORY=%s\n' "${ONTOLOGY_SEED_DIR}"
+        if [[ -n "${SHAPES_TTL}" ]]; then
+            # OntoCast's own SHACL gate. autofix stays at its default 'prune',
+            # which is LLM-free and deliberately narrow: it retypes literals
+            # against sh:datatype, resolves a literal to a catalog IRI, and
+            # drops nodes that violate sh:minCount while asserting nothing.
+            # Measured 2026-08-25 on L1: 0 repairs applied against 19
+            # violations, because every one was MaxCount (two labels, two
+            # courts, two dates) or a Class violation on a node that is already
+            # an IRI. Choosing which of two labels to discard is judgment, and
+            # OntoCast declines it by design -- that is what new_repair.py is
+            # for. The gate is enabled to REPORT, not to repair.
+            printf 'FACTS_SHAPES_DIR=%s\n' "${SHAPES_DIR}"
+            printf 'FACTS_SHACL_INFERENCE=rdfs\n'
+            printf 'FACTS_SHACL_ADVANCED=true\n'
+            printf 'FACTS_SHACL_AUTOFIX=prune\n'
+            printf 'FACTS_SHACL_AUTOFIX_PASSES=1\n'
+        fi
     } > "${arm_env}"
 
     # ---- phase 1: extraction ----

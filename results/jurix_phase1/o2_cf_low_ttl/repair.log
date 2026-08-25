@@ -1,191 +1,58 @@
 repairing 10 file(s) under results/jurix_phase1/o2_cf_low_ttl/repaired
   model: gemma-4-31b @ http://localhost:8000/v1 (temperature 0.4, timeout 300.0s)
   source text: results/jurix_phase1/input.jsonl (quote stage enabled)
-  grammar warm-up skipped: APITimeoutError: Request timed out.
-  [domestic authorities] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L1.facts.ttl: 2 finding(s) in; model proposed 1 group(s), 7 op(s), 0 merge(s)
-    [domestic authorities] pass 1: applied 7 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [9.7s, 9.5s in the model]
+  [domestic authorities] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L1.facts.ttl: 2 finding(s) in; model proposed 1 group(s), 4 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 4 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [6.5s, 6.3s in the model]
     [domestic authorities] pass 2: nothing left to flag - stopping
     RECOVERED 1 group(s), 1 op(s) from a stalled generation
   [domestic proceedings] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L1.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
-    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.6s, 7.5s in the model]
+    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [6.9s, 6.9s in the model]
     [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
-    RECOVERED 2 group(s), 1 op(s) from a stalled generation
-  [persons and participation] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L1.facts.ttl: 10 finding(s) in; model proposed 2 group(s), 1 op(s), 0 merge(s)
-    [persons and participation] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.7s, 7.7s in the model]
-    [persons and participation] pass 1: 1 op(s) applied but findings did not fall (10 -> 10) - stopping
+  [persons and participation] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L1.facts.ttl: 10 finding(s) in; model proposed 16 group(s), 25 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 25 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [26.1s, 26.1s in the model]
+    [persons and participation] pass 2: 7 finding(s) in; model proposed 5 group(s), 8 op(s), 0 merge(s)
+    [persons and participation] pass 2: applied 8 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [17.3s, 17.3s in the model]
   [source quote fidelity] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L1.facts.ttl: 4 finding(s) in; model proposed 4 group(s), 8 op(s), 0 merge(s)
-    [source quote fidelity] pass 1: applied 8 (of which 0 merge(s)), skipped 4, stub orphans swept 0 [11.2s, 11.2s in the model]
-    SKIPPED [The quote for doc:municipalSocialAssistanceDept is a paraphrase/fragment. The source text uses curly quotes for ‘social assessment’ and includes the date and full context in the sentence.] remove doc:municipalSocialAssistanceDept echr:hasSupportingQuote the municipal social assistance department carried out a ‘social assessment': applied (removed 1 quote(s) by index)
-    SKIPPED [The quote for doc:participationAssessmentDept is a paraphrase/fragment.] remove doc:participationAssessmentDept echr:hasSupportingQuote the municipal social assistance department carried out a ‘social assessment': applied (removed 1 quote(s) by index)
-    SKIPPED [The quote for doc:actionSocialAssessment uses a single quote instead of the double quotes found in the source text.] remove doc:actionSocialAssessment echr:hasSupportingQuote on 30 December 2005 the municipal social assistance department carried out a ‘social assessment' ( социална оценка ) of the applicant: applied (removed 1 quote(s) by index)
-    SKIPPED [The quote for doc:participationAssessmentStanev is a fragment with incorrect quotation marks.] remove doc:participationAssessmentStanev echr:hasSupportingQuote carried out a ‘social assessment' ( социална оценка ) of the applicant: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 1: applied 8 (of which 0 merge(s)), skipped 4, stub orphans swept 0 [11.3s, 11.3s in the model]
+    SKIPPED [The quote for doc:municipalSocialAssistanceDept is a paraphrase; the source text uses double curly quotes for 'social assessment' and includes the date and full context. Correcting to verbatim span.] remove doc:municipalSocialAssistanceDept echr:hasSupportingQuote the municipal social assistance department carried out a ‘social assessment': applied (removed 1 quote(s) by index)
+    SKIPPED [The quote for doc:participationAssessmentDept is a paraphrase and lacks verbatim accuracy. Correcting to the full span from the source.] remove doc:participationAssessmentDept echr:hasSupportingQuote the municipal social assistance department carried out a ‘social assessment': applied (removed 1 quote(s) by index)
+    SKIPPED [The quote for doc:actionSocialAssessment uses single quotes instead of the double curly quotes found in the source text. Correcting for character-for-character fidelity.] remove doc:actionSocialAssessment echr:hasSupportingQuote on 30 December 2005 the municipal social assistance department carried out a ‘social assessment' ( социална оценка ) of the applicant: applied (removed 1 quote(s) by index)
+    SKIPPED [The quote for doc:participationAssessmentStanev is a fragment with incorrect quotation marks. Correcting to the full verbatim span.] remove doc:participationAssessmentStanev echr:hasSupportingQuote carried out a ‘social assessment' ( социална оценка ) of the applicant: applied (removed 1 quote(s) by index)
     [source quote fidelity] pass 2: nothing left to flag - stopping
-    document total: 36.6s across 4 model call(s) (35.9s in the model)
+    document total: 68.3s across 5 model call(s) (67.9s in the model)
     wrote results/jurix_phase1/o2_cf_low_ttl/repaired/input.L1.facts.ttl (backup at results/jurix_phase1/o2_cf_low_ttl/repaired/backup/input.L1.facts.ttl)
   [domestic authorities] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L10.facts.ttl: nothing flagged
-    RECOVERED 7 group(s), 1 op(s) from a stalled generation
-  [domestic proceedings] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L10.facts.ttl: 0 finding(s) in; model proposed 7 group(s), 1 op(s), 0 merge(s)
-    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [18.3s, 18.3s in the model]
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [domestic proceedings] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L10.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [8.1s, 8.1s in the model]
     [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
-  [persons and participation] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L10.facts.ttl: 12 finding(s) in; model proposed 5 group(s), 16 op(s), 0 merge(s)
-    [persons and participation] pass 1: applied 16 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [25.1s, 25.0s in the model]
-    [persons and participation] pass 2: 0 finding(s) in; model proposed 13 group(s), 60 op(s), 0 merge(s)
-    [persons and participation] pass 2: applied 60 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [78.0s, 77.9s in the model]
-    [persons and participation] pass 2: 60 op(s) applied but findings did not fall (0 -> 1) - stopping
-  [source quote fidelity] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L10.facts.ttl: 5 finding(s) in; model proposed 5 group(s), 4 op(s), 0 merge(s)
-    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 4, stub orphans swept 0 [7.7s, 7.6s in the model]
-    SKIPPED [The quote for doc:unilateralActionStayExecution contains an ellipsis and is not a verbatim span.] remove doc:unilateralActionStayExecution echr:hasSupportingQuote the Belgian State... lodged a unilateral action to that effect with the President of the Brussels Dutch-speaking TPI on 13 December 2016, but was unsuccessful (order of the same date): applied (removed 1 quote(s) by index)
-    SKIPPED [The quote for doc:unilateralActionStayExecution contains an ellipsis and is not a verbatim span.] add doc:unilateralActionStayExecution echr:hasSupportingQuote the Belgian State, which sought for its part a stay of execution of the Brussels Court of Appeal’s judgment of 7 December 2016, lodged a unilateral action to that effect with the President of the Brussels Dutch – speaking TPI on 13 December 2016, but was unsuccessful (order of the same date): skipped: quote does not appear verbatim in the source document
-    SKIPPED [The quote for doc:tpiBrusselsDutch is not a verbatim span (missing hyphen/dash formatting).] remove doc:tpiBrusselsDutch echr:hasSupportingQuote Brussels Dutch-speaking TPI: applied (removed 1 quote(s) by index)
-    SKIPPED [The quote for doc:tpiBrusselsDutch is not a verbatim span (missing hyphen/dash formatting).] add doc:tpiBrusselsDutch echr:hasSupportingQuote Brussels Dutch – speaking TPI: skipped: quote does not appear verbatim in the source document
-    [source quote fidelity] pass 2: 3 finding(s) in; model proposed 3 group(s), 6 op(s), 0 merge(s)
-    [source quote fidelity] pass 2: applied 3 (of which 0 merge(s)), skipped 6, stub orphans swept 0 [7.3s, 7.1s in the model]
-    SKIPPED [The quote for doc:enforcementActionState is almost verbatim but missing a hyphen in 'Dutch-language'.] remove doc:enforcementActionState echr:hasSupportingQuote On the same date the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI: applied (removed 1 quote(s) by index)
-    SKIPPED [The quote for doc:enforcementActionState is almost verbatim but missing a hyphen in 'Dutch-language'.] add doc:enforcementActionState echr:hasSupportingQuote On the same date the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch – language TPI: skipped: quote does not appear verbatim in the source document
-    SKIPPED [The quote for doc:tpiBrusselsDutchEnforcement is a paraphrase/fragment.] remove doc:tpiBrusselsDutchEnforcement echr:hasSupportingQuote enforcement judge at the Brussels Dutch-language TPI: applied (removed 1 quote(s) by index)
-    SKIPPED [The quote for doc:tpiBrusselsDutchEnforcement is a paraphrase/fragment.] add doc:tpiBrusselsDutchEnforcement echr:hasSupportingQuote enforcement judge at the Brussels Dutch – language TPI: skipped: quote does not appear verbatim in the source document
-    SKIPPED [The quote for doc:interPartesActionTpi is almost verbatim but missing a non-breaking space/special character in 'French-language'.] remove doc:interPartesActionTpi echr:hasSupportingQuote On 7 November 2016 another judge acting as president of the French-language TPI declared their application admissible but unfounded: applied (removed 1 quote(s) by index)
-    SKIPPED [The quote for doc:interPartesActionTpi is almost verbatim but missing a non-breaking space/special character in 'French-language'.] add doc:interPartesActionTpi echr:hasSupportingQuote On 7 November 2016 another judge acting as president of the French – language TPI declared their application admissible but unfounded: skipped: quote does not appear verbatim in the source document
-    [source quote fidelity] pass 3: nothing left to flag - stopping
-    document total: 136.8s across 5 model call(s) (135.9s in the model)
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [persons and participation] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L10.facts.ttl: 12 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [6.7s, 6.7s in the model]
+    [persons and participation] pass 1: 1 op(s) applied but findings did not fall (12 -> 13) - stopping
+  [source quote fidelity] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L10.facts.ttl: 5 finding(s) in; model proposed 5 group(s), 10 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 5 (of which 0 merge(s)), skipped 10, stub orphans swept 0 [12.2s, 12.2s in the model]
+    SKIPPED [The quote 'Brussels Dutch-speaking TPI' is a paraphrase. The source text refers to the 'Brussels Dutch-speaking TPI' in paragraph 37, but as part of a larger phrase. However, looking at the exact wording in paragraph 37, it says 'President of the Brussels Dutch-speaking TPI'.] remove doc:tpiBrusselsDutch echr:hasSupportingQuote Brussels Dutch-speaking TPI: applied (removed 1 quote(s) by index)
+    SKIPPED [The quote 'Brussels Dutch-speaking TPI' is a paraphrase. The source text refers to the 'Brussels Dutch-speaking TPI' in paragraph 37, but as part of a larger phrase. However, looking at the exact wording in paragraph 37, it says 'President of the Brussels Dutch-speaking TPI'.] add doc:tpiBrusselsDutch echr:hasSupportingQuote Brussels Dutch-speaking TPI: skipped: quote does not appear verbatim in the source document
+    SKIPPED [The quote for doc:unilateralActionStayExecution is slightly modified (ellipses used).] remove doc:unilateralActionStayExecution echr:hasSupportingQuote the Belgian State... lodged a unilateral action to that effect with the President of the Brussels Dutch-speaking TPI on 13 December 2016, but was unsuccessful (order of the same date): applied (removed 1 quote(s) by index)
+    SKIPPED [The quote for doc:unilateralActionStayExecution is slightly modified (ellipses used).] add doc:unilateralActionStayExecution echr:hasSupportingQuote the Belgian State, which sought for its part a stay of execution of the Brussels Court of Appeal’s judgment of 7 December 2016, lodged a unilateral action to that effect with the President of the Brussels Dutch-speaking TPI on 13 December 2016, but was unsuccessful (order of the same date): skipped: quote does not appear verbatim in the source document
+    SKIPPED [The quote for doc:enforcementActionState is verbatim.] remove doc:enforcementActionState echr:hasSupportingQuote On the same date the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI: applied (removed 1 quote(s) by index)
+    SKIPPED [The quote for doc:enforcementActionState is verbatim.] add doc:enforcementActionState echr:hasSupportingQuote On the same date the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch-language TPI: skipped: quote does not appear verbatim in the source document
+    SKIPPED [The quote for doc:interPartesActionTpi is verbatim.] remove doc:interPartesActionTpi echr:hasSupportingQuote On 7 November 2016 another judge acting as president of the French-language TPI declared their application admissible but unfounded: applied (removed 1 quote(s) by index)
+    SKIPPED [The quote for doc:interPartesActionTpi is verbatim.] add doc:interPartesActionTpi echr:hasSupportingQuote On 7 November 2016 another judge acting as president of the French-language TPI declared their application admissible but unfounded: skipped: quote does not appear verbatim in the source document
+    SKIPPED [The quote for doc:tpiBrusselsDutchEnforcement is verbatim.] remove doc:tpiBrusselsDutchEnforcement echr:hasSupportingQuote enforcement judge at the Brussels Dutch-language TPI: applied (removed 1 quote(s) by index)
+    SKIPPED [The quote for doc:tpiBrusselsDutchEnforcement is verbatim.] add doc:tpiBrusselsDutchEnforcement echr:hasSupportingQuote enforcement judge at the Brussels Dutch-language TPI: skipped: quote does not appear verbatim in the source document
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 27.2s across 3 model call(s) (27.0s in the model)
     wrote results/jurix_phase1/o2_cf_low_ttl/repaired/input.L10.facts.ttl (backup at results/jurix_phase1/o2_cf_low_ttl/repaired/backup/input.L10.facts.ttl)
   [domestic authorities] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L2.facts.ttl: 6 finding(s) in; model proposed 6 group(s), 6 op(s), 0 merge(s)
-    [domestic authorities] pass 1: applied 6 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [9.7s, 9.6s in the model]
-    [domestic authorities] pass 2: nothing left to flag - stopping
-  [domestic proceedings] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L2.facts.ttl: 0 finding(s) in; model proposed 3 group(s), 3 op(s), 0 merge(s)
-    [domestic proceedings] pass 1: applied 2 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [7.3s, 7.3s in the model]
-    SKIPPED [doc:agreementBeerT is flagged as missing a court, but it is an employment termination agreement, not a proceeding decided by an authority.] remove doc:agreementBeerT echr:hasDecisionDate 1995-06-20: skipped: triple not present
-    [domestic proceedings] pass 1: 2 op(s) applied but findings did not fall (0 -> 0) - stopping
-  [persons and participation] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L2.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
-    [persons and participation] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.5s, 0.5s in the model]
-    [persons and participation] pass 1: no operations applied - stopping
-  [source quote fidelity] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L2.facts.ttl: 2 finding(s) in; model proposed 2 group(s), 4 op(s), 0 merge(s)
-    [source quote fidelity] pass 1: applied 3 (of which 0 merge(s)), skipped 3, stub orphans swept 0 [7.3s, 7.3s in the model]
-    SKIPPED [The quote for doc:proceedingEsaStatus is a paraphrase of paragraph 46. The verbatim span in the source is 'In the instant case the Darmstadt Labour Court concluded that the conditions under section 20(2) of the German Courts Act for finding that the applicants’ action was inadmissible were fulfilled.'] remove doc:proceedingEsaStatus echr:hasSupportingQuote The Darmstadt Labour Court concluded that the conditions under section 20(2) of the German Courts Act for finding that the applicants’ action was inadmissible were fulfilled.: applied (removed 1 quote(s) by index)
-    SKIPPED [The quote for doc:regan_1 is almost verbatim but contains a slight difference in spacing/formatting compared to the source text 'Mr Philip Regan is a British national, born in 1960 and resident in London in the United Kingdom.' (Note: source has a non-breaking space or specific character in 'Mr Philip', but the text matches). Actually, looking closer at the source: 'Mr Philip Regan is a British national, born in 1960 and resident in London in the United Kingdom.' matches exactly.] remove doc:regan_1 echr:hasSupportingQuote Mr Philip Regan is a British national, born in 1960 and resident in London in the United Kingdom.: applied (removed 1 quote(s) by index)
-    SKIPPED [The quote for doc:regan_1 is almost verbatim but contains a slight difference in spacing/formatting compared to the source text 'Mr Philip Regan is a British national, born in 1960 and resident in London in the United Kingdom.' (Note: source has a non-breaking space or specific character in 'Mr Philip', but the text matches). Actually, looking closer at the source: 'Mr Philip Regan is a British national, born in 1960 and resident in London in the United Kingdom.' matches exactly.] add doc:regan_1 echr:hasSupportingQuote Mr Philip Regan is a British national, born in 1960 and resident in London in the United Kingdom.: skipped: quote does not appear verbatim in the source document
-    [source quote fidelity] pass 2: nothing left to flag - stopping
-    document total: 25.1s across 4 model call(s) (24.7s in the model)
-    wrote results/jurix_phase1/o2_cf_low_ttl/repaired/input.L2.facts.ttl (backup at results/jurix_phase1/o2_cf_low_ttl/repaired/backup/input.L2.facts.ttl)
-  [domestic authorities] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L3.facts.ttl: nothing flagged
-    RECOVERED 1 group(s), 1 op(s) from a stalled generation
-  [domestic proceedings] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L3.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
-    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [8.2s, 8.2s in the model]
-    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
-    RECOVERED 1 group(s), 1 op(s) from a stalled generation
-  [persons and participation] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L3.facts.ttl: 3 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
-    [persons and participation] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [6.1s, 6.1s in the model]
-    RECOVERED 1 group(s), 1 op(s) from a stalled generation
-    [persons and participation] pass 2: 2 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
-    [persons and participation] pass 2: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.3s, 7.3s in the model]
-    [persons and participation] pass 3: 1 finding(s) in; model proposed 3 group(s), 29 op(s), 0 merge(s)
-    [persons and participation] pass 3: applied 29 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [34.9s, 34.8s in the model]
-  [source quote fidelity] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L3.facts.ttl: 3 finding(s) in; model proposed 3 group(s), 6 op(s), 0 merge(s)
-    [source quote fidelity] pass 1: applied 6 (of which 0 merge(s)), skipped 3, stub orphans swept 0 [8.6s, 8.6s in the model]
-    SKIPPED [The quote 'recover 726,122,000 Turkish liras from the former shareholders, including... Erol Aksoy' is a paraphrase. The source text contains a verbatim span that covers this fact.] remove doc:participationAksoyRecovery echr:hasSupportingQuote recover 726,122,000 Turkish liras from the former shareholders, including... Erol Aksoy: applied (removed 1 quote(s) by index)
-    SKIPPED [The quote 'the applicant personally signed the Liquidation Protocol as one of the debtors' is almost verbatim but missing the start of the sentence.] remove doc:participationAksoyProtocol echr:hasSupportingQuote the applicant personally signed the Liquidation Protocol as one of the debtors: applied (removed 1 quote(s) by index)
-    SKIPPED [The quote 'the applicant complained that the Fund’s failure to implement the annulment judgment constituted a violation of his property rights' is a paraphrase.] remove doc:participationAksoyConstProperty echr:hasSupportingQuote the applicant complained that the Fund’s failure to implement the annulment judgment constituted a violation of his property rights: applied (removed 1 quote(s) by index)
-    [source quote fidelity] pass 2: nothing left to flag - stopping
-    document total: 65.5s across 5 model call(s) (65.0s in the model)
-    wrote results/jurix_phase1/o2_cf_low_ttl/repaired/input.L3.facts.ttl (backup at results/jurix_phase1/o2_cf_low_ttl/repaired/backup/input.L3.facts.ttl)
-  [domestic authorities] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L4.facts.ttl: 3 finding(s) in; model proposed 3 group(s), 3 op(s), 0 merge(s)
-    [domestic authorities] pass 1: applied 3 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [5.6s, 5.5s in the model]
-    [domestic authorities] pass 2: nothing left to flag - stopping
-  [domestic proceedings] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L4.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 1 merge(s)
-    [domestic proceedings] pass 1: applied 1 (of which 1 merge(s)), skipped 0, stub orphans swept 0 [7.0s, 7.0s in the model]
-    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
-  [persons and participation] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L4.facts.ttl: 6 finding(s) in; model proposed 7 group(s), 29 op(s), 0 merge(s)
-    [persons and participation] pass 1: applied 29 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [36.8s, 36.7s in the model]
-    [persons and participation] pass 2: 5 finding(s) in; model proposed 5 group(s), 3 op(s), 0 merge(s)
-    [persons and participation] pass 2: applied 3 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [11.0s, 11.0s in the model]
-    [persons and participation] pass 3: nothing left to flag - stopping
-  [source quote fidelity] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L4.facts.ttl: nothing flagged
-    document total: 60.8s across 4 model call(s) (60.2s in the model)
-    wrote results/jurix_phase1/o2_cf_low_ttl/repaired/input.L4.facts.ttl (backup at results/jurix_phase1/o2_cf_low_ttl/repaired/backup/input.L4.facts.ttl)
-  [domestic authorities] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L5.facts.ttl: 2 finding(s) in; model proposed 1 group(s), 15 op(s), 0 merge(s)
-    [domestic authorities] pass 1: applied 15 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [13.2s, 13.2s in the model]
+    [domestic authorities] pass 1: applied 6 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [11.1s, 11.0s in the model]
     [domestic authorities] pass 2: nothing left to flag - stopping
     RECOVERED 1 group(s), 1 op(s) from a stalled generation
-  [domestic proceedings] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L5.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
-    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.3s, 7.3s in the model]
-    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (1 -> 1) - stopping
-  [persons and participation] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L5.facts.ttl: 0 finding(s) in; model proposed 2 group(s), 12 op(s), 0 merge(s)
-    [persons and participation] pass 1: applied 12 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [15.6s, 15.6s in the model]
-    [persons and participation] pass 1: 12 op(s) applied but findings did not fall (0 -> 1) - stopping
-  [source quote fidelity] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L5.facts.ttl: 2 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
-    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [3.5s, 3.5s in the model]
-    SKIPPED [The quote "the applicant’s absence from the meeting of 7 December 2012" is not a verbatim span in the source text. It appears to be a paraphrase of phrases found in paragraphs 8 and 9.] remove doc:proceeding_qdc_meeting_2012 echr:hasSupportingQuote the applicant’s absence from the meeting of 7 December 2012: applied (removed 1 quote(s) by index)
-    [source quote fidelity] pass 2: 1 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
-    [source quote fidelity] pass 2: applied 2 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [2.7s, 2.7s in the model]
-    SKIPPED [The quote 'the applicant’s absence from the meeting of 7 December 2012' is a paraphrase. The source text contains a very similar phrase in paragraph 8.] remove doc:part_martynovskiy_meeting_2012 echr:hasSupportingQuote the applicant’s absence from the meeting of 7 December 2012: applied (removed 1 quote(s) by index)
-    [source quote fidelity] pass 3: nothing left to flag - stopping
-    document total: 42.7s across 5 model call(s) (42.3s in the model)
-    wrote results/jurix_phase1/o2_cf_low_ttl/repaired/input.L5.facts.ttl (backup at results/jurix_phase1/o2_cf_low_ttl/repaired/backup/input.L5.facts.ttl)
-  [domestic authorities] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L6.facts.ttl: nothing flagged
-    RECOVERED 1 group(s), 1 op(s) from a stalled generation
-  [domestic proceedings] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L6.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
-    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [6.4s, 6.4s in the model]
-    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
-  [persons and participation] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L6.facts.ttl: 3 finding(s) in; model proposed 4 group(s), 25 op(s), 0 merge(s)
-    [persons and participation] pass 1: applied 25 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [31.1s, 31.1s in the model]
-    [persons and participation] pass 2: 0 finding(s) in; model proposed 8 group(s), 60 op(s), 0 merge(s)
-    [persons and participation] pass 2: applied 60 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [62.9s, 62.9s in the model]
-    [persons and participation] pass 2: 60 op(s) applied but findings did not fall (0 -> 0) - stopping
-  [source quote fidelity] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L6.facts.ttl: nothing flagged
-    document total: 100.6s across 3 model call(s) (100.4s in the model)
-    wrote results/jurix_phase1/o2_cf_low_ttl/repaired/input.L6.facts.ttl (backup at results/jurix_phase1/o2_cf_low_ttl/repaired/backup/input.L6.facts.ttl)
-  [domestic authorities] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L7.facts.ttl: nothing flagged
-  [domestic proceedings] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L7.facts.ttl: nothing flagged
-  [persons and participation] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L7.facts.ttl: 1 finding(s) in; model proposed 5 group(s), 18 op(s), 0 merge(s)
-    [persons and participation] pass 1: applied 18 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [25.2s, 25.2s in the model]
-    [persons and participation] pass 1: 18 op(s) applied but findings did not fall (1 -> 1) - stopping
-  [source quote fidelity] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L7.facts.ttl: nothing flagged
-    document total: 25.5s across 1 model call(s) (25.2s in the model)
-    wrote results/jurix_phase1/o2_cf_low_ttl/repaired/input.L7.facts.ttl (backup at results/jurix_phase1/o2_cf_low_ttl/repaired/backup/input.L7.facts.ttl)
-  [domestic authorities] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L8.facts.ttl: nothing flagged
-  [domestic proceedings] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L8.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
-    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [1.0s, 1.0s in the model]
+  [domestic proceedings] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L2.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [8.6s, 8.6s in the model]
+    SKIPPED [doc:agreementBeerT is flagged as missing a court, but it is an employment termination agreement, not a proceeding before a court or authority.] remove doc:agreementBeerT rdf:type echr:DomesticProceeding: skipped: triple not present
     [domestic proceedings] pass 1: no operations applied - stopping
-  [persons and participation] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L8.facts.ttl: 6 finding(s) in; model proposed 7 group(s), 39 op(s), 0 merge(s)
-    [persons and participation] pass 1: applied 39 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [50.3s, 50.3s in the model]
-    [persons and participation] pass 2: 3 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
-    [persons and participation] pass 2: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.7s, 0.7s in the model]
-    [persons and participation] pass 2: no operations applied - stopping
-  [source quote fidelity] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L8.facts.ttl: 4 finding(s) in; model proposed 4 group(s), 8 op(s), 0 merge(s)
-    [source quote fidelity] pass 1: applied 8 (of which 0 merge(s)), skipped 4, stub orphans swept 0 [16.9s, 16.9s in the model]
-    SKIPPED [The quote for doc:part_retrial_zhanto_1 is a fragment and not a verbatim span. The source contains the full sentence.] remove doc:part_retrial_zhanto_1 echr:hasSupportingQuote civil claims by the latter three companies, “Zhanto”: applied (removed 1 quote(s) by index)
-    SKIPPED [The quote for doc:order_breaches_1 is a concatenation of two sentences and not a single verbatim span.] remove doc:order_breaches_1 echr:hasSupportingQuote On 27 May 1998 the Regional Court made a number of further orders ( частные определения ) in the case. In one order the court noted breaches of the relevant rules of criminal procedure during investigation: applied (removed 1 quote(s) by index)
-    SKIPPED [The quote for doc:part_retrial_oka_1 is a fragment.] remove doc:part_retrial_oka_1 echr:hasSupportingQuote the court also granted civil claims for damages by the shipyard “Oka”: applied (removed 1 quote(s) by index)
-    SKIPPED [The quote for doc:part_cass_klimentyev_2 is a fragment.] remove doc:part_cass_klimentyev_2 echr:hasSupportingQuote the applicant requested permission to attend the hearing in the Supreme Court in person, but the request was turned down: applied (removed 1 quote(s) by index)
-    [source quote fidelity] pass 2: nothing left to flag - stopping
-    document total: 69.2s across 4 model call(s) (68.9s in the model)
-    wrote results/jurix_phase1/o2_cf_low_ttl/repaired/input.L8.facts.ttl (backup at results/jurix_phase1/o2_cf_low_ttl/repaired/backup/input.L8.facts.ttl)
-  [domestic authorities] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L9.facts.ttl: 9 finding(s) in; model proposed 9 group(s), 9 op(s), 0 merge(s)
-    [domestic authorities] pass 1: applied 9 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [14.1s, 14.1s in the model]
-    [domestic authorities] pass 2: nothing left to flag - stopping
-  [domestic proceedings] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L9.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
-    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [2.7s, 2.7s in the model]
-    [domestic proceedings] pass 2: nothing left to flag - stopping
-  [persons and participation] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L9.facts.ttl: 5 finding(s) in; model proposed 3 group(s), 13 op(s), 0 merge(s)
-    [persons and participation] pass 1: applied 13 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [18.4s, 18.4s in the model]
-    [persons and participation] pass 2: 3 finding(s) in; model proposed 2 group(s), 3 op(s), 0 merge(s)
-    [persons and participation] pass 2: applied 0 (of which 0 merge(s)), skipped 3, stub orphans swept 0 [6.7s, 6.7s in the model]
-    SKIPPED [doc:part_supreme_2, doc:part_appeal_2, and doc:part_trial_4 link to DomesticAuthority nodes as participating parties. Participation nodes must link to echr:Party.] remove doc:trial_supreme_court_1 echr:hasParticipation doc:part_supreme_2: skipped: triple not present
-    SKIPPED [doc:part_supreme_2, doc:part_appeal_2, and doc:part_trial_4 link to DomesticAuthority nodes as participating parties. Participation nodes must link to echr:Party.] remove doc:trial_appeal_1 echr:hasParticipation doc:part_appeal_2: skipped: triple not present
-    SKIPPED [doc:part_supreme_2, doc:part_appeal_2, and doc:part_trial_4 link to DomesticAuthority nodes as participating parties. Participation nodes must link to echr:Party.] remove doc:trial_first_instance_1 echr:hasParticipation doc:part_trial_4: skipped: triple not present
-    [persons and participation] pass 2: no operations applied - stopping
-  [source quote fidelity] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L9.facts.ttl: 2 finding(s) in; model proposed 2 group(s), 4 op(s), 0 merge(s)
-    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 4, stub orphans swept 0 [5.0s, 5.0s in the model]
-    SKIPPED [The quote 'during the trial at the first – instance court' contains a non-standard hyphen/dash character that does not match the source text's specific hyphenation.] remove doc:trial_first_instance_1 echr:hasSupportingQuote during the trial at the first ‐ instance court: applied (removed 1 quote(s) by index)
-    SKIPPED [The quote 'during the trial at the first – instance court' contains a non-standard hyphen/dash character that does not match the source text's specific hyphenation.] add doc:trial_first_instance_1 echr:hasSupportingQuote during the trial at the first – instance court: skipped: quote does not appear verbatim in the source document
-    SKIPPED [The quote 'first – instance court' contains a non-standard hyphen/dash character that does not match the source text.] remove doc:authority_court_first_instance_1 echr:hasSupportingQuote first ‐ instance court: applied (removed 1 quote(s) by index)
-    SKIPPED [The quote 'first – instance court' contains a non-standard hyphen/dash character that does not match the source text.] add doc:authority_court_first_instance_1 echr:hasSupportingQuote first – instance court: skipped: quote does not appear verbatim in the source document
-    [source quote fidelity] pass 2: nothing left to flag - stopping
-    document total: 47.3s across 5 model call(s) (46.9s in the model)
-    wrote results/jurix_phase1/o2_cf_low_ttl/repaired/input.L9.facts.ttl (backup at results/jurix_phase1/o2_cf_low_ttl/repaired/backup/input.L9.facts.ttl)
-
-  repair total: 610.3s over 10 document(s), 40 model call(s) (605.4s in the model, 4.9s deterministic)
-    authorities      5 call(s)     52.3s  (51.9s in the model)
-    proceedings      9 call(s)     65.8s  (65.7s in the model)
-    persons         17 call(s)    418.3s  (417.9s in the model)
-    quotes           9 call(s)     70.2s  (69.9s in the model)
+  [persons and participation] results/jurix_phase1/o2_cf_low_ttl/repaired/input.L2.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 8 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 8 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.1s, 7.1s in the model]
+    [persons and participation] pass 1: 8 op(s) applied but findings did not fall (0 -> 0) - stopping

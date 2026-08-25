@@ -1,0 +1,141 @@
+{
+  "source": "results/jurix_phase1/o2_cf_med_ttl/repaired/input.L4.facts.ttl",
+  "timings": {
+    "source": "results/jurix_phase1/o2_cf_med_ttl/repaired/input.L4.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 12.5,
+    "seconds_model_calls": 12.2,
+    "seconds_deterministic": 0.3,
+    "model_calls": 3,
+    "by_stage": {
+      "authorities": {
+        "passes": 1,
+        "seconds": 5.5,
+        "seconds_model_call": 5.5
+      },
+      "proceedings": {
+        "passes": 1,
+        "seconds": 0.5,
+        "seconds_model_call": 0.5
+      },
+      "persons": {
+        "passes": 1,
+        "seconds": 6.2,
+        "seconds_model_call": 6.2
+      }
+    },
+    "passes": [
+      {
+        "stage": "authorities",
+        "pass": 1,
+        "seconds_total": 5.5,
+        "seconds_model_call": 5.5,
+        "seconds_deterministic": 0.0,
+        "findings_in": 1,
+        "ops_proposed": 4,
+        "ops_applied": 4,
+        "merges_applied": 0
+      },
+      {
+        "stage": "proceedings",
+        "pass": 1,
+        "seconds_total": 0.5,
+        "seconds_model_call": 0.5,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 0,
+        "ops_applied": 0,
+        "merges_applied": 0
+      },
+      {
+        "stage": "persons",
+        "pass": 1,
+        "seconds_total": 6.2,
+        "seconds_model_call": 6.2,
+        "seconds_deterministic": 0.0,
+        "findings_in": 4,
+        "ops_proposed": 1,
+        "ops_applied": 1,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node doc:court_unknown_1 is missing the required echr:hasAuthorityName property. I will promote the value from rdfs:label to echr:hasAuthorityName to satisfy the cardinality constraint.",
+      "action": "add",
+      "subject": "doc:court_unknown_1",
+      "predicate": "echr:hasAuthorityName",
+      "object": "\"Court in criminal proceedings against Matko\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node doc:court_unknown_1 is missing the required echr:hasAuthorityName property. I will promote the value from rdfs:label to echr:hasAuthorityName to satisfy the cardinality constraint.",
+      "action": "remove",
+      "subject": "doc:court_unknown_1",
+      "predicate": "rdfs:label",
+      "object": "\"Court in criminal proceedings against Matko\"",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "Missing authority kind for doc:mia",
+      "rationale": "The Ministry of Internal Affairs is an executive/regulatory body, which corresponds to echr:AuthorityAdministrative.",
+      "action": "add",
+      "subject": "doc:mia",
+      "predicate": "echr:hasAuthorityKind",
+      "object": "echr:AuthorityAdministrative",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "Missing authority kind for doc:slovenjGradecPolice",
+      "rationale": "The police (Internal Affairs Administration) is an investigative authority, which corresponds to echr:AuthorityProsecutorial.",
+      "action": "add",
+      "subject": "doc:slovenjGradecPolice",
+      "predicate": "echr:hasAuthorityKind",
+      "object": "echr:AuthorityProsecutorial",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "doc:aleksanderMatko is missing gender",
+      "rationale": "The person's name includes the honorific 'Mr', which indicates male gender.",
+      "action": "add",
+      "subject": "doc:aleksanderMatko",
+      "predicate": "echr:hasGender",
+      "object": "echr:GenderMale",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    }
+  ]
+}

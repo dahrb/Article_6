@@ -1,0 +1,1017 @@
+{
+  "facts_dir": "results/jurix_phase1/o2_low_ttl/repaired",
+  "started": "2026-08-24T16:18:41+00:00",
+  "finished": "2026-08-24T16:34:51+00:00",
+  "model": "gemma-4-31b",
+  "base_url": "http://localhost:8000/v1",
+  "temperature": 0.4,
+  "passes_per_stage": 3,
+  "stages": [
+    "authorities",
+    "proceedings",
+    "persons",
+    "quotes"
+  ],
+  "documents": 10,
+  "documents_timed": 10,
+  "seconds_total": 969.4,
+  "seconds_model_calls": 966.1,
+  "seconds_deterministic": 3.3,
+  "model_calls": 60,
+  "seconds_per_document": 96.9,
+  "seconds_per_model_call": 16.1,
+  "by_stage": {
+    "authorities": {
+      "passes": 9,
+      "seconds": 83.1,
+      "seconds_model_call": 82.5
+    },
+    "proceedings": {
+      "passes": 21,
+      "seconds": 505.0,
+      "seconds_model_call": 504.6
+    },
+    "persons": {
+      "passes": 22,
+      "seconds": 330.0,
+      "seconds_model_call": 329.8
+    },
+    "quotes": {
+      "passes": 8,
+      "seconds": 49.2,
+      "seconds_model_call": 49.2
+    }
+  },
+  "by_document": [
+    {
+      "source": "results/jurix_phase1/o2_low_ttl/repaired/input.L1.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 84.7,
+      "seconds_model_calls": 84.2,
+      "seconds_deterministic": 0.5,
+      "model_calls": 5,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 14.4,
+          "seconds_model_call": 14.2
+        },
+        "proceedings": {
+          "passes": 2,
+          "seconds": 54.4,
+          "seconds_model_call": 54.3
+        },
+        "persons": {
+          "passes": 1,
+          "seconds": 6.6,
+          "seconds_model_call": 6.5
+        },
+        "quotes": {
+          "passes": 1,
+          "seconds": 9.2,
+          "seconds_model_call": 9.2
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 14.4,
+          "seconds_model_call": 14.2,
+          "seconds_deterministic": 0.2,
+          "findings_in": 7,
+          "ops_proposed": 9,
+          "ops_applied": 9,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 39.4,
+          "seconds_model_call": 39.4,
+          "seconds_deterministic": 0.0,
+          "findings_in": 9,
+          "ops_proposed": 30,
+          "ops_applied": 26,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 2,
+          "seconds_total": 15.0,
+          "seconds_model_call": 14.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 3,
+          "ops_proposed": 6,
+          "ops_applied": 2,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 6.6,
+          "seconds_model_call": 6.5,
+          "seconds_deterministic": 0.0,
+          "findings_in": 9,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 9.2,
+          "seconds_model_call": 9.2,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 6,
+          "ops_applied": 6,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1/o2_low_ttl/repaired/input.L10.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 247.4,
+      "seconds_model_calls": 246.8,
+      "seconds_deterministic": 0.6,
+      "model_calls": 8,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 6.8,
+          "seconds_model_call": 6.7
+        },
+        "proceedings": {
+          "passes": 3,
+          "seconds": 161.8,
+          "seconds_model_call": 161.8
+        },
+        "persons": {
+          "passes": 3,
+          "seconds": 74.4,
+          "seconds_model_call": 74.3
+        },
+        "quotes": {
+          "passes": 1,
+          "seconds": 4.0,
+          "seconds_model_call": 4.0
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 6.8,
+          "seconds_model_call": 6.7,
+          "seconds_deterministic": 0.0,
+          "findings_in": 14,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 68.7,
+          "seconds_model_call": 68.7,
+          "seconds_deterministic": 0.0,
+          "findings_in": 31,
+          "ops_proposed": 49,
+          "ops_applied": 39,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 2,
+          "seconds_total": 52.5,
+          "seconds_model_call": 52.5,
+          "seconds_deterministic": 0.0,
+          "findings_in": 7,
+          "ops_proposed": 13,
+          "ops_applied": 3,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 3,
+          "seconds_total": 40.6,
+          "seconds_model_call": 40.6,
+          "seconds_deterministic": 0.0,
+          "findings_in": 5,
+          "ops_proposed": 12,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 7.9,
+          "seconds_model_call": 7.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 17,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 2,
+          "seconds_total": 53.2,
+          "seconds_model_call": 53.1,
+          "seconds_deterministic": 0.0,
+          "findings_in": 15,
+          "ops_proposed": 42,
+          "ops_applied": 42,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 3,
+          "seconds_total": 13.3,
+          "seconds_model_call": 13.3,
+          "seconds_deterministic": 0.0,
+          "findings_in": 8,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 4.0,
+          "seconds_model_call": 4.0,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1/o2_low_ttl/repaired/input.L2.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 69.0,
+      "seconds_model_calls": 68.7,
+      "seconds_deterministic": 0.3,
+      "model_calls": 7,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 18.9,
+          "seconds_model_call": 18.9
+        },
+        "proceedings": {
+          "passes": 2,
+          "seconds": 16.9,
+          "seconds_model_call": 16.8
+        },
+        "persons": {
+          "passes": 3,
+          "seconds": 29.9,
+          "seconds_model_call": 29.9
+        },
+        "quotes": {
+          "passes": 1,
+          "seconds": 3.1,
+          "seconds_model_call": 3.1
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 18.9,
+          "seconds_model_call": 18.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 5,
+          "ops_proposed": 13,
+          "ops_applied": 13,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 8.0,
+          "seconds_model_call": 7.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 4,
+          "ops_proposed": 7,
+          "ops_applied": 3,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 2,
+          "seconds_total": 8.9,
+          "seconds_model_call": 8.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 2,
+          "ops_proposed": 6,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 12.1,
+          "seconds_model_call": 12.1,
+          "seconds_deterministic": 0.0,
+          "findings_in": 12,
+          "ops_proposed": 6,
+          "ops_applied": 7,
+          "merges_applied": 2
+        },
+        {
+          "stage": "persons",
+          "pass": 2,
+          "seconds_total": 13.1,
+          "seconds_model_call": 13.1,
+          "seconds_deterministic": 0.0,
+          "findings_in": 6,
+          "ops_proposed": 5,
+          "ops_applied": 5,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 3,
+          "seconds_total": 4.7,
+          "seconds_model_call": 4.7,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 2,
+          "ops_applied": 2,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 3.1,
+          "seconds_model_call": 3.1,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 2,
+          "ops_applied": 1,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1/o2_low_ttl/repaired/input.L3.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 116.5,
+      "seconds_model_calls": 116.2,
+      "seconds_deterministic": 0.3,
+      "model_calls": 5,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 11.9,
+          "seconds_model_call": 11.8
+        },
+        "proceedings": {
+          "passes": 3,
+          "seconds": 96.4,
+          "seconds_model_call": 96.4
+        },
+        "persons": {
+          "passes": 1,
+          "seconds": 8.0,
+          "seconds_model_call": 8.0
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 11.9,
+          "seconds_model_call": 11.8,
+          "seconds_deterministic": 0.0,
+          "findings_in": 6,
+          "ops_proposed": 8,
+          "ops_applied": 9,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 57.6,
+          "seconds_model_call": 57.6,
+          "seconds_deterministic": 0.0,
+          "findings_in": 24,
+          "ops_proposed": 46,
+          "ops_applied": 24,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 2,
+          "seconds_total": 30.9,
+          "seconds_model_call": 30.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 14,
+          "ops_proposed": 27,
+          "ops_applied": 2,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 3,
+          "seconds_total": 7.9,
+          "seconds_model_call": 7.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 13,
+          "ops_proposed": 1,
+          "ops_applied": 0,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 8.0,
+          "seconds_model_call": 8.0,
+          "seconds_deterministic": 0.0,
+          "findings_in": 9,
+          "ops_proposed": 1,
+          "ops_applied": 0,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1/o2_low_ttl/repaired/input.L4.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 83.1,
+      "seconds_model_calls": 82.9,
+      "seconds_deterministic": 0.2,
+      "model_calls": 5,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 8.2,
+          "seconds_model_call": 8.1
+        },
+        "proceedings": {
+          "passes": 2,
+          "seconds": 42.1,
+          "seconds_model_call": 42.1
+        },
+        "persons": {
+          "passes": 2,
+          "seconds": 32.7,
+          "seconds_model_call": 32.7
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 8.2,
+          "seconds_model_call": 8.1,
+          "seconds_deterministic": 0.1,
+          "findings_in": 1,
+          "ops_proposed": 2,
+          "ops_applied": 3,
+          "merges_applied": 1
+        },
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 34.4,
+          "seconds_model_call": 34.4,
+          "seconds_deterministic": 0.0,
+          "findings_in": 13,
+          "ops_proposed": 29,
+          "ops_applied": 29,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 2,
+          "seconds_total": 7.7,
+          "seconds_model_call": 7.7,
+          "seconds_deterministic": 0.0,
+          "findings_in": 4,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 8.2,
+          "seconds_model_call": 8.2,
+          "seconds_deterministic": 0.0,
+          "findings_in": 9,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 2,
+          "seconds_total": 24.5,
+          "seconds_model_call": 24.5,
+          "seconds_deterministic": 0.0,
+          "findings_in": 7,
+          "ops_proposed": 1,
+          "ops_applied": 0,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1/o2_low_ttl/repaired/input.L5.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 79.7,
+      "seconds_model_calls": 79.5,
+      "seconds_deterministic": 0.2,
+      "model_calls": 7,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 6.9,
+          "seconds_model_call": 6.9
+        },
+        "proceedings": {
+          "passes": 2,
+          "seconds": 24.0,
+          "seconds_model_call": 24.0
+        },
+        "persons": {
+          "passes": 3,
+          "seconds": 45.1,
+          "seconds_model_call": 45.1
+        },
+        "quotes": {
+          "passes": 1,
+          "seconds": 3.5,
+          "seconds_model_call": 3.5
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 6.9,
+          "seconds_model_call": 6.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 4,
+          "ops_proposed": 3,
+          "ops_applied": 5,
+          "merges_applied": 2
+        },
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 16.2,
+          "seconds_model_call": 16.2,
+          "seconds_deterministic": 0.0,
+          "findings_in": 12,
+          "ops_proposed": 11,
+          "ops_applied": 5,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 2,
+          "seconds_total": 7.8,
+          "seconds_model_call": 7.8,
+          "seconds_deterministic": 0.0,
+          "findings_in": 4,
+          "ops_proposed": 1,
+          "ops_applied": 0,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 21.6,
+          "seconds_model_call": 21.6,
+          "seconds_deterministic": 0.0,
+          "findings_in": 9,
+          "ops_proposed": 6,
+          "ops_applied": 7,
+          "merges_applied": 1
+        },
+        {
+          "stage": "persons",
+          "pass": 2,
+          "seconds_total": 5.9,
+          "seconds_model_call": 5.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 4,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 3,
+          "seconds_total": 17.6,
+          "seconds_model_call": 17.6,
+          "seconds_deterministic": 0.0,
+          "findings_in": 3,
+          "ops_proposed": 14,
+          "ops_applied": 14,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 3.5,
+          "seconds_model_call": 3.5,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 2,
+          "ops_applied": 2,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1/o2_low_ttl/repaired/input.L6.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 51.3,
+      "seconds_model_calls": 51.1,
+      "seconds_deterministic": 0.2,
+      "model_calls": 3,
+      "by_stage": {
+        "proceedings": {
+          "passes": 1,
+          "seconds": 7.9,
+          "seconds_model_call": 7.9
+        },
+        "persons": {
+          "passes": 2,
+          "seconds": 43.2,
+          "seconds_model_call": 43.2
+        }
+      },
+      "passes": [
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 7.9,
+          "seconds_model_call": 7.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 1,
+          "ops_applied": 0,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 39.0,
+          "seconds_model_call": 39.0,
+          "seconds_deterministic": 0.0,
+          "findings_in": 7,
+          "ops_proposed": 33,
+          "ops_applied": 31,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 2,
+          "seconds_total": 4.2,
+          "seconds_model_call": 4.2,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 2,
+          "ops_applied": 2,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1/o2_low_ttl/repaired/input.L7.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 64.5,
+      "seconds_model_calls": 64.2,
+      "seconds_deterministic": 0.3,
+      "model_calls": 7,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 4.0,
+          "seconds_model_call": 4.0
+        },
+        "proceedings": {
+          "passes": 2,
+          "seconds": 17.6,
+          "seconds_model_call": 17.6
+        },
+        "persons": {
+          "passes": 3,
+          "seconds": 35.6,
+          "seconds_model_call": 35.6
+        },
+        "quotes": {
+          "passes": 1,
+          "seconds": 7.0,
+          "seconds_model_call": 7.0
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 4.0,
+          "seconds_model_call": 4.0,
+          "seconds_deterministic": 0.0,
+          "findings_in": 2,
+          "ops_proposed": 2,
+          "ops_applied": 2,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 10.9,
+          "seconds_model_call": 10.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 4,
+          "ops_proposed": 6,
+          "ops_applied": 3,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 2,
+          "seconds_total": 6.7,
+          "seconds_model_call": 6.7,
+          "seconds_deterministic": 0.0,
+          "findings_in": 2,
+          "ops_proposed": 1,
+          "ops_applied": 0,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 7.4,
+          "seconds_model_call": 7.4,
+          "seconds_deterministic": 0.0,
+          "findings_in": 5,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 2,
+          "seconds_total": 16.3,
+          "seconds_model_call": 16.3,
+          "seconds_deterministic": 0.0,
+          "findings_in": 3,
+          "ops_proposed": 11,
+          "ops_applied": 11,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 3,
+          "seconds_total": 11.9,
+          "seconds_model_call": 11.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 9,
+          "ops_applied": 9,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 7.0,
+          "seconds_model_call": 7.0,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 2,
+          "ops_applied": 2,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1/o2_low_ttl/repaired/input.L8.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 129.2,
+      "seconds_model_calls": 128.7,
+      "seconds_deterministic": 0.5,
+      "model_calls": 8,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 5.1,
+          "seconds_model_call": 5.0
+        },
+        "proceedings": {
+          "passes": 3,
+          "seconds": 70.6,
+          "seconds_model_call": 70.4
+        },
+        "persons": {
+          "passes": 2,
+          "seconds": 33.7,
+          "seconds_model_call": 33.7
+        },
+        "quotes": {
+          "passes": 2,
+          "seconds": 19.6,
+          "seconds_model_call": 19.6
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 5.1,
+          "seconds_model_call": 5.0,
+          "seconds_deterministic": 0.0,
+          "findings_in": 8,
+          "ops_proposed": 1,
+          "ops_applied": 0,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 37.8,
+          "seconds_model_call": 37.7,
+          "seconds_deterministic": 0.0,
+          "findings_in": 22,
+          "ops_proposed": 29,
+          "ops_applied": 21,
+          "merges_applied": 1
+        },
+        {
+          "stage": "proceedings",
+          "pass": 2,
+          "seconds_total": 25.3,
+          "seconds_model_call": 25.2,
+          "seconds_deterministic": 0.0,
+          "findings_in": 9,
+          "ops_proposed": 16,
+          "ops_applied": 15,
+          "merges_applied": 2
+        },
+        {
+          "stage": "proceedings",
+          "pass": 3,
+          "seconds_total": 7.5,
+          "seconds_model_call": 7.5,
+          "seconds_deterministic": 0.0,
+          "findings_in": 3,
+          "ops_proposed": 4,
+          "ops_applied": 2,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 26.7,
+          "seconds_model_call": 26.7,
+          "seconds_deterministic": 0.0,
+          "findings_in": 16,
+          "ops_proposed": 19,
+          "ops_applied": 18,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 2,
+          "seconds_total": 7.0,
+          "seconds_model_call": 7.0,
+          "seconds_deterministic": 0.0,
+          "findings_in": 11,
+          "ops_proposed": 1,
+          "ops_applied": 0,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 12.5,
+          "seconds_model_call": 12.5,
+          "seconds_deterministic": 0.0,
+          "findings_in": 4,
+          "ops_proposed": 2,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 2,
+          "seconds_total": 7.1,
+          "seconds_model_call": 7.1,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 6,
+          "ops_applied": 5,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1/o2_low_ttl/repaired/input.L9.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 44.0,
+      "seconds_model_calls": 43.8,
+      "seconds_deterministic": 0.2,
+      "model_calls": 5,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 6.9,
+          "seconds_model_call": 6.9
+        },
+        "proceedings": {
+          "passes": 1,
+          "seconds": 13.3,
+          "seconds_model_call": 13.3
+        },
+        "persons": {
+          "passes": 2,
+          "seconds": 20.8,
+          "seconds_model_call": 20.8
+        },
+        "quotes": {
+          "passes": 1,
+          "seconds": 2.8,
+          "seconds_model_call": 2.8
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 6.9,
+          "seconds_model_call": 6.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 6,
+          "ops_proposed": 1,
+          "ops_applied": 0,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 13.3,
+          "seconds_model_call": 13.3,
+          "seconds_deterministic": 0.0,
+          "findings_in": 5,
+          "ops_proposed": 5,
+          "ops_applied": 5,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 15.9,
+          "seconds_model_call": 15.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 10,
+          "ops_applied": 10,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 2,
+          "seconds_total": 4.9,
+          "seconds_model_call": 4.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 0,
+          "ops_applied": 0,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 2.8,
+          "seconds_model_call": 2.8,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 2,
+          "ops_applied": 2,
+          "merges_applied": 0
+        }
+      ]
+    }
+  ]
+}

@@ -4,16 +4,18 @@ A supporting quote is an evidence anchor: it must be a VERBATIM span of the sour
 
 Each entry gives you an `index`, the `subject` the quote hangs off, that subject's `subject_types` and `subject_label`, and the exact `quote` text. Work through every entry:
 
-1. FIND THE REAL SPAN. Read the source text in the <<<SOURCE block and look for the passage the quote was clearly meant to capture. Extraction usually paraphrases something real rather than fabricating from nothing -- a quote that mangles wording, modernises spelling, drops an interpolation, or merges two adjacent sentences still points at a genuine passage. If you find it, `remove` the bad quote and `add` echr:hasSupportingQuote on the SAME subject with the corrected text copied EXACTLY from the source, character for character, including its punctuation and capitalisation. Do not tidy it.
+THIS STAGE REMOVES QUOTES. IT NEVER ADDS THEM. Every entry in `unverified_quotes` is an anchor that does not appear in the source, and your only move is to delete it. An `add` of echr:hasSupportingQuote is refused by the pipeline whatever text it carries, so proposing one wastes the operation.
 
-2. IF THERE IS NO SUCH SPAN, REMOVE THE QUOTE. When the source genuinely does not say this -- the quote describes something the document never states, or refers to a different case entirely -- `remove` the triple and add nothing. The subject keeps its other properties; it simply loses an anchor it never had. Do NOT invent a replacement quote to fill the gap, and do NOT substitute a loosely related passage just to leave the subject with something. An unanchored fact is recoverable; a falsely anchored one is not.
+That is a deliberate restriction, not an oversight. You are shown the graph and the source, but not why any given fact was asserted, so a span you pick is a span YOU chose for someone else's claim. Text that appears verbatim in the document is not thereby evidence OF THIS FACT -- it only proves those words occur somewhere. A wrong anchor that verifies is worse than none at all, because it passes every automated check while defeating the purpose of the check. Only extraction, which reads the document to find the fact, may say what evidences what.
+
+1. REMOVE EVERY UNVERIFIED QUOTE. Work through the list and delete each one. The subject keeps all its other properties; it simply loses an anchor it never truly had. Do not substitute a loosely related passage, and do not leave a bad anchor in place because the subject would otherwise have none -- an unanchored fact is recoverable, a falsely anchored one is not.
+
+2. SAY WHAT YOU FOUND. Use the rationale to record whether the source contains the passage the quote was clearly meant to capture, quoting the real span in the rationale text if you found it. That costs nothing, and it tells whoever reads the audit trail whether extraction paraphrased something genuine or invented it outright -- the two need different fixes upstream, and this stage is the only place that difference is visible.
 
 3. NEVER TOUCH THE SUBJECT'S OTHER PROPERTIES. This stage repairs evidence anchors only. Dates, outcomes, courts, names and links are other stages' business, even when the quote you are fixing makes one of them look wrong.
 
 NEVER RETYPE A QUOTE YOU ARE REMOVING. On every `remove` of echr:hasSupportingQuote, set `quote_index` to the `index` of the entry you are acting on and leave `object` empty. The pipeline looks the literal up by index and removes that one value and no other. This is exact even when the subject holds several quotes and only one is bad, and it costs you two tokens instead of a hundred.
 
-Retyping is how this stage used to fail. A quote is around a hundred characters; reproduced from memory it comes back subtly reworded, matches no triple in the graph, and the remove is discarded as "triple not present" -- while the `add` half of the pair lands regardless, leaving the subject with BOTH the original bad anchor and a new one. Use the index and that cannot happen.
-
-The `add` half is the one place you must still type text out, and it must be copied from the <<<SOURCE block exactly. An add whose text does not appear verbatim in the source is rejected outright, so there is nothing to gain by approximating.
+Retyping is how this stage used to fail. A quote is around a hundred characters; reproduced from memory it comes back subtly reworded, matches no triple in the graph, and the remove is discarded as "triple not present" -- so the bad anchor survived a pass that reported itself as having fixed it. Use the index and that cannot happen.
 
 Emit one RepairGroup per subject you touch, with the rationale naming what you found in the source (or that you searched and it is not there).

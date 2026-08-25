@@ -1,0 +1,305 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/87b4387b7f0a/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/87b4387b7f0a> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:9"^^xsd:string .
+
+doc:administrative_action_confrontation_2 a echr:AdministrativeAction ;
+    rdfs:label "Rejection of second request for confrontation with M.T."@en ;
+    echr:followsProceeding doc:administrative_action_confrontation_1 ;
+    echr:hasCourt doc:authorityInvestigatingGeorgia ;
+    echr:hasDecisionDate "2005-11-16"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_baduashvili_confront_2 ;
+    echr:hasSupportingQuote "A second request by the applicant to have a confrontation with M.T., dated 15 November 2005, was rejected by the investigator on 16 November 2005"@en .
+
+doc:authorityNationalForensicBureau a echr:DomesticAuthority ;
+    rdfs:label "National Forensic Bureau"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "National Forensic Bureau"@en .
+
+doc:case_18720_08 a echr:CaseDocument ;
+    echr:hasApplicant doc:personBaduashvili ;
+    echr:hasApplicationNumber "18720/08"@en ;
+    echr:hasCaseName "Malkhaz BADUASHVILI against Georgia"@en ;
+    echr:hasDomesticProceeding doc:proceedingAppealTbilisi,
+        doc:proceedingSupremeCourtAppeal,
+        doc:proceedingTrialFirstInstance,
+        doc:proceeding_investigation_1 .
+
+doc:detentionBaduashviliRelease a echr:PreTrialDetention ;
+    rdfs:label "Release of Malkhaz Baduashvili"@en ;
+    echr:hasDetainee doc:personBaduashvili ;
+    echr:hasDetentionEndDate "2018-04-26"^^xsd:date ;
+    echr:hasSupportingQuote "The applicant was released from prison on 26 April 2018."@en .
+
+doc:person_governor_rustavi_6 a echr:NaturalPerson ;
+    rdfs:label "Governor of Rustavi Prison no. 6"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasSupportingQuote "he had been severely beaten by the governor of Rustavi Prison no. 6"@en .
+
+doc:proceedingBeatingInvestigation a echr:DomesticProceeding ;
+    rdfs:label "Investigation into allegations of beating by governor"@en ;
+    echr:hasCourt doc:authorityInvestigatingGeorgia ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participation_baduashvili_beating_inv_1,
+        doc:participation_doctor_admission_beating_inv_1,
+        doc:participation_doctor_hosp_beating_inv_1,
+        doc:participation_governor_beating_inv_1,
+        doc:participation_inspector_beating_inv_1,
+        doc:participation_nurse_hosp_beating_inv_1,
+        doc:participation_officer_hosp_beating_inv_1 ;
+    echr:hasProceedingStartDate "2010-08-31"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 31 August 2010 an investigation was opened into the applicant’s allegations."@en .
+
+doc:proceedingMtZtFirstInstance a echr:DomesticProceeding ;
+    rdfs:label "First instance proceedings against M.T. and Z.T."@en ;
+    echr:hasCourt doc:authorityFirstInstanceCourt ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasParticipation doc:participation_mt_false_testimony_1,
+        doc:participation_zt_false_testimony_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 26 December 2006 and 23 January 2007 respectively they were convicted at first instance of obstructing justice by giving false testimony."@en .
+
+doc:review_prosecutor_1 a echr:ProsecutorialReview ;
+    rdfs:label "Appeal to the regional prosecutor's office by M.T."@en ;
+    echr:followsProceeding doc:proceeding_investigation_1 ;
+    echr:hasCourt doc:authorityRegionalProsecutor ;
+    echr:hasParticipation doc:participation_mt_1 ;
+    echr:hasProceedingStartDate "2005-11-03"^^xsd:date ;
+    echr:hasSupportingQuote "On 3 November 2005 M.T. appealed to the regional prosecutor’s office against the investigator’s refusal to question him again"@en .
+
+doc:administrative_action_confrontation_1 a echr:AdministrativeAction ;
+    rdfs:label "Rejection of first request for confrontation with M.T."@en ;
+    echr:hasCourt doc:authorityInvestigatingGeorgia ;
+    echr:hasDecisionDate "2005-11-03"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_baduashvili_confront_1 ;
+    echr:hasSupportingQuote "On 3 November 2005 the applicant asked to confront M.T. His request was rejected by the investigator"@en .
+
+doc:authorityRegionalProsecutor a echr:DomesticAuthority ;
+    rdfs:label "Regional Prosecutor's Office"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "regional prosecutor’s office"@en ;
+    echr:hasJurisdictionState "Georgia"@en .
+
+doc:authoritySupremeCourt a echr:DomesticAuthority ;
+    rdfs:label "Supreme Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Supreme Court"@en .
+
+doc:authorityTbilisiCourtAppeal a echr:DomesticAuthority ;
+    rdfs:label "Tbilisi Court of Appeal"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Tbilisi Court of Appeal"@en .
+
+doc:detention_baduashvili_1 a echr:PreTrialDetention ;
+    rdfs:label "Pre-trial detention of Malkhaz Baduashvili"@en ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:personBaduashvili ;
+    echr:hasDetentionStartDate "2005-07-27"^^xsd:date ;
+    echr:hasSupportingQuote "He was arrested and remanded in custody on 27 July 2005"@en .
+
+doc:lawyerAbuladze a echr:LegalRepresentative ;
+    rdfs:label "S. Abuladze"@en ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasPersonName "Ms S. Abuladze"@en .
+
+doc:participation_at_appeal_1 a echr:Participation ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:participatingParty doc:personAt .
+
+doc:participation_baduashvili_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:personBaduashvili .
+
+doc:participation_baduashvili_appeal_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:personBaduashvili .
+
+doc:participation_baduashvili_beating_inv_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:personBaduashvili .
+
+doc:participation_baduashvili_confront_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:personBaduashvili .
+
+doc:participation_baduashvili_confront_2 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:personBaduashvili .
+
+doc:participation_baduashvili_supreme_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:personBaduashvili .
+
+doc:participation_baduashvili_trial_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:personBaduashvili .
+
+doc:participation_doctor_admission_beating_inv_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:person_doctor_admission_kutaisi_2 .
+
+doc:participation_doctor_hosp_beating_inv_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:personDoctorHospital .
+
+doc:participation_governor_beating_inv_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:person_prison_governor_kutaisi_2 .
+
+doc:participation_inspector_beating_inv_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:personChiefInspectorSecurity .
+
+doc:participation_mt_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:personMt .
+
+doc:participation_mt_false_testimony_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:personMt .
+
+doc:participation_mt_trial_1 a echr:Participation ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:participatingParty doc:personMt .
+
+doc:participation_nurse_hosp_beating_inv_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:personNurseHospital .
+
+doc:participation_officer_hosp_beating_inv_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:personDutyOfficerHospital .
+
+doc:participation_zt_false_testimony_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:personZt .
+
+doc:participation_zt_trial_1 a echr:Participation ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:participatingParty doc:personZt .
+
+doc:personAt a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "A.T."@en ;
+    echr:hasPersonName "A.T."@en .
+
+doc:personChiefInspectorSecurity a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Chief Inspector of the prison’s security unit"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "chief inspector of the prison’s security unit"@en .
+
+doc:personDoctorHospital a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Prison Hospital Doctor"@en ;
+    echr:hasPersonName "doctor who had examined the applicant upon his admission to the prison hospital"@en .
+
+doc:personDutyOfficerHospital a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Prison Hospital Duty Officer"@en ;
+    echr:hasPersonName "duty officer who had examined the applicant upon his admission to the prison hospital"@en .
+
+doc:personNurseHospital a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Prison Hospital Nurse"@en ;
+    echr:hasPersonName "nurse who had examined the applicant upon his admission to the prison hospital"@en .
+
+doc:person_doctor_admission_kutaisi_2 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Admission Doctor at Kutaisi Prison no. 2"@en ;
+    echr:hasPersonName "doctor who had examined the applicant upon his admission to Kutaisi Prison no. 2"@en .
+
+doc:person_prison_governor_kutaisi_2 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Prison Governor of Kutaisi Prison no. 2"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "prison governor"@en .
+
+doc:proceedingSupremeCourtAppeal a echr:DomesticProceeding ;
+    rdfs:label "Appeal on points of law before the Supreme Court"@en ;
+    echr:followsProceeding doc:proceedingAppealTbilisi ;
+    echr:hasCourt doc:authoritySupremeCourt ;
+    echr:hasDecisionDate "2008-02-20"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_baduashvili_supreme_1 ;
+    echr:hasSupportingQuote "On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant inadmissible."@en .
+
+doc:authorityFirstInstanceCourt a echr:DomesticAuthority ;
+    rdfs:label "Court of First Instance"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "court of first instance"@en .
+
+doc:personZt a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Z.T."@en ;
+    echr:hasPersonName "Z.T."@en .
+
+doc:proceedingAppealTbilisi a echr:DomesticProceeding ;
+    rdfs:label "Appeal of Malkhaz Baduashvili before the Tbilisi Court of Appeal"@en ;
+    echr:followsProceeding doc:proceedingTrialFirstInstance ;
+    echr:hasCourt doc:authorityTbilisiCourtAppeal ;
+    echr:hasDecisionDate "2007-06-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_at_appeal_1,
+        doc:participation_baduashvili_appeal_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction."@en .
+
+doc:proceedingTrialFirstInstance a echr:DomesticProceeding ;
+    rdfs:label "First-instance trial of Malkhaz Baduashvili"@en ;
+    echr:followsProceeding doc:proceeding_investigation_1 ;
+    echr:hasCourt doc:authorityFirstInstanceCourt ;
+    echr:hasDecisionDate "2006-12-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_baduashvili_trial_1,
+        doc:participation_mt_trial_1,
+        doc:participation_zt_trial_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 8 December 2006 the court of first instance convicted the applicant of aggravated murder and the illegal acquisition, possession and carrying of firearms, and sentenced him to 17 years’ imprisonment."@en,
+        "during the trial at the first ‑ instance court"@en .
+
+doc:personMt a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "M.T."@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "M.T."@en .
+
+doc:proceeding_investigation_1 a echr:DomesticProceeding ;
+    rdfs:label "Criminal investigation against Malkhaz Baduashvili"@en ;
+    echr:hasCourt doc:authorityInvestigatingGeorgia ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participation_baduashvili_1 ;
+    echr:hasPreTrialDetention doc:detention_baduashvili_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "Criminal proceedings against the applicant (a) Investigation"@en .
+
+doc:authorityInvestigatingGeorgia a echr:DomesticAuthority ;
+    rdfs:label "Investigating Authorities of Georgia"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "investigating authorities"@en ;
+    echr:hasJurisdictionState "Georgia"@en .
+
+doc:personBaduashvili a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Malkhaz Baduashvili"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr Malkhaz Baduashvili"@en ;
+    echr:isRepresentedBy doc:lawyerAbuladze .
+

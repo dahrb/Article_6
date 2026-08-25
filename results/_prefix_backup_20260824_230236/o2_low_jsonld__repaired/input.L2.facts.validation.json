@@ -1,0 +1,50 @@
+{
+  "source": "input.jsonl",
+  "conformance": {
+    "shacl_evaluated": null,
+    "conforms": null,
+    "findings": 2,
+    "errors": 2,
+    "warnings": 0,
+    "by_kind": {
+      "suspect_multi_value": 2
+    },
+    "shacl_violations": 0,
+    "shacl_by_constraint": {},
+    "shacl_by_shape": {},
+    "repairs_applied": {}
+  },
+  "gate_repairs": [],
+  "findings": [
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/aa2bb14a2d16/participationEsaEsa> points at 5 objects via <https://growgraph.dev/echr#participatingParty>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/aa2bb14a2d16/participationEsaEsa",
+      "predicate": "https://growgraph.dev/echr#participatingParty",
+      "values": [
+        "https://growgraph.dev/doc/aa2bb14a2d16/esa",
+        "https://growgraph.dev/doc/aa2bb14a2d16/esaOrg",
+        "https://growgraph.dev/doc/aa2bb14a2d16/esaOrganisation",
+        "https://growgraph.dev/doc/aa2bb14a2d16/esa_1",
+        "https://growgraph.dev/doc/aa2bb14a2d16/partyEsa"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/aa2bb14a2d16/participation_applicants_1> points at 3 objects via <https://growgraph.dev/echr#participatingParty>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/aa2bb14a2d16/participation_applicants_1",
+      "predicate": "https://growgraph.dev/echr#participatingParty",
+      "values": [
+        "https://growgraph.dev/doc/aa2bb14a2d16/applicant_group_1",
+        "https://growgraph.dev/doc/aa2bb14a2d16/applicantsGroup",
+        "https://growgraph.dev/doc/aa2bb14a2d16/applicants_group_1"
+      ],
+      "component": "",
+      "source_shape": ""
+    }
+  ]
+}

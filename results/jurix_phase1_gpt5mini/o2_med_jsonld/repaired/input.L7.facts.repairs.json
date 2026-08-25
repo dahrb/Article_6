@@ -1,0 +1,70 @@
+{
+  "source": "results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L7.facts.ttl",
+  "timings": {
+    "source": "results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L7.facts.ttl",
+    "changed": true,
+    "stage_failures": [
+      {
+        "stage": "persons",
+        "error": "RepairTruncated",
+        "message": "generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document"
+      }
+    ],
+    "seconds_total": 160.9,
+    "seconds_model_calls": 160.8,
+    "seconds_deterministic": 0.1,
+    "model_calls": 2,
+    "by_stage": {
+      "persons": {
+        "passes": 1,
+        "seconds": 152.6,
+        "seconds_model_call": 152.6
+      },
+      "quotes": {
+        "passes": 1,
+        "seconds": 8.2,
+        "seconds_model_call": 8.2
+      }
+    },
+    "passes": [
+      {
+        "stage": "persons",
+        "pass": 0,
+        "seconds_total": 152.6,
+        "seconds_model_call": 152.6,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_applied": 0,
+        "failed": "RepairTruncated"
+      },
+      {
+        "stage": "quotes",
+        "pass": 1,
+        "seconds_total": 8.2,
+        "seconds_model_call": 8.2,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 1,
+        "ops_applied": 1,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "echr:hasSupportingQuote not found in source",
+      "rationale": "The supporting quote does not appear verbatim in the source. The source contains the closely related sentence: \"The Court of Appeal refused leave of appeal to the House of Lords but certified two points of law of general importance, namely:\" which differs (it has \", namely:\"), so the quoted anchor must be removed.",
+      "action": "remove",
+      "subject": "doc:partic_applicant_house_of_lords_15jun2000",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "The Court of Appeal refused leave of appeal to the House of Lords but certified two points of law of general importance.",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": null,
+      "quote_index": 0,
+      "status": "applied (removed 1 quote(s) by index)",
+      "stage": "quotes",
+      "pass": 1
+    }
+  ]
+}

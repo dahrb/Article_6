@@ -22,14 +22,6 @@
 #     the vocabulary checks can see, because rdfs:label admits many values
 #     by design (see SingleLabelShape below).
 #
-# echr:hasSourceParagraph was removed from echr_2.ttl on 2026-08-19: the
-# source text's paragraph numbering was not a consistent part of the corpus
-# (several documents have none at all) and the property was a persistent
-# source of fabricated anchors with no compensating value. Quote fidelity
-# (hasSupportingQuote) is the anchor now; it is a per-document substring
-# check, not expressible in static SHACL, hence sh:Warning severity below
-# rather than a structural shape.
-#
 # Evidence anchoring is reported at sh:Warning, not sh:Violation: on real
 # extractions ~97% of proceedings carry a quote and paragraph anchor, but a
 # few legitimately don't (e.g. a proceeding's outcome is stated only via a
@@ -40,6 +32,21 @@
 #
 # Usage:
 #   uv run pyshacl -s ontology/echr-shapes.ttl -m -a -f human <facts.ttl>
+
+################################################################
+# 0. Shared value shapes
+################################################################
+
+# echr:PartialDate (echr.ttl) is owl:unionOf ( xsd:date xsd:gYearMonth xsd:gYear ) --
+# a date as precise as the source text allows. SHACL sh:datatype takes one IRI,
+# not a union, so the three options are spelled out with sh:or. Referenced via
+# sh:node from every *Date property below rather than repeated per property.
+# Catches malformed literals the extraction model occasionally produces, e.g.
+# "1993-10"^^xsd:string instead of "1993-10"^^xsd:gYearMonth -- syntactically a
+# date, typed as a plain string, so nothing else in this file sees it.
+echr:PartialDateShape a sh:NodeShape ;
+    sh:or ( [ sh:datatype xsd:date ] [ sh:datatype xsd:gYearMonth ] [ sh:datatype xsd:gYear ] ) ;
+    sh:message "date value must be typed xsd:date, xsd:gYearMonth or xsd:gYear (echr:PartialDate), not a plain string or other literal" .
 
 ################################################################
 # 1. Atomic node shapes -- one value per functional property
@@ -98,11 +105,13 @@ echr:DomesticEventAtomicShape a sh:NodeShape ;
     sh:property [
         sh:path echr:hasProceedingStartDate ;
         sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
         sh:message "a domestic event may have at most one start date" ;
     ] ;
     sh:property [
         sh:path echr:hasDecisionDate ;
         sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
         sh:message "a domestic event may have at most one decision date" ;
     ] ;
     sh:property [
@@ -116,6 +125,27 @@ echr:DomesticEventAtomicShape a sh:NodeShape ;
         sh:maxCount 1 ;
         sh:datatype xsd:boolean ;
         sh:message "isFinalDomesticDecision must be a single boolean" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasInactivityPeriod ;
+        sh:class echr:InactivityPeriod ;
+        sh:message "echr:hasInactivityPeriod must point at a node typed echr:InactivityPeriod" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasAdjournment ;
+        sh:class echr:Adjournment ;
+        sh:message "echr:hasAdjournment must point at a node typed echr:Adjournment" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasParticipation ;
+        sh:class echr:Participation ;
+        sh:message "echr:hasParticipation must point at a node typed echr:Participation" ;
+    ] ;
+    sh:property [
+        sh:path echr:followsProceeding ;
+        sh:or ( [ sh:class echr:DomesticProceeding ] [ sh:class echr:AdministrativeAction ]
+                [ sh:class echr:EnforcementAction ] [ sh:class echr:ProsecutorialReview ] ) ;
+        sh:message "echr:followsProceeding must point at a node typed as one of the four DomesticEvent subclasses" ;
     ] .
 
 echr:AuthorityAtomicShape a sh:NodeShape ;
@@ -145,8 +175,21 @@ echr:ParticipationAtomicShape a sh:NodeShape ;
         sh:path echr:participatingParty ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
-        sh:class echr:Party ;
         sh:message "a participation must record exactly one party" ;
+    ] ;
+    # SPLIT FROM THE CARDINALITY CONSTRAINT ABOVE, for the message alone.
+    # Combined, an untyped target reported as "must record exactly one party"
+    # on a node that plainly had exactly one, and the repair model read that as
+    # a cardinality problem and re-added the link it already had. Measured
+    # 2026-08-25 on o2_low_jsonld L1: four participations pointed at
+    # authorities that were never also typed echr:Party, and three consecutive
+    # repair rounds tried and failed to fix them because the finding never said
+    # what was actually wrong. The fix is a one-triple retype, which the model
+    # performs correctly as soon as it is told that is the fix.
+    sh:property [
+        sh:path echr:participatingParty ;
+        sh:class echr:Party ;
+        sh:message "echr:participatingParty must point at a node typed echr:Party -- if it is an authority acting as a party here, ADD echr:Party as a second rdf:type on that same node rather than creating a duplicate" ;
     ] ;
     sh:property [
         sh:path echr:hasPartySide ;
@@ -179,7 +222,28 @@ echr:ParticipationSingleEventShape a sh:NodeShape ;
     ] .
 
 echr:NaturalPersonAtomicShape a sh:NodeShape ;
-    sh:targetClass echr:NaturalPerson ;
+    # echr:LegalRepresentative IS listed, and must be: it is declared
+    # rdfs:subClassOf echr:NaturalPerson in echr.ttl, but SHACL only resolves
+    # sh:targetClass through rdfs:subClassOf when the ONTOLOGY graph is
+    # available to the validator -- and it is not. Both validators that run
+    # these shapes pass the facts graph alone: repair_facts.find_shape_violations
+    # calls pyshacl with ont_graph=None, inference="none", and OntoCast's own
+    # gate assembles an empty ontology context in this pipeline (see the
+    # "Validating facts against an empty ontology context" warning present in
+    # every extract.log in results/).
+    #
+    # Measured 2026-08-25 on a fresh L1 extraction: four lawyer nodes typed
+    # ONLY echr:LegalRepresentative carried echr:hasGenderCueText as a
+    # language-tagged literal, and every one was invisible -- while the same
+    # defect on nodes typed echr:NaturalPerson explicitly was caught and
+    # repaired. Enumerating the subclass costs one triple and does not depend
+    # on entailment; turning RDFS inference on instead would fix this but make
+    # every sh:class constraint vacuous, because rdfs:range entailment then
+    # supplies the very types those constraints check for.
+    #
+    # Same reasoning as DomesticEventAtomicShape and EvidenceAnchoringShape,
+    # which already enumerate their four DomesticEvent subclasses by hand.
+    sh:targetClass echr:NaturalPerson, echr:LegalRepresentative ;
     sh:property [
         sh:path echr:hasGender ;
         sh:maxCount 1 ;
@@ -260,11 +324,13 @@ echr:InactivityAtomicShape a sh:NodeShape ;
     sh:property [
         sh:path echr:hasInactivityStartDate ;
         sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
         sh:message "an inactivity period may have at most one start date" ;
     ] ;
     sh:property [
         sh:path echr:hasInactivityEndDate ;
         sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
         sh:message "an inactivity period may have at most one end date" ;
     ] .
 
@@ -279,11 +345,13 @@ echr:AdjournmentAtomicShape a sh:NodeShape ;
     sh:property [
         sh:path echr:hasAdjournmentDate ;
         sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
         sh:message "an adjournment may have at most one adjournment date" ;
     ] ;
     sh:property [
         sh:path echr:hasResumptionDate ;
         sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
         sh:message "an adjournment may have at most one resumption date" ;
     ] .
 
@@ -292,7 +360,33 @@ echr:CaseDocumentAtomicShape a sh:NodeShape ;
     sh:property [ sh:path echr:hasHudocId ; sh:maxCount 1 ] ;
     sh:property [ sh:path echr:hasCaseName ; sh:maxCount 1 ] ;
     sh:property [ sh:path echr:hasRespondentState ; sh:maxCount 1 ] ;
-    sh:property [ sh:path echr:hasJudgmentDate ; sh:maxCount 1 ] .
+    sh:property [ sh:path echr:hasJudgmentDate ; sh:maxCount 1 ; sh:node echr:PartialDateShape ] ;
+    sh:property [
+        sh:path echr:hasDomesticProceeding ;
+        sh:class echr:DomesticProceeding ;
+        sh:message "echr:hasDomesticProceeding must point at a node typed echr:DomesticProceeding" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasApplicant ;
+        sh:class echr:Party ;
+        sh:message "echr:hasApplicant must point at a node typed echr:Party" ;
+    ] .
+
+echr:ProceedingLinkShape a sh:NodeShape ;
+    sh:targetClass echr:DomesticProceeding ;
+    sh:property [
+        sh:path echr:hasPreTrialDetention ;
+        sh:class echr:PreTrialDetention ;
+        sh:message "echr:hasPreTrialDetention must point at a node typed echr:PreTrialDetention" ;
+    ] .
+
+echr:PartyLinkShape a sh:NodeShape ;
+    sh:targetClass echr:Party ;
+    sh:property [
+        sh:path echr:isRepresentedBy ;
+        sh:class echr:LegalRepresentative ;
+        sh:message "echr:isRepresentedBy must point at a node typed echr:LegalRepresentative" ;
+    ] .
 
 # The pre-trial detention module (echr:PreTrialDetention, echr:CustodialMeasure)
 # has carried five owl:FunctionalProperty datatype/object properties since it
@@ -317,11 +411,13 @@ echr:PreTrialDetentionAtomicShape a sh:NodeShape ;
     sh:property [
         sh:path echr:hasDetentionStartDate ;
         sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
         sh:message "a pre-trial detention may have at most one start date" ;
     ] ;
     sh:property [
         sh:path echr:hasDetentionEndDate ;
         sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
         sh:message "a pre-trial detention may have at most one end date" ;
     ] ;
     sh:property [
@@ -349,4 +445,112 @@ echr:EvidenceAnchoringShape a sh:NodeShape ;
         sh:minLength 5 ;
         sh:severity sh:Warning ;
         sh:message "no supporting quote anchors this entity to the source text" ;
+    ] .
+
+################################################################
+# 3. Chronological consistency
+################################################################
+
+# Cross-type date comparison (xsd:date vs xsd:gYearMonth vs xsd:gYear) is not
+# defined by XPath F&O, so pyshacl/SPARQL either errors or silently drops the
+# FILTER on a mixed-precision pair -- neither is a violation we can trust. Each
+# check below fires only when BOTH endpoints are full xsd:date literals, which
+# is the common case in the corpus and the case worth being strict about; a
+# gYear/gYearMonth-precision pair is left unchecked rather than risk a false
+# positive from an undefined comparison.
+
+echr:DomesticEventDateOrderShape a sh:NodeShape ;
+    sh:targetClass echr:DomesticProceeding, echr:AdministrativeAction, echr:EnforcementAction,
+        echr:ProsecutorialReview ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "hasDecisionDate is earlier than hasProceedingStartDate on the same event" ;
+        sh:select """
+            PREFIX echr: <https://growgraph.dev/echr#>
+            PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+            SELECT $this
+            WHERE {
+                $this echr:hasProceedingStartDate ?start ;
+                      echr:hasDecisionDate ?end .
+                FILTER(datatype(?start) = xsd:date && datatype(?end) = xsd:date)
+                FILTER(?end < ?start)
+            }
+        """ ;
+    ] .
+
+echr:InactivityDateOrderShape a sh:NodeShape ;
+    sh:targetClass echr:InactivityPeriod ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "hasInactivityEndDate is earlier than hasInactivityStartDate on the same period" ;
+        sh:select """
+            PREFIX echr: <https://growgraph.dev/echr#>
+            PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+            SELECT $this
+            WHERE {
+                $this echr:hasInactivityStartDate ?start ;
+                      echr:hasInactivityEndDate ?end .
+                FILTER(datatype(?start) = xsd:date && datatype(?end) = xsd:date)
+                FILTER(?end < ?start)
+            }
+        """ ;
+    ] .
+
+echr:AdjournmentDateOrderShape a sh:NodeShape ;
+    sh:targetClass echr:Adjournment ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "hasResumptionDate is earlier than hasAdjournmentDate on the same adjournment" ;
+        sh:select """
+            PREFIX echr: <https://growgraph.dev/echr#>
+            PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+            SELECT $this
+            WHERE {
+                $this echr:hasAdjournmentDate ?adj ;
+                      echr:hasResumptionDate ?res .
+                FILTER(datatype(?adj) = xsd:date && datatype(?res) = xsd:date)
+                FILTER(?res < ?adj)
+            }
+        """ ;
+    ] .
+
+echr:DetentionDateOrderShape a sh:NodeShape ;
+    sh:targetClass echr:PreTrialDetention ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "hasDetentionEndDate is earlier than hasDetentionStartDate on the same detention" ;
+        sh:select """
+            PREFIX echr: <https://growgraph.dev/echr#>
+            PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+            SELECT $this
+            WHERE {
+                $this echr:hasDetentionStartDate ?start ;
+                      echr:hasDetentionEndDate ?end .
+                FILTER(datatype(?start) = xsd:date && datatype(?end) = xsd:date)
+                FILTER(?end < ?start)
+            }
+        """ ;
+    ] .
+
+# A procedural-chain check, not a same-node pair: an event's own start date
+# should not be earlier than the decision date of the event it
+# echr:followsProceeding (an appeal cannot have opened before the first
+# instance it is appealing decided).
+echr:ProceduralChainOrderShape a sh:NodeShape ;
+    sh:targetSubjectsOf echr:followsProceeding ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "this event's hasProceedingStartDate is earlier than the hasDecisionDate of the event it echr:followsProceeding" ;
+        sh:select """
+            PREFIX echr: <https://growgraph.dev/echr#>
+            PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+            SELECT $this
+            WHERE {
+                $this echr:followsProceeding ?prior ;
+                      echr:hasProceedingStartDate ?thisStart .
+                ?prior echr:hasDecisionDate ?priorDecision .
+                FILTER(datatype(?thisStart) = xsd:date && datatype(?priorDecision) = xsd:date)
+                FILTER(?thisStart < ?priorDecision)
+            }
+        """ ;
     ] .

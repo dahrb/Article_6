@@ -1,0 +1,129 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/b83dff192347/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/b83dff192347> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:4"^^xsd:string .
+
+doc:caseMatko a echr:CaseDocument ;
+    echr:hasApplicant doc:aleksanderMatko ;
+    echr:hasApplicationNumber "43393/98"@en ;
+    echr:hasCaseName "Matko v. Slovenia"@en ;
+    echr:hasDomesticProceeding doc:criminalComplaintInvestigation,
+        doc:criminalProceedingsFirstInstance,
+        doc:criminalProceedingsRetrial,
+        doc:criminal_proceedings_appeal_1,
+        doc:criminal_proceedings_appeal_2 ;
+    echr:hasRespondentState "Slovenia"@en .
+
+doc:slovenjGradecPolice a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Slovenj Gradec Police"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Slovenj Gradec Police"@en ;
+    echr:hasJurisdictionState "Slovenia"@en .
+
+doc:criminalComplaintInvestigation a echr:DomesticProceeding ;
+    rdfs:label "Investigation into applicant's criminal complaint"@en ;
+    echr:hasCourt doc:slovenjGradecDistrictProsecutor ;
+    echr:hasDecisionDate "1997-01-17"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partComplaintMatko ;
+    echr:hasProceedingStartDate "1995-04-07"^^xsd:date ;
+    echr:hasSupportingQuote "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."@en .
+
+doc:criminal_proceedings_appeal_2 a echr:DomesticProceeding ;
+    rdfs:label "Second appeal of criminal proceedings"@en ;
+    echr:followsProceeding doc:criminalProceedingsRetrial ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "2001-05-09"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_appeal2_matko ;
+    echr:hasSupportingQuote "On 9 May 2001 the Maribor Higher Court upheld the conviction"@en ;
+    echr:isFinalDomesticDecision true .
+
+doc:partComplaintMatko a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:partFirstInstanceMatko a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:partRetrialMatko a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_appeal1_matko a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:part_appeal2_matko a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:aleksanderMatko .
+
+doc:slovenjGradecDistrictProsecutor a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Slovenj Gradec District Public Prosecutor’s Office"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Slovenj Gradec District Public Prosecutor’s Office"@en ;
+    echr:hasJurisdictionState "Slovenia"@en .
+
+doc:criminalProceedingsFirstInstance a echr:DomesticProceeding ;
+    rdfs:label "First instance criminal proceedings against Matko"@en ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "1999-11-22"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:partFirstInstanceMatko ;
+    echr:hasProceedingStartDate "1997-01-17"^^xsd:date ;
+    echr:hasSupportingQuote "By a judgment of 22 November 1999 the court acquitted the applicant."@en .
+
+doc:criminalProceedingsRetrial a echr:DomesticProceeding ;
+    rdfs:label "Retrial of criminal proceedings"@en ;
+    echr:followsProceeding doc:criminal_proceedings_appeal_1 ;
+    echr:hasCourt doc:slovenjGradecDistrictCourt ;
+    echr:hasDecisionDate "2001-02-12"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partRetrialMatko ;
+    echr:hasSupportingQuote "By a judgment of 12 February 2001, the Slovenj Gradec District Court convicted the applicant as charged"@en .
+
+doc:criminal_proceedings_appeal_1 a echr:DomesticProceeding ;
+    rdfs:label "First appeal of criminal proceedings"@en ;
+    echr:followsProceeding doc:criminalProceedingsFirstInstance ;
+    echr:hasCourt doc:mariborHigherCourt ;
+    echr:hasDecisionDate "2000-09-27"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeRemitted ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_appeal1_matko ;
+    echr:hasSupportingQuote "on 27 September 2000 the Maribor Higher Court quashed the judgment and remitted the case to a new panel for retrial."@en .
+
+doc:mariborHigherCourt a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Maribor Higher Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Maribor Higher Court"@en ;
+    echr:hasJurisdictionState "Slovenia"@en .
+
+doc:slovenjGradecDistrictCourt a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Slovenj Gradec District Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Slovenj Gradec District Court"@en ;
+    echr:hasJurisdictionState "Slovenia"@en .
+
+doc:aleksanderMatko a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Aleksander Matko"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr Aleksander Matko"@en ;
+    echr:hasSupportingQuote "Mr Aleksander Matko (“the applicant”)"@en .
+

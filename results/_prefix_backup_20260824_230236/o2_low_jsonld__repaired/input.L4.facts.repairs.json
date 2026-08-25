@@ -1,0 +1,199 @@
+{
+  "source": "results/jurix_phase1/o2_low_jsonld/repaired/input.L4.facts.ttl",
+  "timings": {
+    "source": "results/jurix_phase1/o2_low_jsonld/repaired/input.L4.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 42.4,
+    "seconds_model_calls": 42.1,
+    "seconds_deterministic": 0.3,
+    "model_calls": 5,
+    "by_stage": {
+      "authorities": {
+        "passes": 1,
+        "seconds": 2.5,
+        "seconds_model_call": 2.4
+      },
+      "proceedings": {
+        "passes": 1,
+        "seconds": 8.3,
+        "seconds_model_call": 8.3
+      },
+      "persons": {
+        "passes": 2,
+        "seconds": 28.4,
+        "seconds_model_call": 28.4
+      },
+      "quotes": {
+        "passes": 1,
+        "seconds": 3.0,
+        "seconds_model_call": 3.0
+      }
+    },
+    "passes": [
+      {
+        "stage": "authorities",
+        "pass": 1,
+        "seconds_total": 2.5,
+        "seconds_model_call": 2.4,
+        "seconds_deterministic": 0.0,
+        "findings_in": 1,
+        "ops_proposed": 1,
+        "ops_applied": 2,
+        "merges_applied": 1
+      },
+      {
+        "stage": "proceedings",
+        "pass": 1,
+        "seconds_total": 8.3,
+        "seconds_model_call": 8.3,
+        "seconds_deterministic": 0.0,
+        "findings_in": 12,
+        "ops_proposed": 1,
+        "ops_applied": 1,
+        "merges_applied": 0
+      },
+      {
+        "stage": "persons",
+        "pass": 1,
+        "seconds_total": 7.8,
+        "seconds_model_call": 7.8,
+        "seconds_deterministic": 0.0,
+        "findings_in": 9,
+        "ops_proposed": 1,
+        "ops_applied": 1,
+        "merges_applied": 0
+      },
+      {
+        "stage": "persons",
+        "pass": 2,
+        "seconds_total": 20.6,
+        "seconds_model_call": 20.6,
+        "seconds_deterministic": 0.0,
+        "findings_in": 7,
+        "ops_proposed": 1,
+        "ops_applied": 0,
+        "merges_applied": 0
+      },
+      {
+        "stage": "quotes",
+        "pass": 1,
+        "seconds_total": 3.0,
+        "seconds_model_call": 3.0,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 2,
+        "ops_applied": 2,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly",
+      "rationale": "The node doc:mia is missing the required echr:hasAuthorityName property, but has an rdfs:label and supporting quote 'MIA'.",
+      "action": "add",
+      "subject": "doc:mia",
+      "predicate": "echr:hasAuthorityName",
+      "object": "MIA",
+      "object_is_literal": true,
+      "datatype": "xsd:string",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "duplicate_entity",
+      "rationale": "Both nodes refer to the 'Maribor Higher Court' and share identical properties; doc:courtMaribor has more inbound links.",
+      "action": "merge",
+      "keep": "doc:courtMaribor",
+      "drop": "doc:courtHigherMaribor",
+      "status": "applied",
+      "effect": {
+        "inbound_edges_repointed": 1,
+        "self_loops_dropped": 0,
+        "properties_moved": 0,
+        "survivor_value_kept": 3
+      },
+      "stage": "authorities",
+      "pass": 1
+    },
+    {
+      "finding": "flagged_missing_hasCourt_for doc:criminal_proceeding_1",
+      "rationale": "The node refers to the judgment of 12 February 2001. The quote for doc:proceeding_3 explicitly states that on this date the Slovenj Gradec District Court convicted the applicant. Therefore, doc:criminal_proceeding_1 is the same event as doc:proceeding_3 and should be linked to the same court.",
+      "action": "add",
+      "subject": "doc:criminal_proceeding_1",
+      "predicate": "echr:hasCourt",
+      "object": "doc:courtSlovenjGradec",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "proceedings",
+      "pass": 1
+    },
+    {
+      "finding": "Cardinality violation on doc:participation_applicant_1 hasPartySide",
+      "rationale": "The supporting quote 'the applicant went to the Slovenj Gradec Police and made an oral complaint' indicates the applicant was the initiating party in this specific context. Removing SideResponding.",
+      "action": "remove",
+      "subject": "doc:participation_applicant_1",
+      "predicate": "echr:hasPartySide",
+      "object": "echr:SideResponding",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "persons",
+      "pass": 1
+    },
+    {
+      "finding": "doc:applicant_1 has multiple rdfs:labels",
+      "rationale": "A node should have only one label. 'Aleksander Matko' is the specific name of the person.",
+      "action": "remove",
+      "subject": "doc:applicant_1",
+      "predicate": "rdfs:label",
+      "object": "\"the applicant\"",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "skipped: triple not present",
+      "stage": "persons",
+      "pass": 2
+    },
+    {
+      "finding": "The quote 'Officer from the Slovenj Gradec Police, I.G.' is a paraphrase and does not appear verbatim in the source text. The correct span is 'Another officer from the Slovenj Gradec Police, I.G.'.",
+      "rationale": "The quote was slightly modified; it must be a verbatim span from the source.",
+      "action": "remove",
+      "subject": "doc:officer_ig_1",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "Officer from the Slovenj Gradec Police, I.G.",
+      "object_is_literal": true,
+      "datatype": null,
+      "lang": null,
+      "quote_index": 0,
+      "status": "applied (removed 1 quote(s) by index)",
+      "stage": "quotes",
+      "pass": 1
+    },
+    {
+      "finding": "The quote 'Officer from the Slovenj Gradec Police, I.G.' is a paraphrase and does not appear verbatim in the source text. The correct span is 'Another officer from the Slovenj Gradec Police, I.G.'.",
+      "rationale": "The quote was slightly modified; it must be a verbatim span from the source.",
+      "action": "add",
+      "subject": "doc:officer_ig_1",
+      "predicate": "echr:hasSupportingQuote",
+      "object": "Another officer from the Slovenj Gradec Police, I.G.",
+      "object_is_literal": true,
+      "datatype": "rdf:literal",
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "quotes",
+      "pass": 1
+    }
+  ]
+}

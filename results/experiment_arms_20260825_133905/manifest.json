@@ -1,0 +1,66 @@
+{
+  "started": "2026-08-25T13:39:07",
+  "arms_run": [
+    "o2_low_jsonld"
+  ],
+  "arm_specs": {
+    "o2_large_jsonld": {
+      "mode": "native",
+      "chunk_min_size": 20000,
+      "chunk_max_size": 50000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    },
+    "o2_med_jsonld": {
+      "mode": "native",
+      "chunk_min_size": 8000,
+      "chunk_max_size": 16000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    },
+    "o2_low_jsonld": {
+      "mode": "native",
+      "chunk_min_size": 3000,
+      "chunk_max_size": 6000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    },
+    "o2_cf_med_jsonld": {
+      "mode": "rolling",
+      "chunk_min_size": 8000,
+      "chunk_max_size": 16000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    },
+    "o2_cf_low_jsonld": {
+      "mode": "rolling",
+      "chunk_min_size": 3000,
+      "chunk_max_size": 6000,
+      "max_visits": 1,
+      "llm_graph_format": "jsonld"
+    }
+  },
+  "limit": "1",
+  "model": "gemma-4-31b",
+  "base_url": "http://localhost:8000/v1",
+  "temperature": 0.4,
+  "repair_passes_per_stage": 2,
+  "legacy_repair_arm": "o2_large_jsonld",
+  "held_constant": {
+    "ontology": "/home/dahrb/Projects/article_6/domestic_proceedings/ontology/echr.ttl (snapshot alongside)",
+    "ontology_version": "3.5.0",
+    "shacl_shapes": "/home/dahrb/Projects/article_6/domestic_proceedings/ontology/echr-shapes.ttl",
+    "shacl_gate": "ontocast facts gate (FACTS_SHAPES_DIR)",
+    "shacl_autofix": "prune",
+    "facts_prompt": "art6/ontology/prompts/facts.txt (snapshot alongside)",
+    "chunk_section_classifier": "off",
+    "ontology_context_mode": "fixed_single_ontology",
+    "ontology_context_fixed_ontology_id": "echr",
+    "render_mode": "facts",
+    "llm_cache_enabled": false,
+    "response_repair": true,
+    "turtle_repair": true
+  },
+  "git_head": "42b96b59fb043cb646aae582505a788313d6da4c",
+  "git_dirty": true
+}

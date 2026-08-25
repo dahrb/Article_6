@@ -1,0 +1,215 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/4001ea14f09a/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/4001ea14f09a> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:6"^^xsd:string .
+
+doc:caseScholzAg a echr:CaseDocument ;
+    echr:hasApplicant doc:scholzAg ;
+    echr:hasApplicationNumber "16528/10"^^xsd:string ;
+    echr:hasCaseName "Scholz AG v. Armenia"^^xsd:string ;
+    echr:hasRespondentState "Armenia"^^xsd:string .
+
+doc:proceeding_7 a echr:DomesticProceeding ;
+    rdfs:label "Appeal on points of law to Court of Cassation"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_6 ;
+    echr:hasCourt doc:courtOfCassation ;
+    echr:hasDecisionDate "2009-09-23"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_7_scholz ;
+    echr:hasProceedingStartDate "2009-08-04"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "On 4 August 2009 the applicant company lodged an appeal on points of law... On 23 September 2009 the Court of Cassation declared the applicant company’s appeal on points of law inadmissible."^^xsd:string ;
+    echr:isFinalDomesticDecision true .
+
+doc:adminActionArbitrationRefusal a echr:AdministrativeAction ;
+    rdfs:label "Arbitration Tribunal refusal to start proceedings"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_3 ;
+    echr:hasCourt doc:arbitrationTribunal ;
+    echr:hasDecisionDate "2008-10-07"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:partArbScholz ;
+    echr:hasSupportingQuote "On 7 October 2008 the President of the Arbitration Tribunal informed the applicant company that its request to start arbitration proceedings would not be granted."^^xsd:string .
+
+doc:arbitrationTribunal a echr:DomesticAuthority ;
+    rdfs:label "Arbitration Tribunal of the Chamber of Commerce and Industry of Armenia"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Arbitration Tribunal of the Chamber of Commerce and Industry of Armenia"^^xsd:string ;
+    echr:hasJurisdictionState "Armenia"^^xsd:string .
+
+doc:civilCourtAppeal a echr:DomesticAuthority ;
+    rdfs:label "Civil Court of Appeal"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Civil Court of Appeal"^^xsd:string ;
+    echr:hasJurisdictionState "Armenia"^^xsd:string .
+
+doc:courtOfCassation a echr:DomesticAuthority ;
+    rdfs:label "Court of Cassation"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Court of Cassation"^^xsd:string ;
+    echr:hasJurisdictionState "Armenia"^^xsd:string .
+
+doc:districtCourtYerevan a echr:DomesticAuthority ;
+    rdfs:label "Kentron and Nork-Marash District Court of Yerevan"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Kentron and Nork-Marash District Court of Yerevan"^^xsd:string ;
+    echr:hasJurisdictionState "Armenia"^^xsd:string .
+
+doc:lawyerAbgaryan a echr:LegalRepresentative ;
+    rdfs:label "Mr D. Abgaryan"^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr D. Abgaryan"^^xsd:string .
+
+doc:lawyerAtanesyan a echr:LegalRepresentative ;
+    rdfs:label "Mr T. Atanesyan"^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr T. Atanesyan"^^xsd:string .
+
+doc:partArbScholz a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:scholzAg .
+
+doc:part_1_safaryan a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:safaryanLlc .
+
+doc:part_1_scholz a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:scholzAg .
+
+doc:part_2_scholz a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:scholzAg .
+
+doc:part_3_scholz a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:scholzAg .
+
+doc:part_4_scholz a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:scholzAg .
+
+doc:part_5_safaryan a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:safaryanLlc .
+
+doc:part_5_scholz a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:scholzAg .
+
+doc:part_6_safaryan a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:safaryanLlc .
+
+doc:part_6_scholz a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:scholzAg .
+
+doc:part_7_scholz a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:scholzAg .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "Initial claim by Scholz AG"^^xsd:string ;
+    echr:hasCourt doc:commercialCourt ;
+    echr:hasDecisionDate "2007-11-16"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_1_safaryan,
+        doc:part_1_scholz ;
+    echr:hasProceedingStartDate "2007-01-15"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "On 15 January 2007 the applicant company lodged a claim with the Commercial Court against the LLC... On 16 November 2007 the Commercial Court granted the request and decided to leave the applicant company’s claim and the counterclaim lodged by the LLC unexamined."^^xsd:string .
+
+doc:proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "Appeal against decision to leave claim unexamined"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:commercialCourt ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasParticipation doc:part_2_scholz ;
+    echr:hasProceedingStartDate "2007-11-23"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "On 23 November 2007 the applicant company lodged a complaint concerning the decision to leave the claim and counterclaim unexamined."^^xsd:string .
+
+doc:proceeding_3 a echr:DomesticProceeding ;
+    rdfs:label "Complaint against decision to leave claim unexamined (Dec 2007)"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_2 ;
+    echr:hasCourt doc:commercialCourt ;
+    echr:hasDecisionDate "2007-12-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_3_scholz ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "On 10 December 2007 a three-judge bench of the Commercial Court rejected the complaint submitted by the applicant company."^^xsd:string .
+
+doc:proceeding_4 a echr:DomesticProceeding ;
+    rdfs:label "Claim for recovery of loan in Yerevan Civil Court"^^xsd:string ;
+    echr:followsProceeding doc:adminActionArbitrationRefusal ;
+    echr:hasCourt doc:yerevanCivilCourt ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasParticipation doc:part_4_scholz ;
+    echr:hasProceedingStartDate "2008-10-17"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "on 17 October 2008 the applicant company lodged a claim with the Yerevan Civil Court, seeking to recover EUR 116,600 from the LLC"^^xsd:string .
+
+doc:proceeding_5 a echr:DomesticProceeding ;
+    rdfs:label "Claim for recovery of loan in District Court"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_4 ;
+    echr:hasCourt doc:districtCourtYerevan ;
+    echr:hasDecisionDate "2009-06-16"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_5_safaryan,
+        doc:part_5_scholz ;
+    echr:hasProceedingStartDate "2009-03-13"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "On 13 March 2009 the District Court accepted the case for examination... On 16 June 2009 the District Court decided to leave the claim lodged by the applicant company unexamined"^^xsd:string .
+
+doc:proceeding_6 a echr:DomesticProceeding ;
+    rdfs:label "Appeal to Civil Court of Appeal"^^xsd:string ;
+    echr:followsProceeding doc:proceeding_5 ;
+    echr:hasCourt doc:civilCourtAppeal ;
+    echr:hasDecisionDate "2009-07-21"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_6_safaryan,
+        doc:part_6_scholz ;
+    echr:hasProceedingStartDate "2009-06-25"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "On 25 June 2009 the applicant company lodged an appeal... On 21 July 2009 the Civil Court of Appeal upheld the decision of 16 June 2009."^^xsd:string .
+
+doc:yerevanCivilCourt a echr:DomesticAuthority ;
+    rdfs:label "Yerevan Civil Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Yerevan Civil Court"^^xsd:string ;
+    echr:hasJurisdictionState "Armenia"^^xsd:string .
+
+doc:commercialCourt a echr:DomesticAuthority ;
+    rdfs:label "Commercial Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Commercial Court"^^xsd:string ;
+    echr:hasJurisdictionState "Armenia"^^xsd:string .
+
+doc:safaryanLlc a echr:Party ;
+    rdfs:label "A. Safaryan and Associates LLC"^^xsd:string ;
+    echr:hasPartyName "A. Safaryan and Associates LLC"^^xsd:string .
+
+doc:scholzAg a echr:Party ;
+    rdfs:label "Scholz AG"^^xsd:string ;
+    echr:hasPartyName "Scholz AG"^^xsd:string ;
+    echr:isRepresentedBy doc:lawyerAbgaryan,
+        doc:lawyerAtanesyan .
+

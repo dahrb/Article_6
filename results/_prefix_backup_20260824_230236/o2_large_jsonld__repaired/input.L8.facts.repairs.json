@@ -1,0 +1,76 @@
+{
+  "source": "results/jurix_phase1/o2_large_jsonld/repaired/input.L8.facts.ttl",
+  "timings": {
+    "source": "results/jurix_phase1/o2_large_jsonld/repaired/input.L8.facts.ttl",
+    "changed": true,
+    "stage_failures": [],
+    "seconds_total": 6.2,
+    "seconds_model_calls": 6.1,
+    "seconds_deterministic": 0.1,
+    "model_calls": 2,
+    "by_stage": {
+      "proceedings": {
+        "passes": 1,
+        "seconds": 5.6,
+        "seconds_model_call": 5.6
+      },
+      "persons": {
+        "passes": 1,
+        "seconds": 0.5,
+        "seconds_model_call": 0.5
+      }
+    },
+    "passes": [
+      {
+        "stage": "proceedings",
+        "pass": 1,
+        "seconds_total": 5.6,
+        "seconds_model_call": 5.6,
+        "seconds_deterministic": 0.0,
+        "findings_in": 0,
+        "ops_proposed": 1,
+        "ops_applied": 2,
+        "merges_applied": 0
+      },
+      {
+        "stage": "persons",
+        "pass": 1,
+        "seconds_total": 0.5,
+        "seconds_model_call": 0.5,
+        "seconds_deterministic": 0.0,
+        "findings_in": 2,
+        "ops_proposed": 0,
+        "ops_applied": 0,
+        "merges_applied": 0
+      }
+    ]
+  },
+  "operations": [
+    {
+      "finding": "doc:adminElectionDecision is missing an echr:hasCourt link, but the supporting quote identifies the deciding body as the 'local electoral committee'.",
+      "rationale": "The supporting quote explicitly names the 'local electoral committee' as the authority that declared the elections invalid. I will create a new DomesticAuthority node for this committee and link it to the proceeding.",
+      "action": "add",
+      "subject": "doc:local_electoral_committee",
+      "predicate": "rdf:type",
+      "object": "echr:DomesticAuthority",
+      "object_is_literal": false,
+      "datatype": null,
+      "lang": null,
+      "quote_index": null,
+      "status": "applied",
+      "stage": "proceedings",
+      "pass": 1
+    },
+    {
+      "finding": "stub_orphan_sweep",
+      "rationale": "Typed nodes carrying nothing but rdf:type/rdfs:label with no inbound reference; nothing downstream can use them.",
+      "action": "delete_node",
+      "nodes": [
+        "doc:local_electoral_committee"
+      ],
+      "status": "applied",
+      "stage": "proceedings",
+      "pass": 1
+    }
+  ]
+}

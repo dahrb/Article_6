@@ -28,7 +28,7 @@ doc:reinstatement_bail_1999_03_29 a echr:AdministrativeAction ;
     echr:hasCourt doc:domesticAuthorityTrialMrJusticePotts ;
     echr:hasDecisionDate "1999-03-29"^^xsd:date ;
     echr:hasParticipation doc:participationReinstatementBailApplicant ;
-    echr:hasSupportingQuote "On 29 March 1999, defence counsel made representations, inter alia, that the arrangements made for the applicant in prison had not reflected those referred to by the trial judge. ... the trial judge reinstated bail."@en .
+    echr:hasSupportingQuote "On 29 March 1999, defence counsel made representations, inter alia , that the arrangements made for the applicant in prison had not reflected those referred to by the trial judge. He had allegedly been held in a psychiatric ward with disturbed prisoners instead of a room of his own, had been subjected to strip searches and had passed a very distressing weekend. On hearing re-assurances from defence counsel that arrangements would be made for transporting the applicant to and from the court room and for ensuring his welfare in his own home, and having regard to the shortness of the overnight adjournment of the trial, the trial judge reinstated bail."@en .
 
 doc:bail_withdrawal_1999_03_25 a echr:AdministrativeAction ;
     rdfs:label "Withdrawal of bail (25 March 1999)"@en ;
@@ -38,15 +38,10 @@ doc:bail_withdrawal_1999_03_25 a echr:AdministrativeAction ;
     echr:hasParticipation doc:participationBailWithdrawalApplicant ;
     echr:hasSupportingQuote "On 25 March 1999, before the closing speeches were due to begin and a long adjournment over a weekend, the judge after consulting counsel decided to withdraw the applicant’s bail."@en .
 
-doc:britishPolice a echr:DomesticAuthority,
-        echr:Party ;
-    rdfs:label "British police"@en ;
-    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
-    echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation."@en .
-
 doc:courtOfAppealAuthority a echr:DomesticAuthority ;
     rdfs:label "Court of Appeal"@en ;
     echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Court of Appeal" ;
     echr:hasSupportingQuote "In its judgment of 10 February 2000, the Court of Appeal rejected the applicant’s appeal."@en .
 
 doc:court_of_appeal_judgment_2000_02_10 a echr:DomesticProceeding ;
@@ -64,6 +59,7 @@ doc:court_of_appeal_judgment_2000_02_10 a echr:DomesticProceeding ;
 doc:highCourtAuthority a echr:DomesticAuthority ;
     rdfs:label "High Court"@en ;
     echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "High Court" ;
     echr:hasSupportingQuote "An application was made to the High Court to review bail on 26 March 1999. It was refused."@en .
 
 doc:highcourt_bail_review_1999_03_26 a echr:DomesticProceeding ;
@@ -80,6 +76,7 @@ doc:highcourt_bail_review_1999_03_26 a echr:DomesticProceeding ;
 doc:houseOfLordsAuthority a echr:DomesticAuthority ;
     rdfs:label "House of Lords"@en ;
     echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "House of Lords" ;
     echr:hasSupportingQuote "On 15 June 2000, the House of Lords refused the petition for leave to appeal."@en .
 
 doc:indictment_charging_4_counts a echr:DomesticProceeding ;
@@ -156,25 +153,6 @@ doc:participationTrialProsecution a echr:Participation ;
     echr:hasSupportingQuote "In essence, the prosecution case was that the applicant had been a willing volunteer in the local police force and engaged in the search and kill operation carried out after the massacre of the Jewish inhabitants of the ghetto in Domachevo on 19-20 September 1942."@en ;
     echr:participatingParty doc:theProsecution .
 
-doc:police_interview_1996_04_01 a echr:DomesticProceeding ;
-    rdfs:label "Police interview 1 April 1996"@en ;
-    echr:hasInstanceLevel echr:LevelInvestigative ;
-    echr:hasParticipation doc:participation_interview_1996_04_01_applicant,
-        doc:participation_interview_1996_04_01_police ;
-    echr:hasProceedingStartDate "1996-04-01"^^xsd:date ;
-    echr:hasProceedingType echr:TypeCriminal ;
-    echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation."@en .
-
-doc:police_interview_1996_04_03 a echr:DomesticProceeding ;
-    rdfs:label "Police interview 3 April 1996"@en ;
-    echr:followsProceeding doc:police_interview_1996_04_01 ;
-    echr:hasInstanceLevel echr:LevelInvestigative ;
-    echr:hasParticipation doc:participation_interview_1996_04_01_applicant,
-        doc:participation_interview_1996_04_01_police ;
-    echr:hasProceedingStartDate "1996-04-03"^^xsd:date ;
-    echr:hasProceedingType echr:TypeCriminal ;
-    echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation."@en .
-
 doc:participation_interview_1996_04_01_applicant a echr:Participation ;
     rdfs:label "Participation of Anthony SAWONIUK in police interview 1 April 1996"@en,
         "Participation of Anthony SAWONIUK in police interview 3 April 1996"@en ;
@@ -188,6 +166,38 @@ doc:participation_interview_1996_04_01_police a echr:Participation ;
     echr:hasPartySide echr:SideInitiating ;
     echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation."@en ;
     echr:participatingParty doc:britishPolice .
+
+doc:participation_interview_1996_04_03_applicant a echr:Participation ;
+    rdfs:label "Participation of Anthony SAWONIUK in police interview 3 April 1996" ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation." ;
+    echr:participatingParty doc:anthonySawoniuk .
+
+doc:participation_interview_1996_04_03_police a echr:Participation ;
+    rdfs:label "Participation of British police in police interview 3 April 1996" ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation." ;
+    echr:participatingParty doc:britishPolice .
+
+doc:police_interview_1996_04_01 a echr:DomesticProceeding ;
+    rdfs:label "Police interview 1 April 1996"@en ;
+    echr:hasCourt doc:britishPolice ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participation_interview_1996_04_01_applicant,
+        doc:participation_interview_1996_04_01_police ;
+    echr:hasProceedingStartDate "1996-04-01"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation."@en .
+
+doc:police_interview_1996_04_03 a echr:DomesticProceeding ;
+    rdfs:label "Police interview 3 April 1996"@en ;
+    echr:followsProceeding doc:police_interview_1996_04_01 ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participation_interview_1996_04_03_applicant,
+        doc:participation_interview_1996_04_03_police ;
+    echr:hasProceedingStartDate "1996-04-03"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation."@en .
 
 doc:respondentStateUnitedKingdom a echr:Party ;
     rdfs:label "United Kingdom"@en ;
@@ -211,6 +221,13 @@ doc:trial_1999_02_08_1999_04_01 a echr:DomesticProceeding ;
     echr:hasProceedingType echr:TypeCriminal ;
     echr:hasSupportingQuote "In the trial which took place between 8 February and 1 April 1999, before Mr Justice Potts and a jury, the applicant was represented by senior and junior counsel and solicitors."@en .
 
+doc:britishPolice a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "British police"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "British police" ;
+    echr:hasSupportingQuote "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation."@en .
+
 doc:domesticAuthorityTrialMrJusticePotts a echr:DomesticAuthority ;
     rdfs:label "trial before Mr Justice Potts and a jury"@en ;
     echr:hasAuthorityKind echr:AuthorityJudicial ;
@@ -221,6 +238,5 @@ doc:anthonySawoniuk a echr:NaturalPerson,
         echr:Party ;
     rdfs:label "Anthony SAWONIUK"@en ;
     echr:hasGender echr:GenderMale ;
-    echr:hasPersonName "Anthony SAWONIUK"@en ;
-    echr:hasSupportingQuote "He denied that he had been a member of the local police; that there had ever been a locally recruited police force there; that there had only been unarmed lookout men, not in uniform, keeping watch for Russian partisans; that there had been no ghetto in Dormachevo and no restriction of movement had been imposed on the Jewish population."@en .
+    echr:hasPersonName "Anthony SAWONIUK"@en .
 

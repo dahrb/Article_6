@@ -23,6 +23,11 @@ doc:caseScholzAgVArmenia a echr:CaseDocument ;
         doc:proc_yerevan_civil_2008_10_17 ;
     echr:hasSupportingQuote "The case originated in an application (no. 16528/10) against the Republic of Armenia lodged with the Court under Article 34 of the Convention for the Protection of Human Rights and Fundamental Freedoms (“the Convention”) by a German corporation, Scholz AG (“the applicant company”), on 19 March 2010."@en .
 
+doc:participation_proc_civil_court_of_appeal_2009_06_25_scholz rdfs:label "Participation of Scholz AG in Civil Court of Appeal (Jun-Jul 2009)" ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 25 June 2009 the applicant company lodged an appeal." ;
+    echr:participatingParty doc:partyScholzAg .
+
 doc:authorityArbitrationTribunal a echr:DomesticAuthority ;
     rdfs:label "Arbitration Tribunal of the Chamber of Commerce and Industry of Armenia"@en ;
     echr:hasAuthorityKind echr:AuthorityJudicial ;
@@ -51,7 +56,7 @@ doc:authorityYerevanCivilCourt a echr:DomesticAuthority ;
     rdfs:label "Yerevan Civil Court"@en ;
     echr:hasAuthorityKind echr:AuthorityJudicial ;
     echr:hasAuthorityName "Yerevan Civil Court"@en ;
-    echr:hasSupportingQuote "On 17 October 2008 the applicant company lodged a claim with the Yerevan Civil Court, seeking to recover EUR 116,600 from the LLC, representing the amount of the loan and interest."@en .
+    echr:hasSupportingQuote "In view of the fact that the Commercial Court had been abolished by that time, on 17 October 2008 the applicant company lodged a claim with the Yerevan Civil Court, seeking to recover EUR 116,600 from the LLC, representing the amount of the loan and interest." .
 
 doc:legalrepMrDAbgaryan a echr:LegalRepresentative,
         echr:NaturalPerson ;
@@ -82,7 +87,6 @@ doc:participation_proc_arbitration_2008_09_17_scholz a echr:Participation ;
 doc:participation_proc_civil_court_of_appeal_2009_06_25_llc a echr:Participation ;
     rdfs:label "Participation of the LLC in Civil Court of Appeal (Jun-Jul 2009)"@en ;
     echr:hasPartySide echr:SideResponding ;
-    echr:hasSupportingQuote "In its reply to the applicant company’s appeal, the LLC submitted, inter alia, that the applicant company had failed to submit to the Arbitration Tribunal extracts of the contracts containing the arbitration clause."@en ;
     echr:participatingParty doc:partyLlc .
 
 doc:participation_proc_commercialcourt_firstinstance_2007_01_15_llc a echr:Participation ;
@@ -94,7 +98,6 @@ doc:participation_proc_commercialcourt_firstinstance_2007_01_15_llc a echr:Parti
 doc:participation_proc_commercialcourt_firstinstance_2007_01_15_scholz a echr:Participation ;
     rdfs:label "Participation of Scholz AG in Commercial Court (15 Jan 2007)"@en ;
     echr:hasPartySide echr:SideInitiating ;
-    echr:hasSupportingQuote "On 15 January 2007 the applicant company lodged a claim with the Commercial Court, seeking to recover USD 10,000"@en ;
     echr:participatingParty doc:partyScholzAg .
 
 doc:participation_proc_commercialcourt_threejudge_2007_11_23_llc a echr:Participation ;
@@ -112,7 +115,8 @@ doc:participation_proc_commercialcourt_threejudge_2007_11_23_scholz a echr:Parti
 doc:participation_proc_court_of_cassation_2009_08_04_llc a echr:Participation ;
     rdfs:label "Participation of the LLC in Court of Cassation (Aug-Sep 2009)"@en ;
     echr:hasPartySide echr:SideResponding ;
-    echr:hasSupportingQuote "\"As for the letter of the President of the Arbitration Tribunal of the Chamber of Commerce of 7 October 2008 concerning non-acceptance of the claim lodged by [the applicant company], it was based on the grounds that [the applicant company] had not submitted the original arbitration agreement or a certified copy, as required by the Commercial Arbitration Act ... The Court of Cassation finds that, taking into account the failure to submit ... the original arbitration agreement or a certified copy ... and non-examination of [the applicant company’s] claim, [the applicant company] is not deprived of judicial protection ...\""@en ;
+    echr:hasSupportingQuote """“... As for the letter of the President of the Arbitration Tribunal of the Chamber of Commerce of 7 October 2008 concerning non-acceptance of the claim lodged by [the applicant company], it was based on the grounds that [the applicant company] had not submitted the original arbitration agreement or a certified copy, as required by the Commercial Arbitration Act and [the provisions contained therein], in the absence of which arbitration proceedings could not be started.
+The Court of Cassation finds that, taking into account the failure to submit to the Arbitration Tribunal of the Chamber of Commerce and Industry the original arbitration agreement or a certified copy ... and non-examination of [the applicant company’s] claim, [the applicant company] is not deprived of judicial protection in accordance with the general provisions of the Code of Civil Procedure ...”""" ;
     echr:participatingParty doc:partyLlc .
 
 doc:participation_proc_court_of_cassation_2009_08_04_scholz a echr:Participation ;
@@ -126,6 +130,14 @@ doc:participation_proc_district_court_2009_03_13_llc a echr:Participation ;
     echr:hasPartySide echr:SideResponding ;
     echr:hasSupportingQuote "On 12 June 2009 the LLC, relying on the decision of the Commercial Court of 16 November 2007, requested the District Court to leave the applicant company’s claim unexamined."@en ;
     echr:participatingParty doc:partyLlc .
+
+doc:participation_proc_district_court_2009_03_13_scholz a echr:Participation ;
+    rdfs:label "Participation of Scholz AG in Civil Court of Appeal (Jun-Jul 2009)"@en,
+        "Participation of Scholz AG in District Court (Mar-Jun 2009)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 25 June 2009 the applicant company lodged an appeal."@en,
+        "On 25 June 2009 the applicant company lodged an appeal. It argued, in particular, that the Arbitration Tribunal had been provided with the decisions of the Commercial Court and the contracts concluded between the parties."@en ;
+    echr:participatingParty doc:partyScholzAg .
 
 doc:participation_proc_yerevan_civil_2008_10_17_llc a echr:Participation ;
     rdfs:label "Participation of the LLC in Yerevan Civil Court (Oct-Nov 2008)"@en ;
@@ -154,16 +166,7 @@ doc:proc_court_of_cassation_2009_08_04 a echr:DomesticProceeding ;
 doc:authorityCommercialCourt a echr:DomesticAuthority ;
     rdfs:label "Commercial Court"@en ;
     echr:hasAuthorityKind echr:AuthorityJudicial ;
-    echr:hasAuthorityName "Commercial Court"@en ;
-    echr:hasSupportingQuote "On 15 January 2007 the applicant company lodged a claim with the Commercial Court, seeking to recover USD 10,000 from the initial debt of USD 1,213,824."@en .
-
-doc:participation_proc_district_court_2009_03_13_scholz a echr:Participation ;
-    rdfs:label "Participation of Scholz AG in Civil Court of Appeal (Jun-Jul 2009)"@en,
-        "Participation of Scholz AG in District Court (Mar-Jun 2009)"@en ;
-    echr:hasPartySide echr:SideInitiating ;
-    echr:hasSupportingQuote "On 25 June 2009 the applicant company lodged an appeal."@en,
-        "On 25 June 2009 the applicant company lodged an appeal. It argued, in particular, that the Arbitration Tribunal had been provided with the decisions of the Commercial Court and the contracts concluded between the parties."@en ;
-    echr:participatingParty doc:partyScholzAg .
+    echr:hasAuthorityName "Commercial Court"@en .
 
 doc:proc_arbitration_2008_09_17 a echr:DomesticProceeding ;
     rdfs:label "Arbitration Tribunal — claim lodged 17 September 2008; refusal 7 October 2008"@en ;
@@ -184,8 +187,7 @@ doc:proc_civil_court_of_appeal_2009_06_25 a echr:DomesticProceeding ;
     echr:hasCourt doc:authorityCivilCourtOfAppeal ;
     echr:hasDecisionDate "2009-07-21"^^xsd:date ;
     echr:hasOutcome echr:OutcomeInadmissible ;
-    echr:hasParticipation doc:participation_proc_civil_court_of_appeal_2009_06_25_llc,
-        doc:participation_proc_district_court_2009_03_13_scholz ;
+    echr:hasParticipation doc:participation_proc_civil_court_of_appeal_2009_06_25_llc ;
     echr:hasProceedingStartDate "2009-06-25"^^xsd:date ;
     echr:hasProceedingType echr:TypeCivil ;
     echr:hasSupportingQuote "On 21 July 2009 the Civil Court of Appeal upheld the decision of 16 June 2009."@en .
@@ -198,8 +200,7 @@ doc:proc_commercialcourt_firstinstance_2007_01_15 a echr:DomesticProceeding ;
     echr:hasParticipation doc:participation_proc_commercialcourt_firstinstance_2007_01_15_llc,
         doc:participation_proc_commercialcourt_firstinstance_2007_01_15_scholz ;
     echr:hasProceedingStartDate "2007-01-15"^^xsd:date ;
-    echr:hasProceedingType echr:TypeCivil ;
-    echr:hasSupportingQuote "On 15 January 2007 the applicant company lodged a claim with the Commercial Court, seeking to recover USD 10,000 from the initial debt of USD 1,213,824."@en .
+    echr:hasProceedingType echr:TypeCivil .
 
 doc:proc_commercialcourt_threejudge_2007_11_23 a echr:DomesticProceeding ;
     rdfs:label "Commercial Court — three-judge bench (complaint lodged 23 Nov 2007; decision 10 Dec 2007)"@en ;
@@ -235,8 +236,8 @@ doc:proc_yerevan_civil_2008_10_17 a echr:DomesticProceeding ;
         doc:participation_proc_yerevan_civil_2008_10_17_scholz ;
     echr:hasProceedingStartDate "2008-10-17"^^xsd:date ;
     echr:hasProceedingType echr:TypeCivil ;
-    echr:hasSupportingQuote "On 12 November 2008 the Yerevan Civil Court accepted the applicant company’s claim for examination and scheduled a preparatory hearing. On the same day it allowed the applicant company’s interlocutory application for a freezing injunction in respect of the property of the LLC in the amount of the claim."@en,
-        "On 17 October 2008 the applicant company lodged a claim with the Yerevan Civil Court, seeking to recover EUR 116,600 from the LLC, representing the amount of the loan and interest."@en,
+    echr:hasSupportingQuote "In view of the fact that the Commercial Court had been abolished by that time, on 17 October 2008 the applicant company lodged a claim with the Yerevan Civil Court, seeking to recover EUR 116,600 from the LLC, representing the amount of the loan and interest.",
+        "On 12 November 2008 the Yerevan Civil Court accepted the applicant company’s claim for examination and scheduled a preparatory hearing. On the same day it allowed the applicant company’s interlocutory application for a freezing injunction in respect of the property of the LLC in the amount of the claim."@en,
         "On 27 February 2009 the Yerevan Civil Court transferred the case to the Kentron and Nork-Marash District Court of Yerevan (“the District Court\") based on territorial jurisdiction, in view of the fact that on 1 March 2009 the Yerevan Civil Court would be abolished."@en .
 
 doc:partyLlc a echr:Party ;

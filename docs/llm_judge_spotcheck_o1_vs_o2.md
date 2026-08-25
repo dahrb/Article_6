@@ -1,9 +1,13 @@
-# LLM-as-judge spot check: O1 vs the top three O2 arms
+# LLM-as-judge spot check: O1 vs the gemma O2 arms
 
 Rough, unblinded, single-judge (Claude Opus 5) assessment of **3 of the 10 pilot
-documents**, scoring the **repaired** output of the three best-performing O2 arms on the
-automated eval against the **O1 schema-light** baseline. Run 2026-08-24 against
-`results/jurix_phase1/`.
+documents**, scoring the **repaired** output of six O2 arms against the **O1 schema-light**
+baseline. Run 2026-08-24 against `results/jurix_phase1/`.
+
+Written in two passes. The first covered the three arms that rank highest on the automated
+eval; the second extended it to **every remaining jsonld arm**, which completes the jsonld
+side of the gemma sweep. Read §"Extension" and the full seven-condition aggregate for the
+combined picture — the early tables cover the first three arms only.
 
 This is a spot check to sanity-test what the automated numbers in
 `docs/phase1_pilot_report.md` are measuring. It is not the Tier-2 judge pass from
@@ -295,6 +299,201 @@ cases, private contracts typed as domestic events — appears in every arm at so
 despite an explicit instruction against it. And the ellipsis-stitched quote appears in every
 condition including O1, despite explicit instructions in both prompts. Neither is something
 a different chunk size will fix.
+
+**6. Raw recall is close to useless as a quality proxy on this sample.** Across the six O2
+arms the automated rank and the judged rank barely relate (table above). `o2_cf_med_jsonld`
+is 5th on recall and 1st on quality; `o2_low_jsonld` is 3rd on recall and last. The reason is
+consistent: the high-recall arms inflate their counts with duplicate and conflated nodes,
+and the metric charges nothing for either. Any selection rule built on raw `n` will keep
+picking the arms that fail hardest here.
+
+**7. The matched-assembly arm is the one that most needs re-examining, because it is the one
+carrying the ontology claim.** `o2_large_jsonld` produced the single best output in the study
+on L6 (4.75) and the second-worst on L10 (1.75), extracting 8 events from a 26-event
+document and losing the entire cassation layer. That variance is a problem for the O1-vs-
+O2-large contrast specifically: on L10 the comparison reads O1 4.00 against O2-large 1.75,
+and essentially all of that gap is recall on a long document, not anything about
+formalisation. Whole-document assembly appears to degrade sharply with length — which is a
+plausible finding, but it means the ontology contrast cannot be read off this arm without
+stratifying by document length first.
+
+**8. Participation modelling is the one axis where an O2 arm is cleanly best.**
+`o2_large_jsonld` produced 22 participation nodes across three documents with **zero**
+defects — no sharing, no orphans, no missing party or side. Every other O2 arm has between 3
+and 8. O1 has no equivalent structure at all, so there is nothing to compare, which is
+precisely the Layer 3/4 argument: this is capability the flat baseline cannot express rather
+than a contest it loses.
+
+## Extension: the remaining jsonld arms
+
+Added in a second pass, same rubric, same three cases, same `repaired/` checkpoint. This
+completes the jsonld side of the gemma sweep — **LRG** = `o2_large_jsonld` (whole document,
+single call — the **matched-assembly** arm), **CFM** = `o2_cf_med_jsonld` (carry-forward,
+8k/16k), **MED** = `o2_med_jsonld` (fan-out, 8k/16k).
+
+`o2_large_jsonld` matters more than its recall rank suggests: per `docs/jurix_plan.md` §3
+it is the only O2 arm whose call structure matches O1's, and therefore **the only one that
+can carry an ontology claim**.
+
+### L6 — *Scholz AG v. Armenia*
+
+| axis | LRG | CFM | MED |
+|---|--:|--:|--:|
+| Hallucinated triples | **5.0** | 4.5 | 2.5 |
+| Missed connections | **5.0** | 4.5 | 2.5 |
+| Missed triples | **4.0** | 3.5 | 3.0 |
+| Other errors | **5.0** | 2.5 | 2.0 |
+| **mean** | **4.75** | 3.75 | 2.50 |
+
+**LRG is the best single output anywhere in this study, on any document.** Seven events —
+exactly the seven jurisdictional instances — each carrying its start date *and* its decision
+date on one node, which is the granularity rule applied precisely as written. Full chain,
+nothing isolated, every quote verbatim, `isFinalDomesticDecision` on the cassation ruling,
+nine participations with no defects, and one clean node per real-world entity. I could not
+find a hallucinated triple in it. Its only gaps are omissions: the two named lawyers, and
+`hasProceedingType` throughout.
+
+*CFM* splits the Commercial Court appeal into a "lodged" node and a "decided" node, and
+points all eight events at **two shared `Participation` nodes**. Otherwise sound: chain
+complete, final flagged, both lawyers present.
+
+*MED* leaves the 10 December 2007 appeal-bench decision isolated, labels it
+`LevelFirstInstance` when it is the appeal, and marks the District Court's leave-unexamined
+as `OutcomeMeritsDecided`. Applicant and LLC are each duplicated, and the Commercial Court
+and Arbitration Tribunal are spuriously typed `echr:Party` alongside `DomesticAuthority`.
+
+### L1 — *Stanev v. Bulgaria*
+
+| axis | LRG | CFM | MED |
+|---|--:|--:|--:|
+| Hallucinated triples | **3.0** | 2.5 | 1.5 |
+| Missed connections | **3.5** | **3.5** | 2.5 |
+| Missed triples | 2.5 | **3.0** | 2.0 |
+| Other errors | **3.0** | **3.0** | 1.5 |
+| **mean** | **3.00** | **3.00** | 1.88 |
+
+Both carry-forward-adjacent arms commit the same specific error: `councilRilaMunicipal`
+carries **two `rdfs:label` values — "Rila Municipal Council" and "Ruse Municipal Council"** —
+two councils 400 km apart, in different municipalities, doing different things at different
+times, merged into one node. This is the exact false-merge pattern the shapes file's own
+comment describes. In *LRG* it is partly survivable because a separate `councilRuseMunicipal`
+node also exists; in *CFM* there is no separate Ruse node, so **the Ruse council's
+appointment of R.P. is attributed to a node half-labelled Rila**.
+
+*LRG* has 10 events to O1's 10, chains them correctly, and flags the Dupnitsa judgment
+final — but four events carry no `hasCourt` at all, including two of the three prosecutorial
+reviews, and the allowance, police-and-return and address-registration layers are all
+absent.
+
+*CFM* recovers the 2007 allowance grant that *LRG* misses, and models the Dupnitsa review
+correctly as one instance with both a start and a decision date — but then **fails to flag
+it final**, which *LRG* gets right. Its three named lawyers are collapsed into one node
+labelled "Lawyer of Mr Rusi Kosev Stanev".
+
+*MED* is the weakest. Three nodes — `actionGuardianAppointment`, `actionHomePlacement`,
+`administrative_action_1` — are typed **both `echr:AdministrativeAction` and
+`echr:DomesticProceeding`**, which the ontology declares disjoint in
+`owl:AllDisjointClasses`. That is not a style problem: it makes the graph logically
+inconsistent, and it is the only arm in the whole study that does it. On top of that
+`prosecutorial_review_2` carries two decision dates (11 October and 29 November 2005) while
+`prosecutorial_review_chief` separately holds the 29 November one, so the Chief Prosecutor's
+decision is asserted twice — once inside a conflated node. Applicant, case document and
+lawyer are each duplicated.
+
+### L10 — *M.N. and Others v. Belgium*
+
+| axis | LRG | CFM | MED |
+|---|--:|--:|--:|
+| Hallucinated triples | 1.5 | **3.0** | 1.5 |
+| Missed connections | 1.5 | **4.0** | 1.0 |
+| Missed triples | 1.0 | **2.5** | **2.5** |
+| Other errors | **3.0** | **3.0** | 1.5 |
+| **mean** | 1.75 | **3.13** | 1.63 |
+
+**LRG collapses here — 8 events against ~26.** All four Conseil d'État judgments are
+missing, though a `conseilEtat` authority node is minted and left pointing at nothing. Three
+things are outright wrong. `proceeding_court_appeal_1` declares
+`followsProceeding` on `proceeding_tpi_inter_partes_1`, **a node that does not exist in the
+graph** — a dangling edge, and the only one in the study. The 14 October and 20 October
+stays both follow the 13 September refusal, when they follow the 10 October and 17 October
+refusals respectively — neither of which was extracted, so the edges were forced onto the
+wrong parent. And the Court of Appeal's 30 June 2017 judgment is flagged
+`isFinalDomesticDecision` when the case ran on to February and May 2018. Quote fidelity is
+**5 of 9 non-verbatim (56%)**, the worst rate of any condition on any document here.
+
+*CFM* is the standout of these three and the second-best O2 output on this document. Nineteen
+events, and critically **each Aliens Appeals Board stay is chained to the correct Aliens
+Office refusal** — the pairing *LRG* got wrong and *CFJ* got right. It also captures the
+Belgian State's 27 February 2017 cassation appeal, which almost nothing else does, though it
+files it under the Brussels Court of Appeal rather than the Court of Cassation. Its real
+weakness is flattening: the **two** Conseil d'État judgments of 8 February 2018 become one
+node with two parents, and the **two** Aliens Appeals Board judgments of 24 March 2017
+likewise — distinctions O1 and `o2_cf_low_jsonld` both preserved. And it asserts
+`hasOutcome` on **zero of 19** events and no final-decision flag at all.
+
+*MED* contains a **cycle**: `proceeding_3` → `proceeding_5` → `proceeding_4` →
+`proceeding_3`, which has the 25 October 2016 TPI order following the 7 December 2016 Court
+of Appeal judgment. `echr:followsProceeding` is declared `owl:AsymmetricProperty` and
+`owl:IrreflexiveProperty`; a cycle is both a logical violation and a chain that cannot be
+read back in either direction. It is the only cycle in the study. `proceeding_1` also holds
+two decision dates while `proceeding_board_20oct` separately duplicates one of them, and the
+30 June 2017 judgment is flagged final while the same graph contains two 2018 judgments.
+
+### Structural defects unique to these arms
+
+Each of the three anomalies below appears in exactly one arm, across all seven conditions
+and three documents:
+
+| defect | arm | where |
+|---|---|---|
+| `followsProceeding` to a node not in the graph | `o2_large_jsonld` | L10 |
+| chain cycle (3 nodes) | `o2_med_jsonld` | L10 |
+| nodes typed into two `owl:AllDisjointClasses` members | `o2_med_jsonld` | L1 (×3) |
+
+---
+
+## Full aggregate, all seven conditions
+
+Mean across L1, L6 and L10. `o2_cf_low_ttl` is included from the first pass for
+completeness; every other row is jsonld or O1.
+
+| axis | O1 | CFM | LRG | CFJ | CFT | MED | FOJ |
+|---|--:|--:|--:|--:|--:|--:|--:|
+| Hallucinated triples | **4.50** | 3.33 | 3.17 | 2.67 | 2.67 | 1.83 | 1.50 |
+| Missed connections | **4.67** | 4.00 | 3.33 | 3.83 | 2.83 | 2.00 | 1.50 |
+| Missed triples | 3.17 | 3.00 | 2.50 | 3.00 | **3.33** | 2.50 | 2.33 |
+| Other errors | **4.17** | 2.83 | 3.67 | 3.00 | 3.00 | 1.67 | 1.33 |
+| **overall** | **4.13** | **3.29** | 3.17 | 3.13 | 2.96 | 2.00 | 1.67 |
+
+Key: **CFM** `o2_cf_med_jsonld` · **LRG** `o2_large_jsonld` · **CFJ** `o2_cf_low_jsonld` ·
+**CFT** `o2_cf_low_ttl` · **MED** `o2_med_jsonld` · **FOJ** `o2_low_jsonld`.
+
+Supporting counts, three documents combined:
+
+| | O1 | CFM | LRG | CFJ | CFT | MED | FOJ |
+|---|--:|--:|--:|--:|--:|--:|--:|
+| events / entries | 39 | 38 | 25 | 77 | 63 | 37 | 50 |
+| chain edges | 39 | 28 | 18 | 52 | 35 | 20 | 34 |
+| isolated events | — | 3 | 2 | 17 | 18 | 7 | 3 |
+| non-verbatim quotes | 7/39 | 6/45 | 6/29 | 11/113 | 30/216 | 6/41 | 7/88 |
+| multi-court/date violations | n/a | 0 | 0 | 0 | 0 | 2 | 7 |
+| participation defects | n/a | 6 | **0** | 5 | 8 | 6 | 3 |
+| dangling edges / cycles / disjoint double-types | n/a | 0 | 1 | 0 | 0 | 4 | 0 |
+
+### Automated rank against judged rank
+
+| arm | raw events (10 docs) | automated rank | judged rank (of 6 O2 arms) |
+|---|--:|--:|--:|
+| `o2_cf_low_jsonld` | 174 | 1 | 3 |
+| `o2_cf_low_ttl` | 171 | 2 | 4 |
+| `o2_low_jsonld` | 125 | 3 | **6** |
+| `o2_med_jsonld` | 96 | 4 | 5 |
+| `o2_cf_med_jsonld` | 95 | 5 | **1** |
+| `o2_large_jsonld` | 60 | 6 | 2 |
+
+The two rankings are close to uncorrelated on this sample, and where they disagree they
+disagree hard: the arm ranked 3rd on recall is last on quality, and the arm ranked 5th is
+first.
 
 ## Limits
 

@@ -14,6 +14,7 @@ doc:inspection_2005_09_20 a echr:DomesticProceeding ;
     rdfs:label "inspection of the crime scene, 20 September 2005"@en ;
     echr:hasCourt doc:investigatingAuthority ;
     echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:part_inspection_mt_2005 ;
     echr:hasProceedingStartDate "2005-09-20"^^xsd:date ;
     echr:hasProceedingType echr:TypeCriminal ;
     echr:hasSupportingQuote "On 20 September 2005 the investigating authorities carried out an inspection of the crime scene, involving M.T., to verify the particulars of his earlier statements."@en .
@@ -93,6 +94,11 @@ doc:part_appeal_prosecution_2007 a echr:Participation ;
     echr:hasPartySide echr:SideInitiating ;
     echr:participatingParty doc:prosecutionOffice .
 
+doc:part_inspection_mt_2005 a echr:Participation ;
+    rdfs:label "participation of M.T. in inspection (2005)"^^xsd:string ;
+    echr:hasPartySide echr:SideThirdParty ;
+    echr:participatingParty doc:personMT .
+
 doc:part_investigation_applicant_2005 a echr:Participation ;
     rdfs:label "participation of the applicant in the investigation (2005)"@en ;
     echr:hasPartySide echr:SideResponding ;
@@ -111,6 +117,11 @@ doc:part_mt_appeal_2005 a echr:Participation ;
 doc:part_mt_defendant_2006 a echr:Participation ;
     rdfs:label "M.T.'s participation as defendant in his obstructing-justice proceeding (2006)"@en ;
     echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:personMT .
+
+doc:part_refusal_m_t_2005 a echr:Participation ;
+    rdfs:label "participation of M.T. in investigator's refusal (2005)"^^xsd:string ;
+    echr:hasPartySide echr:SideInitiating ;
     echr:participatingParty doc:personMT .
 
 doc:part_supreme_applicant_2008 a echr:Participation ;
@@ -141,12 +152,14 @@ doc:part_zt_defendant_2007 a echr:Participation ;
 doc:personZT a echr:NaturalPerson,
         echr:Party ;
     rdfs:label "Z.T."@en ;
+    echr:hasGender echr:GenderMale ;
     echr:hasSupportingQuote "Another witness, Z.T., stated that he had been walking near the main square of the village when he saw the armed applicant leave the area following the shooting."@en .
 
 doc:refusal_m_t_2005_10_29 a echr:AdministrativeAction ;
     rdfs:label "investigator's refusal of M.T.'s request to be re-questioned, 29 October 2005"@en ;
     echr:hasCourt doc:investigatingAuthority ;
     echr:hasDecisionDate "2005-10-29"^^xsd:date ;
+    echr:hasParticipation doc:part_refusal_m_t_2005 ;
     echr:hasSupportingQuote "On 29 October 2005 M.T.’s request was rejected by the investigator."@en .
 
 doc:regionalProsecutorOffice a echr:DomesticAuthority ;
@@ -178,11 +191,6 @@ doc:trial_first_instance_2006_12_08 a echr:DomesticProceeding ;
     echr:hasProceedingType echr:TypeCriminal ;
     echr:hasSupportingQuote "On 8 December 2006 the court of first instance convicted the applicant of aggravated murder and the illegal acquisition, possession and carrying of firearms, and sentenced him to 17 years’ imprisonment."@en .
 
-doc:personMT a echr:NaturalPerson,
-        echr:Party ;
-    rdfs:label "M.T."@en ;
-    echr:hasSupportingQuote "On the day of the murder and subsequently on 22 July 2005 M.T. claimed to have witnessed the crime and gave statements to the investigating authorities."@en .
-
 doc:firstInstanceCourt a echr:DomesticAuthority ;
     rdfs:label "court of first instance"@en ;
     echr:hasAuthorityKind echr:AuthorityJudicial ;
@@ -193,7 +201,13 @@ doc:prosecutionOffice a echr:DomesticAuthority,
         echr:Party ;
     rdfs:label "the prosecution"@en ;
     echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "the prosecution" ;
     echr:hasSupportingQuote "Both M.T. and Z.T. were questioned in court by the applicant’s representative and the prosecutor."@en .
+
+doc:personMT a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "M.T."@en ;
+    echr:hasSupportingQuote "On the day of the murder and subsequently on 22 July 2005 M.T. claimed to have witnessed the crime and gave statements to the investigating authorities."@en .
 
 doc:applicantMalkhazBaduashvili a echr:NaturalPerson,
         echr:Party ;

@@ -1262,6 +1262,8 @@ def warm_up_grammar(client: OpenAI, model: str) -> None:
     Deliberately non-fatal: a hosted endpoint has no such cost and a warm-up
     failure is not a reason to abandon the run.
     """
+    if DECODING_MODE == "unconstrained":
+        return  # no grammar to compile
     try:
         client.chat.completions.parse(
             model=model,
@@ -1333,6 +1335,7 @@ def _stream_patch_text(
     *,
     temperature: float,
     token_kwargs: dict,
+    guided: bool = True,
 ) -> tuple[str, str | None, bool]:
     """Stream one patch, aborting the moment the generation stalls.
 
@@ -1353,11 +1356,16 @@ def _stream_patch_text(
     stalled = False
     trailing_ws = 0
 
+    # Unconstrained mode drops response_format entirely: the schema goes in
+    # the prompt instead and the JSON is recovered afterwards. The stall
+    # detection below stays either way -- it is not grammar-specific, and an
+    # unconstrained model can still run away, just far less reliably so.
+    fmt = {"response_format": RepairPatch} if guided else {}
     with client.chat.completions.stream(
         model=model,
         messages=messages,
-        response_format=RepairPatch,
         temperature=temperature,
+        **fmt,
         **token_kwargs,
     ) as stream:
         for event in stream:
@@ -1506,6 +1514,8 @@ def call_repair_model(
     """
     last_error: Exception | None = None
     token_kwargs = _token_limit_kwargs(model, max_tokens)
+    guided = DECODING_MODE != "unconstrained"
+    prompt = user_prompt if guided else user_prompt + _schema_instruction()
     for attempt in range(1, max_attempts + 1):
         try:
             raw, finish_reason, stalled = _stream_patch_text(
@@ -1513,10 +1523,11 @@ def call_repair_model(
                 model,
                 [
                     {"role": "system", "content": load_system_prompt()},
-                    {"role": "user", "content": user_prompt},
+                    {"role": "user", "content": prompt},
                 ],
                 temperature=temperature,
                 token_kwargs=token_kwargs,
+                guided=guided,
             )
         except Exception as exc:  # noqa: BLE001
             # LengthFinishReasonError comes out of .parse() itself, BEFORE the
@@ -1547,6 +1558,19 @@ def call_repair_model(
                     max_attempts += 1
             continue
         if not stalled and finish_reason != "length":
+            if not guided:
+                # Free generation is allowed to arrive fenced, prefixed with
+                # prose, or with the wrong closer -- that is the trade being
+                # made for losing the grammar, and recovering it here is the
+                # whole point of the mode.
+                recovered = parse_unconstrained_patch(raw)
+                if recovered is not None:
+                    return recovered
+                last_error = RuntimeError(
+                    "model returned no parseable patch: unconstrained recovery "
+                    "found nothing"
+                )
+                continue
             try:
                 return RepairPatch.model_validate_json(raw.strip())
             except Exception as exc:  # noqa: BLE001
@@ -1600,6 +1624,89 @@ def unwrap_literal(value: str) -> str:
         if '"' not in inner:
             return inner
     return value
+
+
+# A repair pass is treated as having ENGAGED with its findings when it proposes
+# at least this many operations per finding. Below it, a no-progress result is
+# read as the model declining the task rather than as the findings being
+# unfixable, and the stage retries once. Set at one op per two findings: the
+# cheapest genuine fix (a single add or remove) closes one finding, so half that
+# rate is well under any good-faith attempt, while the stages that do engage
+# average 1.0-2.4 ops per finding and clear it comfortably.
+MIN_OPS_PER_FINDING = 0.5
+
+
+# Guided decoding (response_format=RepairPatch) or free generation with the
+# schema described in the prompt and the JSON recovered afterwards.
+#
+# Guided is the default because it makes malformed output impossible. Its cost
+# is the vLLM whitespace stall: under a grammar a stalled model can emit legal
+# whitespace forever, which is why response_repair.py exists and why OntoCast's
+# own facts-render runs UNCONSTRAINED and repairs the text afterwards. That
+# server bug is fixed by `disable_any_whitespace`, silently ignored on the
+# 0.27.1 build here, so the only lever available is which side of the trade to
+# take. Switchable rather than hardcoded so the two can be measured against
+# each other on the same documents.
+DECODING_MODE = os.environ.get("REPAIR_DECODING", "guided")
+
+_SCHEMA_INSTRUCTION = """
+Return ONE JSON object and nothing else -- no prose before or after it, no
+markdown fence. It must match this schema exactly:
+
+{schema}
+
+Every operation goes in `groups[].ops[]`. `action` is exactly "add" or
+"remove". `subject` and `predicate` are always CURIEs. `object` is a CURIE when
+`object_is_literal` is false and the plain text value when it is true. Set
+`datatype` OR `lang`, never both, and omit both for a CURIE object. Keep every
+`rationale` to one short sentence.
+"""
+
+
+def _schema_instruction() -> str:
+    """The RepairPatch schema, for the unconstrained path to put in-prompt."""
+    return _SCHEMA_INSTRUCTION.format(
+        schema=json.dumps(RepairPatch.model_json_schema(), indent=1)
+    )
+
+
+def parse_unconstrained_patch(raw: str) -> RepairPatch | None:
+    """A RepairPatch out of free-form model output, or None.
+
+    Four escalating attempts, cheapest first, mirroring the recovery ladder
+    response_repair.py applies to facts-render: parse it as-is; unwrap a
+    markdown fence; rebuild the container closers from an explicit stack
+    (the model closes the WRONG bracket rather than truncating, so the bad
+    bytes are present and must be replaced, not appended to); and finally fall
+    back to the truncation salvage, which returns the largest well-formed
+    prefix.
+    """
+    raw = (raw or "").strip()
+    if not raw:
+        return None
+
+    candidates = [raw]
+    fence = re.search(r"```(?:json)?\s*(.*?)```", raw, re.DOTALL)
+    if fence:
+        candidates.append(fence.group(1).strip())
+    brace = raw.find("{")
+    if brace > 0:
+        candidates.append(raw[brace:])
+
+    for cand in list(candidates):
+        try:
+            from art6.ontology.response_repair import _rebuild_closers
+
+            candidates.append(_rebuild_closers(cand))
+        except Exception:  # noqa: BLE001, S110
+            pass
+
+    for cand in candidates:
+        try:
+            return RepairPatch.model_validate_json(cand)
+        except Exception:  # noqa: BLE001,S112 - most candidates fail by design
+            continue
+    return salvage_truncated_patch(raw)
 
 
 def resolve_term(
@@ -1751,12 +1858,34 @@ def _match_unverified_quote(
     return best["index"] if best is not None and best_ratio >= 0.75 else None
 
 
+def _quote_in_pool(graph: Graph, text: str) -> bool:
+    """True if `text` is already carried by some echr:hasSupportingQuote in the
+    graph -- exactly, or as a contiguous span of one.
+
+    The pool is what makes a quote ADD safe for a stage that cannot see the
+    document: every member of it was chosen by extraction, which could. See the
+    QUOTE REUSE note in apply_patch.
+    """
+    from art6.ontology.diagnostics.validate_source_quotes import normalize
+
+    wanted = normalize(unwrap_literal(text))
+    if not wanted:
+        return False
+    quote_predicate = ECHR.hasSupportingQuote
+    for existing in graph.objects(None, quote_predicate):
+        if wanted in normalize(str(existing)):
+            return True
+    return False
+
+
 def apply_patch(
     graph: Graph,
     patch: RepairPatch,
     doc_ns: str,
     source_text: str | None = None,
     unverified_quotes: list[dict] | None = None,
+    allow_quote_adds: bool = False,
+    allow_quote_reuse: bool = False,
 ) -> tuple[Graph, list[dict]]:
     """Returns a NEW graph with the patch applied, plus an audit trail. Every
     op is checked against the two-namespace contract and, for removes,
@@ -1797,16 +1926,34 @@ def apply_patch(
         working.bind(prefix, ns)
 
     known_doc_nodes = {str(s) for s in working.subjects() if str(s).startswith(doc_ns)}
+    # ANY add op makes its subject a node this patch is building, not just an
+    # `add rdf:type`. Requiring the type op was too strict and was silently
+    # destroying the patch's most important work: measured 2026-08-25 on
+    # o2_low_jsonld L1, eight `add ... echr:hasParticipation` ops were refused
+    # as dangling in a single round because the model created each
+    # participation node by giving it echr:participatingParty and
+    # echr:hasPartySide -- fully specifying it -- without a separate
+    # rdf:type echr:Participation op, which the range of hasParticipation
+    # already entails. The guard exists to catch references to nodes NOBODY
+    # creates; a node the patch gives properties to is created.
     for group in patch.groups:
         for op in group.ops:
-            if (
-                op.action == "add"
-                and op.predicate == "rdf:type"
-                and not op.object_is_literal
-            ):
-                subj_prefix, _, subj_local = op.subject.strip().partition(":")
-                if subj_prefix == "doc":
-                    known_doc_nodes.add(doc_ns + subj_local)
+            if op.action != "add":
+                continue
+            subj_prefix, _, subj_local = op.subject.strip().partition(":")
+            if subj_prefix == "doc":
+                known_doc_nodes.add(doc_ns + subj_local)
+
+    # Subjects this patch gives a (replacement) participation to. Collected in
+    # the same pre-pass because the guard below has to know about an add that
+    # has not been reached yet: the model routinely emits every remove first
+    # and then the adds that compensate for them.
+    subjects_gaining_participation = {
+        op.subject.strip()
+        for group in patch.groups
+        for op in group.ops
+        if op.action == "add" and op.predicate == "echr:hasParticipation"
+    }
 
     quotes_by_index = {q["index"]: q for q in (unverified_quotes or []) if "index" in q}
 
@@ -1907,6 +2054,42 @@ def apply_patch(
                     record["status"] = "skipped: subject not in doc: namespace"
                     audit.append(record)
                     continue
+                if (
+                    op.action == "remove"
+                    and op.predicate == "echr:hasParticipation"
+                    and op.subject.strip() not in subjects_gaining_participation
+                ):
+                    # PARTICIPATION BALANCE GUARD. Repair may restructure an
+                    # event's participations; it may not strip the event bare.
+                    #
+                    # The one-participation-per-event rule makes shared nodes a
+                    # real defect, and the model diagnoses them correctly -- but
+                    # its remedy is to unlink the shared node from every event
+                    # and mint replacements, and it routinely emits far more
+                    # removes than adds. Measured 2026-08-24 on o2_cf_low_jsonld
+                    # L6, the first arm run after the literal-remove fix: 20
+                    # hasParticipation links removed, 5 added back, and 10 of 15
+                    # events left with no party information at all. Before that
+                    # fix these removes silently no-opped, so the defect was
+                    # invisible and the graph merely kept its shared nodes.
+                    #
+                    # Trading a duplicate for an absence is the wrong direction:
+                    # a shared participation is a defect downstream can see and
+                    # merge, an event with no parties is unrecoverable. Same
+                    # reasoning as the evidence-anchor guard above -- a stage
+                    # must not be able to make the graph worse than it found it.
+                    s_ = resolve_term(
+                        working, op.subject, is_literal=False, datatype=None, lang=None
+                    )
+                    remaining = len(list(working.objects(s_, ECHR.hasParticipation)))
+                    targeted = 1 if op.object.strip() else remaining
+                    if remaining - targeted <= 0:
+                        record["status"] = (
+                            "skipped: would leave the event with no participation "
+                            "and the patch adds no replacement"
+                        )
+                        audit.append(record)
+                        continue
                 if op.action == "remove" and not op.object.strip():
                     # An empty object on a remove means "every value of this
                     # predicate on this subject". The model reaches for this
@@ -1950,20 +2133,97 @@ def apply_patch(
                         )
                         audit.append(record)
                         continue
-                    # An evidence anchor that is not in the evidence is not an
-                    # anchor. See this function's docstring for the L10 case
-                    # this exists to prevent.
-                    if (
-                        source_text
-                        and op.predicate == "echr:hasSupportingQuote"
-                        and op.object_is_literal
-                    ):
+                    # REPAIR MAY NOT MINT EVIDENCE. An earlier version allowed
+                    # an add of echr:hasSupportingQuote provided the text
+                    # verified against the source. That guard worked -- it
+                    # rejected 26 fabricated quotes across the 2026-08-24 sweep
+                    # -- but the permission itself is wrong.
+                    #
+                    # A supporting quote is the anchor that makes a fact
+                    # checkable, and repair sees the graph, not the case. Even a
+                    # verbatim span it chooses is a span IT selected, for a fact
+                    # some earlier stage asserted, with no basis for believing
+                    # that passage evidences that fact. A quote that verifies is
+                    # not thereby the right quote: it only proves those words
+                    # occur somewhere in the document.
+                    #
+                    # The asymmetry from the quotes-stage prompt settles it --
+                    # an unanchored fact is recoverable, a falsely anchored one
+                    # is not, because it defeats the very check it appears to
+                    # satisfy. So repair may DELETE a bad anchor and may never
+                    # supply one. Extraction is the only stage that gets to say
+                    # what evidences what, because it is the only stage reading
+                    # the document to find the fact in the first place.
+                    if op.predicate == "echr:hasSupportingQuote":
+                        if not allow_quote_adds:
+                            # QUOTE REUSE: an anchor may be MOVED, never minted.
+                            #
+                            # The blanket ban was too blunt for one case that
+                            # matters. When the loop correctly splits a
+                            # conflated event in two -- the single commonest
+                            # repair it performs -- the new node needs an
+                            # anchor, and the right anchor is the passage
+                            # already sitting on the node being split. Measured
+                            # 2026-08-25 on o2_low_jsonld L1: the loop minted
+                            # doc:admin_action_appointment_2002 with a court, a
+                            # date and a participation, offered the parent's
+                            # own quote for it, was refused, and the node
+                            # landed permanently unanchored -- a fresh SHACL
+                            # violation created by the pass meant to remove
+                            # them.
+                            #
+                            # So the text must already be in the graph's own
+                            # quote pool: equal to, or a substring of, some
+                            # existing echr:hasSupportingQuote object. That
+                            # keeps the ban's actual point intact. The
+                            # objection was never to the characters, it was
+                            # that a stage which cannot read the document has
+                            # no basis for choosing a passage. Reused text was
+                            # chosen by extraction, which did read it, and a
+                            # substring of a verifying quote verifies too --
+                            # so this can neither fabricate a span nor promote
+                            # one that never appeared in the source.
+                            reused = allow_quote_reuse and _quote_in_pool(
+                                working, op.object
+                            )
+                            if not reused:
+                                record["status"] = (
+                                    "skipped: repair may not add evidence "
+                                    "anchors, only remove or reuse them"
+                                )
+                                audit.append(record)
+                                continue
+                            record["status_note"] = "reused an existing quote"
+                        # Reuse has already proved itself against the graph's
+                        # own pool and must not fall through to the checks
+                        # below: those verify against the source document,
+                        # which the reusing caller does not hold. Letting it
+                        # fall through refused every reuse with "quote adds
+                        # need the source text to verify against" -- measured
+                        # 2026-08-25, where the loop's one correct reuse was
+                        # rejected by the very branch that had just approved it.
+                        elif not source_text:
+                            # The exemption exists for ONE caller: a stage
+                            # holding the source document, which is the
+                            # condition the ban is really about. It still has
+                            # to be a real span -- permission to anchor is not
+                            # permission to invent, and 26 fabricated quotes
+                            # across the 2026-08-24 sweep are what this check
+                            # caught when it applied to everyone.
+                            record["status"] = (
+                                "skipped: quote adds need the source text to "
+                                "verify against"
+                            )
+                            audit.append(record)
+                            continue
                         from art6.ontology.diagnostics.validate_source_quotes import (
                             normalize,
                             quote_verifies,
                         )
 
-                        if not quote_verifies(op.object, normalize(source_text)):
+                        if source_text and not quote_verifies(
+                            op.object, normalize(source_text)
+                        ):
                             record["status"] = (
                                 "skipped: quote does not appear verbatim in the "
                                 "source document"
@@ -2002,12 +2262,53 @@ def apply_patch(
             if op.action == "add":
                 working.add((s, p, o))
                 record["status"] = "applied"
+            elif (s, p, o) in working:
+                working.remove((s, p, o))
+                record["status"] = "applied"
+            elif op.object_is_literal:
+                # LEXICAL FALLBACK. An exact remove has to match the whole
+                # literal TERM -- lexical form, datatype AND language tag --
+                # and the model reliably gets the last two wrong, because it
+                # is naming a VALUE while rdflib is comparing a term.
+                # Extraction writes labels as "..."@en and dates as
+                # "..."^^xsd:date; the model sends no lang at all, or guesses
+                # xsd:string. rdflib treats all three as different terms, so
+                # the remove misses a triple that is plainly there.
+                #
+                # Measured on the 2026-08-24 gemma sweep: 38 of 505 repair
+                # operations skipped as "triple not present", every one a
+                # remove, and 39 of the 72 SHACL violations surviving repair
+                # were multi-label (30) and multi-decision-date (9) -- exactly
+                # the conflations these removes were sent to undo. The stage
+                # diagnosed them correctly every time and then failed to apply
+                # its own fix. Adds landed, removes did not, so graphs could
+                # only ever accumulate.
+                #
+                # The same defect was fixed once before, scoped to
+                # echr:hasSupportingQuote (see the quote_index branch above).
+                # It is not specific to quotes and the narrow fix left every
+                # other predicate exposed.
+                #
+                # Matching on lexical form is the right comparison here: the op
+                # names a value to delete, and two literals with the same
+                # lexical form under one (subject, predicate) are the same
+                # value however they are typed. Every match goes in the audit
+                # trail so a fallback is never mistaken for an exact hit.
+                wanted = unwrap_literal(op.object)
+                matched = [
+                    obj
+                    for obj in working.objects(s, p)
+                    if isinstance(obj, RDFLiteral) and str(obj) == wanted
+                ]
+                for obj in matched:
+                    working.remove((s, p, obj))
+                record["status"] = (
+                    f"applied (matched {len(matched)} literal(s) by lexical form)"
+                    if matched
+                    else "skipped: triple not present"
+                )
             else:
-                if (s, p, o) in working:
-                    working.remove((s, p, o))
-                    record["status"] = "applied"
-                else:
-                    record["status"] = "skipped: triple not present"
+                record["status"] = "skipped: triple not present"
             audit.append(record)
 
     # Merges run AFTER the add/remove ops, never before: an op names nodes by
@@ -2126,6 +2427,12 @@ def _run_stage(
     swept_all: list[str] = []
     timings: list[dict] = []
     changed = False
+
+    # A stage gets ONE retry when a pass under-engages -- see the no-progress
+    # check at the end of the loop. Budgeted rather than unlimited: a model that
+    # will not engage twice will not engage a third time either, and each pass
+    # is a full call.
+    underengaged_retries_left = 1
 
     for pass_no in range(1, passes + 1):
         t_pass = time.perf_counter()
@@ -2310,6 +2617,29 @@ def _run_stage(
                 ]
             )
         if pass_no < passes and remaining >= before_count:
+            # "Findings did not fall" is only evidence that they are unfixable
+            # if the model actually TRIED to fix them. It routinely does not:
+            # measured 2026-08-24 across the gemma sweep, the proceedings stage
+            # early-stopped on 32 of 64 documents, and o2_low_ttl L1 shows the
+            # shape of it -- nine findings in, ONE op proposed, "findings did
+            # not fall (6 -> 6) - stopping". The stage abandoned eight findings
+            # on the strength of a pass that never engaged with them.
+            #
+            # So separate the two cases. A pass that proposed a serious number
+            # of operations and still moved nothing is genuinely stuck, and
+            # another identical call is waste. A pass that answered nine
+            # findings with one op has not tested that hypothesis, and gets one
+            # more try before the stage gives up on the document.
+            engaged = proposed_ops >= max(1, before_count) * MIN_OPS_PER_FINDING
+            if not engaged and underengaged_retries_left > 0:
+                underengaged_retries_left -= 1
+                print(
+                    f"    [{stage.name}] pass {pass_no}: {applied} op(s) applied, "
+                    f"findings did not fall ({before_count} -> {remaining}), but only "
+                    f"{proposed_ops} op(s) were proposed for {before_count} finding(s) "
+                    f"- retrying rather than stopping"
+                )
+                continue
             print(
                 f"    [{stage.name}] pass {pass_no}: {applied} op(s) applied but "
                 f"findings did not fall ({before_count} -> {remaining}) - stopping"

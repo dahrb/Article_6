@@ -1,0 +1,60 @@
+{
+  "source": "input.jsonl",
+  "conformance": {
+    "shacl_evaluated": null,
+    "conforms": null,
+    "findings": 3,
+    "errors": 3,
+    "warnings": 0,
+    "by_kind": {
+      "suspect_multi_value": 3
+    },
+    "shacl_violations": 0,
+    "shacl_by_constraint": {},
+    "shacl_by_shape": {},
+    "repairs_applied": {}
+  },
+  "gate_repairs": [],
+  "findings": [
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/87b4387b7f0a/investigation_1> points at 2 objects via <https://growgraph.dev/echr#hasCourt>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/87b4387b7f0a/investigation_1",
+      "predicate": "https://growgraph.dev/echr#hasCourt",
+      "values": [
+        "https://growgraph.dev/doc/87b4387b7f0a/investigating_authorities_1",
+        "https://growgraph.dev/doc/87b4387b7f0a/investigating_authority_1"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/87b4387b7f0a/investigation_1> points at 2 objects via <https://growgraph.dev/echr#hasParticipation>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/87b4387b7f0a/investigation_1",
+      "predicate": "https://growgraph.dev/echr#hasParticipation",
+      "values": [
+        "https://growgraph.dev/doc/87b4387b7f0a/participationBaduashviliInv",
+        "https://growgraph.dev/doc/87b4387b7f0a/participation_applicant_1"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/87b4387b7f0a/trial_first_instance_1> points at 3 objects via <https://growgraph.dev/echr#hasParticipation>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/87b4387b7f0a/trial_first_instance_1",
+      "predicate": "https://growgraph.dev/echr#hasParticipation",
+      "values": [
+        "https://growgraph.dev/doc/87b4387b7f0a/participation_3",
+        "https://growgraph.dev/doc/87b4387b7f0a/participation_4",
+        "https://growgraph.dev/doc/87b4387b7f0a/participation_5"
+      ],
+      "component": "",
+      "source_shape": ""
+    }
+  ]
+}

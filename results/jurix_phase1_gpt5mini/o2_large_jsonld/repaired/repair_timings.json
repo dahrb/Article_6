@@ -1,0 +1,658 @@
+{
+  "facts_dir": "results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired",
+  "started": "2026-08-24T20:28:41+00:00",
+  "finished": "2026-08-24T20:55:04+00:00",
+  "model": "gpt-5-mini",
+  "base_url": "https://api.openai.com/v1",
+  "temperature": 1.0,
+  "passes_per_stage": 2,
+  "stages": [
+    "authorities",
+    "proceedings",
+    "persons",
+    "quotes"
+  ],
+  "documents": 10,
+  "documents_timed": 10,
+  "seconds_total": 1582.3,
+  "seconds_model_calls": 1580.3,
+  "seconds_deterministic": 2.0,
+  "model_calls": 31,
+  "seconds_per_document": 158.2,
+  "seconds_per_model_call": 51.0,
+  "by_stage": {
+    "authorities": {
+      "passes": 7,
+      "seconds": 209.3,
+      "seconds_model_call": 209.0
+    },
+    "persons": {
+      "passes": 12,
+      "seconds": 914.2,
+      "seconds_model_call": 914.2
+    },
+    "quotes": {
+      "passes": 8,
+      "seconds": 352.1,
+      "seconds_model_call": 352.0
+    },
+    "proceedings": {
+      "passes": 4,
+      "seconds": 105.1,
+      "seconds_model_call": 105.1
+    }
+  },
+  "by_document": [
+    {
+      "source": "results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L1.facts.ttl",
+      "changed": true,
+      "stage_failures": [
+        {
+          "stage": "persons",
+          "error": "RepairTruncated",
+          "message": "generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document"
+        }
+      ],
+      "seconds_total": 233.3,
+      "seconds_model_calls": 233.0,
+      "seconds_deterministic": 0.3,
+      "model_calls": 3,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 48.2,
+          "seconds_model_call": 48.1
+        },
+        "persons": {
+          "passes": 1,
+          "seconds": 158.2,
+          "seconds_model_call": 158.2
+        },
+        "quotes": {
+          "passes": 1,
+          "seconds": 26.7,
+          "seconds_model_call": 26.7
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 48.2,
+          "seconds_model_call": 48.1,
+          "seconds_deterministic": 0.1,
+          "findings_in": 9,
+          "ops_proposed": 9,
+          "ops_applied": 9,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 0,
+          "seconds_total": 158.2,
+          "seconds_model_call": 158.2,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_applied": 0,
+          "failed": "RepairTruncated"
+        },
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 26.7,
+          "seconds_model_call": 26.7,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 4,
+          "ops_applied": 4,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L10.facts.ttl",
+      "changed": true,
+      "stage_failures": [
+        {
+          "stage": "persons",
+          "error": "RepairTruncated",
+          "message": "generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document"
+        }
+      ],
+      "seconds_total": 278.2,
+      "seconds_model_calls": 278.0,
+      "seconds_deterministic": 0.2,
+      "model_calls": 4,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 20.3,
+          "seconds_model_call": 20.3
+        },
+        "proceedings": {
+          "passes": 1,
+          "seconds": 41.0,
+          "seconds_model_call": 41.0
+        },
+        "persons": {
+          "passes": 1,
+          "seconds": 153.5,
+          "seconds_model_call": 153.5
+        },
+        "quotes": {
+          "passes": 1,
+          "seconds": 63.2,
+          "seconds_model_call": 63.2
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 20.3,
+          "seconds_model_call": 20.3,
+          "seconds_deterministic": 0.0,
+          "findings_in": 9,
+          "ops_proposed": 6,
+          "ops_applied": 6,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 41.0,
+          "seconds_model_call": 41.0,
+          "seconds_deterministic": 0.0,
+          "findings_in": 3,
+          "ops_proposed": 9,
+          "ops_applied": 9,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 0,
+          "seconds_total": 153.5,
+          "seconds_model_call": 153.5,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_applied": 0,
+          "failed": "RepairTruncated"
+        },
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 63.2,
+          "seconds_model_call": 63.2,
+          "seconds_deterministic": 0.0,
+          "findings_in": 3,
+          "ops_proposed": 4,
+          "ops_applied": 4,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L2.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 18.7,
+      "seconds_model_calls": 18.6,
+      "seconds_deterministic": 0.1,
+      "model_calls": 1,
+      "by_stage": {
+        "quotes": {
+          "passes": 1,
+          "seconds": 18.6,
+          "seconds_model_call": 18.6
+        }
+      },
+      "passes": [
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 18.6,
+          "seconds_model_call": 18.6,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 2,
+          "ops_applied": 1,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L3.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 133.0,
+      "seconds_model_calls": 132.8,
+      "seconds_deterministic": 0.2,
+      "model_calls": 3,
+      "by_stage": {
+        "proceedings": {
+          "passes": 1,
+          "seconds": 23.8,
+          "seconds_model_call": 23.8
+        },
+        "persons": {
+          "passes": 2,
+          "seconds": 109.0,
+          "seconds_model_call": 109.0
+        }
+      },
+      "passes": [
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 23.8,
+          "seconds_model_call": 23.8,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 53.5,
+          "seconds_model_call": 53.5,
+          "seconds_deterministic": 0.0,
+          "findings_in": 3,
+          "ops_proposed": 25,
+          "ops_applied": 20,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 2,
+          "seconds_total": 55.5,
+          "seconds_model_call": 55.5,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 17,
+          "ops_applied": 15,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L4.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 65.1,
+      "seconds_model_calls": 64.9,
+      "seconds_deterministic": 0.2,
+      "model_calls": 2,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 18.9,
+          "seconds_model_call": 18.9
+        },
+        "persons": {
+          "passes": 1,
+          "seconds": 46.0,
+          "seconds_model_call": 46.0
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 18.9,
+          "seconds_model_call": 18.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 4,
+          "ops_proposed": 4,
+          "ops_applied": 4,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 46.0,
+          "seconds_model_call": 46.0,
+          "seconds_deterministic": 0.0,
+          "findings_in": 6,
+          "ops_proposed": 8,
+          "ops_applied": 6,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L5.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 96.3,
+      "seconds_model_calls": 96.2,
+      "seconds_deterministic": 0.1,
+      "model_calls": 2,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 30.6,
+          "seconds_model_call": 30.5
+        },
+        "persons": {
+          "passes": 1,
+          "seconds": 65.7,
+          "seconds_model_call": 65.7
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 30.6,
+          "seconds_model_call": 30.5,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 65.7,
+          "seconds_model_call": 65.7,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 21,
+          "ops_applied": 18,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L6.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 173.9,
+      "seconds_model_calls": 173.7,
+      "seconds_deterministic": 0.2,
+      "model_calls": 3,
+      "by_stage": {
+        "persons": {
+          "passes": 2,
+          "seconds": 113.8,
+          "seconds_model_call": 113.8
+        },
+        "quotes": {
+          "passes": 1,
+          "seconds": 59.9,
+          "seconds_model_call": 59.9
+        }
+      },
+      "passes": [
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 76.5,
+          "seconds_model_call": 76.5,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 14,
+          "ops_applied": 7,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 2,
+          "seconds_total": 37.3,
+          "seconds_model_call": 37.3,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 6,
+          "ops_applied": 2,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 59.9,
+          "seconds_model_call": 59.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 14,
+          "ops_applied": 10,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L7.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 191.6,
+      "seconds_model_calls": 191.3,
+      "seconds_deterministic": 0.3,
+      "model_calls": 5,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 21.4,
+          "seconds_model_call": 21.3
+        },
+        "proceedings": {
+          "passes": 1,
+          "seconds": 25.3,
+          "seconds_model_call": 25.3
+        },
+        "persons": {
+          "passes": 1,
+          "seconds": 51.8,
+          "seconds_model_call": 51.8
+        },
+        "quotes": {
+          "passes": 2,
+          "seconds": 92.9,
+          "seconds_model_call": 92.9
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 21.4,
+          "seconds_model_call": 21.3,
+          "seconds_deterministic": 0.0,
+          "findings_in": 4,
+          "ops_proposed": 4,
+          "ops_applied": 4,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 25.3,
+          "seconds_model_call": 25.3,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 51.8,
+          "seconds_model_call": 51.8,
+          "seconds_deterministic": 0.0,
+          "findings_in": 2,
+          "ops_proposed": 14,
+          "ops_applied": 14,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 51.0,
+          "seconds_model_call": 51.0,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 2,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 2,
+          "seconds_total": 41.9,
+          "seconds_model_call": 41.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 2,
+          "ops_applied": 2,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L8.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 304.9,
+      "seconds_model_calls": 304.6,
+      "seconds_deterministic": 0.3,
+      "model_calls": 6,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 52.7,
+          "seconds_model_call": 52.7
+        },
+        "proceedings": {
+          "passes": 1,
+          "seconds": 15.0,
+          "seconds_model_call": 15.0
+        },
+        "persons": {
+          "passes": 2,
+          "seconds": 146.2,
+          "seconds_model_call": 146.2
+        },
+        "quotes": {
+          "passes": 2,
+          "seconds": 90.8,
+          "seconds_model_call": 90.7
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 52.7,
+          "seconds_model_call": 52.7,
+          "seconds_deterministic": 0.0,
+          "findings_in": 4,
+          "ops_proposed": 4,
+          "ops_applied": 4,
+          "merges_applied": 0
+        },
+        {
+          "stage": "proceedings",
+          "pass": 1,
+          "seconds_total": 15.0,
+          "seconds_model_call": 15.0,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 94.9,
+          "seconds_model_call": 94.9,
+          "seconds_deterministic": 0.0,
+          "findings_in": 3,
+          "ops_proposed": 30,
+          "ops_applied": 30,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 2,
+          "seconds_total": 51.3,
+          "seconds_model_call": 51.3,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 7,
+          "ops_applied": 6,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 1,
+          "seconds_total": 65.6,
+          "seconds_model_call": 65.5,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 2,
+          "ops_applied": 2,
+          "merges_applied": 0
+        },
+        {
+          "stage": "quotes",
+          "pass": 2,
+          "seconds_total": 25.2,
+          "seconds_model_call": 25.2,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 2,
+          "ops_applied": 2,
+          "merges_applied": 0
+        }
+      ]
+    },
+    {
+      "source": "results/jurix_phase1_gpt5mini/o2_large_jsonld/repaired/input.L9.facts.ttl",
+      "changed": true,
+      "stage_failures": [],
+      "seconds_total": 87.3,
+      "seconds_model_calls": 87.2,
+      "seconds_deterministic": 0.1,
+      "model_calls": 2,
+      "by_stage": {
+        "authorities": {
+          "passes": 1,
+          "seconds": 17.2,
+          "seconds_model_call": 17.2
+        },
+        "persons": {
+          "passes": 1,
+          "seconds": 70.0,
+          "seconds_model_call": 70.0
+        }
+      },
+      "passes": [
+        {
+          "stage": "authorities",
+          "pass": 1,
+          "seconds_total": 17.2,
+          "seconds_model_call": 17.2,
+          "seconds_deterministic": 0.0,
+          "findings_in": 1,
+          "ops_proposed": 1,
+          "ops_applied": 1,
+          "merges_applied": 0
+        },
+        {
+          "stage": "persons",
+          "pass": 1,
+          "seconds_total": 70.0,
+          "seconds_model_call": 70.0,
+          "seconds_deterministic": 0.0,
+          "findings_in": 0,
+          "ops_proposed": 15,
+          "ops_applied": 11,
+          "merges_applied": 0
+        }
+      ]
+    }
+  ]
+}

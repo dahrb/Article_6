@@ -1,0 +1,435 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/3c9a1e0dbd58/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/3c9a1e0dbd58> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:1"^^xsd:string .
+
+doc:admin_action_1 a echr:AdministrativeAction ;
+    rdfs:label "Appointment of guardian by Ruse Municipal Council"@en ;
+    echr:followsProceeding doc:proceeding_2 ;
+    echr:hasCourt doc:councilRuse ;
+    echr:hasDecisionDate "2002-05-23"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_admin_1_applicant,
+        doc:participation_admin_1_council,
+        doc:participation_admin_1_rp ;
+    echr:hasSupportingQuote "on 23 May 2002 the Municipal Council appointed Ms R.P., a council officer, as the applicant’s guardian"@en .
+
+doc:admin_action_placement_1 a echr:AdministrativeAction ;
+    rdfs:label "placement in the home"@en ;
+    echr:hasCourt doc:ministryLabourSocialPolicy ;
+    echr:hasDecisionDate "2002"^^xsd:gYear ;
+    echr:hasParticipation doc:participationPlacementApplicant ;
+    echr:hasSupportingQuote "following his placement in the home in 2002"@en .
+
+doc:administrative_action_2 a echr:AdministrativeAction ;
+    rdfs:label "appointment of guardian"@en ;
+    echr:followsProceeding doc:administrative_action_1 ;
+    echr:hasCourt doc:rilaMunicipalCouncil ;
+    echr:hasDecisionDate "2005-02-02"^^xsd:date ;
+    echr:hasParticipation doc:participation_admin_2_applicant ;
+    echr:hasSupportingQuote "the Municipal Council had decided on 2 February 2005 to appoint the Director of the Pastra social care home as the applicant’s guardian"@en .
+
+doc:allowance_increase_1 a echr:AdministrativeAction ;
+    rdfs:label "increase of allowance"@en ;
+    echr:followsProceeding doc:allowance_grant_1 ;
+    echr:hasCourt doc:municipal_social_assistance_dept_1 ;
+    echr:hasDecisionDate "2009-03-03"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_applicant_increase_1,
+        doc:participation_dept_increase_1 ;
+    echr:hasSupportingQuote "On 3 February 2009 the allowance was increased"@en .
+
+doc:applicant_1_rep a rdf:Statement ;
+    rdf:object doc:lawyer_1 ;
+    rdf:predicate echr:isRepresentedBy ;
+    rdf:subject doc:applicant_1 .
+
+doc:case_36760_06 a echr:CaseDocument ;
+    rdfs:label "Case Document"@en ;
+    echr:hasApplicant doc:applicant_1 ;
+    echr:hasApplicationNumber "36760/06"@en ;
+    echr:hasCaseName "Stanev v. Bulgaria"@en ;
+    echr:hasDomesticProceeding doc:proceeding_1,
+        doc:proceeding_2 ;
+    echr:hasJudgmentDate "2012-01-17"^^xsd:date ;
+    echr:hasRespondentState "Republic of Bulgaria"@en .
+
+doc:domestic_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "judicial review of mayor's decision at Dupnitsa District Court"@en ;
+    echr:followsProceeding doc:admin_action_mayor_refusal ;
+    echr:hasCourt doc:dupnitsaDistrictCourt ;
+    echr:hasDecisionDate "2006-03-10"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1,
+        doc:participation_6,
+        doc:participation_7 ;
+    echr:hasProceedingStartDate "2005-09-28"^^xsd:date ;
+    echr:hasSupportingQuote "On 28 September 2005 the applicant’s lawyer applied to the Dupnitsa District Court for judicial review of the mayor’s decision... The Dupnitsa District Court gave judgment on 10 March 2006... the court dismissed the application"@en ;
+    echr:isFinalDomesticDecision true .
+
+doc:enforcement_action_return_1 a echr:EnforcementAction ;
+    rdfs:label "return to social care home"@en ;
+    echr:followsProceeding doc:admin_action_police_response_1 ;
+    echr:hasCourt doc:ruse_municipal_police_1 ;
+    echr:hasDecisionDate "2006-10-31"^^xsd:date ;
+    echr:hasParticipation doc:participationReturnApplicant ;
+    echr:hasSupportingQuote "He was driven back to the social care home on 31 October 2006"@en .
+
+doc:home_management_1 a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "the home’s management"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "the home’s management"@en .
+
+doc:participation_1_applicant a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:prosecutorial_review_3 a echr:ProsecutorialReview ;
+    rdfs:label "Chief Public Prosecutor's review"@en ;
+    echr:followsProceeding doc:prosecutorial_review_2 ;
+    echr:hasCourt doc:chiefProsecutorOffice ;
+    echr:hasDecisionDate "2005-11-29"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_pr3_applicant ;
+    echr:hasSupportingQuote "subsequently on 29 November 2005 by the Chief Public Prosecutor’s Office at the Supreme Court of Cassation"@en .
+
+doc:admin_action_mayor_refusal a echr:AdministrativeAction ;
+    rdfs:label "mayor of Rila's refusal to bring court action"@en ;
+    echr:hasCourt doc:mayorOfRila ;
+    echr:hasDecisionDate "2005-09-16"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_mayor_refusal_applicant ;
+    echr:hasSupportingQuote "In a letter of 16 September 2005, the mayor of Rila refused his request"@en .
+
+doc:admin_action_police_response_1 a echr:AdministrativeAction ;
+    rdfs:label "police notification of whereabouts"@en ;
+    echr:followsProceeding doc:admin_action_search_request_1 ;
+    echr:hasCourt doc:ruse_municipal_police_1 ;
+    echr:hasDecisionDate "2006-10-19"^^xsd:date ;
+    echr:hasParticipation doc:participationResponseDirector,
+        doc:participationResponsePolice ;
+    echr:hasSupportingQuote "On 19 October 2006 the Ruse police informed the Director that the applicant’s whereabouts had been discovered"@en .
+
+doc:admin_action_search_request_1 a echr:AdministrativeAction ;
+    rdfs:label "request to search for the applicant"@en ;
+    echr:hasCourt doc:directorPastra ;
+    echr:hasDecisionDate "2006-10-13"^^xsd:date ;
+    echr:hasParticipation doc:participationSearchDirector,
+        doc:participationSearchPolice ;
+    echr:hasSupportingQuote "the Director of the home wrote to the Ruse municipal police on 13 October 2006, asking them to search for the applicant"@en .
+
+doc:administrative_action_1 a echr:AdministrativeAction ;
+    rdfs:label "placement in Pastra social care home"@en ;
+    echr:hasCourt doc:ministryLabourSocialPolicy ;
+    echr:hasDecisionDate "2002-12-10"^^xsd:date ;
+    echr:hasParticipation doc:participation_admin_action_1_applicant ;
+    echr:hasSupportingQuote "On 10 December 2002 a welfare-placement agreement was signed"@en .
+
+doc:allowance_grant_1 a echr:AdministrativeAction ;
+    rdfs:label "granting of monthly allowance"@en ;
+    echr:followsProceeding doc:social_assessment_1 ;
+    echr:hasCourt doc:municipal_social_assistance_dept_1 ;
+    echr:hasDecisionDate "2007-02-07"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_applicant_grant_1,
+        doc:participation_dept_grant_1 ;
+    echr:hasSupportingQuote "On 7 February 2007 the municipal social assistance department granted the applicant a monthly allowance"@en .
+
+doc:appellateProsecutorOffice a echr:DomesticAuthority ;
+    rdfs:label "appellate prosecutor"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "appellate prosecutor"@en .
+
+doc:chiefProsecutorOffice a echr:DomesticAuthority ;
+    rdfs:label "Chief Public Prosecutor’s Office at the Supreme Court of Cassation"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Chief Public Prosecutor’s Office at the Supreme Court of Cassation"@en .
+
+doc:courtVtAppeal a echr:DomesticAuthority ;
+    rdfs:label "Veliko Tarnovo Court of Appeal"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Veliko Tarnovo Court of Appeal ( Апелативен съд )"@en .
+
+doc:dupnitsaDistrictCourt a echr:DomesticAuthority ;
+    rdfs:label "Dupnitsa District Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Dupnitsa District Court"@en .
+
+doc:guardian_1 a echr:LegalRepresentative,
+        echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicant’s guardian"@en ;
+    echr:hasSupportingQuote "The guardian, who was present at the hearing"@en,
+        "the applicant’s guardian asked the Municipal Council"@en .
+
+doc:lawyerGenova a echr:LegalRepresentative ;
+    rdfs:label "Ms A. Genova"@en ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasPersonName "Ms A. Genova"@en ;
+    echr:hasSupportingQuote "represented by Ms A. Genova, a lawyer practising in Sofia"@en .
+
+doc:participationPlacementApplicant a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participationResponseDirector a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:directorPastra .
+
+doc:participationResponsePolice a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:ruse_municipal_police_1 .
+
+doc:participationReturnApplicant a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participationSearchDirector a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:directorPastra .
+
+doc:participationSearchPolice a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:ruse_municipal_police_1 .
+
+doc:participation_1 a echr:Participation ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_1_prosecutor a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:prosecutorRuse .
+
+doc:participation_6 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:mayorOfRila .
+
+doc:participation_7 a echr:Participation ;
+    echr:hasPartySide echr:SideThirdParty ;
+    echr:participatingParty doc:guardian_1 .
+
+doc:participation_admin_1_applicant a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_admin_1_council a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:councilRuse .
+
+doc:participation_admin_1_rp a echr:Participation ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:participatingParty doc:personRp .
+
+doc:participation_admin_2_applicant a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_admin_action_1_applicant a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_applicant_assessment_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_applicant_grant_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_applicant_increase_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_dept_assessment_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:municipal_social_assistance_dept_1 .
+
+doc:participation_dept_grant_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:municipal_social_assistance_dept_1 .
+
+doc:participation_dept_increase_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:municipal_social_assistance_dept_1 .
+
+doc:participation_mayor_refusal_applicant a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_pr1_applicant a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_pr2_applicant a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_pr3_applicant a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_proceeding_1_applicant a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_proceeding_2_applicant a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:participation_request_2000_prosecutor a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:prosecutorRuse .
+
+doc:personRp a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Ms R.P."@en ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasPersonName "Ms R.P."@en .
+
+doc:proceeding_incapacity_request_2000 a echr:DomesticProceeding ;
+    rdfs:label "Ruse regional prosecutor's application for declaration of total legal incapacity"@en ;
+    echr:hasCourt doc:courtRuseRegional ;
+    echr:hasParticipation doc:participation_request_2000_prosecutor ;
+    echr:hasSupportingQuote "the Ruse regional prosecutor applied to the Ruse Regional Court ( Окръжен съд ) for a declaration of total legal incapacity in respect of the applicant"@en .
+
+doc:prosecutorial_review_1 a echr:ProsecutorialReview ;
+    rdfs:label "regional prosecutor's refusal to restore legal capacity"@en ;
+    echr:hasCourt doc:prosecutorRuse ;
+    echr:hasDecisionDate "2005-08-10"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_pr1_applicant ;
+    echr:hasSupportingQuote "On 10 August 2005 the regional prosecutor refused to bring an action for restoration of the applicant’s legal capacity"@en .
+
+doc:prosecutorial_review_2 a echr:ProsecutorialReview ;
+    rdfs:label "appellate prosecutor's review"@en ;
+    echr:followsProceeding doc:prosecutorial_review_1 ;
+    echr:hasCourt doc:appellateProsecutorOffice ;
+    echr:hasDecisionDate "2005-10-11"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_pr2_applicant ;
+    echr:hasSupportingQuote "the regional prosecutor’s refusal was upheld on 11 October 2005 by the appellate prosecutor"@en .
+
+doc:rilaMunicipalCouncil a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Rila Municipal Council"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Rila Municipal Council"@en ;
+    echr:hasSupportingQuote "asked the Municipal Council to grant a social allowance"@en .
+
+doc:social_assessment_1 a echr:AdministrativeAction ;
+    rdfs:label "social assessment"@en ;
+    echr:hasCourt doc:municipal_social_assistance_dept_1 ;
+    echr:hasDecisionDate "2005-12-30"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:participation_applicant_assessment_1,
+        doc:participation_dept_assessment_1 ;
+    echr:hasSupportingQuote "on 30 December 2005 the municipal social assistance department carried out a “social assessment” ( социална оценка ) of the applicant, which concluded that... he was entitled to a social allowance"@en .
+
+doc:councilRuse a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Ruse Municipal Council"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Ruse Municipal Council"@en .
+
+doc:courtRuseRegional a echr:DomesticAuthority ;
+    rdfs:label "Ruse Regional Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Ruse Regional Court ( Окръжен съд )"@en .
+
+doc:lawyer_1 a echr:LegalRepresentative ;
+    rdfs:label "the applicant's lawyer"@en ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasPersonName "the applicant’s lawyer"@en ;
+    echr:hasSupportingQuote "at his lawyer’s request"@en,
+        "the applicant’s lawyer requested... she was informed"@en .
+
+doc:mayorOfRila a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "mayor of Rila"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "mayor of Rila"@en .
+
+doc:ministryLabourSocialPolicy a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Ministry of Labour and Social Policy"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Ministry of Labour and Social Policy"@en .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "Ruse Regional Court incapacity proceeding"@en ;
+    echr:followsProceeding doc:proceeding_incapacity_request_2000 ;
+    echr:hasCourt doc:courtRuseRegional ;
+    echr:hasDecisionDate "2000-11-20"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_1_prosecutor,
+        doc:participation_proceeding_1_applicant ;
+    echr:hasStatusApplied echr:StatusPartialIncapacity ;
+    echr:hasSupportingQuote "In a judgment of 20 November 2000, the court declared the applicant to be partially incapacitated"@en .
+
+doc:proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "Veliko Tarnovo Court of Appeal proceeding"@en ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:courtVtAppeal ;
+    echr:hasDecisionDate "2001-04-12"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_proceeding_2_applicant ;
+    echr:hasSupportingQuote "That judgment was upheld in a judgment of 12 April 2001 by the Veliko Tarnovo Court of Appeal"@en .
+
+doc:directorPastra a echr:DomesticAuthority,
+        echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Director of the Pastra social care home"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Director of the Pastra social care home"@en ;
+    echr:hasPersonName "Director of the Pastra social care home"@en,
+        "the Director"@en .
+
+doc:prosecutorRuse a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Ruse regional prosecutor"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "Ruse regional prosecutor"@en .
+
+doc:ruse_municipal_police_1 a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "the Ruse municipal police"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "the Ruse municipal police"@en .
+
+doc:municipal_social_assistance_dept_1 a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "municipal social assistance department"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "municipal social assistance department"@en ;
+    echr:hasSupportingQuote "the municipal social assistance department carried out a “social assessment”"@en .
+
+doc:applicant_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicant"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr Rusi Kosev Stanev"@en,
+        "the applicant"@en ;
+    echr:hasSupportingQuote "Before the Court, he stated"@en,
+        "The applicant was born in 1956 in Ruse, where he lived"@en,
+        "a Bulgarian national, Mr Rusi Kosev Stanev (“the applicant”)"@en,
+        "allowing him to leave the home"@en,
+        "the applicant was uncommunicative, preferred to stay on his own"@en,
+        "the applicant, through his lawyer"@en ;
+    echr:isRepresentedBy doc:lawyerGenova,
+        doc:lawyer_1 .
+

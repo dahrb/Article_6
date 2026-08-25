@@ -1,0 +1,181 @@
+experiment : /home/dahrb/Projects/article_6/domestic_proceedings/results/jurix_phase1
+model      : gemma-4-31b @ http://localhost:8000/v1
+passes     : 2
+
+
+=============== o2_cf_low_jsonld ===============
+repairing 10 file(s) under results/jurix_phase1/o2_cf_low_jsonld/repaired
+  model: gemma-4-31b @ http://localhost:8000/v1 (temperature 0.0, timeout 300.0s)
+  source text: results/jurix_phase1/input.jsonl (quote stage enabled)
+  [domestic authorities] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L1.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 1 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [2.3s, 2.2s in the model]
+    SKIPPED [a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice] remove doc:mayorRila rdfs:label "mayor of Rila (Party)": applied (matched 1 literal(s) by lexical form)
+    [domestic authorities] pass 2: nothing left to flag - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [domestic proceedings] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L1.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [6.8s, 6.7s in the model]
+    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [persons and participation] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L1.facts.ttl: 3 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [5.6s, 5.6s in the model]
+    [persons and participation] pass 1: 1 op(s) applied but findings did not fall (3 -> 4) - stopping
+  [source quote fidelity] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L1.facts.ttl: nothing flagged
+    document total: 14.8s across 3 model call(s) (14.5s in the model)
+    wrote results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L1.facts.ttl (backup at results/jurix_phase1/o2_cf_low_jsonld/repaired/backup/input.L1.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L10.facts.ttl: nothing flagged
+    RECOVERED 5 group(s), 1 op(s) from a stalled generation
+  [domestic proceedings] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L10.facts.ttl: 2 finding(s) in; model proposed 5 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [14.0s, 14.0s in the model]
+    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (2 -> 2) - stopping
+  [persons and participation] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L10.facts.ttl: 9 finding(s) in; model proposed 3 group(s), 14 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 14 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [18.6s, 18.6s in the model]
+    [persons and participation] pass 2: 7 finding(s) in; model proposed 5 group(s), 20 op(s), 0 merge(s)
+    [persons and participation] pass 2: applied 20 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [27.8s, 27.8s in the model]
+    RECOVERED 1 group(s), 2 op(s) from a stalled generation
+  [source quote fidelity] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L10.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 2, stub orphans swept 1 [11.4s, 11.4s in the model]
+    SKIPPED [The quote for doc:dublin_regulation_article_1 is a paraphrase/summary and does not appear verbatim in the source text.] remove doc:dublin_regulation_article_1 echr:hasSupportingQuote Article 1 of Regulation (EU) No 604/2013... (the “Dublin Regulation”): applied (removed 1 quote(s) by index)
+    SKIPPED [The quote for doc:dublin_regulation_article_1 is a paraphrase/summary and does not appear verbatim in the source text.] add doc:dublin_regulation_article_1 echr:hasSupportingQuote Article 1 of Regulation (EU) No 604/2013 of the European Parliament and of the Council of 26 June 2013 establishing the criteria and mechanisms for determining the Member State responsible for examining an application for international protection lodged in one of the Member States by a third-country national or a stateless person (the “Dublin Regulation”), provides as follows:: skipped: quote does not appear verbatim in the source document
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 72.1s across 4 model call(s) (71.8s in the model)
+    wrote results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L10.facts.ttl (backup at results/jurix_phase1/o2_cf_low_jsonld/repaired/backup/input.L10.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L2.facts.ttl: 1 finding(s) in; model proposed 2 group(s), 1 op(s), 1 merge(s)
+    [domestic authorities] pass 1: applied 1 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [3.6s, 3.6s in the model]
+    SKIPPED merge doc:esa <- doc:esaAgency: skipped: nodes have different rdf:type
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L2.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [2.2s, 2.2s in the model]
+    [domestic proceedings] pass 1: no operations applied - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [persons and participation] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L2.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [5.5s, 5.5s in the model]
+    [persons and participation] pass 1: 1 op(s) applied but findings did not fall (0 -> 1) - stopping
+  [source quote fidelity] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L2.facts.ttl: 2 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [3.5s, 3.5s in the model]
+    SKIPPED [The quote for doc:proceedingStatusEsa is a paraphrase of paragraph 46. The verbatim text in the source is slightly different.] remove doc:proceedingStatusEsa echr:hasSupportingQuote The Darmstadt Labour Court concluded that the conditions under section 20(2) of the German Courts Act for finding that the applicants’ action was inadmissible were fulfilled.: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: 1 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 2: applied 2 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [2.7s, 2.7s in the model]
+    SKIPPED [The quote 'the application (no. 28934/95)' is a slight paraphrase/fragment. The verbatim span in the source is 'an application (no. 28934/95)'.] remove doc:case_28934_95 echr:hasSupportingQuote the application (no. 28934/95): applied (removed 1 quote(s) by index)
+    document total: 17.7s across 5 model call(s) (17.5s in the model)
+    wrote results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L2.facts.ttl (backup at results/jurix_phase1/o2_cf_low_jsonld/repaired/backup/input.L2.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L3.facts.ttl: 2 finding(s) in; model proposed 2 group(s), 17 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 17 (of which 0 merge(s)), skipped 8, stub orphans swept 0 [19.7s, 19.7s in the model]
+    SKIPPED [doc:administrativeCourt has multiple labels and names, indicating it has conflated three distinct courts: the Supreme Administrative Court, the Istanbul Administrative Court, and a generic administrative court. These must be split into separate entities.] remove doc:administrativeCourt rdfs:label "Administrative Court": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [doc:administrativeCourt has multiple labels and names, indicating it has conflated three distinct courts: the Supreme Administrative Court, the Istanbul Administrative Court, and a generic administrative court. These must be split into separate entities.] remove doc:administrativeCourt rdfs:label "Supreme Administrative Court": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [doc:administrativeCourt has multiple labels and names, indicating it has conflated three distinct courts: the Supreme Administrative Court, the Istanbul Administrative Court, and a generic administrative court. These must be split into separate entities.] remove doc:administrativeCourt rdfs:label "İstanbul Administrative Court": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [doc:administrativeCourt has multiple labels and names, indicating it has conflated three distinct courts: the Supreme Administrative Court, the Istanbul Administrative Court, and a generic administrative court. These must be split into separate entities.] remove doc:administrativeCourt echr:hasAuthorityName "Supreme Administrative Court": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [doc:administrativeCourt has multiple labels and names, indicating it has conflated three distinct courts: the Supreme Administrative Court, the Istanbul Administrative Court, and a generic administrative court. These must be split into separate entities.] remove doc:administrativeCourt echr:hasAuthorityName "administrative court": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [doc:administrativeCourt has multiple labels and names, indicating it has conflated three distinct courts: the Supreme Administrative Court, the Istanbul Administrative Court, and a generic administrative court. These must be split into separate entities.] remove doc:administrativeCourt echr:hasAuthorityName "İstanbul Administrative Court": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [doc:tskb is typed as echr:AuthorityAdministrative, but the supporting quote identifies it as a bank ('Industrial Development Bank of Türkiye'). A commercial bank is not a domestic authority (court, prosecutor, or administrative body that decided a proceeding).] remove doc:tskb echr:hasAuthorityName "Türkiye Sınaî Kalkınma Bankası A.Ş.": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [doc:tskb is typed as echr:AuthorityAdministrative, but the supporting quote identifies it as a bank ('Industrial Development Bank of Türkiye'). A commercial bank is not a domestic authority (court, prosecutor, or administrative body that decided a proceeding).] remove doc:tskb rdfs:label "Industrial Development Bank of Türkiye": applied (matched 1 literal(s) by lexical form)
+    [domestic authorities] pass 2: nothing left to flag - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [domestic proceedings] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L3.facts.ttl: 13 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.1s, 7.1s in the model]
+    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (13 -> 14) - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [persons and participation] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L3.facts.ttl: 2 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [5.5s, 5.5s in the model]
+    [persons and participation] pass 1: 1 op(s) applied but findings did not fall (2 -> 3) - stopping
+  [source quote fidelity] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L3.facts.ttl: nothing flagged
+    document total: 32.5s across 3 model call(s) (32.3s in the model)
+    wrote results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L3.facts.ttl (backup at results/jurix_phase1/o2_cf_low_jsonld/repaired/backup/input.L3.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L4.facts.ttl: nothing flagged
+  [domestic proceedings] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L4.facts.ttl: nothing flagged
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [persons and participation] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L4.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [5.6s, 5.6s in the model]
+    [persons and participation] pass 1: 1 op(s) applied but findings did not fall (1 -> 2) - stopping
+  [source quote fidelity] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L4.facts.ttl: nothing flagged
+    document total: 5.7s across 1 model call(s) (5.6s in the model)
+    wrote results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L4.facts.ttl (backup at results/jurix_phase1/o2_cf_low_jsonld/repaired/backup/input.L4.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L5.facts.ttl: nothing flagged
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [domestic proceedings] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L5.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [8.1s, 8.1s in the model]
+    SKIPPED [a domestic event may have at most one decision date] remove doc:proceeding_kyiv_dist_admin_court_1 echr:hasDecisionDate 2021-12-09: applied (matched 1 literal(s) by lexical form)
+    [domestic proceedings] pass 2: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 2: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.5s, 0.5s in the model]
+    [domestic proceedings] pass 2: no operations applied - stopping
+  [persons and participation] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L5.facts.ttl: 2 finding(s) in; model proposed 5 group(s), 21 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 21 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [29.0s, 29.0s in the model]
+    [persons and participation] pass 2: 0 finding(s) in; model proposed 2 group(s), 4 op(s), 0 merge(s)
+    [persons and participation] pass 2: applied 4 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [6.7s, 6.7s in the model]
+    RECOVERED 1 group(s), 2 op(s) from a stalled generation
+  [source quote fidelity] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L5.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [12.6s, 12.6s in the model]
+    SKIPPED [The quote 'the applicant had not informed the Disciplinary Chamber of the reasons why he had been absent from the meeting of 7 December 2012' is not verbatim in the source text. It is a slight paraphrase of a sentence in paragraph 34.] remove doc:participation_martynovskiy_meeting_2012 echr:hasSupportingQuote the applicant had not informed the Disciplinary Chamber of the reasons why he had been absent from the meeting of 7 December 2012: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 57.2s across 5 model call(s) (56.9s in the model)
+    wrote results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L5.facts.ttl (backup at results/jurix_phase1/o2_cf_low_jsonld/repaired/backup/input.L5.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L6.facts.ttl: nothing flagged
+  [domestic proceedings] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L6.facts.ttl: nothing flagged
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [persons and participation] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L6.facts.ttl: 3 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [5.4s, 5.4s in the model]
+    [persons and participation] pass 1: 1 op(s) applied but findings did not fall (3 -> 4) - stopping
+  [source quote fidelity] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L6.facts.ttl: nothing flagged
+    document total: 5.5s across 1 model call(s) (5.4s in the model)
+    wrote results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L6.facts.ttl (backup at results/jurix_phase1/o2_cf_low_jsonld/repaired/backup/input.L6.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L7.facts.ttl: nothing flagged
+  [domestic proceedings] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L7.facts.ttl: nothing flagged
+  [persons and participation] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L7.facts.ttl: 1 finding(s) in; model proposed 4 group(s), 3 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 3 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [11.6s, 11.6s in the model]
+    [persons and participation] pass 2: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 2: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.4s, 0.4s in the model]
+    [persons and participation] pass 2: no operations applied - stopping
+  [source quote fidelity] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L7.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [3.4s, 3.4s in the model]
+    SKIPPED [The quote for doc:bail_withdrawal_1999 is a paraphrase/summary using an ellipsis; it must be a verbatim span from the source text.] remove doc:bail_withdrawal_1999 echr:hasSupportingQuote on 25 March 1999... the judge after consulting counsel decided to withdraw the applicant’s bail: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 15.6s across 3 model call(s) (15.4s in the model)
+    wrote results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L7.facts.ttl (backup at results/jurix_phase1/o2_cf_low_jsonld/repaired/backup/input.L7.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L8.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 1 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [2.7s, 2.7s in the model]
+    SKIPPED [The node doc:prosecutorNizhniyNovgorod has two labels: "Nizhniy Novgorod regional administration" and "Nizhniy Novgorod regional prosecutor’s office". The supporting quote mentions the "regional administration", but the authority name and kind (Prosecutorial) refer to the prosecutor's office. These are distinct bodies. Since the node is typed as a prosecutorial authority, the label referring to the administration is incorrect and should be removed.] remove doc:prosecutorNizhniyNovgorod rdfs:label "Nizhniy Novgorod regional administration": applied (matched 1 literal(s) by lexical form)
+    [domestic authorities] pass 2: nothing left to flag - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [domestic proceedings] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L8.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [7.3s, 7.3s in the model]
+    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
+  [persons and participation] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L8.facts.ttl: 8 finding(s) in; model proposed 13 group(s), 68 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 68 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [82.0s, 82.0s in the model]
+    SKIPPED [doc:mrK has multiple labels] remove doc:mrK rdfs:label "shipyard “Oka”": applied (matched 1 literal(s) by lexical form)
+    [persons and participation] pass 2: 4 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 2: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [0.7s, 0.7s in the model]
+    [persons and participation] pass 2: no operations applied - stopping
+  [source quote fidelity] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L8.facts.ttl: nothing flagged
+    document total: 92.8s across 4 model call(s) (92.7s in the model)
+    wrote results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L8.facts.ttl (backup at results/jurix_phase1/o2_cf_low_jsonld/repaired/backup/input.L8.facts.ttl)
+  [domestic authorities] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L9.facts.ttl: nothing flagged
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [domestic proceedings] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L9.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [6.8s, 6.8s in the model]
+    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
+    RECOVERED 1 group(s), 1 op(s) from a stalled generation
+  [persons and participation] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L9.facts.ttl: 2 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 1 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [5.3s, 5.3s in the model]
+    [persons and participation] pass 1: 1 op(s) applied but findings did not fall (2 -> 3) - stopping
+  [source quote fidelity] results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L9.facts.ttl: nothing flagged
+    document total: 12.3s across 2 model call(s) (12.1s in the model)
+    wrote results/jurix_phase1/o2_cf_low_jsonld/repaired/input.L9.facts.ttl (backup at results/jurix_phase1/o2_cf_low_jsonld/repaired/backup/input.L9.facts.ttl)
+
+  repair total: 326.3s over 10 document(s), 31 model call(s) (324.2s in the model, 2.1s deterministic)
+    authorities      4 call(s)     28.3s  (28.2s in the model)
+    proceedings      8 call(s)     52.8s  (52.7s in the model)
+    persons         14 call(s)    209.7s  (209.7s in the model)
+    quotes           5 call(s)     33.6s  (33.6s in the model)
+
+repaired  (results/jurix_phase1/o2_cf_low_jsonld/repaired)
+  file                          conforms  violations  warnings
+  input.L1.facts.ttl               False           4         0
+  input.L10.facts.ttl              False           7         0
+  input.L2.facts.ttl               False           1         0
+  input.L3.facts.ttl               False          17         0
+  input.L4.facts.ttl               False           2         0
+  input.L5.facts.ttl               False           1         0
+  input.L6.facts.ttl               False           4         0
+  input.L7.facts.ttl                True           0         0
+  input.L8.facts.ttl               False           4         0
+  input.L9.facts.ttl               False           3         0
+  TOTAL                             1/10          43         0

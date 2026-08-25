@@ -1,0 +1,246 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/acf1d7ca24c0/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/acf1d7ca24c0> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:3"^^xsd:string .
+
+doc:actionEnforcementRefusal a echr:AdministrativeAction ;
+    rdfs:label "Fund's decision on impossibility of enforcement"@en ;
+    echr:hasCourt doc:fundAuthority ;
+    echr:hasDecisionDate "2015-10-27"^^xsd:date ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasSupportingQuote "On 18 April 2016, the Fund notified the applicant of a decision taken on 27 October 2015 regarding the impossibility of enforcing the judgment."@en .
+
+doc:board_decision_2001 a echr:AdministrativeAction ;
+    rdfs:label "Board decision to transfer İktisat Bank"@en ;
+    echr:hasCourt doc:bankingBoard ;
+    echr:hasDecisionDate "2001-03-15"^^xsd:date ;
+    echr:hasSupportingQuote "By a decision dated 15 March 2001, the Banking Regulation and Supervision Board ( Bankalar Düzenleme ve Denetleme Kurulu , hereinafter “the Board”) resolved to transfer the management and control of İktisat Bankası T.A.Ş."@en .
+
+doc:caseVivaTv a echr:CaseDocument ;
+    rdfs:label "Case concerning Viva TV-Radio Viva"@en ;
+    echr:hasApplicant doc:applicant_1 ;
+    echr:hasDomesticProceeding doc:proceeding_1,
+        doc:proceeding_2,
+        doc:proceeding_3,
+        doc:proceeding_4 .
+
+doc:case_1 a echr:CaseDocument ;
+    echr:hasApplicant doc:applicant_1 .
+
+doc:case_58919_18 a echr:CaseDocument ;
+    echr:hasApplicant doc:erolAksoy ;
+    echr:hasApplicationNumber "58919/18"@en ;
+    echr:hasCaseName "Erol Aksoy v. Türkiye"@en ;
+    echr:hasRespondentState "Türkiye"@en .
+
+doc:court_admin_1 a echr:DomesticAuthority ;
+    rdfs:label "Administrative Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "administrative court"@en .
+
+doc:fund_management_transfer_2008 a echr:AdministrativeAction ;
+    rdfs:label "Fund resolution to transfer management of Aksoy Group"@en ;
+    echr:followsProceeding doc:fund_default_decision_2008 ;
+    echr:hasCourt doc:savingsFund ;
+    echr:hasDecisionDate "2008-09-18"^^xsd:date ;
+    echr:hasSupportingQuote "On 18 September 2008, the Fund further resolved to transfer the management and control of all companies within the Erol Aksoy Group to itself"@en .
+
+doc:fund_recovery_decision_2001 a echr:AdministrativeAction ;
+    rdfs:label "Fund resolution to recover resources"@en ;
+    echr:hasCourt doc:savingsFund ;
+    echr:hasDecisionDate "2001-09-14"^^xsd:date ;
+    echr:hasSupportingQuote "on 14 September 2001, the Fund resolved to recover 726,122,000 Turkish liras from the former shareholders"@en .
+
+doc:proceeding_3_rectification a echr:DomesticProceeding ;
+    rdfs:label "Supreme Administrative Court rectification of GA decision" ;
+    echr:followsProceeding doc:proceeding_3 ;
+    echr:hasCourt doc:courtSupremeAdmin ;
+    echr:hasDecisionDate "2017-06-30" ;
+    echr:hasOutcome echr:OutcomeRemitted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasSupportingQuote "On 30 June 2017, the 13 th Chamber of the Supreme Administrative Court granted the request... the court overturned the judgment of the 6th Chamber of the Istanbul Administrative Court dated 19 March 2014 and annulled the sale in question." .
+
+doc:proceeding_rectification_sac a echr:DomesticProceeding ;
+    rdfs:label "Rectification Request proceeding" ;
+    echr:followsProceeding doc:proceeding_3 ;
+    echr:hasCourt doc:courtSupremeAdmin ;
+    echr:hasDecisionDate "2016-01-25" ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasSupportingQuote "On 25 January 2016, the Supreme Administrative Court rejected the Fund’s request for rectification" .
+
+doc:admin_action_1 a echr:AdministrativeAction ;
+    rdfs:label "Decision to offer Viva TV-Radio Viva for sale"^^xsd:string ;
+    echr:hasCourt doc:fundAuthority ;
+    echr:hasDecisionDate "2011-01-13"^^xsd:date ;
+    echr:hasParticipation doc:part_fund_1 ;
+    echr:hasSupportingQuote "the Fund’s decision of 13 January 2011, which approved the invitation to tender and the terms of sale"@en .
+
+doc:bankingBoard a echr:DomesticAuthority ;
+    rdfs:label "Banking Regulation and Supervision Board"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Bankalar Düzenleme ve Denetleme Kurulu"@en .
+
+doc:courtConstitutional a echr:DomesticAuthority ;
+    rdfs:label "Constitutional Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Constitutional Court"@en .
+
+doc:courtIstanbulAdmin a echr:DomesticAuthority ;
+    rdfs:label "6th Chamber of the İstanbul Administrative Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "6th Chamber of the İstanbul Administrative Court"@en .
+
+doc:court_ga_1 a echr:DomesticAuthority ;
+    rdfs:label "General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative Court"@en .
+
+doc:fund_default_decision_2008 a echr:AdministrativeAction ;
+    rdfs:label "Fund decision on default"@en ;
+    echr:followsProceeding doc:liquidation_protocol_2006 ;
+    echr:hasCourt doc:savingsFund ;
+    echr:hasDecisionDate "2008-04-03"^^xsd:date ;
+    echr:hasSupportingQuote "On 3 April 2008, the Fund concluded that the Erol Aksoy Group had failed to fulfil several commitments and obligations set out in the Liquidation Protocol"@en .
+
+doc:liquidation_protocol_2006 a echr:AdministrativeAction ;
+    rdfs:label "Debt Liquidation Protocol"@en ;
+    echr:hasCourt doc:fundAuthority ;
+    echr:hasDecisionDate "2006-05-09"^^xsd:date ;
+    echr:hasParticipation doc:partAksoyProtocol,
+        doc:partFundProtocol ;
+    echr:hasSupportingQuote "On 9 May 2006, a debt liquidation protocol ( Borç Tasfiye Protokolü , hereinafter referred to as “the Liquidation Protocol”) was signed between the Fund (as creditor) and the Erol Aksoy Group (as debtor)."@en .
+
+doc:nHolliger a echr:LegalRepresentative ;
+    rdfs:label "N. Holliger"@en ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasPersonName "Ms N. Holliger"@en .
+
+doc:partAksoyProtocol a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:erolAksoy .
+
+doc:partFundProtocol a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:savingsFund .
+
+doc:proceeding_4 a echr:DomesticProceeding ;
+    rdfs:label "Rectification Request proceeding"^^xsd:string,
+        "Individual application to Constitutional Court"@en ;
+    echr:followsProceeding doc:proceeding_3 ;
+    echr:hasCourt doc:courtConstitutional ;
+    echr:hasDecisionDate "2016-01-25"^^xsd:date,
+        "2018-05-23"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_1_app,
+        doc:part_1_fund,
+        doc:part_fund_1 ;
+    echr:hasProceedingStartDate "2017-09-11"^^xsd:date ;
+    echr:hasSupportingQuote "On 11 September 2017, the applicant lodged an individual application with the Constitutional Court... In a decision of 23 May 2018, the Constitutional Court... declared the application inadmissible."@en,
+        "On 25 January 2016, the Supreme Administrative Court rejected the Fund’s request for rectification"@en .
+
+doc:erolAksoy a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Erol Aksoy"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr Erol Aksoy"@en ;
+    echr:isRepresentedBy doc:nHolliger .
+
+doc:part_fund_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:fundAuthority .
+
+doc:proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "Administrative Court proceedings"^^xsd:string,
+        "First instance proceeding for annulment of sale"@en ;
+    echr:followsProceeding doc:admin_action_1 ;
+    echr:hasCourt doc:courtIstanbulAdmin ;
+    echr:hasDecisionDate "2014-03-19"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_1_app,
+        doc:part_1_fund,
+        doc:part_fund_2 ;
+    echr:hasProceedingStartDate "2011-02-07"^^xsd:date,
+        "2011-02-24"^^xsd:date ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "On 24 February 2011, the applicant initiated proceedings before the administrative court, seeking the annulment of the sale of Viva TV-Radio Viva."@en,
+        "On 7 February 2011, the applicant initiated proceedings before the administrative court, contesting the actions of the Fund"@en .
+
+doc:proceeding_2 a echr:DomesticProceeding ;
+    rdfs:label "Supreme Administrative Court 13th Chamber proceeding"^^xsd:string,
+        "Appeal to Supreme Administrative Court"@en ;
+    echr:followsProceeding doc:proceeding_1 ;
+    echr:hasCourt doc:courtSupremeAdmin ;
+    echr:hasDecisionDate "2014-12-09"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:part_1_app,
+        doc:part_1_fund,
+        doc:part_fund_2 ;
+    echr:hasSupportingQuote "On 9 December 2014, the 13th Chamber of the Supreme Administrative Court dismissed the applicant’s case"@en,
+        "On an appeal by the applicant, the 13th Chamber of the Supreme Administrative Court upheld that decision on 9 December 2014."@en .
+
+doc:applicant_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicant"^^xsd:string,
+        "the applicant"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "the applicant"@en ;
+    echr:hasSupportingQuote "he had clearly expressed his intention"@en,
+        "the applicant initiated proceedings before the administrative court... he claimed to hold both direct and indirect shares"@en .
+
+doc:courtSupremeAdmin a echr:DomesticAuthority ;
+    rdfs:label "13th Chamber of the Supreme Administrative Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "13th Chamber of the Supreme Administrative Court"@en .
+
+doc:part_fund_2 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:fundAuthority .
+
+doc:part_1_app a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_1 .
+
+doc:part_1_fund a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:fundAuthority .
+
+doc:proceeding_3 a echr:DomesticProceeding ;
+    rdfs:label "General Assembly of the Administrative Proceedings Divisions proceeding"^^xsd:string,
+        "Request for rectification"@en ;
+    echr:followsProceeding doc:proceeding_2 ;
+    echr:hasCourt doc:court_ga_1 ;
+    echr:hasDecisionDate "2015-07-07"^^xsd:date,
+        "2017-06-30"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeRemitted ;
+    echr:hasOutcomeDirection echr:DirectionFavourableToApplicant ;
+    echr:hasParticipation doc:part_1_app,
+        doc:part_1_fund,
+        doc:part_fund_2 ;
+    echr:hasSupportingQuote "On 30 June 2017, the 13 th Chamber of the Supreme Administrative Court granted the request... the court overturned the judgment of the 6th Chamber of the Istanbul Administrative Court dated 19 March 2014 and annulled the sale in question."@en,
+        "On 7 July 2015, following an appeal by the applicant, the General Assembly... annulled the Fund’s decision"@en .
+
+doc:savingsFund a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "Savings Deposit Insurance Fund"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Tasarruf Mevduat Sigorta Fonu"@en .
+
+doc:fundAuthority a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "the Fund"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "the Fund"@en .
+

@@ -1,0 +1,181 @@
+repairing 10 file(s) under results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired
+  model: gpt-5-mini @ https://api.openai.com/v1 (temperature 1.0, timeout 300.0s)
+  source text: results/jurix_phase1_gpt5mini/input.jsonl (quote stage enabled)
+  [domestic authorities] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L1.facts.ttl: 3 finding(s) in; model proposed 2 group(s), 6 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 6 (of which 0 merge(s)), skipped 4, stub orphans swept 0 [42.0s, 41.9s in the model]
+    SKIPPED [shacl_violation] remove doc:pastraDirector rdfs:label "Director of the Pastra social care home": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [shacl_violation] remove doc:pastraDirector rdfs:label "Pastra social care home": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [shacl_violation] remove doc:pastraDirector echr:hasPersonName "Director of the Pastra social care home": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [shacl_violation] remove doc:pastraDirector echr:hasAuthorityName "the Pastra social care home": applied (matched 1 literal(s) by lexical form)
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L1.facts.ttl: 0 finding(s) in; model proposed 6 group(s), 15 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 15 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [48.6s, 48.6s in the model]
+    [domestic proceedings] pass 1: 15 op(s) applied but findings did not fall (0 -> 0) - stopping
+    [persons and participation] FAILED: RepairTruncated: generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document
+    continuing to the next stage; earlier stages' work is kept
+  [source quote fidelity] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L1.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 2 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [18.4s, 18.4s in the model]
+    SKIPPED [supporting quote mismatch / not verbatim] remove doc:applicantLawyer echr:hasSupportingQuote On 28 September 2005 the applicant’s lawyer applied to the Dupnitsa District Court for judicial review of the mayor’s decision, under Article 115 of the Family Code (“the FC”).: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 281.5s across 4 model call(s) (281.2s in the model)
+    wrote results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L1.facts.ttl (backup at results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/backup/input.L1.facts.ttl)
+  [domestic authorities] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L10.facts.ttl: 6 finding(s) in; model proposed 3 group(s), 6 op(s), 2 merge(s)
+    [domestic authorities] pass 1: applied 8 (of which 2 merge(s)), skipped 6, stub orphans swept 0 [27.1s, 27.0s in the model]
+    SKIPPED [multiple_rdfs_label_and_authority_name_values] remove doc:aliensAppealsBoard rdfs:label the Aliens Appeals Board: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple_rdfs_label_and_authority_name_values] remove doc:aliensAppealsBoard echr:hasAuthorityName the Aliens Appeals Board: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple_rdfs_label_and_authority_name_values] remove doc:brusselsCourtOfAppeal rdfs:label the Brussels Court of Appeal: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple_rdfs_label_and_authority_name_values] remove doc:brusselsCourtOfAppeal echr:hasAuthorityName the Brussels Court of Appeal: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple_rdfs_label_and_authority_name_values] remove doc:aliensOffice rdfs:label the Aliens Office: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple_rdfs_label_and_authority_name_values] remove doc:aliensOffice echr:hasAuthorityName the Aliens Office: applied (matched 1 literal(s) by lexical form)
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L10.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 0 op(s), 4 merge(s)
+    [domestic proceedings] pass 1: applied 4 (of which 4 merge(s)), skipped 0, stub orphans swept 0 [37.8s, 37.8s in the model]
+    [domestic proceedings] pass 2: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 0 merge(s)
+    [domestic proceedings] pass 2: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [9.7s, 9.7s in the model]
+    [domestic proceedings] pass 2: no operations applied - stopping
+  [persons and participation] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L10.facts.ttl: 3 finding(s) in; model proposed 3 group(s), 5 op(s), 1 merge(s)
+    [persons and participation] pass 1: applied 6 (of which 1 merge(s)), skipped 0, stub orphans swept 0 [55.4s, 55.4s in the model]
+    [persons and participation] pass 2: nothing left to flag - stopping
+  [source quote fidelity] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L10.facts.ttl: 5 finding(s) in; model proposed 5 group(s), 10 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 10 (of which 0 merge(s)), skipped 5, stub orphans swept 0 [37.8s, 37.8s in the model]
+    SKIPPED [supporting-quote-mismatch] remove doc:tpi_order_2016_10_25 echr:hasSupportingQuote By an order of 25 October 2016, considering that the failure by the Aliens Office to comply with a judgment of the Aliens Appeals Board ... the acting president of the French-language TPI ordered the State, as an urgent measure, to comply with the Board’s judgment of 20 October 2016, that is, to issue the applicants with visas or laissez-passers, and made the order subject to a penalty payment of 1,000 euros (EUR) per day of delay and per applicant.: applied (removed 1 quote(s) by index)
+    SKIPPED [supporting-quote-mismatch] remove doc:part_aliens_appeals_2017_03_24_applicants echr:hasSupportingQuote the applicants brought proceedings before the Aliens Appeals Board to have the Aliens Office’s decisions of 10 October 2016 set aside.: applied (removed 1 quote(s) by index)
+    SKIPPED [supporting-quote-mismatch] remove doc:aliens_appeals_2017_03_24 echr:hasSupportingQuote On 24 March 2017 the Aliens Appeals Board dismissed the application to have those decisions set aside, finding that the Aliens Office’s decisions of 13 September 2016 had become final and that, in consequence, the applicants no longer had standing to challenge the subsequent decisions.: applied (removed 1 quote(s) by index)
+    SKIPPED [supporting-quote-mismatch] remove doc:domestic_proceeding_aliens_appeals_board_extremely_urgent_2016_10_07 echr:hasSupportingQuote it reiterated the res judicata nature of its judgments, in particular that of 7 October 2016, which had nonetheless not been executed.: applied (removed 1 quote(s) by index)
+    SKIPPED [supporting-quote-mismatch] remove doc:part_aliens_appeals_2017_03_24_aliens_office echr:hasSupportingQuote the Aliens Office’s decisions of 13 September 2016 had become final: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 167.9s across 5 model call(s) (167.7s in the model)
+    wrote results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L10.facts.ttl (backup at results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/backup/input.L10.facts.ttl)
+  [domestic authorities] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L2.facts.ttl: 3 finding(s) in; model proposed 1 group(s), 4 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 4 (of which 0 merge(s)), skipped 3, stub orphans swept 0 [36.7s, 36.6s in the model]
+    SKIPPED [shacl_violation] remove doc:darmstadtLabourCourt rdfs:label Darmstadt Labour Court: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [shacl_violation] remove doc:darmstadtLabourCourt echr:hasAuthorityName Darmstadt Labour Court: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [shacl_violation] remove doc:darmstadtLabourCourt echr:hasJurisdictionState Federal Republic of Germany: applied (matched 2 literal(s) by lexical form)
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L2.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 1 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [19.1s, 19.1s in the model]
+    SKIPPED [flagged_isFinalDomesticDecision_conflict] remove doc:domprocGermanCourtsImmunity echr:isFinalDomesticDecision "true": applied (matched 1 literal(s) by lexical form)
+    [domestic proceedings] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
+  [persons and participation] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L2.facts.ttl: 8 finding(s) in; model proposed 7 group(s), 19 op(s), 0 merge(s)
+    [persons and participation] pass 1: applied 19 (of which 0 merge(s)), skipped 7, stub orphans swept 0 [77.4s, 77.4s in the model]
+    SKIPPED [participation_attached_to_multiple_events] remove doc:participation_labour_second_app_1 rdfs:label participation of the second applicant in Darmstadt Labour Court settlement: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [hasGenderCueText_must_be_a_single_verbatim_string] remove doc:repEHabscheid echr:hasGenderCueText Mr E. Habscheid , of the Dresden Bar, Adviser: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [hasGenderCueText_must_be_a_single_verbatim_string] remove doc:repWjHabscheid echr:hasGenderCueText for the applicants Mr W.J. Habscheid , of the Kempten Bar, Counsel: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [hasGenderCueText_must_be_a_single_verbatim_string] remove doc:partyPhilipRegan echr:hasGenderCueText Mr Philip Regan: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [hasGenderCueText_must_be_a_single_verbatim_string] remove doc:partyKarlheinzBeer echr:hasGenderCueText Mr Karlheinz Beer: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [hasGenderCueText_must_be_a_single_verbatim_string] remove doc:partyBeer echr:hasGenderCueText Mr Beer: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [hasGenderCueText_must_be_a_single_verbatim_string] remove doc:partyRegan echr:hasGenderCueText Mr Regan: applied (matched 1 literal(s) by lexical form)
+    [persons and participation] pass 2: 1 finding(s) in; model proposed 2 group(s), 0 op(s), 0 merge(s)
+    [persons and participation] pass 2: applied 0 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [51.5s, 51.5s in the model]
+    [persons and participation] pass 2: no operations applied - stopping
+  [source quote fidelity] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L2.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 1 (of which 0 merge(s)), skipped 2, stub orphans swept 0 [14.8s, 14.8s in the model]
+    SKIPPED [supporting quote fidelity] remove doc:case_28934_95 echr:hasSupportingQuote On 24 February 1997 the Commission declared the application (no. 28934/95) admissible.: applied (removed 1 quote(s) by index)
+    SKIPPED [supporting quote fidelity] add doc:case_28934_95 echr:hasSupportingQuote On 24 February 1997 the Commission declared the application (no. 28934/95) admissible.: skipped: quote does not appear verbatim in the source document
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 199.7s across 5 model call(s) (199.4s in the model)
+    wrote results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L2.facts.ttl (backup at results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/backup/input.L2.facts.ttl)
+  [domestic authorities] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L3.facts.ttl: 8 finding(s) in; model proposed 3 group(s), 22 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 22 (of which 0 merge(s)), skipped 19, stub orphans swept 0 [153.0s, 153.0s in the model]
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund rdfs:label 13th Chamber of the Supreme Administrative Court: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund rdfs:label 6th Chamber of the İstanbul Administrative Court: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund rdfs:label Avrupa ve Amerika Holding A.Ş.: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund rdfs:label Banking Regulation and Supervision Board: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund rdfs:label Supreme Administrative Court: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund rdfs:label administrative court: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund rdfs:label the Erol Aksoy Group: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund rdfs:label the Fund: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund rdfs:label the applicant: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund rdfs:label İktisat Bankası T.A.Ş.: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund echr:hasAuthorityName 13th Chamber of the Supreme Administrative Court: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund echr:hasAuthorityName 6th Chamber of the İstanbul Administrative Court: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund echr:hasAuthorityName Banking Regulation and Supervision Board ( Bankalar Düzenleme ve Denetleme Kurulu , hereinafter “the Board”): applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund echr:hasAuthorityName the Fund: applied (matched 1 literal(s) by lexical form)
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund echr:hasGender : applied (1 value(s))
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund echr:hasGenderCue : applied (1 value(s))
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund echr:hasGenderCueText : applied (2 value(s))
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund echr:hasPartyName : applied (3 value(s))
+    SKIPPED [multiple rdfs:label / multiple hasAuthorityName; multiple hasAuthorityKind; invented predicates present] remove doc:fund echr:hasPersonName : applied (1 value(s))
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L3.facts.ttl: 0 finding(s) in; model proposed 7 group(s), 9 op(s), 2 merge(s)
+    [domestic proceedings] pass 1: applied 11 (of which 2 merge(s)), skipped 1, stub orphans swept 0 [78.1s, 78.1s in the model]
+    SKIPPED [conflicting final domestic decision flags] remove doc:proceeding_rectification_2016_01_25 echr:isFinalDomesticDecision "true": applied (matched 1 literal(s) by lexical form)
+    [domestic proceedings] pass 1: 11 op(s) applied but findings did not fall (0 -> 0) - stopping
+    [persons and participation] FAILED: RepairTruncated: generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document
+    continuing to the next stage; earlier stages' work is kept
+  [source quote fidelity] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L3.facts.ttl: nothing flagged
+    document total: 416.4s across 3 model call(s) (416.3s in the model)
+    wrote results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L3.facts.ttl (backup at results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/backup/input.L3.facts.ttl)
+  [domestic authorities] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L4.facts.ttl: 4 finding(s) in; model proposed 4 group(s), 4 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 4 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [15.4s, 15.3s in the model]
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L4.facts.ttl: nothing flagged
+    [persons and participation] FAILED: RepairTruncated: generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document
+    continuing to the next stage; earlier stages' work is kept
+  [source quote fidelity] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L4.facts.ttl: nothing flagged
+    document total: 191.0s across 2 model call(s) (190.9s in the model)
+    wrote results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L4.facts.ttl (backup at results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/backup/input.L4.facts.ttl)
+  [domestic authorities] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L5.facts.ttl: nothing flagged
+  [domestic proceedings] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L5.facts.ttl: 0 finding(s) in; model proposed 1 group(s), 2 op(s), 0 merge(s)
+    [domestic proceedings] pass 1: applied 2 (of which 0 merge(s)), skipped 0, stub orphans swept 0 [12.0s, 12.0s in the model]
+    [domestic proceedings] pass 1: 2 op(s) applied but findings did not fall (0 -> 0) - stopping
+    [persons and participation] FAILED: RepairTruncated: generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document
+    continuing to the next stage; earlier stages' work is kept
+  [source quote fidelity] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L5.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 1 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [9.5s, 9.4s in the model]
+    SKIPPED [unverified supporting quote] remove doc:kyiv_proceeding_2016_10_05 echr:hasSupportingQuote the courts examined them using the proper procedure and established that the procedure before the bodies of the Bar had been lawful: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 173.7s across 3 model call(s) (173.5s in the model)
+    wrote results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L5.facts.ttl (backup at results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/backup/input.L5.facts.ttl)
+  [domestic authorities] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L6.facts.ttl: 2 finding(s) in; model proposed 1 group(s), 8 op(s), 0 merge(s)
+    [domestic authorities] pass 1: applied 7 (of which 0 merge(s)), skipped 4, stub orphans swept 0 [28.5s, 28.5s in the model]
+    SKIPPED [shacl_violation: node has multiple rdfs:label and multiple echr:hasAuthorityName values] remove doc:commercialCourt rdfs:label "three-judge bench of the Commercial Court": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [shacl_violation: node has multiple rdfs:label and multiple echr:hasAuthorityName values] remove doc:commercialCourt echr:hasAuthorityName "three-judge bench of the Commercial Court": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [shacl_violation: node has multiple rdfs:label and multiple echr:hasAuthorityName values] remove doc:commercialCourt echr:hasAuthorityName "the Commercial Court": applied (matched 1 literal(s) by lexical form)
+    SKIPPED [shacl_violation: node has multiple rdfs:label and multiple echr:hasAuthorityName values] remove doc:commercialCourt echr:hasSupportingQuote : skipped: quote_index 1 does not name a listed unverified quote
+    [domestic authorities] pass 2: nothing left to flag - stopping
+  [domestic proceedings] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L6.facts.ttl: nothing flagged
+    [persons and participation] FAILED: RepairTruncated: generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document
+    continuing to the next stage; earlier stages' work is kept
+  [source quote fidelity] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L6.facts.ttl: 10 finding(s) in; model proposed 8 group(s), 10 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 10 (of which 0 merge(s)), skipped 10, stub orphans swept 0 [48.2s, 48.2s in the model]
+    SKIPPED [unverified_quote] remove doc:dp_commercial_first_instance_20070115 echr:hasSupportingQuote **18.** On 7 November 2007 the LLC requested the Commercial Court to leave the applicant company’s claim unexamined on the grounds that the contracts ... be referred to the Arbitration Tribunal of the Chamber of Commerce and Industry of Armenia (“the Arbitration Tribunal”).: applied (removed 1 quote(s) by index)
+    SKIPPED [unverified_quote] remove doc:dp_commercial_first_instance_20070115 echr:hasSupportingQuote **16.** On 16 November 2007 the Commercial Court granted the request and decided to leave the applicant company’s claim and the counterclaim lodged by the LLC unexamined.: applied (removed 1 quote(s) by index)
+    SKIPPED [unverified_quote] remove doc:dp_commercial_first_instance_20070115 echr:hasSupportingQuote **4.** On 4 October 2007 the LLC filed a counterclaim, contesting the applicant company’s claims.: applied (removed 1 quote(s) by index)
+    SKIPPED [unverified_quote] remove doc:arbitrationTribunalChamberOfCommerce echr:hasSupportingQuote **18.** On 7 November 2007 the LLC requested the Commercial Court to leave the applicant company’s claim unexamined on the grounds that the contracts ... be referred to the Arbitration Tribunal of the Chamber of Commerce and Industry of Armenia (“the Arbitration Tribunal”).: applied (removed 1 quote(s) by index)
+    SKIPPED [unverified_quote] remove doc:dp_commercial_appeal_20071123 echr:hasSupportingQuote **19.** The decision was amenable to appeal before a three-judge bench of the Commercial Court within three days of receipt by the party.: applied (removed 1 quote(s) by index)
+    SKIPPED [unverified_quote] remove doc:commercialCourt echr:hasSupportingQuote **19.** The decision was amenable to appeal before a three-judge bench of the Commercial Court within three days of receipt by the party.: applied (removed 1 quote(s) by index)
+    SKIPPED [unverified_quote] remove doc:participation_llc_firstinstance_20070115 echr:hasSupportingQuote **16.** On 16 November 2007 the Commercial Court granted the request and decided to leave the applicant company’s claim and the counterclaim lodged by the LLC unexamined.: applied (removed 1 quote(s) by index)
+    SKIPPED [unverified_quote] remove doc:domestic_proceeding_yerevan_civil_20081017_20081112 echr:hasSupportingQuote On 17 October 2008 the applicant company lodged a claim with the Yerevan Civil Court, seeking to recover EUR 116,600 from the LLC, representing the amount of the loan and interest.: applied (removed 1 quote(s) by index)
+    SKIPPED [unverified_quote] remove doc:domestic_proceeding_cassation_20090804_20090923 echr:hasSupportingQuote "... As for the letter of the President of the Arbitration Tribunal of the Chamber of Commerce of 7 October 2008 concerning non-acceptance of the claim lodged by [the applicant company], it was based on the grounds that [the applicant company] had not submitted the original arbitration agreement or a certified copy, as required by the Commercial Arbitration Act and [the provisions contained therein], in the absence of which arbitration proceedings could not be started.": applied (removed 1 quote(s) by index)
+    SKIPPED [unverified_quote] remove doc:commercialCourt_three_judge_bench echr:hasSupportingQuote **19.** The decision was amenable to appeal before a three-judge bench of the Commercial Court within three days of receipt by the party.: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 231.9s across 3 model call(s) (231.7s in the model)
+    wrote results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L6.facts.ttl (backup at results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/backup/input.L6.facts.ttl)
+  [domestic authorities] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L7.facts.ttl: nothing flagged
+  [domestic proceedings] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L7.facts.ttl: nothing flagged
+    [persons and participation] FAILED: RepairTruncated: generation hit the 8000-token output cap without closing the patch -- raise --max-tokens for this document
+    continuing to the next stage; earlier stages' work is kept
+  [source quote fidelity] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L7.facts.ttl: 1 finding(s) in; model proposed 1 group(s), 1 op(s), 0 merge(s)
+    [source quote fidelity] pass 1: applied 1 (of which 0 merge(s)), skipped 1, stub orphans swept 0 [8.2s, 8.2s in the model]
+    SKIPPED [echr:hasSupportingQuote not found in source] remove doc:partic_applicant_house_of_lords_15jun2000 echr:hasSupportingQuote The Court of Appeal refused leave of appeal to the House of Lords but certified two points of law of general importance.: applied (removed 1 quote(s) by index)
+    [source quote fidelity] pass 2: nothing left to flag - stopping
+    document total: 160.9s across 2 model call(s) (160.8s in the model)
+    wrote results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L7.facts.ttl (backup at results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/backup/input.L7.facts.ttl)
+  [domestic authorities] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L8.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 1 merge(s)
+    [domestic authorities] pass 1: applied 1 (of which 1 merge(s)), skipped 0, stub orphans swept 0 [4.8s, 4.8s in the model]
+    [domestic authorities] pass 1: 1 op(s) applied but findings did not fall (0 -> 0) - stopping
+  [domestic proceedings] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L8.facts.ttl: 0 finding(s) in; model proposed 0 group(s), 0 op(s), 2 merge(s)
+    [domestic proceedings] pass 1: applied 2 (of which 2 merge(s)), skipped 0, stub orphans swept 0 [10.1s, 10.1s in the model]
+    [domestic proceedings] pass 1: 2 op(s) applied but findings did not fall (0 -> 0) - stopping
+  [persons and participation] results/jurix_phase1_gpt5mini/o2_med_jsonld/repaired/input.L8.facts.ttl: 12 finding(s) in; model proposed 12 group(s), 20 op(s), 1 merge(s)
+    [persons and participation] pass 1: applied 20 (of which 1 merge(s)), skipped 9, stub orphans swept 0 [155.0s, 155.0s in the model]
+    SKIPPED [participation referenced from multiple events] remove doc:port_transfer_1996_01_19_unfreeze_stavanger echr:hasParticipation doc:part_freeze_applicant_1995: skipped: would leave the event with no participation and the patch adds no replacement
+    SKIPPED [participation must record exactly one party (functional)] remove doc:part_rejectreq_1998_05_19_court echr:participatingParty : applied (1 value(s))
+    SKIPPED [hasGenderCueText must be a single verbatim string] remove doc:lawyerMrO echr:hasGenderCueText : applied (1 value(s))
+    SKIPPED [hasGenderCueText must be a single verbatim string] remove doc:mrGerhartRBaum echr:hasGenderCueText : applied (1 value(s))
+    SKIPPED [hasGenderCueText must be a single verbatim string] remove doc:lawyerMrsMoskalenko echr:hasGenderCueText : applied (1 value(s))
+    SKIPPED [hasGenderCueText must be a single verbatim string] remove doc:lawyerMrK echr:hasGenderCueText : applied (1 value(s))
+    SKIPPED [hasGenderCueText must be a single verbatim string] remove doc:mrsMoskalenko echr:hasGenderCueText : applied (1 value(s))
+    SKIPPED [hasGenderCueText must be a single verbatim string] remove doc:applicant_1 echr:hasGenderCueText : applied (1 value(s))
+    SKIPPED [hasGenderCueText must be a single verbatim string] remove doc:andreyAnatolyevichKlimentyev echr:hasGenderCueText : applied (1 value(s))

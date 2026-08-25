@@ -1,0 +1,72 @@
+{
+  "source": "input.jsonl",
+  "conformance": {
+    "shacl_evaluated": null,
+    "conforms": null,
+    "findings": 4,
+    "errors": 4,
+    "warnings": 0,
+    "by_kind": {
+      "suspect_multi_value": 4
+    },
+    "shacl_violations": 0,
+    "shacl_by_constraint": {},
+    "shacl_by_shape": {},
+    "repairs_applied": {}
+  },
+  "gate_repairs": [],
+  "findings": [
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/4001ea14f09a/proceeding_1> points at 2 objects via <https://growgraph.dev/echr#hasCourt>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/4001ea14f09a/proceeding_1",
+      "predicate": "https://growgraph.dev/echr#hasCourt",
+      "values": [
+        "https://growgraph.dev/doc/4001ea14f09a/commercialCourt",
+        "https://growgraph.dev/doc/4001ea14f09a/yerevanCivilCourt"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/4001ea14f09a/proceeding_2> points at 2 objects via <https://growgraph.dev/echr#hasCourt>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/4001ea14f09a/proceeding_2",
+      "predicate": "https://growgraph.dev/echr#hasCourt",
+      "values": [
+        "https://growgraph.dev/doc/4001ea14f09a/commercialCourt",
+        "https://growgraph.dev/doc/4001ea14f09a/districtCourtYerevan"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/4001ea14f09a/proceeding_2> points at 2 objects via <https://growgraph.dev/echr#hasInstanceLevel>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/4001ea14f09a/proceeding_2",
+      "predicate": "https://growgraph.dev/echr#hasInstanceLevel",
+      "values": [
+        "https://growgraph.dev/echr#LevelAppeal",
+        "https://growgraph.dev/echr#LevelFirstInstance"
+      ],
+      "component": "",
+      "source_shape": ""
+    },
+    {
+      "kind": "suspect_multi_value",
+      "severity": "error",
+      "message": "<https://growgraph.dev/doc/4001ea14f09a/proceeding_2> points at 2 objects via <https://growgraph.dev/echr#hasOutcome>, which is single-valued for every other subject in this graph.",
+      "subject": "https://growgraph.dev/doc/4001ea14f09a/proceeding_2",
+      "predicate": "https://growgraph.dev/echr#hasOutcome",
+      "values": [
+        "https://growgraph.dev/echr#OutcomeInadmissible",
+        "https://growgraph.dev/echr#OutcomeMeritsDecided"
+      ],
+      "component": "",
+      "source_shape": ""
+    }
+  ]
+}

@@ -1,0 +1,205 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/87b4387b7f0a/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/87b4387b7f0a> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:9"^^xsd:string .
+
+doc:case_18720_08 a echr:CaseDocument ;
+    echr:hasApplicant doc:baduashvili ;
+    echr:hasApplicationNumber "18720/08"@en ;
+    echr:hasCaseName "Malkhaz BADUASHVILI against Georgia"@en ;
+    echr:hasDomesticProceeding doc:investigation_1,
+        doc:investigation_illtreatment_1,
+        doc:prosecutorial_review_1,
+        doc:trial_appeal_1,
+        doc:trial_first_instance_1,
+        doc:trial_mt_zt_1,
+        doc:trial_supreme_court_1 .
+
+doc:refusal_confrontation_1 a echr:AdministrativeAction ;
+    rdfs:label "Refusal of confrontation request"@en ;
+    echr:followsProceeding doc:investigation_1 ;
+    echr:hasCourt doc:investigating_authorities_1 ;
+    echr:hasDecisionDate "2005-11-16"^^xsd:date ;
+    echr:hasParticipation doc:participationRefusalConfrontationBaduashvili ;
+    echr:hasSupportingQuote "A second request by the applicant to have a confrontation with M.T., dated 15 November 2005, was rejected by the investigator on 16 November 2005"@en .
+
+doc:abuladze a echr:LegalRepresentative ;
+    rdfs:label "S. Abuladze"@en ;
+    echr:hasGender echr:GenderFemale ;
+    echr:hasPersonName "Ms S. Abuladze"@en ;
+    echr:hasSupportingQuote "He was represented before the Court by Ms S. Abuladze, a lawyer practising in Tbilisi"@en .
+
+doc:courtAppealTbilisi a echr:DomesticAuthority ;
+    rdfs:label "Tbilisi Court of Appeal"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Tbilisi Court of Appeal"@en .
+
+doc:detention_1 a echr:PreTrialDetention ;
+    rdfs:label "Pre-trial detention of Malkhaz Baduashvili"@en ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:baduashvili ;
+    echr:hasDetentionStartDate "2005-07-27"^^xsd:date ;
+    echr:hasSupportingQuote "He was arrested and remanded in custody on 27 July 2005"@en .
+
+doc:investigation_illtreatment_1 a echr:DomesticProceeding ;
+    rdfs:label "Investigation into allegations of ill-treatment of Malkhaz Baduashvili"@en ;
+    echr:hasCourt doc:investigating_authorities_1 ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participationIlltreatmentBaduashvili ;
+    echr:hasProceedingStartDate "2010-08-31"^^xsd:date ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 31 August 2010 an investigation was opened into the applicant’s allegations"@en .
+
+doc:participationAppealBaduashvili a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:baduashvili .
+
+doc:participationIlltreatmentBaduashvili a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:baduashvili .
+
+doc:participationInvestigationBaduashvili a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:baduashvili .
+
+doc:participationMtObstruction a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:mtParty .
+
+doc:participationRefusalConfrontationBaduashvili a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:baduashvili .
+
+doc:participationRefusalMt a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:mtParty .
+
+doc:participationReviewMt a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:mtParty .
+
+doc:participationSupremeBaduashvili a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:baduashvili .
+
+doc:participationTrialBaduashvili a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:baduashvili .
+
+doc:participationZtObstruction a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:ztParty .
+
+doc:prosecutorial_review_1 a echr:ProsecutorialReview ;
+    rdfs:label "Appeal against refusal to re-question M.T."@en ;
+    echr:followsProceeding doc:refusal_requestion_mt ;
+    echr:hasCourt doc:regional_prosecutor_1 ;
+    echr:hasParticipation doc:participationReviewMt ;
+    echr:hasProceedingStartDate "2005-11-03"^^xsd:date ;
+    echr:hasSupportingQuote "On 3 November 2005 M.T. appealed to the regional prosecutor’s office against the investigator’s refusal to question him again"@en .
+
+doc:refusal_requestion_mt a echr:AdministrativeAction ;
+    rdfs:label "Refusal to re-question M.T."@en ;
+    echr:hasCourt doc:investigating_authorities_1 ;
+    echr:hasDecisionDate "2005-10-29"^^xsd:date ;
+    echr:hasParticipation doc:participationRefusalMt ;
+    echr:hasSupportingQuote "On 29 October 2005 M.T.’s request was rejected by the investigator"@en .
+
+doc:regional_prosecutor_1 a echr:DomesticAuthority ;
+    rdfs:label "Regional Prosecutor's Office"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "regional prosecutor’s office"@en .
+
+doc:supremeCourtGeorgia a echr:DomesticAuthority ;
+    rdfs:label "Supreme Court of Georgia"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Supreme Court"@en .
+
+doc:trial_mt_zt_1 a echr:DomesticProceeding ;
+    rdfs:label "First instance trial of M.T. and Z.T. for obstructing justice"@en ;
+    echr:hasCourt doc:court_first_instance_1 ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasParticipation doc:participationMtObstruction,
+        doc:participationZtObstruction ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 26 December 2006 and 23 January 2007 respectively they were convicted at first instance of obstructing justice by giving false testimony"@en .
+
+doc:trial_supreme_court_1 a echr:DomesticProceeding ;
+    rdfs:label "Appeal on points of law by Malkhaz Baduashvili"@en ;
+    echr:followsProceeding doc:trial_appeal_1 ;
+    echr:hasCourt doc:supremeCourtGeorgia ;
+    echr:hasDecisionDate "2008-02-20"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationSupremeBaduashvili ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant inadmissible"@en .
+
+doc:ztParty a echr:Party ;
+    rdfs:label "Z.T."@en ;
+    echr:hasPartyName "Z.T."@en .
+
+doc:court_first_instance_1 a echr:DomesticAuthority ;
+    rdfs:label "Court of First Instance"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "court of first instance"@en .
+
+doc:trial_appeal_1 a echr:DomesticProceeding ;
+    rdfs:label "Appeal of Malkhaz Baduashvili's conviction"@en ;
+    echr:followsProceeding doc:trial_first_instance_1 ;
+    echr:hasCourt doc:courtAppealTbilisi ;
+    echr:hasDecisionDate "2007-06-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationAppealBaduashvili ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction"@en .
+
+doc:trial_first_instance_1 a echr:DomesticProceeding ;
+    rdfs:label "First-instance trial of Malkhaz Baduashvili"@en ;
+    echr:followsProceeding doc:investigation_1 ;
+    echr:hasCourt doc:court_first_instance_1 ;
+    echr:hasDecisionDate "2006-12-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationTrialBaduashvili ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 8 December 2006 the court of first instance convicted the applicant of aggravated murder"@en .
+
+doc:investigation_1 a echr:DomesticProceeding ;
+    rdfs:label "Investigation into the murder of V.T."@en ;
+    echr:hasCourt doc:investigating_authorities_1 ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participationInvestigationBaduashvili ;
+    echr:hasPreTrialDetention doc:detention_1 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "Criminal proceedings against the applicant (a) Investigation"@en .
+
+doc:mtParty a echr:Party ;
+    rdfs:label "M.T."@en ;
+    echr:hasPartyName "M.T."@en .
+
+doc:investigating_authorities_1 a echr:DomesticAuthority ;
+    rdfs:label "Investigating Authorities"@en ;
+    echr:hasAuthorityKind echr:AuthorityProsecutorial ;
+    echr:hasAuthorityName "investigating authorities"@en .
+
+doc:baduashvili a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Malkhaz Baduashvili"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr Malkhaz Baduashvili"@en ;
+    echr:hasSupportingQuote "The applicant, Mr Malkhaz Baduashvili is a Georgian national"@en ;
+    echr:isRepresentedBy doc:abuladze .
+

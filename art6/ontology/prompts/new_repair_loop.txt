@@ -1,0 +1,40 @@
+Below are a graph in Turtle, and FINDINGS listing everything currently wrong with it. Fix as many findings as you can in one patch.
+
+The findings come from three places and you treat them identically:
+
+  shacl_violations                  a shape the graph breaks -- the message says which
+  events_missing_participation      a domestic event with no party recorded at all
+  proceedings_missing_court         a proceeding with no deciding authority
+  persons_not_linked_to_any_event   a person the graph never connects to anything
+  possible_duplicate_entities       nodes that may be one real-world thing described twice
+  quotes_not_found_in_source        an evidence anchor that is not in the source document
+
+HOW TO FIX THE COMMON ONES
+
+A node with several rdfs:label values is usually two real entities merged into one. Decide from the labels and the node's other properties whether it is one thing described twice or two things wrongly joined. If it is one thing, remove the labels that do not name it. If it is two, that is a false merge you cannot undo from here -- remove the surplus labels and say so in the rationale.
+
+A domestic event with more than one echr:hasCourt or more than one echr:hasDecisionDate is two proceedings collapsed into one node. Mint a NEW event for the second court or date, move that court/date onto it, and link it to the original with echr:followsProceeding. Never leave one node holding both.
+
+An event with no participation needs an echr:Participation node of its own -- never point two events at one participation node, because echr:hasPartySide is functional and a shared node forces one side onto every event that points at it. Each new participation needs exactly one echr:participatingParty and one echr:hasPartySide.
+
+A date value flagged for the wrong datatype (typed xsd:string, or anything other than xsd:date, xsd:gYearMonth or xsd:gYear) is retyped to match the precision already in the string: a full YYYY-MM-DD becomes xsd:date, a YYYY-MM becomes xsd:gYearMonth, and a bare YYYY becomes xsd:gYear. Change only the datatype tag -- never the digits, and never add a day or month the string does not already have.
+
+A link flagged for pointing at a node of the wrong type (echr:hasDomesticProceeding, echr:hasParticipation, echr:hasAdjournment, echr:hasInactivityPeriod, echr:hasPreTrialDetention, echr:followsProceeding, echr:isRepresentedBy, echr:participatingParty) usually means the target node is missing the rdf:type the property requires, not that the link itself is wrong. ADD the required type to the target node rather than deleting the link or minting a replacement node, unless the target is plainly the wrong entity altogether.
+
+A duplicate pair is merged with a `merge` operation naming which node to keep and which to drop, not by hand-editing triples. Check first: two people can share a name, and two courts of the same level are not the same court. Where the evidence points at two different entities, leave them alone.
+
+An unverified quote is REMOVED. You cannot add a replacement -- you are looking at the graph, not the document, so any span you supply would be one you chose for a fact you did not read. Remove it and let the node stand unanchored.
+
+WHAT YOU MAY NOT DO
+
+You may not WRITE a echr:hasSupportingQuote. You cannot see the document, so any passage you compose is one you chose for a fact you did not read.
+
+You MAY MOVE one. When you split a conflated event in two, copy the original node's echr:hasSupportingQuote onto the new event -- exactly as it stands in the graph above, or a contiguous span of it. That text was chosen by the extraction, which did read the document, so moving it anchors the new node without either of us inventing evidence. Do this every time you mint an event: an unanchored event is a SHACL violation, and you would be creating one while fixing another.
+
+Any quote text that is not already in the graph is refused.
+
+You may not remove an event's last participation unless the same patch gives it another. Stripping an event of its parties trades a defect that can be seen for one that cannot.
+
+You may not delete a domestic event to make a finding go away. If an event is wrong, correct it.
+
+You may not resolve a chronological-order violation (a decision date earlier than its own start date, a resumption date earlier than its adjournment, a detention end before its start, or a procedural chain running backwards) by swapping or altering either date. You cannot see the source document, so you do not know which of the two dates is actually wrong. Leave it for the document-reading review pass.

@@ -1,0 +1,535 @@
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# SHACL validation layer for echr.ttl (v3.5.0).
+#
+# Targets the hallucination classes named in extraction_quality_report.md /
+# extraction_fixes_evaluation.md:
+#   - property clobbering: a functional property (already declared
+#     owl:FunctionalProperty in the ontology, but OWL never *rejects* a
+#     second value -- it just breaks reasoning silently) asserted twice on
+#     one node, e.g. two courts or two decision dates on one proceeding.
+#   - invented vocabulary: a term outside the closed owl:oneOf enumeration
+#     for a controlled-vocabulary property (Qwen3 minting
+#     echr:OutcomeDismissed, echr:InstanceLevelSecondInstance, etc).
+#   - missing evidence anchors: a proceeding/inactivity period/adjournment
+#     asserted with no echr:hasSupportingQuote to check it against.
+#   - false merges: a node carrying more than one rdfs:label, or a
+#     DomesticAuthority with no (or more than one) hasAuthorityName --
+#     the multi-label defect neither the functional-property checks nor
+#     the vocabulary checks can see, because rdfs:label admits many values
+#     by design (see SingleLabelShape below).
+#
+# Evidence anchoring is reported at sh:Warning, not sh:Violation: on real
+# extractions ~97% of proceedings carry a quote and paragraph anchor, but a
+# few legitimately don't (e.g. a proceeding's outcome is stated only via a
+# cross-reference in a later paragraph). A validator that fails a build over
+# that is worse than one that flags it. See the sibling paragraph-anchor
+# validator's own note that "a validator that invents violations is worse
+# than none."
+#
+# Usage:
+#   uv run pyshacl -s ontology/echr-shapes.ttl -m -a -f human <facts.ttl>
+
+################################################################
+# 0. Shared value shapes
+################################################################
+
+# echr:PartialDate (echr.ttl) is owl:unionOf ( xsd:date xsd:gYearMonth xsd:gYear ) --
+# a date as precise as the source text allows. SHACL sh:datatype takes one IRI,
+# not a union, so the three options are spelled out with sh:or. Referenced via
+# sh:node from every *Date property below rather than repeated per property.
+# Catches malformed literals the extraction model occasionally produces, e.g.
+# "1993-10"^^xsd:string instead of "1993-10"^^xsd:gYearMonth -- syntactically a
+# date, typed as a plain string, so nothing else in this file sees it.
+echr:PartialDateShape a sh:NodeShape ;
+    sh:or ( [ sh:datatype xsd:date ] [ sh:datatype xsd:gYearMonth ] [ sh:datatype xsd:gYear ] ) ;
+    sh:message "date value must be typed xsd:date, xsd:gYearMonth or xsd:gYear (echr:PartialDate), not a plain string or other literal" .
+
+################################################################
+# 1. Atomic node shapes -- one value per functional property
+################################################################
+
+echr:DomesticEventAtomicShape a sh:NodeShape ;
+    # DomesticProceeding, AdministrativeAction, EnforcementAction and
+    # ProsecutorialReview all subclass echr:DomesticEvent and share its
+    # property vocabulary (2026-08-19 ontology extension), so one shape
+    # covers all four rather than four near-identical copies.
+    sh:targetClass echr:DomesticProceeding, echr:AdministrativeAction,
+        echr:EnforcementAction, echr:ProsecutorialReview ;
+    sh:property [
+        sh:path echr:hasCourt ;
+        sh:maxCount 1 ;
+        sh:class echr:DomesticAuthority ;
+        sh:message "a proceeding may have at most one deciding authority" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasInstanceLevel ;
+        sh:maxCount 1 ;
+        sh:in ( echr:LevelInvestigative echr:LevelAdministrativeReview echr:LevelFirstInstance
+                echr:LevelAppeal echr:LevelCassation
+                echr:LevelSupervisoryReview echr:LevelReopening
+                echr:LevelUnknown ) ;
+        sh:message "hasInstanceLevel must be a single value from the closed InstanceLevel vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasProceedingType ;
+        sh:maxCount 1 ;
+        sh:in ( echr:TypeCriminal echr:TypeCivil echr:TypeAdministrative echr:TypeConstitutional
+                echr:TypeDisciplinary echr:TypeOther echr:TypeUnknown ) ;
+        sh:message "hasProceedingType must be a single value from the closed ProceedingType vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasOutcome ;
+        sh:maxCount 1 ;
+        sh:in ( echr:OutcomeMeritsDecided echr:OutcomeInadmissible echr:OutcomeSettledOrWithdrawn
+                echr:OutcomeRemitted echr:OutcomeOther echr:OutcomeUnknown ) ;
+        sh:message "hasOutcome must be a single value from the closed ProceedingOutcome vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasOutcomeDirection ;
+        sh:maxCount 1 ;
+        sh:in ( echr:DirectionFavourableToApplicant echr:DirectionUnfavourableToApplicant
+                echr:DirectionMixed echr:DirectionUnknown ) ;
+        sh:message "hasOutcomeDirection must be a single value from the closed OutcomeDirection vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasStatusApplied ;
+        sh:maxCount 1 ;
+        sh:in ( echr:StatusPartialIncapacity echr:StatusFullIncapacity
+                echr:StatusCapacityRestored echr:StatusOther echr:StatusUnknown ) ;
+        sh:message "hasStatusApplied must be a single value from the closed StatusAlteration vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasProceedingStartDate ;
+        sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
+        sh:message "a domestic event may have at most one start date" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasDecisionDate ;
+        sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
+        sh:message "a domestic event may have at most one decision date" ;
+    ] ;
+    sh:property [
+        sh:path echr:isPending ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:boolean ;
+        sh:message "isPending must be a single boolean" ;
+    ] ;
+    sh:property [
+        sh:path echr:isFinalDomesticDecision ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:boolean ;
+        sh:message "isFinalDomesticDecision must be a single boolean" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasInactivityPeriod ;
+        sh:class echr:InactivityPeriod ;
+        sh:message "echr:hasInactivityPeriod must point at a node typed echr:InactivityPeriod" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasAdjournment ;
+        sh:class echr:Adjournment ;
+        sh:message "echr:hasAdjournment must point at a node typed echr:Adjournment" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasParticipation ;
+        sh:class echr:Participation ;
+        sh:message "echr:hasParticipation must point at a node typed echr:Participation" ;
+    ] ;
+    sh:property [
+        sh:path echr:followsProceeding ;
+        sh:or ( [ sh:class echr:DomesticProceeding ] [ sh:class echr:AdministrativeAction ]
+                [ sh:class echr:EnforcementAction ] [ sh:class echr:ProsecutorialReview ] ) ;
+        sh:message "echr:followsProceeding must point at a node typed as one of the four DomesticEvent subclasses" ;
+    ] .
+
+echr:AuthorityAtomicShape a sh:NodeShape ;
+    sh:targetClass echr:DomesticAuthority ;
+    sh:property [
+        sh:path echr:hasAuthorityKind ;
+        sh:maxCount 1 ;
+        sh:in ( echr:AuthorityJudicial echr:AuthorityProsecutorial echr:AuthorityAdministrative
+                echr:AuthorityDisciplinary echr:AuthorityUnknown ) ;
+        sh:message "hasAuthorityKind must be a single value from the closed AuthorityKind vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasAuthorityName ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "an authority must have exactly one name -- zero means the extraction fell back to rdfs:label only, which the false-merge check below does not police as tightly" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasJurisdictionState ;
+        sh:maxCount 1 ;
+        sh:message "an authority may have at most one jurisdiction state" ;
+    ] .
+
+echr:ParticipationAtomicShape a sh:NodeShape ;
+    sh:targetClass echr:Participation ;
+    sh:property [
+        sh:path echr:participatingParty ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "a participation must record exactly one party" ;
+    ] ;
+    # SPLIT FROM THE CARDINALITY CONSTRAINT ABOVE, for the message alone.
+    # Combined, an untyped target reported as "must record exactly one party"
+    # on a node that plainly had exactly one, and the repair model read that as
+    # a cardinality problem and re-added the link it already had. Measured
+    # 2026-08-25 on o2_low_jsonld L1: four participations pointed at
+    # authorities that were never also typed echr:Party, and three consecutive
+    # repair rounds tried and failed to fix them because the finding never said
+    # what was actually wrong. The fix is a one-triple retype, which the model
+    # performs correctly as soon as it is told that is the fix.
+    sh:property [
+        sh:path echr:participatingParty ;
+        sh:class echr:Party ;
+        sh:message "echr:participatingParty must point at a node typed echr:Party -- if it is an authority acting as a party here, ADD echr:Party as a second rdf:type on that same node rather than creating a duplicate" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasPartySide ;
+        sh:maxCount 1 ;
+        sh:in ( echr:SideInitiating echr:SideResponding echr:SideThirdParty echr:SideUnknown ) ;
+        sh:message "hasPartySide must be a single value from the closed PartySide vocabulary" ;
+    ] .
+
+# One participation node, one event. echr:Participation exists to isolate a
+# party's role AT ONE INSTANCE (echr.ttl: "Create exactly one instance per
+# party, per echr:DomesticEvent"), and echr:hasPartySide is functional -- so a
+# node shared by several events can hold only one side value and silently
+# forces it onto all of them. Observed 2026-08-24: doc:part_stanev_2 was the
+# target of four echr:hasParticipation links spanning a judicial review, an
+# administrative action, an incapacity appeal and a prosecutorial review, all
+# necessarily recorded as echr:SideInitiating.
+#
+# Watched on the INVERSE path deliberately. The atomic shape below already caps
+# echr:participatingParty at one, which caught the older form of this defect
+# (several parties on one node); extraction then stopped using
+# echr:participatesIn entirely and expressed the same error through inbound
+# echr:hasParticipation, where nothing was looking. The defect did not get
+# fixed, it moved -- so the guard belongs on the direction it moved to.
+echr:ParticipationSingleEventShape a sh:NodeShape ;
+    sh:targetClass echr:Participation ;
+    sh:property [
+        sh:path [ sh:inversePath echr:hasParticipation ] ;
+        sh:maxCount 1 ;
+        sh:message "a participation records one party at ONE event; several events pointing at one participation collapses the per-event side distinction the class exists to make" ;
+    ] .
+
+echr:NaturalPersonAtomicShape a sh:NodeShape ;
+    sh:targetClass echr:NaturalPerson ;
+    sh:property [
+        sh:path echr:hasGender ;
+        sh:maxCount 1 ;
+        sh:in ( echr:GenderMale echr:GenderFemale echr:GenderOther ) ;
+        sh:message "hasGender must be a single value from the closed Gender vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasGenderCue ;
+        sh:maxCount 1 ;
+        sh:in ( echr:GenderCueHonorific echr:GenderCuePronoun echr:GenderCueGenderedNoun ) ;
+        sh:message "hasGenderCue must be a single value from the closed GenderCue vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasGenderCueText ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "hasGenderCueText must be a single verbatim string" ;
+    ] .
+
+# Gender provenance travels as a set or not at all. A cue kind with no cue text
+# cannot be checked against the source, and cue text with no kind does not say
+# what was read from it -- either alone is provenance that cannot be audited,
+# which is the one thing these two properties exist to prevent. The converse
+# direction is deliberately NOT constrained: hasGender without a cue is caught
+# by the extraction prompt, not here, because a valid prior graph may predate
+# the cue properties entirely.
+echr:GenderCuePairShape a sh:NodeShape ;
+    sh:targetSubjectsOf echr:hasGenderCue ;
+    sh:property [
+        sh:path echr:hasGenderCueText ;
+        sh:minCount 1 ;
+        sh:message "hasGenderCue asserted without hasGenderCueText: the cue kind cannot be checked against the source without the span it was read from" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasGender ;
+        sh:minCount 1 ;
+        sh:message "hasGenderCue asserted without hasGender: a cue recorded for an assertion that was never made" ;
+    ] .
+
+echr:GenderCueTextShape a sh:NodeShape ;
+    sh:targetSubjectsOf echr:hasGenderCueText ;
+    sh:property [
+        sh:path echr:hasGenderCue ;
+        sh:minCount 1 ;
+        sh:message "hasGenderCueText asserted without hasGenderCue: the span is recorded but not what was read from it" ;
+    ] .
+
+# False-merge guard, not specific to DomesticAuthority: a node carrying more
+# than one rdfs:label is asserting that two distinct things it was told apart
+# in the source text (e.g. "Constitutional Court" and "İstanbul Administrative
+# Court") are one entity. rdfs:label is not owl:FunctionalProperty in RDFS
+# itself, so nothing in the ontology or in reasoning catches this -- it is a
+# SHACL-only check. Observed on echr_2/gemma4 2026-08-19: one DomesticAuthority
+# node held five labels spanning a Constitutional Court and three different
+# administrative-court chambers, with zero hasAuthorityName for the shape
+# above to catch either. Scoped to the entity classes this ontology defines
+# (not sh:targetSubjectsOf rdfs:label globally), so it never fires on the
+# CaseDocument or catalog-ontology nodes that legitimately carry one label.
+echr:SingleLabelShape a sh:NodeShape ;
+    sh:targetClass echr:DomesticAuthority, echr:DomesticProceeding, echr:AdministrativeAction,
+        echr:EnforcementAction, echr:ProsecutorialReview, echr:CaseDocument,
+        echr:InactivityPeriod, echr:Adjournment, echr:Party, echr:NaturalPerson,
+        echr:LegalRepresentative, echr:PreTrialDetention ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:maxCount 1 ;
+        sh:message "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice" ;
+    ] .
+
+echr:InactivityAtomicShape a sh:NodeShape ;
+    sh:targetClass echr:InactivityPeriod ;
+    sh:property [
+        sh:path echr:hasInactivityCause ;
+        sh:maxCount 1 ;
+        sh:in ( echr:DelayAttributedToAuthorities echr:DelayAttributedToApplicant echr:DelayUnattributed ) ;
+        sh:message "hasInactivityCause must be a single value from the closed DelayAttribution vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasInactivityStartDate ;
+        sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
+        sh:message "an inactivity period may have at most one start date" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasInactivityEndDate ;
+        sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
+        sh:message "an inactivity period may have at most one end date" ;
+    ] .
+
+echr:AdjournmentAtomicShape a sh:NodeShape ;
+    sh:targetClass echr:Adjournment ;
+    sh:property [
+        sh:path echr:hasAdjournmentCause ;
+        sh:maxCount 1 ;
+        sh:in ( echr:DelayAttributedToAuthorities echr:DelayAttributedToApplicant echr:DelayUnattributed ) ;
+        sh:message "hasAdjournmentCause must be a single value from the closed DelayAttribution vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasAdjournmentDate ;
+        sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
+        sh:message "an adjournment may have at most one adjournment date" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasResumptionDate ;
+        sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
+        sh:message "an adjournment may have at most one resumption date" ;
+    ] .
+
+echr:CaseDocumentAtomicShape a sh:NodeShape ;
+    sh:targetClass echr:CaseDocument ;
+    sh:property [ sh:path echr:hasHudocId ; sh:maxCount 1 ] ;
+    sh:property [ sh:path echr:hasCaseName ; sh:maxCount 1 ] ;
+    sh:property [ sh:path echr:hasRespondentState ; sh:maxCount 1 ] ;
+    sh:property [ sh:path echr:hasJudgmentDate ; sh:maxCount 1 ; sh:node echr:PartialDateShape ] ;
+    sh:property [
+        sh:path echr:hasDomesticProceeding ;
+        sh:class echr:DomesticProceeding ;
+        sh:message "echr:hasDomesticProceeding must point at a node typed echr:DomesticProceeding" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasApplicant ;
+        sh:class echr:Party ;
+        sh:message "echr:hasApplicant must point at a node typed echr:Party" ;
+    ] .
+
+echr:ProceedingLinkShape a sh:NodeShape ;
+    sh:targetClass echr:DomesticProceeding ;
+    sh:property [
+        sh:path echr:hasPreTrialDetention ;
+        sh:class echr:PreTrialDetention ;
+        sh:message "echr:hasPreTrialDetention must point at a node typed echr:PreTrialDetention" ;
+    ] .
+
+echr:PartyLinkShape a sh:NodeShape ;
+    sh:targetClass echr:Party ;
+    sh:property [
+        sh:path echr:isRepresentedBy ;
+        sh:class echr:LegalRepresentative ;
+        sh:message "echr:isRepresentedBy must point at a node typed echr:LegalRepresentative" ;
+    ] .
+
+# The pre-trial detention module (echr:PreTrialDetention, echr:CustodialMeasure)
+# has carried five owl:FunctionalProperty datatype/object properties since it
+# was added, with no shape ever enforcing the cardinality OWL itself does not
+# -- the same silent-clobbering gap this whole file exists to close for every
+# other class. Mirrors InactivityAtomicShape/AdjournmentAtomicShape.
+echr:PreTrialDetentionAtomicShape a sh:NodeShape ;
+    sh:targetClass echr:PreTrialDetention ;
+    sh:property [
+        sh:path echr:hasDetainee ;
+        sh:maxCount 1 ;
+        sh:class echr:NaturalPerson ;
+        sh:message "a pre-trial detention must record at most one detainee" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasCustodialMeasure ;
+        sh:maxCount 1 ;
+        sh:in ( echr:MeasurePoliceCustody echr:MeasureRemandInCustody echr:MeasureHouseArrest
+                echr:MeasurePsychiatricConfinement echr:MeasureOther echr:MeasureUnknown ) ;
+        sh:message "hasCustodialMeasure must be a single value from the closed CustodialMeasure vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasDetentionStartDate ;
+        sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
+        sh:message "a pre-trial detention may have at most one start date" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasDetentionEndDate ;
+        sh:maxCount 1 ;
+        sh:node echr:PartialDateShape ;
+        sh:message "a pre-trial detention may have at most one end date" ;
+    ] ;
+    sh:property [
+        sh:path echr:isStillDetained ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:boolean ;
+        sh:message "isStillDetained must be a single boolean" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasStatedDetentionDuration ;
+        sh:maxCount 1 ;
+        sh:message "a pre-trial detention may have at most one stated duration" ;
+    ] .
+
+################################################################
+# 2. Evidence anchoring -- flag proceedings/events with no anchor
+################################################################
+
+echr:EvidenceAnchoringShape a sh:NodeShape ;
+    sh:targetClass echr:DomesticProceeding, echr:AdministrativeAction, echr:EnforcementAction,
+        echr:ProsecutorialReview, echr:InactivityPeriod, echr:Adjournment, echr:PreTrialDetention ;
+    sh:property [
+        sh:path echr:hasSupportingQuote ;
+        sh:minCount 1 ;
+        sh:minLength 5 ;
+        sh:severity sh:Warning ;
+        sh:message "no supporting quote anchors this entity to the source text" ;
+    ] .
+
+################################################################
+# 3. Chronological consistency
+################################################################
+
+# Cross-type date comparison (xsd:date vs xsd:gYearMonth vs xsd:gYear) is not
+# defined by XPath F&O, so pyshacl/SPARQL either errors or silently drops the
+# FILTER on a mixed-precision pair -- neither is a violation we can trust. Each
+# check below fires only when BOTH endpoints are full xsd:date literals, which
+# is the common case in the corpus and the case worth being strict about; a
+# gYear/gYearMonth-precision pair is left unchecked rather than risk a false
+# positive from an undefined comparison.
+
+echr:DomesticEventDateOrderShape a sh:NodeShape ;
+    sh:targetClass echr:DomesticProceeding, echr:AdministrativeAction, echr:EnforcementAction,
+        echr:ProsecutorialReview ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "hasDecisionDate is earlier than hasProceedingStartDate on the same event" ;
+        sh:select """
+            PREFIX echr: <https://growgraph.dev/echr#>
+            PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+            SELECT $this
+            WHERE {
+                $this echr:hasProceedingStartDate ?start ;
+                      echr:hasDecisionDate ?end .
+                FILTER(datatype(?start) = xsd:date && datatype(?end) = xsd:date)
+                FILTER(?end < ?start)
+            }
+        """ ;
+    ] .
+
+echr:InactivityDateOrderShape a sh:NodeShape ;
+    sh:targetClass echr:InactivityPeriod ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "hasInactivityEndDate is earlier than hasInactivityStartDate on the same period" ;
+        sh:select """
+            PREFIX echr: <https://growgraph.dev/echr#>
+            PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+            SELECT $this
+            WHERE {
+                $this echr:hasInactivityStartDate ?start ;
+                      echr:hasInactivityEndDate ?end .
+                FILTER(datatype(?start) = xsd:date && datatype(?end) = xsd:date)
+                FILTER(?end < ?start)
+            }
+        """ ;
+    ] .
+
+echr:AdjournmentDateOrderShape a sh:NodeShape ;
+    sh:targetClass echr:Adjournment ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "hasResumptionDate is earlier than hasAdjournmentDate on the same adjournment" ;
+        sh:select """
+            PREFIX echr: <https://growgraph.dev/echr#>
+            PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+            SELECT $this
+            WHERE {
+                $this echr:hasAdjournmentDate ?adj ;
+                      echr:hasResumptionDate ?res .
+                FILTER(datatype(?adj) = xsd:date && datatype(?res) = xsd:date)
+                FILTER(?res < ?adj)
+            }
+        """ ;
+    ] .
+
+echr:DetentionDateOrderShape a sh:NodeShape ;
+    sh:targetClass echr:PreTrialDetention ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "hasDetentionEndDate is earlier than hasDetentionStartDate on the same detention" ;
+        sh:select """
+            PREFIX echr: <https://growgraph.dev/echr#>
+            PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+            SELECT $this
+            WHERE {
+                $this echr:hasDetentionStartDate ?start ;
+                      echr:hasDetentionEndDate ?end .
+                FILTER(datatype(?start) = xsd:date && datatype(?end) = xsd:date)
+                FILTER(?end < ?start)
+            }
+        """ ;
+    ] .
+
+# A procedural-chain check, not a same-node pair: an event's own start date
+# should not be earlier than the decision date of the event it
+# echr:followsProceeding (an appeal cannot have opened before the first
+# instance it is appealing decided).
+echr:ProceduralChainOrderShape a sh:NodeShape ;
+    sh:targetSubjectsOf echr:followsProceeding ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "this event's hasProceedingStartDate is earlier than the hasDecisionDate of the event it echr:followsProceeding" ;
+        sh:select """
+            PREFIX echr: <https://growgraph.dev/echr#>
+            PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+            SELECT $this
+            WHERE {
+                $this echr:followsProceeding ?prior ;
+                      echr:hasProceedingStartDate ?thisStart .
+                ?prior echr:hasDecisionDate ?priorDecision .
+                FILTER(datatype(?thisStart) = xsd:date && datatype(?priorDecision) = xsd:date)
+                FILTER(?thisStart < ?priorDecision)
+            }
+        """ ;
+    ] .

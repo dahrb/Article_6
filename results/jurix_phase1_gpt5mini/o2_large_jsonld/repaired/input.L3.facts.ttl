@@ -12,6 +12,7 @@
 
 doc:adminaction_fund_decision_2011_01_13 a echr:AdministrativeAction ;
     rdfs:label "Fund decision of 13 January 2011 approving the invitation to tender and terms of sale"@en ;
+    echr:hasCourt doc:authoritySavingsDepositInsuranceFund ;
     echr:hasDecisionDate "2011-01-13"^^xsd:date ;
     echr:hasParticipation doc:part_adminaction_fund_decision_2011_applicant,
         doc:part_adminaction_fund_decision_2011_fund ;
@@ -35,20 +36,27 @@ doc:case_erol_aksoy_58919_18 a echr:CaseDocument ;
         doc:proc_supadm_rect_reject_2016_01_25 ;
     echr:hasHudocId "58919/18"^^xsd:string .
 
+doc:part_adminaction_fund_enforcement_2017_applicant rdfs:label "Participation of Mr Erol Aksoy in response to the Fund's 11 August 2017 decision"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyErolAksoy .
+
+doc:part_proc_supadm_rect_grant_2017_applicant rdfs:label "Participation of Mr Erol Aksoy in the rectification grant (2017)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyErolAksoy .
+
 doc:adminaction_fund_enforcement_decision_2017_08_11 a echr:AdministrativeAction ;
     rdfs:label "Fund decision of 11 August 2017 regarding enforcement"@en ;
     echr:followsProceeding doc:adminaction_fund_impossibility_2015_10_27 ;
     echr:hasDecisionDate "2017-08-11"^^xsd:date ;
-    echr:hasParticipation doc:part_adminaction_fund_decision_2011_applicant,
-        doc:part_adminaction_fund_decision_2011_fund ;
+    echr:hasParticipation doc:part_adminaction_fund_enforcement_2017_fund ;
     echr:hasSupportingQuote "On 5 September 2017, the Fund responded, stating that a decision had already been made on 11 August 2017 regarding the enforcement of the relevant judgment."@en .
 
 doc:adminaction_fund_impossibility_2015_10_27 a echr:AdministrativeAction ;
     rdfs:label "Fund decision of 27 October 2015 regarding impossibility of enforcement"@en ;
     echr:followsProceeding doc:proc_supadm_general_2015_07_07 ;
     echr:hasDecisionDate "2015-10-27"^^xsd:date ;
-    echr:hasParticipation doc:part_adminaction_fund_decision_2011_applicant,
-        doc:part_adminaction_fund_decision_2011_fund ;
+    echr:hasParticipation doc:part_adminaction_fund_impossibility_2015_applicant,
+        doc:part_adminaction_fund_impossibility_2015_fund ;
     echr:hasSupportingQuote "the Fund notified the applicant of a decision taken on 27 October 2015 regarding the impossibility of enforcing the judgment"@en .
 
 doc:authorityConstitutionalCourt a echr:DomesticAuthority ;
@@ -68,6 +76,44 @@ doc:authority_istanbul_adm_court_6th_chamber a echr:DomesticAuthority ;
     echr:hasAuthorityKind echr:AuthorityJudicial ;
     echr:hasAuthorityName "6th Chamber of the İstanbul Administrative Court"@en ;
     echr:hasSupportingQuote "On 19 March 2014, the 6th Chamber of the İstanbul Administrative Court dismissed the applicant’s claim"@en .
+
+doc:part_adminaction_fund_decision_2011_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Erol Aksoy affected by the Fund's 13 January 2011 decision"@en,
+        "Participation of Mr Erol Aksoy in response to the Fund's 11 August 2017 decision"@en,
+        "Participation of Mr Erol Aksoy in response to the Fund's 27 October 2015 decision"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyErolAksoy .
+
+doc:part_adminaction_fund_decision_2011_fund a echr:Participation ;
+    rdfs:label "Participation of the Fund in its 11 August 2017 enforcement decision"@en,
+        "Participation of the Fund in its 13 January 2011 decision"@en,
+        "Participation of the Fund in its 27 October 2015 enforcement-impossibility decision"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:authoritySavingsDepositInsuranceFund .
+
+doc:part_adminaction_fund_enforcement_2017_fund a echr:Participation ;
+    rdfs:label "Participation of the Fund in its 11 August 2017 enforcement decision"@en,
+        "Participation of the Fund in the enforcement decision (11 August 2017)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:authoritySavingsDepositInsuranceFund .
+
+doc:part_adminaction_fund_impossibility_2015_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Erol Aksoy affected by the Fund's 27 October 2015 decision"@en,
+        "Participation of Mr Erol Aksoy in the 27 October 2015 decision regarding impossibility of enforcement"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyErolAksoy .
+
+doc:part_adminaction_fund_impossibility_2015_fund a echr:Participation ;
+    rdfs:label "Participation of the Fund in its 27 October 2015 decision regarding impossibility of enforcement"@en,
+        "Participation of the Fund in the 27 October 2015 decision regarding impossibility of enforcement"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:authoritySavingsDepositInsuranceFund .
+
+doc:part_proc_constitutional_2017_applicant a echr:Participation ;
+    rdfs:label "Participation of Mr Erol Aksoy in the Constitutional Court application (2017)"@en,
+        "Participation of Mr Erol Aksoy in the rectification grant (2017)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyErolAksoy .
 
 doc:part_proc_constitutional_2017_fund a echr:Participation ;
     rdfs:label "Participation of the Fund in the Constitutional Court application (2017)"@en ;
@@ -137,15 +183,8 @@ doc:proc_supadm_13th_rect_grant_2017_06_30 a echr:DomesticProceeding ;
     echr:hasCourt doc:authority_supreme_admin_13th_chamber ;
     echr:hasDecisionDate "2017-06-30"^^xsd:date ;
     echr:hasOutcome echr:OutcomeMeritsDecided ;
-    echr:hasParticipation doc:part_proc_constitutional_2017_applicant,
-        doc:part_proc_supadm_rect_grant_2017_fund ;
+    echr:hasParticipation doc:part_proc_supadm_rect_grant_2017_fund ;
     echr:hasSupportingQuote "On 30 June 2017, the 13 th Chamber of the Supreme Administrative Court granted the request, referring to the ruling of the General Assembly of 7 July 2015 ... The court ... overturned the judgment of the 6th Chamber of the Istanbul Administrative Court dated 19 March 2014 and annulled the sale in question."@en .
-
-doc:part_proc_constitutional_2017_applicant a echr:Participation ;
-    rdfs:label "Participation of Mr Erol Aksoy in the Constitutional Court application (2017)"@en,
-        "Participation of Mr Erol Aksoy in the rectification grant (2017)"@en ;
-    echr:hasPartySide echr:SideInitiating ;
-    echr:participatingParty doc:partyErolAksoy .
 
 doc:proc_istanbul_6th_2011_02_07_2014_03_19 a echr:DomesticProceeding ;
     rdfs:label "Proceeding before the 6th Chamber of the İstanbul Administrative Court (instituted 7 February 2011; decision 19 March 2014)"@en ;
@@ -181,20 +220,6 @@ doc:authority_supreme_admin_13th_chamber a echr:DomesticAuthority ;
     echr:hasAuthorityKind echr:AuthorityJudicial ;
     echr:hasAuthorityName "13th Chamber of the Supreme Administrative Court"@en ;
     echr:hasSupportingQuote "On 9 December 2014, the 13th Chamber of the Supreme Administrative Court dismissed the applicant’s case."@en .
-
-doc:part_adminaction_fund_decision_2011_applicant a echr:Participation ;
-    rdfs:label "Participation of Mr Erol Aksoy affected by the Fund's 13 January 2011 decision"@en,
-        "Participation of Mr Erol Aksoy in response to the Fund's 11 August 2017 decision"@en,
-        "Participation of Mr Erol Aksoy in response to the Fund's 27 October 2015 decision"@en ;
-    echr:hasPartySide echr:SideResponding ;
-    echr:participatingParty doc:partyErolAksoy .
-
-doc:part_adminaction_fund_decision_2011_fund a echr:Participation ;
-    rdfs:label "Participation of the Fund in its 11 August 2017 enforcement decision"@en,
-        "Participation of the Fund in its 13 January 2011 decision"@en,
-        "Participation of the Fund in its 27 October 2015 enforcement-impossibility decision"@en ;
-    echr:hasPartySide echr:SideInitiating ;
-    echr:participatingParty doc:authoritySavingsDepositInsuranceFund .
 
 doc:proc_supadm_general_2015_07_07 a echr:DomesticProceeding ;
     rdfs:label "General Assembly decision of the Supreme Administrative Court (7 July 2015) annulling the Fund's decision"@en ;

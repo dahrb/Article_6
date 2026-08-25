@@ -1,0 +1,402 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/a926cd889740/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/a926cd889740> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:9"^^xsd:string .
+
+doc:admin_applicant_partial_statement_2010_11_29 a echr:AdministrativeAction ;
+    rdfs:label "On 29 November 2010 the applicant gave a partial statement."@en ;
+    echr:hasCourt doc:authInvestigator ;
+    echr:hasDecisionDate "2010-11-29"^^xsd:date ;
+    echr:hasParticipation doc:participation_admin_partial_statement_applicant_2010_11_29 ;
+    echr:hasSupportingQuote "On 29 November 2010 the applicant gave a partial statement, alleging that on 12 August 2010 the governor of Rustavi Prison no. 6 had asked him to withdraw his application to the Court, in exchange for better conditions in prison."@en .
+
+doc:admin_forensic_concluded_2010_09_03 a echr:AdministrativeAction ;
+    rdfs:label "On 3 September 2010 the forensic medical examination was concluded."@en ;
+    echr:followsProceeding doc:admin_forensic_commission_2010_08_31 ;
+    echr:hasCourt doc:authNationalForensicBureau ;
+    echr:hasDecisionDate "2010-09-03"^^xsd:date ;
+    echr:hasParticipation doc:participation_admin_forensic_concluded_applicant_2010_09_03,
+        doc:participation_admin_forensic_concluded_nfb_2010_09_03 ;
+    echr:hasSupportingQuote "On 3 September 2010 the forensic medical examination was concluded. An expert from the National Forensic Bureau found that the applicant had a trace of a small abrasion in the area of his chin, approximately a month old, possibly caused by a hard object. A small wound, no more than three days old, was observed on the applicant’s shin. The report noted that both injuries were located \"within the applicant’s own reach\"."@en .
+
+doc:admin_investigator_approached_2010_08_31 a echr:AdministrativeAction ;
+    rdfs:label "On 31 August 2010 the applicant and his cellmate were approached by the investigator, but both refused to be questioned in the absence of their lawyers."@en ;
+    echr:hasCourt doc:authInvestigator ;
+    echr:hasDecisionDate "2010-08-31"^^xsd:date ;
+    echr:hasParticipation doc:participation_admin_investigator_approach_applicant_2010_08_31,
+        doc:participation_admin_investigator_approach_cellmate_2010_08_31,
+        doc:participation_admin_investigator_approach_investigator_2010_08_31 ;
+    echr:hasSupportingQuote "On 31 August 2010 the applicant and his cellmate were approached by the investigator, but both refused to be questioned in the absence of their lawyers."@en .
+
+doc:admin_question_doctor_2010_09_02 a echr:AdministrativeAction ;
+    rdfs:label "On 2 September 2010 the investigator questioned a doctor from the prison hospital."@en ;
+    echr:hasCourt doc:authInvestigator ;
+    echr:hasDecisionDate "2010-09-02"^^xsd:date ;
+    echr:hasParticipation doc:participation_admin_question_doctor_investigator_2010_09_02 ;
+    echr:hasSupportingQuote "On 2 September 2010 the investigator questioned a doctor from the prison hospital. The doctor stated that she had met the applicant on 30 August 2010. No visible signs of injuries had been observed, nor had the applicant complained in this regard."@en .
+
+doc:adminaction_reject_confrontation_applicant_20051103 a echr:AdministrativeAction ;
+    rdfs:label "investigator rejection of applicant's request to confront M.T. (3 Nov 2005)"@en ;
+    echr:hasCourt doc:investigator_1 ;
+    echr:hasDecisionDate "2005-11-03"^^xsd:date ;
+    echr:hasSupportingQuote "On 3 November 2005 the applicant asked to confront M.T. His request was rejected by the investigator on account of M.T.’s request of 3 September 2005 not to have a confrontation with the applicant owing to concerns for his safety."@en .
+
+doc:adminaction_reject_confrontation_applicant_20051116 a echr:AdministrativeAction ;
+    rdfs:label "investigator rejection of applicant's second request to confront M.T. (16 Nov 2005)"@en ;
+    echr:hasCourt doc:investigator_1 ;
+    echr:hasDecisionDate "2005-11-16"^^xsd:date ;
+    echr:hasSupportingQuote "A second request by the applicant to have a confrontation with M.T., dated 15 November 2005, was rejected by the investigator on 16 November 2005 on identical grounds."@en .
+
+doc:domestic_proceeding_appeal_after_2006 a echr:DomesticProceeding ;
+    rdfs:label "appeal against the first-instance conviction"@en ;
+    echr:followsProceeding doc:domestic_proceeding_first_instance_2006 ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasParticipation doc:participation_appeal_applicant_after2006,
+        doc:participation_appeal_prosecution_after2006 ;
+    echr:hasSupportingQuote "The applicant appealed, arguing that there was insufficient evidence to convict him."@en .
+
+doc:domestic_proceeding_investigation_2005 a echr:DomesticProceeding ;
+    rdfs:label "investigation (criminal)"@en ;
+    echr:hasCourt doc:investigator_1 ;
+    echr:hasInstanceLevel echr:LevelInvestigative ;
+    echr:hasParticipation doc:participation_investigation_applicant_2005,
+        doc:participation_investigation_prosecution_2005 ;
+    echr:hasPreTrialDetention doc:pretrial_detention_1 ;
+    echr:hasSupportingQuote "On 14 July 2005 a search warrant was issued in respect of the applicant. He was arrested and remanded in custody on 27 July 2005."@en .
+
+doc:enf_placed_prison_hospital_2010_08_27 a echr:EnforcementAction ;
+    rdfs:label "On 27 August 2010 the applicant was placed in the prison hospital, at his request."@en ;
+    echr:hasCourt doc:authPrisonHospital ;
+    echr:hasDecisionDate "2010-08-27"^^xsd:date ;
+    echr:hasParticipation doc:participation_enf_prison_hospital_applicant_2010_08_27 ;
+    echr:hasSupportingQuote "On 27 August 2010 the applicant was placed in the prison hospital, at his request."@en .
+
+doc:partyAT a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "A.T."@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue echr:GenderCuePronoun ;
+    echr:hasGenderCueText "He"@en ;
+    echr:hasPersonName "A.T."@en ;
+    echr:hasSupportingQuote "He confirmed his earlier statement that on that date he had witnessed M.T., whom he had known since childhood, confirming to the investigators his initial version of the events implicating the applicant and indicating particular details related to that account."@en .
+
+doc:proc_mt_first_instance_2006_12_26 a echr:DomesticProceeding ;
+    rdfs:label "On 26 December 2006 they were convicted at first instance of obstructing justice by giving false testimony."@en ;
+    echr:hasCourt doc:authFirstInstance ;
+    echr:hasDecisionDate "2006-12-26"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasParticipation doc:participation_proc_mt_2006_12_26 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On an unspecified date separate criminal proceedings were opened against M.T. and Z.T. On 26 December 2006 and 23 January 2007 respectively they were convicted at first instance of obstructing justice by giving false testimony."@en .
+
+doc:proc_supreme_court_2008_02_20 a echr:DomesticProceeding ;
+    rdfs:label "On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant inadmissible."@en ;
+    echr:followsProceeding doc:proc_tbilisi_court_appeal_2007_06_27 ;
+    echr:hasCourt doc:authSupremeCourt ;
+    echr:hasDecisionDate "2008-02-20"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelCassation ;
+    echr:hasParticipation doc:participation_proc_supreme_applicant_2008_02_20 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant inadmissible."@en ;
+    echr:isFinalDomesticDecision true .
+
+doc:proc_zt_first_instance_2007_01_23 a echr:DomesticProceeding ;
+    rdfs:label "On 23 January 2007 they were convicted at first instance of obstructing justice by giving false testimony."@en ;
+    echr:hasCourt doc:authFirstInstance ;
+    echr:hasDecisionDate "2007-01-23"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasParticipation doc:participation_proc_zt_2007_01_23 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On an unspecified date separate criminal proceedings were opened against M.T. and Z.T. On 26 December 2006 and 23 January 2007 respectively they were convicted at first instance of obstructing justice by giving false testimony."@en .
+
+doc:prosecutorial_review_mt_20051103 a echr:ProsecutorialReview ;
+    rdfs:label "M.T.'s appeal to the regional prosecutor's office (3 Nov 2005)"@en ;
+    echr:followsProceeding doc:adminaction_reject_mt_20051029 ;
+    echr:hasCourt doc:regional_prosecutor_office_2005 ;
+    echr:hasParticipation doc:participation_prosecutorialreview_mt_20051103 ;
+    echr:hasProceedingStartDate "2005-11-03"^^xsd:date ;
+    echr:hasSupportingQuote "On 3 November 2005 M.T. appealed to the regional prosecutor’s office against the investigator’s refusal to question him again."@en .
+
+doc:admin_forensic_commission_2010_08_31 a echr:AdministrativeAction ;
+    rdfs:label "On the same day the investigator commissioned a forensic medical examination to determine if there were any injuries on the applicant’s body and, if so, where they had come from."@en ;
+    echr:followsProceeding doc:admin_investigation_opened_2010_08_31 ;
+    echr:hasCourt doc:authInvestigator ;
+    echr:hasDecisionDate "2010-08-31"^^xsd:date ;
+    echr:hasParticipation doc:participation_admin_forensic_applicant_2010_08_31,
+        doc:participation_admin_forensic_investigator_2010_08_31 ;
+    echr:hasSupportingQuote "On the same day the investigator commissioned a forensic medical examination to determine if there were any injuries on the applicant’s body and, if so, where they had come from."@en .
+
+doc:admin_investigation_opened_2010_08_31 a echr:AdministrativeAction ;
+    rdfs:label "On 31 August 2010 an investigation was opened into the applicant’s allegations."@en ;
+    echr:hasCourt doc:authInvestigator ;
+    echr:hasDecisionDate "2010-08-31"^^xsd:date ;
+    echr:hasParticipation doc:participation_admin_investigation_applicant_2010_08_31,
+        doc:participation_admin_investigation_investigator_2010_08_31 ;
+    echr:hasSupportingQuote "On 31 August 2010 an investigation was opened into the applicant’s allegations."@en .
+
+doc:adminaction_reject_mt_20051029 a echr:AdministrativeAction ;
+    rdfs:label "investigator rejection of M.T.'s request to be questioned again (29 Oct 2005)"@en ;
+    echr:hasCourt doc:investigator_1 ;
+    echr:hasDecisionDate "2005-10-29"^^xsd:date ;
+    echr:hasSupportingQuote "On 29 October 2005 M.T.’s request was rejected by the investigator."@en .
+
+doc:authPrisonHospital a echr:DomesticAuthority ;
+    rdfs:label "prison hospital"@en ;
+    echr:hasSupportingQuote "On 27 August 2010 the applicant was placed in the prison hospital, at his request."@en .
+
+doc:authSupremeCourt a echr:DomesticAuthority ;
+    rdfs:label "Supreme Court"@en ;
+    echr:hasAuthorityName "Supreme Court"@en ;
+    echr:hasSupportingQuote "On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant inadmissible."@en .
+
+doc:authTbilisiCourtOfAppeal a echr:DomesticAuthority ;
+    rdfs:label "Tbilisi Court of Appeal"@en ;
+    echr:hasAuthorityName "Tbilisi Court of Appeal"@en ;
+    echr:hasSupportingQuote "On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction."@en .
+
+doc:domestic_proceeding_first_instance_2006 a echr:DomesticProceeding ;
+    rdfs:label "first-instance criminal trial (court of first instance)"@en ;
+    echr:hasCourt doc:first_instance_court_2006 ;
+    echr:hasDecisionDate "2006-12-08"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_firstinstance_applicant_2006,
+        doc:participation_firstinstance_prosecution_2006 ;
+    echr:hasPreTrialDetention doc:pretrial_detention_1 ;
+    echr:hasSupportingQuote "On 8 December 2006 the court of first instance convicted the applicant of aggravated murder and the illegal acquisition, possession and carrying of firearms, and sentenced him to 17 years’ imprisonment."@en .
+
+doc:first_instance_court_2006 a echr:DomesticAuthority ;
+    rdfs:label "the court of first instance"@en ;
+    echr:hasAuthorityName "the court of first instance"@en ;
+    echr:hasSupportingQuote "On 8 December 2006 the court of first instance convicted the applicant of aggravated murder and the illegal acquisition, possession and carrying of firearms, and sentenced him to 17 years’ imprisonment."@en .
+
+doc:participation_admin_forensic_applicant_2010_08_31 a echr:Participation ;
+    rdfs:label "participation of the applicant in commissioning of forensic exam 31 August 2010"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On the same day the investigator commissioned a forensic medical examination to determine if there were any injuries on the applicant’s body and, if so, where they had come from."@en ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_admin_forensic_concluded_applicant_2010_09_03 a echr:Participation ;
+    rdfs:label "participation of the applicant in forensic examination conclusion 3 September 2010"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On 3 September 2010 the forensic medical examination was concluded. An expert from the National Forensic Bureau found that the applicant had a trace of a small abrasion in the area of his chin, approximately a month old, possibly caused by a hard object."@en ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_admin_forensic_concluded_nfb_2010_09_03 a echr:Participation ;
+    rdfs:label "participation of the National Forensic Bureau in forensic examination conclusion 3 September 2010"@en ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "An expert from the National Forensic Bureau found that the applicant had a trace of a small abrasion in the area of his chin, approximately a month old, possibly caused by a hard object."@en ;
+    echr:participatingParty doc:authNationalForensicBureau .
+
+doc:participation_admin_forensic_investigator_2010_08_31 a echr:Participation ;
+    rdfs:label "participation of the investigator in commissioning forensic exam 31 August 2010"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On the same day the investigator commissioned a forensic medical examination to determine if there were any injuries on the applicant’s body and, if so, where they had come from."@en ;
+    echr:participatingParty doc:authInvestigator .
+
+doc:participation_admin_investigation_applicant_2010_08_31 a echr:Participation ;
+    rdfs:label "participation of the applicant in investigation opened 31 August 2010"@en ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "On 31 August 2010 an investigation was opened into the applicant’s allegations."@en ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_admin_investigation_investigator_2010_08_31 a echr:Participation ;
+    rdfs:label "participation of the investigator in opening investigation 31 August 2010"@en ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "On 31 August 2010 an investigation was opened into the applicant’s allegations."@en ;
+    echr:participatingParty doc:authInvestigator .
+
+doc:participation_admin_investigator_approach_applicant_2010_08_31 a echr:Participation ;
+    rdfs:label "participation of the applicant in being approached by investigator 31 August 2010"@en ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "On 31 August 2010 the applicant and his cellmate were approached by the investigator, but both refused to be questioned in the absence of their lawyers."@en ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_admin_investigator_approach_cellmate_2010_08_31 a echr:Participation ;
+    rdfs:label "participation of his cellmate in being approached by investigator 31 August 2010"@en ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "On 31 August 2010 the applicant and his cellmate were approached by the investigator, but both refused to be questioned in the absence of their lawyers."@en ;
+    echr:participatingParty doc:partyCellmate .
+
+doc:participation_admin_investigator_approach_investigator_2010_08_31 a echr:Participation ;
+    rdfs:label "participation of the investigator in approaching applicant and cellmate 31 August 2010"@en ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "On 31 August 2010 the applicant and his cellmate were approached by the investigator, but both refused to be questioned in the absence of their lawyers."@en ;
+    echr:participatingParty doc:authInvestigator .
+
+doc:participation_admin_partial_statement_applicant_2010_11_29 a echr:Participation ;
+    rdfs:label "participation of the applicant in giving partial statement 29 November 2010"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 29 November 2010 the applicant gave a partial statement, alleging that on 12 August 2010 the governor of Rustavi Prison no. 6 had asked him to withdraw his application to the Court, in exchange for better conditions in prison."@en ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_admin_question_doctor_investigator_2010_09_02 a echr:Participation ;
+    rdfs:label "participation of the investigator in questioning the doctor 2 September 2010"@en ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "On 2 September 2010 the investigator questioned a doctor from the prison hospital. The doctor stated that she had met the applicant on 30 August 2010."@en ;
+    echr:participatingParty doc:authInvestigator .
+
+doc:participation_appeal_applicant_after2006 a echr:Participation ;
+    rdfs:label "participation: applicant on appeal (post-2006)"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyMalkhazBaduashvili .
+
+doc:participation_appeal_prosecution_after2006 a echr:Participation ;
+    rdfs:label "participation: prosecution on appeal (post-2006)"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyProsecution .
+
+doc:participation_enf_prison_hospital_applicant_2010_08_27 a echr:Participation ;
+    rdfs:label "participation of the applicant in placement in prison hospital 27 August 2010"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 27 August 2010 the applicant was placed in the prison hospital, at his request."@en ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_firstinstance_applicant_2006 a echr:Participation ;
+    rdfs:label "participation: applicant in first-instance 2006"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyMalkhazBaduashvili .
+
+doc:participation_firstinstance_prosecution_2006 a echr:Participation ;
+    rdfs:label "participation: prosecution in first-instance 2006"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyProsecution .
+
+doc:participation_investigation_applicant_2005 a echr:Participation ;
+    rdfs:label "participation: applicant in investigation 2005"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:partyMalkhazBaduashvili .
+
+doc:participation_investigation_prosecution_2005 a echr:Participation ;
+    rdfs:label "participation: prosecution in investigation 2005"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyProsecution .
+
+doc:participation_proc_mt_2006_12_26 a echr:Participation ;
+    rdfs:label "participation of M.T. in first-instance conviction 26 December 2006"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On an unspecified date separate criminal proceedings were opened against M.T. and Z.T. On 26 December 2006 and 23 January 2007 respectively they were convicted at first instance of obstructing justice by giving false testimony."@en ;
+    echr:participatingParty doc:partyMT .
+
+doc:participation_proc_supreme_applicant_2008_02_20 a echr:Participation ;
+    rdfs:label "participation of the applicant in Supreme Court decision 20 February 2008"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant inadmissible."@en ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_proc_tbilisi_applicant_2007_06_27 a echr:Participation ;
+    rdfs:label "participation of the applicant in Tbilisi Court of Appeal decision 27 June 2007"@en ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction."@en ;
+    echr:participatingParty doc:partyApplicant .
+
+doc:participation_proc_zt_2007_01_23 a echr:Participation ;
+    rdfs:label "participation of Z.T. in first-instance conviction 23 January 2007"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "On an unspecified date separate criminal proceedings were opened against M.T. and Z.T. On 26 December 2006 and 23 January 2007 respectively they were convicted at first instance of obstructing justice by giving false testimony."@en ;
+    echr:participatingParty doc:partyZT .
+
+doc:participation_prosecutorialreview_mt_20051103 a echr:Participation ;
+    rdfs:label "participation: M.T. in prosecutorial review 3 Nov 2005"@en ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:partyMt .
+
+doc:partyCellmate a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "his cellmate"@en ;
+    echr:hasSupportingQuote "On 31 August 2010 the applicant and his cellmate were approached by the investigator, but both refused to be questioned in the absence of their lawyers."@en .
+
+doc:partyMT a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "M.T."@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue echr:GenderCuePronoun ;
+    echr:hasGenderCueText "him"@en ;
+    echr:hasPersonName "M.T."@en ;
+    echr:hasSupportingQuote "M.T.’s statement dated 3 September 2005 saying that the applicant had exerted pressure on him to alter his initial statements."@en .
+
+doc:partyMt a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "M.T."@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue echr:GenderCuePronoun ;
+    echr:hasGenderCueText "He noted that he had been overly nervous on the day of the victim’s murder and wanted to correct some of his earlier statements."@en ;
+    echr:hasPersonName "M.T."@en ;
+    echr:hasSupportingQuote "On 26 October 2005 M.T. asked to be questioned again. He noted that he had been overly nervous on the day of the victim’s murder and wanted to correct some of his earlier statements."@en .
+
+doc:partyZT a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Z.T."@en ;
+    echr:hasPersonName "Z.T."@en ;
+    echr:hasSupportingQuote "On an unspecified date separate criminal proceedings were opened against M.T. and Z.T."@en .
+
+doc:proc_tbilisi_court_appeal_2007_06_27 a echr:DomesticProceeding ;
+    rdfs:label "On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction."@en ;
+    echr:hasCourt doc:authTbilisiCourtOfAppeal ;
+    echr:hasDecisionDate "2007-06-27"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelAppeal ;
+    echr:hasParticipation doc:participation_proc_tbilisi_applicant_2007_06_27 ;
+    echr:hasProceedingType echr:TypeCriminal ;
+    echr:hasSupportingQuote "On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction."@en .
+
+doc:regional_prosecutor_office_2005 a echr:DomesticAuthority ;
+    rdfs:label "the regional prosecutor’s office"@en ;
+    echr:hasAuthorityName "the regional prosecutor’s office"@en ;
+    echr:hasSupportingQuote "On 3 November 2005 M.T. appealed to the regional prosecutor’s office against the investigator’s refusal to question him again."@en .
+
+doc:authFirstInstance a echr:DomesticAuthority ;
+    rdfs:label "first instance"@en ;
+    echr:hasSupportingQuote "On 26 December 2006 and 23 January 2007 respectively they were convicted at first instance of obstructing justice by giving false testimony."@en .
+
+doc:authNationalForensicBureau a echr:DomesticAuthority ;
+    rdfs:label "National Forensic Bureau"@en ;
+    echr:hasSupportingQuote "An expert from the National Forensic Bureau found that the applicant had a trace of a small abrasion in the area of his chin, approximately a month old, possibly caused by a hard object."@en .
+
+doc:pretrial_detention_1 a echr:PreTrialDetention ;
+    rdfs:label "remand in custody (pre-trial)"@en ;
+    echr:hasCustodialMeasure echr:MeasureRemandInCustody ;
+    echr:hasDetainee doc:partyMalkhazBaduashvili ;
+    echr:hasDetentionStartDate "2005-07-27"^^xsd:date ;
+    echr:hasSupportingQuote "He was arrested and remanded in custody on 27 July 2005."@en .
+
+doc:partyProsecution a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "the prosecutor"@en ;
+    echr:hasAuthorityName "the prosecutor"@en ;
+    echr:hasSupportingQuote "Both M.T. and Z.T. were questioned in court by the applicant’s representative and the prosecutor."@en .
+
+doc:investigator_1 a echr:DomesticAuthority ;
+    rdfs:label "the investigator"@en ;
+    echr:hasAuthorityName "the investigator"@en ;
+    echr:hasSupportingQuote "On 29 October 2005 M.T.’s request was rejected by the investigator."@en .
+
+doc:partyMalkhazBaduashvili a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Malkhaz Baduashvili"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue echr:GenderCueHonorific ;
+    echr:hasGenderCueText "Mr"@en ;
+    echr:hasPersonName "Mr Malkhaz Baduashvili"@en ;
+    echr:hasSupportingQuote "The applicant, Mr Malkhaz Baduashvili is a Georgian national who was born in 1979."@en .
+
+doc:partyApplicant a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicant"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasGenderCue echr:GenderCuePronoun ;
+    echr:hasGenderCueText "he"@en ;
+    echr:hasPersonName "the applicant"@en ;
+    echr:hasSupportingQuote "According to the applicant, there was severe overcrowding in the Tbilisi Prison no. 5, he had to take turns sleeping as the cell intended for 26 persons was accommodating approximately 70-80 inmates."@en .
+
+doc:authInvestigator a echr:DomesticAuthority ;
+    rdfs:label "the investigator"@en ;
+    echr:hasSupportingQuote "On 31 August 2010 an investigation was opened into the applicant’s allegations. On the same day the investigator commissioned a forensic medical examination to determine if there were any injuries on the applicant’s body and, if so, where they had come from."@en .
+

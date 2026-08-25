@@ -1,0 +1,238 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/aa2bb14a2d16/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/aa2bb14a2d16> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:2"^^xsd:string .
+
+doc:case_28934_95 a echr:CaseDocument ;
+    echr:hasApplicant doc:karlheinzBeer,
+        doc:philipRegan ;
+    echr:hasApplicationNumber "28934/95"@en ;
+    echr:hasCaseName "Beer and Regan v. Germany"@en ;
+    echr:hasJudgmentDate "1999-02-18"^^xsd:date ;
+    echr:hasRespondentState "Federal Republic of Germany"@en .
+
+doc:case_document_1 a echr:CaseDocument ;
+    rdfs:label "Beer and Regan v. Germany"@en ;
+    echr:hasApplicant doc:applicant_2,
+        doc:applicant_group_1,
+        doc:applicantsGroup,
+        doc:firstApplicant,
+        doc:karlheinzBeer,
+        doc:philipRegan ;
+    echr:hasDomesticProceeding doc:agreement_beer_1995,
+        doc:proceeding_esa_1,
+        doc:proceeding_ti_1 .
+
+doc:esaOrg a echr:Party ;
+    rdfs:label "ESA"@en ;
+    echr:hasPartyName "ESA"@en ;
+    echr:hasSupportingQuote "dispute with ESA"@en .
+
+doc:german_courts_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "German court proceedings against ESA"@en ;
+    echr:hasCourt doc:german_courts_1 ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_applicants_1,
+        doc:participation_esa_german_courts ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "the German courts did not exceed their margin of appreciation"@en,
+        "the rule of immunity from jurisdiction, which the German courts applied to ESA in the present case"@en .
+
+doc:labour_court_proceeding_1 a echr:DomesticProceeding ;
+    rdfs:label "labour court proceedings concerning dismissal of first applicant"@en ;
+    echr:hasCourt doc:labourCourtGermany ;
+    echr:hasParticipation doc:participation_first_app_1 ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "labour court proceedings concerning his dismissal"@en .
+
+doc:participationEsaEsa a echr:Participation ;
+    rdfs:label "ESA Participation in Labour Court"@en ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the reasons advanced by the German labour courts to give effect to the immunity from jurisdiction of ESA"@en ;
+    echr:participatingParty doc:esa .
+
+doc:agreement_beer_1995 a echr:DomesticProceeding ;
+    rdfs:label "Employment termination agreement Karlheinz Beer"@en ;
+    echr:hasDecisionDate "1995-06-20"^^xsd:date ;
+    echr:hasParticipation doc:participation_beer_agreement,
+        doc:participation_companyT_agreement ;
+    echr:hasSupportingQuote "Under the terms of an agreement concluded on 20 June 1995 with the first applicant, terminating his contract of employment on 30 June 1995, the company T. undertook to pay to the first applicant the sum of DEM 14,000 for lawyer’s fees incurred in labour court proceedings concerning his dismissal and DEM 305,000 for the loss of his job."@en .
+
+doc:applicant_group_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the applicants"@en ;
+    echr:hasSupportingQuote "the applicants"@en .
+
+doc:german_courts_1 a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "German courts"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "German courts"@en ;
+    echr:hasJurisdictionState "Germany"@en .
+
+doc:participationTiTi a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:companyT .
+
+doc:participation_applicants_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the applicants were able to argue the question of immunity"@en ;
+    echr:participatingParty doc:applicantsGroup .
+
+doc:participation_apps_darmstadt echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicantsGroup .
+
+doc:participation_apps_labour echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicantsGroup .
+
+doc:participation_beer_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:karlheinzBeer .
+
+doc:participation_beer_agreement a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:firstApplicant .
+
+doc:participation_companyT_agreement a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:companyT .
+
+doc:participation_esa_app1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:firstApplicant .
+
+doc:participation_esa_app2 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_2 .
+
+doc:participation_esa_darmstadt echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:esa .
+
+doc:participation_esa_esa_1 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:esa .
+
+doc:participation_esa_german_courts a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:esa .
+
+doc:participation_esa_labour echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:esa .
+
+doc:participation_first_app_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "labour court proceedings concerning his dismissal"@en ;
+    echr:participatingParty doc:firstApplicant .
+
+doc:participation_regan_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:philipRegan .
+
+doc:participation_ti_app2 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:applicant_2 .
+
+doc:proceeding_esa_1 a echr:DomesticProceeding ;
+    rdfs:label "Proceedings against ESA"@en ;
+    echr:hasCourt doc:labourCourtGermany ;
+    echr:hasDecisionDate "1995-03-21"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participation_apps_darmstadt,
+        doc:participation_apps_labour,
+        doc:participation_beer_1,
+        doc:participation_esa_app1,
+        doc:participation_esa_app2,
+        doc:participation_esa_darmstadt,
+        doc:participation_esa_esa_1,
+        doc:participation_esa_labour,
+        doc:participation_regan_1 ;
+    echr:hasProceedingStartDate "1993-10"^^xsd:string ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "On 21 March 1995 the Darmstadt Labour Court, following hearings, declared the applicants’ respective actions inadmissible."@en,
+        "The German labour court regarded the applicants’ action under the German Provision of Labour (Temporary Staff) Act inadmissible"@en,
+        "the labour court proceedings instituted by the applicants"@en,
+        "the reasons advanced by the German labour courts to give effect to the immunity from jurisdiction of ESA"@en .
+
+doc:proceeding_ti_1 a echr:DomesticProceeding ;
+    rdfs:label "Proceedings against T.I."@en ;
+    echr:hasCourt doc:labourCourtGermany ;
+    echr:hasDecisionDate "1994-09-06"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeSettledOrWithdrawn ;
+    echr:hasOutcomeDirection echr:DirectionMixed ;
+    echr:hasParticipation doc:participationTiTi,
+        doc:participation_ti_app2 ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "In the proceedings instituted by the second applicant against his dismissal by the company T.I. (see paragraph 13 above), a settlement had been reached in the Darmstadt Labour Court on 6 September 1994."@en .
+
+doc:companyT a echr:Party ;
+    rdfs:label "T.I."@en ;
+    echr:hasPartyName "T.I."@en,
+        "company T"@en,
+        "company T.I."@en ;
+    echr:hasSupportingQuote "the company T"@en,
+        "the company T.I."@en .
+
+doc:applicant_2 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "the second applicant"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "second applicant"@en,
+        "the second applicant"@en ;
+    echr:hasSupportingQuote "In his submissions, the second applicant indicated"@en,
+        "the second applicant’s employment"@en .
+
+doc:karlheinzBeer a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Karlheinz Beer"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr Beer"@en,
+        "Mr Karlheinz Beer"@en ;
+    echr:hasSupportingQuote "Mr Beer"@en,
+        "Mr Karlheinz Beer is a German national"@en,
+        "a German national, Mr Karlheinz Beer"@en .
+
+doc:labourCourtGermany a echr:DomesticAuthority ;
+    rdfs:label "Darmstadt Labour Court"@en ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Darmstadt Labour Court"@en ;
+    echr:hasJurisdictionState "Germany"@en ;
+    echr:hasSupportingQuote "the German labour courts"@en .
+
+doc:philipRegan a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Philip Regan"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr Philip Regan"@en,
+        "Mr Regan"@en ;
+    echr:hasSupportingQuote "Mr Regan"@en,
+        "a British national, Mr Philip Regan"@en .
+
+doc:applicantsGroup a echr:Party ;
+    rdfs:label "the applicants"@en ;
+    echr:hasPartyName "the applicants"@en .
+
+doc:firstApplicant a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "first applicant"@en ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "first applicant"@en,
+        "the first applicant"@en ;
+    echr:hasSupportingQuote "terminating his contract of employment"@en .
+
+doc:esa a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "European Space Agency"@en ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "European Space Agency"@en ;
+    echr:hasSupportingQuote "ESA was formed out of ESRO and ELDO as a new and single organisation"@en .
+

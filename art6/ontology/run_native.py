@@ -116,6 +116,50 @@ def units_lost_by_document(log_text: str) -> dict[str, dict[str, int]]:
     return per_doc
 
 
+def _live_facts_prompt() -> str | None:
+    """The current prompts/facts.txt, or None if it is not where we expect."""
+    path = pathlib.Path(__file__).resolve().parent / "prompts" / "facts.txt"
+    try:
+        return path.read_text(encoding="utf-8").strip()
+    except OSError:
+        return None
+
+
+def _stale_prompt_records(input_path: str) -> list[str]:
+    """Input records whose embedded facts prompt is not the live one.
+
+    This check exists because its absence cost a 13-minute extraction run on
+    2026-08-27 and, worse, produced a result that looked entirely valid. The
+    facts prompt is embedded per record as `facts_user_instruction` when the
+    JSONL is built; nothing reads prompts/facts.txt at extraction time. So a
+    prompt edit followed by a re-run over an existing JSONL silently runs the
+    OLD prompt. The measured symptom was a metric that stayed at exactly 0/47
+    rather than moving partially -- which reads as "the model ignored the
+    rule" and is in fact "the model was never shown the rule".
+
+    Returns the case_ids that differ. Never raises: a check that cannot run
+    must not be able to stop a run that would otherwise work.
+    """
+    live = _live_facts_prompt()
+    if live is None:
+        return []
+    path = pathlib.Path(input_path)
+    if not path.is_file() or path.suffix != ".jsonl":
+        return []
+    stale: list[str] = []
+    try:
+        for i, line in enumerate(path.read_text(encoding="utf-8").splitlines()):
+            if not line.strip():
+                continue
+            record = json.loads(line)
+            embedded = record.get("facts_user_instruction")
+            if embedded is not None and embedded.strip() != live:
+                stale.append(str(record.get("case_id", f"line {i + 1}")))
+    except (OSError, ValueError):
+        return []
+    return stale
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(
         description="Run `ontocast process` in-process with response_repair installed."
@@ -150,7 +194,33 @@ def main() -> int:
             "looks clean at every other checkpoint -- see units_lost_by_document."
         ),
     )
+    ap.add_argument(
+        "--allow-stale-prompt",
+        action="store_true",
+        help=(
+            "Run even when the input JSONL's embedded facts_user_instruction "
+            "differs from the live prompts/facts.txt. Needed only to replay an "
+            "old snapshot deliberately."
+        ),
+    )
     args, passthrough = ap.parse_known_args()
+
+    stale = _stale_prompt_records(args.input_path)
+    if stale and not args.allow_stale_prompt:
+        live = len(_live_facts_prompt() or "")
+        print(
+            f"ABORT: {len(stale)} input record(s) carry a facts_user_instruction "
+            f"that differs from the live art6/ontology/prompts/facts.txt "
+            f"({live:,} chars).\n"
+            "  The prompt is NOT read at extraction time -- it is baked into each\n"
+            "  JSONL record when the input is built, so editing facts.txt and\n"
+            "  reusing an existing JSONL runs the OLD prompt and produces a\n"
+            "  perfectly clean-looking result that ignores the edit entirely.\n"
+            "  Rebuild the input, or pass --allow-stale-prompt to replay the\n"
+            "  embedded one on purpose.",
+            file=sys.stderr,
+        )
+        return 2
 
     if not args.no_response_repair:
         from art6.ontology.response_repair import enable as enable_response_repair

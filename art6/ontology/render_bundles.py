@@ -1,0 +1,174 @@
+"""Stage 1 -> stage 2 handoff.
+
+Renders verified evidence bundles as a compact text document and writes a JSONL
+in the shape OntoCast already consumes, so stage 2 needs no pipeline changes.
+
+The rendered document REPLACES the judgment. That is the point of the design:
+stage 2 cannot introduce content that did not pass stage 1's verbatim check, so
+every span it can quote is one already proven to exist in the source. It also
+means the ontology prompt no longer competes with 24,000-38,000 characters of
+narrative for the model's attention.
+
+Offsets travel in the rendered text as [start:end] markers rather than being
+dropped. They are what makes a downstream triple traceable to a character range
+without re-running a string search, and they survive into the facts graph as the
+supporting quote's provenance.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+
+def _span(value) -> str | None:
+    if isinstance(value, dict) and "text" in value:
+        return f'"{value["text"]}" [{value["start"]}:{value["end"]}]'
+    return None
+
+
+def _line(label: str, value, indent: str = "  ") -> list[str]:
+    rendered = _span(value)
+    return [f"{indent}{label}: {rendered}"] if rendered else []
+
+
+def render(payload: dict) -> str:
+    out: list[str] = []
+    case = payload.get("case") or {}
+    if case:
+        out.append("CASE")
+        for key in (
+            "case_name_span",
+            "application_number_span",
+            "respondent_state_span",
+            "judgment_date_span",
+        ):
+            out += _line(key.removesuffix("_span"), case.get(key))
+        out.append("")
+
+    events = payload.get("events") or []
+    out.append(
+        f"DOMESTIC EVENTS ({len(events)}), in the order the judgment gives them."
+    )
+    out.append(
+        "Each block is ONE jurisdictional instance. Quoted text is verbatim from"
+    )
+    out.append(
+        "the judgment; the [start:end] pair is its character range in the source."
+    )
+    out.append("")
+    for event in events:
+        out.append(f"EVENT {event.get('id', '?')}")
+        for key in (
+            "what_happened_span",
+            "authority_span",
+            "authority_kind_span",
+            "start_date_span",
+            "decision_date_span",
+            "outcome_span",
+            "instance_span",
+            "proceeding_type_span",
+            "finality_span",
+            "pending_span",
+            "follows_span",
+        ):
+            out += _line(key.removesuffix("_span"), event.get(key))
+        if event.get("follows"):
+            out.append(f"  follows: {event['follows']}")
+        for party in event.get("parties") or []:
+            name, role = _span(party.get("name_span")), _span(party.get("role_span"))
+            if name:
+                out.append(f"  party: {name}" + (f" — did: {role}" if role else ""))
+        for item in event.get("interim_spans") or []:
+            rendered = _span(item)
+            if rendered:
+                out.append(f"  interim step (same body): {rendered}")
+        for detention in event.get("detention") or []:
+            out.append("  detention:")
+            for key in (
+                "detainee_span",
+                "start_span",
+                "end_span",
+                "measure_span",
+                "duration_span",
+                "still_detained_span",
+            ):
+                out += _line(key.removesuffix("_span"), detention.get(key), "    ")
+        for inactivity in event.get("inactivity") or []:
+            out.append("  inactivity:")
+            for key in ("start_span", "end_span", "cause_span"):
+                out += _line(key.removesuffix("_span"), inactivity.get(key), "    ")
+        for adjournment in event.get("adjournments") or []:
+            out.append("  adjournment:")
+            for key in ("date_span", "resumption_span", "cause_span"):
+                out += _line(key.removesuffix("_span"), adjournment.get(key), "    ")
+        out.append("")
+
+    persons = payload.get("persons") or []
+    if persons:
+        out.append(f"PERSONS ({len(persons)})")
+        for person in persons:
+            out.append("  person:")
+            for key in ("name_span", "role_span", "gender_cue_span", "represents_span"):
+                out += _line(key.removesuffix("_span"), person.get(key), "    ")
+        out.append("")
+
+    authorities = payload.get("authorities") or []
+    if authorities:
+        out.append(f"AUTHORITIES ({len(authorities)})")
+        for authority in authorities:
+            name, kind = (
+                _span(authority.get("name_span")),
+                _span(authority.get("kind_span")),
+            )
+            if name:
+                out.append(f"  {name}" + (f" — kind: {kind}" if kind else ""))
+    return "\n".join(out).strip() + "\n"
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--compress-dir", required=True, type=Path)
+    ap.add_argument(
+        "--source-jsonl",
+        required=True,
+        type=Path,
+        help="original input.jsonl, for the facts_user_instruction and ids",
+    )
+    ap.add_argument("--out-jsonl", required=True, type=Path)
+    ap.add_argument("--only", default="")
+    args = ap.parse_args()
+
+    wanted = {w.strip() for w in args.only.split(",") if w.strip()}
+    source_lines = [
+        l
+        for l in args.source_jsonl.read_text(encoding="utf-8").splitlines()
+        if l.strip()
+    ]
+    written = 0
+    with args.out_jsonl.open("w", encoding="utf-8") as handle:
+        for index, line in enumerate(source_lines, 1):
+            doc_id = f"input.L{index}"
+            if wanted and doc_id not in wanted:
+                continue
+            path = args.compress_dir / f"{doc_id}.compress.json"
+            if not path.exists():
+                print(f"  {doc_id}: no compression output, skipped")
+                continue
+            record = json.loads(line)
+            payload = json.loads(path.read_text(encoding="utf-8"))["payload"]
+            rendered = render(payload)
+            record["text"] = rendered
+            handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+            written += 1
+            print(
+                f"  {doc_id}: {len(rendered):6,} chars "
+                f"({len(payload.get('events', [])):3} events) "
+                f"<- was {len(json.loads(line).get('text', '')):6,}"
+            )
+    print(f"\nwrote {written} record(s) to {args.out_jsonl}")
+
+
+if __name__ == "__main__":
+    main()

@@ -161,6 +161,49 @@ def ontology_terms() -> frozenset[URIRef]:
     return frozenset(terms)
 
 
+@lru_cache(maxsize=1)
+def disjoint_class_sets() -> tuple[frozenset[URIRef], ...]:
+    """Every owl:AllDisjointClasses group declared in echr.ttl, as a tuple of
+    frozensets of member classes.
+
+    Nothing else in this pipeline reads these. SHACL does not evaluate
+    owl:AllDisjointClasses, so a patch could satisfy every shape by typing a
+    node into two classes the ontology declares mutually exclusive -- e.g.
+    adding echr:DomesticProceeding to a node already typed
+    echr:AdministrativeAction to satisfy CaseDocumentShape's range check on
+    echr:hasDomesticProceeding, producing a node that is logically
+    inconsistent even though pyshacl reports conforms. Read live so an edit to
+    echr.ttl's disjointness groups is picked up without a code change.
+    """
+    g = Graph()
+    g.parse(ONTOLOGY_TTL)
+    groups = []
+    for restriction in g.subjects(RDF.type, OWL.AllDisjointClasses):
+        members = set()
+        for lst in g.objects(restriction, OWL.members):
+            cur = lst
+            while cur and cur != RDF.nil:
+                for first in g.objects(cur, RDF.first):
+                    if isinstance(first, URIRef):
+                        members.add(first)
+                cur = next(g.objects(cur, RDF.rest), None)
+        if members:
+            groups.append(frozenset(members))
+    return tuple(groups)
+
+
+def disjoint_conflict(existing_types: set[URIRef], new_type: URIRef) -> URIRef | None:
+    """The member of `existing_types` that owl:AllDisjointClasses forbids
+    coexisting with `new_type`, or None if adding it is safe."""
+    for group in disjoint_class_sets():
+        if new_type not in group:
+            continue
+        for other in existing_types:
+            if other != new_type and other in group:
+                return other
+    return None
+
+
 def unknown_echr_terms(*candidates: str) -> list[str]:
     """Which of ``candidates`` (CURIEs) name an echr: term the ontology lacks."""
     known = ontology_terms()
@@ -662,6 +705,102 @@ def find_proceedings_missing_court(graph: Graph, doc_ns: str) -> list[str]:
     return sorted(set(out))
 
 
+def complete_entailed_types(graph: Graph, doc_ns: str) -> int:
+    """Assert the rdf:type that a property's rdfs:range already entails.
+
+    A node reached by echr:hasParticipation IS a echr:Participation -- the
+    ontology says so as the property's range -- but SHACL's sh:class checks the
+    asserted type, not the entailed one, so a participation added without an
+    explicit rdf:type is reported as "hasParticipation must point at a node
+    typed echr:Participation". Measured 2026-08-28 on the compressed L3: the
+    review stage added ten participations this way and the document went from
+    6 violations to 10. The post-review round then tried to fix them, created
+    six party-less participations in the attempt, and was reverted by the
+    improvement gate -- so all ten survived.
+
+    Asking a model to add a type the ontology already entails is asking it to
+    do arithmetic it will sometimes get wrong, in exchange for nothing. This
+    adds it directly. It invents no facts: the triple asserting the link is
+    the model's, and the type is what that link already means.
+
+    Deliberately narrow. Only ranges whose entailment is unambiguous and
+    carries no further claim are completed; echr:Party is NOT among them,
+    because typing a node echr:Party where it is also a echr:DomesticAuthority
+    is a real assertion about its role, not bookkeeping.
+
+    Returns the number of types added.
+    """
+    entailed = (
+        (ECHR.hasParticipation, ECHR.Participation),
+        (ECHR.hasInactivityPeriod, ECHR.InactivityPeriod),
+        (ECHR.hasAdjournment, ECHR.Adjournment),
+        (ECHR.hasPreTrialDetention, ECHR.PreTrialDetention),
+    )
+    added = 0
+    for prop, cls in entailed:
+        for obj in set(graph.objects(None, prop)):
+            if not isinstance(obj, URIRef) or not str(obj).startswith(doc_ns):
+                continue
+            if (obj, RDF.type, cls) in graph:
+                continue
+            graph.add((obj, RDF.type, cls))
+            added += 1
+    return added
+
+
+def find_unchained_events(graph: Graph, doc_ns: str) -> list[dict]:
+    """Domestic events that follow nothing and are followed by nothing.
+
+    THE CHAIN IS THE POINT OF THIS DATASET and until 2026-08-28 no stage of
+    repair could see it. No finder reported it; the loop prompt named
+    echr:followsProceeding only when splitting a conflated event, and the
+    review prompt only for events it newly added. An event extracted with no
+    chain link at all was invisible to every stage.
+
+    Reported with the event's date and the dates either side of it in document
+    order, because that is what a reader needs to judge the gap and it costs
+    nothing to supply. An ISOLATED event -- no inbound and no outbound link --
+    is the signal worth acting on: an event that is merely the head of a track
+    legitimately follows nothing, but one that nothing follows EITHER is
+    either the whole of a one-step track or a link that was missed.
+
+    Advisory, not a violation: parallel tracks are normal in these judgments,
+    and a document can genuinely contain an isolated administrative act. This
+    names candidates for a stage that can read the document, and says so.
+    """
+    events: list[tuple[str, str]] = []
+    for cls in domestic_event_classes():
+        for s in graph.subjects(RDF.type, cls):
+            if not str(s).startswith(doc_ns):
+                continue
+            date = ""
+            for pred in (ECHR.hasDecisionDate, ECHR.hasProceedingStartDate):
+                for o in graph.objects(s, pred):
+                    date = str(o)
+                    break
+                if date:
+                    break
+            events.append((str(s), date))
+    out: list[dict] = []
+    for iri, date in sorted(set(events), key=lambda e: (e[1] or "9999", e[0])):
+        node = URIRef(iri)
+        outbound = (node, ECHR.followsProceeding, None) in graph
+        inbound = (None, ECHR.followsProceeding, node) in graph
+        if outbound or inbound:
+            continue
+        out.append(
+            {
+                "event": _curie(graph, node),
+                "date": date,
+                "note": (
+                    "no echr:followsProceeding in either direction: this event "
+                    "continues nothing and nothing continues it"
+                ),
+            }
+        )
+    return out
+
+
 def find_unlinked_persons(graph: Graph, doc_ns: str) -> list[str]:
     """echr:NaturalPerson nodes never named as an echr:Participation's party.
 
@@ -902,6 +1041,50 @@ def find_shape_violations(graph: Graph) -> list[dict]:
             }
         )
     _SHAPE_VIOLATION_CACHE[fingerprint] = list(findings)
+    return findings
+
+
+def find_disjoint_type_conflicts(graph: Graph) -> list[dict]:
+    """Nodes carrying two rdf:type values the ontology declares mutually
+    exclusive via owl:AllDisjointClasses.
+
+    SHACL does not evaluate owl:AllDisjointClasses, so this is invisible to
+    find_shape_violations and to pyshacl's own conforms/violates report.
+    Without it, a patch can silently satisfy a range constraint (e.g.
+    CaseDocumentShape requiring echr:hasDomesticProceeding to point at an
+    echr:DomesticProceeding) by adding that type to a node already typed
+    echr:AdministrativeAction -- the SHACL violation disappears and the graph
+    becomes logically inconsistent, and nothing scores the difference. This
+    finder exists so the repair loop is told about that class of defect at
+    all, and the corresponding guard in apply_patch stops a patch from
+    introducing one in the first place.
+    """
+    findings: list[dict] = []
+    for subject in {s for s in graph.subjects(RDF.type, None) if isinstance(s, URIRef)}:
+        types = {t for t in graph.objects(subject, RDF.type) if isinstance(t, URIRef)}
+        seen: set[frozenset[URIRef]] = set()
+        for group in disjoint_class_sets():
+            hit = types & group
+            if len(hit) > 1 and frozenset(hit) not in seen:
+                seen.add(frozenset(hit))
+                findings.append(
+                    {
+                        "kind": "disjoint_type_conflict",
+                        "severity": "error",
+                        "message": (
+                            "this node is typed as "
+                            + " and ".join(sorted(_curie(graph, t) for t in hit))
+                            + ", but the ontology declares these classes mutually "
+                            "exclusive (owl:AllDisjointClasses) -- remove the "
+                            "wrong type, or better, remove or retarget the "
+                            "predicate that required it, rather than keeping "
+                            "both types"
+                        ),
+                        "subject": _curie(graph, subject),
+                        "predicate": "rdf:type",
+                        "values": sorted(_curie(graph, t) for t in hit),
+                    }
+                )
     return findings
 
 
@@ -1957,6 +2140,145 @@ def apply_patch(
 
     quotes_by_index = {q["index"]: q for q in (unverified_quotes or []) if "index" in q}
 
+    # THE DECIDING BODY IS NOT A PARTY TO THE EVENT IT DECIDED, enforced here
+    # rather than left to the SHACL message, for the reason every other
+    # structural ban in this function exists: the model read the finding and
+    # made it worse. Measured 2026-08-27 on the compressed L3, condition D:
+    # the graph arrived with ONE court-as-party instance and left with EIGHT,
+    # all of them doc:sdif, all minted in a single loop round as
+    # doc:part_e4_sdif, doc:part_e5_sdif, ... -- one template applied
+    # mechanically to every event that body decided.
+    #
+    # The mechanism is not hallucination. The loop is shown the graph and not
+    # the document, so when a finding says "this event has no participation"
+    # it has no evidence about who the parties were, and the cheapest node
+    # satisfying the shape is one already attached to the event: the court.
+    # A prompt rule cannot fix that, because the model is not being careless
+    # -- it is being asked to supply data it was given no basis for. Until
+    # absence-findings stop reaching this stage at all, the least it can do is
+    # refuse to name the adjudicator.
+    #
+    # The event behind a participation may be established by the input graph
+    # or by an `add ... echr:hasParticipation ...` elsewhere in THIS patch,
+    # and likewise its court, so both maps are built across both sources.
+    participation_event: dict[str, str] = {}
+    for s_, o_ in working.subject_objects(ECHR.hasParticipation):
+        participation_event[str(o_)] = str(s_)
+    event_court: dict[str, str] = {}
+    for s_, o_ in working.subject_objects(ECHR.hasCourt):
+        event_court[str(s_)] = str(o_)
+
+    def _expand(term: str) -> str:
+        prefix, _, local = term.strip().partition(":")
+        return doc_ns + local if prefix == "doc" else term.strip()
+
+    for group in patch.groups:
+        for op in group.ops:
+            if op.action != "add" or op.object_is_literal:
+                continue
+            if op.predicate == "echr:hasParticipation":
+                participation_event[_expand(op.object)] = _expand(op.subject)
+            elif op.predicate == "echr:hasCourt":
+                event_court[_expand(op.subject)] = _expand(op.object)
+
+    # The ban is GROUP-LEVEL, not per-operation. Refusing only the
+    # echr:participatingParty op lets its siblings land -- the
+    # echr:hasParticipation link, the echr:hasPartySide, the rdf:type -- and
+    # leaves a participation node with a side and no party. That is the
+    # party-less-participation defect under another name, and it is itself a
+    # shape violation. Measured 2026-08-27 on the compressed L3: the
+    # per-operation ban took court-as-party 8 -> 0 and left exactly 8 "a
+    # participation must record exactly one party" violations in their place,
+    # trading one defect for another one-for-one.
+    #
+    # So the whole participation is refused: every op whose subject is the
+    # banned node, and the link pointing at it from the event. The event then
+    # simply has no participation, which is an HONEST ABSENCE -- it surfaces
+    # as a missing_participation finding, visible and true, rather than as
+    # fabricated data or a stub.
+    banned_participations: set[str] = set()
+    for group in patch.groups:
+        for op in group.ops:
+            if (
+                op.action == "add"
+                and op.predicate == "echr:participatingParty"
+                and not op.object_is_literal
+            ):
+                subject = _expand(op.subject)
+                event = participation_event.get(subject)
+                if event is not None and event_court.get(event) == _expand(op.object):
+                    banned_participations.add(subject)
+
+    # A PARTICIPATION MAY ONLY BE ADDED WHERE IT IS EVIDENCED.
+    #
+    # A participation asserts that a named party stood on a named side of a
+    # named event. That is a factual claim about the case, and repair has no
+    # business making one it cannot point at words for. Until 2026-08-27
+    # nothing checked this, and nothing COULD: no party node in any condition
+    # carried a supporting quote, so a participation invented by repair looked
+    # exactly like one read off the document by extraction.
+    #
+    # So a new participation must arrive with an anchor -- either one the same
+    # patch attaches to it, or one it already carries in the graph. The blind
+    # loop cannot mint quotes at all, which is the point: it can no longer
+    # create participations, only repair the structure of existing ones. The
+    # review stage can, because it reads the document, and its quote is
+    # verified verbatim against the source before it lands.
+    #
+    # Note this is a floor, not a guarantee of correctness: an anchored
+    # participation can still name the wrong party. It guarantees only that
+    # SOMEONE can check, which is the property the whole pipeline is for.
+    anchored_participations = {
+        str(s) for s in working.subjects(ECHR.hasSupportingQuote, None)
+    }
+    for group in patch.groups:
+        for op in group.ops:
+            if op.action == "add" and op.predicate == "echr:hasSupportingQuote":
+                anchored_participations.add(_expand(op.subject))
+    unevidenced_participations = {
+        _expand(op.subject)
+        for group in patch.groups
+        for op in group.ops
+        if op.action == "add"
+        and op.predicate == "echr:participatingParty"
+        and _expand(op.subject) not in anchored_participations
+    }
+
+    # A PARTICIPATION WITH NO PARTY AT ALL is the other half of the same hole.
+    # The evidence check above keys on `add echr:participatingParty`, so it
+    # only sees participations that name SOMEBODY. A group that adds
+    # echr:hasParticipation and echr:hasPartySide and no party at all names
+    # nobody, trips nothing, and lands a stub: a participation asserting that
+    # some unspecified entity stood on a side. Measured 2026-08-28 on the
+    # compressed L3, once the entailed types were completed and the stubs
+    # became visible: six of them, all from the review stage.
+    #
+    # Such a group is refused whole, for the same reason the deciding-body ban
+    # is refused whole -- a half-built participation is a defect in its own
+    # right, and the event is better off with the honest absence.
+    partied = {
+        _expand(op.subject)
+        for group in patch.groups
+        for op in group.ops
+        if op.action == "add" and op.predicate == "echr:participatingParty"
+    }
+    partyless_participations: set[str] = set()
+    for group in patch.groups:
+        for op in group.ops:
+            if op.action != "add":
+                continue
+            node = None
+            if op.predicate == "echr:hasPartySide":
+                node = _expand(op.subject)
+            elif op.predicate == "echr:hasParticipation" and not op.object_is_literal:
+                node = _expand(op.object)
+            if node is None or node in partied:
+                continue
+            if (URIRef(node), ECHR.participatingParty, None) in working:
+                continue
+            partyless_participations.add(node)
+    unevidenced_participations |= partyless_participations
+
     audit: list[dict] = []
     for group in patch.groups:
         for op in group.ops:
@@ -2119,6 +2441,46 @@ def apply_patch(
                     )
                     audit.append(record)
                     continue
+                if (
+                    op.action == "add"
+                    and unevidenced_participations
+                    and (
+                        _expand(op.subject) in unevidenced_participations
+                        or (
+                            op.predicate == "echr:hasParticipation"
+                            and not op.object_is_literal
+                            and _expand(op.object) in unevidenced_participations
+                        )
+                    )
+                ):
+                    record["status"] = (
+                        "skipped: repair may not add an incomplete participation "
+                        "- it must name exactly one echr:participatingParty and "
+                        "carry a echr:hasSupportingQuote anchoring it, or the "
+                        "event is left with an honest absence instead"
+                    )
+                    audit.append(record)
+                    continue
+                if (
+                    op.action == "add"
+                    and banned_participations
+                    and (
+                        _expand(op.subject) in banned_participations
+                        or (
+                            op.predicate == "echr:hasParticipation"
+                            and not op.object_is_literal
+                            and _expand(op.object) in banned_participations
+                        )
+                    )
+                ):
+                    record["status"] = (
+                        "skipped: repair may not name the deciding body as a "
+                        "participating party - the whole participation is refused "
+                        "so the event is left with an honest absence rather than a "
+                        "party-less stub"
+                    )
+                    audit.append(record)
+                    continue
                 if op.action == "add":
                     # Closed-vocabulary discipline applies to the repair pass
                     # too. Without this a patch can "correct" a valid term to
@@ -2258,6 +2620,33 @@ def apply_patch(
                 record["status"] = f"skipped: {exc}"
                 audit.append(record)
                 continue
+
+            if op.action == "add" and p == RDF.type and isinstance(o, URIRef):
+                # A retype that satisfies one shape by making the node
+                # LOGICALLY INCONSISTENT is worse than the violation it
+                # removes. SHACL does not evaluate owl:AllDisjointClasses, so
+                # nothing else in this pipeline would ever catch e.g. adding
+                # echr:DomesticProceeding to a node already typed
+                # echr:AdministrativeAction to satisfy CaseDocumentShape's
+                # range check on echr:hasDomesticProceeding -- the violation
+                # disappears from the report and the graph gets worse. Checked
+                # against `working` as mutated so far, which already reflects
+                # every earlier op in this same patch.
+                existing_types = {
+                    t for t in working.objects(s, RDF.type) if isinstance(t, URIRef)
+                }
+                conflict = disjoint_conflict(existing_types, o)
+                if conflict is not None:
+                    record["status"] = (
+                        f"skipped: adding {_curie(working, o)} would make "
+                        f"{_curie(working, s)} both {_curie(working, o)} and "
+                        f"{_curie(working, conflict)}, which the ontology "
+                        "declares mutually exclusive (owl:AllDisjointClasses) "
+                        "-- remove or retarget the predicate that required "
+                        "this type instead of adding a second, incompatible one"
+                    )
+                    audit.append(record)
+                    continue
 
             if op.action == "add":
                 working.add((s, p, o))

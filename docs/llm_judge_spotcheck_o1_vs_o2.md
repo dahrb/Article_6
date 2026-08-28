@@ -609,3 +609,379 @@ have fixed exactly these failures: quote fidelity ran 84–100% across the four 
 arms, and closed-vocabulary violations were **zero in all four**. That is a reasonable
 before/after datapoint for the methodology section, and a poor basis for any claim about
 the model.
+
+---
+
+# Re-judge after `new_repair.py` (2026-08-25)
+
+Same rubric, same three documents, same single unblinded judge. What changed is the
+input: every O2 arm was re-repaired with `new_repair.py` (see
+`docs/new_repair_fixes.md`) instead of the staged `repair_facts.py` output the tables
+above scored. Run on scratch copies in `/tmp/spotcheck_repair/`; `results/` untouched.
+
+**O1 is unchanged and uncopied** — it has no repair stage, so its 4.13 carries over as the
+same baseline. Only the six O2 arms were re-scored.
+
+Automated structural counts, three documents combined, repaired output:
+
+| | CFM | CFJ | CFT | FOJ | LRG | MED |
+|---|--:|--:|--:|--:|--:|--:|
+| events | 43 | 76 | 58 | 54 | 38 | 40 |
+| chain edges | 32 | 54 | 38 | 43 | 25 | 26 |
+| isolated events | 4 | 15 | 11 | 3 | 8 | 4 |
+| **non-verbatim quotes** | **0/50** | **0/119** | **0/218** | **0/92** | **0/35** | **0/43** |
+| multi-court/date violations | **0** | **0** | **0** | **0** | **0** | **0** |
+| duplicate-label nodes | **0** | **0** | **0** | **0** | **0** | **0** |
+| party-less participations | **0** | **0** | **0** | **0** | **0** | **0** |
+| shared / orphan participations | 0/7 | 3/5 | 1/2 | 2/14 | 0/1 | 0/5 |
+| side-less participations | 0 | 0 | **7** | 1 | 0 | 0 |
+| **disjoint double-typed events** | **0** | **0** | **14** | **1** | **8** | **4** |
+| events with no supporting quote | 0 | 1 | 4 | 2 | **7** | 1 |
+| dangling edges / cycles | 0/0 | 0/0 | 0/0 | 0/0 | 0/0 | 0/0 |
+
+## Per-document scores
+
+### L6 — *Scholz AG v. Armenia*
+
+| axis | LRG | CFM | CFT | CFJ | MED | FOJ |
+|---|--:|--:|--:|--:|--:|--:|
+| Hallucinated triples | **5.0** | 4.5 | 4.0 | 4.0 | 3.5 | 3.0 |
+| Missed connections | **5.0** | **5.0** | 3.0 | 4.5 | 4.0 | 3.5 |
+| Missed triples | 4.5 | 4.0 | 3.5 | 3.5 | 3.5 | 2.5 |
+| Other errors | 4.5 | 3.0 | 4.0 | 2.0 | 3.0 | 3.0 |
+| **mean** | **4.75** | 4.13 | 3.63 | 3.50 | 3.50 | 3.00 |
+
+*LRG* remains the best output in the study: eight events, one per jurisdictional instance,
+every one carrying a court and a date, chain complete. Repair added the Yerevan Civil Court
+injunction, correctly.
+
+*CFJ scores worst on Other errors and repair made it worse.* Eighteen events for a case
+with roughly seven jurisdictional instances, because it models filing and decision as
+separate proceedings (`proceeding_1` "Claim for recovery of debt" and `proceeding_2`
+"Decision to leave claim and counterclaim unexamined" are one instance; so are 3/4, 5/6,
+7/8/9, 10/11). The review stage then **added three more** — `proceeding_counterclaim`,
+`proceeding_response`, `proceeding_request_unexamined` — which are party filings, not
+jurisdictional instances. The stage is doing what it was told (find events with no node)
+and the rubric's granularity rule is invisible to it.
+
+### L1 — *Stanev v. Bulgaria*
+
+| axis | CFJ | CFM | FOJ | LRG | CFT | MED |
+|---|--:|--:|--:|--:|--:|--:|
+| Hallucinated triples | **3.5** | 2.5 | 3.0 | 2.0 | 2.0 | 2.0 |
+| Missed connections | **4.0** | 3.5 | 3.0 | 3.5 | 2.5 | 2.5 |
+| Missed triples | 3.5 | 3.0 | 3.0 | 2.5 | **3.5** | 2.0 |
+| Other errors | **4.0** | 3.5 | 3.0 | 1.5 | 1.0 | 1.5 |
+| **mean** | **3.75** | 3.13 | 3.00 | 2.38 | 2.25 | 2.00 |
+
+**FOJ's defining failure is fixed.** The first pass scored it 1.75 here because
+`admin_action_1` merged the Ruse Municipal Council's 2002 guardian appointment with the
+mayor of Rila's 2005 refusal. Repair split them: `admin_action_1` now holds the Ruse
+appointment (23 May 2002, `councilRuse`) and `admin_action_mayor_refusal` the refusal
+(16 September 2005, `mayorOfRila`). One duplicate pair survives — `admin_action_placement_1`
+and `administrative_action_1` are the same December 2002 placement.
+
+**CFM's severe error survives repair untouched.** `actionGuardianAppointment`, the 23 May
+2002 appointment, still carries `hasCourt councilRilaMunicipal` — the Ruse council made
+that decision. No shape can see a wrong-but-well-formed authority link, so nothing flagged
+it and nothing fixed it. This is the clearest case in the study of SHACL conformance and
+factual accuracy coming apart.
+
+### L10 — *M.N. and Others v. Belgium*
+
+| axis | CFT | CFM | MED | FOJ | CFJ | LRG |
+|---|--:|--:|--:|--:|--:|--:|
+| Hallucinated triples | **3.5** | **3.5** | 3.0 | 2.5 | 2.0 | 1.5 |
+| Missed connections | **4.0** | **4.0** | 3.5 | 3.5 | 2.5 | 1.5 |
+| Missed triples | **4.0** | 3.0 | 3.0 | 3.0 | 3.0 | 2.0 |
+| Other errors | 3.0 | 3.0 | 3.0 | 2.0 | 2.5 | 1.5 |
+| **mean** | **3.63** | 3.38 | 3.13 | 2.75 | 2.50 | 1.63 |
+
+*MED's chain cycle is gone* and its 3-node disjoint double-typing on this document is gone.
+
+**CFJ's nine out-of-scope nodes survive verbatim.** `visa_code_article_25`,
+`visa_code_article_32`, `visaCodeReg`, `dublin_regulation_article_1`,
+`dublin_regulation_article_3`, `schengen_borders_code_article_4`,
+`schengen_borders_code_article_6`, `asylum_procedures_directive_article_3` and
+`cjeuPreliminaryRulingCaseX` are all still typed as domestic events. Repair took this
+document from 13 SHACL violations to a handful while leaving every one of them in place —
+no shape forbids typing a statute as a proceeding.
+
+**LRG regressed badly and repair caused it.** Seven of its eighteen events are stubs the
+loop minted: `rdf:type`, `hasCourt` and a participation, with **no label, no date and no
+quote**. `proceeding_set_aside_2`, `proceeding_set_aside_3`,
+`proceeding_enforcement_dutch_1`, `proceeding_enforcement_final_1`,
+`proceeding_enforcement_french_1`, `proceeding_court_appeal_stay_1` and
+`proceeding_tpi_inter_partes_1` assert that proceedings exist without saying what they are
+or pointing at any text. The apparent recall gain from 11 events to 18 is not real.
+
+## Aggregate, six O2 arms, after re-repair
+
+| axis | O1 | CFM | CFJ | CFT | FOJ | LRG | MED |
+|---|--:|--:|--:|--:|--:|--:|--:|
+| Hallucinated triples | **4.50** | 3.50 | 3.17 | 3.17 | 2.83 | 2.83 | 2.83 |
+| Missed connections | **4.67** | 4.17 | 3.67 | 3.17 | 3.33 | 3.33 | 3.33 |
+| Missed triples | 3.17 | 3.33 | 3.33 | **3.67** | 2.83 | 3.00 | 2.83 |
+| Other errors | **4.17** | 3.17 | 2.83 | 2.67 | 2.67 | 2.50 | 2.50 |
+| **overall** | **4.13** | **3.54** | 3.25 | 3.17 | 2.92 | 2.92 | 2.88 |
+
+## Change against the first pass
+
+| arm | before | after | Δ |
+|---|--:|--:|--:|
+| `o2_low_jsonld` (FOJ) | 1.67 | 2.92 | **+1.25** |
+| `o2_med_jsonld` (MED) | 2.00 | 2.88 | **+0.88** |
+| `o2_cf_low_ttl` (CFT) | 2.96 | 3.17 | +0.21 |
+| `o2_cf_med_jsonld` (CFM) | 3.29 | 3.54 | +0.25 |
+| `o2_cf_low_jsonld` (CFJ) | 3.13 | 3.25 | +0.12 |
+| `o2_large_jsonld` (LRG) | 3.17 | 2.92 | **−0.25** |
+| `o1_gemma` (O1) | 4.13 | 4.13 | — (not repaired) |
+
+**Ranking, six O2 arms:**
+
+| | before | after |
+|---|---|---|
+| 1 | CFM 3.29 | CFM 3.54 |
+| 2 | LRG 3.17 | CFJ 3.25 |
+| 3 | CFJ 3.13 | CFT 3.17 |
+| 4 | CFT 2.96 | FOJ 2.92 |
+| 5 | MED 2.00 | LRG 2.92 |
+| 6 | FOJ 1.67 | MED 2.88 |
+
+## What I take from the re-judge
+
+**1. Repair compresses the field far more than it raises it.** The spread across six arms
+fell from 1.62 points (1.67–3.29) to 0.66 (2.88–3.54). The two worst arms gained +1.25 and
++0.88; the best gained +0.25 and one regressed. Repair is mostly buying back floor, not
+ceiling — which is what a defect-driven loop should do, but it means **arm choice matters
+much less after repair than the first pass implied.** Three of the six now sit within 0.1
+of each other, which three documents cannot separate.
+
+**2. O1 still wins, by a wider relative margin than the headline suggests.** 4.13 against
+CFM's 3.54. The caveat from the first pass stands and now matters more: O1 is not scored on
+half of what O2 is scored on, and its lead is largest on the axes where the rubric is
+common to both.
+
+**3. Everything mechanically checkable went to zero. Nothing judgment-dependent moved.**
+Non-verbatim quotes, multi-court/date violations, duplicate labels and party-less
+participations are now zero in every arm — 449 non-verbatim quotes across the sample
+eliminated. But CFJ's nine statutory nodes, CFM's wrong council and CFJ's filing/decision
+over-segmentation all survived untouched. **The repair loop fixes exactly what SHACL can
+name, and the residual error is now almost entirely the part SHACL cannot name.** That is
+the strongest argument in this whole study for the formalisation claim, and simultaneously
+the clearest statement of its limit.
+
+**4. Repair introduced a new defect class that SHACL cannot see: 27 disjoint-class
+contradictions.** Zero exist in any raw extraction; 14 in CFT, 8 in LRG, 4 in MED and 1 in
+FOJ exist after repair. `echr.ttl` declares `DomesticProceeding`, `AdministrativeAction`,
+`EnforcementAction` and `ProsecutorialReview` mutually disjoint in `owl:AllDisjointClasses`;
+these nodes carry two of them and are therefore logically inconsistent.
+
+The cause is traceable and is a shape problem, not a model problem. `CaseDocumentShape`
+requires `hasDomesticProceeding` to point at a `DomesticProceeding` (matching
+`rdfs:range` in `echr.ttl`), but the extractions link the case document to *every* domestic
+event through that property — 13 such violations in CFT L1 alone. The model repaired them
+the only way that satisfies the shape, by adding the missing type, and its own rationale
+says so: *"These events are linked as domestic proceedings but lack the
+echr:DomesticProceeding type."* The correct repair was to remove the mis-typed links. **A
+shape that can be satisfied two ways will be satisfied the cheap way**, and nothing in the
+gate scores the difference — SHACL does not evaluate `owl:AllDisjointClasses`.
+
+**5. The gate's own number is now actively misleading for LRG.** LRG L10 finished at a low
+SHACL count while containing seven content-free stub events. Conformance rose and the
+artefact got worse. This is the same pattern `run_native.py`'s header comment records for
+unit loss — "shape conformance measures whether what you extracted is well-formed, never
+whether you extracted it" — reproduced here by the repair stage rather than the extractor.
+
+**6. Automated recall rank and judged rank remain close to uncorrelated**, and re-repair did
+not fix that. `o2_cf_low_jsonld` is still rank 1 on raw events and 2nd here;
+`o2_cf_med_jsonld` is still 5th on recall and 1st on quality; `o2_large_jsonld` is 6th on
+recall and has now fallen to 5th on quality.
+
+## Limits, unchanged and one new
+
+Everything in the earlier Limits section still applies — one judge, three documents,
+unblinded, no gold standard, and three documents cannot separate 3.25 from 3.17.
+
+New: I scored these knowing which defects `new_repair.py` was built to fix, having built it.
+That is a real bias risk in the direction of crediting repair, and the two findings that cut
+against it — the 27 disjointness contradictions and LRG's seven stubs — were found by
+automated checks I wrote for this pass, not by the judgement. Readers should weight the
+mechanical counts above the scores accordingly.
+
+---
+
+# Pilot: does compression change where the ontology should enter? (2026-08-27)
+
+**This is a pilot on the 10-case set and must not appear in the paper.** Same rubric,
+same three documents, four conditions crossing compression with repair.
+
+| id | stage 1 | stage 2 | repair |
+|---|---|---|---|
+| **A** | — | ontology direct from judgment | no |
+| **B** | — | ontology direct from judgment | yes |
+| **C** | evidence selection (spans) | ontology from bundles | no |
+| **D** | evidence selection (spans) | ontology from bundles | yes |
+
+**B is excluded from the scores below.** It was repaired under the older
+`CaseDocumentAtomicShape`, whose `sh:class echr:DomesticProceeding` constraint has since
+been corrected to `sh:or` over the four DomesticEvent subclasses. That constraint is what
+manufactured B's 8 disjoint-class contradictions, so B and D were repaired against
+different rules and are not comparable. B must be re-run before any B/D claim is made.
+
+## Scores
+
+### L6 — *Scholz AG v. Armenia*
+
+| axis | A | C | D |
+|---|--:|--:|--:|
+| Hallucinated triples | **4.0** | 3.5 | 3.0 |
+| Missed connections | **4.0** | 3.5 | **4.0** |
+| Missed triples | **3.5** | 3.0 | 3.0 |
+| Other errors | **4.0** | 2.5 | 2.0 |
+| **mean** | **3.88** | 3.13 | 3.00 |
+
+**A wins this document and the reason is granularity.** It recovers exactly seven
+instances for a seven-instance case. C splits the Yerevan Civil Court instance into an
+"examination" node and a "transfer" node, and D additionally splits the arbitration
+correspondence (23 July / 1 August 2008) from the arbitration refusal. C and D also model
+the Yerevan Civil Court itself as a participating party with no side, and D gives the
+District Court proceeding two `SideInitiating` parties.
+
+C and D code "left unexamined" as `OutcomeMeritsDecided`; A codes it `OutcomeInadmissible`,
+which is right.
+
+### L1 — *Stanev v. Bulgaria*
+
+| axis | A | C | D |
+|---|--:|--:|--:|
+| Hallucinated triples | 2.0 | **3.5** | **3.5** |
+| Missed connections | 3.0 | **4.0** | **4.0** |
+| Missed triples | 2.5 | **4.0** | **4.0** |
+| Other errors | 2.5 | **3.0** | 2.5 |
+| **mean** | 2.50 | **3.63** | 3.50 |
+
+**A carries a severe internal contradiction**: the node labelled "Guardian appointment by
+Ruse Municipal Council" has `hasCourt` pointing at **Rila** Municipal Council. Its own
+label contradicts its own authority link — the same Ruse/Rila error seen in `o2_cf_med`.
+Seven of A's ten events carry no parties at all, and its single person has `hasGender`
+with no cue.
+
+C and D recover the welfare track A misses entirely (allowance grant, allowance increase,
+social assessment) and carry two persons with verbatim gender cues.
+
+Both C and D violate the extraction rule that a participation names the party, never their
+representative: `the applicant's lawyer` appears as `participatingParty` on two
+prosecutorial reviews.
+
+### L10 — *M.N. and Others v. Belgium*
+
+| axis | A | C | D |
+|---|--:|--:|--:|
+| Hallucinated triples | 3.0 | **3.5** | 3.0 |
+| Missed connections | 2.5 | **4.5** | 4.0 |
+| Missed triples | 1.5 | **4.0** | **4.0** |
+| Other errors | 2.0 | **3.5** | 3.0 |
+| **mean** | 2.25 | **3.88** | 3.50 |
+
+**A fails on the hardest document**: 8 events against a ~26-event reference, one dangling
+`followsProceeding`, six of eight events with no parties, and two persons carrying
+`hasGender` with no cue. The entire Conseil d'État track is absent.
+
+C recovers 20 events, every one quote-anchored, nearly all with parties, no dangling
+references. D adds two more, one of which has no supporting quote.
+
+## Aggregate
+
+| axis | A direct | C compressed | D compressed+repair |
+|---|--:|--:|--:|
+| Hallucinated triples | 3.00 | **3.50** | 3.17 |
+| Missed connections | 3.17 | **4.00** | **4.00** |
+| Missed triples | 2.50 | **3.67** | **3.67** |
+| Other errors | 2.83 | **3.00** | 2.50 |
+| **overall** | **2.88** | **3.54** | 3.33 |
+
+## Against O1
+
+O1 was re-scored in this same sitting rather than carried over, because the earlier 4.13
+was calibrated against different comparators. It came out **4.17**, close enough to the
+original to show the scale is stable.
+
+| axis | **O1** | C compressed | D compr+repair | A direct |
+|---|--:|--:|--:|--:|
+| Hallucinated triples | **4.50** | 3.50 | 3.17 | 3.00 |
+| Missed connections | **4.50** | 4.00 | 4.00 | 3.17 |
+| Missed triples | **3.67** | **3.67** | **3.67** | 2.50 |
+| Other errors | **4.00** | 3.00 | 2.50 | 2.83 |
+| **overall** | **4.17** | 3.54 | 3.33 | 2.88 |
+
+Per document: O1 4.38 (L6), 3.88 (L1), 4.25 (L10).
+
+**Compression halves the gap but does not close it.** O1 led direct ontology extraction by
+1.29 (4.17 vs 2.88); it leads the compressed pipeline by 0.63 (4.17 vs 3.54).
+
+**Recall is now level — the remaining gap is entirely structural.** Missed triples is a tie
+at 3.67. On L10 O1 recovers 22 events and C recovers 20. What separates them is "other
+errors" (4.00 vs 3.00) and hallucination (4.50 vs 3.50), and those come from defects the
+flat format cannot commit:
+
+- O1 cannot split one instance across two nodes, because an entry is an entry. C split the
+  Yerevan Civil Court instance; D split the arbitration correspondence.
+- O1 cannot produce a dangling reference or a participation with no side, because `follows`
+  is an index into its own array and roles are inline strings.
+- O1 cannot type a court as a party. C models the Yerevan Civil Court as a participating
+  party with no side.
+
+O1 also does something none of the ontology arms manage: `follows: [6, 9, 13]` expresses a
+genuine DAG with multiple parents, which is what a case with three interleaving tracks
+actually looks like.
+
+**Where O1 is weaker, and the rubric does not see it.** Its `instance_level` values across
+these three documents alone include "arbitration", "administrative review", "supervisory
+review", "first instance (extremely urgent procedure)" and "cassation (appeal on points of
+law)" — the 21-form dispersion measured earlier. It models the deciding body as a *party*
+in seven of ten L1 entries, which is a category error the ontology forbids by construction.
+It carries no persons, no gender, no entity identity. None of that is penalised here,
+because the rubric scores per-document fidelity and O1 is scored against what its own
+schema can hold.
+
+**So the comparison stands where it stood.** O1 wins per-document extraction quality;
+compression narrows that lead substantially but does not overturn it. The ontology's case
+remains aggregability, not fidelity — and this pilot is evidence that the pipeline can be
+made competitive on fidelity while keeping the closed vocabularies, not that it can win on
+fidelity outright.
+
+## What this pilot suggests
+
+**1. Compression helps, and it helps most where the ontology pipeline was weakest.** The
+gain is concentrated in recall (missed triples 2.50 -> 3.67) and chain structure (3.17 ->
+4.00), which are exactly the axes the matched-assembly arm lost on in the earlier study.
+Reading and instantiating in one pass was costing coverage.
+
+**2. Repair is net-NEGATIVE on compressed input (3.54 -> 3.33).** This inverts the
+expectation. Repair's additions are mostly noise once the input is already well-formed: it
+split one instance into two on L6 and on L1, and added an unanchored event on L10. Its
+"Other errors" score falls on all three documents. On direct extraction repair had real
+defects to fix; here it mostly manufactures granularity violations.
+
+If this holds at scale it is a genuine finding — **the value of a repair stage is a
+function of how bad its input is**, and a pipeline that fixes the input upstream should
+consider dropping it rather than tuning it.
+
+**3. Gender provenance only exists in the compressed pipeline.** Across all ten documents,
+direct extraction produced 23 `hasGender` triples and **zero** `hasGenderCueText`: gender
+asserted with no evidence, unverifiable by construction. Compression produced 25 and 25.
+
+**4. Two defects belong to stage 2, not to compression.** Stage 1 extracted 53 persons
+with 42 gender cues; only 16 persons and 25 cues survive into the graph — roughly 70% loss
+in the mapping stage. And `the applicant's lawyer` appears as a participating party
+despite an explicit prohibition. Both are fixable in the stage-2 prompt.
+
+## Limits
+
+One judge, three documents, and I built the pipeline being judged. **I was not blind**:
+outputs were rendered into a common format that strips IRI naming conventions, but I knew
+which directory each came from. The mechanical counts are trustworthy; the 0-5 scores
+carry my authorship bias and should be weighted accordingly. Note that the scores go
+against the pipeline I built on L6 and against the repair stage I built overall, which is
+weak evidence that the bias did not dominate — but it is not a substitute for blinding.

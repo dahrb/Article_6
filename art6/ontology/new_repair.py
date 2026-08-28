@@ -63,10 +63,13 @@ from art6.ontology.repair_facts import (
     _stream_patch_text,
     _token_limit_kwargs,
     apply_patch,
+    complete_entailed_types,
+    find_disjoint_type_conflicts,
     find_duplicate_candidates,
     find_missing_participation,
     find_proceedings_missing_court,
     find_shape_violations,
+    find_unchained_events,
     find_unlinked_persons,
     find_unverified_quotes,
     parse_unconstrained_patch,
@@ -89,15 +92,18 @@ class Findings:
     """Everything wrong with a graph, from all three sources."""
 
     shacl: list[dict] = field(default_factory=list)
+    disjoint_conflicts: list[dict] = field(default_factory=list)
     missing_participation: list[str] = field(default_factory=list)
     missing_court: list[str] = field(default_factory=list)
     unlinked_persons: list[str] = field(default_factory=list)
     duplicates: list[dict] = field(default_factory=list)
     unverified_quotes: list[dict] = field(default_factory=list)
+    unchained_events: list[dict] = field(default_factory=list)
 
     def __len__(self) -> int:
         return (
             len(self.shacl)
+            + len(self.disjoint_conflicts)
             + len(self.missing_participation)
             + len(self.missing_court)
             + len(self.unlinked_persons)
@@ -105,8 +111,121 @@ class Findings:
             + len(self.unverified_quotes)
         )
 
-    def as_prompt_payload(self) -> dict:
-        """EVERY finding, unbatched.
+    # THE SPLIT THAT DECIDES WHICH STAGE SEES WHAT.
+    #
+    # A VIOLATION is fully determined by the graph: a date typed xsd:string, a
+    # node with two labels, a link whose target lacks the required type, a
+    # quote that is not in the source. Everything needed to fix it is visible
+    # in the graph itself, so a model that has never read the document can fix
+    # it correctly.
+    #
+    # An ABSENCE is not. "This event has no parties" does not say who the
+    # parties were; that answer is in the document and nowhere else. Handing
+    # an absence to the blind loop asks it to supply data it was given no
+    # basis for, and it complies -- because the finding reads as an
+    # instruction and the loop has no way to say "I cannot know this".
+    #
+    # Measured 2026-08-27 on the compressed L3: eight events_missing_
+    # participation findings went into loop round 1 and eight participations
+    # came out, every one naming doc:sdif -- the authority that DECIDED those
+    # events -- as the participating party. Not scattered errors: one template
+    # (doc:part_e4_sdif, doc:part_e5_sdif, ...) applied to every event that
+    # body decided. The graph went from ONE court-as-party instance to EIGHT,
+    # and the total finding count FELL, because clearing eight absences more
+    # than paid for the eight violations it created. No aggregate metric
+    # objected, because in aggregate terms the trade looked like progress.
+    #
+    # Structural bans in apply_patch stop that particular fabrication. They do
+    # not stop the next one, because the incentive is unchanged: an absence is
+    # a demand to add data, and the cheapest data is whatever is already
+    # attached to the node. So absences no longer reach the blind loop at all.
+    # They go to the review stage, which reads the document and can actually
+    # answer them.
+    # CHAIN AND PARTICIPATION TRAVEL TOGETHER, in ABSENCE_FIELDS.
+    #
+    # They are the same kind of thing and splitting them was incoherent: an
+    # event with no parties and an event chained to nothing are both places
+    # the graph records nothing, and in both cases the answer is in the
+    # document or it does not exist. Both now go to the one stage that reads
+    # the document, in the same list, and that stage may decline either.
+    #
+    # PARTICIPATION IS STILL NOT MANDATORY. Its absence is not a violation and
+    # nothing treats it as one -- it is offered to the review stage as a place
+    # to look, not a demand to fill. What made it safe to show at all is that
+    # fabrication is now blocked STRUCTURALLY rather than by withholding the
+    # finding: apply_patch refuses any participation without a supporting
+    # quote, so a stage that cannot evidence a party cannot add one. Hiding
+    # the gap was the crude version of that guarantee; the guard is the real
+    # one, and with it in place hiding costs recall for nothing.
+    #
+    # `missing_participation` used to sit in ABSENCE_FIELDS and, before the
+    # split, in the blind loop's payload. It is gone from both. An event with
+    # no recorded participation is a COVERAGE GAP, not a defect: the graph is
+    # not making a false statement, it is declining to make one.
+    #
+    # The reason is that we have no evidence channel that could satisfy the
+    # demand honestly. Measured 2026-08-27 on the compressed L3: not one party
+    # node in ANY condition -- raw extraction included -- carried a
+    # echr:hasSupportingQuote. Quotes landed only on events. So "this event
+    # must have a party" could only ever be met by a model choosing a party,
+    # never by one reading a party, and a constraint that can only be
+    # satisfied by guessing is a constraint that manufactures guesses.
+    #
+    # It is still counted and reported, as coverage. It is simply no longer
+    # something any stage is asked to fix.
+    # AN UNVERIFIED QUOTE IS AN ABSENCE, NOT A VIOLATION.
+    #
+    # It was in VIOLATION_FIELDS on the theory that "this text is not in the
+    # source" is decidable from the graph plus the source string, which it is.
+    # But the FIX is not: knowing a quote is wrong tells you nothing about what
+    # the right one is, and the right one is in the document. Handing it to the
+    # blind loop offers exactly one move -- delete the anchor and leave the
+    # node unevidenced -- which trades a checkable-and-wrong claim for an
+    # uncheckable one. The document-reading stage can do the thing actually
+    # wanted: find the passage and correct the span.
+    VIOLATION_FIELDS = (
+        "shacl_errors",
+        "disjoint_conflicts",
+        "duplicates",
+    )
+    ABSENCE_FIELDS = (
+        "unchained_events",
+        "missing_participation",
+        "missing_court",
+        "unlinked_persons",
+        "unverified_quotes",
+    )
+
+    @property
+    def shacl_errors(self) -> list[dict]:
+        """SHACL findings the blind loop can actually act on.
+
+        find_shape_violations returns Violations and Warnings in one list.
+        Warnings are advisory by construction -- the one that matters here is
+        EvidenceAnchoringShape, "no supporting quote anchors this entity",
+        which the blind loop is structurally incapable of fixing because it
+        may not mint quotes. Feeding it eight of those (as adding
+        echr:Participation to that shape's targets does on the compressed L3)
+        spends rounds on operations that are refused on arrival.
+        """
+        return [v for v in self.shacl if v.get("severity") != "warning"]
+
+    @property
+    def shacl_warnings(self) -> list[dict]:
+        return [v for v in self.shacl if v.get("severity") == "warning"]
+
+    def count(self, scope: str = "all") -> int:
+        fields = {
+            "violations": self.VIOLATION_FIELDS,
+            "absences": self.ABSENCE_FIELDS,
+        }.get(scope, self.VIOLATION_FIELDS + self.ABSENCE_FIELDS)
+        return sum(len(getattr(self, f)) for f in fields)
+
+    def count_warnings(self) -> int:
+        return len(self.shacl_warnings)
+
+    def as_prompt_payload(self, scope: str = "all") -> dict:
+        """Findings for one stage, unbatched.
 
         The old pipeline cut each list at MAX_GAP_ENTRIES_PER_PASS to keep a
         single patch small enough to finish under guided decoding, and relied
@@ -114,22 +233,65 @@ class Findings:
         script generates unconstrained, so length is no longer the failure
         mode, and the loop has only three rounds rather than the old two passes
         per stage across four stages -- deferring a finding here now means it
-        may never be seen at all. The model gets the whole graph and the whole
-        violation set, and decides for itself what to fix first.
+        may never be seen at all. So within a scope the model gets everything.
+
+        `scope` selects WHICH findings, per the split documented above:
+        "violations" for the blind loop, "absences" for the document-reading
+        review, "all" for reporting.
         """
-        return {
-            "shacl_violations": self.shacl,
+        violations = {
+            "shacl_violations": self.shacl_errors,
+            "logically_inconsistent_types": self.disjoint_conflicts,
+            "possible_duplicate_entities": self.duplicates,
+        }
+        absences = {
+            "events_chained_to_nothing": self.unchained_events,
             "events_missing_participation": self.missing_participation,
             "proceedings_missing_court": self.missing_court,
             "persons_not_linked_to_any_event": self.unlinked_persons,
-            "possible_duplicate_entities": self.duplicates,
             "quotes_not_found_in_source": self.unverified_quotes,
         }
+        if scope == "violations":
+            return violations
+        if scope == "absences":
+            return absences
+        return {**violations, **absences}
+
+
+def _finding_kinds(findings: Findings) -> dict[str, int]:
+    """Per-kind finding counts, for the strict-improvement gate.
+
+    SHACL violations are keyed by their MESSAGE rather than lumped into one
+    "shacl" bucket, because the whole point of the gate is to notice a round
+    that trades one shape's violations for another's. The message is used
+    because find_shape_violations does not carry the source shape IRI through
+    -- it returns kind/severity/message/subject/predicate/values -- and each
+    shape in echr-shapes.ttl carries its own sh:message, so the text is a
+    faithful stand-in for shape identity. Truncated because a couple of the
+    messages interpolate the offending value.
+    """
+    kinds: dict[str, int] = {}
+    for v in findings.shacl_errors:
+        key = "shacl:" + str(v.get("message", ""))[:60].strip()
+        kinds[key] = kinds.get(key, 0) + 1
+    for name in (
+        "disjoint_conflicts",
+        "missing_court",
+        "unchained_events",
+        "unlinked_persons",
+        "duplicates",
+        "unverified_quotes",
+    ):
+        n = len(getattr(findings, name))
+        if n:
+            kinds[name] = n
+    return kinds
 
 
 def collect_findings(graph: Graph, doc_ns: str, source_text: str | None) -> Findings:
     return Findings(
         shacl=find_shape_violations(graph),
+        disjoint_conflicts=find_disjoint_type_conflicts(graph),
         missing_participation=find_missing_participation(graph, doc_ns),
         missing_court=find_proceedings_missing_court(graph, doc_ns),
         unlinked_persons=find_unlinked_persons(graph, doc_ns),
@@ -137,6 +299,7 @@ def collect_findings(graph: Graph, doc_ns: str, source_text: str | None) -> Find
         unverified_quotes=(
             find_unverified_quotes(graph, source_text) if source_text else []
         ),
+        unchained_events=find_unchained_events(graph, doc_ns),
     )
 
 
@@ -259,7 +422,10 @@ def run_loop(
 
     for rnd in range(1, max_rounds + 1):
         findings = collect_findings(graph, doc_ns, source_text)
-        total = len(findings)
+        # VIOLATIONS ONLY. Absences are not this stage's business -- see the
+        # split documented on Findings. A round that "fixed" an absence here
+        # was inventing, not repairing.
+        total = findings.count("violations")
         if total == 0:
             print(f"    {label} round {rnd}: nothing left to fix - stopping")
             break
@@ -287,7 +453,7 @@ def run_loop(
             )
         previous = total
 
-        payload = findings.as_prompt_payload()
+        payload = findings.as_prompt_payload("violations")
         # Full ontology, full graph, full finding set. The loop cannot see the
         # document, so the ontology is the only thing telling it which classes
         # and vocabulary members exist -- and a fragment is what made the old
@@ -330,14 +496,83 @@ def run_loop(
         # asked to remove doc:lawyer_1's paraphrased quote in all three rounds
         # and was refused all three times, for want of the list it was reading
         # the index out of.
-        graph, round_audit = apply_patch(
+        # QUOTES ARE NOT THIS STAGE'S TO TOUCH. allow_quote_reuse was True
+        # here, permitting a quote to be MOVED to a new triple (never minted)
+        # on the grounds that extraction chose it, so moving it invented
+        # nothing. That reasoning does not survive contact with what a move
+        # means: a span selected as evidence for one claim is being asserted
+        # as evidence for a DIFFERENT claim, by a stage that cannot read the
+        # document and so cannot know whether it supports the new one. The
+        # text is genuine and the assertion is unchecked, which is the worst
+        # combination -- it looks anchored and is not.
+        #
+        # A whole triple may still be DELETED here, quote triples included:
+        # removing an assertion asserts nothing. Only writing and moving are
+        # the document-reading stage's business.
+        candidate, round_audit = apply_patch(
             graph,
             patch,
             doc_ns,
-            unverified_quotes=findings.unverified_quotes,
-            allow_quote_reuse=True,
         )
         applied = sum(1 for a in round_audit if a["status"].startswith("applied"))
+
+        # STRICT-IMPROVEMENT GATE. A round is kept only if it left the graph
+        # no worse than it found it. Before this, the only question asked of a
+        # round was "did you apply anything?", so a round that fixed nine
+        # defects and introduced seven was indistinguishable from a round that
+        # fixed nine. Measured 2026-08-27 on the compressed L3, condition D:
+        # round 1 applied 107 operations, moved SHACL 10 -> 8, and every one
+        # of the eight survivors was a court-as-party instance the round had
+        # itself created.
+        #
+        # A ROUND MAY NOT INTRODUCE A DEFECT KIND THAT WAS NOT THERE BEFORE.
+        # Full stop -- the total is not consulted.
+        #
+        # The first version of this gate also required the total to have
+        # failed to fall, on the theory that a deep repair legitimately raises
+        # the count on the way down (splitting one conflated event into two
+        # correct ones creates a node briefly missing its court). That made it
+        # unsatisfiable in practice: on the compressed L3 it fired ZERO times
+        # while the round applied 107 operations and manufactured eight
+        # court-as-party instances, because clearing eight absences more than
+        # paid for the eight violations created, so the total fell every round
+        # (19 -> 9 -> 8) and the second condition was never true.
+        #
+        # That trade is now impossible: absences no longer reach this loop at
+        # all, so "the total fell" can no longer be bought by filling gaps.
+        # Every finding here is a violation the graph itself answers, and a
+        # round that answers some by creating others is not making progress
+        # whatever the arithmetic says. The deep-repair case the old escape
+        # clause protected still works, because splitting an event correctly
+        # does not introduce a violation KIND -- it resolves the multi-court
+        # violation and leaves the new node's absences, which this loop does
+        # not see.
+        after_findings = collect_findings(candidate, doc_ns, source_text)
+        before_kinds = _finding_kinds(findings)
+        after_kinds = _finding_kinds(after_findings)
+        regressions = {
+            kind: (before_kinds.get(kind, 0), count)
+            for kind, count in after_kinds.items()
+            if count > before_kinds.get(kind, 0)
+        }
+        if regressions:
+            detail = ", ".join(
+                f"{kind} {was}->{now}"
+                for kind, (was, now) in sorted(regressions.items())
+            )
+            print(
+                f"    {label} round {rnd}: {total} finding(s), {proposed} op(s) "
+                f"proposed, {applied} applied - REVERTED, made things worse "
+                f"({detail}) [{time.perf_counter() - t0:.1f}s]"
+            )
+            for a in round_audit:
+                a["stage"] = label
+                a["round"] = rnd
+                a["reverted"] = True
+            audit.extend(round_audit)
+            break
+
+        graph = candidate
         for a in round_audit:
             a["stage"] = label
             a["round"] = rnd
@@ -476,9 +711,11 @@ def run_review(
     source_text: str,
     temperature: float,
     max_tokens: int,
+    absences: dict | None = None,
 ) -> tuple[Graph, list[dict]]:
     """One pass with the full graph and the full case text, for what the loop
-    cannot see: events the extraction never captured at all.
+    cannot see: events the extraction never captured at all, and the ABSENCES
+    the blind loop is no longer permitted to guess at.
 
     This is the only stage permitted to add an evidence anchor, and the only
     one that can add an event, because it is the only one reading the document.
@@ -499,6 +736,16 @@ def run_review(
         + source_text
         + "\nSOURCE\n\nGRAPH EXTRACTED FROM THAT DOCUMENT\n"
         + graph.serialize(format="turtle")
+        + "\n\nGAPS IN THAT GRAPH\n"
+        "These are places the graph records nothing. They are NOT constraint "
+        "violations, and there is no way to answer them from the graph alone: "
+        "the answer is in the document above, or it does not exist. You are "
+        "the only stage that reads the document, so you are the only stage "
+        "that can answer them. Fill in what the document supports, with a "
+        "verbatim quote. Where the document does not say, LEAVE THE GAP -- an "
+        "event with no parties recorded is honest; one with invented parties "
+        "is not.\n"
+        + json.dumps(absences or {}, indent=1, default=str)
         + "\n\nYOUR TASK\n"
         + _prompt("new_repair_review.txt")
         + "\n\nOUTPUT SCHEMA\n"
@@ -561,8 +808,29 @@ def repair_document(
     if not doc_ns:
         return {"file": facts_ttl.name, "error": "no doc: prefix in graph"}
 
+    # COMPLETE ENTAILED TYPES FIRST, so every later comparison is
+    # apples-to-apples. A participation node reached by echr:hasParticipation
+    # but never explicitly typed is invisible to ParticipationAtomicShape --
+    # so a party-less participation sitting in the extraction output is not
+    # reported until something types it. Measured 2026-08-28 on the compressed
+    # L3: a loop round added seven such types (correctly -- it is the
+    # entailment), four of the newly-typed nodes turned out to have no party,
+    # the improvement gate read "0 -> 4" as the round creating four defects,
+    # and reverted the whole round. It had created nothing; it had REVEALED
+    # four that were already there, and the revert hid them again.
+    #
+    # Doing it up front means latent defects are in the baseline where they
+    # belong, and the gate can no longer mistake revealing for creating.
+    startup_types = complete_entailed_types(graph, doc_ns)
+    if startup_types:
+        print(f"    entailed types completed on input: {startup_types}")
+
     before = len(find_shape_violations(graph))
-    print(f"  {facts_ttl.name}: {before} SHACL violation(s) in")
+    disjoint_before = len(find_disjoint_type_conflicts(graph))
+    print(
+        f"  {facts_ttl.name}: {before} SHACL violation(s), "
+        f"{disjoint_before} disjoint-type conflict(s) in"
+    )
 
     graph, audit = run_loop(
         graph,
@@ -576,6 +844,12 @@ def repair_document(
     )
 
     if source_text and not skip_review:
+        # The absences the loop was not allowed to touch are handed to the one
+        # stage that can answer them from evidence.
+        pre_review = collect_findings(graph, doc_ns, source_text)
+        n_absences = pre_review.count("absences")
+        if n_absences:
+            print(f"    review: carrying {n_absences} unanswered gap(s) forward")
         graph, review_audit = run_review(
             graph,
             client=client,
@@ -584,6 +858,7 @@ def repair_document(
             source_text=source_text,
             temperature=temperature,
             max_tokens=max_tokens,
+            absences=pre_review.as_prompt_payload("absences"),
         )
         audit.extend(review_audit)
 
@@ -595,8 +870,8 @@ def repair_document(
         # the three gaps it can see structurally; SHACL catches the rest, and
         # before this there was no pass left to hand them to.
         remaining = collect_findings(graph, doc_ns, source_text)
-        if len(remaining):
-            print(f"    post-review: {len(remaining)} finding(s) left")
+        if remaining.count("violations"):
+            print(f"    post-review: {remaining.count('violations')} violation(s) left")
             graph, post_audit = run_loop(
                 graph,
                 client=client,
@@ -612,7 +887,19 @@ def repair_document(
         else:
             print("    post-review: nothing left to fix")
 
+    # Assert what the ontology already entails, deterministically, before the
+    # final count. A node reached by echr:hasParticipation is a
+    # echr:Participation whether or not anyone said so; SHACL checks the
+    # asserted type, so leaving it unsaid reports a violation for a fact the
+    # graph already contains. Doing it here rather than asking a model to is
+    # the difference between arithmetic and a coin flip -- see
+    # complete_entailed_types.
+    entailed_added = complete_entailed_types(graph, doc_ns)
+    if entailed_added:
+        print(f"    entailed types completed: {entailed_added}")
+
     after = len(find_shape_violations(graph))
+    disjoint_after = len(find_disjoint_type_conflicts(graph))
     backup = facts_ttl.parent / "backup"
     backup.mkdir(exist_ok=True)
     if not (backup / facts_ttl.name).exists():
@@ -623,11 +910,16 @@ def repair_document(
     (facts_ttl.parent / (facts_ttl.stem + ".newrepair.json")).write_text(
         json.dumps({"operations": audit}, indent=1, default=str), encoding="utf-8"
     )
-    print(f"  {facts_ttl.name}: {before} -> {after} SHACL violation(s)")
+    print(
+        f"  {facts_ttl.name}: {before} -> {after} SHACL violation(s), "
+        f"{disjoint_before} -> {disjoint_after} disjoint-type conflict(s)"
+    )
     return {
         "file": facts_ttl.name,
         "shacl_before": before,
         "shacl_after": after,
+        "disjoint_before": disjoint_before,
+        "disjoint_after": disjoint_after,
         "operations": len(audit),
         "applied": sum(1 for a in audit if a["status"].startswith("applied")),
     }
@@ -701,7 +993,9 @@ def main() -> None:
     ok = [r for r in results if "error" not in r]
     print(
         f"\ntotal: {sum(r['shacl_before'] for r in ok)} -> "
-        f"{sum(r['shacl_after'] for r in ok)} SHACL violation(s) over "
+        f"{sum(r['shacl_after'] for r in ok)} SHACL violation(s), "
+        f"{sum(r['disjoint_before'] for r in ok)} -> "
+        f"{sum(r['disjoint_after'] for r in ok)} disjoint-type conflict(s) over "
         f"{len(ok)} document(s) in {time.perf_counter() - t0:.1f}s"
     )
 

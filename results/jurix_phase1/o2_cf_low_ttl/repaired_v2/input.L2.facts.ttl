@@ -1,0 +1,288 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix doc: <https://growgraph.dev/doc/aa2bb14a2d16/> .
+@prefix echr: <https://growgraph.dev/echr#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://growgraph.dev/doc/aa2bb14a2d16> a prov:Entity,
+        foaf:Document ;
+    dcterms:title "input.jsonl:2"^^xsd:string .
+
+doc:agreementBeerT a echr:AdministrativeAction ;
+    rdfs:label "Employment termination agreement between Mr Beer and Company T."^^xsd:string ;
+    echr:hasCourt doc:esa ;
+    echr:hasDecisionDate "1995-06-20"^^xsd:date ;
+    echr:hasOutcome echr:OutcomeMeritsDecided ;
+    echr:hasParticipation doc:participationBeerAgreement,
+        doc:participationTAgreement ;
+    echr:hasSupportingQuote "an agreement concluded on 20 June 1995 with the first applicant, terminating his contract of employment on 30 June 1995"^^xsd:string .
+
+doc:case_28934_95 a echr:CaseDocument ;
+    rdfs:label "Beer and Regan v. Germany"^^xsd:string ;
+    echr:hasApplicant doc:beer_1,
+        doc:regan_1 ;
+    echr:hasApplicationNumber "28934/95"^^xsd:string ;
+    echr:hasCaseName "Beer and Regan v. Germany"^^xsd:string ;
+    echr:hasDomesticProceeding doc:proceedingDismissalReganTi,
+        doc:proceedingEsaAppealsBoard,
+        doc:proceedingEsaStatus ;
+    echr:hasRespondentState "Federal Republic of Germany"^^xsd:string .
+
+doc:committeeStaffRepresentatives a echr:Party ;
+    rdfs:label "Committee of Staff Representatives of the Coordinated Organisations"^^xsd:string ;
+    echr:hasSupportingQuote "The Committee of Staff Representatives of the Coordinated Organisations"^^xsd:string .
+
+doc:companyS a echr:Party ;
+    rdfs:label "S."^^xsd:string ;
+    echr:hasSupportingQuote "the French company S."^^xsd:string .
+
+doc:eldo a echr:Party ;
+    rdfs:label "ELDO"^^xsd:string ;
+    echr:hasSupportingQuote "ESA was formed out of ESRO and ELDO"^^xsd:string .
+
+doc:esoc a echr:DomesticAuthority ;
+    rdfs:label "European Space Operations Centre"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "European Space Operations Centre" ;
+    echr:hasSupportingQuote "establishing a European Space Operations Centre"^^xsd:string .
+
+doc:esro a echr:Party ;
+    rdfs:label "ESRO"^^xsd:string ;
+    echr:hasSupportingQuote "concluded between the Government of the Federal Republic of Germany and ESRO"^^xsd:string .
+
+doc:germanLabourMarketLegislation a echr:AdministrativeAction ;
+    rdfs:label "German legislation for the regulation of the German labour market"^^xsd:string ;
+    echr:hasCourt doc:germanCourts ;
+    echr:hasParticipation doc:participationLegislation ;
+    echr:hasSupportingQuote "special German legislation for the regulation of the German labour market"^^xsd:string .
+
+doc:proceedingDismissalBeer a echr:DomesticProceeding ;
+    rdfs:label "Proceedings against T. regarding dismissal"^^xsd:string ;
+    echr:hasCourt doc:darmsdtadtLabourCourt ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeSettledOrWithdrawn ;
+    echr:hasOutcomeDirection echr:DirectionMixed ;
+    echr:hasParticipation doc:participationBeerT,
+        doc:participationTBeer ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "lawyer’s fees incurred in labour court proceedings concerning his dismissal"^^xsd:string .
+
+doc:proceedingWaiteKennedy a echr:DomesticProceeding ;
+    rdfs:label "Proceedings concerning Mr Waite and Mr Kennedy"^^xsd:string ;
+    echr:hasCourt doc:federalLabourCourt ;
+    echr:hasDecisionDate "1993-11-10"^^xsd:date ;
+    echr:hasParticipation doc:participationKennedyWk,
+        doc:participationWaiteWk ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "the decision of the Federal Labour Court of 10 November 1993 in the case concerning Mr Waite and Mr Kennedy"^^xsd:string .
+
+doc:appealsBoardEsa a echr:DomesticAuthority ;
+    rdfs:label "Appeals Board of the Agency"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "Appeals Board of the Agency" ;
+    echr:hasSupportingQuote "There shall be set up an Appeals Board, independent of the Agency"^^xsd:string .
+
+doc:esaAppealsBoardParticipationBeer a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "they could and should have had recourse to the ESA Appeals Board"^^xsd:string ;
+    echr:participatingParty doc:beer_1 .
+
+doc:esaAppealsBoardParticipationRegan a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "they could and should have had recourse to the ESA Appeals Board"^^xsd:string ;
+    echr:participatingParty doc:regan_1 .
+
+doc:federalLabourCourt a echr:DomesticAuthority ;
+    rdfs:label "Federal Labour Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Federal Labour Court" ;
+    echr:hasJurisdictionState "Germany"^^xsd:string ;
+    echr:hasSupportingQuote "the decision of the Federal Labour Court"^^xsd:string .
+
+doc:germanCourts a echr:DomesticAuthority ;
+    rdfs:label "German courts"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "German courts" ;
+    echr:hasJurisdictionState "Germany"^^xsd:string ;
+    echr:hasSupportingQuote "the German courts did not exceed their margin of appreciation"^^xsd:string .
+
+doc:governmentGermany a echr:Party ;
+    rdfs:label "Government of the Federal Republic of Germany"^^xsd:string ;
+    echr:hasSupportingQuote "the Government of the Federal Republic of Germany"^^xsd:string .
+
+doc:kennedy_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Kennedy"^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr Kennedy"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Kennedy"^^xsd:string .
+
+doc:participationBeerAgreement a echr:Participation ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "an agreement concluded on 20 June 1995 with the first applicant"^^xsd:string ;
+    echr:participatingParty doc:beer_1 .
+
+doc:participationBeerEsa a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the applicants instituted proceedings"^^xsd:string ;
+    echr:participatingParty doc:beer_1 .
+
+doc:participationBeerEsaStatus a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the applicants were able to argue the question of immunity"^^xsd:string ;
+    echr:participatingParty doc:beer_1 .
+
+doc:participationBeerT a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "lawyer’s fees incurred in labour court proceedings concerning his dismissal"^^xsd:string ;
+    echr:participatingParty doc:beer_1 .
+
+doc:participationEsaEsa a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "against ESA"^^xsd:string ;
+    echr:participatingParty doc:esa .
+
+doc:participationEsaEsaStatus a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "the reasons advanced by the German labour courts to give effect to the immunity from jurisdiction of ESA"^^xsd:string ;
+    echr:participatingParty doc:esa .
+
+doc:participationKennedyWk a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the case concerning Mr Waite and Mr Kennedy"^^xsd:string ;
+    echr:participatingParty doc:kennedy_1 .
+
+doc:participationLegislation a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:governmentGermany .
+
+doc:participationReganEsa a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the applicants instituted proceedings"^^xsd:string ;
+    echr:participatingParty doc:regan_1 .
+
+doc:participationReganEsaStatus a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the applicants were able to argue the question of immunity"^^xsd:string ;
+    echr:participatingParty doc:regan_1 .
+
+doc:participationReganTi a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "proceedings instituted by the second applicant"^^xsd:string ;
+    echr:participatingParty doc:regan_1 .
+
+doc:participationReganTi_1 a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:participatingParty doc:regan_1 .
+
+doc:participationReganTi_2 a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:participatingParty doc:companyTi .
+
+doc:participationTAgreement a echr:Participation ;
+    echr:hasPartySide echr:SideUnknown ;
+    echr:hasSupportingQuote "the company T. undertook to pay to the first applicant"^^xsd:string ;
+    echr:participatingParty doc:companyT .
+
+doc:participationTBeer a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "lawyer’s fees incurred in labour court proceedings concerning his dismissal"^^xsd:string ;
+    echr:participatingParty doc:companyT .
+
+doc:participationTiTi a echr:Participation ;
+    echr:hasPartySide echr:SideResponding ;
+    echr:hasSupportingQuote "against his dismissal by the company T.I."^^xsd:string ;
+    echr:participatingParty doc:companyTi .
+
+doc:participationWaiteWk a echr:Participation ;
+    echr:hasPartySide echr:SideInitiating ;
+    echr:hasSupportingQuote "the case concerning Mr Waite and Mr Kennedy"^^xsd:string ;
+    echr:participatingParty doc:waite_1 .
+
+doc:proceedingDismissalReganTi a echr:DomesticProceeding ;
+    rdfs:label "Proceedings against T.I. regarding dismissal of Mr Regan" ;
+    echr:hasCourt doc:darmsdtadtLabourCourt ;
+    echr:hasDecisionDate "1994-09-06"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeSettledOrWithdrawn ;
+    echr:hasOutcomeDirection echr:DirectionMixed ;
+    echr:hasParticipation doc:participationReganTi,
+        doc:participationReganTi_1,
+        doc:participationReganTi_2,
+        doc:participationTiTi ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "In the proceedings instituted by the second applicant against his dismissal by the company T.I. (see paragraph 13 above), a settlement had been reached in the Darmstadt Labour Court on 6 September 1994.",
+        "In the proceedings instituted by the second applicant against his dismissal by the company T.I. ... a settlement had been reached in the Darmstadt Labour Court on 6 September 1994"^^xsd:string .
+
+doc:proceedingEsaAppealsBoard a echr:DomesticProceeding ;
+    rdfs:label "Potential proceedings before the ESA Appeals Board"^^xsd:string ;
+    echr:hasCourt doc:appealsBoardEsa ;
+    echr:hasInstanceLevel echr:LevelAdministrativeReview ;
+    echr:hasParticipation doc:esaAppealsBoardParticipationBeer,
+        doc:esaAppealsBoardParticipationRegan ;
+    echr:hasProceedingType echr:TypeAdministrative ;
+    echr:hasSupportingQuote "they could and should have had recourse to the ESA Appeals Board"^^xsd:string .
+
+doc:proceedingEsaStatus a echr:DomesticProceeding ;
+    rdfs:label "Proceedings against ESA regarding employee status"^^xsd:string ;
+    echr:hasCourt doc:darmsdtadtLabourCourt ;
+    echr:hasDecisionDate "1995-03-21"^^xsd:date ;
+    echr:hasInstanceLevel echr:LevelFirstInstance ;
+    echr:hasOutcome echr:OutcomeInadmissible ;
+    echr:hasOutcomeDirection echr:DirectionUnfavourableToApplicant ;
+    echr:hasParticipation doc:participationBeerEsa,
+        doc:participationBeerEsaStatus,
+        doc:participationEsaEsa,
+        doc:participationEsaEsaStatus,
+        doc:participationReganEsa,
+        doc:participationReganEsaStatus ;
+    echr:hasProceedingStartDate "1993-10"^^xsd:gYearMonth ;
+    echr:hasProceedingType echr:TypeCivil ;
+    echr:hasSupportingQuote "In October and November 1993 the applicants instituted proceedings before the Darmstadt Labour Court ( Arbeitsgericht ) against ESA"^^xsd:string .
+
+doc:waite_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Waite"^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr Waite"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Waite"^^xsd:string .
+
+doc:companyT a echr:Party ;
+    rdfs:label "T."^^xsd:string ;
+    echr:hasSupportingQuote "the French company T."^^xsd:string .
+
+doc:companyTi a echr:Party ;
+    rdfs:label "T.I."^^xsd:string ;
+    echr:hasSupportingQuote "the Italian company T.I."^^xsd:string .
+
+doc:darmsdtadtLabourCourt a echr:DomesticAuthority ;
+    rdfs:label "Darmstadt Labour Court"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityJudicial ;
+    echr:hasAuthorityName "Darmstadt Labour Court" ;
+    echr:hasJurisdictionState "Germany"^^xsd:string ;
+    echr:hasSupportingQuote "Darmstadt Labour Court ( Arbeitsgericht )"^^xsd:string .
+
+doc:esa a echr:DomesticAuthority,
+        echr:Party ;
+    rdfs:label "European Space Agency"^^xsd:string ;
+    echr:hasAuthorityKind echr:AuthorityAdministrative ;
+    echr:hasAuthorityName "European Space Agency" ;
+    echr:hasSupportingQuote "The European Space Agency (\"ESA\")"^^xsd:string .
+
+doc:beer_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Karlheinz Beer"^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr Karlheinz Beer"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Karlheinz Beer"^^xsd:string,
+        "the first applicant, a civil engineer by profession and employed by the French company S."^^xsd:string .
+
+doc:regan_1 a echr:NaturalPerson,
+        echr:Party ;
+    rdfs:label "Mr Philip Regan"^^xsd:string ;
+    echr:hasGender echr:GenderMale ;
+    echr:hasPersonName "Mr Philip Regan"^^xsd:string ;
+    echr:hasSupportingQuote "Mr Philip Regan"^^xsd:string .
+

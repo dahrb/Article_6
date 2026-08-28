@@ -363,8 +363,9 @@ echr:CaseDocumentAtomicShape a sh:NodeShape ;
     sh:property [ sh:path echr:hasJudgmentDate ; sh:maxCount 1 ; sh:node echr:PartialDateShape ] ;
     sh:property [
         sh:path echr:hasDomesticProceeding ;
-        sh:class echr:DomesticProceeding ;
-        sh:message "echr:hasDomesticProceeding must point at a node typed echr:DomesticProceeding" ;
+        sh:or ( [ sh:class echr:DomesticProceeding ] [ sh:class echr:AdministrativeAction ]
+                [ sh:class echr:EnforcementAction ] [ sh:class echr:ProsecutorialReview ] ) ;
+        sh:message "echr:hasDomesticProceeding must point at a node typed as one of the four DomesticEvent subclasses" ;
     ] ;
     sh:property [
         sh:path echr:hasApplicant ;
@@ -436,9 +437,18 @@ echr:PreTrialDetentionAtomicShape a sh:NodeShape ;
 # 2. Evidence anchoring -- flag proceedings/events with no anchor
 ################################################################
 
+# echr:Participation is in this list as of 2026-08-27. A participation asserts
+# that a named party stood on a named side of a named event -- as strong a
+# factual claim as any event in the graph, and until now the only one with no
+# way to check it. Measured on the compressed L3: zero party nodes carried a
+# supporting quote in ANY condition, extraction included, so an invented
+# participation was indistinguishable from a read one. It is a Warning rather
+# than a Violation on the same terms as the rest of this shape: a prior graph
+# extracted before the rule existed is incomplete, not wrong.
 echr:EvidenceAnchoringShape a sh:NodeShape ;
     sh:targetClass echr:DomesticProceeding, echr:AdministrativeAction, echr:EnforcementAction,
-        echr:ProsecutorialReview, echr:InactivityPeriod, echr:Adjournment, echr:PreTrialDetention ;
+        echr:ProsecutorialReview, echr:InactivityPeriod, echr:Adjournment, echr:PreTrialDetention,
+        echr:Participation ;
     sh:property [
         sh:path echr:hasSupportingQuote ;
         sh:minCount 1 ;
@@ -551,6 +561,31 @@ echr:ProceduralChainOrderShape a sh:NodeShape ;
                 ?prior echr:hasDecisionDate ?priorDecision .
                 FILTER(datatype(?thisStart) = xsd:date && datatype(?priorDecision) = xsd:date)
                 FILTER(?thisStart < ?priorDecision)
+            }
+        """ ;
+    ] .
+
+# The body that DECIDED an event is not a party to it. A court, tribunal,
+# prosecutor's office or ministry that rules on a matter is reached through
+# echr:hasCourt; listing that same node as a echr:participatingParty on a
+# echr:Participation the event itself points at records the adjudicator as a
+# litigant in its own case. The same body legitimately IS a party at a
+# DIFFERENT event it did not decide (a municipal council that rules once and
+# later appeals as a litigant), so the check is deliberately scoped to the
+# single event: it fires only when the deciding body and the participant are
+# the same node on the same event.
+echr:DecidingBodyNotAPartyShape a sh:NodeShape ;
+    sh:targetSubjectsOf echr:hasCourt ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "the body named by echr:hasCourt on this event is also listed as a echr:participatingParty on one of its own echr:Participation nodes - the deciding body is not a party to the event it decided; remove that participation, or if the body really did take part as a litigant, that belongs on a different event" ;
+        sh:select """
+            PREFIX echr: <https://growgraph.dev/echr#>
+            SELECT $this
+            WHERE {
+                $this echr:hasCourt ?body ;
+                      echr:hasParticipation ?p .
+                ?p echr:participatingParty ?body .
             }
         """ ;
     ] .

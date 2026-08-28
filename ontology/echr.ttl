@@ -229,9 +229,9 @@ echr:GenderCue a owl:Class ;
 
 echr:hasDomesticProceeding a owl:ObjectProperty ;
     rdfs:label "has domestic proceeding"@en ;
-    skos:definition "Attaches an extracted proceeding to the case document."@en ;
+    skos:definition "Attaches an extracted domestic event -- a proceeding, administrative action, enforcement action or prosecutorial review -- to the case document. Despite the name, this is the sole link from echr:CaseDocument to the procedural chain: there is no separate property for the other three echr:DomesticEvent subclasses, and extraction routinely uses it for all four."@en ;
     rdfs:domain echr:CaseDocument ;
-    rdfs:range echr:DomesticProceeding ;
+    rdfs:range echr:DomesticEvent ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
 echr:followsProceeding a owl:ObjectProperty, owl:AsymmetricProperty, owl:IrreflexiveProperty ;

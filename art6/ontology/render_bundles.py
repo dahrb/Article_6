@@ -66,14 +66,22 @@ def render(payload: dict) -> str:
             "authority_kind_span",
             "start_date_span",
             "decision_date_span",
-            "outcome_span",
-            "instance_span",
             "proceeding_type_span",
             "finality_span",
             "pending_span",
             "follows_span",
         ):
             out += _line(key.removesuffix("_span"), event.get(key))
+        # instance_span / outcome_span render like any other span.
+        # instance_level / outcome are CLASSIFICATIONS: no offsets, so _line
+        # would drop them. They are evidenced by the event's own
+        # what_happened_span above, and corroborated by their _span partner
+        # wherever the document stated the rung or result outright.
+        out += _line("outcome_span", event.get("outcome_span"))
+        out += _line("instance_span", event.get("instance_span"))
+        for key in ("instance_level", "outcome"):
+            if event.get(key):
+                out.append(f"  {key}: {event[key]}")
         if event.get("follows"):
             out.append(f"  follows: {event['follows']}")
         for party in event.get("parties") or []:
@@ -112,6 +120,31 @@ def render(payload: dict) -> str:
             out.append("  person:")
             for key in ("name_span", "role_span", "gender_cue_span", "represents_span"):
                 out += _line(key.removesuffix("_span"), person.get(key), "    ")
+        out.append("")
+
+    # Rendered as its own section rather than folded into PERSONS above, for the
+    # same reason it is a separate list in the stage-1 schema: measured
+    # 2026-08-28 on gemma-4-31b, putting the demographic fields on every person
+    # entry made the model treat `persons` as a choice between an exhaustive
+    # cast list and a described applicant, and it could not do both. Asking for
+    # the two separately gets both -- birth-year recall went from 5/9 to 7/7
+    # while the person list returned to its baseline size. The applicant appears
+    # in both lists; stage 2 joins them on the name.
+    applicants = payload.get("applicants") or []
+    if applicants:
+        out.append(f"APPLICANTS ({len(applicants)}), described by the document itself.")
+        out.append("One block per applicant, in the order the description gives them.")
+        out.append("")
+        for applicant in applicants:
+            out.append("  applicant:")
+            for key in (
+                "name_span",
+                "birth_year_span",
+                "nationality_span",
+                "residence_span",
+                "description_span",
+            ):
+                out += _line(key.removesuffix("_span"), applicant.get(key), "    ")
         out.append("")
 
     authorities = payload.get("authorities") or []

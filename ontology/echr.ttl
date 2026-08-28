@@ -123,6 +123,7 @@ echr:Party a owl:Class ;
 echr:NaturalPerson a owl:Class ;
     rdfs:label "Natural Person"@en ;
     skos:definition "An identified or referred-to human being in the case: an applicant, a co-party, a lawyer, a relative. Create one instance per person, however they are designated -- a person named only as \"the applicant\" or as \"X\" is still a natural person."@en ;
+    skos:scopeNote "ONE human being per instance, and only a human being. A node standing for several people (\"the applicants\", \"M.N. and Others\", \"the applicant and his wife\") or for a company (\"Scholz AG\") is not a natural person, and typing it as one is a false statement rather than an approximation: every per-person property then attaches to a thing that has no single value for it. A group of applicants becomes one echr:NaturalPerson each, and where the document distributes attributes across them -- \"born in 1933, 1938 and 1952 respectively\" -- each value goes to the person it belongs to in that order. A company or public body is echr:Party alone and gets no echr:NaturalPerson type. Where the text genuinely never separates the members of a group, prefer a single echr:Party carrying echr:hasPartyName and no echr:NaturalPerson type over a natural person that silently stands for several."@en ;
     rdfs:subClassOf foaf:Person ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
@@ -435,6 +436,45 @@ echr:hasGenderCueText a owl:DatatypeProperty, owl:FunctionalProperty ;
     rdfs:label "has gender cue text"@en ;
     skos:definition "The verbatim span carrying the cue that echr:hasGender was read from: the honorific phrase (\"Ms A. Genova\"), the pronoun in its clause (\"she was informed\"), or the gendered noun (\"his half-sister\")."@en ;
     skos:scopeNote "Copied exactly from the source, on the same terms as echr:hasSupportingQuote -- not paraphrased, not reconstructed from the name. Kept separate from echr:hasSupportingQuote because the cue may sit far from the passage that evidences the person's role: a party introduced as \"R.P.\" and called \"she\" twenty paragraphs later is echr:GenderFemale on the strength of the later span, and it is that span which belongs here."@en ;
+    rdfs:domain echr:NaturalPerson ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+# Applicant demographic properties. Each records something the document STATES
+# outright, in the near-formulaic sentence that opens the facts of an ECHR
+# judgment -- "The applicant, Mr X, is a Ukrainian national who was born in 1979
+# and lives in Kiev." That is why none of them carries a cue property in the way
+# echr:hasGender does: gender is READ OFF a marker and so needs its reading
+# recorded, whereas these are copied from an assertion the court itself made.
+# What they do need is the person node's echr:hasSupportingQuote, which
+# echr:PersonDemographicEvidenceShape requires as soon as any of them appears.
+#
+# They belong to echr:NaturalPerson and to no other class. A collective node
+# ("M.N. and Others") or a corporate one ("Scholz AG") that carries them is
+# asserting one birth year for several people, or a nationality for a company;
+# echr:CollectivePersonShape and echr:CorporatePersonShape exist to catch that,
+# and the extraction rule is to split such a node into one person each.
+
+echr:hasBirthYear a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has birth year"@en ;
+    skos:definition "The year of birth the document gives for this person: \"was born in 1954\" becomes \"1954\"^^xsd:gYear."@en ;
+    skos:scopeNote "A YEAR, deliberately, and not an age. Age is a function of a date -- age at the first-instance trial, at the final domestic decision and at the Strasbourg judgment are three different numbers, and a proceeding in this corpus routinely spans a decade. Storing the year keeps every one of them derivable against the event dates already in the graph, whereas storing a computed age silently fixes a choice of reference date that analysis would want to vary. Where a full birth date is given, still record only the year: the day and month are not what the document is reliably stating and are not needed to compute an age in years."@en ;
+    rdfs:domain echr:NaturalPerson ;
+    rdfs:range xsd:gYear ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasNationality a owl:DatatypeProperty ;
+    rdfs:label "has nationality"@en ;
+    skos:definition "A nationality the document attributes to this person, as the document words it: \"Ukrainian\" from \"is a Ukrainian national\", \"Turkish\" from \"a Turkish citizen\"."@en ;
+    skos:scopeNote "Not functional: dual and multiple nationality are both stated in this corpus, and a person may hold more than one. Kept as a plain string on the same terms as echr:hasJurisdictionState rather than pointing into a closed country vocabulary -- the source values include stateless persons, contested and historical states, and nationalities named only by adjective, and a closed list would force each of those into a wrong member or drop it. Normalisation to country codes is downstream work on the string, where it can be inspected and revised without re-extraction. Record it only where the text says it: nationality must NEVER be inferred from the respondent State, from where the person lives, or from the look of a name."@en ;
+    rdfs:domain echr:NaturalPerson ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasPlaceOfResidence a owl:DatatypeProperty ;
+    rdfs:label "has place of residence"@en ;
+    skos:definition "A place the document says this person lives in, as the document words it: \"Budapest\", \"Fediyivka village, Kirovograd region, Ukraine\"."@en ;
+    skos:scopeNote "Not functional, and not a claim about where they lived during the domestic proceedings. The opening formula states residence as at the Strasbourg application, which in this corpus is often many years and sometimes a move away from the events described; where the text separately says the person lived elsewhere at the material time, that is a second value, not a correction of the first. Distinct from echr:hasJurisdictionState, which is a property of a deciding authority and not of a person."@en ;
     rdfs:domain echr:NaturalPerson ;
     rdfs:range xsd:string ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .

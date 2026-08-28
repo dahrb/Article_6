@@ -42,6 +42,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import os
 import time
 from pathlib import Path
 
@@ -207,8 +208,12 @@ def main(argv: list[str] | None = None) -> int:
     args.out_dir.mkdir(parents=True, exist_ok=True)
     _, suffix = CONDITIONS[args.condition]
 
+    # API KEY FROM THE ENVIRONMENT BY DEFAULT, never from argv. A key passed as
+    # --api-key is visible in `ps` output to every user on the machine for the
+    # whole run; this project leaked a live OpenAI key that way on 2026-08-26.
+    # `token-abc123` remains the fallback because a local vLLM ignores it.
     client = OpenAI(
-        api_key=args.api_key or "token-abc123",
+        api_key=args.api_key or os.environ.get("OPENAI_API_KEY") or "token-abc123",
         base_url=args.base_url,
         timeout=args.timeout,
         max_retries=1,

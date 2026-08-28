@@ -52,8 +52,10 @@ verbatim text for. Omit any list that is empty.
       "start_date_span": "the date it was begun or lodged, if separately given",
       "authority_span": "the body that decided it, as named",
       "authority_kind_span": "words showing what kind of body (court, prosecutor, council)",
-      "outcome_span": "words stating the result",
-      "instance_span": "words showing which rung it was (first instance, on appeal, cassation)",
+      "outcome": "THE RESULT, as one of: merits decided | inadmissible | remitted | settled or withdrawn | other. A judgement you make, filled on EVERY event -- see CLASSIFY THE RUNG AND THE RESULT below.",
+      "outcome_span": "the words stating the result, IF the document states it. Omit when it does not -- the classification above still gets filled.",
+      "instance_level": "WHICH RUNG, as one of: first instance | appeal | cassation | investigative | administrative review | supervisory review | reopening. A judgement you make, filled on EVERY event -- see CLASSIFY THE RUNG AND THE RESULT below.",
+      "instance_span": "the words naming the rung, IF the document states it literally ('at first instance', 'on appeal'). Omit when it does not -- the classification above still gets filled.",
       "proceeding_type_span": "words showing the branch (criminal, civil, administrative)",
       "finality_span": "words showing it was final or that remedies were exhausted",
       "pending_span": "words showing it was still pending",
@@ -93,6 +95,60 @@ verbatim text for. Omit any list that is empty.
     {"name_span": "the body as named", "kind_span": "words showing what kind of body it is"}
   ]
 }
+
+## CLASSIFY THE RUNG AND THE RESULT
+
+These two come in PAIRS, and the pairing is the point.
+
+  instance_level / outcome      a judgement you make, filled on EVERY event
+  instance_span / outcome_span  the literal words, ONLY when the document
+                                states them
+
+Everything else in this schema is copied text. These are the exception: they
+are judgements ABOUT an event rather than phrases in it. That does not make
+them unevidenced -- the evidence is the event's own `what_happened_span`, which
+you have already copied and which anyone can check your judgement against.
+Where the document ALSO names the rung or the result in so many words, copy
+that into the `_span` field too: the reader then has both the classification
+and the sentence it came from, and can see whether they agree.
+
+Never withhold the classification because there is no span. The judgment
+usually will not write "first instance" or "cassation" anywhere, and waiting
+for those words leaves the field empty on almost every event -- which is
+exactly the failure this pairing exists to fix. Span present or absent, the
+classification is filled.
+
+Read what the body did and say which rung it is:
+
+  - a first hearing of a claim, charge or application  -> first instance
+  - a review of a lower body's decision on the merits  -> appeal
+  - a review limited to points of law                  -> cassation
+  - a step inside a criminal investigation (a warrant, an arrest, a
+    prosecutor's refusal, an expert order)             -> investigative
+  - an internal review by an administrative body       -> administrative review
+  - an extraordinary review after finality             -> supervisory review
+  - a case reopened after a final decision             -> reopening
+
+And say what the result was:
+
+  - the body ruled on the substance, whichever way      -> merits decided
+  - a claim or appeal refused without reaching merits   -> inadmissible
+  - sent back to a lower body                           -> remitted
+  - withdrawn, discontinued or settled                  -> settled or withdrawn
+  - a real outcome none of these fit                    -> other
+
+These FIVE are the whole vocabulary. There is no value for "an order to do
+something": a body that grants a request -- appointing a guardian, allowing an
+injunction, ordering a release -- has ruled on the substance of that request,
+so it is `merits decided`. A purely housekeeping order that decides nothing,
+such as transferring a case to another court on jurisdictional grounds, is
+`other`.
+
+`other` is a last resort, not a default. An event you have labelled `other`
+should be one you could argue about, not one you did not think about. In
+particular a decision to leave a claim unexamined is `inadmissible`, not
+`other`, and a decision refusing a request during an investigation is
+`inadmissible`, not `merits decided`.
 
 ## COVERAGE AND GRANULARITY
 

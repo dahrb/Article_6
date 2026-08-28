@@ -516,61 +516,48 @@ def run_loop(
         )
         applied = sum(1 for a in round_audit if a["status"].startswith("applied"))
 
-        # STRICT-IMPROVEMENT GATE. A round is kept only if it left the graph
-        # no worse than it found it. Before this, the only question asked of a
-        # round was "did you apply anything?", so a round that fixed nine
-        # defects and introduced seven was indistinguishable from a round that
-        # fixed nine. Measured 2026-08-27 on the compressed L3, condition D:
-        # round 1 applied 107 operations, moved SHACL 10 -> 8, and every one
-        # of the eight survivors was a court-as-party instance the round had
-        # itself created.
+        # Complete entailed types on the CANDIDATE before comparing. Doing it
+        # once at startup was not enough: any stage that adds a participation
+        # adds it untyped, so the same reveal-looks-like-create artefact
+        # returns on the very next round. Measured 2026-08-28 on the compressed
+        # L3, iteration 4: startup completion ran, the review stage then added
+        # nine untyped participations, and the post-review round was reverted
+        # for "0 -> 6" defects it had merely exposed by typing them.
+        complete_entailed_types(candidate, doc_ns)
+
+        # REGRESSION WARNING, not a revert.
         #
-        # A ROUND MAY NOT INTRODUCE A DEFECT KIND THAT WAS NOT THERE BEFORE.
-        # Full stop -- the total is not consulted.
+        # This began as a gate that discarded any round introducing a new kind
+        # of defect. It fired three times, and all three were the SAME false
+        # positive: the round was adding rdf:type to untyped participation
+        # nodes -- correct, it is the entailment -- which made SHACL start
+        # checking them and exposed party-less stubs that were already in the
+        # extraction output. It read "newly visible" as "newly created" and
+        # reverted correct work, re-hiding the defects. Completing entailed
+        # types before every comparison removed the artefact, and with it gone
+        # the gate stopped firing entirely (2026-08-28, compressed L3 + L9).
         #
-        # The first version of this gate also required the total to have
-        # failed to fall, on the theory that a deep repair legitimately raises
-        # the count on the way down (splitting one conflated event into two
-        # correct ones creates a node briefly missing its court). That made it
-        # unsatisfiable in practice: on the compressed L3 it fired ZERO times
-        # while the round applied 107 operations and manufactured eight
-        # court-as-party instances, because clearing eight absences more than
-        # paid for the eight violations created, so the total fell every round
-        # (19 -> 9 -> 8) and the second condition was never true.
+        # So there is no evidence it ever caught a real regression, and a
+        # strong reason not to keep the revert: it throws away a whole round,
+        # including everything that round got right, on one bad operation. The
+        # structural bans in apply_patch do the job properly -- they refuse the
+        # single offending operation and let the rest land.
         #
-        # That trade is now impossible: absences no longer reach this loop at
-        # all, so "the total fell" can no longer be bought by filling gaps.
-        # Every finding here is a violation the graph itself answers, and a
-        # round that answers some by creating others is not making progress
-        # whatever the arithmetic says. The deep-repair case the old escape
-        # clause protected still works, because splitting an event correctly
-        # does not introduce a violation KIND -- it resolves the multi-court
-        # violation and leaves the new node's absences, which this loop does
-        # not see.
+        # The comparison is kept as a WARNING because it costs no model call
+        # and a regression it cannot currently produce is still worth seeing if
+        # one ever appears.
         after_findings = collect_findings(candidate, doc_ns, source_text)
-        before_kinds = _finding_kinds(findings)
-        after_kinds = _finding_kinds(after_findings)
         regressions = {
-            kind: (before_kinds.get(kind, 0), count)
-            for kind, count in after_kinds.items()
-            if count > before_kinds.get(kind, 0)
+            kind: (_finding_kinds(findings).get(kind, 0), count)
+            for kind, count in _finding_kinds(after_findings).items()
+            if count > _finding_kinds(findings).get(kind, 0)
         }
         if regressions:
             detail = ", ".join(
                 f"{kind} {was}->{now}"
                 for kind, (was, now) in sorted(regressions.items())
             )
-            print(
-                f"    {label} round {rnd}: {total} finding(s), {proposed} op(s) "
-                f"proposed, {applied} applied - REVERTED, made things worse "
-                f"({detail}) [{time.perf_counter() - t0:.1f}s]"
-            )
-            for a in round_audit:
-                a["stage"] = label
-                a["round"] = rnd
-                a["reverted"] = True
-            audit.extend(round_audit)
-            break
+            print(f"    {label} round {rnd}: WARNING, new defect kind ({detail})")
 
         graph = candidate
         for a in round_audit:
@@ -773,6 +760,10 @@ def run_review(
         allow_quote_adds=True,
         unverified_quotes=find_unverified_quotes(graph, source_text),
     )
+    # This stage adds participations, and adds them untyped. Typing them here
+    # means the post-review round sees the true state of what review left
+    # behind rather than one flattered by missing types.
+    complete_entailed_types(graph, doc_ns)
     applied = sum(1 for a in audit if a["status"].startswith("applied"))
     for a in audit:
         a["stage"] = "review"

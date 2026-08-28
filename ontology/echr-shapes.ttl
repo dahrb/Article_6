@@ -261,6 +261,136 @@ echr:NaturalPersonAtomicShape a sh:NodeShape ;
         sh:maxCount 1 ;
         sh:datatype xsd:string ;
         sh:message "hasGenderCueText must be a single verbatim string" ;
+    ] ;
+    # A four-digit year in 1850-2030 and nothing else. The window is not
+    # decoration -- an age computed from a birth year the model transposed out of
+    # a case number ("3599/18") or a decision date is wrong in a way nothing
+    # downstream can see, and both failure modes land outside a span that covers
+    # every person who could appear in this corpus.
+    #
+    # The bound is spelled as a regex rather than as sh:minInclusive /
+    # sh:maxInclusive because pyshacl cannot ORDER xsd:gYear literals: measured
+    # 2026-08-28, a pair of inclusive bounds reported a violation on every value
+    # it was given, valid years included, because the comparison is incomparable
+    # rather than false. A lexical range over a fixed-width numeral is exact
+    # here, and it collapses into the same pattern that already pins the form --
+    # xsd:gYear alone would admit "1954-05" in some serialisations and negative
+    # and five-digit years in all of them.
+    sh:property [
+        sh:path echr:hasBirthYear ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:gYear ;
+        sh:pattern "^(18[5-9][0-9]|19[0-9]{2}|20[0-2][0-9]|2030)$" ;
+        sh:message "hasBirthYear must be a single four-digit xsd:gYear between 1850 and 2030 -- a value outside that window is a date or a case number read as a birth year" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasNationality ;
+        sh:datatype xsd:string ;
+        sh:minLength 3 ;
+        sh:message "hasNationality must be a plain string naming a nationality as the document words it" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasPlaceOfResidence ;
+        sh:datatype xsd:string ;
+        sh:minLength 2 ;
+        sh:message "hasPlaceOfResidence must be a plain string naming the place as the document words it" ;
+    ] .
+
+# Demographic claims are claims, and are checkable on their own terms: the
+# opening formula that carries them is a single sentence a reader can be pointed
+# at. Anything else in this ontology asserting a fact about an entity has to
+# anchor it (echr:EvidenceAnchoringShape below), and there is no reason a birth
+# year should be the exception -- it is the property most likely to be supplied
+# from the model's expectation of what such a sentence usually says.
+#
+# Targeted at the subjects of the three properties rather than at
+# echr:NaturalPerson as a class, deliberately: a person node that merely names a
+# lawyer needs no quote, and requiring one of every person would fire on nearly
+# every graph and train the repair loop to ignore the shape.
+echr:PersonDemographicEvidenceShape a sh:NodeShape ;
+    sh:targetSubjectsOf echr:hasBirthYear, echr:hasNationality, echr:hasPlaceOfResidence ;
+    # These three are echr:NaturalPerson properties by rdfs:domain, but domain is
+    # a declaration and not a constraint -- and with inference off (as it is for
+    # both validators here) nothing enforces it. It needs enforcing: measured
+    # 2026-08-28, stage 1 returned an APPLICANTS block for the corporate
+    # applicant "Scholz AG" carrying the nationality "German corporation", which
+    # is a faithful copy of the document and still must not reach a graph as a
+    # person's nationality. The alternation spells out echr:LegalRepresentative
+    # for the same no-entailment reason as echr:NaturalPersonAtomicShape above.
+    sh:or (
+        [ sh:class echr:NaturalPerson ]
+        [ sh:class echr:LegalRepresentative ]
+    ) ;
+    sh:message "a birth year, nationality or place of residence on a node that is not an echr:NaturalPerson: a company, public body or group of applicants does not have them" ;
+    sh:property [
+        sh:path echr:hasSupportingQuote ;
+        sh:minCount 1 ;
+        sh:minLength 5 ;
+        sh:message "a person carrying a birth year, nationality or residence must carry the echr:hasSupportingQuote holding the words the document stated it in" ;
+    ] .
+
+# PERSON SPLITTING, half one.
+#
+# A node named for several people cannot hold per-person properties: one birth
+# year for "M.N. and Others" is a statement about nobody. Observed on the
+# 2026-08 phase-1 outputs, where "M.N. and Others" was minted as a single
+# echr:NaturalPerson typed exactly like an individual applicant, so nothing
+# distinguished it downstream.
+#
+# The patterns cover the two shapes the collapse actually takes. The first is
+# citational -- "M.N. and Others", "et al". The second is descriptive, and is
+# what an anonymised multi-applicant case produces: measured 2026-08-28 on L10,
+# stage 1 described the applicants as "a married couple and their two minor
+# children, all Syrian nationals", which is an honest reading of a document that
+# never names them, but is four people in one node the moment it is typed
+# echr:NaturalPerson. That case has no split available -- the right graph is an
+# echr:Party with echr:hasPartyName and no person type, which is what
+# echr.ttl's scopeNote on echr:NaturalPerson directs -- so the shape must catch
+# the wording rather than assume a name to split on.
+#
+# It fires on the type, not on the property, because the fix is to retype the
+# node whether or not it has yet acquired a demographic value.
+echr:CollectivePersonShape a sh:NodeShape ;
+    sh:targetClass echr:NaturalPerson, echr:LegalRepresentative ;
+    sh:property [
+        sh:path echr:hasPersonName ;
+        sh:not [ sh:pattern "(?i)(\\band\\s+others\\b|\\bet\\s+al\\b|\\bothers\\s+v\\b|\\bapplicants\\b|\\bmarried\\s+couple\\b|\\bthe\\s+couple\\b|\\bspouses\\b|\\bchildren\\b|\\bfamily\\b)" ] ;
+        sh:message "a person named as a group (\"and Others\", \"a married couple and their two minor children\", \"the applicants\") is several people in one node: mint one echr:NaturalPerson per applicant and give each their own name, gender and demographic values, or -- where the document never separates them and there is no split available -- drop the echr:NaturalPerson type and keep it as an echr:Party carrying echr:hasPartyName" ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:not [ sh:pattern "(?i)(\\band\\s+others\\b|\\bet\\s+al\\b)" ] ;
+        sh:message "a person labelled as a group (\"and Others\") is several people in one node: split it into one echr:NaturalPerson per applicant" ;
+    ] .
+
+# PERSON SPLITTING, half two.
+#
+# echr.ttl already says a company or public body is echr:Party alone, and the
+# extraction prompt already says it; neither stopped "Scholz AG" being minted as
+# an echr:NaturalPerson in the phase-1 run. A corporate applicant typed as a
+# human is not a harmless extra triple once demographic properties exist -- it
+# is a row in every applicant-level analysis with a nationality and no age, and
+# it looks exactly like a human the document declined to describe.
+#
+# Suffixes only, anchored at a word boundary and requiring the legal form to
+# stand as its own token, so "Mr Ladislav SA" is not caught by "SA" inside a
+# name. Warning rather than Violation: the list is a heuristic over legal forms
+# across forty-odd jurisdictions and will not be complete, and a false positive
+# should surface for a human to look at rather than send the repair loop
+# rewriting a correct node.
+echr:CorporatePersonShape a sh:NodeShape ;
+    sh:targetClass echr:NaturalPerson, echr:LegalRepresentative ;
+    # Severity sits on the PROPERTY shape, not on the node shape. A node-level
+    # sh:severity does not reach a nested property shape: the result's source
+    # shape is the property shape itself, and with no severity of its own it
+    # defaults to sh:Violation. Verified 2026-08-28 -- declared on the node
+    # shape, "Scholz AG" came back as a Violation, which would have put the
+    # repair loop to work rewriting names on a heuristic.
+    sh:property [
+        sh:severity sh:Warning ;
+        sh:path echr:hasPersonName ;
+        sh:not [ sh:pattern "(?i)(\\b(a\\.?g|gmbh|s\\.?a|s\\.?r\\.?l|s\\.?p\\.?a|n\\.?v|b\\.?v|ltd|limited|plc|inc|llc|llp|kft|zrt|sp\\.?\\s*z\\s*o\\.?o|s\\.?r\\.?o|a\\.?s|oy|ab|aps|d\\.?o\\.?o|ooo|oao|zao|pao)\\.?\\s*$|\\b(company|corporation|holding|bank|insurance|municipality|ministry|association|foundation)\\b)" ] ;
+        sh:message "this name looks like a company or public body, not a human: an institutional party is echr:Party alone and must not be typed echr:NaturalPerson, and must never carry a birth year, nationality or residence" ;
     ] .
 
 # Gender provenance travels as a set or not at all. A cue kind with no cue text

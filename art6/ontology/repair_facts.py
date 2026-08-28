@@ -537,6 +537,35 @@ def _normalize_name(value) -> str:
     return re.sub(r"[^a-z0-9]+", " ", str(value).lower()).strip()
 
 
+def _demographics_conflict(graph: Graph, nodes: list[URIRef]) -> bool:
+    """Do these same-named nodes disagree on a fact one person cannot disagree with?
+
+    Co-applicants routinely share a designation -- a judgment calls all five of
+    them "the applicant" in the sentences that describe them individually -- so
+    the name key alone groups people the extraction was RIGHT to keep apart.
+    Sending such a group to the merge prompt asks the model to undo the person
+    splitting the extraction prompt just achieved, and the group looks maximally
+    mergeable when it happens: identical name, identical type, few triples each.
+
+    A differing birth year or gender is positive evidence of distinct people.
+    Both are owl:FunctionalProperty, so the disagreement is not two readings of
+    one person that a merge could reconcile -- it is two people, and merging
+    them would drop one of the two values outright.
+
+    Deliberately narrower than "any property differs": co-applicants usually DO
+    differ in residence and often in what quote anchors them, and treating every
+    difference as disqualifying would suppress the real duplicates this check
+    exists to surface. Absence never conflicts -- one node with a birth year and
+    one without are still candidates, which is the ordinary shape of a genuine
+    duplicate where one copy is thinner than the other.
+    """
+    for prop in (ECHR.hasBirthYear, ECHR.hasGender):
+        seen = {value for node in nodes for value in graph.objects(node, prop)}
+        if len(seen) > 1:
+            return True
+    return False
+
+
 def find_duplicate_candidates(graph: Graph) -> list[dict]:
     """Groups of same-typed doc: nodes that look like one entity split in two.
 
@@ -548,11 +577,14 @@ def find_duplicate_candidates(graph: Graph) -> list[dict]:
                           cannot decide the same case twice on one day, so a
                           collision here is a duplicate rather than a coincidence.
       DomesticAuthority   same normalized hasAuthorityName / rdfs:label.
-      NaturalPerson       same normalized hasPersonName / rdfs:label. Weaker
-                          than the other two keys -- two distinct people can
-                          share a name (a father and son, two co-accused) --
-                          so this one leans harder on the model actually
-                          checking the quotes before merging.
+      NaturalPerson       same normalized hasPersonName / rdfs:label, MINUS any
+                          group whose members disagree on a birth year or a
+                          gender (see `_demographics_conflict`). Weaker than the
+                          other two keys -- two distinct people can share a name
+                          (a father and son, two co-accused, five co-applicants
+                          the judgment all calls "the applicant") -- so this one
+                          leans harder on the model actually checking the quotes
+                          before merging.
 
     Each group is returned with enough context -- label, dates, outcome, quotes,
     and how many triples the node carries -- for the model to pick which node to
@@ -630,7 +662,7 @@ def find_duplicate_candidates(graph: Graph) -> list[dict]:
             continue
         by_person_name.setdefault(_normalize_name(name), []).append(s_)
     for name, nodes in by_person_name.items():
-        if len(nodes) > 1:
+        if len(nodes) > 1 and not _demographics_conflict(graph, nodes):
             groups.append(
                 {
                     "class": "echr:NaturalPerson",

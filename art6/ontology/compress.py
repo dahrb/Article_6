@@ -27,6 +27,14 @@ from openai import OpenAI
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PROMPT = Path(__file__).resolve().parent / "prompts" / "compress.txt"
+APPLICANTS_PROMPT = Path(__file__).resolve().parent / "prompts" / "applicants.txt"
+
+# How much of the document the applicants call reads. The description formula
+# ("is a Ukrainian national who was born in 1979 and lives in Kiev") sits in the
+# opening of the facts: across the pilot corpus its latest occurrence starts at
+# character 6,202, so 8,000 covers every case with margin at about a fifth of the
+# tokens of a full-document call.
+APPLICANTS_HEAD_CHARS = 8000
 
 # Fields whose values must be verbatim source text. Everything else (ids, order,
 # follows) is structural and is left alone.
@@ -200,11 +208,20 @@ def compress(
     )
     last = ""
     for attempt in range(1, retries + 2):
+        # The output-cap kwarg and the temperature a model will accept differ
+        # by family: gpt-5 reasoning models reject `max_tokens` in favour of
+        # `max_completion_tokens`, and reject any temperature but the default.
+        # Reusing repair_facts._token_limit_kwargs keeps the one spelling rule
+        # in one place rather than drifting between the two callers.
+        from art6.ontology.repair_facts import _token_limit_kwargs
+
+        kwargs = dict(_token_limit_kwargs(model, max_tokens))
+        if not model.lower().lstrip().startswith(("gpt-5", "o1", "o3", "o4")):
+            kwargs["temperature"] = temperature
         response = client.chat.completions.create(
             model=model,
             messages=[{"role": "user", "content": prompt}],
-            temperature=temperature,
-            max_tokens=max_tokens,
+            **kwargs,
         )
         last = response.choices[0].message.content or ""
         payload = parse_json(last)
@@ -213,6 +230,65 @@ def compress(
             stats["attempt"] = attempt
             return verified, stats, last
     return None, {"attempt": retries + 1, "error": "no usable JSON"}, last
+
+
+def compress_applicants(
+    client: OpenAI,
+    model: str,
+    text: str,
+    *,
+    temperature: float,
+    max_tokens: int = 4000,
+) -> tuple[list, str]:
+    """The applicants' own description, asked for in a SEPARATE call.
+
+    WHY THIS IS NOT PART OF THE MAIN PROMPT
+    ---------------------------------------
+    It was, and it cost events. Measured 2026-08-28 on gemma-4-31b at
+    temperature 0, arms interleaved within each round so that vLLM batching
+    could not align with the comparison:
+
+        L3   without applicants 21/21/21 events   with 19/19/19
+        L4   without applicants 13/13/13 events   with 10/10/10
+        L1   unaffected
+
+    The cause is not prompt length: a length-matched placebo of already-stated
+    rules cost nothing (L3 21/21). It is not the extra output section either --
+    a structurally identical dummy section asking for documents mentioned, which
+    the model actually filled with 2-5 entries, cost nothing and if anything
+    raised the count (L3 22/22, L4 14/15). Nor is it attention drawn to the
+    document's opening: the guidance prose WITHOUT the schema fields cost
+    nothing (L3 21/21/21). Only asking the model to emit these particular fields
+    alongside the events did it, and no single mechanism I tested accounts for
+    that. So this is a workaround for a measured effect, not a fix for an
+    understood one.
+
+    A second call makes the question moot. The main call runs the unchanged
+    prompt and so extracts exactly what it did before, and the applicants come
+    from a small, cheap call over the opening alone -- which is also more
+    accurate: birth-year recall went from 5/9 available values in the merged
+    prompt to 9/9 here, with no fabrications either way.
+    """
+    prompt = (
+        APPLICANTS_PROMPT.read_text(encoding="utf-8")
+        + "\n\nDOCUMENT OPENING\n<<<DOC\n"
+        + text[:APPLICANTS_HEAD_CHARS]
+        + "\nDOC\n"
+    )
+    from art6.ontology.repair_facts import _token_limit_kwargs
+
+    kwargs = dict(_token_limit_kwargs(model, max_tokens))
+    if not model.lower().lstrip().startswith(("gpt-5", "o1", "o3", "o4")):
+        kwargs["temperature"] = temperature
+    response = client.chat.completions.create(
+        model=model, messages=[{"role": "user", "content": prompt}], **kwargs
+    )
+    raw = response.choices[0].message.content or ""
+    payload = parse_json(raw)
+    if not isinstance(payload, dict):
+        return [], raw
+    applicants = payload.get("applicants")
+    return (applicants if isinstance(applicants, list) else []), raw
 
 
 def main() -> None:
@@ -257,12 +333,32 @@ def main() -> None:
             print(f"  {doc_id}: FAILED ({stats.get('error')})")
             (args.out_dir / f"{doc_id}.raw.txt").write_text(raw, encoding="utf-8")
             continue
+        # The applicants call is separate (see compress_applicants) but its spans
+        # are held to exactly the same standard: verified against the FULL source,
+        # not the 8,000-character head it was asked about, so the offsets that
+        # travel to stage 2 refer to the document as a whole like every other span.
+        applicants, applicants_raw = compress_applicants(
+            client, args.model, text, temperature=args.temperature
+        )
+        if applicants:
+            verified_applicants, applicant_stats = verify(
+                {"applicants": applicants}, text
+            )
+            for key in ("spans", "located", "dropped"):
+                stats[key] = stats.get(key, 0) + applicant_stats[key]
+            stats["dropped_values"] += applicant_stats["dropped_values"]
+            payload["applicants"] = verified_applicants.get("applicants", [])
+        elif applicants_raw:
+            (args.out_dir / f"{doc_id}.applicants.raw.txt").write_text(
+                applicants_raw, encoding="utf-8"
+            )
         for k in totals:
             totals[k] += stats.get(k, 0)
         rate = stats["located"] / stats["spans"] * 100 if stats["spans"] else 0.0
         print(
             f"  {doc_id}: {len(payload.get('events', [])):3} events, "
             f"{len(payload.get('persons', [])):2} persons, "
+            f"{len(payload.get('applicants', [])):2} applicants, "
             f"{stats['located']:4}/{stats['spans']:4} spans verbatim ({rate:5.1f}%), "
             f"{stats['dropped']:3} dropped [{time.perf_counter() - t0:.0f}s]"
         )

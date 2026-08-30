@@ -182,14 +182,31 @@ def main() -> None:
     written = 0
     with args.out_jsonl.open("w", encoding="utf-8") as handle:
         for index, line in enumerate(source_lines, 1):
-            doc_id = f"input.L{index}"
+            record = json.loads(line)
+            # Stage 1 names its output after the DOCUMENT when the input carries
+            # a case_id, and falls back to the positional name otherwise. Both
+            # spellings are accepted here: assuming the positional one silently
+            # skipped every document and produced an empty bundles file, which
+            # reads exactly like a compression stage that found nothing.
+            candidates = [
+                f"{record[key]}"
+                for key in ("case_id", "itemid")
+                if str(record.get(key) or "").strip()
+            ] + [f"input.L{index}"]
+            doc_id = next(
+                (
+                    c
+                    for c in candidates
+                    if (args.compress_dir / f"{c}.compress.json").exists()
+                ),
+                candidates[0],
+            )
             if wanted and doc_id not in wanted:
                 continue
             path = args.compress_dir / f"{doc_id}.compress.json"
             if not path.exists():
                 print(f"  {doc_id}: no compression output, skipped")
                 continue
-            record = json.loads(line)
             payload = json.loads(path.read_text(encoding="utf-8"))["payload"]
             rendered = render(payload)
             record["text"] = rendered
@@ -201,6 +218,18 @@ def main() -> None:
                 f"<- was {len(json.loads(line).get('text', '')):6,}"
             )
     print(f"\nwrote {written} record(s) to {args.out_jsonl}")
+    # A SHORT BUNDLE FILE SILENTLY MISALIGNS THE COMPARISON. Stage 2 names its
+    # outputs from the input file stem plus LINE POSITION, so if compression is
+    # missing for document 5 of ten, every later document shifts up a line and
+    # bundles.L5 is no longer the same case as input.L5. Nothing downstream
+    # would notice; the ablation would just quietly compare different judgments
+    # against each other. Fail here instead.
+    if written != len(source_lines):
+        raise SystemExit(
+            f"{len(source_lines) - written} of {len(source_lines)} document(s) have no "
+            "compression output -- refusing to write a bundle file whose line "
+            "numbering no longer matches the source"
+        )
 
 
 if __name__ == "__main__":

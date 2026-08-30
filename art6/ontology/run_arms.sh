@@ -502,16 +502,28 @@ for arm in ${ARMS}; do
     # when sourced, and carry_forward.py's own _load_env_file also takes the
     # LAST assignment -- so appending is enough, the base is never edited.
     arm_env="${arm_dir}/arm.env"
+    # CREDENTIALS ARE NEVER WRITTEN INTO A GENERATED FILE. They are read from
+    # keys.env into this shell and inherited by both consumers below -- the
+    # `source "${arm_env}"` path and `uv run --env-file`, which both add to the
+    # process environment rather than replacing it. arm.env lives under
+    # results/, a tracked directory, and previously held a literal LLM_API_KEY
+    # and FUSEKI_AUTH; only *.env being gitignored kept them out of a public
+    # repo. Exported here, stripped from the file below.
+    set -a
+    eval "$(grep -E '^(LLM_API_KEY|FUSEKI_AUTH)=' "${BASE_ENV_FILE}")"
+    set +a
+    LLM_API_KEY="${API_KEY:-${LLM_API_KEY:-}}"
+    export LLM_API_KEY
+    [[ -n "${LLM_API_KEY}" ]] || die "LLM_API_KEY resolved empty - source keys.env first"
+    [[ -n "${FUSEKI_AUTH:-}" ]] || die "FUSEKI_AUTH resolved empty - check ${BASE_ENV_FILE}"
+
     {
-        cat "${BASE_ENV_FILE}"
+        grep -vE '^(LLM_API_KEY|FUSEKI_AUTH|OPENAI_API_KEY|GEMINI_KEY|VLLM_API_KEY)=' \
+            "${BASE_ENV_FILE}"
         printf '\n# ---- run_arms.sh overrides for arm %s ----\n' "${arm}"
         printf 'LLM_MODEL_NAME=%s\n' "${MODEL_NAME}"
         printf 'LLM_TEMPERATURE=%s\n' "${TEMPERATURE}"
         printf 'LLM_BASE_URL=%s\n' "${BASE_URL}"
-        # A LITERAL key, never ${OPENAI_API_KEY}: carry_forward.py's
-        # _load_env_file skips any value containing '${' with a warning, so an
-        # interpolated key silently becomes no key at all.
-        printf 'LLM_API_KEY=%s\n' "${API_KEY}"
         printf 'LLM_MAX_INFLIGHT=4\n'
         # Forced off so wall clock and call counts mean something. See header.
         printf 'LLM_CACHE_ENABLED=false\n'

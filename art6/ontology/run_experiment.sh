@@ -278,7 +278,10 @@ for key in ${MODELS}; do
         printf 'ONTOLOGY_CONTEXT_FIXED_ONTOLOGY_ID=echr\n'
         if [[ -n "${base_url}" ]]; then
             printf 'LLM_BASE_URL=%s\n' "${base_url}"
-            printf 'LLM_API_KEY=%s\n' "${VLLM_API_KEY}"
+            # The key is exported, never written: this file is generated under
+            # results/ and a literal key there is one gitignore rule away from
+            # a public repo.
+            export LLM_API_KEY="${VLLM_API_KEY}"
             # Local servers queue rather than scale; keep the fan-out modest.
             printf 'LLM_MAX_INFLIGHT=4\n'
         fi

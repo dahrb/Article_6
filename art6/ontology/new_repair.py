@@ -966,6 +966,12 @@ def main() -> None:
     ap.add_argument("--input-jsonl", type=Path, default=None)
     ap.add_argument("--timeout", type=float, default=300.0)
     ap.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Re-repair documents that already have a .newrepair.json report. "
+        "Off by default so an interrupted run resumes where it stopped.",
+    )
+    ap.add_argument(
         "--capture-raw",
         type=Path,
         default=None,
@@ -991,25 +997,49 @@ def main() -> None:
     print(f"{len(files)} document(s), max {args.max_rounds} loop round(s)\n")
 
     t0 = time.perf_counter()
-    results = [
-        repair_document(
-            f,
-            client=client,
-            model=args.model,
-            source_text=sources.get(f.name.removesuffix(".facts.ttl")),
-            temperature=args.temperature,
-            max_tokens=args.max_tokens,
-            max_rounds=args.max_rounds,
-            skip_review=args.skip_review,
-        )
-        for f in files
-    ]
+    # PER-DOCUMENT ISOLATION AND RESUME.
+    #
+    # This was a list comprehension, which meant one raised exception -- an
+    # endpoint that went away mid-run, a malformed graph -- discarded every
+    # document already repaired in the same invocation. Over 240 documents
+    # that is hours of model calls thrown away by one transient failure, and
+    # repair is not reproducible run to run, so redoing them is not even a
+    # return to the same state.
+    #
+    # A document is "done" when its .newrepair.json report exists. Re-running
+    # the same command therefore picks up where it stopped.
+    results = []
+    failed: list[str] = []
+    resumed = 0
+    for f in files:
+        marker = f.with_suffix(".newrepair.json")
+        if marker.exists() and not args.overwrite:
+            resumed += 1
+            continue
+        try:
+            results.append(
+                repair_document(
+                    f,
+                    client=client,
+                    model=args.model,
+                    source_text=sources.get(f.name.removesuffix(".facts.ttl")),
+                    temperature=args.temperature,
+                    max_tokens=args.max_tokens,
+                    max_rounds=args.max_rounds,
+                    skip_review=args.skip_review,
+                )
+            )
+        except Exception as exc:  # noqa: BLE001 -- one document must not end the run
+            failed.append(f.name)
+            print(f"  {f.name}: FAILED ({type(exc).__name__}: {exc})", flush=True)
     if args.capture_raw is not None:
         args.capture_raw.write_text(
             json.dumps(RAW_RESPONSES, indent=1), encoding="utf-8"
         )
         print(f"raw generations -> {args.capture_raw}")
     ok = [r for r in results if "error" not in r]
+    if resumed:
+        print(f"\nresumed: {resumed} document(s) already repaired, skipped")
     print(
         f"\ntotal: {sum(r['shacl_before'] for r in ok)} -> "
         f"{sum(r['shacl_after'] for r in ok)} SHACL violation(s), "
@@ -1017,6 +1047,19 @@ def main() -> None:
         f"{sum(r['disjoint_after'] for r in ok)} disjoint-type conflict(s) over "
         f"{len(ok)} document(s) in {time.perf_counter() - t0:.1f}s"
     )
+    # Exit non-zero when the run did not cover its input. The totals above are
+    # computed over the documents that worked, so they look healthy however
+    # many were lost -- the count has to be checked against the input instead.
+    errored = [r for r in results if "error" in r]
+    covered = len(ok) + resumed
+    if failed:
+        print(f"FAILED outright: {len(failed)} -- {', '.join(failed)}")
+    if errored:
+        print(f"errored: {len(errored)} document(s)")
+    if covered < len(files):
+        print(f"INCOMPLETE: {covered} of {len(files)} document(s) repaired")
+    if failed or errored or covered < len(files):
+        raise SystemExit(2)
 
 
 if __name__ == "__main__":

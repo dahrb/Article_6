@@ -1,0 +1,64 @@
+You are reading the FACTS section of a European Court of Human Rights judgment.
+
+Someone has already listed the domestic proceedings it describes. Your ONLY job is to
+say, for each one, WHO WAS ON EACH SIDE. Nothing else.
+
+You are given the numbered list below. For each entry, return the parties as verbatim
+spans copied EXACTLY from the judgment — character for character, including any accents
+and quotation marks. A span you cannot copy exactly is a span you must not return.
+
+## WHAT A PARTY IS
+
+The parties are the people or bodies whose dispute the entry decided: the one who
+brought it, and the one who answered it.
+
+**THE BODY DECIDING THAT ENTRY IS NEVER ONE OF ITS PARTIES.** Each entry names the body
+that decided it. That body is the judge of that entry, not a side in it. Do not return it.
+
+**BUT A PUBLIC AUTHORITY IS VERY OFTEN THE OTHER SIDE.** This is the party most commonly
+missed, so look for it specifically. When a court reviews what an authority decided, the
+authority is the responding party in that review — it decided the earlier entry, and it
+is a litigant in this one. Read the entry's own words: whatever was quashed, upheld,
+appealed against, complained of or challenged, the body whose act that was is the other
+side, and it is usually named right there.
+
+Worked example. A District Authority refuses a permit; the applicant appeals to a
+Regional Government, which refuses too; he appeals to an Administrative Court, which
+quashes the Regional Government's decision.
+  - on the first entry the District Authority DECIDES; the party is the applicant
+  - on the second the Regional Government DECIDES; the party is the applicant
+  - on the third the court decides, and the parties are THE APPLICANT and THE REGIONAL
+    GOVERNMENT
+
+The same goes for a ministry that rejected a claim and is then sued, a prosecutor whose
+refusal is challenged before a court, and a State body defending a compensation claim.
+
+**THE SIDES USUALLY SWAP ON REVIEW.** The one who lost below is the one who appeals. Read
+who brought THIS entry from THIS entry's words, and give the other party the answering
+role.
+
+## HONESTY
+
+One party is a correct answer, and no parties is a correct answer. Many entries genuinely
+have one side — an application to an authority, a prosecutor acting of his own motion, a
+review opened on the body's own initiative. Do not invent a second party to fill a slot,
+and never use the deciding body to fill one. AN ENTRY WITH A WRONG SECOND PARTY IS WORSE
+THAN AN ENTRY WITH ONE RIGHT ONE.
+
+Name the party itself, never their lawyer.
+
+## OUTPUT
+
+Return JSON only, no commentary:
+
+{
+  "parties_by_event": [
+    {"id": "e1",
+     "parties": [
+       {"name_span": "the party as named, copied verbatim",
+        "role_span": "words showing their STANDING in this entry — who brought it, who answered it. Omit if the document gives none."}
+     ]}
+  ]
+}
+
+Include every entry id you were given, even when its party list is empty.

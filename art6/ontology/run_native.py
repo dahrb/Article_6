@@ -299,6 +299,28 @@ def main() -> int:
 
     out_dir = pathlib.Path(args.output_dir)
     facts_files = sorted(out_dir.glob("*.facts.ttl"))
+    # A RUN THAT PROCESSED NOTHING IS NOT A CLEAN RUN. Every integrity check
+    # below is computed over the documents that produced output, so an
+    # invocation that produced none passes all of them vacuously. Measured
+    # 2026-08-30: Fuseki refused to create a new project's datasets, every
+    # document fell through, and this printed "complete: all 0 document(s)
+    # kept every unit" with units_lost_total 0 and exited 0. `--allow-unit-loss`
+    # cannot see this, because it checks units lost PER DOCUMENT PROCESSED.
+    input_records = 0
+    input_path = pathlib.Path(args.input_path)
+    if input_path.is_file() and input_path.suffix == ".jsonl":
+        input_records = sum(
+            1
+            for line in input_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        )
+    if input_records and len(facts_files) < input_records:
+        print(
+            f"INCOMPLETE: {len(facts_files)} facts file(s) for "
+            f"{input_records} input record(s)",
+            file=sys.stderr,
+        )
+        exit_code = exit_code or 2
 
     # Per-document unit accounting. The log gives the loss; the per-document
     # run manifest gives the authoritative unit count (retrieval_metrics.

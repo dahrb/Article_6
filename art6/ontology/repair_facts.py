@@ -1886,7 +1886,18 @@ def call_repair_model(
     token_kwargs = _token_limit_kwargs(model, max_tokens)
     guided = DECODING_MODE != "unconstrained"
     prompt = user_prompt if guided else user_prompt + _schema_instruction()
-    for attempt in range(1, max_attempts + 1):
+    # A DOWNED ENDPOINT MUST NOT CONSUME AN ATTEMPT. `max_attempts` exists for
+    # noisy sampling -- the same prompt giving a good patch on one draw and
+    # nothing on the next -- and spending it on "the server is restarting"
+    # turns a two-minute outage into a document repaired without the model.
+    # Measured 2026-08-30: a repair run over ten documents logged 36
+    # connection failures, proposed zero operations, and still printed a
+    # totals line that read like a successful pass.
+    transient_waited = 0.0
+    transient_index = 0
+    attempt = 0
+    while attempt < max_attempts:
+        attempt += 1
         try:
             raw, finish_reason, stalled = _stream_patch_text(
                 client,
@@ -1914,6 +1925,31 @@ def call_repair_model(
                 if type(exc).__name__ == "LengthFinishReasonError"
                 else exc
             )
+            from art6.ontology.compress import (
+                TRANSIENT_BACKOFF,
+                TRANSIENT_MAX_WAIT_SECONDS,
+                _is_transient,
+            )
+
+            if _is_transient(exc) and transient_waited < TRANSIENT_MAX_WAIT_SECONDS:
+                # The endpoint is restarting, not refusing. Wait it out WITHOUT
+                # consuming a sampling attempt -- nothing was sampled, the
+                # request never reached the model. Same reasoning as the
+                # token-param swap below.
+                delay = TRANSIENT_BACKOFF[
+                    min(transient_index, len(TRANSIENT_BACKOFF) - 1)
+                ]
+                transient_index += 1
+                transient_waited += delay
+                attempt -= 1
+                print(
+                    f"      {type(exc).__name__}, endpoint unreachable -- "
+                    f"retrying in {delay}s (waited {transient_waited:.0f}s of "
+                    f"{TRANSIENT_MAX_WAIT_SECONDS}s)",
+                    flush=True,
+                )
+                time.sleep(delay)
+                continue
             if _is_wrong_token_param_error(exc):
                 # Wrong spelling for this endpoint: swap it and retry WITHOUT
                 # consuming a sampling attempt -- nothing was sampled, the

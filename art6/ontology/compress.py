@@ -16,17 +16,22 @@ judgment, so it cannot introduce content that did not pass through here.
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
+import contextlib
 import json
 import os
 import re
+import threading
 import time
 import unicodedata
+import urllib.request
 from pathlib import Path
 
 from openai import OpenAI
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PROMPT = Path(__file__).resolve().parent / "prompts" / "compress.txt"
+PARTIES_PROMPT = Path(__file__).resolve().parent / "prompts" / "parties.txt"
 APPLICANTS_PROMPT = Path(__file__).resolve().parent / "prompts" / "applicants.txt"
 
 # How much of the document the applicants call reads. The description formula
@@ -194,6 +199,205 @@ def parse_json(raw: str) -> dict | None:
     return None
 
 
+# ---------------------------------------------------------------------------
+# Admission control: concurrency bounded by TOKENS, not by request count
+# ---------------------------------------------------------------------------
+
+
+class TokenBudget:
+    """Let requests run concurrently only while their token footprints fit.
+
+    A worker count is the wrong unit for this pipeline. The three stage-1 calls
+    have very different footprints -- the main call sends a whole judgment and
+    asks for up to 16k back, the applicants call sends 8k characters and asks
+    for 4k -- and the documents themselves span a 26-fold length range, from a
+    3.8k-character Commission decision to a 98k Grand Chamber judgment. Four
+    workers is therefore anywhere between a trivial load and four maximal
+    sequences at once, depending entirely on which documents happen to align.
+
+    What a server can actually hold is a number of TOKENS: every in-flight
+    sequence occupies KV cache for its prompt plus everything it will generate,
+    for as long as it runs. So each request reserves `prompt + max_output`
+    before it starts and releases it when it finishes, and a request waits
+    rather than starting when its footprint does not fit in what is left.
+
+    vLLM will not error if this is exceeded -- it queues and preempts, and
+    preemption means recomputing a prefill that was already paid for. The cost
+    of getting this wrong is therefore silent slowdown and thrash rather than a
+    crash, which is exactly the kind of failure that is easy to ship.
+
+    A request larger than the whole budget runs alone rather than deadlocking,
+    with a warning: that is a `--token-budget` set too low for the corpus, and
+    the run should not stop for it.
+    """
+
+    def __init__(self, capacity: int) -> None:
+        self.capacity = capacity
+        self._available = capacity
+        self._lock = threading.Lock()
+        self._freed = threading.Condition(self._lock)
+
+    @contextlib.contextmanager
+    def reserve(self, cost: int, *, label: str = ""):
+        cost = max(1, int(cost))
+        with self._lock:
+            if cost > self.capacity:
+                print(
+                    f"    {label}: needs {cost:,} tokens, budget is "
+                    f"{self.capacity:,} -- running it alone",
+                    flush=True,
+                )
+                while self._available < self.capacity:
+                    self._freed.wait()
+                granted = self._available
+            else:
+                while self._available < cost:
+                    self._freed.wait()
+                granted = cost
+            self._available -= granted
+        try:
+            yield
+        finally:
+            with self._lock:
+                self._available += granted
+                self._freed.notify_all()
+
+
+def count_prompt_tokens(base_url: str, model: str, prompt: str, api_key: str) -> int:
+    """Exact prompt length from the server's own tokenizer, or a safe estimate.
+
+    vLLM exposes /tokenize, which is one cheap call and removes the guesswork.
+    The fallback matters more than it looks: an underestimate lets too much
+    run at once, so it errs high at 3 characters per token -- gemma averages
+    nearer 4 on this corpus, and being wrong in the direction of caution costs
+    a little throughput rather than a preemption storm.
+    """
+    root = base_url.rstrip("/")
+    root = root.removesuffix("/v1")
+    try:
+        body = json.dumps({"model": model, "prompt": prompt}).encode()
+        request = urllib.request.Request(
+            f"{root}/tokenize",
+            data=body,
+            headers={
+                "Content-Type": "application/json",
+                **({"Authorization": f"Bearer {api_key}"} if api_key else {}),
+            },
+        )
+        with urllib.request.urlopen(request, timeout=10) as response:
+            count = json.loads(response.read()).get("count")
+        if isinstance(count, int) and count > 0:
+            return count
+    except Exception:  # noqa: BLE001, S110 -- the estimate below is the point
+        pass
+    return len(prompt) // 3 + 1
+
+
+def server_token_capacity(base_url: str, api_key: str, default: int = 98_304) -> int:
+    """The server's max_model_len, which is the largest single sequence it can hold.
+
+    Used as the default budget. It is deliberately conservative -- a server can
+    usually hold several such sequences -- but it is the one number the server
+    actually tells us, and the whole point of this class is to stop guessing.
+    Raise it with --token-budget once a run's memory headroom is known.
+    """
+    try:
+        request = urllib.request.Request(
+            f"{base_url.rstrip('/')}/models",
+            headers={"Authorization": f"Bearer {api_key}"} if api_key else {},
+        )
+        with urllib.request.urlopen(request, timeout=10) as response:
+            data = json.loads(response.read()).get("data", [])
+        for entry in data:
+            value = entry.get("max_model_len")
+            if isinstance(value, int) and value > 0:
+                return value
+    except Exception:  # noqa: BLE001, S110
+        pass
+    return default
+
+
+# ---------------------------------------------------------------------------
+# Surviving a flaky endpoint
+# ---------------------------------------------------------------------------
+
+# How long to keep trying when the endpoint is unreachable rather than wrong.
+# Long by design: a run over thousands of documents is measured in hours, and
+# the failures that actually happen are an SSH port-forward dropping or a vLLM
+# server being restarted -- minutes of unavailability, not permanent loss.
+# Dying on those throws away everything computed so far; waiting costs nothing
+# but wall-clock. Measured 2026-08-30: an unwrapped call lost a ten-document O1
+# run in 5.9 seconds because the endpoint had gone down between runs.
+TRANSIENT_MAX_WAIT_SECONDS = 1800
+TRANSIENT_BACKOFF = (5, 15, 30, 60, 120, 300)
+
+
+BUDGET: TokenBudget | None = None
+
+
+def _reserve(
+    prompt: str, max_out: int, label: str, base_url: str, model: str, key: str
+):
+    """Reserve this request's peak footprint, or nothing when running serially.
+
+    Sequential runs need no admission control -- there is only ever one request
+    in flight -- so the budget is left unset and this is a no-op. It is the
+    parallel path that can put a 70k-token prompt and a 20k output budget on
+    the wire beside three more of the same and exceed what the server can hold.
+    """
+    if BUDGET is None:
+        return contextlib.nullcontext()
+    cost = count_prompt_tokens(base_url, model, prompt, key) + max_out
+    return BUDGET.reserve(cost, label=label)
+
+
+def _is_transient(exc: Exception) -> bool:
+    """True for "the endpoint is not there", false for "the request is wrong".
+
+    A 400 means the prompt is too long or malformed and retrying it forever is
+    a hang, not resilience. A connection error, a timeout, a 502 or a 503 means
+    something upstream is restarting and the same request will succeed later.
+    """
+    name = type(exc).__name__
+    if name in {
+        "APIConnectionError",
+        "APITimeoutError",
+        "InternalServerError",
+        "RateLimitError",
+    }:
+        return True
+    status = getattr(exc, "status_code", None) or getattr(exc, "status", None)
+    return status in {408, 409, 429, 500, 502, 503, 504}
+
+
+def call_with_recovery(client: OpenAI, *, label: str, **kwargs):
+    """One chat completion, waiting out an endpoint that has gone away.
+
+    Returns the response, or raises the last exception once
+    TRANSIENT_MAX_WAIT_SECONDS of retrying has not helped -- at which point the
+    endpoint is down rather than restarting, and the caller should record the
+    document as failed and carry on to the next one.
+    """
+    waited = 0.0
+    index = 0
+    while True:
+        try:
+            return client.chat.completions.create(**kwargs)
+        except Exception as exc:
+            if not _is_transient(exc) or waited >= TRANSIENT_MAX_WAIT_SECONDS:
+                raise
+            delay = TRANSIENT_BACKOFF[min(index, len(TRANSIENT_BACKOFF) - 1)]
+            index += 1
+            waited += delay
+            print(
+                f"    {label}: {type(exc).__name__}, endpoint unreachable -- "
+                f"retrying in {delay}s (waited {waited:.0f}s of "
+                f"{TRANSIENT_MAX_WAIT_SECONDS}s)",
+                flush=True,
+            )
+            time.sleep(delay)
+
+
 def compress(
     client: OpenAI,
     model: str,
@@ -218,11 +422,21 @@ def compress(
         kwargs = dict(_token_limit_kwargs(model, max_tokens))
         if not model.lower().lstrip().startswith(("gpt-5", "o1", "o3", "o4")):
             kwargs["temperature"] = temperature
-        response = client.chat.completions.create(
-            model=model,
-            messages=[{"role": "user", "content": prompt}],
-            **kwargs,
-        )
+        with _reserve(
+            prompt,
+            max_tokens,
+            "main",
+            str(client.base_url),
+            model,
+            client.api_key or "",
+        ):
+            response = call_with_recovery(
+                client,
+                label="main",
+                model=model,
+                messages=[{"role": "user", "content": prompt}],
+                **kwargs,
+            )
         last = response.choices[0].message.content or ""
         payload = parse_json(last)
         if payload is not None and payload.get("events"):
@@ -280,15 +494,159 @@ def compress_applicants(
     kwargs = dict(_token_limit_kwargs(model, max_tokens))
     if not model.lower().lstrip().startswith(("gpt-5", "o1", "o3", "o4")):
         kwargs["temperature"] = temperature
-    response = client.chat.completions.create(
-        model=model, messages=[{"role": "user", "content": prompt}], **kwargs
-    )
+    with _reserve(
+        prompt,
+        max_tokens,
+        "applicants",
+        str(client.base_url),
+        model,
+        client.api_key or "",
+    ):
+        response = call_with_recovery(
+            client,
+            label="applicants",
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            **kwargs,
+        )
     raw = response.choices[0].message.content or ""
     payload = parse_json(raw)
     if not isinstance(payload, dict):
         return [], raw
     applicants = payload.get("applicants")
     return (applicants if isinstance(applicants, list) else []), raw
+
+
+def compress_parties(
+    client: OpenAI,
+    model: str,
+    text: str,
+    events: list,
+    *,
+    temperature: float,
+    max_tokens: int = 6000,
+) -> tuple[dict, str]:
+    """Ask ONLY "who was on each side", in a second call, given the event list.
+
+    OPT-IN via --parties-pass. The main prompt keeps its own `parties` field and
+    is unchanged, so turning this off restores the previous behaviour exactly.
+
+    WHY A SECOND CALL
+    -----------------
+    The main prompt asks for twenty-odd fields per event and the opposing party
+    competes with all of them. There is precedent for that mattering here: see
+    compress_applicants, where moving two fields out of the main prompt and into
+    a call of their own stopped a measured loss of events and raised birth-year
+    recall from 5/9 to 9/9. Attention, not capability, was the binding
+    constraint there.
+
+    It looks like the binding constraint for parties too. Measured 2026-08-30 on
+    a held-out ten, extraction records both sides on 32% of events, while the
+    schema-light O1 baseline -- one call, nine flat fields, no ontology --
+    records two parties on 52%. O1 is not better at this; 20 of its party
+    entries are the deciding body of the very entry they sit on, which the
+    ontology conditions make impossible. But a much simpler prompt naming the
+    same thing gets closer to it, which points at competition for attention
+    rather than a limit on what the model can read.
+
+    The second call is given the events the first call already found, so it
+    cannot add, remove or renumber proceedings -- it can only answer the party
+    question about each one. Its spans are verified against the FULL source like
+    every other span, and its parties go through the deciding-body filter.
+
+    Returns ({event_id: [party dicts]}, raw response).
+    """
+    listing = []
+    for event in events:
+        bits = [f"[{event.get('id')}]"]
+        for key, label in (
+            ("decision_date_span", "date"),
+            ("authority_span", "decided by"),
+            ("what_happened_span", "what happened"),
+        ):
+            value = event.get(key) or {}
+            value = value.get("text") if isinstance(value, dict) else value
+            if value:
+                bits.append(f"{label}: {value}")
+        listing.append(" | ".join(bits))
+
+    prompt = (
+        PARTIES_PROMPT.read_text(encoding="utf-8")
+        + "\n\nTHE PROCEEDINGS\n"
+        + "\n".join(listing)
+        + "\n\nTHE JUDGMENT\n<<<DOC\n"
+        + text
+        + "\nDOC\n"
+    )
+    from art6.ontology.repair_facts import _token_limit_kwargs
+
+    kwargs = dict(_token_limit_kwargs(model, max_tokens))
+    if not model.lower().lstrip().startswith(("gpt-5", "o1", "o3", "o4")):
+        kwargs["temperature"] = temperature
+    with _reserve(
+        prompt, max_tokens, "parties", str(client.base_url), model, client.api_key or ""
+    ):
+        response = call_with_recovery(
+            client,
+            label="parties",
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            **kwargs,
+        )
+    raw = response.choices[0].message.content or ""
+    payload = parse_json(raw)
+    if not isinstance(payload, dict):
+        return {}, raw
+    out: dict = {}
+    for row in payload.get("parties_by_event") or []:
+        if isinstance(row, dict) and row.get("id"):
+            parties = row.get("parties")
+            out[str(row["id"])] = parties if isinstance(parties, list) else []
+    return out, raw
+
+
+def merge_parties(payload: dict, by_event: dict) -> tuple[int, int]:
+    """Add second-pass parties the main pass did not already have.
+
+    ADDITIVE ONLY. The main pass's parties are never removed or overwritten,
+    so the second call can only improve coverage, never cost it -- which keeps
+    the failure mode one-directional and makes the flag safe to leave on.
+
+    Matching is on normalised name text, so the second pass naming "the
+    applicant" where the first said "the applicant" adds nothing, while naming
+    "the Regional Government" adds a party.
+
+    Returns (parties added, events that gained one).
+    """
+    added = 0
+    events_touched = 0
+    for event in payload.get("events") or []:
+        proposed = by_event.get(str(event.get("id"))) or []
+        if not proposed:
+            continue
+        existing = event.get("parties") or []
+        seen = {
+            _normalise_name((p.get("name_span") or {}).get("text"))
+            for p in existing
+            if isinstance(p, dict)
+        }
+        gained = False
+        for party in proposed:
+            if not isinstance(party, dict):
+                continue
+            name = party.get("name_span")
+            name = name.get("text") if isinstance(name, dict) else name
+            key = _normalise_name(name)
+            if not key or key in seen:
+                continue
+            seen.add(key)
+            existing.append(party)
+            added += 1
+            gained = True
+        if gained:
+            events_touched += 1
+        event["parties"] = existing
+    return added, events_touched
 
 
 # Words describing something DONE in an investigation rather than a request
@@ -417,7 +775,15 @@ def drop_deciding_body_parties(payload: dict) -> tuple[int, list[str]]:
 
 
 def _normalise_name(value: str | None) -> str:
-    return re.sub(r"\s+", " ", (value or "")).strip().lower()
+    """Normalised form for comparing two party names.
+
+    Leading articles are stripped because the second pass and the main pass
+    routinely name the same body differently -- measured 2026-08-30, "Regional
+    Government" and "the Regional Government" landed on the same event as two
+    parties. An article is never what distinguishes two litigants.
+    """
+    value = re.sub(r"\s+", " ", (value or "")).strip().lower()
+    return re.sub(r"^(the|a|an)\s+", "", value)
 
 
 def main() -> None:
@@ -428,6 +794,34 @@ def main() -> None:
     ap.add_argument("--base-url", default="http://localhost:8001/v1")
     ap.add_argument("--api-key", default=os.environ.get("VLLM_API_KEY", "EMPTY"))
     ap.add_argument("--temperature", type=float, default=0.0)
+    ap.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="Documents to extract concurrently. 1 (the default) is the "
+        "sequential path, which is bit-reproducible: three separate runs of "
+        "the same input produced byte-identical payloads. Concurrency changes "
+        "vLLM batch composition and that guarantee is not claimed above 1.",
+    )
+    ap.add_argument(
+        "--token-budget",
+        type=int,
+        default=0,
+        help="Ceiling on prompt+output tokens in flight at once. 0 asks the "
+        "server for its max_model_len. Only consulted when --workers > 1.",
+    )
+    ap.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Redo documents whose .compress.json already exists. Off by "
+        "default so an interrupted run resumes where it stopped.",
+    )
+    ap.add_argument(
+        "--parties-pass",
+        action="store_true",
+        help="Second call asking only who was on each side, merged additively "
+        "into the main pass's parties. Off by default -- see compress_parties.",
+    )
     ap.add_argument("--max-tokens", type=int, default=16000)
     ap.add_argument(
         "--only", default="", help="comma-separated doc ids, e.g. input.L1,input.L6"
@@ -443,12 +837,34 @@ def main() -> None:
         for l in args.input_jsonl.read_text(encoding="utf-8").splitlines()
         if l.strip()
     ]
-    print(f"stage 1: {args.model} @ {args.base_url} (temperature {args.temperature})")
+    global BUDGET
+    if args.workers > 1:
+        capacity = args.token_budget or server_token_capacity(
+            args.base_url, args.api_key or ""
+        )
+        BUDGET = TokenBudget(capacity)
+        print(
+            f"stage 1: {args.model} @ {args.base_url} "
+            f"(temperature {args.temperature}, {args.workers} workers, "
+            f"token budget {capacity:,})"
+        )
+    else:
+        print(
+            f"stage 1: {args.model} @ {args.base_url} (temperature {args.temperature})"
+        )
     totals = {"spans": 0, "located": 0, "dropped": 0}
-    for i, line in enumerate(lines, 1):
-        doc_id = f"input.L{i}"
-        if wanted and doc_id not in wanted:
-            continue
+    failures: list[str] = []
+    resumed = 0
+    lock = threading.Lock()
+
+    def _run_doc(i: int, line: str, doc_id: str) -> None:
+        """Extract one document. Safe to call from several threads at once.
+
+        Everything here is per-document except `totals` and the printing, so
+        those take the lock and nothing else needs to. The document's own
+        SpanIndex, payload and stats are local, which is what makes the
+        parallel path a scheduling change rather than a behavioural one.
+        """
         text = json.loads(line).get("text", "")
         t0 = time.perf_counter()
         payload, stats, raw = compress(
@@ -459,9 +875,11 @@ def main() -> None:
             max_tokens=args.max_tokens,
         )
         if payload is None:
+            with lock:
+                failures.append(doc_id)
             print(f"  {doc_id}: FAILED ({stats.get('error')})")
             (args.out_dir / f"{doc_id}.raw.txt").write_text(raw, encoding="utf-8")
-            continue
+            return
         # The applicants call is separate (see compress_applicants) but its spans
         # are held to exactly the same standard: verified against the FULL source,
         # not the 8,000-character head it was asked about, so the offsets that
@@ -481,16 +899,53 @@ def main() -> None:
             (args.out_dir / f"{doc_id}.applicants.raw.txt").write_text(
                 applicants_raw, encoding="utf-8"
             )
+        if args.parties_pass:
+            by_event, parties_raw = compress_parties(
+                client,
+                args.model,
+                text,
+                payload.get("events") or [],
+                temperature=args.temperature,
+            )
+            # An empty string is not a span. The second pass emits
+            # "role_span": "" where the document states no role, and feeding
+            # those to verify() counted 79 phantom drops on one ten-document
+            # run -- a span-fidelity figure that looked like a fabrication
+            # problem and was punctuation.
+            for _parties in by_event.values():
+                for _party in _parties:
+                    if isinstance(_party, dict):
+                        for _k in [k for k, v in _party.items() if not str(v).strip()]:
+                            _party.pop(_k)
+            if by_event:
+                verified, party_stats = verify({"e": by_event}, text)
+                for key in ("spans", "located", "dropped"):
+                    stats[key] = stats.get(key, 0) + party_stats[key]
+                stats["dropped_values"] += party_stats["dropped_values"]
+                p_added, p_events = merge_parties(payload, verified.get("e", {}))
+            else:
+                p_added = p_events = 0
+                if parties_raw:
+                    (args.out_dir / f"{doc_id}.parties.raw.txt").write_text(
+                        parties_raw, encoding="utf-8"
+                    )
+            stats["parties_pass_added"] = p_added
+            stats["parties_pass_events"] = p_events
+            with lock:
+                totals["p_added"] = totals.get("p_added", 0) + p_added
+        else:
+            p_added = p_events = 0
         actless, actless_ids = drop_actless_outcomes(payload)
         stats["actless_outcomes_dropped"] = actless
         stats["actless_outcomes_dropped_ids"] = actless_ids
         body_parties, body_names = drop_deciding_body_parties(payload)
         stats["deciding_body_parties_dropped"] = body_parties
         stats["deciding_body_parties_dropped_values"] = body_names
-        for k in totals:
-            totals[k] += stats.get(k, 0)
-        totals["body_parties"] = totals.get("body_parties", 0) + body_parties
-        totals["actless"] = totals.get("actless", 0) + actless
+        with lock:
+            for k in ("spans", "located", "dropped"):
+                totals[k] += stats.get(k, 0)
+            totals["body_parties"] = totals.get("body_parties", 0) + body_parties
+            totals["actless"] = totals.get("actless", 0) + actless
         rate = stats["located"] / stats["spans"] * 100 if stats["spans"] else 0.0
         print(
             f"  {doc_id}: {len(payload.get('events', [])):3} events, "
@@ -498,8 +953,9 @@ def main() -> None:
             f"{len(payload.get('applicants', [])):2} applicants, "
             f"{stats['located']:4}/{stats['spans']:4} spans verbatim ({rate:5.1f}%), "
             f"{stats['dropped']:3} dropped, "
-            f"{body_parties:2} body-as-party, {actless:2} actless-outcome removed "
-            f"[{time.perf_counter() - t0:.0f}s]"
+            f"{body_parties:2} body-as-party, {actless:2} actless-outcome removed"
+            + (f", +{p_added:2} parties (2nd pass) " if args.parties_pass else " ")
+            + f"[{time.perf_counter() - t0:.0f}s]"
         )
         (args.out_dir / f"{doc_id}.compress.json").write_text(
             json.dumps(
@@ -509,6 +965,43 @@ def main() -> None:
             ),
             encoding="utf-8",
         )
+
+    def _guarded(i: int, line: str) -> None:
+        doc_id = f"input.L{i}"
+        # ONE DOCUMENT MUST NOT END THE RUN. call_with_recovery waits out a
+        # restarting endpoint and re-raises only when it is genuinely gone;
+        # at that point this document is recorded as failed and the others
+        # keep going, so a run that loses its server for good still keeps
+        # everything it had already produced and still exits non-zero.
+        try:
+            _run_doc(i, line, doc_id)
+        except Exception as exc:  # noqa: BLE001 -- recorded, not swallowed
+            with lock:
+                failures.append(doc_id)
+            print(f"  {doc_id}: FAILED ({type(exc).__name__}: {exc})", flush=True)
+
+    todo = []
+    for i, line in enumerate(lines, 1):
+        doc_id = f"input.L{i}"
+        if wanted and doc_id not in wanted:
+            continue
+        # RESUME. A long run will be interrupted -- a dropped port-forward,
+        # a restarted server, a killed shell -- and redoing completed work to
+        # reach the point of failure is both slow and a source of drift. An
+        # existing output is a finished document.
+        if (args.out_dir / f"{doc_id}.compress.json").exists() and not args.overwrite:
+            resumed += 1
+            continue
+        todo.append((i, line))
+
+    if args.workers > 1:
+        with concurrent.futures.ThreadPoolExecutor(args.workers) as pool:
+            list(pool.map(lambda a: _guarded(*a), todo))
+    else:
+        for i, line in todo:
+            _guarded(i, line)
+    if resumed:
+        print(f"\nresumed: {resumed} document(s) already present, skipped")
     if totals["spans"]:
         print(
             f"\ntotal: {totals['located']}/{totals['spans']} spans verbatim "
@@ -516,6 +1009,20 @@ def main() -> None:
             f"{totals.get('body_parties', 0)} deciding-body parties, "
             f"{totals.get('actless', 0)} actless outcomes removed"
         )
+    # A NON-ZERO EXIT WHEN ANYTHING WAS LOST. A stage that reports a tidy
+    # summary after failing on some of its input is the failure mode that cost
+    # a whole v15 run: run_native printed "complete: all 0 document(s) kept
+    # every unit" and exited 0 after Fuseki refused every write. Wall time and
+    # span rates look normal when the denominator is the documents that
+    # worked, so the count has to be checked against the input, not itself.
+    expected = len(wanted) if wanted else len(lines)
+    produced = len(list(args.out_dir.glob("*.compress.json")))
+    if failures:
+        print(f"FAILED on {len(failures)} document(s): {', '.join(failures)}")
+    if produced < expected:
+        print(f"INCOMPLETE: {produced} output(s) for {expected} input(s)")
+    if failures or produced < expected:
+        raise SystemExit(2)
 
 
 if __name__ == "__main__":

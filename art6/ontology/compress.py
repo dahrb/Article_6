@@ -107,6 +107,22 @@ class SpanIndex:
         return self.positions[at], self.positions[end] + 1
 
 
+def _located(index: SpanIndex, hit: tuple[int, int]) -> dict:
+    """Record what the DOCUMENT says at these offsets, not what the model typed.
+
+    Location is deliberately tolerant -- it folds whitespace and falls back to a
+    case-insensitive search -- so a located span is not necessarily character-
+    identical to the source. Storing the model's string then produces a record
+    whose text and offsets disagree: measured on Ukraine v. Russia (re Crimea),
+    1 span of 825 came back as "the sentence was later reduced" where the
+    judgment reads "The sentence was later reduced". Slicing the source closes
+    that gap, so `text == source[start:end]` holds for every span by
+    construction rather than by luck.
+    """
+    start, end = hit
+    return {"text": index.source[start:end], "start": start, "end": end}
+
+
 def verify(payload: dict, source: str) -> tuple[dict, dict]:
     """Walk the payload, locate every *_span, attach offsets, drop what fails.
 
@@ -138,7 +154,7 @@ def verify(payload: dict, source: str) -> tuple[dict, dict]:
                             stats["dropped_values"].append(item[:80])
                             continue
                         stats["located"] += 1
-                        kept.append({"text": item, "start": hit[0], "end": hit[1]})
+                        kept.append(_located(index, hit))
                     if kept:
                         out[key] = kept
                 elif key.endswith(SPAN_SUFFIX) and isinstance(value, str):
@@ -149,7 +165,7 @@ def verify(payload: dict, source: str) -> tuple[dict, dict]:
                         stats["dropped_values"].append(value[:80])
                         continue
                     stats["located"] += 1
-                    out[key] = {"text": value, "start": hit[0], "end": hit[1]}
+                    out[key] = _located(index, hit)
                 else:
                     walked = walk(value)
                     if walked not in (None, [], {}):
@@ -406,11 +422,22 @@ def compress(
     temperature: float,
     max_tokens: int,
     retries: int = 2,
+    verify_against: str | None = None,
 ) -> tuple[dict | None, dict, str]:
+    """One extraction pass over `text`.
+
+    `verify_against` is the document spans are located in, defaulting to `text`
+    itself. The split path (compress_split) passes the WHOLE document while
+    sending only a half to the model, so that offsets come back relative to the
+    full source rather than to the half -- otherwise every span from the second
+    half would be silently mis-anchored.
+    """
+    source = text if verify_against is None else verify_against
     prompt = (
         PROMPT.read_text(encoding="utf-8") + "\n\nJUDGMENT\n<<<DOC\n" + text + "\nDOC\n"
     )
     last = ""
+    truncated = False
     for attempt in range(1, retries + 2):
         # The output-cap kwarg and the temperature a model will accept differ
         # by family: gpt-5 reasoning models reject `max_tokens` in favour of
@@ -422,6 +449,7 @@ def compress(
         kwargs = dict(_token_limit_kwargs(model, max_tokens))
         if not model.lower().lstrip().startswith(("gpt-5", "o1", "o3", "o4")):
             kwargs["temperature"] = temperature
+        kwargs["seed"] = MODEL_SEED
         with _reserve(
             prompt,
             max_tokens,
@@ -438,12 +466,289 @@ def compress(
                 **kwargs,
             )
         last = response.choices[0].message.content or ""
+        truncated = response.choices[0].finish_reason == "length"
         payload = parse_json(last)
         if payload is not None and payload.get("events"):
-            verified, stats = verify(payload, text)
+            verified, stats = verify(payload, source)
             stats["attempt"] = attempt
             return verified, stats, last
-    return None, {"attempt": retries + 1, "error": "no usable JSON"}, last
+    # Distinguish "the model wrote nonsense" from "the model was cut off". Only
+    # the second is fixable by giving it more room or less document, and the
+    # split path keys off exactly that distinction.
+    reason = "output truncated at the token cap" if truncated else "no usable JSON"
+    return None, {"attempt": retries + 1, "error": reason, "truncated": truncated}, last
+
+
+# Halving 424,646 chars (the corpus maximum) clears the window in one split, so
+# the cap is a guard against pathological input, not a working depth.
+# Sampling seed sent with every completion. It does NOT make generation
+# reproducible: at temperature 0 decoding is greedy, so there is no sampling RNG
+# for a seed to control, and the residual run-to-run variance is numerical --
+# batch composition and prefix-cache state change reduction order in the GPU
+# kernels. Measured 2026-08-30 on a 57k-token prompt: four calls, three
+# byte-identical (two unseeded, one seeded) and a fourth with the SAME seed
+# differing. Sent anyway so the request is fully specified and so any future
+# run at temperature > 0 is reproducible without a code change.
+MODEL_SEED = 42
+
+MAX_SPLIT_DEPTH = 4
+
+# What a split part is allowed to WRITE. A document only reaches the split path
+# because it is long, and a long ECHR judgment is long in events as well as in
+# words -- half of Ukraine v. Russia (re Crimea) alone holds 73. Parts are sized
+# so the prompt and this budget both fit the window.
+SPLIT_OUTPUT_TOKENS = 32_000
+SPLIT_OUTPUT_MARGIN = 1_000
+
+
+def _halve(text: str) -> tuple[str, str]:
+    """Split as near the midpoint as a sane boundary allows.
+
+    Separators are tried coarsest-first, but a separator is only used if its
+    occurrence NEAREST THE MIDPOINT is actually near it. That proviso is the
+    whole point: the largest judgment in the corpus has 24 blank-line breaks and
+    all of them fall in its first 29k of 425k characters, so preferring
+    paragraph breaks unconditionally cut 29k/396k, recursed on a tail barely
+    smaller than the input, and exhausted the depth cap without ever fitting.
+    Long ECHR narratives separate paragraphs with a single newline.
+    """
+    mid = len(text) // 2
+    tolerance = len(text) // 4
+    for separator in ("\n\n", "\n", ". ", " "):
+        positions = [m.start() for m in re.finditer(re.escape(separator), text)]
+        if not positions:
+            continue
+        best = min(positions, key=lambda position: abs(position - mid))
+        if abs(best - mid) <= tolerance:
+            cut = best + (len(separator) if separator == ". " else 0)
+            return text[:cut], text[cut:]
+    return text[:mid], text[mid:]
+
+
+def _merge_split_payloads(parts: list[dict]) -> dict:
+    """Concatenate the parts' events, keeping ids unique and `follows` intact.
+
+    `follows` holds another event's id ("e1") and is scoped to the call that
+    produced it, so two halves both emit an "e1". Ids are prefixed per part and
+    every follows pointer is rewritten with the same map; a chain that crosses
+    the split simply has no link, because neither half could see the other side.
+    """
+    merged: dict = {}
+    events: list = []
+    for n, part in enumerate(parts, start=1):
+        if not isinstance(part, dict):
+            continue
+        for key, value in part.items():
+            if key != "events" and key not in merged:
+                merged[key] = value
+        remap = {}
+        part_events = part.get("events") or []
+        for event in part_events:
+            if isinstance(event, dict) and event.get("id"):
+                remap[event["id"]] = f"p{n}{event['id']}"
+        for event in part_events:
+            if not isinstance(event, dict):
+                continue
+            event = dict(event)
+            if event.get("id") in remap:
+                event["id"] = remap[event["id"]]
+            follows = event.get("follows")
+            if follows:
+                if follows in remap:
+                    event["follows"] = remap[follows]
+                else:
+                    # Points across the split. Drop the pointer and its span
+                    # rather than leave a dangling id for stage 2 to resolve.
+                    event.pop("follows", None)
+                    event.pop("follows_span", None)
+            events.append(event)
+    merged["events"] = events
+    return merged
+
+
+def compress_split(
+    client: OpenAI,
+    model: str,
+    text: str,
+    *,
+    temperature: float,
+    max_tokens: int,
+    retries: int = 2,
+    capacity: int,
+    verify_against: str | None = None,
+    depth: int = 0,
+) -> tuple[dict | None, dict, str]:
+    """compress(), but halve the document when it will not fit the window.
+
+    Two of 9,270 English judgments approach the model window. Truncating one
+    would lose proceedings from the end of the chain without saying so, and
+    dropping it would leave the pipeline unable to process its own corpus, so an
+    oversize document is halved and each half extracted independently. Spans are
+    verified against the WHOLE document, so verified-by-construction holds
+    exactly as on the single-pass path.
+
+    SIZE THE PARTS FOR THE ANSWER, NOT JUST THE QUESTION
+    ----------------------------------------------------
+    The first version of this split sized parts to fit the prompt and left the
+    output budget at the caller's 16,000. Measured on Ukraine v. Russia (re
+    Crimea): the 212,326-character second half is 57,270 prompt tokens, leaving
+    41,034 of headroom, and its answer ran past 16,000 tokens and was cut off
+    mid-event at id e74 -- 73 events in one half, because an inter-state case
+    enumerates individual incidents. So parts are now sized so that the prompt
+    AND a generous output budget both fit, and a part that still comes back
+    truncated is split again rather than accepted.
+    """
+    source = text if verify_against is None else verify_against
+    cost = _prompt_cost(client, model, text)
+    if cost + max_tokens <= capacity:
+        return compress(
+            client,
+            model,
+            text,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            retries=retries,
+            verify_against=source,
+        )
+    payloads, totals, raws = [], {"spans": 0, "located": 0, "dropped": 0}, []
+    failed = _extract_parts(
+        client,
+        model,
+        text,
+        temperature=temperature,
+        retries=retries,
+        capacity=capacity,
+        source=source,
+        depth=depth,
+        payloads=payloads,
+        totals=totals,
+        raws=raws,
+    )
+    totals["split_parts"] = len(payloads)
+    totals["split_parts_failed"] = failed
+    raw = "\n".join(raws)
+    if failed or not payloads:
+        # A half-extracted judgment is WORSE than a missing one: it looks like a
+        # complete extraction and would be scored as one. Fail the document and
+        # let the caller record it, rather than returning a partial that reports
+        # a healthy verbatim rate over the parts that happened to work.
+        totals["error"] = (
+            f"{failed} split part(s) produced no usable JSON --"
+            " refusing to emit a partially extracted document"
+        )
+        return None, totals, raw
+    return _merge_split_payloads(payloads), totals, raw
+
+
+def _prompt_cost(client: OpenAI, model: str, text: str) -> int:
+    prompt = (
+        PROMPT.read_text(encoding="utf-8") + "\n\nJUDGMENT\n<<<DOC\n" + text + "\nDOC\n"
+    )
+    return count_prompt_tokens(
+        str(client.base_url), model, prompt, client.api_key or ""
+    )
+
+
+def _extract_parts(
+    client: OpenAI,
+    model: str,
+    text: str,
+    *,
+    temperature: float,
+    retries: int,
+    capacity: int,
+    source: str,
+    depth: int,
+    payloads: list,
+    totals: dict,
+    raws: list,
+) -> int:
+    """Recursively halve `text` until each part fits, extracting as it goes.
+
+    Appends one payload per part, in document order, and returns how many parts
+    failed. Parts get SPLIT_OUTPUT_TOKENS rather than the caller's budget: a
+    document only reaches this path because it is unusually long, and length
+    here means many events to emit, not merely many to read.
+    """
+    cost = _prompt_cost(client, model, text)
+    room = capacity - cost
+    fits = room >= SPLIT_OUTPUT_TOKENS
+    if fits or depth >= MAX_SPLIT_DEPTH:
+        budget = min(SPLIT_OUTPUT_TOKENS, max(room - SPLIT_OUTPUT_MARGIN, 1_000))
+        payload, stats, raw = compress(
+            client,
+            model,
+            text,
+            temperature=temperature,
+            max_tokens=budget,
+            retries=retries,
+            verify_against=source,
+        )
+        raws.append(raw)
+        for key in ("spans", "located", "dropped"):
+            totals[key] = totals.get(key, 0) + stats.get(key, 0)
+        totals.setdefault("dropped_values", []).extend(stats.get("dropped_values", []))
+        if payload is None:
+            if stats.get("truncated") and depth < MAX_SPLIT_DEPTH:
+                # It read the part fine and ran out of room to answer. Fewer
+                # events per part is the fix, so halve it and try again rather
+                # than record a failure the split path can still avoid.
+                print(
+                    f"    part truncated at {budget:,} output tokens;"
+                    f" splitting {len(text):,} chars further",
+                    flush=True,
+                )
+                head, tail = _halve(text)
+                if head.strip() and tail.strip():
+                    return sum(
+                        _extract_parts(
+                            client,
+                            model,
+                            half,
+                            temperature=temperature,
+                            retries=retries,
+                            capacity=capacity,
+                            source=source,
+                            depth=depth + 1,
+                            payloads=payloads,
+                            totals=totals,
+                            raws=raws,
+                        )
+                        for half in (head, tail)
+                    )
+            print(
+                f"    SPLIT PART FAILED ({stats.get('error')}):"
+                f" {len(text):,} chars, {cost:,} prompt tokens,"
+                f" {budget:,} output budget",
+                flush=True,
+            )
+            return 1
+        payloads.append(payload)
+        return 0
+    head, tail = _halve(text)
+    if not head.strip() or not tail.strip():
+        depth = MAX_SPLIT_DEPTH
+    print(
+        f"    {len(text):,} chars is {cost:,} prompt tokens against a"
+        f" {capacity:,} window; splitting into {len(head):,} + {len(tail):,}",
+        flush=True,
+    )
+    failed = 0
+    for half in (head, tail):
+        failed += _extract_parts(
+            client,
+            model,
+            half,
+            temperature=temperature,
+            retries=retries,
+            capacity=capacity,
+            source=source,
+            depth=depth + 1,
+            payloads=payloads,
+            totals=totals,
+            raws=raws,
+        )
+    return failed
 
 
 def compress_applicants(
@@ -494,6 +799,7 @@ def compress_applicants(
     kwargs = dict(_token_limit_kwargs(model, max_tokens))
     if not model.lower().lstrip().startswith(("gpt-5", "o1", "o3", "o4")):
         kwargs["temperature"] = temperature
+        kwargs["seed"] = MODEL_SEED
     with _reserve(
         prompt,
         max_tokens,
@@ -583,6 +889,7 @@ def compress_parties(
     kwargs = dict(_token_limit_kwargs(model, max_tokens))
     if not model.lower().lstrip().startswith(("gpt-5", "o1", "o3", "o4")):
         kwargs["temperature"] = temperature
+        kwargs["seed"] = MODEL_SEED
     with _reserve(
         prompt, max_tokens, "parties", str(client.base_url), model, client.api_key or ""
     ):
@@ -786,6 +1093,27 @@ def _normalise_name(value: str | None) -> str:
     return re.sub(r"^(the|a|an)\s+", "", value)
 
 
+def doc_id_for(index: int, line: str) -> str:
+    """Name an output after the DOCUMENT, not after its line number.
+
+    Positional ids (input.L1 ... input.L250) make the mapping back to HUDOC
+    depend on input line order, which resume markers, partial reruns and any
+    reordering of the input silently invalidate -- and a 250-document run is
+    exactly where that goes unnoticed. The evaluation samples carry `case_id`,
+    so use it when present and fall back to the positional name otherwise, which
+    keeps older input files working unchanged.
+    """
+    try:
+        record = json.loads(line)
+    except (ValueError, TypeError):
+        return f"input.L{index}"
+    for field in ("case_id", "itemid"):
+        value = str(record.get(field) or "").strip()
+        if value:
+            return value
+    return f"input.L{index}"
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--input-jsonl", required=True, type=Path)
@@ -838,10 +1166,12 @@ def main() -> None:
         if l.strip()
     ]
     global BUDGET
+    # Capacity is needed on every path now, not just the parallel one: it is
+    # what decides whether a document has to be split.
+    capacity = args.token_budget or server_token_capacity(
+        args.base_url, args.api_key or ""
+    )
     if args.workers > 1:
-        capacity = args.token_budget or server_token_capacity(
-            args.base_url, args.api_key or ""
-        )
         BUDGET = TokenBudget(capacity)
         print(
             f"stage 1: {args.model} @ {args.base_url} "
@@ -867,12 +1197,13 @@ def main() -> None:
         """
         text = json.loads(line).get("text", "")
         t0 = time.perf_counter()
-        payload, stats, raw = compress(
+        payload, stats, raw = compress_split(
             client,
             args.model,
             text,
             temperature=args.temperature,
             max_tokens=args.max_tokens,
+            capacity=capacity,
         )
         if payload is None:
             with lock:
@@ -967,7 +1298,7 @@ def main() -> None:
         )
 
     def _guarded(i: int, line: str) -> None:
-        doc_id = f"input.L{i}"
+        doc_id = doc_id_for(i, line)
         # ONE DOCUMENT MUST NOT END THE RUN. call_with_recovery waits out a
         # restarting endpoint and re-raises only when it is genuinely gone;
         # at that point this document is recorded as failed and the others
@@ -982,7 +1313,7 @@ def main() -> None:
 
     todo = []
     for i, line in enumerate(lines, 1):
-        doc_id = f"input.L{i}"
+        doc_id = doc_id_for(i, line)
         if wanted and doc_id not in wanted:
             continue
         # RESUME. A long run will be interrupted -- a dropped port-forward,

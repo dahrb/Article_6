@@ -52,7 +52,7 @@ verbatim text for. Omit any list that is empty.
       "start_date_span": "the date it was begun or lodged, if separately given",
       "authority_span": "the body that decided it, as named",
       "authority_kind_span": "words showing what kind of body (court, prosecutor, council)",
-      "outcome": "THE RESULT, as one of: merits decided | inadmissible | remitted | settled or withdrawn | other. A judgement you make, filled on EVERY event -- see CLASSIFY THE RUNG AND THE RESULT below.",
+      "outcome": "THE RESULT, as one of: merits decided | inadmissible | remitted | settled or withdrawn | other. A judgement you make, filled on every event that DECIDED something -- omitted entirely on an event that merely records an act. See CLASSIFY THE RUNG AND THE RESULT below.",
       "outcome_span": "the words stating the result, IF the document states it. Omit when it does not -- the classification above still gets filled.",
       "instance_level": "WHICH RUNG, as one of: first instance | appeal | cassation | investigative | administrative review | supervisory review | reopening. A judgement you make, filled on EVERY event -- see CLASSIFY THE RUNG AND THE RESULT below.",
       "instance_span": "the words naming the rung, IF the document states it literally ('at first instance', 'on appeal'). Omit when it does not -- the classification above still gets filled.",
@@ -150,6 +150,25 @@ particular a decision to leave a claim unexamined is `inadmissible`, not
 `other`, and a decision refusing a request during an investigation is
 `inadmissible`, not `merits decided`.
 
+**AN ACT IS NOT A RESULT. Leave `outcome` OUT when nothing was decided.** This is
+the one place the pairing above does not apply, and `instance_level` is unaffected
+-- classify the rung as always. A gun is seized, a search warrant is issued, a
+suspect is arrested, a crime scene is inspected, an investigation is opened: these
+are things DONE, not requests answered, and none of the five values is true of
+them. `merits decided` is false, because no merits were reached; `other` is false,
+because there was no result at all. Omit the field.
+
+The test is whether something was ASKED and ANSWERED. A request refused during an
+investigation IS a result -- `inadmissible`, as above -- and keeps its outcome. An
+arrest answers nothing, and does not.
+
+Investigative steps are where this goes wrong, because the rung is obvious and the
+habit of filling every field carries `merits decided` in behind it. Measured
+2026-08-28 on a Georgian criminal case: a gun seizure, a search warrant and an
+arrest were all labelled `merits decided`. Every one of those triples was
+well-formed, in-vocabulary and evidenced, and every one was false. An omitted
+outcome is a gap anyone can see; a wrong one is a gap nobody can.
+
 ## COVERAGE AND GRANULARITY
 
 ONE ENTRY PER JURISDICTIONAL INSTANCE — not one per procedural act.
@@ -212,6 +231,58 @@ struck out, the applicant is still the one who brought it, and `role_span` for t
 applicant stays on the words about lodging the claim. Reading the standing off the last
 act is the single most common way this field goes wrong, and it silently reverses who was
 on which side.
+
+**THE OTHER SIDE IS OFTEN NAMED ONLY ONCE.** A first-instance judgment names both sides.
+The appeal against it usually names only the one who appealed — "the applicant appealed",
+"an appeal was lodged" — because the other side is already known to the reader and the
+text does not repeat it. Where the entry this one `follows` recorded an opposing party,
+and nothing in the text suggests they dropped out, record that party here too. It is the
+same dispute between the same litigants, and leaving them out makes the opposing party
+vanish from the whole upper half of the chain.
+
+**This is permission, not a quota.** Add the second party where the document names them,
+or where the entry this one follows makes plain who they are. Do not manufacture one to
+fill the field. Many entries genuinely have one party — an application to an authority, a
+prosecutor acting of his own motion, a review opened ex officio — and some have none you
+can name from the text. ONE PARTY IS A CORRECT ANSWER. NO PARTIES IS A CORRECT ANSWER. An
+entry carrying a wrong second party is worse than an entry carrying one right one.
+
+**Never reach for the deciding body OF THIS ENTRY to fill the gap.** The body named in
+THIS entry's `authority_span` is not available as this entry's missing party. If you
+cannot name the other side, leave it out and move on. This is the most common way the
+field goes wrong: the gap is obvious, the deciding body's name is right there, and on
+this entry it is the one name that is certainly not the answer.
+
+**But an authority IS the party when its OWN decision is the thing under review, and this
+is the single most-missed party in the whole corpus.** In public-law proceedings the
+respondent is usually a public body, and it is a party exactly where it is not the judge:
+
+  - A permit is refused by a District Authority. The applicant appeals to a Regional
+    Government, which refuses it too. He appeals to an Administrative Court, which
+    QUASHES THE REGIONAL GOVERNMENT'S DECISION. On the first two entries those bodies
+    are the deciding body. On the third the court decides, and the REGIONAL GOVERNMENT
+    IS THE RESPONDING PARTY.
+  - A ministry rejects a claim, and the claimant sues. On the ministry's own decision it
+    is the deciding body; in the litigation that follows it is the defendant, and stays
+    the defendant through every appeal.
+  - A prosecutor refuses to bring an action and the refusal is challenged before a court:
+    the prosecutor's office is the responding party in that challenge.
+
+The test is simply WHO IS DECIDING THIS ENTRY. Everyone else named in it is eligible,
+including a public body, including one that decided an earlier entry in the same chain.
+Look at what this entry's own words say was quashed, upheld, appealed against or
+complained of: the body whose act that was is the other side, and it is usually named
+right there.
+
+**THE SIDES USUALLY SWAP ON REVIEW, so do not copy `role_span` across.** The party who
+lost at first instance is the one who appeals, so the first-instance respondent is very
+often the appellant above. Read who brought THIS instance from THIS entry's words
+("appealed", "lodged an appeal against", "applied for review"), and give the other party
+the answering role. Only where the text plainly shows the same side bringing it again does
+the alignment stay as it was below.
+
+An entry that `follows` nothing inherits nothing. The test in `follows` is unchanged, and
+a new matter that merely happens later is not a review of anything.
 
 **THE DECIDING BODY IS NEVER A PARTY.** The court, tribunal, prosecutor's office,
 ministry or municipal authority that DECIDED this step belongs in `authority_span`, and

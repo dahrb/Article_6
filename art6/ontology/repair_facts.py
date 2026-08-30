@@ -780,6 +780,161 @@ def complete_entailed_types(graph: Graph, doc_ns: str) -> int:
     return added
 
 
+def split_shared_participations(graph: Graph, doc_ns: str) -> int:
+    """Give every event its own copy of a participation several events share.
+
+    echr:ParticipationSingleEventShape fires when one echr:Participation is the
+    target of echr:hasParticipation from more than one event, because
+    echr:hasPartySide is functional and a shared node can hold only one side
+    for all of them. The shape is right. What repair did with it was not: the
+    cheapest way to satisfy sh:maxCount 1 is to drop the surplus
+    echr:hasParticipation links, and that is what the model proposed and the
+    applier accepted -- so every event but one lost that party entirely.
+
+    Measured 2026-08-28 across the ten v12 documents: extraction produced 36
+    events carrying two party sides, repair returned 20. Sixteen adversarial
+    proceedings were left recording only one of their two sides, on L1, L3,
+    L4, L6, L8 and L10. The graph got more conformant and less true.
+
+    The defect is a serialisation shortcut, not a missing fact -- the party,
+    the side and the quote are all present, they are simply written once and
+    pointed at N times. Copying the node N times is therefore lossless and
+    needs no model: it asserts nothing the graph did not already assert, it
+    only stops one assertion standing in for several.
+
+    Runs before the loop sees the graph, so the violation never reaches a
+    prompt and never gets "fixed" by deletion.
+
+    Returns the number of participation copies minted.
+    """
+    minted = 0
+    for part in set(graph.objects(None, ECHR.hasParticipation)):
+        if not isinstance(part, URIRef) or not str(part).startswith(doc_ns):
+            continue
+        events = sorted(
+            {s for s in graph.subjects(ECHR.hasParticipation, part)},
+            key=str,
+        )
+        if len(events) < 2:
+            continue
+        payload = [(pred, obj) for pred, obj in graph.predicate_objects(part)]
+        # The first event keeps the original node; the rest get copies, so any
+        # inbound reference from elsewhere in the graph stays valid.
+        for index, event in enumerate(events[1:], start=1):
+            local = str(part)[len(doc_ns) :]
+            copy = URIRef(f"{doc_ns}{local}_e{index}")
+            suffix = 1
+            while (copy, None, None) in graph:
+                suffix += 1
+                copy = URIRef(f"{doc_ns}{local}_e{index}x{suffix}")
+            for pred, obj in payload:
+                graph.add((copy, pred, obj))
+            graph.remove((event, ECHR.hasParticipation, part))
+            graph.add((event, ECHR.hasParticipation, copy))
+            minted += 1
+    return minted
+
+
+def split_multiparty_participations(graph: Graph, doc_ns: str) -> int:
+    """Give every party its own participation when several share one node.
+
+    The mirror of split_shared_participations, for the other way the same
+    mistake is made. That one fixes ONE participation pointed at by SEVERAL
+    events; this fixes ONE participation pointing at SEVERAL parties.
+    echr.ttl asks for exactly one instance per party per echr:DomesticEvent,
+    and echr:ParticipationAtomicShape caps echr:participatingParty at one.
+
+    Measured 2026-08-30 on holdout L10 (Ilascu and Others v. Moldova and
+    Russia, four co-applicants). Extraction produced four participations with
+    one party each and the graph reported zero violations. The review stage,
+    which reads the document, then correctly noticed that all four applicants
+    were arrested together -- and recorded that by hanging all four off the
+    single existing participation, taking the document from 0 to 4 violations.
+    It was the first time repair made a graph worse all day.
+
+    The added parties are RIGHT and must not be discarded: the other three
+    co-applicants really were parties to those events, and refusing the ops
+    would lose three real litigants to protect a cardinality. What is wrong is
+    only the packing. So this splits rather than blocks, which keeps the
+    review stage's recall and costs nothing -- the party, the side and the
+    quote are all present, written once and pointed at N times.
+
+    Returns the number of participation copies minted.
+    """
+    minted = 0
+    for part in set(graph.subjects(ECHR.participatingParty, None)):
+        if not isinstance(part, URIRef) or not str(part).startswith(doc_ns):
+            continue
+        parties = sorted(set(graph.objects(part, ECHR.participatingParty)), key=str)
+        if len(parties) < 2:
+            continue
+        events = sorted(set(graph.subjects(ECHR.hasParticipation, part)), key=str)
+        shared = [
+            (pred, obj)
+            for pred, obj in graph.predicate_objects(part)
+            if pred != ECHR.participatingParty
+        ]
+        # The first party keeps the original node, so inbound references stay
+        # valid; the rest get a node each.
+        for party in parties[1:]:
+            graph.remove((part, ECHR.participatingParty, party))
+            local = str(party)[len(doc_ns) :] if str(party).startswith(doc_ns) else "p"
+            copy = URIRef(f"{part!s}_{local}")
+            suffix = 1
+            while (copy, None, None) in graph:
+                suffix += 1
+                copy = URIRef(f"{part!s}_{local}{suffix}")
+            for pred, obj in shared:
+                graph.add((copy, pred, obj))
+            graph.add((copy, ECHR.participatingParty, party))
+            for event in events:
+                graph.add((event, ECHR.hasParticipation, copy))
+            minted += 1
+    return minted
+
+
+def mirror_party_labels(graph: Graph, doc_ns: str) -> int:
+    """Copy echr:hasPartyName / echr:hasPersonName into a missing rdfs:label.
+
+    Nothing requires a echr:Party to carry rdfs:label, so extraction names
+    parties through whichever predicate the ontology offered for their kind:
+    measured 2026-08-28 on the ten v12 documents, 5 of 37 party nodes had no
+    rdfs:label at all -- doc:partyPastraDirector, doc:party_iktisat_bank and
+    three others -- while every one of them carried a perfectly good
+    echr:hasPartyName ("Director of the Pastra social care home").
+
+    So this is not missing data, it is an inconsistent naming predicate, and
+    it matters for exactly one thing: cross-document entity linking reads
+    rdfs:label, and would silently skip an eighth of the parties in the
+    corpus. Mirroring costs nothing and invents nothing -- the name is the
+    model's, only the predicate is added.
+
+    echr:hasPartyName wins over echr:hasPersonName when both are present: it
+    is the party's name IN THE PROCEEDING, which is what a label on a party
+    node should say.
+
+    Returns the number of labels added.
+    """
+    added = 0
+    for party in set(graph.objects(None, ECHR.participatingParty)):
+        if not isinstance(party, URIRef) or not str(party).startswith(doc_ns):
+            continue
+        if list(graph.objects(party, RDFS.label)):
+            continue
+        names = list(graph.objects(party, ECHR.hasPartyName)) or list(
+            graph.objects(party, ECHR.hasPersonName)
+        )
+        if len(names) != 1:
+            # Zero means there is nothing to mirror; more than one means the
+            # node is conflating two entities, which is a real defect for the
+            # duplicate finder rather than something to paper over with a
+            # label picked arbitrarily.
+            continue
+        graph.add((party, RDFS.label, names[0]))
+        added += 1
+    return added
+
+
 def find_unchained_events(graph: Graph, doc_ns: str) -> list[dict]:
     """Domestic events that follow nothing and are followed by nothing.
 

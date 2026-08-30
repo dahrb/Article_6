@@ -72,7 +72,10 @@ from art6.ontology.repair_facts import (
     find_unchained_events,
     find_unlinked_persons,
     find_unverified_quotes,
+    mirror_party_labels,
     parse_unconstrained_patch,
+    split_multiparty_participations,
+    split_shared_participations,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -816,6 +819,21 @@ def repair_document(
     if startup_types:
         print(f"    entailed types completed on input: {startup_types}")
 
+    # Both of these are lossless rewrites of things the graph already asserts,
+    # and both run BEFORE the first violation count so the defects they clear
+    # never reach a prompt. That ordering is the point: left to the loop, a
+    # shared participation is repaired by deleting a party -- see
+    # split_shared_participations for the sixteen proceedings that cost.
+    startup_splits = split_shared_participations(graph, doc_ns)
+    if startup_splits:
+        print(f"    shared participations split on input: {startup_splits}")
+    startup_multi = split_multiparty_participations(graph, doc_ns)
+    if startup_multi:
+        print(f"    multi-party participations split on input: {startup_multi}")
+    startup_labels = mirror_party_labels(graph, doc_ns)
+    if startup_labels:
+        print(f"    party labels mirrored on input: {startup_labels}")
+
     before = len(find_shape_violations(graph))
     disjoint_before = len(find_disjoint_type_conflicts(graph))
     print(
@@ -888,6 +906,16 @@ def repair_document(
     entailed_added = complete_entailed_types(graph, doc_ns)
     if entailed_added:
         print(f"    entailed types completed: {entailed_added}")
+
+    split_added = split_shared_participations(graph, doc_ns)
+    if split_added:
+        print(f"    shared participations split: {split_added}")
+    multi_added = split_multiparty_participations(graph, doc_ns)
+    if multi_added:
+        print(f"    multi-party participations split: {multi_added}")
+    labels_added = mirror_party_labels(graph, doc_ns)
+    if labels_added:
+        print(f"    party labels mirrored: {labels_added}")
 
     after = len(find_shape_violations(graph))
     disjoint_after = len(find_disjoint_type_conflicts(graph))

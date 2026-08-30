@@ -291,6 +291,135 @@ def compress_applicants(
     return (applicants if isinstance(applicants, list) else []), raw
 
 
+# Words describing something DONE in an investigation rather than a request
+# answered. Deliberately narrow: each is an act with no respondent and no
+# ruling, and none of the five ProceedingOutcome values is true of it.
+_INVESTIGATIVE_ACTS = re.compile(
+    r"\b(seiz|search|arrest|detain|remand|inspect|question|interrogat|"
+    r"exhum|autops|forensic|expert examination|opened an investigation|"
+    r"investigation was opened|charged|indict)",
+    re.IGNORECASE,
+)
+
+
+# A decision verb anywhere in the span means something WAS answered, whatever
+# else the wording contains. Added after a false positive: "the Stavanger was
+# freed from arrest" matched the act list on the word "arrest", but a
+# prosecutor freeing a ship FROM arrest has granted a request, which the
+# prompt's own rule makes `merits decided`. The act list asks "does this look
+# like an investigative step"; this asks "was it nevertheless a ruling", and
+# the second question wins.
+_DECISION_VERBS = re.compile(
+    r"\b(freed|releas|grant|allow|refus|reject|dismiss|uphold|upheld|quash|"
+    r"annul|overturn|order(?:ed|s)?|award|convict|acquit|sentenc|declar|"
+    r"rul(?:ed|ing)|decid|terminat|discontinu)",
+    re.IGNORECASE,
+)
+
+
+def drop_actless_outcomes(payload: dict) -> tuple[int, list[str]]:
+    """Remove `outcome` from investigative events that decided nothing.
+
+    `outcome` is one of five ProceedingOutcome values and every one of them
+    presupposes that something was ASKED and ANSWERED. A gun seizure, a search
+    warrant, an arrest, a crime-scene inspection and the opening of an
+    investigation answer nothing: `merits decided` is false because no merits
+    were reached, and `other` is false because there was no result at all.
+
+    Measured 2026-08-28 on L9 (a Georgian criminal case): stage 1 labelled a
+    seizure, a warrant and an arrest `merits decided`. Every one of those
+    triples was well-formed, in-vocabulary, evidenced and SHACL-conformant, and
+    every one was false -- which is exactly why this cannot be left to the
+    validation layer. The shapes check that a value is IN the vocabulary; no
+    shape can check that the vocabulary applies.
+
+    The bias matters more than the count. It is systematic and one-directional,
+    so a distribution computed over the released corpus would skew toward
+    `merits decided` with nothing downstream able to detect it. An omitted
+    outcome is a gap anyone can see; a wrong one is a gap nobody can.
+
+    Deliberately conservative -- all three conditions must hold:
+
+      * `instance_level` is investigative. Other rungs decide things by
+        definition, and an administrative body granting a request HAS ruled on
+        its substance (see the prompt's note on orders).
+      * there is no `outcome_span`. If the document states a result in words,
+        the model found one and it is kept. This preserves the correct
+        `inadmissible` on "the request was rejected by the investigator",
+        which is a genuine answer to a genuine request.
+      * the event's own `what_happened_span` names an act from the list above.
+
+    Returns (number dropped, the event ids).
+    """
+    dropped: list[str] = []
+    for event in payload.get("events") or []:
+        if not event.get("outcome"):
+            continue
+        level = (event.get("instance_level") or "").strip().lower()
+        if level != "investigative":
+            continue
+        if event.get("outcome_span"):
+            continue
+        what = ((event.get("what_happened_span") or {}).get("text")) or ""
+        if not _INVESTIGATIVE_ACTS.search(what):
+            continue
+        if _DECISION_VERBS.search(what):
+            continue
+        event.pop("outcome", None)
+        dropped.append(event.get("id", "?"))
+    return len(dropped), dropped
+
+
+def drop_deciding_body_parties(payload: dict) -> tuple[int, list[str]]:
+    """Remove any party that IS the body deciding that same entry.
+
+    The deciding body is never a party to the step it decided -- echr.ttl says
+    so, echr:DecidingBodyNotAPartyShape enforces it, and repair_facts.apply_patch
+    refuses to add one. Stage 1 was the only place the rule was left to the
+    prompt, and the prompt cannot hold it.
+
+    Measured 2026-08-28 across four ten-document stage-1 runs on gemma-4-31b.
+    Asking for the opposing party at all raises deciding-body-as-party from 7 to
+    18 regardless of how the request is worded: a version phrased as a quota
+    ("list both") and a version phrased as permission ("add it where the document
+    makes it plain, one party is a correct answer") produced 18 each. Three
+    explicit sentences forbidding it moved the number not at all. A prohibition
+    competes with an instruction in the same prompt, and loses.
+
+    So the prompt asks for recall and this enforces the constraint, which is the
+    division that has worked everywhere else in this pipeline. The filter costs
+    nothing real: on the same measurement it removed 18 party entries and left
+    two-sided coverage at 54% of events, against 28% without the carry-forward
+    instruction -- so the instruction's gain survives and only its contamination
+    is taken out.
+
+    Matching is on normalised text and is deliberately generous about
+    containment ("the Fund" against "the Savings Deposit Insurance Fund"), since
+    a party that is a substring of the deciding body's name is that body under
+    a shorter description, not a different entity.
+
+    Returns (number dropped, the dropped names).
+    """
+    dropped: list[str] = []
+    for event in payload.get("events") or []:
+        authority = _normalise_name((event.get("authority_span") or {}).get("text"))
+        if not authority:
+            continue
+        kept = []
+        for party in event.get("parties") or []:
+            name = _normalise_name((party.get("name_span") or {}).get("text"))
+            if name and (name == authority or name in authority or authority in name):
+                dropped.append((party.get("name_span") or {}).get("text", ""))
+                continue
+            kept.append(party)
+        event["parties"] = kept
+    return len(dropped), dropped
+
+
+def _normalise_name(value: str | None) -> str:
+    return re.sub(r"\s+", " ", (value or "")).strip().lower()
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--input-jsonl", required=True, type=Path)
@@ -352,15 +481,25 @@ def main() -> None:
             (args.out_dir / f"{doc_id}.applicants.raw.txt").write_text(
                 applicants_raw, encoding="utf-8"
             )
+        actless, actless_ids = drop_actless_outcomes(payload)
+        stats["actless_outcomes_dropped"] = actless
+        stats["actless_outcomes_dropped_ids"] = actless_ids
+        body_parties, body_names = drop_deciding_body_parties(payload)
+        stats["deciding_body_parties_dropped"] = body_parties
+        stats["deciding_body_parties_dropped_values"] = body_names
         for k in totals:
             totals[k] += stats.get(k, 0)
+        totals["body_parties"] = totals.get("body_parties", 0) + body_parties
+        totals["actless"] = totals.get("actless", 0) + actless
         rate = stats["located"] / stats["spans"] * 100 if stats["spans"] else 0.0
         print(
             f"  {doc_id}: {len(payload.get('events', [])):3} events, "
             f"{len(payload.get('persons', [])):2} persons, "
             f"{len(payload.get('applicants', [])):2} applicants, "
             f"{stats['located']:4}/{stats['spans']:4} spans verbatim ({rate:5.1f}%), "
-            f"{stats['dropped']:3} dropped [{time.perf_counter() - t0:.0f}s]"
+            f"{stats['dropped']:3} dropped, "
+            f"{body_parties:2} body-as-party, {actless:2} actless-outcome removed "
+            f"[{time.perf_counter() - t0:.0f}s]"
         )
         (args.out_dir / f"{doc_id}.compress.json").write_text(
             json.dumps(
@@ -373,7 +512,9 @@ def main() -> None:
     if totals["spans"]:
         print(
             f"\ntotal: {totals['located']}/{totals['spans']} spans verbatim "
-            f"({totals['located'] / totals['spans'] * 100:.1f}%), {totals['dropped']} dropped"
+            f"({totals['located'] / totals['spans'] * 100:.1f}%), {totals['dropped']} dropped, "
+            f"{totals.get('body_parties', 0)} deciding-body parties, "
+            f"{totals.get('actless', 0)} actless outcomes removed"
         )
 
 

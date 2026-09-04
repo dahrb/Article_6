@@ -37,3 +37,15 @@ echr_decisions_corpus.jsonl
 # Local archive of the pre-refactor demographic-phase content (~104 MB).
 # Exceeds GitHub's 100 MB file limit - must never be committed.
 art_6_demo_old.zip
+
+# The annotation reference standard. The blanket *.txt / *.json rules above
+# would silently drop the guide and the sample manifest, which are the two
+# files the whole evaluation is calibrated against -- negate them explicitly.
+# gold/*.yaml (the annotations themselves) is not matched by any rule above.
+!annotation/annotation_guide.txt
+!annotation/gold/manifest.json
+
+# NOT tracked: annotation/gold_text/*.txt -- the 20 source judgments. They are
+# corpus text, which this repo does not track anywhere (see data/ rules), and
+# they regenerate from data/ via the seeded sampler:
+#   uv run python -m art6.data.build_annotation_sample --n 20 --seed 42

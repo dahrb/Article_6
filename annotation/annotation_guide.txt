@@ -1,0 +1,464 @@
+================================================================================
+ANNOTATION GUIDE — DOMESTIC PROCEEDINGS IN ECtHR ARTICLE 6 JUDGMENTS
+Grounded in ontology/echr.ttl, version 3.5.0.
+================================================================================
+
+Read this once before annotating, and keep §4 (which events to record) and §6
+(controlled vocabularies) open while you work.
+
+================================================================================
+1. WHAT YOU ARE PRODUCING
+================================================================================
+
+For each document: the list of domestic events the judgment describes, one YAML
+record each, in the schema at annotation/annotation_schema.yaml.
+
+Read the whole judgment first, then annotate. Order your records by decision
+date, earliest first.
+
+================================================================================
+2. SCOPE — WHICH PART OF THE JUDGMENT
+================================================================================
+
+IN SCOPE: the domestic (national) procedural history, wherever the judgment
+narrates it — normally "THE FACTS" / "THE CIRCUMSTANCES OF THE CASE", and in
+decisions also "PROCEDURE".
+
+OUT OF SCOPE, always:
+  - Proceedings before the European Court of Human Rights itself. The Strasbourg
+    application, its communication, the Chamber and Grand Chamber. The domestic
+    chain ends at the last national decision.
+  - "RELEVANT DOMESTIC LAW AND PRACTICE" — statutes, and decisions of other
+    courts cited as authority rather than as steps in this applicant's case.
+  - Another person's case cited as legal authority or for comparison. NOT the
+    same as proceedings involving other people that form part of this
+    applicant's own history — those are in scope; see §4.3.
+  - The Court's own legal reasoning, admissibility analysis, and Article 41
+    just-satisfaction award.
+
+================================================================================
+3. THE UNIT — ONE EVENT OR TWO?
+================================================================================
+
+The ontology's definition (echr:DomesticProceeding):
+
+    "One set of proceedings before a single national court or authority in the
+     domestic chain (e.g. first-instance trial, appeal, cassation)."
+
+So the unit is ONE AUTHORITY DECIDING ONCE. Consequences, all of which follow
+from that sentence and are not additional rules:
+
+  - A hearing and the judgment closing it on the same date are ONE event, not
+    two. The hearing is a step inside the proceeding, not a proceeding.
+  - Several hearings across two years before one court, ending in one judgment,
+    are ONE event. Put the institution date in start_date and the judgment date
+    in decision_date.
+  - A first-instance trial and its appeal are TWO events, linked by `follows`.
+  - Remittal makes a new event even before the same court. The ontology says so
+    explicitly (scopeNote on echr:DomesticProceeding): "Where a case is remitted
+    and retried before the same court, the retrial is a separate proceeding
+    linked by echr:followsProceeding."
+  - A request and the decision refusing it are ONE event: the request is
+    start_date, the refusal is decision_date and outcome. Three refused requests
+    are three events.
+  - An administrative decision and the court challenge to it are TWO events —
+    scopeNote on echr:AdministrativeAction — the challenge linked back with
+    `follows`.
+
+WHEN THE TEXT IS AMBIGUOUS about whether something is one event or two, record
+one event and write why in `note`. Do not split on suspicion.
+
+================================================================================
+4. WHICH EVENTS TO RECORD
+================================================================================
+
+IS IT ONE OF THE FOUR echr:DomesticEvent SUBCLASSES?
+
+If you can type it, annotate it. If it is none of the four, it is not an event.
+That is the whole rule, and it is deliberately generous: echr:DomesticEvent is
+defined as "ANY milestone in the domestic procedural history narrated in the
+facts".
+
+--------------------------------------------------------------------------------
+4.1 The four types
+--------------------------------------------------------------------------------
+Definitions verbatim from ontology/echr.ttl. Ask them in this order.
+
+  echr:DomesticProceeding
+      "One set of proceedings before a single national court or authority in the
+       domestic chain (e.g. first-instance trial, appeal, cassation)."
+      The default for anything before a court or tribunal.
+
+  echr:AdministrativeAction
+      "A decision by a state or municipal body outside a formal trial (e.g.
+       appointing a guardian, denying a welfare request, refusing a permit)."
+
+  echr:EnforcementAction
+      "The physical or bureaucratic execution of an earlier decision (e.g.
+       forced relocation to an institution, seizure of property, removal from
+       the country)."
+
+  echr:ProsecutorialReview
+      "An internal decision or appeal within a public prosecutor's office (e.g.
+       a regional prosecutor's refusal to act, reviewed by the prosecutor's
+       office above it), distinct from a proceeding before a court."
+      Use DomesticProceeding instead once the matter reaches a court.
+
+A PROCEEDING STILL RUNNING IS STILL AN EVENT. Nothing above requires a decision
+to have been reached. A claim lodged and never determined is a DomesticProceeding
+with a start_date, no decision_date and outcome Unknown. The ontology carries
+echr:isPending for exactly this situation.
+
+An event does not need the applicant to be a party, and does not need to belong
+to the proceedings actually complained of. See 4.3.
+
+--------------------------------------------------------------------------------
+4.2 The two exclusions
+--------------------------------------------------------------------------------
+Only two things are ruled out, and neither is about who acted:
+
+  NOT DOMESTIC.  Proceedings before the European Court of Human Rights itself.
+  The domestic history ends at the last national decision.
+
+  NOT THIS HISTORY.  Another case cited as legal authority or for comparison —
+  "as the Court held in X v. Y", a leading domestic judgment quoted for the rule
+  it lays down. That is law, not history.
+
+Beyond those two, if it types, it counts.
+
+--------------------------------------------------------------------------------
+4.3 Scope is the whole narrated history, not the exhaustion chain
+--------------------------------------------------------------------------------
+All of these are in, and none is a special case:
+
+  - PRIOR proceedings — the earlier conviction, the administrative decision
+    later challenged, the guardianship order that preceded everything. The
+    scopeNote on echr:AdministrativeAction expects exactly this: the decision is
+    its own event and the court challenge follows it.
+  - PARALLEL proceedings — a civil claim running alongside the criminal case.
+    Independent chains are normal; a document routinely has several, each with
+    its own `follows: null` head.
+  - CONSEQUENT proceedings — enforcement, reopening, supervisory review, after
+    the chain had otherwise closed.
+  - Proceedings where THE APPLICANT WAS NOT A PARTY but which the facts narrate
+    as part of their history: a guardian's application concerning the applicant,
+    a prosecutor's decision about a relative's death. echr:Party is "a person,
+    company or public body taking part in the domestic proceedings, INCLUDING
+    the future applicant" — the applicant is one possible party, not a
+    requirement.
+
+Which events exhausted domestic remedies is recorded by
+`final_domestic_decision` (§5), so that distinction is carried by a field rather
+than by leaving events out.
+
+--------------------------------------------------------------------------------
+4.4 When you cannot decide
+--------------------------------------------------------------------------------
+Some things sit genuinely on the boundary. A crime-scene inspection, an arrest,
+a registration made at someone's request, an agreement signed between private
+parties: whether these are milestones in the procedural history or merely things
+that happened is a real question, and the ontology does not settle it.
+
+Do not agonise, and do not invent a rule. RECORD THE EVENT AND MARK IT:
+
+    borderline: true
+    borderline_reason: "investigative step, no decision by any body"
+
+Then carry on. The flag costs you a few seconds and makes the call visible
+instead of silent, so a reader can see exactly which events you were unsure
+about and why.
+
+Mark borderline only where you would expect a careful colleague to disagree with
+you — not merely where you had to think about it. If you find yourself flagging
+most of a document, the boundary is not the problem and something else has gone
+wrong.
+
+--------------------------------------------------------------------------------
+4.5 One practice note
+--------------------------------------------------------------------------------
+Annotate what the judgment states, not what must have happened. An event you
+infer from the shape of the procedure ("the appeal must have been registered")
+is not in the document and is not annotated. This is a rule about evidence, not
+about scope: everything in §4 assumes the text says so.
+
+================================================================================
+5. THE FIELDS, AND THE TRIPLES THEY STAND FOR
+================================================================================
+
+Every YAML key maps to exactly one ontology construct, listed beside it. A field
+means what the ontology says it means and nothing more.
+
+Annotate every field on every event.
+
+Throughout: E is the event node, A the deciding authority, P a party, p a
+participation node, D the case document.
+
+--------------------------------------------------------------------------------
+5.1 The event
+--------------------------------------------------------------------------------
+
+  id
+      Your local number, 1..n, ordered by decision_date, earliest first.
+      Not a triple — `follows` uses it, and so does the alignment pass.
+      Implied: D echr:hasDomesticProceeding E .
+
+  type
+      E a echr:<Class> .
+      One of the four in §4.1: DomesticProceeding, AdministrativeAction,
+      EnforcementAction, ProsecutorialReview.
+
+  start_date
+      E echr:hasProceedingStartDate "<date>" .
+      When the event was instituted. Omit if the text does not give it.
+
+  decision_date
+      E echr:hasDecisionDate "<date>" .
+      Date of the decision that closed the event. Omit if still running.
+
+      Both dates are echr:PartialDate: a full date, a year and month, or a bare
+      year — as precise as the text allows and no more. "in the spring of 2003"
+      is "2003". ALWAYS QUOTE DATES in the YAML: "2004-03-14", "2004-03",
+      "2004". Unquoted, YAML reads those three as a date, a string and an
+      integer.
+
+  level
+      E echr:hasInstanceLevel echr:Level<X> .   Closed vocabulary, §6.1.
+
+  proceeding_type
+      E echr:hasProceedingType echr:Type<X> .   Closed vocabulary, §6.2.
+
+  outcome
+      E echr:hasOutcome echr:Outcome<X> .       Closed vocabulary, §6.3.
+      Unknown where the event is still running.
+
+  outcome_direction
+      E echr:hasOutcomeDirection echr:Direction<X> .  Closed vocabulary, §6.4.
+      "The applicant" means the future Strasbourg applicant, even where they
+      were not yet an applicant at the time.
+
+  final_domestic_decision
+      E echr:isFinalDomesticDecision true .
+      Mark the event that concluded the domestic remedies before the applicant
+      went to Strasbourg. Write `true` on that event and omit the field
+      everywhere else — this is the one field where omission means false rather
+      than "the text does not say".
+
+      Rules, in order:
+        - ONE PER CHAIN, not one per document. A judgment with two independent
+          chains has two flags. §3 defines the chain.
+        - NOT NECESSARILY THE LATEST EVENT. Enforcement, or an unrelated later
+          proceeding, can be dated after the decision that actually exhausted
+          the remedy. Follow `follows` to the end of the chain; do not sort by
+          date.
+        - A chain still pending when the application was lodged has NO flag.
+        - Where the applicant stopped short of the highest available instance,
+          flag the last decision they actually obtained and say so in `note`.
+          You are recording what happened, not ruling on whether remedies were
+          properly exhausted — that is the Court's job, not an annotation task.
+
+--------------------------------------------------------------------------------
+5.2 The deciding authority
+--------------------------------------------------------------------------------
+
+  body
+      E echr:hasCourt A .   A echr:hasAuthorityName "<body>" .
+      The authority's name VERBATIM as this passage writes it. If the text says
+      "the Regional Court", write that, not the fuller name from elsewhere in
+      the judgment. Two spellings of one authority are still one authority —
+      §8.
+
+  authority_kind
+      A echr:hasAuthorityKind echr:Authority<X> .  Closed vocabulary, §6.6.
+
+--------------------------------------------------------------------------------
+5.3 The parties
+--------------------------------------------------------------------------------
+
+  parties
+      A list. For each entry, with name N, side S:
+          E echr:hasParticipation p .
+          p echr:participatingParty P .
+          p echr:hasPartySide echr:Side<S> .
+          P echr:hasPartyName "<N>"   (and P echr:hasPersonName "<N>" if human)
+
+      ONE ENTRY PER PARTY PER EVENT. A party appearing at three instances
+      appears in three events' party lists, once each.
+
+      name
+          As the text names them: "the applicant", "M.N.", "Scholz AG".
+
+      side
+          Closed vocabulary, §6.7. Side is per EVENT, not per person: a
+          defendant at trial who appeals is Responding in the trial event and
+          Initiating in the appeal event. That is the whole reason participation
+          is a node rather than two columns.
+
+      natural_person
+          true for one human being; false for a company, a public body, or a
+          group the text never separates.
+          true  -> P a echr:NaturalPerson .
+          The ontology is strict here: a node standing for several people ("the
+          applicants", "M.N. and Others") is NOT a natural person. Where the
+          text names them individually, make one entry each; where it never
+          separates them, make one entry with natural_person: false.
+
+      THE DECIDING BODY IS NEVER A PARTY TO THE EVENT IT DECIDED. A body can
+      of course be a party to a DIFFERENT event in the chain — a prosecutor who
+      decided at first instance may be the responding party on appeal.
+
+      A lawyer acting for a party is representation, not participation. Record
+      a lawyer only where the lawyer was themselves a party.
+
+      An empty list `[]` says the text names no party, and is worth writing —
+      it records that you looked.
+
+--------------------------------------------------------------------------------
+5.4 The chain
+--------------------------------------------------------------------------------
+
+  follows
+      E echr:followsProceeding E' .
+      The `id` of the event immediately before this one, or null.
+
+      "Immediately before" is PROCEDURAL, not chronological: an appeal follows
+      the decision it appeals, an enforcement follows what it enforces, a court
+      challenge follows the administrative decision challenged. Two events
+      merely consecutive in time, with no procedural relation, are not linked —
+      follows is null.
+
+      Parallel tracks are normal. Several events may share one predecessor, and
+      a document may hold several unconnected chains, each with its own null
+      head. Record only a link the text supports.
+
+--------------------------------------------------------------------------------
+5.5 Evidence and audit
+--------------------------------------------------------------------------------
+
+  quote
+      E echr:hasSupportingQuote "<text>" .
+      A short verbatim span from the judgment establishing this event. COPY AND
+      PASTE IT. Do not retype, tidy punctuation, or stitch together text from
+      two passages. One sentence is usually enough.
+
+  para
+      Not a triple. The paragraph number the event is drawn from, so any verdict
+      about it is auditable. Where a judgment has no numbered paragraphs, give a
+      character offset or a short locator.
+
+  borderline
+      Not a triple. true where you could not confidently decide whether this
+      belongs in the annotation at all — see §4.4. Omit otherwise.
+
+  borderline_reason
+      Not a triple. One line saying what made it a hard call. Required whenever
+      borderline is true.
+
+  note
+      Not a triple (echr:hasExtractionNote is the ontology's near equivalent).
+      Free text. Use it whenever you made a call someone could reasonably make
+      differently — see §9. `borderline` is for whether the event belongs at
+      all; `note` is for everything else.
+
+================================================================================
+6. CONTROLLED VOCABULARIES — CLOSED, WRITE THE SHORT FORM
+================================================================================
+Write the short form given in CAPS below; the lifter expands it to the IRI.
+Every vocabulary is closed. If nothing fits, use the vocabulary's own escape
+value, never a word of your own.
+
+6.1 level  (echr:InstanceLevel)
+    Investigative           investigative or pre-trial
+    AdministrativeReview    administrative or quasi-judicial review
+    FirstInstance           first instance
+    Appeal                  appeal
+    Cassation               cassation or supreme court
+    SupervisoryReview       supervisory review
+    Reopening               reopening or retrial
+    Unknown                 escape value
+
+6.2 proceeding_type  (echr:ProceedingType)
+    Criminal  Civil  Administrative  Constitutional  Disciplinary
+    Other  Unknown
+
+6.3 outcome  (echr:ProceedingOutcome)
+    MeritsDecided       a substantive decision was reached — conviction,
+                        acquittal, claim granted or dismissed, measure imposed
+    Inadmissible        dismissed on procedural grounds without reaching merits
+    SettledOrWithdrawn  discontinued, settled out of court, or withdrawn
+    Remitted            decision below overturned and sent back down
+    Other               escape value
+    Unknown             escape value — including where still pending
+
+6.4 outcome_direction  (echr:OutcomeDirection)
+    FavourableToApplicant  UnfavourableToApplicant  Mixed  Unknown
+    Read "the applicant" as the future Strasbourg applicant, even where they
+    were not yet an applicant at the time.
+
+6.5 type  (subclass of echr:DomesticEvent)
+    DomesticProceeding   one set of proceedings before a court or authority
+    AdministrativeAction a decision by a state or municipal body outside a
+                         formal trial (appointing a guardian, denying a welfare
+                         request, refusing a permit)
+    EnforcementAction    the physical or bureaucratic execution of an earlier
+                         decision (forced relocation, seizure, removal)
+    ProsecutorialReview  an internal decision or appeal within a prosecutor's
+                         office. Use DomesticProceeding instead once the matter
+                         reaches a court.
+
+6.6 authority_kind  (echr:AuthorityKind)
+    Judicial        a formal court or tribunal within the national judiciary
+    Prosecutorial   a public prosecutor's office or police/investigative body
+    Administrative  an executive, municipal, regulatory or welfare authority
+    Disciplinary    a professional regulatory body or internal disciplinary board
+    Unknown         escape value
+
+6.7 party side  (echr:PartySide)  — written inside `parties`
+    Initiating   the party who moved the authority to act at THIS instance:
+                 claimant, plaintiff, prosecution, appellant, the party seeking
+                 supervisory review or reopening
+    Responding   the party the proceeding was brought against at THIS instance:
+                 defendant, accused, respondent on appeal
+    ThirdParty   joined without being on either side: intervener, civil party
+                 joined to a criminal trial, a body appearing to be heard
+    Unknown      the facts place the party in the event but not on a side
+
+    Side is per event, not per person. A defendant at trial who appeals is
+    Responding in the trial event and Initiating in the appeal event. This is
+    the whole reason participation is a node rather than a pair of columns.
+
+================================================================================
+7. WHEN TO WRITE "Unknown" AND WHEN TO OMIT
+================================================================================
+
+OMIT the field entirely when the text gives you nothing and the vocabulary has
+no escape value — dates, quotes, names.
+
+WRITE the escape value (Unknown) when the field has a closed vocabulary, the
+event exists, and the text does not tell you which value applies. Unknown is a
+real answer meaning "the document does not say".
+
+NEVER GUESS from background knowledge of the legal system. If the judgment does
+not say the Regional Court sat on appeal, level is Unknown even where you know
+Bulgarian regional courts usually do. You are annotating the document, not the
+jurisdiction.
+
+================================================================================
+8. IDENTITY — WHEN ARE TWO MENTIONS THE SAME EVENT
+================================================================================
+
+You will need this when the judgment revisits an event later, and it is what
+fixes the granularity of the whole annotation.
+
+Two mentions are the SAME event when they share the same deciding authority and
+the same decision. In practice:
+
+  - Same authority, same decision date  ->  same event.
+  - Naming variants are the same authority: "the Regional Court", "the Sofia
+    Regional Court" and "the Sofia City Regional Court" are one body where the
+    text is plainly referring to the same one.
+  - Same authority, different dates  ->  different events, UNLESS one date is
+    the institution and the other the decision of a single proceeding.
+  - A date given only as a year matches a full date in that year where the
+    authority and the surrounding narrative agree.
+
+Where you genuinely cannot tell, record one event and say so in `note`.

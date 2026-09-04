@@ -1,0 +1,58 @@
+# =============================================================================
+# CASE OF DANILOV v. RUSSIA
+# 001-206264 | CHAMBER | 2020 | RUS
+#
+# Annotate against annotation/annotation_guide.txt.
+# Read the whole judgment first, then fill in one record per domestic event,
+# ordered by decision_date, earliest first.
+#
+# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-206264)
+# Do not open any pipeline output before this file is finished.
+# =============================================================================
+
+case_id: "001-206264"
+case_name: "CASE OF DANILOV v. RUSSIA"
+court_level: "CHAMBER"
+annotator: ""
+annotated_utc: ""
+mode: cold
+guide_version: "1.0"
+
+proceedings:
+
+  # Copy this block for each event. Delete any key the document gives you
+  # nothing for -- an omitted key and an empty value are not the same thing.
+  # Closed vocabularies are in guide §6; write the short form.
+  - id: 1
+    type:                            # §6.5  DomesticProceeding | AdministrativeAction
+                                     #       | EnforcementAction | ProsecutorialReview
+    body: ""                         # authority name, verbatim from this passage
+    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
+                                     #       | Disciplinary | Unknown
+    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
+    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
+    level:                           # §6.1  Investigative | AdministrativeReview
+                                     #       | FirstInstance | Appeal | Cassation
+                                     #       | SupervisoryReview | Reopening | Unknown
+    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
+                                     #       | Constitutional | Disciplinary | Other | Unknown
+    outcome:                         # §6.3  MeritsDecided | Inadmissible
+                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
+    outcome_direction:               # §6.4  FavourableToApplicant
+                                     #       | UnfavourableToApplicant | Mixed | Unknown
+    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
+    parties: []                      # - name: ""
+                                     #   side:              # §6.7 Initiating | Responding
+                                     #                      #      | ThirdParty | Unknown
+                                     #   natural_person:    # true for ONE human being
+                                     # the deciding body is never a party to its own event
+    follows:                         # id of the event this procedurally continues, or null
+    borderline:                      # true if you could not decide whether it belongs (§4.4)
+    borderline_reason: ""
+    quote: ""                        # verbatim span, COPIED not retyped
+    para:                            # paragraph number
+    note: ""
+
+# Anything about the judgment as a whole: an unusual structure, a section you
+# judged out of scope, a chain you could not resolve.
+document_note: ""

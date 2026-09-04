@@ -1,0 +1,138 @@
+# =============================================================================
+# ANNOTATION SCHEMA — one file per document, named <case_id>.yaml
+# Companion to annotation/annotation_guide.txt. Section refs below point into it.
+#
+# Every key maps to exactly one construct in ontology/echr.ttl (v3.5.0).
+# annotation/evaluated_triples.yaml lists which of them are scored, and how.
+#
+# Conventions
+#   - Omit a key entirely when the document gives you nothing (§7).
+#   - Write "Unknown" only where the vocabulary has that escape value (§7).
+#   - Controlled vocabularies are CLOSED: use the short forms in §6, never prose.
+#   - Dates are QUOTED strings, as precise as the text allows (§5):
+#       "2004-03-14" | "2004-03" | "2004".  Always quote -- unquoted, YAML
+#       reads these as three different types.
+#   - Quotes are copy-pasted verbatim, never retyped (§5).
+# =============================================================================
+
+case_id: "001-188177"        # HUDOC id, matches the filename
+annotator: "david"
+annotated_utc: "2026-09-05T10:00:00Z"
+mode: cold                   # cold | assisted -- all 20 calibration docs are cold
+guide_version: "1.0"         # bump if annotation_guide.txt changes mid-set
+
+proceedings:
+
+  # ---------------------------------------------------------------------------
+  # Worked example 1 — a prosecutor's decision. Illustrates: investigative level,
+  # an event with one party, a chain head (follows: null).
+  # ---------------------------------------------------------------------------
+  - id: 1                            # local, 1..n, ordered by decision_date
+    type: ProsecutorialReview        # §6.5   E a echr:<Class>
+    body: "the Sofia District Prosecutor's Office"
+                                     #        E echr:hasCourt A .
+                                     #        A echr:hasAuthorityName "..."
+    authority_kind: Prosecutorial    # §6.6   A echr:hasAuthorityKind ...
+    start_date: "2005-02-01"          #        E echr:hasProceedingStartDate
+    decision_date: "2005-03-14"       #        E echr:hasDecisionDate
+    level: Investigative             # §6.1   E echr:hasInstanceLevel
+    proceeding_type: Criminal        # §6.2   E echr:hasProceedingType
+    outcome: Inadmissible            # §6.3   E echr:hasOutcome
+    outcome_direction: UnfavourableToApplicant
+                                     # §6.4   E echr:hasOutcomeDirection
+    parties:                         #        one entry per party per event (§5)
+      - name: "the applicant"        #        P echr:hasPartyName / hasPersonName
+        side: Initiating             # §6.7   p echr:hasPartySide echr:Side...
+        natural_person: true         #        P a echr:NaturalPerson
+    follows: null                    #        E echr:followsProceeding E'
+                                     #        null = head of a chain
+    quote: "On 14 March 2005 the Sofia District Prosecutor's Office refused to
+      open a criminal investigation into the applicant's complaint."
+                                     #        E echr:hasSupportingQuote
+    para: 12                         #        not a triple -- audit locator
+    note: ""                         #        free text, see §9
+
+  # ---------------------------------------------------------------------------
+  # Worked example 2 — the court challenge to event 1. Illustrates: `follows`,
+  # two-sided participation, the deciding body kept OUT of the party list.
+  # ---------------------------------------------------------------------------
+  - id: 2
+    type: DomesticProceeding
+    body: "the Sofia City Court"
+    authority_kind: Judicial
+    start_date: "2005-04-02"
+    decision_date: "2005-11-20"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Sofia District Prosecutor's Office"
+        side: Responding             # the prosecutor decided event 1 and is a
+        natural_person: false        # PARTY to event 2 -- legitimate (§5)
+    follows: 1
+    quote: "The applicant appealed against that refusal to the Sofia City Court,
+      which upheld it on 20 November 2005."
+    para: 14
+    note: ""
+
+  # ---------------------------------------------------------------------------
+  # Worked example 3 — minimal record. Everything the text does not give is
+  # omitted or Unknown; nothing is inferred from knowledge of the system (§7).
+  # ---------------------------------------------------------------------------
+  - id: 3
+    type: DomesticProceeding
+    body: "the Supreme Court of Cassation"
+    authority_kind: Judicial
+    decision_date: "2007"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties: []                      # empty list = the text names no party.
+                                     # Omitting the key means the same thing;
+                                     # the empty list says you checked.
+    follows: 2
+    final_domestic_decision: true    # E echr:isFinalDomesticDecision true
+                                     # write ONLY on the terminal event of each
+                                     # chain; omit elsewhere (§5). Follow the
+                                     # `follows` chain to its end -- not the
+                                     # latest date.
+    quote: "The case reached the Supreme Court of Cassation in 2007."
+    para: 15
+    note: "Text gives no outcome and no month."
+
+  # ---------------------------------------------------------------------------
+  # Worked example 4 — a borderline event (§4.4). Recorded, flagged, moved on.
+  # No rule was invented and no time was spent agonising.
+  # ---------------------------------------------------------------------------
+  - id: 4
+    type: ProsecutorialReview
+    body: "the investigator"
+    authority_kind: Prosecutorial
+    decision_date: "2005-01-20"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties: []
+    follows: null
+    borderline: true                 # §4.4 -- membership genuinely contestable
+    borderline_reason: "crime-scene inspection; no decision by any body, so it
+      may not be a milestone in the procedural history at all"
+    quote: "On 20 January 2005 an investigator inspected the scene."
+    para: 9
+    note: ""
+
+# =============================================================================
+# Document-level notes: anything about the judgment as a whole -- an unusual
+# structure, a section you judged out of scope, a chain you could not resolve.
+# Read during disagreement analysis, so write what a reader would need.
+# =============================================================================
+document_note: >
+  Two unconnected chains: the criminal complaint (events 1-3) and the unrelated
+  civil compensation claim (events 4-6). No procedural link between them in the
+  text, so no `follows` crosses.

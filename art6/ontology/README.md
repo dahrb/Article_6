@@ -282,11 +282,11 @@ guesses.
 |---|---|
 | **LLM server** | any OpenAI-compatible endpoint; all entry points take `--base-url` / `--model`. The reported runs use vLLM serving `gemma-4-31b` (`RedHatAI/gemma-4-31B-it-FP8-dynamic`) with `--max-model-len 98304` — 81,920 is the workable minimum, and below 65,536 the configuration cannot run. For a hosted API see §3.6. |
 | **Triple store** | Apache Fuseki in a container named `ontocast-fuseki`, reachable via `docker exec`, with credentials matching `FUSEKI_AUTH` in the base environment file. |
-| **OntoCast** | a checkout beside this repository (`$ONTOCAST_REPO`, default `<repo>/../../ontocast`), installed with its SHACL extra. |
+| **OntoCast** | **v0.6.2** (commit `2504579`, tagged `v0.6.2`, 2026-08-29) — a checkout beside this repository (`$ONTOCAST_REPO`, default `<repo>/../../ontocast`), installed with its SHACL extra. Not a dependency of this package: it is invoked from the checkout, in-process, by `run_native.py`. **The version is load-bearing** — v0.6.2 absorbed the JSON-recovery patches this project previously carried locally, so an earlier version needs those patches reapplied. Pin it with `git -C $ONTOCAST_REPO checkout v0.6.2`. |
 | **This repository** | `uv sync`. All Python entry points are `uv run python -m art6....` |
 | **Configuration** | `ontology/ontology_vllm.env` — the OntoCast settings surface. Credentials are read from it into the environment and are never written into generated run files. |
 | **Ontology** | `ontology/echr.ttl` and `ontology/echr-shapes.ttl`. |
-| **Documents** | a JSON array of `{case_id, text}` records. `data/art6_domestic_test_set.json` is a 10-judgment set (17k–38k characters) suitable for a full end-to-end run; the drawn evaluation samples are alongside it. |
+| **Documents** | a JSON **array** of `{case_id, text}` records — `case_id` unique, `text` the judgment as plain text or markdown. Any other keys are passed through untouched and are never read by extraction. `data/art6_domestic_test_set.json` is a 10-judgment set (17k–38k characters) suitable for a full end-to-end run; the drawn evaluation samples are alongside it. **From JSONL**, convert first — see §3.2. |
 
 Sampling is documented in `docs/JURIX_2.md` §2 and implemented separately: the
 evaluation frame is post-2000 English judgments, drawn evenly across court level
@@ -297,10 +297,33 @@ another court level.
 
 ### 3.2 Running the ablation
 
+**From a JSONL of case text.** The runner takes a JSON array; convert first. It
+then writes its own `<out>/input.jsonl`, adding the stage 2 instruction to each
+record — that generated file is an artefact of the run, not an input to it.
+
+```bash
+uv run python -c "
+import json
+recs=[json.loads(l) for l in open('cases.jsonl') if l.strip()]
+assert len({r['case_id'] for r in recs}) == len(recs), 'case_id must be unique'
+json.dump(recs, open('cases.json','w'), ensure_ascii=False)
+print(f'{len(recs)} document(s) -> cases.json')"
+```
+
+**Then run all five conditions from one command:**
+
 ```bash
 ./art6/ontology/run_ablation.sh \
-    --set data/art6_domestic_test_set.json \
-    --out results/ablation_test
+    --set cases.json \
+    --out results/my_run
+```
+
+The reported run was:
+
+```bash
+./art6/ontology/run_ablation.sh \
+    --set data/art6_eval_sample_judgments_flat.json \
+    --out results/ablation_250_mv1
 ```
 
 All five conditions come from this single command. A smoke test on one document

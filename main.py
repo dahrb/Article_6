@@ -13,8 +13,12 @@ from __future__ import annotations
 
 import argparse
 
-from art6.data import collection, metadata_processing, text_processing
-from art6.ontology import build_ontocast_test_set
+from art6.data import (
+    build_ontocast_test_set,
+    collection,
+    metadata_processing,
+    text_processing,
+)
 from art6.paths import (
     DECISIONS_METADATA_JSON,
     DECISIONS_METADATA_PROCESSED_JSON,

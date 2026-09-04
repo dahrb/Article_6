@@ -1,0 +1,208 @@
+# =============================================================================
+# THE EVALUATED TRIPLE SET
+# What the JURIX evaluation scores, and what it deliberately ignores.
+# Anything absent from this file is out of scope and its absence from an arm's
+# output is NOT an error.
+#
+# Scope rule: the domestic event, the authority that decided it, and the parties
+# to it -- echr:DomesticEvent and its four subclasses, echr:hasCourt and
+# echr:DomesticAuthority, echr:Participation and echr:Party. Nothing else.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# TIER A -- comparable across ALL FIVE ARMS.
+# C0's flat schema can express each of these, so a contrast including C0 is fair.
+# These carry every headline claim.
+# -----------------------------------------------------------------------------
+tier_a:
+
+  - name: event_exists
+    yaml_field: "(the record itself)"
+    triples: ["D echr:hasDomesticProceeding E"]
+    metric: precision, recall, F1
+    note: >
+      The primary content outcome. Matching rule in guide §8: same authority,
+      same decision. Recall is measurable at full scale only because the judge
+      produces its own reference list in the first-pass call.
+
+  - name: deciding_body
+    yaml_field: body
+    triples: ["E echr:hasCourt A", "A echr:hasAuthorityName ?name"]
+    metric: accuracy over matched events
+    note: Naming variants count as correct; see guide §8.
+
+  - name: decision_date
+    yaml_field: decision_date
+    triples: ["E echr:hasDecisionDate ?d"]
+    metric: accuracy over matched events
+    note: A partial date is correct if consistent with the annotation's precision.
+
+  - name: instance_level
+    yaml_field: level
+    triples: ["E echr:hasInstanceLevel ?l"]
+    metric: accuracy over matched events; closed-vocabulary conformance
+
+  - name: outcome
+    yaml_field: outcome
+    triples: ["E echr:hasOutcome ?o"]
+    metric: accuracy over matched events; closed-vocabulary conformance
+
+  - name: chain_edge
+    yaml_field: follows
+    triples: ["E echr:followsProceeding E'"]
+    metric: precision, recall, F1 over edges
+    note: >
+      THE PRIMARY STRUCTURAL OUTCOME. An edge is correct only if both endpoints
+      matched an annotated event and the annotation carries the same edge.
+
+  - name: participation
+    yaml_field: parties[].name
+    triples:
+      - "E echr:hasParticipation p"
+      - "p echr:participatingParty P"
+      - "P echr:hasPartyName ?n  /  P echr:hasPersonName ?n"
+    metric: precision, recall over party mentions per matched event
+
+  - name: party_side
+    yaml_field: parties[].side
+    triples: ["p echr:hasPartySide ?s"]
+    metric: accuracy over matched parties; closed-vocabulary conformance
+    note: >
+      Scored per event, not per person -- a party changing side between
+      instances is correct behaviour, not an inconsistency.
+
+  - name: deciding_body_as_party
+    yaml_field: "(derived)"
+    triples: ["E echr:hasCourt A", "E echr:hasParticipation p", "p echr:participatingParty A"]
+    metric: violation count (lower is better)
+    note: >
+      Mechanical, tier 1, no judge. The baseline's systemic defect: 20 party
+      entries named the body that decided that very proceeding.
+
+  - name: supporting_quote
+    yaml_field: quote
+    triples: ["E echr:hasSupportingQuote ?q"]
+    metric: verbatim rate (tier 1, mechanical) + sufficiency (judge, descriptive)
+    note: >
+      Verbatim rate is mechanical and is ~100% by construction for C3/C4.
+      Whether the quote SUPPORTS the claim is judged, unblinded, and reported as
+      artefact description only -- quote style identifies the arm on sight.
+
+# -----------------------------------------------------------------------------
+# TIER B -- graph arms only (C1-C4), reported descriptively.
+# C0 cannot express these. Never used in a contrast that includes C0.
+# -----------------------------------------------------------------------------
+tier_b:
+
+  - name: event_class
+    yaml_field: type
+    triples: ["E a echr:DomesticProceeding | echr:AdministrativeAction | echr:EnforcementAction | echr:ProsecutorialReview"]
+    metric: accuracy over matched events
+
+  - name: authority_kind
+    yaml_field: authority_kind
+    triples: ["A echr:hasAuthorityKind ?k"]
+    metric: accuracy over matched events
+
+  - name: proceeding_type
+    yaml_field: proceeding_type
+    triples: ["E echr:hasProceedingType ?t"]
+    metric: accuracy over matched events
+
+  - name: outcome_direction
+    yaml_field: outcome_direction
+    triples: ["E echr:hasOutcomeDirection ?d"]
+    metric: accuracy over matched events
+
+  - name: final_domestic_decision
+    yaml_field: final_domestic_decision
+    triples: ["E echr:isFinalDomesticDecision true"]
+    metric: precision, recall, F1 over flagged events ("terminal identification")
+    note: >
+      The event that concluded the domestic remedies before Strasbourg. Legally
+      the most consequential single fact in the chain -- it is what Article 35-1
+      exhaustion turns on and what starts the four-month clock -- and it is the
+      bridge to the follow-on analysis paper.
+
+      TIER B because C0 cannot express it: the flat schema has nine keys and
+      none of them marks finality (art6/conditions/prompts/o1_schema_light.txt).
+      Deriving it for C0 as "the last decision in the chain" was rejected -- that
+      would score C0 on an assertion it never made. Its absence is a schema
+      limitation, and a concrete instance of what the C0-vs-C1 contrast asks:
+      the ontology can mark the terminal decision and the flat schema cannot.
+
+      Scored per chain, not per document: a document with several independent
+      chains has one flag per exhausted chain, and a chain still pending at the
+      time of application has none.
+
+# -----------------------------------------------------------------------------
+# TIER C -- structural, mechanical only, no annotation needed.
+# Computed by art6/ontology/diagnostics/ablation_auto_eval.py over all arms.
+# -----------------------------------------------------------------------------
+tier_c:
+  - SHACL conformance and violation counts (ontology/echr-shapes.ttl)
+  - closed-vocabulary adherence across every vocabulary in guide §6
+  - participation cardinality (one participation per party per event)
+  - disjoint-class conflicts
+  - duplicate events on the (hasCourt, hasDecisionDate) key
+  - documents producing no parseable output
+
+# -----------------------------------------------------------------------------
+# OUT OF SCOPE -- not annotated, not scored, absence is not an error.
+# State as a scope limit in Methods.
+# -----------------------------------------------------------------------------
+out_of_scope:
+  - echr:InactivityPeriod, echr:hasInactivityCause
+  - echr:Adjournment, echr:hasAdjournmentCause
+  - echr:PreTrialDetention and all its properties (the ORDER imposing detention
+    is in scope as an event; the detention period is not)
+  - echr:hasGender, echr:hasGenderCue, echr:hasGenderCueText
+  - echr:isRepresentedBy, echr:LegalRepresentative
+  - echr:hasStatusApplied
+  - echr:isPending
+  - echr:hasApplicant on the case document
+  - echr:hasProceedingStartDate is ANNOTATED but not scored -- it disambiguates
+    one-event-or-two during alignment, and C0 has no field for it
+
+# =============================================================================
+# BORDERLINE EVENTS AND SENSITIVITY
+# The annotation guide (§4.4) asks the annotator to record contestable events
+# and flag them rather than to apply a rule the ontology does not contain. The
+# judge's first-pass prompt carries the same instruction, so both reference
+# lists come with the same flag.
+#
+# Rationale: whether investigative steps, arrests and private arrangements count
+# as domestic events is genuinely unsettled, and it is NOT neutral noise. The
+# compressed arms recover those events and the raw-text arm does not, so a
+# ruling either way moves the C1-vs-C3 and C1-vs-C4 recall gaps in a known
+# direction. Legislating an answer inside the annotation guide would bury a
+# choice that changes a headline result.
+# =============================================================================
+
+borderline_handling:
+
+  reporting_rule: >
+    Compute every metric TWICE and report both:
+      core  -- borderline events excluded from the reference on both sides
+      full  -- borderline events included
+    Where a conclusion holds under both, say so and use `core` in the tables.
+    Where it flips, that IS the result: the comparison is sensitive to whether
+    contestable events count, and the range is the finding. Do not pick the
+    variant that reads better.
+
+  agreement_rule: >
+    Report annotator-judge agreement separately for flagged and unflagged
+    events. High agreement on clear events with low agreement on flagged ones is
+    the expected and healthy pattern -- it says the instrument is sound and the
+    boundary is genuinely contested. Low agreement on UNFLAGGED events is the
+    problem case, and would mean the guide is not doing its job.
+
+  asymmetry_rule: >
+    An event flagged by one side and not the other is itself a disagreement
+    about the boundary, not a match failure. Count these separately; do not let
+    them fall silently into the pipeline-only or reference-only buckets.
+
+  not_a_metric: >
+    Borderline is not a quality judgement about the pipeline. An arm is never
+    penalised or credited for extracting a flagged event -- that is precisely
+    what the core/full split exists to keep out of the score.

@@ -1,0 +1,123 @@
+This is the final check. You are given the finished graph AND the full text of the judgment it was extracted from. Every earlier pass saw only the graph; you are the one pass that can see what the extraction MISSED.
+
+YOU HAVE TWO JOBS.
+
+FIRST, the GAPS listed above: events chained to nothing, events with no parties recorded, proceedings with no deciding authority, persons linked to nothing. Earlier passes were shown none of these, on purpose. Filling a gap means knowing who the parties were or which court it was, and that is written in the document -- so a pass that cannot read the document can only guess, and when it guessed it reached for whatever node was nearest, naming courts as parties to their own cases. You can read the document, so these are yours.
+
+  For each gap: find the passage that answers it and add what it supports,
+  with a verbatim echr:hasSupportingQuote for any new party you name. A
+  participation you add needs exactly one echr:participatingParty (the party
+  itself -- never their lawyer, guardian or representative, and NEVER the
+  body that decided the event) and one echr:hasPartySide.
+
+  `events_chained_to_nothing` is the most important of these, and the one
+  most often left unfixed. Each names an event that continues nothing and is
+  continued by nothing -- an island in what is supposed to be a procedural
+  history. For each, read the document and ask what came before it in the SAME
+  matter, then add `echr:followsProceeding` pointing at that event.
+
+  What counts as continuing is wider than an appeal, and appeals are the only
+  kind anyone gets right. A body acting again in the same matter continues its
+  own earlier act: an authority that seizes an asset, resolves to sell it,
+  re-offers it when the sale fails, then transfers ownership has made four
+  linked decisions, not four unrelated ones. A new phase continues the earlier
+  phase: a trial follows the investigation that produced the charges, an
+  enforcement follows the judgment it enforces, a judicial challenge follows
+  the administrative decision it contests -- the bodies being different is not
+  a reason to break the chain, it is usually where the chain matters most. A
+  fresh hearing after a remittal follows the quashing, not the original
+  decision.
+
+  LINK, DO NOT MERGE. Two events joined by echr:followsProceeding stay two
+  events, each keeping its own court, date and quote. Never fold one into the
+  other.
+
+  Some islands are correct: a genuinely separate track has a head that follows
+  nothing, and a one-off administrative act may stand alone. Leave those.
+
+  THE TEST IS "THE SAME MATTER CONTINUED", NOT "THE NEXT THING THAT HAPPENED".
+  Two events chain only if the later one carries forward the SAME dispute,
+  charge or claim, about the SAME people. Nearness in time is not continuity,
+  and neither is sharing a court, a prosecutor or an investigator.
+
+  Three things are NOT continuations, and each is a track of its own that
+  correctly follows nothing:
+
+    - PROCEEDINGS AGAINST A DIFFERENT PERSON. Where a co-accused, a witness or
+      a third party is tried and convicted in their own proceedings, that is
+      their track, not the applicant's. Two convictions weeks apart before the
+      same court are still two separate matters if they convict two different
+      people. Chaining them asserts a procedural continuity that does not
+      exist.
+    - A NEW MATTER ARISING LATER. A fresh investigation opened into new
+      allegations after the original case ended does not continue that case
+      merely because it involves the same applicant. Ask what it is ABOUT: new
+      subject matter is a new track, however suggestive the timing.
+    - A PARALLEL TRACK RUNNING ALONGSIDE. Civil and criminal proceedings over
+      the same facts run beside each other and neither continues the other.
+
+  When you are unsure whether two events are one matter or two, LEAVE THEM
+  UNLINKED. A missing link is a gap a reader can see. A wrong link is a
+  procedural history that reads as authoritative and is false, and nothing
+  downstream can tell it from a true one.
+
+  `events_missing_participation` names events with no parties recorded. A
+  participation you add needs a verbatim echr:hasSupportingQuote showing THIS
+  party taking part in THIS event -- not the event's own quote. Without one it
+  will be refused outright, whole, and the event left as it was. That is the
+  intended outcome, not a failure: recording a party the document does not
+  place there is worse than recording none, because nothing downstream can
+  tell an invented party from a read one. Participation is not required.
+
+  `quotes_not_found_in_source` names anchors whose text is not in the document.
+  Earlier stages cannot touch these at all -- not to fix, not even to move --
+  so they reach you untouched and you are the only stage that can act. For
+  each, find the passage that actually supports the claim and replace the span
+  with it, copied character for character. Where the document supports the
+  claim nowhere, remove the anchor and say so in the rationale: a node left
+  honestly unevidenced beats one carrying a quote that does not check out.
+  Never "correct" a quote by tidying it into something that merely reads well.
+
+  You will also see nodes with no anchor that an earlier stage created by
+  splitting a conflated event in two. Those are not errors -- the split was
+  right, and that stage is forbidden from moving the original quote onto the
+  new node. Anchor them from the document.
+
+  WHERE THE DOCUMENT DOES NOT SAY, LEAVE THE GAP. This is the whole point of
+  routing these to you. An event recorded with no parties is honest and can
+  be fixed later by a human or a better extraction; an event recorded with
+  parties the document never names is a false statement in a released
+  dataset, and nothing downstream can tell it apart from a true one. If you
+  cannot point at the words, do not write the triple. Returning a gap
+  unanswered is a correct answer, not a failure.
+
+SECOND, and more important, read the case text and compare it against the graph: domestic events that happened and are not in the graph at all. A hearing, a decision, an appeal, an administrative refusal, an enforcement step, a prosecutor's ruling -- anything before the case reached Strasbourg that affected the applicant and has no node.
+
+This is the only pass permitted to add an event, and the only one permitted to add an evidence anchor, because it is the only one reading the document to find the fact. That permission comes with a condition:
+
+  EVERY EVENT YOU ADD MUST CARRY ALL THREE OF THESE, in the same group that
+  mints it, or the WHOLE GROUP IS DISCARDED and the event does not land:
+
+    1. echr:hasSupportingQuote, copied character for character from the text
+       above. Not paraphrased, not tidied, not stitched together from two
+       passages. An unevidenced addition is indistinguishable from an
+       invention.
+    2. echr:hasCourt naming the authority that decided it.
+    3. echr:hasParticipation pointing at a participation node that YOU also
+       create in the same group, carrying both echr:participatingParty (the
+       party itself, never their lawyer or guardian) and echr:hasPartySide.
+       A bare link to an empty participation node does not count.
+
+  This is not a formality. You are the last stage: nothing runs after you, so
+  an event you leave without a court or a party stays that way permanently. A
+  half-specified event is not a partial success -- it is a new defect, and you
+  are better off not adding it at all. If the document does not tell you who
+  decided the event or who took part in it, DO NOT ADD THE EVENT.
+
+Give each new event its class (echr:DomesticProceeding for a step before a court, echr:AdministrativeAction for a non-judicial decision by a state body, echr:EnforcementAction for carrying out an earlier decision, echr:ProsecutorialReview for a decision inside a prosecutor's office), its date, and a echr:followsProceeding link to whatever it continues or reviews.
+
+You may also correct a fact the document plainly contradicts -- a wrong date, a decision attributed to the wrong court. Say in the rationale what the text says. This includes a chronological-order violation flagged by the validator (a decision date earlier than its own start date, a resumption before its adjournment, or a procedural chain running backwards): earlier passes cannot see the document and so left it alone -- you can, so check the text and fix whichever date is actually wrong.
+
+Give any date you write the datatype matching the precision the text gives -- xsd:date for a full date, xsd:gYearMonth for a year and month, xsd:gYear for a bare year -- never a plain string.
+
+BE CONSERVATIVE. Add what the document states and no more. Do not add an event because a case like this usually has one; do not infer a step from a gap in the dates; do not model the Strasbourg proceedings themselves, or other cases cited as precedent. If the graph already covers the document, return an empty patch -- that is the correct answer and a common one.

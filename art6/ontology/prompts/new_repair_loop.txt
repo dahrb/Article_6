@@ -1,0 +1,47 @@
+Below are a graph in Turtle, and FINDINGS listing everything currently wrong with it. Fix as many findings as you can in one patch.
+
+Every finding you are given is one the GRAPH ITSELF contains the answer to. You
+can fix all of them without knowing anything about the case:
+
+  shacl_violations                  a shape the graph breaks -- the message says which
+  logically_inconsistent_types      a node typed as two things that cannot both be true
+  possible_duplicate_entities       nodes that may be one real-world thing described twice
+  quotes_not_found_in_source        an evidence anchor that is not in the source document
+
+You will NOT be shown gaps -- an event with no parties, a proceeding with no
+court, a person linked to nothing. Those are not yours to fix. Answering them
+means knowing who the parties were or which court it was, and that is in the
+document, which you cannot see. A later stage reads the document and answers
+them from evidence. If you notice such a gap, LEAVE IT.
+
+HOW TO FIX THE COMMON ONES
+
+A node with several rdfs:label values is usually two real entities merged into one. Decide from the labels and the node's other properties whether it is one thing described twice or two things wrongly joined. If it is one thing, remove the labels that do not name it. If it is two, that is a false merge you cannot undo from here -- remove the surplus labels and say so in the rationale.
+
+A domestic event with more than one echr:hasCourt or more than one echr:hasDecisionDate is two proceedings collapsed into one node. Mint a NEW event for the second court or date, move that court/date onto it, and link it to the original with echr:followsProceeding. Never leave one node holding both.
+
+Where a shape violation is about a participation that ALREADY EXISTS -- it names two parties, or none, or several events point at one node -- fix the structure: never point two events at one participation node, because echr:hasPartySide is functional and a shared node forces one side onto every event that points at it. Split it, giving each event its own node carrying the party it already had. You may not invent a party for a participation that has none, and you may not create a participation for an event that has none: if the party is not already in the graph, leave it and let the gap stand.
+
+You may NEVER name an event's deciding body -- its echr:hasCourt -- as the echr:participatingParty of that same event. The adjudicator is not a litigant in its own case. It is the nearest node to hand when a participation needs a party, which is exactly why it is forbidden.
+
+A date value flagged for the wrong datatype (typed xsd:string, or anything other than xsd:date, xsd:gYearMonth or xsd:gYear) is retyped to match the precision already in the string: a full YYYY-MM-DD becomes xsd:date, a YYYY-MM becomes xsd:gYearMonth, and a bare YYYY becomes xsd:gYear. Change only the datatype tag -- never the digits, and never add a day or month the string does not already have.
+
+A link flagged for pointing at a node of the wrong type (echr:hasDomesticProceeding, echr:hasParticipation, echr:hasAdjournment, echr:hasInactivityPeriod, echr:hasPreTrialDetention, echr:followsProceeding, echr:isRepresentedBy, echr:participatingParty) usually means the target node is missing the rdf:type the property requires, not that the link itself is wrong. ADD the required type to the target node rather than deleting the link or minting a replacement node, unless the target is plainly the wrong entity altogether.
+
+A duplicate pair is merged with a `merge` operation naming which node to keep and which to drop, not by hand-editing triples. Check first: two people can share a name, and two courts of the same level are not the same court. Where the evidence points at two different entities, leave them alone.
+
+WHAT YOU MAY NOT DO
+
+QUOTES ARE NOT YOURS TO TOUCH. You may not write a echr:hasSupportingQuote, and you may not move one either. Both are refused.
+
+Writing one is obvious: you cannot see the document, so any passage you compose is one you chose for a fact you did not read. Moving one is the same defect wearing the extraction's clothes. A span was selected as evidence for ONE claim; putting it on a different triple asserts it as evidence for ANOTHER, and you cannot check whether it supports that one, because you cannot read the source. The text stays genuine while the assertion becomes unchecked -- which is worse than no anchor at all, because it looks anchored.
+
+You MAY delete a whole triple, quote triples included. Removing an assertion asserts nothing, so it needs no evidence.
+
+WHEN YOU SPLIT A CONFLATED EVENT, leave the new node unanchored. Do not copy the original's quote onto it. The unanchored node is reported as a gap to the stage that reads the document, and that stage anchors it properly against the source. An anchor you moved would satisfy the check while telling nobody the truth; a gap tells the truth and gets fixed.
+
+You may not remove an event's last participation unless the same patch gives it another. Stripping an event of its parties trades a defect that can be seen for one that cannot.
+
+You may not delete a domestic event to make a finding go away. If an event is wrong, correct it.
+
+You may not resolve a chronological-order violation (a decision date earlier than its own start date, a resumption date earlier than its adjournment, a detention end before its start, or a procedural chain running backwards) by swapping or altering either date. You cannot see the source document, so you do not know which of the two dates is actually wrong. Leave it for the document-reading review pass.

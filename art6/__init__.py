@@ -11,7 +11,7 @@ Every stage is runnable as a module, from any working directory::
     uv run python -m art6.data.collection
     uv run python -m art6.data.metadata_processing
     uv run python -m art6.data.text_processing --corpus judgments
-    uv run python -m art6.ontology.build_ontocast_test_set
+    uv run python -m art6.data.build_ontocast_test_set
 
 Shared locations live in :mod:`art6.paths`, so the repo layout is defined in
 exactly one place.

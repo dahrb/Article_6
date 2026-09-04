@@ -1,10 +1,34 @@
 __pycache__/
 .venv/
 *.sh
+# but project launchers are tracked (gitignore has no trailing comments)
+!art6/**/*.sh
 *.html
 *.out
+
+*.ttl
+*.txt
+*.jsonl
+*.json
+
+# Config carrying credentials (FUSEKI_AUTH, LLM_API_KEY, ...). This repo is
+# public and has leaked a credential before, so ignore every .env by default.
+# ontology/old/*.env are already tracked; gitignore does not untrack them.
 keys.env
+*.env
+
+# OntoCast LLM/tool response cache (ONTOCAST_CACHE_DIR). Regenerable, and grows
+# to tens of GB across the full corpus.
+.cache/
+
+docs/
+
 data/*.json
+# JSONL form of the test set, fed to `ontocast process --input-path`. Rebuild:
+#   uv run python -c "import json;from art6.paths import ONTOCAST_TEST_SET_JSON as p;\
+#   open(p.with_suffix('.jsonl'),'w').writelines(json.dumps(e,ensure_ascii=False)+'\n' \
+#   for e in json.load(open(p)))"
+data/*.jsonl
 data/*.parquet
 data/additional_data/*.txt
 echr_corpus.jsonl
@@ -13,3 +37,15 @@ echr_decisions_corpus.jsonl
 # Local archive of the pre-refactor demographic-phase content (~104 MB).
 # Exceeds GitHub's 100 MB file limit - must never be committed.
 art_6_demo_old.zip
+
+# The annotation reference standard. The blanket *.txt / *.json rules above
+# would silently drop the guide and the sample manifest, which are the two
+# files the whole evaluation is calibrated against -- negate them explicitly.
+# gold/*.yaml (the annotations themselves) is not matched by any rule above.
+!annotation/annotation_guide.txt
+!annotation/gold/manifest.json
+
+# NOT tracked: annotation/gold_text/*.txt -- the 20 source judgments. They are
+# corpus text, which this repo does not track anywhere (see data/ rules), and
+# they regenerate from data/ via the seeded sampler:
+#   uv run python -m art6.data.build_annotation_sample --n 20 --seed 42

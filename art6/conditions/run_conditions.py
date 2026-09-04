@@ -46,9 +46,11 @@ import os
 import time
 from pathlib import Path
 
-from openai import OpenAI
+from openai import LengthFinishReasonError, OpenAI
 
 from art6.conditions.schema import NormalisedDocument
+from art6.ontology.compress import call_with_recovery
+from art6.ontology.repair_facts import model_call_kwargs
 from art6.paths import REPO_ROOT, relative
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
@@ -123,18 +125,44 @@ def extract_one(
     finding about O1 rather than about output formatting.
     """
     started = time.perf_counter()
-    request = {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": load_condition_prompt(condition)},
-            {"role": "user", "content": document["text"]},
-        ],
-        "temperature": temperature,
-        token_param: max_tokens,
-    }
-    completion = client.chat.completions.parse(
-        response_format=NormalisedDocument, **request
-    )
+    # A cap is occasionally too small for a document that is short on input but
+    # long on procedural history -- e.g. a single, ordinary-length judgment
+    # (001-59859, 4.7k chars) still ran the structured JSON output past 16000
+    # tokens on 2026-08-31. `.parse()` raises LengthFinishReasonError rather
+    # than returning a truncated completion, so there is nothing to retry
+    # against except a bigger cap. One doubling mirrors compress.py's own
+    # truncation retry rather than looping indefinitely.
+    for cap in (max_tokens, max_tokens * 2):
+        # Sampling kwargs come from one place for every caller in the repository,
+        # so that a hosted model is a --model change and nothing else: the
+        # gpt-5/o-series families need `max_completion_tokens` and refuse an
+        # explicit temperature. An explicit --token-param still wins, for an
+        # endpoint that disagrees.
+        sampling = model_call_kwargs(model, temperature=temperature, max_tokens=cap)
+        if token_param != "auto":
+            sampling.pop("max_tokens", None)
+            sampling.pop("max_completion_tokens", None)
+            sampling[token_param] = cap
+        request = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": load_condition_prompt(condition)},
+                {"role": "user", "content": document["text"]},
+            ],
+            **sampling,
+        }
+        try:
+            completion = call_with_recovery(
+                client,
+                label="o1",
+                method="parse",
+                response_format=NormalisedDocument,
+                **request,
+            )
+            break
+        except LengthFinishReasonError:
+            if cap == max_tokens * 2:
+                raise
     seconds = time.perf_counter() - started
     choice = completion.choices[0]
     usage = completion.usage
@@ -197,11 +225,17 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--token-param",
-        default="max_tokens",
-        choices=["max_tokens", "max_completion_tokens"],
-        help="gpt-5 reasoning models require max_completion_tokens.",
+        default="auto",
+        choices=["auto", "max_tokens", "max_completion_tokens"],
+        help="Output-cap spelling. 'auto' picks it from the model name "
+        "(gpt-5 and o-series reasoning models require max_completion_tokens).",
     )
     parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Re-run a document whose .o1.json already exists.",
+    )
     args = parser.parse_args(argv)
 
     documents = load_documents(args.input_json, args.limit)
@@ -227,9 +261,19 @@ def main(argv: list[str] | None = None) -> int:
     run_start = time.perf_counter()
     timings: list[dict] = []
     failures = 0
+    resumed = 0
 
     for document in documents:
         stem = f"input.L{document['line']}"
+        # A document is "done" when its .o1.json report exists. Re-running the
+        # same command therefore picks up where a dead endpoint left off,
+        # rather than redoing all 250 documents -- the C0 baseline was the one
+        # stage in this driver with no resume at all, measured 2026-08-31 on a
+        # 250-document run that died mid-stage-1 with 239/250 C0 outputs
+        # already on disk and no way to skip them on retry.
+        if not args.overwrite and (args.out_dir / f"{stem}.{suffix}.json").exists():
+            resumed += 1
+            continue
         try:
             raw, timing = extract_one(
                 client,
@@ -284,6 +328,7 @@ def main(argv: list[str] | None = None) -> int:
         "max_tokens": args.max_tokens,
         "input": str(relative(args.input_json)),
         "documents": len(documents),
+        "resumed": resumed,
         "failures": failures,
         "started_at": started_at.isoformat(),
         "seconds_total": round(run_seconds, 1),
@@ -298,6 +343,8 @@ def main(argv: list[str] | None = None) -> int:
         json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
     )
 
+    if resumed:
+        print(f"\nresumed: {resumed} document(s) already present, skipped")
     print(f"\n{args.condition.upper()} complete in {run_seconds:.1f}s")
     if args.condition == "o1":
         print(f"  parsed cleanly: {parsed_ok}/{len(documents)}")

@@ -1,0 +1,404 @@
+TASK: Read this European Court of Human Rights judgment and SELECT THE EVIDENCE for the
+domestic procedural history — everything that happened in the respondent State before the
+case reached Strasbourg.
+
+You are a SELECTOR, not a summariser and not a classifier.
+
+## THE ONE RULE
+
+Every value you output must be text COPIED CHARACTER FOR CHARACTER from the judgment.
+
+Not paraphrased. Not tidied. Not re-punctuated. Not stitched together from two places with
+an ellipsis. If you cannot copy it exactly, leave the field out. A field that is absent is
+recoverable; a field containing text that is not in the document is not, because it looks
+exactly like a fact.
+
+Keep each span SHORT — the few words that carry the fact, not the whole paragraph. A span
+must be long enough to be unambiguous if the same words appear elsewhere.
+
+## WHAT YOU MUST NOT DO
+
+Do not decide what category anything belongs to. You do not say whether a step is first
+instance or appeal, whether a party initiated or responded, whether a court is judicial or
+administrative, whether an outcome was favourable. A later stage decides all of that.
+
+Your job is to find the WORDS THE DOCUMENT USES that let it decide. Where the document
+signals a category, copy the signalling words into the corresponding `*_span` field and
+stop there.
+
+Do not normalise dates. Copy "20 November 2000" as it appears, not "2000-11-20".
+
+Do not model the Strasbourg proceedings, other cases cited as precedent, or statutory
+provisions and EU instruments. Only what happened to THESE applicants in the domestic
+system, including non-judicial steps: administrative decisions, prosecutorial rulings,
+enforcement actions.
+
+## OUTPUT
+
+A single JSON object, no prose around it, matching this shape. Omit any field you have no
+verbatim text for. Omit any list that is empty.
+
+{
+  "case": {
+    "case_name_span": "...", "application_number_span": "...",
+    "respondent_state_span": "...", "judgment_date_span": "..."
+  },
+  "events": [
+    {
+      "id": "e1",
+      "order": 1,
+      "what_happened_span": "the decisive words: what was decided or done",
+      "decision_date_span": "the date it was decided, as written",
+      "start_date_span": "the date it was begun or lodged, if separately given",
+      "authority_span": "the body that decided it, as named",
+      "authority_kind_span": "words showing what kind of body (court, prosecutor, council)",
+      "outcome": "THE RESULT, as one of: merits decided | inadmissible | remitted | settled or withdrawn | other. A judgement you make, filled on every event that DECIDED something -- omitted entirely on an event that merely records an act. See CLASSIFY THE RUNG AND THE RESULT below.",
+      "outcome_span": "the words stating the result, IF the document states it. Omit when it does not -- the classification above still gets filled.",
+      "instance_level": "WHICH RUNG, as one of: first instance | appeal | cassation | investigative | administrative review | supervisory review | reopening. A judgement you make, filled on EVERY event -- see CLASSIFY THE RUNG AND THE RESULT below.",
+      "instance_span": "the words naming the rung, IF the document states it literally ('at first instance', 'on appeal'). Omit when it does not -- the classification above still gets filled.",
+      "proceeding_type_span": "words showing the branch (criminal, civil, administrative)",
+      "finality_span": "words showing it was final or that remedies were exhausted",
+      "pending_span": "words showing it was still pending",
+      "interim_spans": ["steps before the SAME body between start and decision"],
+      "follows": "id of the event this continues, reviews, appeals or enforces, e.g. e1. An appeal is only ONE kind of continuation -- see FOLLOWS below",
+      "follows_span": "the words linking them",
+      "parties": [
+        {"name_span": "the party as named",
+         "role_span": "words showing their STANDING in this instance -- who brought it, who answered it. NOT the last thing they did."}
+      ],
+      "inactivity": [
+        {"start_span": "...", "end_span": "...", "cause_span": "words attributing the delay"}
+      ],
+      "adjournments": [
+        {"date_span": "...", "resumption_span": "...", "cause_span": "..."}
+      ],
+      "detention": [
+        {"detainee_span": "...", "start_span": "...", "end_span": "...",
+         "measure_span": "words naming the custodial measure",
+         "duration_span": "a stated total duration, if the text gives one",
+         "still_detained_span": "words showing they remain detained"}
+      ]
+    }
+  ],
+  "persons": [
+    {
+      "name_span": "the person as named",
+      "role_span": "words showing who they are (the applicant, her lawyer, his guardian)",
+      "gender_cue_span": "a SHORT span containing an honorific, pronoun or gendered noun that
+                          refers to this person: 'Ms A. Genova', 'she was informed',
+                          'his half-sister'. Anywhere in the document, not only at first
+                          mention. Omit entirely if the document never marks them.",
+      "represents_span": "words showing they act for someone, and for whom"
+    }
+  ],
+  "authorities": [
+    {"name_span": "the body as named", "kind_span": "words showing what kind of body it is"}
+  ]
+}
+
+## CLASSIFY THE RUNG AND THE RESULT
+
+These two come in PAIRS, and the pairing is the point.
+
+  instance_level / outcome      a judgement you make, filled on EVERY event
+  instance_span / outcome_span  the literal words, ONLY when the document
+                                states them
+
+Everything else in this schema is copied text. These are the exception: they
+are judgements ABOUT an event rather than phrases in it. That does not make
+them unevidenced -- the evidence is the event's own `what_happened_span`, which
+you have already copied and which anyone can check your judgement against.
+Where the document ALSO names the rung or the result in so many words, copy
+that into the `_span` field too: the reader then has both the classification
+and the sentence it came from, and can see whether they agree.
+
+Never withhold the classification because there is no span. The judgment
+usually will not write "first instance" or "cassation" anywhere, and waiting
+for those words leaves the field empty on almost every event -- which is
+exactly the failure this pairing exists to fix. Span present or absent, the
+classification is filled.
+
+Read what the body did and say which rung it is:
+
+  - a first hearing of a claim, charge or application  -> first instance
+  - a review of a lower body's decision on the merits  -> appeal
+  - a review limited to points of law                  -> cassation
+  - a step inside a criminal investigation (a warrant, an arrest, a
+    prosecutor's refusal, an expert order)             -> investigative
+  - an internal review by an administrative body       -> administrative review
+  - an extraordinary review after finality             -> supervisory review
+  - a case reopened after a final decision             -> reopening
+
+And say what the result was:
+
+  - the body ruled on the substance, whichever way      -> merits decided
+  - a claim or appeal refused without reaching merits   -> inadmissible
+  - sent back to a lower body                           -> remitted
+  - withdrawn, discontinued or settled                  -> settled or withdrawn
+  - a real outcome none of these fit                    -> other
+
+These FIVE are the whole vocabulary. There is no value for "an order to do
+something": a body that grants a request -- appointing a guardian, allowing an
+injunction, ordering a release -- has ruled on the substance of that request,
+so it is `merits decided`. A purely housekeeping order that decides nothing,
+such as transferring a case to another court on jurisdictional grounds, is
+`other`.
+
+`other` is a last resort, not a default. An event you have labelled `other`
+should be one you could argue about, not one you did not think about. In
+particular a decision to leave a claim unexamined is `inadmissible`, not
+`other`, and a decision refusing a request during an investigation is
+`inadmissible`, not `merits decided`.
+
+**AN ACT IS NOT A RESULT. Leave `outcome` OUT when nothing was decided.** This is
+the one place the pairing above does not apply, and `instance_level` is unaffected
+-- classify the rung as always. A gun is seized, a search warrant is issued, a
+suspect is arrested, a crime scene is inspected, an investigation is opened: these
+are things DONE, not requests answered, and none of the five values is true of
+them. `merits decided` is false, because no merits were reached; `other` is false,
+because there was no result at all. Omit the field.
+
+The test is whether something was ASKED and ANSWERED. A request refused during an
+investigation IS a result -- `inadmissible`, as above -- and keeps its outcome. An
+arrest answers nothing, and does not.
+
+Investigative steps are where this goes wrong, because the rung is obvious and the
+habit of filling every field carries `merits decided` in behind it. Measured
+2026-08-28 on a Georgian criminal case: a gun seizure, a search warrant and an
+arrest were all labelled `merits decided`. Every one of those triples was
+well-formed, in-vocabulary and evidenced, and every one was false. An omitted
+outcome is a gap anyone can see; a wrong one is a gap nobody can.
+
+## COVERAGE AND GRANULARITY
+
+ONE ENTRY PER JURISDICTIONAL INSTANCE — not one per procedural act.
+
+This is the rule people get wrong, so read it twice. Lodging a claim and the decision on
+that claim are ONE entry, not two: put the lodging date in `start_date_span` and the
+decision date in `decision_date_span`. Everything that happened in between before the same
+body — an amendment, a counterclaim, a request, a transfer, an acceptance for examination —
+belongs to that SAME entry, in `interim_spans`.
+
+A NEW entry begins only when:
+  - a DIFFERENT body takes the matter (appeal, cassation, transfer to another court), or
+  - the same body decides a genuinely separate matter on its own facts.
+
+So a claim lodged in January, amended in October, met with a counterclaim, and left
+unexamined in November by the same court is ONE entry with one start date, one decision
+date, and four interim spans. It is not five entries.
+
+Include instances that went nowhere — a request refused, an appeal declared inadmissible,
+a claim left unexamined. Include non-judicial ones: administrative decisions,
+prosecutorial rulings, enforcement steps.
+
+### WHAT ALWAYS STARTS A NEW ENTRY
+
+Grouping has a hard limit, and under-splitting loses whole appeals. These are NEVER
+interim spans and ALWAYS get their own entry:
+
+  - an appeal, a cassation appeal, a constitutional complaint, a supervisory review
+  - a remittal, a retrial, a case transferred to another court
+  - ANY decision by a body that is not the deciding body of the entry you are writing
+  - a prosecutor's ruling, an administrative decision, an enforcement step
+  - a detention order or its extension
+
+`interim_spans` is ONLY for steps taken before the SAME body, between that body's own
+start date and its own decision. If a different body did it, it is a different entry.
+Putting another court's judgment in `interim_spans` deletes that court from the record.
+
+### DETENTION GOES IN ITS OWN FIELD
+
+A decision to detain, release, or extend detention is not an interim span. Put it in the
+`detention` list of the entry it belongs to, with the spans naming who was detained, when
+it started and ended, and what the measure was called. Detention is one of the things this
+extraction exists to capture; buried in prose it is lost.
+
+### FOUR THINGS THAT GET LEFT OUT, AND MUST NOT BE
+
+**1. PARTIES — every entry needs them.** Somebody brought every step and somebody answered
+it. Even when the text is terse, the applicant is almost always one of them. For each
+entry list the parties with the words naming them and the words showing their standing.
+Name the party itself, never their lawyer. An entry with no parties records a decision
+with nobody in it.
+
+`role_span` must show the party's STANDING IN THIS INSTANCE — who brought this instance
+and who answered it — not the most recent thing they happened to do inside it. Prefer the
+words showing who lodged, claimed, applied, appealed, was prosecuted or was sued
+("lodged a claim against", "brought proceedings", "was charged with", "the defendant").
+A party who files a motion partway through does NOT thereby become the party who brought
+the instance: if the applicant sued and the respondent later asked for the claim to be
+struck out, the applicant is still the one who brought it, and `role_span` for the
+applicant stays on the words about lodging the claim. Reading the standing off the last
+act is the single most common way this field goes wrong, and it silently reverses who was
+on which side.
+
+**THE OTHER SIDE IS OFTEN NAMED ONLY ONCE.** A first-instance judgment names both sides.
+The appeal against it usually names only the one who appealed — "the applicant appealed",
+"an appeal was lodged" — because the other side is already known to the reader and the
+text does not repeat it. Where the entry this one `follows` recorded an opposing party,
+and nothing in the text suggests they dropped out, record that party here too. It is the
+same dispute between the same litigants, and leaving them out makes the opposing party
+vanish from the whole upper half of the chain.
+
+**This is permission, not a quota.** Add the second party where the document names them,
+or where the entry this one follows makes plain who they are. Do not manufacture one to
+fill the field. Many entries genuinely have one party — an application to an authority, a
+prosecutor acting of his own motion, a review opened ex officio — and some have none you
+can name from the text. ONE PARTY IS A CORRECT ANSWER. NO PARTIES IS A CORRECT ANSWER. An
+entry carrying a wrong second party is worse than an entry carrying one right one.
+
+**Never reach for the deciding body OF THIS ENTRY to fill the gap.** The body named in
+THIS entry's `authority_span` is not available as this entry's missing party. If you
+cannot name the other side, leave it out and move on. This is the most common way the
+field goes wrong: the gap is obvious, the deciding body's name is right there, and on
+this entry it is the one name that is certainly not the answer.
+
+**But an authority IS the party when its OWN decision is the thing under review, and this
+is the single most-missed party in the whole corpus.** In public-law proceedings the
+respondent is usually a public body, and it is a party exactly where it is not the judge:
+
+  - A permit is refused by a District Authority. The applicant appeals to a Regional
+    Government, which refuses it too. He appeals to an Administrative Court, which
+    QUASHES THE REGIONAL GOVERNMENT'S DECISION. On the first two entries those bodies
+    are the deciding body. On the third the court decides, and the REGIONAL GOVERNMENT
+    IS THE RESPONDING PARTY.
+  - A ministry rejects a claim, and the claimant sues. On the ministry's own decision it
+    is the deciding body; in the litigation that follows it is the defendant, and stays
+    the defendant through every appeal.
+  - A prosecutor refuses to bring an action and the refusal is challenged before a court:
+    the prosecutor's office is the responding party in that challenge.
+
+The test is simply WHO IS DECIDING THIS ENTRY. Everyone else named in it is eligible,
+including a public body, including one that decided an earlier entry in the same chain.
+Look at what this entry's own words say was quashed, upheld, appealed against or
+complained of: the body whose act that was is the other side, and it is usually named
+right there.
+
+**THE SIDES USUALLY SWAP ON REVIEW, so do not copy `role_span` across.** The party who
+lost at first instance is the one who appeals, so the first-instance respondent is very
+often the appellant above. Read who brought THIS instance from THIS entry's words
+("appealed", "lodged an appeal against", "applied for review"), and give the other party
+the answering role. Only where the text plainly shows the same side bringing it again does
+the alignment stay as it was below.
+
+An entry that `follows` nothing inherits nothing. The test in `follows` is unchanged, and
+a new matter that merely happens later is not a review of anything.
+
+**THE DECIDING BODY IS NEVER A PARTY.** The court, tribunal, prosecutor's office,
+ministry or municipal authority that DECIDED this step belongs in `authority_span`, and
+nowhere else. Never list it under `parties` merely because it acted — deciding, ruling,
+transferring, remitting, quashing and adjourning are what a deciding body does, and none
+of them make it a party. The same body IS a party when it appears on one side of a
+DIFFERENT entry it did not decide (e.g. a municipal council that later appeals as a
+litigant). If the only name you have for an entry is the body that decided it, leave
+`parties` out of that entry entirely rather than putting the body there.
+
+**2. FOLLOWS — the chain is the point.** Every entry except the first of a track continues,
+reviews, appeals or enforces an earlier one. Set `follows` to that entry's id and copy the
+linking words into `follows_span`. Where several tracks run in parallel, each has its own
+first entry with no `follows`; everything else should be linked. If most of your entries
+have no `follows`, you have produced a list, not a procedural history.
+
+AN APPEAL IS ONLY ONE KIND OF CONTINUATION, and it is the one everybody gets right. These
+three are missed constantly, and each leaves a whole stretch of the history unchained:
+
+  a. **The same body acting again in the same matter.** Where an authority takes a
+     succession of decisions carrying one process forward -- seizes an asset, values it,
+     resolves to sell it, offers it, re-offers it when the sale fails, awards it,
+     transfers ownership -- every step after the first `follows` the step before it. It
+     is one administrative process, not a dozen unrelated decisions that happen to share
+     a decision-maker. Twelve entries by the same body with no `follows` between any of
+     them is the single most common way this field is left empty.
+
+     Worked example, from a real judgment. A Fund seizes a broadcaster, resolves
+     to recover a debt, signs a liquidation protocol, establishes two companies,
+     offers them for sale, merges them, offers the merged company for sale,
+     offers it again when nobody bids, approves an award to a bidder, and
+     transfers ownership. That is TEN entries and NINE `follows` links, each
+     pointing at the step before it. Left unlinked, it reads as ten unrelated
+     decisions by a body that happens to keep appearing, and the sequence that
+     is the whole point of the record is gone. Where such a run genuinely splits
+     into two processes (a debt recovery and a separate sale), chain each run
+     internally and start the second one fresh; do not leave both flat.
+
+  b. **A new phase continuing an earlier one.** A trial `follows` the investigation that
+     produced the charges. Enforcement `follows` the judgment it enforces. A judicial
+     challenge `follows` the administrative decision it contests, even though a court and
+     a ministry are nothing alike. The bodies differing is not a reason to break the
+     chain -- it is usually the point at which the chain matters most.
+
+  c. **A remittal going back down.** Where a higher court quashes and sends a case back,
+     the fresh hearing `follows` the quashing, not the original first-instance decision.
+
+THE TEST IS "THE SAME MATTER CONTINUED", NOT "THE NEXT THING THAT HAPPENED". Two entries
+chain only if the later one carries forward the same dispute, charge or claim, about the
+same people. Nearness in time is not continuity, and neither is sharing a court, a
+prosecutor or an investigator. Three things are NOT continuations and each starts its own
+track with no `follows`: proceedings against a DIFFERENT PERSON (a co-accused tried in
+their own case is their track, not the applicant's, even before the same court weeks
+later); a NEW MATTER arising later (a fresh investigation into new allegations does not
+continue the closed case just because the applicant is the same -- ask what it is ABOUT);
+and a PARALLEL TRACK (civil and criminal proceedings over the same facts run beside each
+other, neither continuing the other). When unsure whether two entries are one matter or
+two, LEAVE THEM UNLINKED: a missing link is a gap a reader can see, a wrong link is a
+false procedural history that reads as authoritative.
+
+LINKING IS NOT MERGING, and confusing the two destroys more than it fixes. When you find
+that one entry continues another, you set `follows` and you keep BOTH ENTRIES. You do not
+fold them into a single entry carrying the first one's description and the second one's
+body and date. A claim lodged on 24 February 2011 and dismissed by the 6th Chamber on
+19 March 2014 is TWO entries joined by `follows` -- not one entry reading "seeking the
+annulment" with the 6th Chamber's date on it. That fusion loses the filing, loses its
+date, and misattributes the applicant's own act to the court that ruled on it. Every step
+keeps its own body, its own date and its own description; `follows` is the only thing that
+joins them.
+
+BEFORE YOU FINISH, look at every entry whose `follows` is empty and ask what came before
+it in this matter. Legitimate answers exist -- it opens a genuinely separate track, or it
+is the earliest thing the document records -- and where one applies, leave it empty. But
+an entry that plainly continues something already in your list and says `follows: null`
+is an error, and it is the error that turns a procedural history back into a list.
+
+**3. DELAY AND POSTPONEMENT.** Where the text says a case lay dormant, was stayed, or
+nothing happened between two dates, record it in `inactivity` with the spans bounding the
+period and any words attributing the cause. Where a hearing was adjourned or postponed and
+later resumed, record it in `adjournments`. These matter: length-of-proceedings is a core
+Article 6 complaint and the delays are usually stated explicitly.
+
+**4. FINALITY AND PENDING.** Copy into `finality_span` any words showing a decision was
+final, not subject to further appeal, or that domestic remedies were exhausted. Copy into
+`pending_span` any words showing a matter was still outstanding when the judgment was
+written.
+
+### BEFORE YOU FINISH — COVERAGE CHECK
+
+Go back through the procedural history and list every body that decided anything about
+these applicants — and the list is wider than courts. It includes:
+
+  - courts, tribunals, appeal benches, arbitration bodies
+  - prosecutors at every level
+  - municipal councils, ministries, mayors, governors
+  - **social assistance and welfare departments** — granting, refusing, increasing or
+    reducing an allowance is a domestic event with a decision and a date
+  - **police and enforcement officers** — a search for a person, an arrest, a return to
+    an institution, a seizure, a payment order carried out
+  - **medical, psychiatric and social assessment bodies** whose findings decided something
+  - care homes, hospitals, guardianship authorities, registrars
+
+EVERY ONE of them must be the `authority_span` of at least one entry.
+
+The non-judicial periphery is the part that gets missed. A welfare decision or a police
+action is easy to read as background narrative rather than as a step in the procedural
+history; it is a step, it has a decision-maker and a date, and it must have an entry.
+
+If a body appears in your reading but not in your entries, you have merged away a real
+step — add it. If the same body decided twice on different matters or on different dates
+at different levels, that is two entries, not one.
+
+Where the document names a person at all — applicant, lawyer, guardian, relative, witness,
+co-accused — give them an entry in `persons`, and copy a gender cue if the document marks
+them. Gender cues are easy to miss: a person introduced as initials and called "she"
+twenty paragraphs later still has one.
+
+Be exhaustive about evidence and silent about judgement. If the document does not say, do
+not supply it.

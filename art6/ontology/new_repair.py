@@ -27,7 +27,7 @@ THE THREE DESIGN DECISIONS WORTH KNOWING
    parse failures either way -- and on the persons findings guided proposed ONE
    op and stalled where unconstrained proposed 31 plus 2 merges. Under a vLLM
    grammar a stalled model can emit legal whitespace forever; without one it
-   writes the patch. See repair_facts.call_repair_model and response_repair.py.
+   writes the patch. See repair_facts.call_repair_model and json_closers.py.
 
 2. SHACL IS NOT ENOUGH ON ITS OWN. The shapes catch constraint violations well
    and absences badly: on the 2026-08-24 sweep 52 of 174 events carried no
@@ -74,6 +74,7 @@ from art6.ontology.repair_facts import (
     find_unverified_quotes,
     mirror_party_labels,
     parse_unconstrained_patch,
+    prune_unbuilt_proceedings,
     split_multiparty_participations,
     split_shared_participations,
 )
@@ -833,6 +834,9 @@ def repair_document(
     startup_labels = mirror_party_labels(graph, doc_ns)
     if startup_labels:
         print(f"    party labels mirrored on input: {startup_labels}")
+    startup_pruned = prune_unbuilt_proceedings(graph, doc_ns)
+    if startup_pruned:
+        print(f"    unbuilt proceeding references pruned on input: {startup_pruned}")
 
     before = len(find_shape_violations(graph))
     disjoint_before = len(find_disjoint_type_conflicts(graph))
@@ -947,10 +951,21 @@ def repair_document(
 def load_source_texts(input_jsonl: Path | None) -> dict[str, str]:
     if not input_jsonl or not input_jsonl.exists():
         return {}
+    # KEY ON THE INPUT FILE'S OWN STEM, not the literal "input". Stage 2 names
+    # its outputs after the file it was given -- input.jsonl -> input.L1, but
+    # bundles.jsonl -> bundles.L1 -- so hardcoding "input" meant every lookup
+    # missed on the compressed arm. source_text then came back None, which
+    # SILENTLY disables both the review stage and the unverified-quote finder:
+    # measured 2026-08-30, C3->C4 ran 79 loop operations and zero review
+    # operations across 20 documents while C1->C2 ran 396, and the run reported
+    # success either way.
+    stem = input_jsonl.stem
     out = {}
     for i, line in enumerate(input_jsonl.read_text(encoding="utf-8").splitlines(), 1):
         if line.strip():
-            out[f"input.L{i}"] = json.loads(line).get("text", "")
+            text = json.loads(line).get("text", "")
+            out[f"{stem}.L{i}"] = text
+            out[f"input.L{i}"] = text  # tolerate older runs named this way
     return out
 
 
@@ -992,6 +1007,17 @@ def main() -> None:
     if not files:
         print(f"no *.facts.ttl under {args.facts_dir}", file=sys.stderr)
         raise SystemExit(1)
+    if sources and not any(f.name.removesuffix(".facts.ttl") in sources for f in files):
+        # Every document would silently run without a review stage and without
+        # quote verification, and the run would still report success.
+        print(
+            f"ABORT: --input-jsonl {args.input_jsonl} matches none of the "
+            f"{len(files)} graph(s) in {args.facts_dir}. Expected keys like "
+            f"{files[0].name.removesuffix('.facts.ttl')!r}; got "
+            f"{sorted(sources)[:3]!r}.",
+            file=sys.stderr,
+        )
+        raise SystemExit(2)
 
     print(f"model: {args.model} @ {args.base_url} (temperature {args.temperature})")
     print(f"{len(files)} document(s), max {args.max_rounds} loop round(s)\n")

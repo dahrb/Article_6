@@ -37,7 +37,6 @@ BASE_URL="${BASE_URL:-http://localhost:8003/v1}"
 TEMPERATURE="${TEMPERATURE:-0.4}"          # stage 2/3; stage 1 is 0.0
 PROJECT_BASE="${PROJECT_BASE:-art6_abl_$(basename "${OUT_DIR}")}"
 FUSEKI_CONTAINER="${FUSEKI_CONTAINER:-ontocast-fuseki}"
-FUSEKI_AUTH_B64="$(printf '%s' "${FUSEKI_AUTH:-admin:test345}" | tr '/' ':' | base64)"
 BASE_ENV_FILE="${BASE_ENV_FILE:-${REPO_ROOT}/ontology/ontology_vllm.env}"
 
 die() { echo "ABORT: $*" >&2; exit 1; }
@@ -49,12 +48,28 @@ LOG="${OUT_DIR}/run.log"
 exec > >(tee -a "${LOG}") 2>&1
 echo "=== ablation: $(basename "${SET_JSON}") -> ${OUT_DIR#${REPO_ROOT}/} @ $(date -Is) ==="
 
+# ---- credentials -----------------------------------------------------------
+# From the environment, never from a generated file, and never on a command line
+# where `ps` shows them to every user on the machine. An already-exported value
+# wins, so a hosted run needs only OPENAI_API_KEY set in the calling shell.
+[[ -f "${BASE_ENV_FILE}" ]] || die "base env not found: ${BASE_ENV_FILE}"
+set -a; eval "$(grep -E '^(LLM_API_KEY|FUSEKI_AUTH)=' "${BASE_ENV_FILE}")"; set +a
+export LLM_API_KEY="${OPENAI_API_KEY:-${VLLM_API_KEY:-${LLM_API_KEY:-EMPTY}}}"
+export OPENAI_API_KEY="${LLM_API_KEY}" VLLM_API_KEY="${LLM_API_KEY}"
+FUSEKI_AUTH_B64="$(printf '%s' "${FUSEKI_AUTH:-admin:test345}" | tr '/' ':' | base64)"
+
+# Reasoning models (gpt-5, o-series) reject any temperature but their default;
+# the Python stages drop the parameter themselves, and this is the same rule for
+# OntoCast, which is configured through the environment rather than by us.
+STAGE2_TEMPERATURE="${TEMPERATURE}"
+case "${MODEL,,}" in gpt-5*|o1*|o3*|o4*) STAGE2_TEMPERATURE=1.0;; esac
+
 # ---- preflight -------------------------------------------------------------
-curl -sf -m 10 -o /dev/null "${BASE_URL}/models" || die "${BASE_URL} unreachable"
+curl -sf -m 10 -o /dev/null -H "Authorization: Bearer ${LLM_API_KEY}" \
+    "${BASE_URL}/models" || die "${BASE_URL} unreachable or rejecting the key"
 docker exec "${FUSEKI_CONTAINER}" true 2>/dev/null || die "fuseki container ${FUSEKI_CONTAINER} not running"
 [[ -f "${SET_JSON}" ]] || die "set not found: ${SET_JSON}"
 [[ -d "${ONTOCAST_REPO}" ]] || die "ontocast repo not found: ${ONTOCAST_REPO}"
-[[ -f "${BASE_ENV_FILE}" ]] || die "base env not found: ${BASE_ENV_FILE}"
 echo "preflight ok: ${MODEL} @ ${BASE_URL}"
 
 fuseki_ds() {   # create a dataset, idempotent
@@ -63,10 +78,6 @@ fuseki_ds() {   # create a dataset, idempotent
         --post-data "dbName=$1&dbType=tdb2" \
         http://localhost:3030/\$/datasets >/dev/null 2>&1 || true
 }
-
-# Credentials come from the environment, never from a generated file.
-set -a; eval "$(grep -E '^(LLM_API_KEY|FUSEKI_AUTH)=' "${BASE_ENV_FILE}")"; set +a
-export LLM_API_KEY="${VLLM_API_KEY:-${LLM_API_KEY:-EMPTY}}"
 
 # ---- ontology + shapes, staged so the run records what it used -------------
 SEED_DIR="${OUT_DIR}/ontology_seed"; SHAPES_DIR="${OUT_DIR}/shapes"
@@ -114,10 +125,19 @@ phase "C0  O1 schema-light"
 t0=$(now)
 (cd "${REPO_ROOT}" && uv run python -m art6.conditions.run_conditions \
     --condition o1 --input-json "${SET_JSON}" --out-dir "${OUT_DIR}/C0" \
-    --model "${MODEL}" --base-url "${BASE_URL}" --api-key "${LLM_API_KEY}" \
+    --model "${MODEL}" --base-url "${BASE_URL}" \
     ${LIMIT:+--limit "${LIMIT}"}) || echo "C0 returned $?"
 echo "C0 done in $(( $(now) - t0 ))s"
-mark_phase C0
+# Only mark the phase done if every input document actually produced output --
+# a dead endpoint mid-run must not get masked as "complete" (this bit us once:
+# a partial 239/250 run got marked done and silently skipped on resume).
+c0_expect=$(wc -l < "${INPUT_JSONL}")
+c0_got=$(ls "${OUT_DIR}/C0"/*.o1.json 2>/dev/null | wc -l)
+if [[ "${c0_got}" -eq "${c0_expect}" ]]; then
+    mark_phase C0
+else
+    echo "C0 incomplete: ${c0_got}/${c0_expect} -- not marking done, will resume next run"
+fi
 fi
 
 # ---- stage 1: compression (C3/C4 input) ------------------------------------
@@ -129,6 +149,7 @@ t0=$(now)
 (cd "${REPO_ROOT}" && uv run python -m art6.ontology.compress \
     --input-jsonl "${INPUT_JSONL}" --out-dir "${OUT_DIR}/stage1" \
     --model "${MODEL}" --base-url "${BASE_URL}" --temperature 0.0 \
+    ${SPLIT_MAX_TOKENS:+--split-max-tokens "${SPLIT_MAX_TOKENS}"} \
     --parties-pass)
 (cd "${REPO_ROOT}" && uv run python -m art6.ontology.render_bundles \
     --compress-dir "${OUT_DIR}/stage1" --source-jsonl "${INPUT_JSONL}" \
@@ -145,6 +166,14 @@ run_arm() {
     mkdir -p "${dir}"
     fuseki_ds "growgraph--${project}--facts"
     fuseki_ds "growgraph--${project}--ontologies"
+    # ontocast >= v0.6.2 partitions SHACL shapes into their own dataset
+    # (FusekiConfig.shapes_dataset, tenant_project_shapes_name) rather than
+    # co-locating them in --ontologies -- a shapes document declares its own
+    # owl:Ontology header, and catalog discovery would otherwise offer it to
+    # the renderer as schema. Without this dataset pre-created, stage 2 fails
+    # outright (403 auto-create from a non-localhost origin, then 405 on the
+    # shapes SPARQL endpoint) on every document.
+    fuseki_ds "growgraph--${project}--shapes"
 
     # RESUME IS PER PHASE HERE, NOT PER DOCUMENT. run_native names its outputs
     # from the INPUT FILE stem plus line position (input.jsonl -> input.L1 ...),
@@ -153,14 +182,16 @@ run_arm() {
     # an existing file. Stage 2 is therefore all-or-nothing per arm. Stage 1 and
     # stage 3 resume per document on their own markers, and those are the long
     # phases; a repeated stage 2 costs ~75s per document.
+    local stage2_complete=1
     if done_phase "stage2_${label}"; then
         echo; echo "--- ${label} stage 2  (already done, skipping) ---"
     else
+    stage2_complete=0
     phase "${label}  stage 2  extraction -> ${dir#${REPO_ROOT}/}/raw"
     local t=$(now)
     (
         set -a; source <(grep -vE '^(LLM_API_KEY|FUSEKI_AUTH)=' "${BASE_ENV_FILE}"); set +a
-        export LLM_MODEL_NAME="${MODEL}" LLM_BASE_URL="${BASE_URL}" LLM_TEMPERATURE="${TEMPERATURE}"
+        export LLM_MODEL_NAME="${MODEL}" LLM_BASE_URL="${BASE_URL}" LLM_TEMPERATURE="${STAGE2_TEMPERATURE}"
         export LLM_GRAPH_FORMAT=jsonld LLM_CACHE_ENABLED=false LLM_MAX_INFLIGHT=4
         export CHUNK_SECTION_CLASSIFIER=off CHUNK_MIN_SIZE=200000 CHUNK_MAX_SIZE=400000
         export ONTOLOGY_CONTEXT_FIXED_ONTOLOGY_ID=echr
@@ -171,11 +202,36 @@ run_arm() {
         env -u VIRTUAL_ENV PYTHONPATH="${REPO_ROOT}" \
             uv run python -m art6.ontology.run_native \
                 --input-path "${input}" --tenant growgraph --project "${project}" \
-                --output-dir "${dir}/raw" --max-visits 1 \
+                --output-dir "${dir}/raw" --max-visits "${MAX_VISITS:-1}" \
                 --report "${dir}/extract_report.json" --allow-unit-loss
     ) || echo "${label} stage 2 returned $?"
     echo "${label} stage 2 done in $(( $(now) - t ))s"
-    mark_phase "stage2_${label}"
+    # Same guard as C0: only mark done if every input document actually got a
+    # facts.ttl out of it -- a dead endpoint mid-arm must not be masked as
+    # "complete" (stage 2 is all-or-nothing per arm, see note above, so a
+    # false mark_phase here would strand the arm at whatever it reached).
+    s2_expect=$(wc -l < "${input}")
+    s2_got=$(ls "${dir}/raw"/*.facts.ttl 2>/dev/null | wc -l)
+    if [[ "${s2_got}" -eq "${s2_expect}" ]]; then
+        mark_phase "stage2_${label}"
+        stage2_complete=1
+    else
+        echo "${label} stage 2 incomplete: ${s2_got}/${s2_expect} -- not marking done, will resume next run"
+    fi
+    fi
+
+    # Repair on an incomplete stage 2 is worse than useless: it burns real time
+    # retrying against whatever killed stage 2 in the first place (usually the
+    # same dead endpoint), can mark documents "repaired" (a .newrepair.json
+    # written even though every call inside it failed) that a later resume
+    # would then skip, and lets the script reach "done" and write a manifest
+    # for an arm that never actually finished. Measured 2026-08-31: stage 2
+    # gave up at 25/250 when the endpoint died, and stage 3 immediately started
+    # anyway, spending several minutes on APIConnectionError retries against
+    # documents whose siblings didn't exist yet.
+    if [[ "${stage2_complete}" -ne 1 ]]; then
+        echo; echo "--- ${label} stage 3  (skipped -- stage 2 incomplete) ---"
+        return
     fi
 
     phase "${label}  stage 3  repair -> ${dir#${REPO_ROOT}/}/repaired"
@@ -190,7 +246,7 @@ run_arm() {
     fi
     (cd "${REPO_ROOT}" && PYTHONUNBUFFERED=1 uv run python -m art6.ontology.new_repair \
         --facts-dir "${dir}/repaired" --input-jsonl "${input}" \
-        --model "${MODEL}" --base-url "${BASE_URL}" --api-key "${LLM_API_KEY}" \
+        --model "${MODEL}" --base-url "${BASE_URL}" \
         --temperature 0.0) || echo "${label} stage 3 returned $?"
     echo "${label} stage 3 done in $(( $(now) - t ))s"
 }
@@ -205,7 +261,7 @@ cat > "${OUT_DIR}/manifest.json" <<JSON
   "finished": "$(date -Is)",
   "model": "${MODEL}",
   "base_url": "${BASE_URL}",
-  "temperature_stage2_3": ${TEMPERATURE},
+  "temperature_stage2_3": ${STAGE2_TEMPERATURE},
   "temperature_stage1": 0.0,
   "conditions": {
     "C0": "C0/",

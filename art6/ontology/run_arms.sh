@@ -21,9 +21,9 @@
 # It also fixes three things that would silently corrupt an arm comparison:
 #
 #   1. run_experiment.sh routes extraction through run_data.sh, which `exec`s
-#      `ontocast process` as a SUBPROCESS -- so response_repair/turtle_repair
-#      never load. This script calls run_native.py / carry_forward.py, both of
-#      which run in-process with the patches installed.
+#      `ontocast process` as a SUBPROCESS, so it produces no run report. This
+#      script calls run_native.py / carry_forward.py, which run in-process and
+#      record per-document unit loss.
 #   2. data/art6_domestic_test_set.jsonl carries a STALE embedded copy of the
 #      facts prompt (1,783 chars against prompts/facts.txt's current 5,401).
 #      The JSONL is rebuilt from the .json plus the live prompt every run.
@@ -473,8 +473,6 @@ print(json.dumps({
         "ontology_context_fixed_ontology_id": "echr",
         "render_mode": "facts",
         "llm_cache_enabled": False,
-        "response_repair": True,
-        "turtle_repair": True,
     },
     "git_head": subprocess.run(["git","rev-parse","HEAD"],capture_output=True,text=True,cwd="${REPO_ROOT}").stdout.strip(),
     "git_dirty": bool(subprocess.run(["git","status","--porcelain"],capture_output=True,text=True,cwd="${REPO_ROOT}").stdout.strip()),

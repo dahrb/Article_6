@@ -386,19 +386,25 @@ def _is_transient(exc: Exception) -> bool:
     return status in {408, 409, 429, 500, 502, 503, 504}
 
 
-def call_with_recovery(client: OpenAI, *, label: str, **kwargs):
+def call_with_recovery(client: OpenAI, *, label: str, method: str = "create", **kwargs):
     """One chat completion, waiting out an endpoint that has gone away.
+
+    `method` selects `client.chat.completions.create` (every caller so far) or
+    `.parse` (structured output against a pydantic response_format, as
+    run_conditions.py's C0 baseline needs -- `.create` does not accept a
+    pydantic class there the way `.parse` does).
 
     Returns the response, or raises the last exception once
     TRANSIENT_MAX_WAIT_SECONDS of retrying has not helped -- at which point the
     endpoint is down rather than restarting, and the caller should record the
     document as failed and carry on to the next one.
     """
+    endpoint = getattr(client.chat.completions, method)
     waited = 0.0
     index = 0
     while True:
         try:
-            return client.chat.completions.create(**kwargs)
+            return endpoint(**kwargs)
         except Exception as exc:
             if not _is_transient(exc) or waited >= TRANSIENT_MAX_WAIT_SECONDS:
                 raise
@@ -440,16 +446,13 @@ def compress(
     truncated = False
     for attempt in range(1, retries + 2):
         # The output-cap kwarg and the temperature a model will accept differ
-        # by family: gpt-5 reasoning models reject `max_tokens` in favour of
-        # `max_completion_tokens`, and reject any temperature but the default.
-        # Reusing repair_facts._token_limit_kwargs keeps the one spelling rule
-        # in one place rather than drifting between the two callers.
-        from art6.ontology.repair_facts import _token_limit_kwargs
+        # by family; repair_facts.model_call_kwargs holds that rule for every
+        # caller in the repository, so a hosted model needs no code change here.
+        from art6.ontology.repair_facts import model_call_kwargs
 
-        kwargs = dict(_token_limit_kwargs(model, max_tokens))
-        if not model.lower().lstrip().startswith(("gpt-5", "o1", "o3", "o4")):
-            kwargs["temperature"] = temperature
-        kwargs["seed"] = MODEL_SEED
+        kwargs = model_call_kwargs(
+            model, temperature=temperature, max_tokens=max_tokens, seed=MODEL_SEED
+        )
         with _reserve(
             prompt,
             max_tokens,
@@ -468,7 +471,14 @@ def compress(
         last = response.choices[0].message.content or ""
         truncated = response.choices[0].finish_reason == "length"
         payload = parse_json(last)
-        if payload is not None and payload.get("events"):
+        # A genuinely event-free document (e.g. a committee batch judgment
+        # whose only content is a header table, no domestic-proceedings
+        # narrative) is a valid zero-event result, not a parse failure --
+        # checking truthy "events" treated that as "no usable JSON" and
+        # retried it into a permanent failure every time. "case" is always
+        # in the schema, so its presence is what actually distinguishes a
+        # parsed response from the model writing nonsense or a refusal.
+        if payload is not None and payload.get("case"):
             verified, stats = verify(payload, source)
             stats["attempt"] = attempt
             return verified, stats, last
@@ -497,6 +507,9 @@ MAX_SPLIT_DEPTH = 4
 # because it is long, and a long ECHR judgment is long in events as well as in
 # words -- half of Ukraine v. Russia (re Crimea) alone holds 73. Parts are sized
 # so the prompt and this budget both fit the window.
+# Lower it with --split-max-tokens for an endpoint whose per-response ceiling is
+# below this: hosted models cap completions (gpt-4o-mini at 16,384) and reject a
+# larger request outright, where a local server sized by --max-model-len does not.
 SPLIT_OUTPUT_TOKENS = 32_000
 SPLIT_OUTPUT_MARGIN = 1_000
 
@@ -794,12 +807,11 @@ def compress_applicants(
         + text[:APPLICANTS_HEAD_CHARS]
         + "\nDOC\n"
     )
-    from art6.ontology.repair_facts import _token_limit_kwargs
+    from art6.ontology.repair_facts import model_call_kwargs
 
-    kwargs = dict(_token_limit_kwargs(model, max_tokens))
-    if not model.lower().lstrip().startswith(("gpt-5", "o1", "o3", "o4")):
-        kwargs["temperature"] = temperature
-        kwargs["seed"] = MODEL_SEED
+    kwargs = model_call_kwargs(
+        model, temperature=temperature, max_tokens=max_tokens, seed=MODEL_SEED
+    )
     with _reserve(
         prompt,
         max_tokens,
@@ -884,12 +896,11 @@ def compress_parties(
         + text
         + "\nDOC\n"
     )
-    from art6.ontology.repair_facts import _token_limit_kwargs
+    from art6.ontology.repair_facts import model_call_kwargs
 
-    kwargs = dict(_token_limit_kwargs(model, max_tokens))
-    if not model.lower().lstrip().startswith(("gpt-5", "o1", "o3", "o4")):
-        kwargs["temperature"] = temperature
-        kwargs["seed"] = MODEL_SEED
+    kwargs = model_call_kwargs(
+        model, temperature=temperature, max_tokens=max_tokens, seed=MODEL_SEED
+    )
     with _reserve(
         prompt, max_tokens, "parties", str(client.base_url), model, client.api_key or ""
     ):
@@ -1115,6 +1126,8 @@ def doc_id_for(index: int, line: str) -> str:
 
 
 def main() -> None:
+    global SPLIT_OUTPUT_TOKENS
+
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--input-jsonl", required=True, type=Path)
     ap.add_argument("--out-dir", required=True, type=Path)
@@ -1152,9 +1165,19 @@ def main() -> None:
     )
     ap.add_argument("--max-tokens", type=int, default=16000)
     ap.add_argument(
+        "--split-max-tokens",
+        type=int,
+        default=SPLIT_OUTPUT_TOKENS,
+        help="Output budget for one part of a split document. Must not exceed "
+        "the endpoint's per-response ceiling; hosted models have one well below "
+        f"the default {SPLIT_OUTPUT_TOKENS:,}.",
+    )
+    ap.add_argument(
         "--only", default="", help="comma-separated doc ids, e.g. input.L1,input.L6"
     )
     args = ap.parse_args()
+
+    SPLIT_OUTPUT_TOKENS = args.split_max_tokens
 
     client = OpenAI(base_url=args.base_url, api_key=args.api_key, timeout=900.0)
     args.out_dir.mkdir(parents=True, exist_ok=True)

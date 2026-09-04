@@ -286,7 +286,7 @@ def load_openai_api_key() -> str:
 # shorter list can take that away. vLLM's disable_any_whitespace option is the
 # right shape of fix but was silently ignored by this server version.
 #
-# This is the same pathology response_repair.py documents for facts-render.
+# This is the same pathology previously documented for facts-render.
 # It is reliably reproducible on L10's proceedings prompt and is a decoding
 # bug, not a prompt or schema defect. Leave --max-tokens as the backstop.
 
@@ -891,6 +891,38 @@ def split_multiparty_participations(graph: Graph, doc_ns: str) -> int:
                 graph.add((event, ECHR.hasParticipation, copy))
             minted += 1
     return minted
+
+
+def prune_unbuilt_proceedings(graph: Graph, doc_ns: str) -> int:
+    """Remove a case's list-membership triple for a proceeding that was never built.
+
+    OntoCast's facts renderer sometimes emits the case-level scaffold --
+    `echr:hasDomesticProceeding` naming every event the document identified --
+    without materialising a node for all of them. Measured 2026-08-31 on
+    holdout L1 (Enea v. Italy, 29 domestic events, the largest event count in
+    either tuning set): the scaffold names all 29, but only 7 carry any content
+    at all -- no rdf:type, no date, no court, nothing. The root cause is
+    upstream of this repository (OntoCast's one-shot render hit a generation
+    limit on this document, and its finding-driven repair pass targets
+    quarantined literals and unknown terms, not missing content, so it never
+    revisits the gap) -- see docs/ablation_c0_c4_20case.md SS9-10.
+
+    This is the cheap mitigation available from our side: a reference this
+    unfalsifiable is worse than no reference, so it is dropped rather than
+    left for repair to try to complete with an invented quote. A node with ANY
+    property at all is left alone, even an incomplete one -- completing a
+    partial node is repair's job; this only removes what is provably nothing.
+    """
+    removed = 0
+    for case in list(graph.subjects(RDF.type, ECHR.CaseDocument)):
+        for node in list(graph.objects(case, ECHR.hasDomesticProceeding)):
+            if not str(node).startswith(doc_ns):
+                continue
+            if next(graph.predicate_objects(node), None) is not None:
+                continue
+            graph.remove((case, ECHR.hasDomesticProceeding, node))
+            removed += 1
+    return removed
 
 
 def mirror_party_labels(graph: Graph, doc_ns: str) -> int:
@@ -1656,6 +1688,34 @@ def _token_limit_kwargs(model: str, max_tokens: int) -> dict[str, int]:
     return {"max_tokens": max_tokens}
 
 
+def accepts_temperature(model: str) -> bool:
+    """False for the families that reject any temperature but the default.
+
+    The pipeline asks for temperature 0 nearly everywhere, which a gpt-5/o-series
+    endpoint answers with a 400 rather than by clamping. Omitting the parameter
+    gets that model's own default, which is what those families support.
+    """
+    return not model.lower().lstrip().startswith(_REASONING_TOKEN_PARAM_PREFIXES)
+
+
+def model_call_kwargs(
+    model: str, *, temperature: float, max_tokens: int, seed: int | None = None
+) -> dict:
+    """Sampling kwargs a given model will accept, in one place.
+
+    Every completion call in this repository goes through here so that swapping
+    a local vLLM model for a hosted one is a --model change and nothing else.
+    `seed` rides with temperature: it is a sampling control, and the families
+    that refuse a temperature have no sampling loop for it to control.
+    """
+    kwargs: dict = dict(_token_limit_kwargs(model, max_tokens))
+    if accepts_temperature(model):
+        kwargs["temperature"] = temperature
+        if seed is not None:
+            kwargs["seed"] = seed
+    return kwargs
+
+
 def _is_wrong_token_param_error(exc: Exception) -> bool:
     """True for the 400 that says we picked the wrong spelling of the cap."""
     text = str(exc)
@@ -1731,10 +1791,12 @@ def _stream_patch_text(
     # detection below stays either way -- it is not grammar-specific, and an
     # unconstrained model can still run away, just far less reliably so.
     fmt = {"response_format": RepairPatch} if guided else {}
+    # Reasoning models reject an explicit temperature; see accepts_temperature.
+    temp = {"temperature": temperature} if accepts_temperature(model) else {}
     with client.chat.completions.stream(
         model=model,
         messages=messages,
-        temperature=temperature,
+        **temp,
         **fmt,
         **token_kwargs,
     ) as stream:
@@ -1856,7 +1918,7 @@ def call_repair_model(
     vLLM guided decoding (response_format=RepairPatch) occasionally never
     closes the RepairGroup.rationale free-text field and pads with whitespace
     until something stops it -- confirmed on facts-render at a much bigger
-    prompt (see response_repair.py), and reproduced here at a MUCH smaller one
+    prompt, and reproduced here at a MUCH smaller one
     (2026-08-20: a 5.6k-token repair prompt for L3 ran the full 600s client
     timeout with zero output). This is a decoding pathology, not a sign the
     prompt is too much work for the model: the same prompt content produces a
@@ -2047,7 +2109,7 @@ MIN_OPS_PER_FINDING = 0.5
 #
 # Guided is the default because it makes malformed output impossible. Its cost
 # is the vLLM whitespace stall: under a grammar a stalled model can emit legal
-# whitespace forever, which is why response_repair.py exists and why OntoCast's
+# whitespace forever, which is why OntoCast's
 # own facts-render runs UNCONSTRAINED and repairs the text afterwards. That
 # server bug is fixed by `disable_any_whitespace`, silently ignored on the
 # 0.27.1 build here, so the only lever available is which side of the trade to
@@ -2079,8 +2141,7 @@ def _schema_instruction() -> str:
 def parse_unconstrained_patch(raw: str) -> RepairPatch | None:
     """A RepairPatch out of free-form model output, or None.
 
-    Four escalating attempts, cheapest first, mirroring the recovery ladder
-    response_repair.py applies to facts-render: parse it as-is; unwrap a
+    Four escalating attempts, cheapest first: parse it as-is; unwrap a
     markdown fence; rebuild the container closers from an explicit stack
     (the model closes the WRONG bracket rather than truncating, so the bad
     bytes are present and must be replaced, not appended to); and finally fall
@@ -2101,9 +2162,9 @@ def parse_unconstrained_patch(raw: str) -> RepairPatch | None:
 
     for cand in list(candidates):
         try:
-            from art6.ontology.response_repair import _rebuild_closers
+            from art6.ontology.json_closers import rebuild_closers
 
-            candidates.append(_rebuild_closers(cand))
+            candidates.append(rebuild_closers(cand))
         except Exception:  # noqa: BLE001, S110
             pass
 
@@ -2467,6 +2528,47 @@ def apply_patch(
         and _expand(op.subject) not in anchored_participations
     }
 
+    # A PROCEEDING WITH NO ANCHOR is the same hole one level up, and it is the
+    # larger one. Measured 2026-08-31 on holdout L1 (Enea v. Italy): extraction
+    # produced 7 domestic proceedings, all substantive and all quoted; repair
+    # returned 28, of which 22 carried four triples or fewer -- a type, a court,
+    # a followsProceeding and a participation, with no date, no instance level,
+    # no outcome and NO SUPPORTING QUOTE. Enea is a prison-regime case with many
+    # near-identical applications to one court, and the review stage extrapolated
+    # the pattern into 21 proceedings the document does not describe.
+    #
+    # The verbatim guarantee does not catch this, and cannot: it constrains what
+    # a quote must be, not whether a node must have one. A proceeding with no
+    # quote is not a weak claim, it is an unfalsifiable one -- so a proceeding
+    # this patch creates must arrive anchored, exactly as a participation must.
+    proceeding_predicates = {
+        "echr:hasDomesticProceeding",
+        "echr:followsProceeding",
+    }
+    created_proceedings = {
+        _expand(op.object)
+        for group in patch.groups
+        for op in group.ops
+        if op.action == "add"
+        and op.predicate in proceeding_predicates
+        and not op.object_is_literal
+    }
+    created_proceedings |= {
+        _expand(op.subject)
+        for group in patch.groups
+        for op in group.ops
+        if op.action == "add"
+        and op.predicate == "rdf:type"
+        and not op.object_is_literal
+        and "Proceeding" in op.object
+    }
+    unevidenced_proceedings = {
+        node
+        for node in created_proceedings
+        if node not in anchored_participations
+        and (URIRef(node), ECHR.hasSupportingQuote, None) not in working
+    }
+
     # A PARTICIPATION WITH NO PARTY AT ALL is the other half of the same hole.
     # The evidence check above keys on `add echr:participatingParty`, so it
     # only sees participations that name SOMEBODY. A group that adds
@@ -2661,6 +2763,24 @@ def apply_patch(
                         f"applied ({removed} value(s))"
                         if removed
                         else "skipped: predicate not present"
+                    )
+                    audit.append(record)
+                    continue
+                if (
+                    op.action == "add"
+                    and unevidenced_proceedings
+                    and (
+                        _expand(op.subject) in unevidenced_proceedings
+                        or (
+                            not op.object_is_literal
+                            and _expand(op.object) in unevidenced_proceedings
+                        )
+                    )
+                ):
+                    record["status"] = (
+                        "skipped: repair may not add a proceeding with no "
+                        "echr:hasSupportingQuote - an unanchored proceeding is "
+                        "unfalsifiable, and the chain is better off without it"
                     )
                     audit.append(record)
                     continue
@@ -2965,6 +3085,70 @@ def apply_patch(
             record["status"] = "applied"
             record["effect"] = merge_nodes(working, keep, drop)
         audit.append(record)
+
+    # WITHDRAW HALF-BUILT PARTICIPATIONS.
+    #
+    # Ops are applied one triple at a time and a skipped op only `continue`s,
+    # so a rejected member of a group leaves the rest of the group standing.
+    # Measured 2026-08-30 on the compressed arm: review proposed a participation
+    # as four triples -- type, side, quote, participatingParty -- and the fourth
+    # was skipped ("object node does not exist in the graph or this patch")
+    # because the Party it named was never minted. The first three landed, and
+    # doc:part_e2_shareholders became a Participation with a side and a quote
+    # and no party: 6 such nodes, each one a SHACL violation this pass created.
+    #
+    # Scoped deliberately. Rolling back whole groups would discard legitimate
+    # removes that happen to share a group with a failed add, and DELETING the
+    # node outright orphans every participation pointing at the party it
+    # references -- tried, and it took violations from 35 to 133. So this
+    # withdraws only the triples THIS patch added for a participation THIS
+    # patch created that has no party, plus the links to it.
+    created_here = {
+        str(rec.get("subject", "")).strip()
+        for rec in audit
+        if rec.get("action") == "add"
+        and str(rec.get("status", "")).startswith("applied")
+    }
+    withdrawn = 0
+    for subject in list(created_here):
+        prefix, _, local = subject.partition(":")
+        if prefix != "doc":
+            continue
+        node = URIRef(doc_ns + local)
+        # Participation-ness is established by BEHAVIOUR, not by rdf:type. The
+        # type op is frequently skipped by the incomplete-participation guard
+        # above while the side and quote ops land, and the type only appears
+        # later when complete_entailed_types derives it from the range of
+        # echr:hasParticipation. Requiring an explicit type here matched none of
+        # the six real cases.
+        looks_like_participation = (
+            (node, RDF.type, ECHR.Participation) in working
+            or working.value(node, ECHR.hasPartySide) is not None
+            or (None, ECHR.hasParticipation, node) in working
+        )
+        if not looks_like_participation:
+            continue
+        if working.value(node, ECHR.participatingParty) is not None:
+            continue
+        for triple in list(working.triples((node, None, None))):
+            working.remove(triple)
+        for triple in list(working.triples((None, None, node))):
+            working.remove(triple)
+        withdrawn += 1
+        audit.append(
+            {
+                "finding": "incomplete_participation",
+                "action": "withdraw",
+                "subject": subject,
+                "status": "applied (participation had no participatingParty)",
+                "rationale": (
+                    "a member of this patch was skipped, leaving a participation "
+                    "with no party; the patch's own triples for it are withdrawn"
+                ),
+            }
+        )
+    if withdrawn:
+        print(f"    withdrew {withdrawn} half-built participation(s)", flush=True)
 
     return working, audit
 

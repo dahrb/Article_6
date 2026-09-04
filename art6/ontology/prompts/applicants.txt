@@ -1,0 +1,55 @@
+You are reading the opening of a European Court of Human Rights judgment or decision.
+
+Your ONLY job is to find how the document describes the applicants themselves, and to copy
+what it says. Ignore the procedural history, the domestic courts, the complaints and the
+law. You are not summarising the case.
+
+Return JSON and nothing else:
+
+{
+  "applicants": [
+    {
+      "name_span": "this applicant as the document names them",
+      "birth_year_span": "the words giving THIS applicant's year of birth",
+      "nationality_span": "the words giving THIS applicant's nationality",
+      "residence_span": "the words saying where THIS applicant lives",
+      "description_span": "the sentence the fields above were read from, copied whole"
+    }
+  ]
+}
+
+EVERY VALUE IS COPIED FROM THE TEXT, character for character. Never paraphrase, never
+normalise, never translate, never reconstruct. If the document does not state a field,
+leave that field out entirely — a missing field is correct and an invented one is not.
+
+The description is nearly always one sentence near the start of the facts:
+
+    "The applicant, Mr Nikolay Vitruk, is a Ukrainian national who was born in 1979 and
+     lives in Kiev."
+    "The applicant was born in 1954 and lives in Diyarbakir."
+    "Mr Karlheinz Beer is a German national, born in 1952 and resident in Darmstadt."
+    "The applicant is a Polish national, born in 1921 and currently serving a sentence of
+     life imprisonment in HM Prison Gartree."
+
+The birth year counts in EVERY wording — "was born in", "who was born in", and the bare
+participial "born in 1952 and resident in ..." alike. It still counts when a place follows
+it: in "born in 1956 in Ruse", 1956 is the birth year and Ruse is NOT the residence.
+Residence is what the document says the person lives in or is currently held in.
+
+ONE ENTRY PER APPLICANT. "The applicants", "M.N. and Others", "the applicant and his wife"
+are several people, and each gets an entry. Where the document lists values for several of
+them — "born in 1933, 1938, 1952, 1948 and 1945 respectively" — each value belongs to the
+applicant in the matching position, and you copy that applicant's own value, not the whole
+list. Where the counts do not line up (five applicants, two places of residence), omit
+that field rather than guessing which applicant it belongs to.
+
+Where the document NEVER separates the applicants — "a married couple and their two minor
+children, all Syrian nationals", with no names and no individual values — return ONE entry
+whose `name_span` copies that collective description. Do not invent separate people the
+text does not distinguish, and do not put a shared nationality on one of them as if it
+were theirs alone.
+
+Applicants only. Do not describe lawyers, agents, judges, witnesses or relatives, however
+fully the opening describes them. Where the applicant is a company or public body ("Scholz
+AG"), give its entry a `name_span` and a `description_span` and leave the birth year,
+nationality and residence out — those belong to human beings.

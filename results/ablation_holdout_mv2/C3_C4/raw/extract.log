@@ -1,0 +1,600 @@
+2026-08-31 02:26:58,813 WARNING ontocast.config.settings: Model 'gemma-4-31b' is not a known openai preset (OpenAIModel). Passing it through -- the provider decides whether it exists.
+2026-08-31 02:26:59,518 INFO    httpx: HTTP Request: POST http://localhost:3032/$/datasets "HTTP/1.1 403 Forbidden"
+2026-08-31 02:26:59,519 ERROR   ontocast.tool.triple_manager.fuseki: Failed to create dataset growgraph--art6_abl_ablation_holdout_mv2_comp--facts. Status code: 403
+2026-08-31 02:26:59,519 ERROR   ontocast.tool.triple_manager.fuseki: Response: <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<title>Error 403 Access denied : only localhost access allowed</title>
+</head>
+<body>
+<h2>HTTP ERROR 403 Access denied : only localhost access allowed</h2>
+<table>
+<tr><th>URI:</th><td>http://localhost:3032/$/datasets</td></tr>
+<tr><th>STATUS:</th><td>403</td></tr>
+<tr><th>MESSAGE:</th><td>Access denied : only localhost access allowed</td></tr>
+</table>
+
+</body>
+</html>
+2026-08-31 02:26:59,525 INFO    httpx: HTTP Request: POST http://localhost:3032/$/datasets "HTTP/1.1 403 Forbidden"
+2026-08-31 02:26:59,525 ERROR   ontocast.tool.triple_manager.fuseki: Failed to create dataset growgraph--art6_abl_ablation_holdout_mv2_comp--ontologies. Status code: 403
+2026-08-31 02:26:59,526 ERROR   ontocast.tool.triple_manager.fuseki: Response: <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<title>Error 403 Access denied : only localhost access allowed</title>
+</head>
+<body>
+<h2>HTTP ERROR 403 Access denied : only localhost access allowed</h2>
+<table>
+<tr><th>URI:</th><td>http://localhost:3032/$/datasets</td></tr>
+<tr><th>STATUS:</th><td>403</td></tr>
+<tr><th>MESSAGE:</th><td>Access denied : only localhost access allowed</td></tr>
+</table>
+
+</body>
+</html>
+2026-08-31 02:26:59,526 INFO    ontocast.tool.triple_manager.fuseki: Fuseki tenancy set to tenant='growgraph' project='art6_abl_ablation_holdout_mv2_comp' (facts=growgraph--art6_abl_ablation_holdout_mv2_comp--facts ontologies=growgraph--art6_abl_ablation_holdout_mv2_comp--ontologies)
+2026-08-31 02:26:59,538 INFO    httpx: HTTP Request: POST http://localhost:3032/$/datasets "HTTP/1.1 403 Forbidden"
+2026-08-31 02:26:59,538 ERROR   ontocast.tool.triple_manager.fuseki: Failed to create dataset growgraph--art6_abl_ablation_holdout_mv2_comp--facts. Status code: 403
+2026-08-31 02:26:59,539 ERROR   ontocast.tool.triple_manager.fuseki: Response: <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<title>Error 403 Access denied : only localhost access allowed</title>
+</head>
+<body>
+<h2>HTTP ERROR 403 Access denied : only localhost access allowed</h2>
+<table>
+<tr><th>URI:</th><td>http://localhost:3032/$/datasets</td></tr>
+<tr><th>STATUS:</th><td>403</td></tr>
+<tr><th>MESSAGE:</th><td>Access denied : only localhost access allowed</td></tr>
+</table>
+
+</body>
+</html>
+2026-08-31 02:26:59,546 INFO    httpx: HTTP Request: POST http://localhost:3032/$/datasets "HTTP/1.1 403 Forbidden"
+2026-08-31 02:26:59,546 ERROR   ontocast.tool.triple_manager.fuseki: Failed to create dataset growgraph--art6_abl_ablation_holdout_mv2_comp--ontologies. Status code: 403
+2026-08-31 02:26:59,546 ERROR   ontocast.tool.triple_manager.fuseki: Response: <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<title>Error 403 Access denied : only localhost access allowed</title>
+</head>
+<body>
+<h2>HTTP ERROR 403 Access denied : only localhost access allowed</h2>
+<table>
+<tr><th>URI:</th><td>http://localhost:3032/$/datasets</td></tr>
+<tr><th>STATUS:</th><td>403</td></tr>
+<tr><th>MESSAGE:</th><td>Access denied : only localhost access allowed</td></tr>
+</table>
+
+</body>
+</html>
+2026-08-31 02:26:59,621 INFO    ontocast.toolbox: Found 1 seed ontologies in ontology_directory
+2026-08-31 02:26:59,629 INFO    httpx: HTTP Request: POST http://localhost:3032/growgraph--art6_abl_ablation_holdout_mv2_comp--ontologies/sparql "HTTP/1.1 200 OK"
+2026-08-31 02:26:59,629 INFO    ontocast.toolbox: Found 0 ontologies in triple store
+2026-08-31 02:26:59,629 INFO    ontocast.toolbox: Syncing seed ontology to triple store: https://growgraph.dev/echr (version: 3.5.0)
+2026-08-31 02:26:59,629 INFO    ontocast.toolbox: Ontology sync finished: 1 ontolog(ies) in 0.08s
+2026-08-31 02:26:59,753 INFO    httpx: HTTP Request: PUT http://localhost:3032/growgraph--art6_abl_ablation_holdout_mv2_comp--ontologies/data?graph=https://growgraph.dev/echr%23b054b471b5c0b0504d79ac6d3a8bda58aa2c56589fee2e3bf25fcc2ab2e272e9 "HTTP/1.1 201 Created"
+2026-08-31 02:26:59,753 INFO    ontocast.tool.triple_manager.fuseki: Ontology graph https://growgraph.dev/echr#b054b471b5c0b0504d79ac6d3a8bda58aa2c56589fee2e3bf25fcc2ab2e272e9 uploaded to Fuseki as named graph.
+2026-08-31 02:26:59,753 INFO    ontocast.toolbox: Materialized ontology https://growgraph.dev/echr in 0.12s
+2026-08-31 02:26:59,753 INFO    ontocast.toolbox: Ontology materialize + enrich finished for 1 ontolog(ies) in 0.12s (reindex_concurrency=2); initialize total 0.23s
+2026-08-31 02:27:00,194 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-31 02:27:00,206 INFO    ontocast.agent.chunk_text: Created 1 chunks for processing: [16905]
+2026-08-31 02:27:00,207 INFO    ontocast.agent.chunk_text: Created 1 content units: [16905]
+2026-08-31 02:27:00,207 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=1
+2026-08-31 02:27:00,214 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-31 02:27:00,214 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-31 02:27:00,214 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-31 02:27:00,214 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-31 02:27:55,251 INFO    httpx: HTTP Request: POST http://localhost:8003/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-31 02:27:55,726 INFO    ontocast.agent.render_facts: Fresh facts generated with 180 triple(s).
+2026-08-31 02:27:55,726 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-31 02:27:55,731 WARNING ontocast.util.numeric_inventory: Numeric coverage: 251 missing mention(s) truncated to 30 for the repair prompt
+2026-08-31 02:27:55,731 INFO    ontocast.stategraph.atomic: Finding-driven facts repair render 1/1: 2 finding(s) (1 mandatory)
+2026-08-31 02:27:55,731 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-31 02:27:55,731 INFO    ontocast.agent.render_facts: Generating facts update
+2026-08-31 02:27:55,731 INFO    ontocast.agent.render_facts: Rendering updates for facts
+2026-08-31 02:28:01,530 INFO    httpx: HTTP Request: POST http://localhost:8003/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-31 02:28:01,541 INFO    ontocast.tool.facts_invariants: Repaired literal rdf:type object 'echr:DomesticProceeding' -> <https://growgraph.dev/echr#DomesticProceeding>
+2026-08-31 02:28:01,543 INFO    ontocast.agent.render_facts: Deterministic graph repair: retyped 0 literal(s), coerced 1 rdf:type literal(s), rewrote 0 alias triple(s), resolved 0 code(s)
+2026-08-31 02:28:01,560 INFO    ontocast.agent.render_facts: Facts update has 2 operation(s) with 2 total triple(s).
+2026-08-31 02:28:01,564 WARNING ontocast.util.numeric_inventory: Numeric coverage: 251 missing mention(s) truncated to 30 for the repair prompt
+2026-08-31 02:28:01,567 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-31 02:28:03,337 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=48 known_ontology=3 tentative_ontology=52
+2026-08-31 02:28:03,337 INFO    ontocast.tool.agg.clustering: Embedding 62 entity representations in parallel...
+2026-08-31 02:28:04,900 INFO    ontocast.tool.sentence_transformer: Loading sentence-transformer model: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (device=auto)
+2026-08-31 02:28:04,901 INFO    sentence_transformers.base.model: No device provided, using cpu
+2026-08-31 02:28:05,028 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-31 02:28:05,036 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/modules.json "HTTP/1.1 200 OK"
+2026-08-31 02:28:05,136 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-31 02:28:05,137 WARNING huggingface_hub.utils._http: Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-08-31 02:28:05,144 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-31 02:28:05,144 INFO    sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2.
+2026-08-31 02:28:05,248 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-31 02:28:05,255 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-31 02:28:05,356 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-08-31 02:28:05,364 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/README.md "HTTP/1.1 200 OK"
+2026-08-31 02:28:05,461 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-31 02:28:05,469 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/modules.json "HTTP/1.1 200 OK"
+2026-08-31 02:28:05,569 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-31 02:28:05,577 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-08-31 02:28:05,677 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-08-31 02:28:05,777 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-31 02:28:05,784 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json "HTTP/1.1 200 OK"
+2026-08-31 02:28:05,969 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-08-31 02:28:06,071 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-31 02:28:06,174 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-31 02:28:06,277 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-31 02:28:06,377 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-31 02:28:06,385 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-31 02:28:06,485 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-31 02:28:06,492 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json "HTTP/1.1 200 OK"
+2026-08-31 02:28:06,592 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-31 02:28:06,599 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json "HTTP/1.1 200 OK"
+2026-08-31 02:28:06,700 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-31 02:28:06,708 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-31 02:28:06,814 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-31 02:28:06,821 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-31 02:28:06,922 INFO    httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-08-31 02:28:07,027 INFO    httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-08-31 02:28:08,153 INFO    httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 "HTTP/1.1 200 OK"
+2026-08-31 02:28:08,398 INFO    httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-31 02:28:08,406 INFO    httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-08-31 02:28:08,509 INFO    httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 "HTTP/1.1 200 OK"
+2026-08-31 02:28:09,461 INFO    ontocast.tool.agg.clustering: Embedded 62 entities
+2026-08-31 02:28:09,514 INFO    ontocast.tool.agg.clustering: Clustering 62 entities...
+2026-08-31 02:28:09,526 INFO    ontocast.tool.agg.clustering: Formed 11 clusters: 7 singletons, 4 multi-entity clusters, max cluster size: 38
+2026-08-31 02:28:09,526 INFO    ontocast.tool.agg.clustering: Embedding 33 entity representations in parallel...
+2026-08-31 02:28:09,827 INFO    ontocast.tool.agg.clustering: Embedded 33 entities
+2026-08-31 02:28:09,827 INFO    ontocast.tool.agg.clustering: Clustering 33 entities...
+2026-08-31 02:28:09,829 INFO    ontocast.tool.agg.clustering: Formed 11 clusters: 7 singletons, 4 multi-entity clusters, max cluster size: 10
+2026-08-31 02:28:09,829 INFO    ontocast.tool.agg.clustering: Embedding 8 entity representations in parallel...
+2026-08-31 02:28:10,081 INFO    ontocast.tool.agg.clustering: Embedded 8 entities
+2026-08-31 02:28:10,082 INFO    ontocast.tool.agg.clustering: Clustering 8 entities...
+2026-08-31 02:28:10,084 INFO    ontocast.tool.agg.clustering: Formed 8 clusters: 8 singletons, 0 multi-entity clusters, max cluster size: 1
+2026-08-31 02:28:10,113 INFO    ontocast.tool.agg.aggregate: Rejected 378 candidate merges after symbolic validation
+2026-08-31 02:28:10,114 INFO    ontocast.tool.agg.clustering: Created mapping for 103 entities to 101 representatives
+2026-08-31 02:28:10,115 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 103 entities, 48 normalised
+2026-08-31 02:28:10,122 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 181 -> 524 triples (46 entities merged)
+2026-08-31 02:28:10,122 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-31 02:28:10,156 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 173 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:28:10,363 INFO    ontocast.tool.facts_invariants: Dangling-reference report capped at 20; 1 more not reported
+2026-08-31 02:28:10,363 INFO    ontocast.stategraph.facts_gate: Facts validation gate: 2 merge-signature error finding(s), re-aggregating with 1 merge veto pair(s)
+2026-08-31 02:28:10,365 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-31 02:28:12,397 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=48 known_ontology=3 tentative_ontology=52
+2026-08-31 02:28:12,397 INFO    ontocast.tool.agg.clustering: Embedding 62 entity representations in parallel...
+2026-08-31 02:28:13,278 INFO    ontocast.tool.agg.clustering: Embedded 62 entities
+2026-08-31 02:28:13,279 INFO    ontocast.tool.agg.clustering: Clustering 62 entities...
+2026-08-31 02:28:13,282 INFO    ontocast.tool.agg.clustering: Formed 11 clusters: 7 singletons, 4 multi-entity clusters, max cluster size: 38
+2026-08-31 02:28:13,282 INFO    ontocast.tool.agg.clustering: Embedding 33 entity representations in parallel...
+2026-08-31 02:28:13,679 INFO    ontocast.tool.agg.clustering: Embedded 33 entities
+2026-08-31 02:28:13,679 INFO    ontocast.tool.agg.clustering: Clustering 33 entities...
+2026-08-31 02:28:13,681 INFO    ontocast.tool.agg.clustering: Formed 11 clusters: 7 singletons, 4 multi-entity clusters, max cluster size: 10
+2026-08-31 02:28:13,681 INFO    ontocast.tool.agg.clustering: Embedding 8 entity representations in parallel...
+2026-08-31 02:28:13,757 INFO    ontocast.tool.agg.clustering: Embedded 8 entities
+2026-08-31 02:28:13,757 INFO    ontocast.tool.agg.clustering: Clustering 8 entities...
+2026-08-31 02:28:13,758 INFO    ontocast.tool.agg.clustering: Formed 8 clusters: 8 singletons, 0 multi-entity clusters, max cluster size: 1
+2026-08-31 02:28:13,783 INFO    ontocast.tool.agg.aggregate: Rejected 379 candidate merges after symbolic validation
+2026-08-31 02:28:13,784 INFO    ontocast.tool.agg.clustering: Created mapping for 103 entities to 102 representatives
+2026-08-31 02:28:13,784 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 103 entities, 48 normalised
+2026-08-31 02:28:13,792 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 181 -> 536 triples (47 entities merged)
+2026-08-31 02:28:13,793 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-31 02:28:13,806 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 177 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:28:14,035 INFO    ontocast.tool.facts_invariants: Dangling-reference report capped at 20; 1 more not reported
+2026-08-31 02:28:14,035 WARNING ontocast.stategraph.facts_gate: Facts validation gate: repair pass 1 did not reduce merge-signature errors (2 -> 2); reverting to the pre-repair graph
+2026-08-31 02:28:14,042 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 173 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:28:14,239 INFO    ontocast.tool.facts_invariants: SHACL autofix: 3 repair(s) applied, violations 29 -> 26, 3 provenance quad(s) retargeted
+2026-08-31 02:28:14,250 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 173 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:28:14,451 INFO    ontocast.tool.facts_invariants: Dangling-reference report capped at 20; 1 more not reported
+2026-08-31 02:28:14,451 WARNING ontocast.tool.facts_invariants: Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+2026-08-31 02:28:14,451 WARNING ontocast.stategraph.facts_gate: Facts validation gate: 27 error finding(s) remain after 0 repair pass(es)
+2026-08-31 02:28:14,452 INFO    ontocast.agent.serialize: LLM: 2 calls, 317,580 sent, 14,390 received | 110,418 in / 4,864 out tokens | Triples: 0 ontology, 182 facts
+2026-08-31 02:28:14,452 INFO    ontocast.agent.serialize: Durations: Render Facts 61.4s, Render Facts/unit_sum 61.4s, llm/provider 60.7s, Merge Facts 8.6s, Validate Facts 4.3s, Render Facts/loop_lag_total 0.8s, Render Facts/loop_lag_max 0.5s, Convert to Text 0.4s, prompt/ontology_chapter 0.0s, Chunk Text 0.0s, repair/deterministic 0.0s, llm/inflight_wait 0.0s, ctx/merge_document_ontology 0.0s, Render Facts/worker_wait 0.0s
+2026-08-31 02:28:14,452 INFO    ontocast.agent.serialize: Effective workers: Render Facts 1.0x (loop lag 0.8s)
+2026-08-31 02:28:14,514 INFO    httpx: HTTP Request: PUT http://localhost:3032/growgraph--art6_abl_ablation_holdout_mv2_comp--facts/data?graph=https://growgraph.dev/doc/4f69da8f6b37/ "HTTP/1.1 201 Created"
+2026-08-31 02:28:14,514 INFO    ontocast.tool.triple_manager.fuseki: Graph graph https://growgraph.dev/doc/4f69da8f6b37/ uploaded to Fuseki as named graph.
+2026-08-31 02:28:14,530 INFO    ontocast.api.process_helpers: Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L1.facts.ttl
+2026-08-31 02:28:14,531 INFO    ontocast.api.process_helpers: Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L1.facts.validation.json
+2026-08-31 02:28:14,532 INFO    ontocast.api.process_helpers: Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L1.run.json
+2026-08-31 02:28:14,534 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-31 02:28:14,535 INFO    ontocast.agent.chunk_text: Created 1 chunks for processing: [6673]
+2026-08-31 02:28:14,536 INFO    ontocast.agent.chunk_text: Created 1 content units: [6673]
+2026-08-31 02:28:14,536 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=1
+2026-08-31 02:28:14,546 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-31 02:28:14,546 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-31 02:28:14,546 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-31 02:28:14,546 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-31 02:29:08,263 INFO    httpx: HTTP Request: POST http://localhost:8003/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-31 02:29:08,773 INFO    ontocast.agent.render_facts: Fresh facts generated with 177 triple(s).
+2026-08-31 02:29:08,773 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-31 02:29:08,776 WARNING ontocast.util.numeric_inventory: Numeric coverage: 127 missing mention(s) truncated to 30 for the repair prompt
+2026-08-31 02:29:08,779 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-31 02:29:10,697 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=29 known_ontology=2 tentative_ontology=56
+2026-08-31 02:29:10,697 INFO    ontocast.tool.agg.clustering: Embedding 46 entity representations in parallel...
+2026-08-31 02:29:11,489 INFO    ontocast.tool.agg.clustering: Embedded 46 entities
+2026-08-31 02:29:11,489 INFO    ontocast.tool.agg.clustering: Clustering 46 entities...
+2026-08-31 02:29:11,491 INFO    ontocast.tool.agg.clustering: Formed 8 clusters: 2 singletons, 6 multi-entity clusters, max cluster size: 24
+2026-08-31 02:29:11,491 INFO    ontocast.tool.agg.clustering: Embedding 33 entity representations in parallel...
+2026-08-31 02:29:11,850 INFO    ontocast.tool.agg.clustering: Embedded 33 entities
+2026-08-31 02:29:11,851 INFO    ontocast.tool.agg.clustering: Clustering 33 entities...
+2026-08-31 02:29:11,852 INFO    ontocast.tool.agg.clustering: Formed 16 clusters: 11 singletons, 5 multi-entity clusters, max cluster size: 11
+2026-08-31 02:29:11,852 INFO    ontocast.tool.agg.clustering: Embedding 8 entity representations in parallel...
+2026-08-31 02:29:11,933 INFO    ontocast.tool.agg.clustering: Embedded 8 entities
+2026-08-31 02:29:11,933 INFO    ontocast.tool.agg.clustering: Clustering 8 entities...
+2026-08-31 02:29:11,935 INFO    ontocast.tool.agg.clustering: Formed 8 clusters: 8 singletons, 0 multi-entity clusters, max cluster size: 1
+2026-08-31 02:29:11,947 INFO    ontocast.tool.agg.aggregate: Rejected 102 candidate merges after symbolic validation
+2026-08-31 02:29:11,947 INFO    ontocast.tool.agg.clustering: Created mapping for 87 entities to 83 representatives
+2026-08-31 02:29:11,947 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 87 entities, 29 normalised
+2026-08-31 02:29:11,953 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 177 -> 506 triples (26 entities merged)
+2026-08-31 02:29:11,954 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-31 02:29:11,974 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 167 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:29:12,172 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 167 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:29:12,362 INFO    ontocast.tool.facts_invariants: SHACL autofix: 3 repair(s) applied, violations 7 -> 4, 3 provenance quad(s) retargeted
+2026-08-31 02:29:12,372 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 167 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:29:12,589 WARNING ontocast.tool.facts_invariants: Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+2026-08-31 02:29:12,589 WARNING ontocast.stategraph.facts_gate: Facts validation gate: 4 error finding(s) remain after 0 repair pass(es)
+2026-08-31 02:29:12,590 INFO    ontocast.agent.serialize: LLM: 1 calls, 138,883 sent, 13,960 received | 47,372 in / 4,685 out tokens | Triples: 0 ontology, 177 facts
+2026-08-31 02:29:12,590 INFO    ontocast.agent.serialize: Durations: Render Facts 54.2s, Render Facts/unit_sum 54.2s, llm/provider 53.6s, Merge Facts 3.2s, Render Facts/loop_lag_total 0.7s, Validate Facts 0.6s, Render Facts/loop_lag_max 0.5s, prompt/ontology_chapter 0.0s, Chunk Text 0.0s, repair/deterministic 0.0s, Convert to Text 0.0s, llm/inflight_wait 0.0s, ctx/merge_document_ontology 0.0s, Render Facts/worker_wait 0.0s
+2026-08-31 02:29:12,590 INFO    ontocast.agent.serialize: Effective workers: Render Facts 1.0x (loop lag 0.7s)
+2026-08-31 02:29:12,696 INFO    httpx: HTTP Request: PUT http://localhost:3032/growgraph--art6_abl_ablation_holdout_mv2_comp--facts/data?graph=https://growgraph.dev/doc/a9f04065fcf8/ "HTTP/1.1 201 Created"
+2026-08-31 02:29:12,696 INFO    ontocast.tool.triple_manager.fuseki: Graph graph https://growgraph.dev/doc/a9f04065fcf8/ uploaded to Fuseki as named graph.
+2026-08-31 02:29:12,708 INFO    ontocast.api.process_helpers: Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L2.facts.ttl
+2026-08-31 02:29:12,708 INFO    ontocast.api.process_helpers: Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L2.facts.validation.json
+2026-08-31 02:29:12,709 INFO    ontocast.api.process_helpers: Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L2.run.json
+2026-08-31 02:29:12,711 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-31 02:29:12,712 INFO    ontocast.agent.chunk_text: Created 1 chunks for processing: [5340]
+2026-08-31 02:29:12,713 INFO    ontocast.agent.chunk_text: Created 1 content units: [5340]
+2026-08-31 02:29:12,713 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=1
+2026-08-31 02:29:12,722 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-31 02:29:12,722 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-31 02:29:12,722 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-31 02:29:12,722 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-31 02:29:52,832 INFO    httpx: HTTP Request: POST http://localhost:8003/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-31 02:29:53,073 INFO    ontocast.agent.render_facts: Fresh facts generated with 130 triple(s).
+2026-08-31 02:29:53,073 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-31 02:29:53,076 WARNING ontocast.util.numeric_inventory: Numeric coverage: 97 missing mention(s) truncated to 30 for the repair prompt
+2026-08-31 02:29:53,079 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-31 02:29:54,373 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=20 known_ontology=2 tentative_ontology=48
+2026-08-31 02:29:54,373 INFO    ontocast.tool.agg.clustering: Embedding 7 entity representations in parallel...
+2026-08-31 02:29:54,448 INFO    ontocast.tool.agg.clustering: Embedded 7 entities
+2026-08-31 02:29:54,448 INFO    ontocast.tool.agg.clustering: Clustering 7 entities...
+2026-08-31 02:29:54,449 INFO    ontocast.tool.agg.clustering: Formed 6 clusters: 5 singletons, 1 multi-entity clusters, max cluster size: 2
+2026-08-31 02:29:54,449 INFO    ontocast.tool.agg.clustering: Embedding 33 entity representations in parallel...
+2026-08-31 02:29:55,091 INFO    ontocast.tool.agg.clustering: Embedded 33 entities
+2026-08-31 02:29:55,091 INFO    ontocast.tool.agg.clustering: Clustering 33 entities...
+2026-08-31 02:29:55,093 INFO    ontocast.tool.agg.clustering: Formed 12 clusters: 5 singletons, 7 multi-entity clusters, max cluster size: 8
+2026-08-31 02:29:55,094 INFO    ontocast.tool.agg.clustering: Embedding 30 entity representations in parallel...
+2026-08-31 02:29:55,549 INFO    ontocast.tool.agg.clustering: Embedded 30 entities
+2026-08-31 02:29:55,549 INFO    ontocast.tool.agg.clustering: Clustering 30 entities...
+2026-08-31 02:29:55,551 INFO    ontocast.tool.agg.clustering: Formed 16 clusters: 11 singletons, 5 multi-entity clusters, max cluster size: 7
+2026-08-31 02:29:55,556 INFO    ontocast.tool.agg.aggregate: Rejected 44 candidate merges after symbolic validation
+2026-08-31 02:29:55,556 INFO    ontocast.tool.agg.clustering: Created mapping for 70 entities to 66 representatives
+2026-08-31 02:29:55,557 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 70 entities, 20 normalised
+2026-08-31 02:29:55,564 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 130 -> 353 triples (16 entities merged)
+2026-08-31 02:29:55,564 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-31 02:29:55,586 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 116 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:29:55,736 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 116 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:29:55,884 INFO    ontocast.tool.facts_invariants: SHACL autofix: 5 repair(s) applied, violations 8 -> 3, 5 provenance quad(s) retargeted
+2026-08-31 02:29:55,896 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 116 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:29:56,057 WARNING ontocast.tool.facts_invariants: Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+2026-08-31 02:29:56,057 WARNING ontocast.stategraph.facts_gate: Facts validation gate: 3 error finding(s) remain after 0 repair pass(es)
+2026-08-31 02:29:56,058 INFO    ontocast.agent.serialize: LLM: 1 calls, 137,550 sent, 10,285 received | 46,752 in / 3,477 out tokens | Triples: 0 ontology, 130 facts
+2026-08-31 02:29:56,058 INFO    ontocast.agent.serialize: Durations: Render Facts 40.4s, Render Facts/unit_sum 40.4s, llm/provider 40.0s, Merge Facts 2.5s, Validate Facts 0.5s, Render Facts/loop_lag_total 0.4s, Render Facts/loop_lag_max 0.2s, prompt/ontology_chapter 0.0s, Chunk Text 0.0s, repair/deterministic 0.0s, Convert to Text 0.0s, llm/inflight_wait 0.0s, ctx/merge_document_ontology 0.0s, Render Facts/worker_wait 0.0s
+2026-08-31 02:29:56,058 INFO    ontocast.agent.serialize: Effective workers: Render Facts 1.0x (loop lag 0.4s)
+2026-08-31 02:29:56,125 INFO    httpx: HTTP Request: PUT http://localhost:3032/growgraph--art6_abl_ablation_holdout_mv2_comp--facts/data?graph=https://growgraph.dev/doc/72b590b66a85/ "HTTP/1.1 201 Created"
+2026-08-31 02:29:56,125 INFO    ontocast.tool.triple_manager.fuseki: Graph graph https://growgraph.dev/doc/72b590b66a85/ uploaded to Fuseki as named graph.
+2026-08-31 02:29:56,134 INFO    ontocast.api.process_helpers: Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L3.facts.ttl
+2026-08-31 02:29:56,134 INFO    ontocast.api.process_helpers: Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L3.facts.validation.json
+2026-08-31 02:29:56,134 INFO    ontocast.api.process_helpers: Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L3.run.json
+2026-08-31 02:29:56,137 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-31 02:29:56,138 INFO    ontocast.agent.chunk_text: Created 1 chunks for processing: [6130]
+2026-08-31 02:29:56,138 INFO    ontocast.agent.chunk_text: Created 1 content units: [6130]
+2026-08-31 02:29:56,138 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=1
+2026-08-31 02:29:56,146 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-31 02:29:56,146 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-31 02:29:56,146 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-31 02:29:56,146 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-31 02:30:51,141 INFO    httpx: HTTP Request: POST http://localhost:8003/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-31 02:30:51,758 INFO    ontocast.agent.render_facts: Fresh facts generated with 149 triple(s).
+2026-08-31 02:30:51,758 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-31 02:30:51,762 WARNING ontocast.util.numeric_inventory: Numeric coverage: 118 missing mention(s) truncated to 30 for the repair prompt
+2026-08-31 02:30:51,764 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-31 02:30:52,889 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=26 known_ontology=2 tentative_ontology=53
+2026-08-31 02:30:52,890 INFO    ontocast.tool.agg.clustering: Embedding 41 entity representations in parallel...
+2026-08-31 02:30:53,633 INFO    ontocast.tool.agg.clustering: Embedded 41 entities
+2026-08-31 02:30:53,633 INFO    ontocast.tool.agg.clustering: Clustering 41 entities...
+2026-08-31 02:30:53,635 INFO    ontocast.tool.agg.clustering: Formed 12 clusters: 8 singletons, 4 multi-entity clusters, max cluster size: 24
+2026-08-31 02:30:53,635 INFO    ontocast.tool.agg.clustering: Embedding 32 entity representations in parallel...
+2026-08-31 02:30:54,187 INFO    ontocast.tool.agg.clustering: Embedded 32 entities
+2026-08-31 02:30:54,187 INFO    ontocast.tool.agg.clustering: Clustering 32 entities...
+2026-08-31 02:30:54,189 INFO    ontocast.tool.agg.clustering: Formed 16 clusters: 11 singletons, 5 multi-entity clusters, max cluster size: 6
+2026-08-31 02:30:54,189 INFO    ontocast.tool.agg.clustering: Embedding 8 entity representations in parallel...
+2026-08-31 02:30:54,270 INFO    ontocast.tool.agg.clustering: Embedded 8 entities
+2026-08-31 02:30:54,270 INFO    ontocast.tool.agg.clustering: Clustering 8 entities...
+2026-08-31 02:30:54,271 INFO    ontocast.tool.agg.clustering: Formed 8 clusters: 8 singletons, 0 multi-entity clusters, max cluster size: 1
+2026-08-31 02:30:54,280 INFO    ontocast.tool.agg.aggregate: Rejected 79 candidate merges after symbolic validation
+2026-08-31 02:30:54,281 INFO    ontocast.tool.agg.clustering: Created mapping for 81 entities to 80 representatives
+2026-08-31 02:30:54,281 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 81 entities, 26 normalised
+2026-08-31 02:30:54,286 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 149 -> 440 triples (25 entities merged)
+2026-08-31 02:30:54,286 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-31 02:30:54,308 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 145 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:30:54,478 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 145 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:30:54,634 INFO    ontocast.tool.facts_invariants: SHACL autofix: 2 repair(s) applied, violations 4 -> 2, 2 provenance quad(s) retargeted
+2026-08-31 02:30:54,641 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 145 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:30:55,088 WARNING ontocast.tool.facts_invariants: Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+2026-08-31 02:30:55,089 WARNING ontocast.stategraph.facts_gate: Facts validation gate: 1 error finding(s) remain after 0 repair pass(es)
+2026-08-31 02:30:55,089 INFO    ontocast.agent.serialize: LLM: 1 calls, 138,340 sent, 15,212 received | 47,197 in / 4,804 out tokens | Triples: 0 ontology, 149 facts
+2026-08-31 02:30:55,090 INFO    ontocast.agent.serialize: Durations: Render Facts 55.6s, Render Facts/unit_sum 55.6s, llm/provider 54.9s, Merge Facts 2.5s, Render Facts/loop_lag_total 0.8s, Validate Facts 0.8s, Render Facts/loop_lag_max 0.6s, prompt/ontology_chapter 0.0s, repair/deterministic 0.0s, Convert to Text 0.0s, Chunk Text 0.0s, llm/inflight_wait 0.0s, ctx/merge_document_ontology 0.0s, Render Facts/worker_wait 0.0s
+2026-08-31 02:30:55,090 INFO    ontocast.agent.serialize: Effective workers: Render Facts 1.0x (loop lag 0.8s)
+2026-08-31 02:30:55,187 INFO    httpx: HTTP Request: PUT http://localhost:3032/growgraph--art6_abl_ablation_holdout_mv2_comp--facts/data?graph=https://growgraph.dev/doc/ec33eea00690/ "HTTP/1.1 201 Created"
+2026-08-31 02:30:55,187 INFO    ontocast.tool.triple_manager.fuseki: Graph graph https://growgraph.dev/doc/ec33eea00690/ uploaded to Fuseki as named graph.
+2026-08-31 02:30:55,200 INFO    ontocast.api.process_helpers: Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L4.facts.ttl
+2026-08-31 02:30:55,201 INFO    ontocast.api.process_helpers: Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L4.facts.validation.json
+2026-08-31 02:30:55,201 INFO    ontocast.api.process_helpers: Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L4.run.json
+2026-08-31 02:30:55,203 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-31 02:30:55,204 INFO    ontocast.agent.chunk_text: Created 1 chunks for processing: [5484]
+2026-08-31 02:30:55,204 INFO    ontocast.agent.chunk_text: Created 1 content units: [5484]
+2026-08-31 02:30:55,204 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=1
+2026-08-31 02:30:55,212 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-31 02:30:55,212 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-31 02:30:55,212 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-31 02:30:55,212 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-31 02:31:50,978 INFO    httpx: HTTP Request: POST http://localhost:8003/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-31 02:31:51,663 INFO    ontocast.agent.render_facts: Fresh facts generated with 149 triple(s).
+2026-08-31 02:31:51,663 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-31 02:31:51,666 WARNING ontocast.util.numeric_inventory: Numeric coverage: 102 missing mention(s) truncated to 30 for the repair prompt
+2026-08-31 02:31:51,668 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-31 02:31:52,934 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=25 known_ontology=2 tentative_ontology=48
+2026-08-31 02:31:52,934 INFO    ontocast.tool.agg.clustering: Embedding 6 entity representations in parallel...
+2026-08-31 02:31:53,003 INFO    ontocast.tool.agg.clustering: Embedded 6 entities
+2026-08-31 02:31:53,003 INFO    ontocast.tool.agg.clustering: Clustering 6 entities...
+2026-08-31 02:31:53,005 INFO    ontocast.tool.agg.clustering: Formed 6 clusters: 6 singletons, 0 multi-entity clusters, max cluster size: 1
+2026-08-31 02:31:53,005 INFO    ontocast.tool.agg.clustering: Embedding 38 entity representations in parallel...
+2026-08-31 02:31:53,783 INFO    ontocast.tool.agg.clustering: Embedded 38 entities
+2026-08-31 02:31:53,783 INFO    ontocast.tool.agg.clustering: Clustering 38 entities...
+2026-08-31 02:31:53,785 INFO    ontocast.tool.agg.clustering: Formed 7 clusters: 0 singletons, 7 multi-entity clusters, max cluster size: 19
+2026-08-31 02:31:53,785 INFO    ontocast.tool.agg.clustering: Embedding 31 entity representations in parallel...
+2026-08-31 02:31:54,199 INFO    ontocast.tool.agg.clustering: Embedded 31 entities
+2026-08-31 02:31:54,199 INFO    ontocast.tool.agg.clustering: Clustering 31 entities...
+2026-08-31 02:31:54,201 INFO    ontocast.tool.agg.clustering: Formed 12 clusters: 10 singletons, 2 multi-entity clusters, max cluster size: 14
+2026-08-31 02:31:54,214 INFO    ontocast.tool.agg.aggregate: Rejected 97 candidate merges after symbolic validation
+2026-08-31 02:31:54,215 INFO    ontocast.tool.agg.clustering: Created mapping for 75 entities to 71 representatives
+2026-08-31 02:31:54,215 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 75 entities, 25 normalised
+2026-08-31 02:31:54,220 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 149 -> 452 triples (23 entities merged)
+2026-08-31 02:31:54,221 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-31 02:31:54,241 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 149 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:31:54,378 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 149 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:31:54,500 INFO    ontocast.tool.facts_invariants: SHACL autofix: 7 repair(s) applied, violations 18 -> 11, 7 provenance quad(s) retargeted
+2026-08-31 02:31:54,508 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 149 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:31:54,636 WARNING ontocast.tool.facts_invariants: Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+2026-08-31 02:31:54,636 WARNING ontocast.stategraph.facts_gate: Facts validation gate: 11 error finding(s) remain after 0 repair pass(es)
+2026-08-31 02:31:54,637 INFO    ontocast.agent.serialize: LLM: 1 calls, 137,694 sent, 15,925 received | 46,824 in / 4,881 out tokens | Triples: 0 ontology, 149 facts
+2026-08-31 02:31:54,637 INFO    ontocast.agent.serialize: Durations: Render Facts 56.5s, Render Facts/unit_sum 56.5s, llm/provider 55.7s, Merge Facts 2.6s, Render Facts/loop_lag_total 0.9s, Render Facts/loop_lag_max 0.7s, Validate Facts 0.4s, prompt/ontology_chapter 0.0s, repair/deterministic 0.0s, Chunk Text 0.0s, Convert to Text 0.0s, llm/inflight_wait 0.0s, ctx/merge_document_ontology 0.0s, Render Facts/worker_wait 0.0s
+2026-08-31 02:31:54,637 INFO    ontocast.agent.serialize: Effective workers: Render Facts 1.0x (loop lag 0.9s)
+2026-08-31 02:31:54,695 INFO    httpx: HTTP Request: PUT http://localhost:3032/growgraph--art6_abl_ablation_holdout_mv2_comp--facts/data?graph=https://growgraph.dev/doc/b873b0b16973/ "HTTP/1.1 201 Created"
+2026-08-31 02:31:54,696 INFO    ontocast.tool.triple_manager.fuseki: Graph graph https://growgraph.dev/doc/b873b0b16973/ uploaded to Fuseki as named graph.
+2026-08-31 02:31:54,708 INFO    ontocast.api.process_helpers: Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L5.facts.ttl
+2026-08-31 02:31:54,708 INFO    ontocast.api.process_helpers: Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L5.facts.validation.json
+2026-08-31 02:31:54,709 INFO    ontocast.api.process_helpers: Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L5.run.json
+2026-08-31 02:31:54,711 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-31 02:31:54,711 INFO    ontocast.agent.chunk_text: Created 1 chunks for processing: [4054]
+2026-08-31 02:31:54,712 INFO    ontocast.agent.chunk_text: Created 1 content units: [4054]
+2026-08-31 02:31:54,712 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=1
+2026-08-31 02:31:54,722 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-31 02:31:54,722 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-31 02:31:54,723 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-31 02:31:54,723 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-31 02:32:33,070 INFO    httpx: HTTP Request: POST http://localhost:8003/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-31 02:32:33,365 INFO    ontocast.agent.render_facts: Fresh facts generated with 126 triple(s).
+2026-08-31 02:32:33,365 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-31 02:32:33,368 WARNING ontocast.util.numeric_inventory: Numeric coverage: 94 missing mention(s) truncated to 30 for the repair prompt
+2026-08-31 02:32:33,372 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-31 02:32:34,489 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=19 known_ontology=2 tentative_ontology=51
+2026-08-31 02:32:34,490 INFO    ontocast.tool.agg.clustering: Embedding 7 entity representations in parallel...
+2026-08-31 02:32:34,566 INFO    ontocast.tool.agg.clustering: Embedded 7 entities
+2026-08-31 02:32:34,566 INFO    ontocast.tool.agg.clustering: Clustering 7 entities...
+2026-08-31 02:32:34,567 INFO    ontocast.tool.agg.clustering: Formed 7 clusters: 7 singletons, 0 multi-entity clusters, max cluster size: 1
+2026-08-31 02:32:34,567 INFO    ontocast.tool.agg.clustering: Embedding 33 entity representations in parallel...
+2026-08-31 02:32:35,213 INFO    ontocast.tool.agg.clustering: Embedded 33 entities
+2026-08-31 02:32:35,213 INFO    ontocast.tool.agg.clustering: Clustering 33 entities...
+2026-08-31 02:32:35,215 INFO    ontocast.tool.agg.clustering: Formed 13 clusters: 5 singletons, 8 multi-entity clusters, max cluster size: 7
+2026-08-31 02:32:35,215 INFO    ontocast.tool.agg.clustering: Embedding 32 entity representations in parallel...
+2026-08-31 02:32:35,569 INFO    ontocast.tool.agg.clustering: Embedded 32 entities
+2026-08-31 02:32:35,569 INFO    ontocast.tool.agg.clustering: Clustering 32 entities...
+2026-08-31 02:32:35,571 INFO    ontocast.tool.agg.clustering: Formed 19 clusters: 13 singletons, 6 multi-entity clusters, max cluster size: 5
+2026-08-31 02:32:35,577 INFO    ontocast.tool.agg.aggregate: Rejected 48 candidate merges after symbolic validation
+2026-08-31 02:32:35,577 INFO    ontocast.tool.agg.clustering: Created mapping for 72 entities to 71 representatives
+2026-08-31 02:32:35,577 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 72 entities, 19 normalised
+2026-08-31 02:32:35,583 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 126 -> 383 triples (19 entities merged)
+2026-08-31 02:32:35,584 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-31 02:32:35,601 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 126 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:32:35,721 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 126 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:32:35,829 INFO    ontocast.tool.facts_invariants: SHACL autofix: 6 repair(s) applied, violations 6 -> 0, 6 provenance quad(s) retargeted
+2026-08-31 02:32:35,835 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 126 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:32:35,947 WARNING ontocast.tool.facts_invariants: Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+2026-08-31 02:32:35,948 INFO    ontocast.agent.serialize: LLM: 1 calls, 136,264 sent, 9,986 received | 46,286 in / 3,354 out tokens | Triples: 0 ontology, 126 facts
+2026-08-31 02:32:35,948 INFO    ontocast.agent.serialize: Durations: Render Facts 38.7s, Render Facts/unit_sum 38.7s, llm/provider 38.3s, Merge Facts 2.2s, Render Facts/loop_lag_total 0.5s, Validate Facts 0.4s, Render Facts/loop_lag_max 0.3s, prompt/ontology_chapter 0.0s, Chunk Text 0.0s, repair/deterministic 0.0s, Convert to Text 0.0s, llm/inflight_wait 0.0s, ctx/merge_document_ontology 0.0s, Render Facts/worker_wait 0.0s
+2026-08-31 02:32:35,948 INFO    ontocast.agent.serialize: Effective workers: Render Facts 1.0x (loop lag 0.5s)
+2026-08-31 02:32:36,007 INFO    httpx: HTTP Request: PUT http://localhost:3032/growgraph--art6_abl_ablation_holdout_mv2_comp--facts/data?graph=https://growgraph.dev/doc/67310a91c850/ "HTTP/1.1 201 Created"
+2026-08-31 02:32:36,007 INFO    ontocast.tool.triple_manager.fuseki: Graph graph https://growgraph.dev/doc/67310a91c850/ uploaded to Fuseki as named graph.
+2026-08-31 02:32:36,017 INFO    ontocast.api.process_helpers: Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L6.facts.ttl
+2026-08-31 02:32:36,017 INFO    ontocast.api.process_helpers: Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L6.facts.validation.json
+2026-08-31 02:32:36,018 INFO    ontocast.api.process_helpers: Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L6.run.json
+2026-08-31 02:32:36,019 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-31 02:32:36,020 INFO    ontocast.agent.chunk_text: Created 1 chunks for processing: [4926]
+2026-08-31 02:32:36,020 INFO    ontocast.agent.chunk_text: Created 1 content units: [4926]
+2026-08-31 02:32:36,020 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=1
+2026-08-31 02:32:36,028 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-31 02:32:36,028 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-31 02:32:36,029 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-31 02:32:36,029 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-31 02:33:30,981 INFO    httpx: HTTP Request: POST http://localhost:8003/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-31 02:33:31,523 INFO    ontocast.agent.render_facts: Fresh facts generated with 150 triple(s).
+2026-08-31 02:33:31,523 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-31 02:33:31,527 WARNING ontocast.util.numeric_inventory: Numeric coverage: 101 missing mention(s) truncated to 30 for the repair prompt
+2026-08-31 02:33:31,529 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-31 02:33:33,127 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=25 known_ontology=2 tentative_ontology=49
+2026-08-31 02:33:33,127 INFO    ontocast.tool.agg.clustering: Embedding 8 entity representations in parallel...
+2026-08-31 02:33:33,202 INFO    ontocast.tool.agg.clustering: Embedded 8 entities
+2026-08-31 02:33:33,202 INFO    ontocast.tool.agg.clustering: Clustering 8 entities...
+2026-08-31 02:33:33,203 INFO    ontocast.tool.agg.clustering: Formed 8 clusters: 8 singletons, 0 multi-entity clusters, max cluster size: 1
+2026-08-31 02:33:33,203 INFO    ontocast.tool.agg.clustering: Embedding 39 entity representations in parallel...
+2026-08-31 02:33:33,935 INFO    ontocast.tool.agg.clustering: Embedded 39 entities
+2026-08-31 02:33:33,935 INFO    ontocast.tool.agg.clustering: Clustering 39 entities...
+2026-08-31 02:33:33,940 INFO    ontocast.tool.agg.clustering: Formed 9 clusters: 5 singletons, 4 multi-entity clusters, max cluster size: 22
+2026-08-31 02:33:33,940 INFO    ontocast.tool.agg.clustering: Embedding 29 entity representations in parallel...
+2026-08-31 02:33:34,293 INFO    ontocast.tool.agg.clustering: Embedded 29 entities
+2026-08-31 02:33:34,293 INFO    ontocast.tool.agg.clustering: Clustering 29 entities...
+2026-08-31 02:33:34,295 INFO    ontocast.tool.agg.clustering: Formed 15 clusters: 10 singletons, 5 multi-entity clusters, max cluster size: 5
+2026-08-31 02:33:34,308 INFO    ontocast.tool.agg.aggregate: Rejected 96 candidate merges after symbolic validation
+2026-08-31 02:33:34,308 INFO    ontocast.tool.agg.clustering: Created mapping for 76 entities to 75 representatives
+2026-08-31 02:33:34,309 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 76 entities, 25 normalised
+2026-08-31 02:33:34,314 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 150 -> 443 triples (24 entities merged)
+2026-08-31 02:33:34,314 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-31 02:33:34,335 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 146 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:33:34,511 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 146 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:33:34,668 INFO    ontocast.tool.facts_invariants: SHACL autofix: 4 repair(s) applied, violations 5 -> 1, 4 provenance quad(s) retargeted
+2026-08-31 02:33:34,676 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 146 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:33:34,810 WARNING ontocast.tool.facts_invariants: Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+2026-08-31 02:33:34,811 WARNING ontocast.stategraph.facts_gate: Facts validation gate: 1 error finding(s) remain after 0 repair pass(es)
+2026-08-31 02:33:34,811 INFO    ontocast.agent.serialize: LLM: 1 calls, 137,136 sent, 15,258 received | 46,626 in / 4,811 out tokens | Triples: 0 ontology, 150 facts
+2026-08-31 02:33:34,811 INFO    ontocast.agent.serialize: Durations: Render Facts 55.5s, Render Facts/unit_sum 55.5s, llm/provider 54.9s, Merge Facts 2.8s, Render Facts/loop_lag_total 0.8s, Render Facts/loop_lag_max 0.5s, Validate Facts 0.5s, prompt/ontology_chapter 0.0s, repair/deterministic 0.0s, Chunk Text 0.0s, Convert to Text 0.0s, llm/inflight_wait 0.0s, ctx/merge_document_ontology 0.0s, Render Facts/worker_wait 0.0s
+2026-08-31 02:33:34,811 INFO    ontocast.agent.serialize: Effective workers: Render Facts 1.0x (loop lag 0.8s)
+2026-08-31 02:33:34,882 INFO    httpx: HTTP Request: PUT http://localhost:3032/growgraph--art6_abl_ablation_holdout_mv2_comp--facts/data?graph=https://growgraph.dev/doc/c11ea9fa1d21/ "HTTP/1.1 201 Created"
+2026-08-31 02:33:34,882 INFO    ontocast.tool.triple_manager.fuseki: Graph graph https://growgraph.dev/doc/c11ea9fa1d21/ uploaded to Fuseki as named graph.
+2026-08-31 02:33:34,893 INFO    ontocast.api.process_helpers: Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L7.facts.ttl
+2026-08-31 02:33:34,893 INFO    ontocast.api.process_helpers: Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L7.facts.validation.json
+2026-08-31 02:33:34,894 INFO    ontocast.api.process_helpers: Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L7.run.json
+2026-08-31 02:33:34,896 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-31 02:33:34,897 INFO    ontocast.agent.chunk_text: Created 1 chunks for processing: [6219]
+2026-08-31 02:33:34,898 INFO    ontocast.agent.chunk_text: Created 1 content units: [6219]
+2026-08-31 02:33:34,898 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=1
+2026-08-31 02:33:34,906 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-31 02:33:34,906 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-31 02:33:34,906 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-31 02:33:34,906 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-31 02:34:24,275 INFO    httpx: HTTP Request: POST http://localhost:8003/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-31 02:34:24,657 INFO    ontocast.agent.render_facts: Fresh facts generated with 134 triple(s).
+2026-08-31 02:34:24,657 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-31 02:34:24,660 WARNING ontocast.util.numeric_inventory: Numeric coverage: 94 missing mention(s) truncated to 30 for the repair prompt
+2026-08-31 02:34:24,663 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-31 02:34:25,705 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=21 known_ontology=2 tentative_ontology=46
+2026-08-31 02:34:25,705 INFO    ontocast.tool.agg.clustering: Embedding 7 entity representations in parallel...
+2026-08-31 02:34:25,770 INFO    ontocast.tool.agg.clustering: Embedded 7 entities
+2026-08-31 02:34:25,770 INFO    ontocast.tool.agg.clustering: Clustering 7 entities...
+2026-08-31 02:34:25,771 INFO    ontocast.tool.agg.clustering: Formed 7 clusters: 7 singletons, 0 multi-entity clusters, max cluster size: 1
+2026-08-31 02:34:25,771 INFO    ontocast.tool.agg.clustering: Embedding 35 entity representations in parallel...
+2026-08-31 02:34:26,394 INFO    ontocast.tool.agg.clustering: Embedded 35 entities
+2026-08-31 02:34:26,394 INFO    ontocast.tool.agg.clustering: Clustering 35 entities...
+2026-08-31 02:34:26,396 INFO    ontocast.tool.agg.clustering: Formed 7 clusters: 3 singletons, 4 multi-entity clusters, max cluster size: 22
+2026-08-31 02:34:26,396 INFO    ontocast.tool.agg.clustering: Embedding 27 entity representations in parallel...
+2026-08-31 02:34:26,721 INFO    ontocast.tool.agg.clustering: Embedded 27 entities
+2026-08-31 02:34:26,721 INFO    ontocast.tool.agg.clustering: Clustering 27 entities...
+2026-08-31 02:34:26,723 INFO    ontocast.tool.agg.clustering: Formed 12 clusters: 8 singletons, 4 multi-entity clusters, max cluster size: 10
+2026-08-31 02:34:26,736 INFO    ontocast.tool.agg.aggregate: Rejected 75 candidate merges after symbolic validation
+2026-08-31 02:34:26,736 INFO    ontocast.tool.agg.clustering: Created mapping for 69 entities to 69 representatives
+2026-08-31 02:34:26,736 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 69 entities, 21 normalised
+2026-08-31 02:34:26,741 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 134 -> 407 triples (21 entities merged)
+2026-08-31 02:34:26,741 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-31 02:34:26,758 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 134 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:34:26,937 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 134 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:34:27,085 INFO    ontocast.tool.facts_invariants: SHACL autofix: 4 repair(s) applied, violations 4 -> 0, 4 provenance quad(s) retargeted
+2026-08-31 02:34:27,093 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 134 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:34:27,579 WARNING ontocast.tool.facts_invariants: Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+2026-08-31 02:34:27,580 INFO    ontocast.agent.serialize: LLM: 1 calls, 138,429 sent, 13,516 received | 46,883 in / 4,309 out tokens | Triples: 0 ontology, 134 facts
+2026-08-31 02:34:27,580 INFO    ontocast.agent.serialize: Durations: Render Facts 49.8s, Render Facts/unit_sum 49.8s, llm/provider 49.3s, Merge Facts 2.1s, Validate Facts 0.8s, Render Facts/loop_lag_total 0.6s, Render Facts/loop_lag_max 0.3s, prompt/ontology_chapter 0.0s, Chunk Text 0.0s, repair/deterministic 0.0s, Convert to Text 0.0s, llm/inflight_wait 0.0s, ctx/merge_document_ontology 0.0s, Render Facts/worker_wait 0.0s
+2026-08-31 02:34:27,580 INFO    ontocast.agent.serialize: Effective workers: Render Facts 1.0x (loop lag 0.6s)
+2026-08-31 02:34:27,637 INFO    httpx: HTTP Request: PUT http://localhost:3032/growgraph--art6_abl_ablation_holdout_mv2_comp--facts/data?graph=https://growgraph.dev/doc/0311135fae42/ "HTTP/1.1 201 Created"
+2026-08-31 02:34:27,637 INFO    ontocast.tool.triple_manager.fuseki: Graph graph https://growgraph.dev/doc/0311135fae42/ uploaded to Fuseki as named graph.
+2026-08-31 02:34:27,647 INFO    ontocast.api.process_helpers: Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L8.facts.ttl
+2026-08-31 02:34:27,647 INFO    ontocast.api.process_helpers: Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L8.facts.validation.json
+2026-08-31 02:34:27,647 INFO    ontocast.api.process_helpers: Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L8.run.json
+2026-08-31 02:34:27,649 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-31 02:34:27,650 INFO    ontocast.agent.chunk_text: Created 1 chunks for processing: [4809]
+2026-08-31 02:34:27,651 INFO    ontocast.agent.chunk_text: Created 1 content units: [4809]
+2026-08-31 02:34:27,651 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=1
+2026-08-31 02:34:27,659 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-31 02:34:27,659 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-31 02:34:27,659 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-31 02:34:27,659 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-31 02:35:16,293 INFO    httpx: HTTP Request: POST http://localhost:8003/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-31 02:35:16,819 INFO    ontocast.agent.render_facts: Fresh facts generated with 144 triple(s).
+2026-08-31 02:35:16,819 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-31 02:35:16,822 WARNING ontocast.util.numeric_inventory: Numeric coverage: 90 missing mention(s) truncated to 30 for the repair prompt
+2026-08-31 02:35:16,825 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-31 02:35:17,990 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=22 known_ontology=2 tentative_ontology=50
+2026-08-31 02:35:17,990 INFO    ontocast.tool.agg.clustering: Embedding 8 entity representations in parallel...
+2026-08-31 02:35:18,076 INFO    ontocast.tool.agg.clustering: Embedded 8 entities
+2026-08-31 02:35:18,077 INFO    ontocast.tool.agg.clustering: Clustering 8 entities...
+2026-08-31 02:35:18,079 INFO    ontocast.tool.agg.clustering: Formed 8 clusters: 8 singletons, 0 multi-entity clusters, max cluster size: 1
+2026-08-31 02:35:18,079 INFO    ontocast.tool.agg.clustering: Embedding 36 entity representations in parallel...
+2026-08-31 02:35:18,931 INFO    ontocast.tool.agg.clustering: Embedded 36 entities
+2026-08-31 02:35:18,931 INFO    ontocast.tool.agg.clustering: Clustering 36 entities...
+2026-08-31 02:35:18,933 INFO    ontocast.tool.agg.clustering: Formed 10 clusters: 6 singletons, 4 multi-entity clusters, max cluster size: 18
+2026-08-31 02:35:18,933 INFO    ontocast.tool.agg.clustering: Embedding 30 entity representations in parallel...
+2026-08-31 02:35:19,531 INFO    ontocast.tool.agg.clustering: Embedded 30 entities
+2026-08-31 02:35:19,532 INFO    ontocast.tool.agg.clustering: Clustering 30 entities...
+2026-08-31 02:35:19,535 INFO    ontocast.tool.agg.clustering: Formed 14 clusters: 8 singletons, 6 multi-entity clusters, max cluster size: 8
+2026-08-31 02:35:19,546 INFO    ontocast.tool.agg.aggregate: Rejected 61 candidate merges after symbolic validation
+2026-08-31 02:35:19,546 INFO    ontocast.tool.agg.clustering: Created mapping for 74 entities to 70 representatives
+2026-08-31 02:35:19,547 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 74 entities, 22 normalised
+2026-08-31 02:35:19,552 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 144 -> 404 triples (19 entities merged)
+2026-08-31 02:35:19,552 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-31 02:35:19,571 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 133 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:35:19,690 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 133 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:35:19,795 INFO    ontocast.tool.facts_invariants: SHACL autofix: 5 repair(s) applied, violations 7 -> 2, 5 provenance quad(s) retargeted
+2026-08-31 02:35:19,803 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 133 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:35:19,913 WARNING ontocast.tool.facts_invariants: Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+2026-08-31 02:35:19,913 WARNING ontocast.stategraph.facts_gate: Facts validation gate: 2 error finding(s) remain after 0 repair pass(es)
+2026-08-31 02:35:19,914 INFO    ontocast.agent.serialize: LLM: 1 calls, 137,019 sent, 13,745 received | 46,572 in / 4,233 out tokens | Triples: 0 ontology, 144 facts
+2026-08-31 02:35:19,914 INFO    ontocast.agent.serialize: Durations: Render Facts 49.2s, Render Facts/unit_sum 49.2s, llm/provider 48.6s, Merge Facts 2.7s, Render Facts/loop_lag_total 0.7s, Render Facts/loop_lag_max 0.5s, Validate Facts 0.4s, prompt/ontology_chapter 0.0s, Chunk Text 0.0s, repair/deterministic 0.0s, Convert to Text 0.0s, ctx/merge_document_ontology 0.0s, llm/inflight_wait 0.0s, Render Facts/worker_wait 0.0s
+2026-08-31 02:35:19,914 INFO    ontocast.agent.serialize: Effective workers: Render Facts 1.0x (loop lag 0.7s)
+2026-08-31 02:35:19,977 INFO    httpx: HTTP Request: PUT http://localhost:3032/growgraph--art6_abl_ablation_holdout_mv2_comp--facts/data?graph=https://growgraph.dev/doc/7ef5de28f6eb/ "HTTP/1.1 201 Created"
+2026-08-31 02:35:19,978 INFO    ontocast.tool.triple_manager.fuseki: Graph graph https://growgraph.dev/doc/7ef5de28f6eb/ uploaded to Fuseki as named graph.
+2026-08-31 02:35:19,989 INFO    ontocast.api.process_helpers: Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L9.facts.ttl
+2026-08-31 02:35:19,989 INFO    ontocast.api.process_helpers: Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L9.facts.validation.json
+2026-08-31 02:35:19,990 INFO    ontocast.api.process_helpers: Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L9.run.json
+2026-08-31 02:35:19,992 INFO    ontocast.agent.chunk_text: Chunking the text
+2026-08-31 02:35:19,993 INFO    ontocast.agent.chunk_text: Created 1 chunks for processing: [7714]
+2026-08-31 02:35:19,994 INFO    ontocast.agent.chunk_text: Created 1 content units: [7714]
+2026-08-31 02:35:19,994 INFO    ontocast.agent.chunk_text: Section labels: (unlabeled)=1
+2026-08-31 02:35:20,002 INFO    ontocast.stategraph.atomic: Ontology context for mode fixed_single_ontology: sources=['https://growgraph.dev/echr'] writable=['https://growgraph.dev/echr']
+2026-08-31 02:35:20,003 INFO    ontocast.agent.render_facts: Render facts for content unit 1
+2026-08-31 02:35:20,003 INFO    ontocast.agent.render_facts: Generating fresh facts as Turtle
+2026-08-31 02:35:20,003 INFO    ontocast.agent.render_facts: Rendering fresh facts
+2026-08-31 02:36:19,745 INFO    httpx: HTTP Request: POST http://localhost:8003/v1/chat/completions "HTTP/1.1 200 OK"
+2026-08-31 02:36:20,468 INFO    ontocast.agent.render_facts: Fresh facts generated with 186 triple(s).
+2026-08-31 02:36:20,468 INFO    ontocast.stategraph.atomic: Unit facts loop finishing on final render attempt 1/1 (skipping LLM critic; finding-driven repair renders may still run)
+2026-08-31 02:36:20,472 WARNING ontocast.util.numeric_inventory: Numeric coverage: 130 missing mention(s) truncated to 30 for the repair prompt
+2026-08-31 02:36:20,476 INFO    ontocast.tool.agg.aggregate: Starting aggregation with metadata for 1 units
+2026-08-31 02:36:22,595 INFO    ontocast.tool.agg.aggregate: Aggregation entity classification stats: fact=32 known_ontology=2 tentative_ontology=48
+2026-08-31 02:36:22,595 INFO    ontocast.tool.agg.clustering: Embedding 45 entity representations in parallel...
+2026-08-31 02:36:23,422 INFO    ontocast.tool.agg.clustering: Embedded 45 entities
+2026-08-31 02:36:23,422 INFO    ontocast.tool.agg.clustering: Clustering 45 entities...
+2026-08-31 02:36:23,424 INFO    ontocast.tool.agg.clustering: Formed 11 clusters: 4 singletons, 7 multi-entity clusters, max cluster size: 14
+2026-08-31 02:36:23,424 INFO    ontocast.tool.agg.clustering: Embedding 29 entity representations in parallel...
+2026-08-31 02:36:23,818 INFO    ontocast.tool.agg.clustering: Embedded 29 entities
+2026-08-31 02:36:23,818 INFO    ontocast.tool.agg.clustering: Clustering 29 entities...
+2026-08-31 02:36:23,820 INFO    ontocast.tool.agg.clustering: Formed 16 clusters: 10 singletons, 6 multi-entity clusters, max cluster size: 7
+2026-08-31 02:36:23,820 INFO    ontocast.tool.agg.clustering: Embedding 8 entity representations in parallel...
+2026-08-31 02:36:23,896 INFO    ontocast.tool.agg.clustering: Embedded 8 entities
+2026-08-31 02:36:23,896 INFO    ontocast.tool.agg.clustering: Clustering 8 entities...
+2026-08-31 02:36:23,898 INFO    ontocast.tool.agg.clustering: Formed 7 clusters: 6 singletons, 1 multi-entity clusters, max cluster size: 2
+2026-08-31 02:36:23,906 INFO    ontocast.tool.agg.aggregate: Rejected 86 candidate merges after symbolic validation
+2026-08-31 02:36:23,906 INFO    ontocast.tool.agg.clustering: Created mapping for 82 entities to 78 representatives
+2026-08-31 02:36:23,906 INFO    ontocast.tool.agg.uri_builder: Built URI mapping: 82 entities, 32 normalised
+2026-08-31 02:36:23,912 INFO    ontocast.tool.agg.rewriter: Merged 1 unit graphs with provenance: 186 -> 533 triples (28 entities merged)
+2026-08-31 02:36:23,913 INFO    ontocast.tool.agg.aggregate: Aggregation with metadata complete
+2026-08-31 02:36:23,936 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 176 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:36:24,142 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 176 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:36:24,327 INFO    ontocast.tool.facts_invariants: SHACL autofix: 11 repair(s) applied, violations 13 -> 2, 11 provenance quad(s) retargeted
+2026-08-31 02:36:24,338 WARNING ontocast.onto.rdfgraph: run_shacl: dropped 176 RDF 1.2 triple-term triple(s); rdflib graphs cannot hold them
+2026-08-31 02:36:24,523 WARNING ontocast.tool.facts_invariants: Validating facts against an empty ontology context (no ontology context was assembled); every extracted term is outside the catalog.
+2026-08-31 02:36:24,523 WARNING ontocast.stategraph.facts_gate: Facts validation gate: 2 error finding(s) remain after 0 repair pass(es)
+2026-08-31 02:36:24,524 INFO    ontocast.agent.serialize: LLM: 1 calls, 139,924 sent, 15,558 received | 47,876 in / 5,212 out tokens | Triples: 0 ontology, 186 facts
+2026-08-31 02:36:24,524 INFO    ontocast.agent.serialize: Durations: Render Facts 60.5s, Render Facts/unit_sum 60.5s, llm/provider 59.7s, Merge Facts 3.4s, Render Facts/loop_lag_total 1.0s, Render Facts/loop_lag_max 0.7s, Validate Facts 0.6s, prompt/ontology_chapter 0.0s, Chunk Text 0.0s, repair/deterministic 0.0s, Convert to Text 0.0s, ctx/merge_document_ontology 0.0s, llm/inflight_wait 0.0s, Render Facts/worker_wait 0.0s
+2026-08-31 02:36:24,524 INFO    ontocast.agent.serialize: Effective workers: Render Facts 1.0x (loop lag 1.0s)
+2026-08-31 02:36:24,636 INFO    httpx: HTTP Request: PUT http://localhost:3032/growgraph--art6_abl_ablation_holdout_mv2_comp--facts/data?graph=https://growgraph.dev/doc/c68763e60795/ "HTTP/1.1 201 Created"
+2026-08-31 02:36:24,636 INFO    ontocast.tool.triple_manager.fuseki: Graph graph https://growgraph.dev/doc/c68763e60795/ uploaded to Fuseki as named graph.
+2026-08-31 02:36:24,652 INFO    ontocast.api.process_helpers: Dumped facts graph with chunk-level provenance stripped to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L10.facts.ttl
+2026-08-31 02:36:24,653 INFO    ontocast.api.process_helpers: Dumped facts validation report to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L10.facts.validation.json
+2026-08-31 02:36:24,653 INFO    ontocast.api.process_helpers: Dumped run manifest to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_holdout_mv2/C3_C4/raw/bundles.L10.run.json

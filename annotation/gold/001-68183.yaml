@@ -2,12 +2,12 @@
 # CASE OF MAMATKULOV AND ASKAROV v. TURKEY
 # 001-68183 | GRANDCHAMBER | 2005 | TUR
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
+# AI-GENERATED DRAFT -- read the source and amend.
+# Source: annotation/gold_text/001-68183.txt | Rules: annotation/annotation_guide.txt
 #
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-68183)
-# Do not open any pipeline output before this file is finished.
+# Revised under guide v1.1 §3.1: a narrated filing and its narrated decision are
+# TWO events. Five pairs split here. Ids renumbered chronologically, which
+# interleaves the two applicants' chains.
 # =============================================================================
 
 case_id: "001-68183"
@@ -15,44 +15,364 @@ case_name: "CASE OF MAMATKULOV AND ASKAROV v. TURKEY"
 court_level: "GRANDCHAMBER"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
+  # ---- Chain A: the first applicant (Mamatkulov) -- ids 1, 3, 4, 7, 9, 12 ----
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
+    type: ProsecutorialReview
+    body: "the Turkish police"
+    authority_kind: Prosecutorial
+    decision_date: "1999-03-03"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    borderline: true
+    borderline_reason: "an arrest, executing an international warrant -- the
+      investigative-step boundary again, and arguably an EnforcementAction"
+    quote: "He was arrested by the Turkish police at Atatürk Airport (Istanbul) under an international arrest warrant and taken into police custody on suspicion of homicide, causing injuries through the explosion of a bomb in Uzbekistan and an attempted terrorist attack on the President of Uzbekistan."
+    note: "Consistent with 001-59859 id 1, 001-202419 id 3, 001-101173 id 1."
+
+  # ---- Chain B: the second applicant (Askarov) -- ids 2, 5, 6, 8, 10, 11, 14 ----
+  - id: 2
+    type: ProsecutorialReview
+    body: "the Turkish police"
+    authority_kind: Prosecutorial
+    decision_date: "1999-03-05"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the second applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    borderline: true
+    borderline_reason: "an arrest -- same question as id 1"
+    quote: "On 5 March 1999, acting on a request for his extradition by the Republic of Uzbekistan, the Turkish police arrested him and took him into police custody."
     note: ""
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 3
+    type: DomesticProceeding
+    body: "the investigating judge"
+    authority_kind: Judicial
+    start_date: "1999-03-05"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Bakırköy public prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+    follows: 1
+    quote: "On 5 March 1999 the Bakırköy public prosecutor made an application to the investigating judge for the first applicant to be remanded in custody."
+    note: "Filing half of a §3.1 pair; the remand is id 4, the SAME DAY. Split
+      because the text narrates the prosecutor's application and the judge's order
+      as separate acts by separate actors, which is what §3.1 turns on."
+
+  - id: 4
+    type: DomesticProceeding
+    body: "the investigating judge"
+    authority_kind: Judicial
+    decision_date: "1999-03-05"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the Bakırköy public prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+    follows: 3
+    quote: "The first applicant, who was assisted by his lawyer, was brought before the judge on the same day and remanded in custody for forty-five days, in accordance with the European Convention on Mutual Assistance in Criminal Matters."
+    note: "Decision half of the pair opened at id 3. Forty-five days, under the
+      European Convention on Mutual Assistance in Criminal Matters."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the investigating judge"
+    authority_kind: Judicial
+    start_date: "1999-03-07"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Bakırköy public prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the second applicant"
+        side: Responding
+        natural_person: true
+    follows: 2
+    quote: "On 7 March 1999 the Bakırköy public prosecutor made an application to the investigating judge for the second applicant to be remanded in custody."
+    note: "Filing half of a §3.1 pair; the remand is id 6, the same day. The mirror
+      of id 3 for the second applicant."
+
+  - id: 6
+    type: DomesticProceeding
+    body: "the investigating judge"
+    authority_kind: Judicial
+    decision_date: "1999-03-07"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the Bakırköy public prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the second applicant"
+        side: Responding
+        natural_person: true
+    follows: 5
+    quote: "On the same day the second applicant was brought before the judge, who remanded him in custody."
+    note: "Decision half of the pair opened at id 5."
+
+  - id: 7
+    type: DomesticProceeding
+    body: "the judge of the Bakırköy Criminal Court"
+    authority_kind: Judicial
+    decision_date: "1999-03-11"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+    follows: 4
+    quote: "In an order made on the same day under the expedited applications procedure, the judge referred to the charges against the first applicant and noted that the offences concerned were not political or military in nature but ordinary criminal offences."
+    note: "The substantive extradition ruling for the first applicant: offences held
+      to be ordinary rather than political, and a further remand pending extradition.
+      The representative's written pleadings of the same day are argument, not a
+      decision. No §3.1 split: nothing in the text institutes this hearing on a
+      separate date -- the applicant is simply interviewed on 11 Mar and the order
+      made the same day."
+
+  - id: 8
+    type: DomesticProceeding
+    body: "the Fatih Criminal Court"
+    authority_kind: Judicial
+    start_date: "1999-03-12"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Fatih public prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the second applicant"
+        side: Responding
+        natural_person: true
+    follows: 6
+    quote: "In a letter of 12 March 1999 the Fatih public prosecutor applied to the Fatih Criminal Court for a determination of the second applicant’s nationality and of the nature of the alleged offence."
+    note: "Filing half of a §3.1 pair; the determination is id 10."
+
+  - id: 9
+    type: DomesticProceeding
+    body: "the Bakırköy Assize Court"
+    authority_kind: Judicial
+    start_date: "1999-03-15"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+    follows: 7
+    quote: "On 15 March 1999 the first applicant appealed to the Bakırköy Assize Court against the order made under the expedited applications procedure on 11 March 1999."
+    note: "Filing half of a §3.1 pair; the dismissal is id 12."
+
+  - id: 10
+    type: DomesticProceeding
+    body: "the Fatih Criminal Court"
+    authority_kind: Judicial
+    decision_date: "1999-03-15"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the Fatih public prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the second applicant"
+        side: Responding
+        natural_person: true
+    follows: 8
+    quote: "In a decision of 15 March 1999, after hearing the applicant, the Criminal Court determined his nationality and the nature of the offence pursuant to Article 9 of the Turkish Criminal Code."
+    note: "Decision half of the pair opened at id 8, and the mirror of id 7 for the
+      second applicant. Same holding -- ordinary rather than political offences --
+      plus remand pending extradition."
+
+  - id: 11
+    type: DomesticProceeding
+    body: "the Istanbul Assize Court"
+    authority_kind: Judicial
+    start_date: "1999-03-18"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+    follows: 10
+    quote: "On 18 March 1999 the second applicant appealed to the Istanbul Assize Court against the judgment of 15 March 1999."
+    note: "Filing half of a §3.1 pair; the dismissal is id 14."
+
+  - id: 12
+    type: DomesticProceeding
+    body: "the Bakırköy Assize Court"
+    authority_kind: Judicial
+    decision_date: "1999-03-19"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+    follows: 9
+    final_domestic_decision: true
+    quote: "Having examined the case file, the Assize Court dismissed the first applicant’s appeal on 19 March 1999."
+    note: "Decision half of the pair opened at id 9. Terminal judicial event for the
+      first applicant."
+
+  # ---- The executive strand ----
+  - id: 13
+    type: AdministrativeAction
+    body: "the Turkish government"
+    authority_kind: Administrative
+    decision_date: "1999-03-19"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+      - name: "the second applicant"
+        side: Responding
+        natural_person: true
+    follows: 7
+    quote: "On 19 March 1999 the Turkish government issued a decree ordering the applicants’ extradition."
+    note: "One decree covering both applicants, so `follows` can point at only one
+      chain; recorded as 7, the first applicant's substantive extradition ruling.
+      Issued while the second applicant's appeal (id 11) was still pending."
+
+  - id: 14
+    type: DomesticProceeding
+    body: "the Istanbul Assize Court"
+    authority_kind: Judicial
+    decision_date: "1999-03-26"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+    follows: 11
+    final_domestic_decision: true
+    quote: "Having examined the case file, the Assize Court dismissed the appeal on 26 March 1999."
+    note: "Decision half of the pair opened at id 11. Terminal judicial event for the
+      second applicant. Note it postdates the extradition decree (id 13) by a week."
+
+  - id: 15
+    type: EnforcementAction
+    body: "the Turkish government"
+    authority_kind: Administrative
+    decision_date: "1999-03-27"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+      - name: "the second applicant"
+        side: Responding
+        natural_person: true
+    follows: 13
+    quote: "On 27 March 1999 the applicants were handed over to the Uzbek authorities."
+    note: "Execution of the decree -- a clear EnforcementAction. The acting body is
+      not named; attributed to the government that issued the decree. REVIEW."
+
+  # ---- Uzbek proceedings ----
+  - id: 16
+    type: DomesticProceeding
+    body: "the Supreme Court of the Republic of Uzbekistan"
+    authority_kind: Judicial
+    decision_date: "1999-06-28"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+      - name: "the second applicant"
+        side: Responding
+        natural_person: true
+    follows: 15
+    borderline: true
+    borderline_reason: "an UZBEK court -- not a proceeding of the respondent State
+      (Turkey); same question as the United States decisions in 001-61054"
+    quote: "In a letter of 8 July 1999, the Government informed the Court that by a judgment of 28 June 1999 the Supreme Court of the Republic of Uzbekistan had found the applicants guilty of the offences charged and had sentenced them to terms of imprisonment."
+    note: "Twenty years and eleven years respectively (¶32). Known to the Court only
+      through diplomatic correspondence, which is itself a reason to question whether
+      it is recorded procedural history or reported background."
+
+document_note: >
+  TWO PARALLEL CHAINS, one per applicant, running through identical Turkish
+  extradition proceedings a few days apart, plus an executive strand (ids 13, 15)
+  and one Uzbek conviction (id 16). Chain A (the first applicant) is ids 1, 3, 4,
+  7, 9, 12; chain B (the second applicant) is ids 2, 5, 6, 8, 10, 11, 14.
+
+  SPLIT UNDER §3.1: five pairs are now two events each -- both remand applications
+  (3 -> 4 and 5 -> 6), the Fatih prosecutor's application (8 -> 10) and both
+  appeals to the Assize Courts (9 -> 12 and 11 -> 14). Two of those pairs are
+  same-day: the prosecutor applies and the judge remands within one day, and §3.1
+  splits them because the text narrates two acts by two actors. Note the effect on
+  chain structure -- ids now interleave the two applicants because the file is
+  ordered chronologically, so neither chain is contiguous any more.
+
+  THE FOREIGN-COURT QUESTION RECURS HERE. The respondent State is Turkey, so the
+  Uzbek Supreme Court judgment (id 16) is a third State's proceeding, exactly as
+  the Michigan decisions are in 001-61054. Decide it once for both documents.
+
+  Everything under Rule 39 (¶24, 26 -- the Court's interim measures) is Strasbourg
+  procedure and out of scope by guide §4.2. The diplomatic assurances and notes
+  (¶28-29, 32) are correspondence, not decisions.
+
+  Worth noticing: the extradition decree (id 13, 19 Mar) precedes the second
+  applicant's appeal decision (id 14, 26 Mar), and the handover (id 15, 27 Mar)
+  follows it by one day.

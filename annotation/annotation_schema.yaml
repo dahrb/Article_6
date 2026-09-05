@@ -45,12 +45,17 @@ proceedings:
         side: Initiating             # §6.7   p echr:hasPartySide echr:Side...
         natural_person: true         #        P a echr:NaturalPerson
     follows: null                    #        E echr:followsProceeding E'
-                                     #        null = head of a chain
+                                     #        null = head of a chain. Not
+                                     #        FunctionalProperty in the ontology --
+                                     #        give a list [n, m] where one decision
+                                     #        disposes of more than one predecessor
+                                     #        (worked example 7).
     quote: "On 14 March 2005 the Sofia District Prosecutor's Office refused to
       open a criminal investigation into the applicant's complaint."
-                                     #        E echr:hasSupportingQuote
-    para: 12                         #        not a triple -- audit locator
-    note: ""                         #        free text, see §9
+                                     #        E echr:hasSupportingQuote                         #        not a triple -- audit locator
+    note: "Keeps BOTH dates because the complaint of 1 Feb is reported, not
+      narrated -- there is no separate sentence to quote for it, so there is
+      only one act to record. Contrast worked example 5 (§3.1)."
 
   # ---------------------------------------------------------------------------
   # Worked example 2 — the court challenge to event 1. Illustrates: `follows`,
@@ -76,7 +81,6 @@ proceedings:
     follows: 1
     quote: "The applicant appealed against that refusal to the Sofia City Court,
       which upheld it on 20 November 2005."
-    para: 14
     note: ""
 
   # ---------------------------------------------------------------------------
@@ -102,7 +106,6 @@ proceedings:
                                      # `follows` chain to its end -- not the
                                      # latest date.
     quote: "The case reached the Supreme Court of Cassation in 2007."
-    para: 15
     note: "Text gives no outcome and no month."
 
   # ---------------------------------------------------------------------------
@@ -124,8 +127,83 @@ proceedings:
     borderline_reason: "crime-scene inspection; no decision by any body, so it
       may not be a milestone in the procedural history at all"
     quote: "On 20 January 2005 an investigator inspected the scene."
-    para: 9
     note: ""
+
+  # ---------------------------------------------------------------------------
+  # Worked examples 5 and 6 — A FILING AND ITS DECISION, SPLIT (§3.1).
+  # The judgment narrates the institution and the judgment as two separate
+  # sentences, so they are two events. This is the NORMAL case; a record with
+  # both dates (example 1) is the exception.
+  #
+  # The filing half carries start_date and no decision_date; the decision half
+  # carries decision_date and no start_date. Everything that followed the
+  # proceeding -- appeals, enforcement -- follows the DECISION half.
+  # ---------------------------------------------------------------------------
+  - id: 5
+    type: DomesticProceeding
+    body: "the Celje District Court"
+    authority_kind: Judicial
+    start_date: "1999-03-15"         # no decision_date on a filing event
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown                 # not "pending" -- the outcome simply
+    outcome_direction: Unknown       # belongs to the other half, id 6
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: null
+    quote: "On 15 March 1999 the applicant instituted civil proceedings against
+      his employer in the Celje District Court seeking damages."
+    note: "Filing half of a §3.1 pair; the decision is id 6."
+
+  - id: 6
+    type: DomesticProceeding
+    body: "the Celje District Court"   # same body, level, type as id 5
+    authority_kind: Judicial
+    decision_date: "2003-06-05"        # no start_date on a decision event
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 5                         # the decision follows its own filing
+    quote: "On 5 June 2003 the court dismissed the claim."
+    note: "Decision half of a §3.1 pair. Note the four-year gap is irrelevant to
+      the split -- what matters is that the text narrates both acts."
+
+  # ---------------------------------------------------------------------------
+  # Worked example 7 — ONE decision disposing of TWO predecessors. Illustrates:
+  # `follows` as a list. echr:followsProceeding is not owl:FunctionalProperty,
+  # so an event may follow more than one predecessor where the text supports it.
+  # ---------------------------------------------------------------------------
+  - id: 7
+    type: DomesticProceeding
+    body: "the Regional Court"
+    authority_kind: Judicial
+    decision_date: "1996-08-29"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: Remitted
+    outcome_direction: Mixed
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the mother"
+        side: Initiating
+        natural_person: true
+    follows: [3, 6]                  # two prior events resolved by one decision
+    quote: "The Regional Court granted an appeal by the first applicant against
+      the transfer of jurisdiction and, on the mother's appeal, quashed the
+      District Court's enforcement order and referred the case back to it."
+    note: "ONE decision disposing of TWO appeals -- the first applicant's against
+      the transfer (id 3) and the mother's against the enforcement order (id 6).
+      Do not force this onto a single id or split the decision into two events
+      to work around it -- a list is the correct representation."
 
 # =============================================================================
 # Document-level notes: anything about the judgment as a whole -- an unusual

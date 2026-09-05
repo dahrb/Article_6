@@ -1,13 +1,12 @@
 # =============================================================================
 # CASE OF DRAON v. FRANCE
-# 001-70447 | GRANDCHAMBER | 2005 | FRA
+# 001-70447 | GRANDCHAMBER | 2005
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
+# AI-GENERATED DRAFT -- read the source and amend.
+# Source: annotation/gold_text/001-70447.txt | Rules: annotation/annotation_guide.txt
 #
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-70447)
-# Do not open any pipeline output before this file is finished.
+# Revised under guide v1.1 §3.1: a narrated filing and its narrated decision are
+# TWO events. Three pairs split here. Ids renumbered chronologically.
 # =============================================================================
 
 case_id: "001-70447"
@@ -15,44 +14,255 @@ case_name: "CASE OF DRAON v. FRANCE"
 court_level: "GRANDCHAMBER"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
-    note: ""
+    type: AdministrativeAction
+    body: "Assistance Publique - Hôpitaux de Paris (AP ‑ HP)"
+    authority_kind: Administrative
+    start_date: "1998-12-10"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "Mr Draon"
+        side: Initiating
+        natural_person: true
+      - name: "Mrs Draon"
+        side: Initiating
+        natural_person: true
+    follows: null
+    quote: "On 10 December 1998 the applicants sent a claim to AP-HP seeking compensation for the damage suffered as a result of R.’s disability."
+    note: "Filing half of a §3.1 pair; the reply is id 2. Two applicants, named
+      separately -- the ontology forbids one node standing for several people."
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 2
+    type: AdministrativeAction
+    body: "Assistance Publique - Hôpitaux de Paris (AP ‑ HP)"
+    authority_kind: Administrative
+    decision_date: "1999-02-08"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Other
+    outcome_direction: Mixed
+    parties:
+      - name: "Mr Draon"
+        side: Initiating
+        natural_person: true
+      - name: "Mrs Draon"
+        side: Initiating
+        natural_person: true
+    follows: 1
+    quote: "In a letter dated 8 February 1999 AP-HP replied that it “[did] not intend to deny liability in this case” but invited the applicants to “submit an application to the Paris Administrative Court which, in its wisdom, will assess the damage for which compensation should be paid”."
+    note: "Decision half of the pair opened at id 1. Outcome is Other because AP-HP
+      neither granted nor refused -- it declined to contest liability and
+      redirected them to the court."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the Paris Administrative Court"
+    authority_kind: Judicial
+    start_date: "1999-03-29"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "Mr Draon"
+        side: Initiating
+        natural_person: true
+      - name: "Mrs Draon"
+        side: Initiating
+        natural_person: true
+      - name: "Assistance Publique - Hôpitaux de Paris (AP ‑ HP)"
+        side: Responding
+        natural_person: false
+    follows: 2
+    quote: "On 29 March 1999 the applicants submitted to the Paris Administrative Court a statement of their claim against AP-HP, requesting an assessment of the damage suffered."
+    note: "Filing half of a §3.1 pair; the judgment on the merits is id 8, four and
+      a half years later. The supplementary memorial of 14 Dec 1999, AP-HP's reply
+      of 19 Jul 2000, the rejoinder, and the deferral of 3 Sep 2002 pending the
+      Conseil d'Etat opinion are all steps inside this proceeding, not events."
+
+  - id: 4
+    type: DomesticProceeding
+    body: "the urgent applications judge of the Paris Administrative Court"
+    authority_kind: Judicial
+    start_date: "1999-03-29"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "Mr Draon"
+        side: Initiating
+        natural_person: true
+      - name: "Mrs Draon"
+        side: Initiating
+        natural_person: true
+      - name: "Assistance Publique - Hôpitaux de Paris (AP ‑ HP)"
+        side: Responding
+        natural_person: false
+    follows: 2
+    borderline: true
+    borderline_reason: "the request that opens an interlocutory branch -- if the
+      interim awards are steps inside the main claim rather than proceedings, this
+      filing is not an event either"
+    quote: "At the same time the applicants submitted to the urgent applications judge at the same court a request for the appointment of an expert and an interim award."
+    note: "Filing half of a §3.1 pair; the decision is id 5. “At the same time”
+      dates this to 29 Mar 1999, the same day as id 3. Fold into id 3 if interim
+      relief is a step; if so, fold ids 5 and 6 too."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the urgent applications judge of the Paris Administrative Court"
+    authority_kind: Judicial
+    decision_date: "1999-05-10"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "Mr Draon"
+        side: Initiating
+        natural_person: true
+      - name: "Mrs Draon"
+        side: Initiating
+        natural_person: true
+      - name: "Assistance Publique - Hôpitaux de Paris (AP ‑ HP)"
+        side: Responding
+        natural_person: false
+    follows: 4
+    borderline: true
+    borderline_reason: "an interim award and appointment of an expert by the urgent
+      applications judge -- a distinct judicial decision, but arguably an
+      interlocutory step inside the main claim (id 8) rather than a proceeding"
+    quote: "In a decision of 10 May 1999 the urgent applications judge of the Paris Administrative Court made a first interim award of FRF 250,000 (EUR 38,112.25) and appointed an expert."
+    note: "Decision half of the pair opened at id 4. FRF 250,000. The expert reported
+      on 16 Jul 1999 -- evidence, not an event."
+
+  - id: 6
+    type: DomesticProceeding
+    body: "the urgent applications judge of the Paris Administrative Court"
+    authority_kind: Judicial
+    decision_date: "2001-08-11"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "Mr Draon"
+        side: Initiating
+        natural_person: true
+      - name: "Mrs Draon"
+        side: Initiating
+        natural_person: true
+      - name: "Assistance Publique - Hôpitaux de Paris (AP ‑ HP)"
+        side: Responding
+        natural_person: false
+    follows: 5
+    borderline: true
+    borderline_reason: "second interim award -- same question as id 5"
+    quote: "In addition, the applicants again asked the urgent applications judge to make an interim award. In a decision of 11 August 2001 the urgent applications judge of the Paris Administrative Court made an additional interim award of FRF 750,000 (EUR 114,336.76) to the applicants “in view of the severity of the disorders from which the boy R. continues to suffer and the high costs of bringing him up and caring for him since 1996”."
+    note: "FRF 750,000. NOT split under §3.1: the renewed request is narrated
+      (“the applicants again asked”) but carries no date, so it gets no event of
+      its own and the quote covers both sentences."
+
+  - id: 7
+    type: DomesticProceeding
+    body: "the Conseil d’Etat"
+    authority_kind: Judicial
+    decision_date: "2002-12-06"
+    level: Cassation
+    proceeding_type: Administrative
+    outcome: Other
+    outcome_direction: UnfavourableToApplicant
+    parties: []
+    follows: 3
+    borderline: true
+    borderline_reason: "an avis contentieux -- an opinion on interpretation given at
+      the trial court's request, not a determination of anyone's rights; it may be a
+      step inside id 8 rather than an event"
+    quote: "On 6 December 2002 the Conseil d’Etat gave an opinion in the context of the litigation in progress ( avis contentieux) which is reproduced below (see paragraph 51)."
+    note: "No parties: the reference came from the court, not from a litigant.
+      Direction recorded as Unfavourable because the opinion enabled the Law of
+      4 March 2002 to be applied against the claim, but the opinion itself decides
+      nothing for anyone. `follows` points at id 3 rather than id 8 because the
+      referral came out of the pending first-instance proceeding, and id 8 is
+      later in time."
+
+  - id: 8
+    type: DomesticProceeding
+    body: "the Paris Administrative Court"
+    authority_kind: Judicial
+    decision_date: "2003-09-02"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Mixed
+    parties:
+      - name: "Mr Draon"
+        side: Initiating
+        natural_person: true
+      - name: "Mrs Draon"
+        side: Initiating
+        natural_person: true
+      - name: "Assistance Publique - Hôpitaux de Paris (AP ‑ HP)"
+        side: Responding
+        natural_person: false
+    follows: 3
+    quote: "On the basis of that opinion, the Paris Administrative Court ruled on the merits of the case on 2 September 2003."
+    note: "Decision half of the pair opened at id 3 -- the main claim. Direction
+      Mixed: EUR 180,000 awarded for non-pecuniary damage and disruption, but the
+      special burdens arising from the child's disability were excluded under the
+      Law of 4 March 2002, and the claim for loss of enjoyment of the Spanish
+      property was rejected."
+
+  - id: 9
+    type: DomesticProceeding
+    body: "the Paris Administrative Court of Appeal"
+    authority_kind: Judicial
+    start_date: "2003-09-03"
+    level: Appeal
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "Mr Draon"
+        side: Initiating
+        natural_person: true
+      - name: "Mrs Draon"
+        side: Initiating
+        natural_person: true
+      - name: "Assistance Publique - Hôpitaux de Paris (AP ‑ HP)"
+        side: Responding
+        natural_person: false
+    follows: 8
+    quote: "On 3 September 2003 the applicants appealed against the judgment. Their appeal is currently pending before the Paris Administrative Court of Appeal."
+    note: "STILL PENDING at the date of the Strasbourg judgment -- no decision_date,
+      outcome Unknown. This is why no event carries final_domestic_decision. Note
+      that this record is shaped exactly like a §3.1 filing event, but for the
+      opposite reason: there is no decision half to write yet."
+
+document_note: >
+  One chain over a medical-negligence compensation claim. NO EVENT IS MARKED
+  final_domestic_decision: the appeal (id 9) was still pending when the Court gave
+  judgment, and guide §5 says a chain still pending at the time of the application
+  has no flag.
+
+  SPLIT UNDER §3.1: three filing/decision pairs are now two events each -- the
+  preliminary claim to AP-HP (1 -> 2), the main claim to the Paris Administrative
+  Court (3 -> 8) and the interim-award request (4 -> 5). The second interim award
+  (id 6) is NOT split: the renewed request is narrated but undated. Ids were
+  renumbered chronologically and do NOT correspond to the pre-v1.1 numbering.
+
+  Four of nine events are flagged, which is high and worth your attention -- they
+  are all the same question in different clothes: whether interlocutory decisions
+  (two interim awards, one advisory opinion) are events or steps inside the main
+  claim. If they are steps, this document has four events, not nine. The medical
+  acts (the amniocentesis of 20 Aug 1996, the misdiagnosis) are treatment, not
+  procedure, and are not recorded.

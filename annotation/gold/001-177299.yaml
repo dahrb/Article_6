@@ -1,13 +1,12 @@
 # =============================================================================
 # CASE OF REGNER v. THE CZECH REPUBLIC
-# 001-177299 | GRANDCHAMBER | 2017 | CZE
+# 001-177299 | GRANDCHAMBER | 2017
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
+# AI-GENERATED DRAFT -- read the source and amend.
+# Source: annotation/gold_text/001-177299.txt | Rules: annotation/annotation_guide.txt
 #
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-177299)
-# Do not open any pipeline output before this file is finished.
+# Revised under guide v1.1 §3.1: a narrated filing and its narrated decision are
+# TWO events. Five pairs split here. Ids renumbered chronologically.
 # =============================================================================
 
 case_id: "001-177299"
@@ -15,44 +14,334 @@ case_name: "CASE OF REGNER v. THE CZECH REPUBLIC"
 court_level: "GRANDCHAMBER"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
+  # ---- Chain 1: the security-clearance revocation (1-4, 6-11) ----
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
-    note: ""
+    type: AdministrativeAction
+    body: "the National Security Authority ( Národní bezpečnostní úřad – “the Authority”)"
+    authority_kind: Administrative
+    start_date: "2004-12-27"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Ministry’s authorised representative"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: ThirdParty
+        natural_person: true
+    follows: null
+    quote: "On 27 December 2004, the Ministry’s authorised representative requested the National Security Authority ( Národní bezpečnostní úřad – “the Authority”) to issue the applicant with security clearance ( osvědčení ) giving him access to State classified information in the “secret” category ( tajné ) in accordance with the duties to be carried out by him."
+    note: "Filing half of a §3.1 pair; the clearance is id 2. The Ministry, not the
+      applicant, requested the clearance, so the applicant is recorded as ThirdParty
+      rather than Initiating -- he is the subject of the decision without having
+      asked for it. Change to Initiating if you read the clearance as sought on his
+      behalf."
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 2
+    type: AdministrativeAction
+    body: "the National Security Authority ( Národní bezpečnostní úřad – “the Authority”)"
+    authority_kind: Administrative
+    decision_date: "2005-07-19"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the Ministry’s authorised representative"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: ThirdParty
+        natural_person: true
+    follows: 1
+    quote: "On 19 July 2005 the Authority issued the applicant with security clearance, valid until 18 July 2010, confirming that he had access to State classified information in the “secret” category."
+    note: "Decision half of the pair opened at id 1."
+
+  - id: 3
+    type: AdministrativeAction
+    body: "the National Security Authority ( Národní bezpečnostní úřad – “the Authority”)"
+    authority_kind: Administrative
+    start_date: "2005-10-07"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 2
+    quote: "On 7 October 2005 the Authority received confidential information from the intelligence service, classified “restricted” ( vyhrazené ) and dated 5 October 2005. It started an investigation in order to verify the information received."
+    note: "Filing half of a §3.1 pair; the revocation is id 4. Unusual in that the
+      proceeding is opened by the AUTHORITY of its own motion rather than by a
+      party's application -- §3.1 turns on the institution being narrated as its own
+      dated act, not on who performed it. REVIEW if you read an own-motion opening
+      as not an institution at all."
+
+  - id: 4
+    type: AdministrativeAction
+    body: "the National Security Authority ( Národní bezpečnostní úřad – “the Authority”)"
+    authority_kind: Administrative
+    decision_date: "2006-09-05"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 3
+    quote: "On the basis of that information the Authority revoked the security clearance on 5 September 2006."
+    note: "Decision half of the pair opened at id 3. Two grounds: undisclosed
+      directorships and foreign accounts, and a national security risk. The further
+      intelligence information of 21 Mar 2006 falls in the gap but is evidence
+      gathered within the investigation, not an event."
+
+  - id: 5
+    type: AdministrativeAction
+    body: "the Ministry of Defence"
+    authority_kind: Administrative
+    decision_date: "2006-10-04"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: null
+    borderline: true
+    borderline_reason: "removal from office at the applicant's own request for health
+      reasons, under the Labour Code -- an employment act rather than a procedural
+      step, and the deciding body is his employer"
+    quote: "He was removed from office on the same day under Article 65 § 2 of the Labour Code (see paragraph 26 below)."
+    note: "The mutual-consent termination agreement of 20 Oct 2006, effective
+      31 Jan 2007, is folded in here rather than recorded separately -- an agreement
+      between employee and employer, which is the same boundary question again.
+      Delete both if employment acts are out. The applicant's own request is not
+      separately dated, so no §3.1 split."
+
+  - id: 6
+    type: AdministrativeAction
+    body: "the director of the Authority"
+    authority_kind: Administrative
+    decision_date: "2006-12-18"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 4
+    quote: "On an administrative appeal ( rozklad ) by the applicant, the director of the Authority, after obtaining an opinion from the appeals board, confirmed on 18 December 2006 the Authority’s decision of 5 September 2006, but on partly different grounds."
+    note: "An internal administrative appeal within the same Authority, so
+      AdministrativeAction rather than DomesticProceeding -- no court involved. The
+      non-disclosure ground was dismissed; the security-risk ground upheld. The
+      applicant's rozklad is narrated but undated, so no §3.1 split."
+
+  - id: 7
+    type: DomesticProceeding
+    body: "the Prague Municipal Court ( městský soud )"
+    authority_kind: Judicial
+    start_date: "2007-01-19"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the National Security Authority ( Národní bezpečnostní úřad – “the Authority”)"
+        side: Responding
+        natural_person: false
+    follows: 6
+    quote: "On 19 January 2007 the applicant lodged an application with the Prague Municipal Court ( městský soud ) for judicial review of the decision revoking his security clearance."
+    note: "Filing half of a §3.1 pair; the judgment is id 8. Judicial review of the
+      revocation, so it follows the administrative appeal (id 6) rather than the
+      original revocation. The applicant's consultation of the redacted file and
+      the public hearing are steps inside this proceeding."
+
+  - id: 8
+    type: DomesticProceeding
+    body: "the Prague Municipal Court ( městský soud )"
+    authority_kind: Judicial
+    decision_date: "2009-09-01"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the National Security Authority ( Národní bezpečnostní úřad – “the Authority”)"
+        side: Responding
+        natural_person: false
+    follows: 7
+    quote: "In a judgment of 1 September 2009 the court dismissed the application for judicial review."
+    note: "Decision half of the pair opened at id 7."
+
+  - id: 9
+    type: DomesticProceeding
+    body: "the Supreme Administrative Court ( Nejvyšší správní soud )"
+    authority_kind: Judicial
+    decision_date: "2010-07-15"
+    level: Cassation
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the National Security Authority ( Národní bezpečnostní úřad – “the Authority”)"
+        side: Responding
+        natural_person: false
+    follows: 8
+    quote: "In a judgment of 15 July 2010 the Supreme Administrative Court ( Nejvyšší správní soud ) dismissed an appeal on points of law ( kasační stížnost ) lodged by the applicant as unfounded."
+    note: "The kasační stížnost is narrated but undated, so no §3.1 split."
+
+  - id: 10
+    type: DomesticProceeding
+    body: "the Constitutional Court ( Ústavní soud )"
+    authority_kind: Judicial
+    start_date: "2010-10-25"
+    level: Cassation
+    proceeding_type: Constitutional
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 9
+    quote: "On 25 October 2010 the applicant lodged a complaint with the Constitutional Court ( Ústavní soud ), complaining of the unfairness of the proceedings."
+    note: "Filing half of a §3.1 pair; the judgment is id 11."
+
+  - id: 11
+    type: DomesticProceeding
+    body: "the Constitutional Court ( Ústavní soud )"
+    authority_kind: Judicial
+    decision_date: "2010-11-18"
+    level: Cassation
+    proceeding_type: Constitutional
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 10
+    final_domestic_decision: true
+    quote: "In a judgment of 18 November 2010 the court dismissed his complaint as manifestly ill-founded."
+    note: "Decision half of the pair opened at id 10. The instance-level vocabulary
+      has no constitutional value; recorded as Cassation ('cassation or supreme
+      court'). Unknown is arguable. Dismissal as manifestly ill-founded is a
+      procedural disposal, hence Inadmissible. Terminal event of the
+      security-clearance chain."
+
+  # ---- Chain 2: the criminal prosecution over public contracts (12-14) ----
+  - id: 12
+    type: DomesticProceeding
+    body: "the prosecution service"
+    authority_kind: Prosecutorial
+    start_date: "2011-03-16"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the prosecution service"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    quote: "On 16 March 2011 the prosecution service lodged a bill of indictment against the applicant and 51 other persons on charges of influencing the award of public contracts at the Ministry of Defence from 2005 to 2007."
+    note: "Filing half of a §3.1 pair and head of a SECOND, independent chain; the
+      conviction is id 13. `body` is the prosecution service, which lodged the
+      indictment, whereas id 13 is decided by the České Budějovice Regional Court --
+      the two halves name different bodies and §8 matches on authority. REVIEW. The
+      other 51 defendants are not named and are not recorded."
+
+  - id: 13
+    type: DomesticProceeding
+    body: "the České Budějovice Regional Court ( krajský soud )"
+    authority_kind: Judicial
+    decision_date: "2014-03-25"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the prosecution service"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 12
+    quote: "In a judgment of 25 March 2014 the České Budějovice Regional Court ( krajský soud ) found the applicant guilty and sentenced him, inter alia , to three years’ imprisonment."
+    note: "Decision half of the pair opened at id 12."
+
+  - id: 14
+    type: DomesticProceeding
+    body: "the Prague High Court ( Vrchní soud )"
+    authority_kind: Judicial
+    decision_date: "2016-05-27"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: Mixed
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the prosecution service"
+        side: Responding
+        natural_person: false
+    follows: 13
+    final_domestic_decision: true
+    quote: "In a judgment of 27 May 2016 the Prague High Court ( Vrchní soud ) upheld the first-instance judgment convicting the applicant, but suspended execution of his prison sentence for a two-year probationary period."
+    note: "Direction Mixed: conviction upheld but the prison sentence suspended. The
+      text says this judgment became final, so it is the terminal event of chain 2.
+      The appeal itself is undated, so no §3.1 split."
+
+document_note: >
+  TWO independent chains, each with its own terminal decision. Chain 1 (ids 1-4,
+  6-11) is the security-clearance revocation, running from the Authority through
+  internal appeal to judicial review, cassation and the Constitutional Court --
+  most of its early events are AdministrativeAction rather than DomesticProceeding,
+  which is unusual and worth checking. Chain 2 (ids 12-14) is the later criminal
+  prosecution, which the judgment narrates without linking it to the clearance
+  decision.
+
+  id 5 (removal from office) is flagged and sits outside both chains.
+
+  SPLIT UNDER §3.1: five pairs are now two events each -- the clearance request
+  (1 -> 2), the security investigation (3 -> 4), the judicial review (7 -> 8), the
+  constitutional complaint (10 -> 11) and the criminal prosecution (12 -> 13). This
+  is the highest split rate in the sample, because the judgment consistently dates
+  both the application and the ruling on it.
+
+  TWO THINGS §3.1 RAISES HERE. First, id 3: the security investigation is opened by
+  the Authority of its own motion, not on anyone's application -- flagged REVIEW,
+  because "institution" may not be the right reading of an own-motion opening.
+  Second, id 12: the filing half is the prosecution service's indictment while the
+  decision half is the Regional Court's judgment, so one proceeding is split across
+  two different authorities. §8 matches events on authority, and the guide should
+  say which body the filing half takes. Ids were renumbered chronologically and do
+  NOT correspond to the pre-v1.1 numbering.

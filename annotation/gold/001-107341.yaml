@@ -1,13 +1,12 @@
 # =============================================================================
 # CASE OF SVERCHKOV AND SVERCHKOVA v. UKRAINE
-# 001-107341 | COMMITTEE | 2011 | UKR
+# 001-107341 | COMMITTEE | 2012
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
+# AI-GENERATED DRAFT -- read the source and amend.
+# Source: annotation/gold_text/001-107341.txt | Rules: annotation/annotation_guide.txt
 #
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-107341)
-# Do not open any pipeline output before this file is finished.
+# Revised under guide v1.1 §3.1: a narrated filing and its narrated decision are
+# TWO events. Both chain heads split here. Ids renumbered chronologically.
 # =============================================================================
 
 case_id: "001-107341"
@@ -15,44 +14,288 @@ case_name: "CASE OF SVERCHKOV AND SVERCHKOVA v. UKRAINE"
 court_level: "COMMITTEE"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
+  # ---- Chain A: Mrs F.'s claim against the applicants (¶5-9) ----
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
+    type: DomesticProceeding
+    body: "the Leninskyy District Court of Zaporizhzhya (“the Leninskyy Court”)"
+    authority_kind: Judicial
+    start_date: "2000-09-18"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "Mrs F."
+        side: Initiating
+        natural_person: true
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: null
+    quote: "On 18 September 2000 Mrs F. lodged a claim with the Leninskyy District Court of Zaporizhzhya (“the Leninskyy Court”) against the applicants, requesting it to determine how the parties should use their adjacent plot of land."
+    note: "Filing half of a §3.1 pair and head of chain A; the judgment is id 3. The
+      two applicants are never named or separated in the narrative, so one party
+      entry with natural_person false rather than a node standing for two people
+      (guide §5.3)."
+
+  # ---- Chain B: the applicants' claim against Mrs F. (¶10-13) ----
+  - id: 2
+    type: DomesticProceeding
+    body: "the Leninskyy Court"
+    authority_kind: Judicial
+    start_date: "2000-10-10"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicants"
+        side: Initiating
+        natural_person: false
+      - name: "Mrs F."
+        side: Responding
+        natural_person: true
+      - name: "Mr and Mrs E."
+        side: Responding
+        natural_person: false
+    follows: null
+    quote: "On 10 October 2000 the applicants lodged a claim with the Leninskyy Court against Mrs F., seeking the elimination of obstacles in using the impugned plot of land."
+    note: "Filing half of a §3.1 pair and head of chain B; the discontinuance is
+      id 12, nearly nine years later. Mr and Mrs E. joined as co-respondents on an
+      unspecified date and are recorded as one entry because the text never
+      separates them."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the Leninskyy Court"
+    authority_kind: Judicial
+    decision_date: "2002-01-11"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "Mrs F."
+        side: Initiating
+        natural_person: true
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 1
+    quote: "On 11 January 2002 the court delivered a judgment."
+    note: "Decision half of the pair opened at id 1. Direction Unknown -- the text
+      does not say which way any of the three first-instance judgments went until
+      ¶8."
+
+  - id: 4
+    type: DomesticProceeding
+    body: "the Zaporizhzhya Regional Court of Appeal (“the Court of Appeal”)"
+    authority_kind: Judicial
+    decision_date: "2002-04-08"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "Mrs F."
+        side: Initiating
+        natural_person: true
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 3
+    quote: "On 8 April 2002 the Zaporizhzhya Regional Court of Appeal (“the Court of Appeal”) upheld it."
+    note: "The text does not say who appealed at any instance in this chain; sides
+      are carried over from id 1. No §3.1 split anywhere in the appeal/cassation
+      cycles below: not one of those appeals is narrated as a dated act. REVIEW."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "2002-10-16"
+    level: Cassation
+    proceeding_type: Civil
+    outcome: Remitted
+    outcome_direction: Unknown
+    parties:
+      - name: "Mrs F."
+        side: Initiating
+        natural_person: true
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 4
+    quote: "On 16 October 2002 the Supreme Court quashed both decisions and remitted the case for fresh consideration."
     note: ""
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 6
+    type: DomesticProceeding
+    body: "the Leninskyy Court"
+    authority_kind: Judicial
+    decision_date: "2005-07-11"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "Mrs F."
+        side: Initiating
+        natural_person: true
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 5
+    quote: "On 11 July 2005 the Leninskyy Court delivered a judgment."
+    note: "Fresh consideration after the remittal in id 5, so a separate event before
+      the same court (guide §3). Level could be Reopening; recorded as FirstInstance.
+      Instituted by the remittal rather than by any filing, so no §3.1 pair."
+
+  - id: 7
+    type: DomesticProceeding
+    body: "the Court of Appeal"
+    authority_kind: Judicial
+    decision_date: "2005-12-08"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "Mrs F."
+        side: Initiating
+        natural_person: true
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 6
+    quote: "On 8 December 2005 the Court of Appeal amended it."
+    note: ""
+
+  - id: 8
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "2006-12-13"
+    level: Cassation
+    proceeding_type: Civil
+    outcome: Remitted
+    outcome_direction: Unknown
+    parties:
+      - name: "Mrs F."
+        side: Initiating
+        natural_person: true
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 7
+    quote: "On 13 December 2006 the Supreme Court quashed both decisions and remitted the case for fresh consideration."
+    note: ""
+
+  - id: 9
+    type: DomesticProceeding
+    body: "the Leninskyy Court"
+    authority_kind: Judicial
+    decision_date: "2007-10-19"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "Mrs F."
+        side: Initiating
+        natural_person: true
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 8
+    quote: "On 19 October 2007 the Leninskyy Court rejected the claim of Mrs F. as unsubstantiated."
+    note: "Second fresh consideration."
+
+  - id: 10
+    type: DomesticProceeding
+    body: "the Court of Appeal"
+    authority_kind: Judicial
+    decision_date: "2008-05-20"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "Mrs F."
+        side: Initiating
+        natural_person: true
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 9
+    quote: "On 20 May and 26 November 2008, respectively, the Court of Appeal and the Supreme Court upheld that judgment."
+    note: "id 10 and id 11 share this one sentence as their quote."
+
+  - id: 11
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "2008-11-26"
+    level: Cassation
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "Mrs F."
+        side: Initiating
+        natural_person: true
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 10
+    final_domestic_decision: true
+    quote: "On 20 May and 26 November 2008, respectively, the Court of Appeal and the Supreme Court upheld that judgment."
+    note: "Terminal event of chain A."
+
+  - id: 12
+    type: DomesticProceeding
+    body: "the Leninskyy Court"
+    authority_kind: Judicial
+    decision_date: "2009-06-25"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: SettledOrWithdrawn
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicants"
+        side: Initiating
+        natural_person: false
+      - name: "Mrs F."
+        side: Responding
+        natural_person: true
+      - name: "Mr and Mrs E."
+        side: Responding
+        natural_person: false
+    follows: 2
+    final_domestic_decision: true
+    quote: "On 25 June 2009, following a friendly settlement reached by the parties, the Leninskyy Court discontinued the proceedings."
+    note: "Decision half of the pair opened at id 2 and terminal event of chain B.
+      No procedural link to chain A even though this claim was repeatedly suspended
+      pending chain A's outcome. Terminal: the applicants did not appeal."
+
+document_note: >
+  TWO independent chains over the same plot of land, running in parallel for nine
+  years: Mrs F.'s claim against the applicants (ids 1, 3-11, three full first
+  instance / appeal / cassation cycles with two remittals) and the applicants'
+  counter-claim against her (ids 2 and 12, settled). Each has its own
+  `follows: null` head and its own terminal decision. The suspensions of chain B
+  pending chain A (¶11) are InactivityPeriod, outside this annotation; the roughly
+  thirty adjournments and the five forensic examinations are steps inside
+  proceedings (guide §3).
+
+  SPLIT UNDER §3.1: both chain heads are now two events -- Mrs F.'s claim (1 -> 3)
+  and the applicants' claim (2 -> 12). Nothing else splits: the text never dates a
+  single appeal or cassation petition, and the two fresh considerations are
+  instituted by remittals rather than by filings. This makes the two filing events
+  the heads of their chains and pushes the chain-B pair nine years apart. Ids were
+  renumbered chronologically and do NOT correspond to the pre-v1.1 numbering.

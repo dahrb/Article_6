@@ -2,12 +2,8 @@
 # CASE OF PAUL AND BORODIN v. RUSSIA
 # 001-187600 | COMMITTEE | 2018 | RUS
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
-#
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-187600)
-# Do not open any pipeline output before this file is finished.
+# AI-GENERATED DRAFT -- read the source and amend.
+# Source: annotation/gold_text/001-187600.txt | Rules: annotation/annotation_guide.txt
 # =============================================================================
 
 case_id: "001-187600"
@@ -15,44 +11,157 @@ case_name: "CASE OF PAUL AND BORODIN v. RUSSIA"
 court_level: "COMMITTEE"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
-    note: ""
+    type: DomesticProceeding
+    body: "the Sovetskiy District Court of Voronezh"
+    authority_kind: Judicial
+    decision_date: "2010-06-22"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "Mr Aleksey Georgiyevich Paul"
+        side: Initiating
+        natural_person: true
+      - name: "Mr Sergey Vladimirovich Borodin"
+        side: Initiating
+        natural_person: true
+      - name: "the municipal transport company"
+        side: Responding
+        natural_person: false
+    follows: null
+    quote: "On 22 June 2010 the Sovetskiy District Court of Voronezh granted the applicants claim against the municipal transport company and awarded them 40,020,000 Russian roubles."
+    note: "Instituted after the 2008-2010 unpaid consultations (¶6); no date given
+      for institution. Two applicants, so two party entries -- the ontology forbids
+      one node standing for several people."
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 2
+    type: EnforcementAction
+    body:
+    authority_kind: Unknown
+    decision_date:
+    level: Unknown
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: FavourableToApplicant
+    parties: []
+    follows: 1
+    borderline: true
+    borderline_reason: "the text hedges -- “It appears that the judgment was
+      executed” -- and names no authority, no date and no formal step; it may be
+      background rather than a recorded domestic event"
+    quote: "It appears that the judgment was executed at the expense of the municipal budget."
+    note: "Delete if hedged background does not meet the recording requirement."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the district court"
+    authority_kind: Judicial
+    start_date: "2013-01-09"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the prosecutor of the Voronezh Region"
+        side: Initiating
+        natural_person: false
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 1
+    quote: "On 9 January 2013 the prosecutor of the Voronezh Region applied to the district court for the extension of the time-limits for an ordinary appeal against the judgment of 22 June 2010."
+    note: "Filing half of a §3.1 pair; the refusal is id 4. The text says “the
+      district court”; from ¶7 this is the Sovetskiy District Court of Voronezh,
+      but it is not named again here so the body is recorded as written. The
+      applicants are not separated in ¶8-11, so one party entry with
+      natural_person false rather than a node standing for two people."
+
+  - id: 4
+    type: DomesticProceeding
+    body: "the district court"
+    authority_kind: Judicial
+    decision_date: "2013-06-13"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the prosecutor of the Voronezh Region"
+        side: Initiating
+        natural_person: false
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 3
+    quote: "On 13 June 2013 the district court refused to extend the time-limits."
+    note: "Decision half of the pair opened at id 3. The next sentence, “The
+      prosecutor appealed”, is a narrated filing but carries no date, so under
+      §3.1 it gets no event of its own; its decision is id 5."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the Voronezh Regional Court"
+    authority_kind: Judicial
+    decision_date: "2013-08-08"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the prosecutor of the Voronezh Region"
+        side: Initiating
+        natural_person: false
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 4
+    quote: "On 8 August 2013 the Voronezh Regional Court quashed the decision of the district court and extended the time limit for an ordinary appeal."
+    note: "Substituted its own decision rather than remitting, so MeritsDecided
+      rather than Remitted. The prosecutor's appeal against id 4 is undated, so no
+      §3.1 filing event precedes this."
+
+  - id: 6
+    type: DomesticProceeding
+    body: "the Voronezh Regional Court"
+    authority_kind: Judicial
+    decision_date: "2013-11-12"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the prosecutor of the Voronezh Region"
+        side: Initiating
+        natural_person: false
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 1
+    final_domestic_decision: true
+    quote: "On 12 November 2013 the Voronezh Regional Court granted the appeal lodged by the prosecutor and quashed the judgment of 22 June 2010 and ordered the reversal of execution."
+    note: "follows id 1 -- this is the out-of-time appeal against the judgment of
+      22 June 2010 -- although id 5 is what made it possible. Change to 5 if you
+      read the chain as procedural sequence rather than as what is under review.
+      The subsequent partial execution (“The judgment became final and was
+      partially executed”) is recorded here rather than as a separate event; add
+      one if you disagree, consistent with whatever you decide about id 2."
+
+document_note: >
+  One chain: a final judgment in the applicants' favour, reopened years later on
+  the prosecutor's out-of-time appeal and quashed. The two execution mentions
+  (¶7 and ¶11) are the annotation question in this document -- both are hedged or
+  bare, and whether they are EnforcementAction events or background is exactly the
+  boundary guide §4.4 asks to be flagged rather than settled.
+
+  SPLIT UNDER §3.1: the prosecutor's time-limit application (3 -> 4) is now two
+  events. Nothing else here splits: the 2010 claim is instituted on an unstated
+  date (¶6), and the prosecutor's two later appeals are narrated but undated, which
+  §3.1 excludes. Ids 4 and 5 shifted to 5 and 6; the numbering does NOT correspond
+  to the pre-v1.1 version.

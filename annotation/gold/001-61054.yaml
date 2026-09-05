@@ -1,13 +1,17 @@
 # =============================================================================
 # CASE OF SYLVESTER v. AUSTRIA
-# 001-61054 | CHAMBER | 2003 | AUT
+# 001-61054 | CHAMBER | 2003
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
+# AI-GENERATED DRAFT -- read the source and amend.
+# Source: annotation/gold_text/001-61054.txt | Rules: annotation/annotation_guide.txt
 #
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-61054)
-# Do not open any pipeline output before this file is finished.
+# Revised under guide v1.1 §3.1: a narrated filing and its narrated decision are
+# TWO events. Four pairs split here -- the return request, the custody claim, and
+# both enforcement applications. Ids renumbered chronologically throughout.
+#
+# Further revised: the mother's appeal of 15 May 1996 (¶25), previously left
+# unrecorded and only referenced in notes, is now its own event (id 10). Ids
+# renumbered again to accommodate it.
 # =============================================================================
 
 case_id: "001-61054"
@@ -15,44 +19,552 @@ case_name: "CASE OF SYLVESTER v. AUSTRIA"
 court_level: "CHAMBER"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
+  # ---- Chain A: the Hague Convention return order (1, 3, 4, 5) ----
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
+    type: DomesticProceeding
+    body: "the Austrian courts"
+    authority_kind: Judicial
+    start_date: "1995-10-31"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant’s mother"
+        side: Responding
+        natural_person: true
+    follows: null
+    quote: "On 31 October 1995 the first applicant, relying on the 1980 Hague Convention on the Civil Aspects of International Child Abduction (“the Hague Convention”), requested the Austrian courts to order the second applicant's return."
+    note: "Filing half of a §3.1 pair; the decision is id 3. `body` is VERBATIM as
+      this passage writes it (§5.2) -- the text says only “the Austrian courts”
+      here, and names the Graz District Civil Court only at the decision. That
+      makes the two halves carry different authority names for the same
+      proceeding; flagged because §8 matches on authority. REVIEW."
+
+  # ---- Chain C: custody (2, 20, 21) ----
+  - id: 2
+    type: DomesticProceeding
+    body: "the Graz District Civil Court ( Bezirksgericht für Zivilrechtssachen )"
+    authority_kind: Judicial
+    start_date: "1995-11-03"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the second applicant’s mother"
+        side: Initiating
+        natural_person: true
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    quote: "On 3 November 1995 the second applicant's mother filed an application with the Graz District Civil Court ( Bezirksgericht für Zivilrechtssachen ) for the award of sole custody over the second applicant."
+    note: "Filing half of a §3.1 pair; the decision is id 20, over two years later
+      -- the claim lay dormant under Article 16 of the Hague Convention while the
+      return and enforcement chains ran. On 15 May 1996 the mother 'again filed
+      an application for the award of sole custody' (¶25) -- now recorded at
+      id 10, bundled with her appeal against the enforcement order. The renewal
+      itself is not separately modelled as a fresh custody event, since it
+      continues THIS proceeding rather than opening a new one. RESOLVED: the
+      transfer of jurisdiction (id 13, ¶28) follows id 10, i.e. it belongs to the
+      enforcement chain's response to that filing, not to this custody chain."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the Graz District Civil Court"
+    authority_kind: Judicial
+    decision_date: "1995-12-20"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant’s mother"
+        side: Responding
+        natural_person: true
+    follows: 1
+    quote: "On 20 December 1995 the Graz District Civil Court, after having heard evidence from the first applicant and his wife and the oral statement of an expert in child psychology, Dr. K., ordered that the second applicant be returned to the first applicant at her former place of residence in Michigan."
+    note: "Decision half of the pair opened at id 1. The second applicant (the
+      child) is a party to the Strasbourg case but is the subject rather than a
+      participant in the domestic proceedings; not recorded as a party. REVIEW."
+
+  - id: 4
+    type: DomesticProceeding
+    body: "the Graz Regional Civil Court ( Landesgericht für Zivilrechtssachen )"
+    authority_kind: Judicial
+    decision_date: "1996-01-19"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the second applicant’s mother"
+        side: Initiating
+        natural_person: true
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+    follows: 3
+    quote: "On 19 January 1996 the Graz Regional Civil Court ( Landesgericht für Zivilrechtssachen ) dismissed an appeal by the second applicant's mother."
+    note: "The mother is Initiating here, having been Responding at ids 1 and 3.
+      The appeal itself is not separately narrated -- only its dismissal -- so
+      this stays ONE event under §3.1."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the Supreme Court ( Oberster Gerichtshof )"
+    authority_kind: Judicial
+    decision_date: "1996-02-27"
+    level: Cassation
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the second applicant’s mother"
+        side: Initiating
+        natural_person: true
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+    follows: 4
+    final_domestic_decision: true
+    quote: "On 27 February 1996 the Supreme Court ( Oberster Gerichtshof ) dismissed a further appeal by the second applicant's mother."
+    note: "Terminal event of the return-order chain; the order became final."
+
+  # ---- Chain B: enforcement of the return order (6, 8, 9, 10, 12-15, 17-19) ----
+  - id: 6
+    type: DomesticProceeding
+    body: "the Graz District Civil Court"
+    authority_kind: Judicial
+    start_date: "1996-02-27"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant’s mother"
+        side: Responding
+        natural_person: true
+    follows: 5
+    quote: "On 27 February 1996 the first applicant filed an application for enforcement of the return order of 20 December 1995."
+    note: "Filing half of a §3.1 pair; the decision is id 8. Same date as id 5 but
+      a separate act, narrated at ¶20 immediately after it. `body` is not named in
+      this sentence; taken from the deciding court at id 8. REVIEW."
+
+  # ---- United States proceedings (7, 11, 16) ----
+  - id: 7
+    type: DomesticProceeding
+    body: "the Oakland Circuit Court (Michigan)"
+    authority_kind: Judicial
+    decision_date: "1996-04-16"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant’s mother"
+        side: Responding
+        natural_person: true
+    follows: null
+    borderline: true
+    borderline_reason: "a UNITED STATES court -- narrated as part of this history but
+      not a proceeding of the respondent State, so arguably not 'domestic'"
+    quote: "By a decision of 16 April 1996, the court pronounced a default judgment of divorce."
+    note: "Divorce, sole custody to the first applicant, and an order that the child
+      reside with him on return. See document_note -- ids 7, 11, 16 stand or fall
+      together. The institution ('the first applicant had started divorce
+      proceedings') is reported without a date, so no §3.1 split: nothing to
+      put in start_date and no second act to quote."
+
+  - id: 8
+    type: DomesticProceeding
+    body: "the Graz District Civil Court"
+    authority_kind: Judicial
+    decision_date: "1996-05-08"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant’s mother"
+        side: Responding
+        natural_person: true
+    follows: 6
+    quote: "On 8 May 1996 the Graz District Civil Court ordered the enforcement of the return order under section 19 (1) of the Non-Contentious Proceedings Act ( Ausserstreitgesetz )."
+    note: "Decision half of the pair opened at id 6. The judicial order authorising
+      coercive measures; the physical attempt to execute it is id 9."
+
+  - id: 9
+    type: EnforcementAction
+    body: "a bailiff, assisted by a police officer, a locksmith and a representative of the Youth Welfare Office"
+    authority_kind: Administrative
+    decision_date: "1996-05-10"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Other
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant’s mother"
+        side: Responding
+        natural_person: true
+    follows: 8
+    quote: "In the early hours of 10 May 1996, an attempt to enforce the return order was made in accordance with the terms set out in the order of 8 May."
+    note: "The clearest EnforcementAction in the sample: physical execution of an
+      earlier decision. Unsuccessful -- the search did not find the child -- so
+      outcome Other. A single act, so no §3.1 split."
+
+  - id: 10
+    type: DomesticProceeding
+    body: "the Graz Regional Civil Court"
+    authority_kind: Judicial
+    start_date: "1996-05-15"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the second applicant’s mother"
+        side: Initiating
+        natural_person: true
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+    follows: 8
+    quote: "On 15 May 1996 the second applicant's mother appealed against the decision of 8 May 1996 and again filed an application for the award of sole custody of the second applicant."
+    note: "Previously left unrecorded -- flagged only in the notes on ids 2, 12 and
+      13 of the prior revision -- now given its own event. Bundles TWO acts in one
+      sentence: an appeal against the enforcement order of 8 May 1996 (id 8), and a
+      renewed custody application. Recorded here as the APPEAL, since that is what
+      id 14 decides and what makes `follows` -> id 8 meaningful. The renewed
+      custody application is NOT separately modelled -- it continues the
+      already-open custody proceeding at id 2 (decided at id 20), not a fresh
+      filing; see id 2's note. `body` is not named in this sentence; taken from
+      the deciding court at id 14, matching the §3.1 convention used elsewhere in
+      this document for unnamed filings. REVIEW the type: an appeal instituted by
+      one sentence bundling two prayers for relief is a judgement call."
+
+  # ---- United States proceedings continued ----
+  - id: 11
+    type: DomesticProceeding
+    body: "the United States District Court, Eastern District of Michigan"
+    authority_kind: Judicial
+    decision_date: "1996-05-29"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the second applicant’s mother"
+        side: Responding
+        natural_person: true
+    follows: null
+    borderline: true
+    borderline_reason: "a United States court; also an arrest warrant, which is the
+      investigative-step boundary"
+    quote: "On 29 May 1996 the United States District Court, Eastern District of Michigan, issued an arrest warrant against the second applicant's mother on suspicion of international parental kidnapping."
+    note: "Two separate reasons to question this one."
+
+  - id: 12
+    type: DomesticProceeding
+    body: "the Graz District Civil Court"
+    authority_kind: Judicial
+    start_date: "1996-06-18"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant’s mother"
+        side: Responding
+        natural_person: true
+    follows: 8
+    quote: "On 18 June 1996 the first applicant made a further application for enforcement of the return order."
+    note: "Filing half of a §3.1 pair; the decision is id 17, ten months later.
+      A transfer of jurisdiction, an appeal against it and a cassation (ids 13-15)
+      all ran in between. `body` is not named in this sentence; taken from the
+      deciding court at id 17. REVIEW."
+
+  - id: 13
+    type: DomesticProceeding
+    body: "the Graz District Civil Court"
+    authority_kind: Judicial
+    decision_date: "1996-06-25"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the second applicant’s mother"
+        side: Initiating
+        natural_person: true
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+    follows: 10
+    borderline: true
+    borderline_reason: "a transfer of jurisdiction to another district court -- a
+      procedural ruling rather than a determination of anything"
+    quote: "By a decision of 25 June 1996 the Graz District Civil Court, at the request of the second applicant's mother, transferred jurisdiction to the Leibnitz District Court, in the judicial district of which the second applicant had purportedly established her residence."
+    note: "RESOLVED: `follows` changed from 8 to 10 -- this is the disposition of
+      the request made at id 10 (the second applicant's mother's filing of 15 May
+      1996), not a fresh, unlinked application. Quashed on appeal within id 14."
+
+  - id: 14
+    type: DomesticProceeding
+    body: "the Graz Regional Civil Court"
+    authority_kind: Judicial
+    decision_date: "1996-08-29"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: Remitted
+    outcome_direction: Mixed
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant’s mother"
+        side: Initiating
+        natural_person: true
+    follows: [13, 10]
+    quote: "On 29 August 1996 the Graz Regional Civil Court granted an appeal by the first applicant against the transfer of jurisdiction and, on the mother's appeal, quashed the Graz District Civil Court's enforcement order of 8 May 1996 and referred the case back to it."
+    note: "ONE decision disposing of TWO appeals -- the first applicant's against
+      the transfer (id 13) and the mother's against the enforcement order, filed
+      at id 10. `follows` is a list since echr:followsProceeding is not
+      FunctionalProperty (annotation_schema.yaml worked example 7); no need to
+      pick one predecessor or split into two events."
+
+  - id: 15
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "1996-10-15"
+    level: Cassation
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant’s mother"
+        side: Responding
+        natural_person: true
+    follows: 14
+    quote: "On 15 October 1996 the Supreme Court dismissed an appeal by the first applicant and set aside the enforcement order of 8 May 1996."
+    note: "Case referred back to the Graz District Civil Court (¶35)."
+
+  - id: 16
+    type: DomesticProceeding
+    body: "the Oakland Circuit Court"
+    authority_kind: Judicial
+    decision_date: "1997-04-23"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant’s mother"
+        side: Responding
+        natural_person: true
+    follows: 7
+    borderline: true
+    borderline_reason: "a United States court"
+    quote: "On 23 April 1997 the Oakland Circuit Court issued a “safe harbour” order, valid until 21 October 1997, which provided, inter alia , that pending determination of custody in expedited proceedings, the first applicant would not exercise his right to sole custody of the child; the second applicant would live with her mother away from the first applicant, who would undertake to cover their living expenses; and the arrest warrant against the mother would be set aside as soon as she and the second applicant boarded a direct flight to Michigan."
     note: ""
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 17
+    type: DomesticProceeding
+    body: "the Graz District Civil Court"
+    authority_kind: Judicial
+    decision_date: "1997-04-29"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant’s mother"
+        side: Responding
+        natural_person: true
+    follows: 12
+    quote: "On 29 April 1997 the Graz District Civil Court dismissed an application by the first applicant for enforcement of the return order."
+    note: "Decision half of the pair opened at id 12, so `follows` points there per
+      §3.1. It could equally point at id 15, the cassation that set aside the
+      earlier order and referred the case back -- `follows` holds only one
+      predecessor and both edges are real. Dr. K.'s renewed expert opinion of
+      26 Mar 1997 is evidence within this proceeding, not an event. REVIEW."
+
+  - id: 18
+    type: DomesticProceeding
+    body: "the Graz Regional Civil Court"
+    authority_kind: Judicial
+    decision_date: "1997-05-28"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant’s mother"
+        side: Responding
+        natural_person: true
+    follows: 17
+    quote: "On 28 May 1997 the Graz Regional Civil Court dismissed an appeal by the first applicant."
+    note: ""
+
+  - id: 19
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "1997-09-09"
+    level: Cassation
+    proceeding_type: Civil
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant’s mother"
+        side: Responding
+        natural_person: true
+    follows: 18
+    final_domestic_decision: true
+    quote: "On 9 September 1997 the Supreme Court dismissed a further appeal by the first applicant on the ground that it did not raise any important legal issues."
+    note: "Dismissed for want of an important legal issue, so Inadmissible rather
+      than MeritsDecided. Terminal event of the enforcement chain."
+
+  - id: 20
+    type: DomesticProceeding
+    body: "the Graz District Civil Court"
+    authority_kind: Judicial
+    decision_date: "1997-12-29"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the second applicant’s mother"
+        side: Initiating
+        natural_person: true
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+    follows: 2
+    quote: "On 29 December 1997 the second applicant's mother was awarded sole custody of the second applicant by the Graz District Civil Court."
+    note: "Decision half of the pair opened at id 2, reached once Article 16 of the
+      Hague Convention no longer barred a custody ruling -- the enforcement chain
+      had by then concluded unfavourably to the first applicant. Unfavourable to
+      the FIRST applicant."
+
+  - id: 21
+    type: DomesticProceeding
+    body:
+    authority_kind: Unknown
+    decision_date: "1998-03-31"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant’s mother"
+        side: Responding
+        natural_person: true
+    follows: 20
+    final_domestic_decision: true
+    borderline: true
+    borderline_reason: "the text records only that “following appeal proceedings the
+      judgment became final on 31 March 1998” -- no court, no decision, no appellant"
+    quote: "Following appeal proceedings the judgment became final on 31 March 1998."
+    note: "Almost nothing is stated. Delete and move final_domestic_decision to id 20
+      if a bare mention of appeal proceedings is not enough to record an event."
+
+document_note: >
+  NOT RECORDED: the wrongful removal of 30 Oct 1995 (¶12), by which the mother took
+  the child to Austria without the father's consent. It is legally decisive -- the
+  Graz District Civil Court found it a wrongful removal within the meaning of
+  Article 3 of the Hague Convention, and the return order rests on that finding --
+  but no echr:DomesticEvent subclass fits a private act by a private person, so it
+  is left out rather than forced into a type. Worth reporting as an ontology
+  limitation: the operative fact of a child-abduction case cannot be expressed.
+
+  The most tangled document in the sample: THREE Austrian chains -- the Hague
+  Convention return order (1, 3-5), its enforcement (6, 8, 9, 10, 12-15, 17-19,
+  two full cycles through district, regional and Supreme Court), and custody
+  (2, 20, 21) -- plus three UNITED STATES decisions (7, 11, 16).
+
+  SPLIT UNDER §3.1: four filing/decision pairs are now two events each -- the
+  return request (1 -> 3), the first enforcement application (6 -> 8), the second
+  enforcement application (12 -> 17) and the custody claim (2 -> 20). Every other
+  record here narrates only one act. Ids were renumbered chronologically, so they
+  do NOT correspond to the pre-v1.1 numbering.
+
+  A FIFTH FILING WAS ADDED (id 10): the mother's appeal against the enforcement
+  order of 8 May 1996 (¶25), previously left unrecorded and only referenced in
+  notes as a gap. Adding it resolves two edges that were previously mis-pointed:
+  id 13 (the transfer of jurisdiction, made "at the request of the second
+  applicant's mother") now follows id 10 instead of jumping back to id 8, and
+  id 14 (the appeal decision disposing of both the first applicant's and the
+  mother's appeals) now follows id 10 instead of id 8 for the same reason. The
+  renewed custody application bundled into the same sentence is still not
+  separately modelled -- it continues the already-open id 2/id 20 proceeding.
+
+  THE BIG QUESTION HERE IS ids 7, 11, 16. The respondent State is Austria, so the
+  Michigan divorce, the federal arrest warrant and the "safe harbour" order are
+  proceedings of a third State. They are unquestionably narrated as part of this
+  history, which guide §4.3 puts in scope, but "domestic" naturally means the
+  respondent State's own courts. Deciding this changes the event count by 3 of 21,
+  and the same question will recur in any extradition or child-abduction case.
+  Whatever you decide, it should go into the guide rather than stay a per-document
+  call.
+
+  A SECOND QUESTION §3.1 RAISES: the filing half of a pair often does not name the
+  deciding body (ids 6, 10, 12) or names it differently from the decision half
+  (id 1, "the Austrian courts" vs "the Graz District Civil Court"). §5.2 says to
+  write the authority VERBATIM as the passage gives it, but §8 matches events on
+  authority. Ids 1, 6, 10 and 12 are flagged REVIEW for this. The guide should say
+  whether the filing half may borrow the body named at the decision.
+
+  Also note id 14: one decision disposing of two separate appeals, which `follows`
+  cannot represent -- resolved to follow id 10, the specific dated filing on the
+  mother's side, though the first applicant's own appeal against id 13 remains
+  undated and unrecorded; and id 17, where the §3.1 edge to its filing (id 12)
+  competes with the remittal edge to the cassation at id 15. The Central Authority
+  correspondence (¶31) is diplomatic exchange, not a proceeding.

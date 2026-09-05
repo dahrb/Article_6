@@ -99,7 +99,6 @@ proceedings:
     borderline:                      # true if you could not decide whether it belongs (§4.4)
     borderline_reason: ""
     quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
     note: ""
 
 # Anything about the judgment as a whole: an unusual structure, a section you

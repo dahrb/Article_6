@@ -1,6 +1,7 @@
 ================================================================================
 ANNOTATION GUIDE — DOMESTIC PROCEEDINGS IN ECtHR ARTICLE 6 JUDGMENTS
 Grounded in ontology/echr.ttl, version 3.5.0.
+Guide version 1.1 — §3 gains the intervening-events rule.
 ================================================================================
 
 Read this once before annotating, and keep §4 (which events to record) and §6
@@ -58,15 +59,65 @@ from that sentence and are not additional rules:
     explicitly (scopeNote on echr:DomesticProceeding): "Where a case is remitted
     and retried before the same court, the retrial is a separate proceeding
     linked by echr:followsProceeding."
-  - A request and the decision refusing it are ONE event: the request is
-    start_date, the refusal is decision_date and outcome. Three refused requests
-    are three events.
   - An administrative decision and the court challenge to it are TWO events —
     scopeNote on echr:AdministrativeAction — the challenge linked back with
     `follows`.
 
+--------------------------------------------------------------------------------
+3.1 A FILING AND ITS DECISION ARE TWO EVENTS
+--------------------------------------------------------------------------------
+
+Where the text separately narrates the institution of a proceeding and the
+decision closing it, record TWO events:
+
+    THE FILING     start_date, NO decision_date, outcome Unknown,
+                   outcome_direction Unknown, quote = the filing sentence.
+                   `follows` = whatever the filing responded to (null if it
+                   heads a chain).
+
+    THE DECISION   decision_date, NO start_date, the real outcome and
+                   outcome_direction, quote = the decision sentence.
+                   `follows` = the filing event.
+
+Both carry the same type, body, authority_kind, level and proceeding_type.
+Anything that followed the original proceeding — an appeal, an enforcement step
+— follows THE DECISION, not the filing. Where the chain is terminal,
+final_domestic_decision goes on THE DECISION.
+
+APPLY THIS WHENEVER THE TEXT NARRATES BOTH ACTS, however short the interval and
+whether or not anything else happened in between. Do not weigh how long the
+proceeding took or how much fell in the gap; the question is only whether the
+judgment gives you two sentences or one.
+
+  - "On 15 March 1999 the applicant instituted civil proceedings ... On 5 June
+    2003 the court dismissed the claim." — TWO events, even though nothing else
+    is narrated in the four years between.
+  - "On 5 June 2003 the court dismissed a claim brought in 1999." — ONE event.
+    The institution is reported, not narrated: there is no second act to quote.
+    Put 1999 in start_date and 2003 in decision_date.
+  - A request and the decision refusing it, both narrated, are TWO events. Three
+    refused requests, each narrated twice, are six.
+
+AN UNDATED FILING DOES NOT GET ITS OWN EVENT. "The prosecutor appealed", with no
+date, is narrated but undatable: a separate record for it would carry no
+start_date and no decision_date, and every event must be placed in time. Keep it
+inside the decision's record and say so in `note`. Split only where you can put
+a date in start_date.
+
+THE REASON IS THE QUOTE. `quote` must be the passage that evidences THIS event
+(§5). A folded record has two distinct textual acts and can only carry one of
+them, so one of its two dates is always left unsupported — and it is usually the
+decision, since annotators reach for the sentence that names the court. Splitting
+is what makes every event's quote actually support that event.
+
+The folding rules above are unaffected. Several hearings ending in one judgment
+are still ONE event: a hearing is a step inside a proceeding, not a separate act
+of instituting or deciding.
+
 WHEN THE TEXT IS AMBIGUOUS about whether something is one event or two, record
-one event and write why in `note`. Do not split on suspicion.
+one event and write why in `note`. Do not split on suspicion. §3.1 is not a
+matter of suspicion: either the text narrates the filing as its own act, with a
+sentence you can quote, or it does not.
 
 ================================================================================
 4. WHICH EVENTS TO RECORD
@@ -78,6 +129,18 @@ If you can type it, annotate it. If it is none of the four, it is not an event.
 That is the whole rule, and it is deliberately generous: echr:DomesticEvent is
 defined as "ANY milestone in the domestic procedural history narrated in the
 facts".
+
+RECORD ALL LEGALLY RELEVANT EVENTS. When a thing could plausibly be typed and it
+mattered legally -- it moved the case, created or removed a right, started or
+stopped a clock, authorised or ended a deprivation of liberty -- record it. An
+arrest, a search ordered by an investigator, a bill of indictment, a detention
+order, the lifting of an immunity, an order that was never executed: all of these
+are events. The default is to RECORD, and §4.4 is for saying you were unsure, not
+for leaving things out.
+
+The reason is asymmetry. An event you recorded and should not have is visible and
+can be removed; an event you never recorded is invisible and cannot be recovered
+by anything downstream.
 
 --------------------------------------------------------------------------------
 4.1 The four types
@@ -159,7 +222,8 @@ a registration made at someone's request, an agreement signed between private
 parties: whether these are milestones in the procedural history or merely things
 that happened is a real question, and the ontology does not settle it.
 
-Do not agonise, and do not invent a rule. RECORD THE EVENT AND MARK IT:
+Do not agonise, and do not invent a rule. RECORD THE EVENT -- always record it --
+AND MARK IT:
 
     borderline: true
     borderline_reason: "investigative step, no decision by any body"
@@ -198,7 +262,8 @@ participation node, D the case document.
 --------------------------------------------------------------------------------
 
   id
-      Your local number, 1..n, ordered by decision_date, earliest first.
+      Your local number, 1..n, ordered by decision_date, earliest first — or by
+      start_date for a filing event, which has no decision_date (§3.1).
       Not a triple — `follows` uses it, and so does the alignment pass.
       Implied: D echr:hasDomesticProceeding E .
 
@@ -209,11 +274,17 @@ participation node, D the case document.
 
   start_date
       E echr:hasProceedingStartDate "<date>" .
-      When the event was instituted. Omit if the text does not give it.
+      When the event was instituted. Omit if the text does not give it, and on
+      the decision half of a pair split under §3.1.
 
   decision_date
       E echr:hasDecisionDate "<date>" .
-      Date of the decision that closed the event. Omit if still running.
+      Date of the decision that closed the event. Omit if still running, and on
+      the filing half of a pair split under §3.1.
+
+      A record carrying BOTH dates is now the exception, not the norm. It means
+      the institution was reported rather than narrated — no quotable sentence of
+      its own — so there was only ever one act to record. See §3.1.
 
       Both dates are echr:PartialDate: a full date, a year and month, or a bare
       year — as precise as the text allows and no more. "in the spring of 2003"
@@ -330,6 +401,15 @@ participation node, D the case document.
       a document may hold several unconnected chains, each with its own null
       head. Record only a link the text supports.
 
+      echr:followsProceeding is NOT owl:FunctionalProperty: give a LIST, e.g.
+      `follows: [3, 6]`, where a single decision disposes of more than one
+      predecessor (worked example 7, annotation_schema.yaml) — for instance one
+      ruling that grants one party's appeal against a transfer of jurisdiction
+      AND, on another party's appeal, quashes a separate enforcement order.
+      Do not force such a decision onto a single id, and do not split it into
+      two events merely to give each predecessor its own link — the decision is
+      one event with two procedural antecedents; record it that way.
+
 --------------------------------------------------------------------------------
 5.5 Evidence and audit
 --------------------------------------------------------------------------------
@@ -339,11 +419,6 @@ participation node, D the case document.
       A short verbatim span from the judgment establishing this event. COPY AND
       PASTE IT. Do not retype, tidy punctuation, or stitch together text from
       two passages. One sentence is usually enough.
-
-  para
-      Not a triple. The paragraph number the event is drawn from, so any verdict
-      about it is auditable. Where a judgment has no numbered paragraphs, give a
-      character offset or a short locator.
 
   borderline
       Not a triple. true where you could not confidently decide whether this
@@ -456,9 +531,19 @@ the same decision. In practice:
   - Naming variants are the same authority: "the Regional Court", "the Sofia
     Regional Court" and "the Sofia City Regional Court" are one body where the
     text is plainly referring to the same one.
-  - Same authority, different dates  ->  different events, UNLESS one date is
-    the institution and the other the decision of a single proceeding.
+  - Same authority, different dates  ->  different events. Under §3.1 the
+    institution and the decision of one proceeding ARE two events, so this no
+    longer carries an exception.
   - A date given only as a year matches a full date in that year where the
     authority and the surrounding narrative agree.
+
+FILING EVENTS (§3.1) have no decision to match on, so match them on authority
+and start_date instead:
+
+  - Same authority, same start_date, neither carrying a decision_date  ->  same
+    filing event.
+  - A filing event NEVER matches a decision event, even for the same authority
+    and the same proceeding. They are the two halves of a split pair and the
+    alignment must keep them apart, or the split collapses at scoring time.
 
 Where you genuinely cannot tell, record one event and say so in `note`.

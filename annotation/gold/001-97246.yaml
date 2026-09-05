@@ -2,12 +2,11 @@
 # CASE OF ABDULLAYEV v. RUSSIA
 # 001-97246 | CHAMBER | 2010 | RUS
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
+# AI-GENERATED DRAFT -- read the source and amend.
+# Source: annotation/gold_text/001-97246.txt | Rules: annotation/annotation_guide.txt
 #
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-97246)
-# Do not open any pipeline output before this file is finished.
+# Revised under guide v1.1 §3.1: a narrated filing and its narrated decision are
+# TWO events. Two pairs split here. Ids renumbered chronologically.
 # =============================================================================
 
 case_id: "001-97246"
@@ -15,44 +14,140 @@ case_name: "CASE OF ABDULLAYEV v. RUSSIA"
 court_level: "CHAMBER"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
-    note: ""
+    type: DomesticProceeding
+    body: "the Leninskiy District Court of Makhachkala"
+    authority_kind: Judicial
+    decision_date: "2004-02-18"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "G."
+        side: Initiating
+        natural_person: true
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+      - name: "Y."
+        side: Responding
+        natural_person: true
+    follows: null
+    quote: "On 18 February 2004 the Leninskiy District Court of Makhachkala held in favour of G., transferred to her the property rights on the applicant’s part of the house and obliged her to reimburse the applicant its value."
+    note: "Y. is identified as a co-defendant at ¶7. No §3.1 split: G.'s action is
+      reported at ¶5 without a date ('G. brought a court action against the
+      applicant'), so there is no filing act to date or quote."
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 2
+    type: DomesticProceeding
+    body: "the Supreme Court of the Republic of Dagestan"
+    authority_kind: Judicial
+    start_date: "2004-03-03"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "Y."
+        side: Initiating
+        natural_person: true
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "G."
+        side: Responding
+        natural_person: true
+    follows: 1
+    quote: "On 3 March 2004 Y., a co ‑ defendant to the proceedings along with the applicant, appealed against the judgment. On 16 March 2004 the applicant joined the appeal."
+    note: "Filing half of a §3.1 pair; the decision is id 3. Y. appealed on 3 Mar
+      and the applicant joined on 16 Mar; both are Initiating here, having been
+      Responding at id 1 -- which is what participation-as-a-node exists to
+      express. start_date is the earlier of the two acts; the applicant joining is
+      a step within this filing, not a separate event."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the Supreme Court of the Republic of Dagestan"
+    authority_kind: Judicial
+    decision_date: "2004-04-02"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "Y."
+        side: Initiating
+        natural_person: true
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "G."
+        side: Responding
+        natural_person: true
+    follows: 2
+    quote: "On 2 April 2004 the Supreme Court of the Republic of Dagestan quashed the judgment of 18 February 2004 on appeal and dismissed G.’s action."
+    note: "Decision half of the pair opened at id 2."
+
+  - id: 4
+    type: DomesticProceeding
+    body: "the Supreme Court of the Republic of Dagestan"
+    authority_kind: Judicial
+    start_date: "2004-07-02"
+    level: SupervisoryReview
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "G."
+        side: Initiating
+        natural_person: true
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 3
+    quote: "On 2 July 2004 G. lodged an application for supervisory review of the appeal judgment of 2 April 2004 with the Supreme Court of the Republic of Dagestan."
+    note: "Filing half of a §3.1 pair; the decision is id 5. `body` is the Supreme
+      Court, as the application was lodged with it; the decision at id 5 is taken
+      by its Presidium, so the two halves name different bodies for one
+      proceeding. §8 matches on authority. REVIEW."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the Presidium of the Supreme Court of the Republic of Dagestan"
+    authority_kind: Judicial
+    decision_date: "2004-09-23"
+    level: SupervisoryReview
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "G."
+        side: Initiating
+        natural_person: true
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 4
+    final_domestic_decision: true
+    quote: "On 23 September 2004 the Presidium of the Supreme Court of the Republic of Dagestan quashed the appeal judgment of 2 April 2004 for wrong assessment of evidence and upheld the judgment of 18 February 2004."
+    note: "Decision half of the pair opened at id 4. The President's referral to the
+      Presidium of 16 Sep 2004 (¶10) is a step within the supervisory review rather
+      than a proceeding of its own; split it out if you read the referral as a
+      separate decision."
+
+document_note: >
+  A single linear chain over one property dispute: first instance against the
+  applicant, appeal in his favour, supervisory review restoring the first-instance
+  judgment. The applicant's complaint that he was not informed of the Presidium
+  hearing (¶12) is an allegation about the conduct of id 5, not a further event.
+
+  SPLIT UNDER §3.1: the appeal (2 -> 3) and the supervisory review (4 -> 5) are now
+  two events each. The first-instance proceeding is NOT split, because ¶5 reports
+  G.'s action without a date. Ids were renumbered chronologically and do NOT
+  correspond to the pre-v1.1 numbering.

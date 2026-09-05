@@ -1,13 +1,9 @@
 # =============================================================================
 # CASE OF MARKOVIC AND OTHERS v. ITALY
-# 001-78623 | GRANDCHAMBER | 2006 | ITA
+# 001-78623 | GRANDCHAMBER | 2006
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
-#
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-78623)
-# Do not open any pipeline output before this file is finished.
+# AI-GENERATED DRAFT -- read the source and amend.
+# Source: annotation/gold_text/001-78623.txt | Rules: annotation/annotation_guide.txt
 # =============================================================================
 
 case_id: "001-78623"
@@ -15,44 +11,112 @@ case_name: "CASE OF MARKOVIC AND OTHERS v. ITALY"
 court_level: "GRANDCHAMBER"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
-    note: ""
+    type: DomesticProceeding
+    body: "the Rome District Court"
+    authority_kind: Judicial
+    start_date: "2000-05-31"
+    decision_date:
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "Dusan Markovic"
+        side: Initiating
+        natural_person: true
+      - name: "Zoran Markovic"
+        side: Initiating
+        natural_person: true
+      - name: "Dusika Jontic"
+        side: Initiating
+        natural_person: true
+      - name: "Vladimir Jontic"
+        side: Initiating
+        natural_person: true
+      - name: "Draga Jankovic"
+        side: Initiating
+        natural_person: true
+      - name: "Mirjana Stevanovic"
+        side: Initiating
+        natural_person: true
+      - name: "Slavica Stevanovic"
+        side: Initiating
+        natural_person: true
+      - name: "Milena Dragojevic"
+        side: Initiating
+        natural_person: true
+      - name: "Obrad Dragojevic"
+        side: Initiating
+        natural_person: true
+      - name: "Dejan Dragojevic"
+        side: Initiating
+        natural_person: true
+      - name: "the Italian Prime Minister’s Office"
+        side: Responding
+        natural_person: false
+      - name: "the Ministry of Defence"
+        side: Responding
+        natural_person: false
+      - name: "the Command of NATO’s Allied Forces in Southern Europe (AFSOUTH)"
+        side: Responding
+        natural_person: false
+    follows: null
+    quote: "On 31 May 2000 the first four applicants brought an action in damages in the Rome District Court under Article 2043 of the Italian Civil Code. The other six applicants applied to be joined to the proceedings on 3 November 2000."
+    note: "No outcome: the supplied text stops before this proceeding is decided --
+      see document_note. Ten separate party entries because the judgment names each
+      applicant individually and the ontology forbids one node standing for several
+      people; trim if that is too fine-grained for your purposes. The first four
+      brought the action on 31 May 2000 and the other six joined on 3 Nov 2000,
+      which the schema cannot express per-participation. The applicants
+      discontinued the proceedings against AFSOUTH (¶15) -- recorded here rather
+      than as a separate withdrawal event."
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 2
+    type: DomesticProceeding
+    body: "the Court of Cassation"
+    authority_kind: Judicial
+    start_date:
+    decision_date:
+    level: Cassation
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Italian Prime Minister’s Office"
+        side: Initiating
+        natural_person: false
+      - name: "the Ministry of Defence"
+        side: Initiating
+        natural_person: false
+    follows: 1
+    quote: "The Prime Minister’s Office and the Ministry of Defence subsequently sought a preliminary ruling from the Court of Cassation on the question of jurisdiction ( regolamento preventivo di giurisdizione ) under Article 41 of the Italian Code of Civil Procedure."
+    note: "An interlocutory jurisdiction reference, not an appeal -- the defendants
+      are Initiating here having been Responding in id 1. No date for the
+      application and NO RULING IS RECORDED; the text ends inside Assistant
+      Principal State Counsel's submissions of 16 Nov 2001. Those submissions are an
+      advocate's argument, not a decision, so they are not an event."
+
+document_note: >
+  THE SUPPLIED TEXT IS TRUNCATED. It ends mid-quotation inside ¶17, before the
+  Court of Cassation rules and before the Rome District Court disposes of the
+  claim, so no event has an outcome and NO EVENT IS MARKED final_domestic_decision
+  -- nothing in this text concludes.
+
+  Check this against the source before accepting: if the truncation is an artefact
+  of corpus preparation rather than of the judgment, the annotation is measuring a
+  broken document. It is still a FAIR comparison, because every arm was given this
+  same truncated text.
+
+  The extensive NATO background (¶11-12, quoting Banković) narrates a military
+  operation, not domestic proceedings, and yields no events.
+
+  NO §3.1 SPLIT (guide v1.1). Neither record folds a filing into a decision: the
+  supplied text stops before either proceeding is decided, so both already carry a
+  start_date and no decision_date -- the same shape a §3.1 filing event takes, but
+  for the opposite reason.

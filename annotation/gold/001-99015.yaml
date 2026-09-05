@@ -2,12 +2,8 @@
 # CASE OF GÄFGEN v. GERMANY
 # 001-99015 | GRANDCHAMBER | 2010 | DEU
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
-#
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-99015)
-# Do not open any pipeline output before this file is finished.
+# AI-GENERATED DRAFT -- read the source and amend.
+# Source: annotation/gold_text/001-99015.txt | Rules: annotation/annotation_guide.txt
 # =============================================================================
 
 case_id: "001-99015"
@@ -15,44 +11,385 @@ case_name: "CASE OF GÄFGEN v. GERMANY"
 court_level: "GRANDCHAMBER"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
+  # ---- Chain A: the criminal case against the applicant ----
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
-    note: ""
+    type: ProsecutorialReview
+    body: "the police"
+    authority_kind: Prosecutorial
+    decision_date: "2002-09-30"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    quote: "That afternoon, he was arrested at Frankfurt am Main airport"
+    note: "Arrest following surveillance of the ransom pick-up."
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 2
+    type: ProsecutorialReview
+    body: "the deputy chief of the Frankfurt police, D."
+    authority_kind: Prosecutorial
+    decision_date: "2002-10-01"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 1
+    quote: "In a note for the police file dated 1 October 2002, the deputy chief of the Frankfurt police, D., stated that he believed that that morning J.’s life had been in great danger, if he was still alive at all, given his lack of food and the temperature outside."
+    note: "D.'s ORDER that the applicant be questioned under threat of pain -- the act
+      at the centre of the whole case, later held to be coercion (id 9) and to have
+      tainted the confession (id 5). Recorded as an investigative decision, not as
+      the interrogation itself. The medical certificates of 4 and 7 Oct 2002 are
+      evidence, not events."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the Frankfurt am Main Regional Court"
+    authority_kind: Judicial
+    decision_date: "2003-04-09"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the public prosecutor"
+        side: Responding
+        natural_person: false
+    follows: 2
+    quote: "On 9 April 2003, in response to the first preliminary application, the Frankfurt am Main Regional Court dismissed the applicant’s application for the discontinuation of the criminal proceedings."
+    note: "First of TWO rulings by the same court on the same day on two separate
+      preliminary applications (ids 3 and 4). Both are recorded because each disposes
+      of a distinct application and each is legally consequential -- this one refused
+      to stop the prosecution, and its refusal is what the applicant appealed at
+      id 6."
+
+  - id: 4
+    type: DomesticProceeding
+    body: "the Frankfurt am Main Regional Court"
+    authority_kind: Judicial
+    decision_date: "2003-04-09"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the public prosecutor"
+        side: Responding
+        natural_person: false
+    follows: 2
+    quote: "In response to the applicant’s second preliminary application, the Frankfurt am Main Regional Court found that, in accordance with Article 136a § 3 of the Code of Criminal Procedure, all confessions and statements hitherto made by the applicant before the police, a public prosecutor and a"
+    note: "The exclusion ruling: all prior statements held inadmissible because
+      detective officer E. had used prohibited methods under Article 136a § 1. The
+      only decision in the applicant's favour in this chain. The quote is truncated
+      mid-sentence in the source paragraph as supplied."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the Frankfurt am Main Regional Court"
+    authority_kind: Judicial
+    decision_date: "2003-07-28"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the public prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 4
+    quote: "On 28 July 2003 the Frankfurt am Main Regional Court convicted the applicant, inter alia , of murder and kidnapping with extortion causing the death of the victim."
+    note: "Life imprisonment, with a declaration of particular gravity of guilt
+      bearing on later release on probation. The trial itself, following the two
+      preliminary rulings."
+
+  - id: 6
+    type: DomesticProceeding
+    body: "the Federal Court of Justice"
+    authority_kind: Judicial
+    start_date: "2003-07-29"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Federal Public Prosecutor"
+        side: Responding
+        natural_person: false
+    follows: 5
+    quote: "On the day following his conviction, the applicant lodged an appeal on points of law with the Federal Court of Justice."
+    note: "Filing half of a §3.1 pair; the dismissal is id 7. start_date is DERIVED,
+      not stated: the text says only “the day following his conviction”, and the
+      conviction (id 5) is 28 Jul 2003. The Federal Public Prosecutor's observations
+      of 9 Mar 2004 fall in the gap but are argument, not a decision."
+
+  - id: 7
+    type: DomesticProceeding
+    body: "the Federal Court of Justice"
+    authority_kind: Judicial
+    decision_date: "2004-05-21"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Federal Public Prosecutor"
+        side: Responding
+        natural_person: false
+    follows: 6
+    quote: "On 21 May 2004 the Federal Court of Justice, without giving further reasons, dismissed the applicant’s appeal on points of law as ill-founded."
+    note: "Decision half of the pair opened at id 6. Dismissed without reasons."
+
+  - id: 8
+    type: DomesticProceeding
+    body: "the Federal Constitutional Court"
+    authority_kind: Judicial
+    start_date: "2004-06-23"
+    level: Cassation
+    proceeding_type: Constitutional
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 7
+    quote: "On 23 June 2004 the applicant lodged a complaint with the Federal Constitutional Court."
+    note: "Filing half of a §3.1 pair; the decision is id 9."
+
+  - id: 9
+    type: DomesticProceeding
+    body: "the Federal Constitutional Court"
+    authority_kind: Judicial
+    decision_date: "2004-12-14"
+    level: Cassation
+    proceeding_type: Constitutional
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 8
+    final_domestic_decision: true
+    quote: "On 14 December 2004 the Federal Constitutional Court, sitting as a panel of three judges, held that the applicant’s constitutional complaint was inadmissible."
+    note: "Decision half of the pair opened at id 8. Served on the applicant's lawyer
+      22 Dec 2004. Terminal event of the criminal chain. Level recorded as Cassation
+      -- the vocabulary has no constitutional value; compare 001-177299 id 11."
+
+  # ---- Chain B: the prosecution of the police officers ----
+  - id: 10
+    type: ProsecutorialReview
+    body: "the Frankfurt am Main public prosecutor’s office"
+    authority_kind: Prosecutorial
+    decision_date: "2003-01"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the deputy chief of the Frankfurt police, D."
+        side: Responding
+        natural_person: true
+      - name: "detective officer E."
+        side: Responding
+        natural_person: true
+    follows: 2
+    quote: "In January 2003 the Frankfurt am Main public prosecutor’s office opened criminal investigation proceedings against the deputy chief of the Frankfurt police, D., and detective officer E. on the basis of the applicant’s allegations that he had been threatened on 1 October 2002."
+    note: "Head of a second chain. Month only, no day. The applicant is NOT a party --
+      he is the complainant whose allegations prompted it, but the proceedings are
+      against the officers. REVIEW whether he should appear as ThirdParty."
+
+  - id: 11
+    type: DomesticProceeding
+    body: "the Frankfurt am Main Regional Court"
+    authority_kind: Judicial
+    decision_date: "2004-12-20"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the public prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the deputy chief of the Frankfurt police, D."
+        side: Responding
+        natural_person: true
+      - name: "detective officer E."
+        side: Responding
+        natural_person: true
+    follows: 10
+    final_domestic_decision: true
+    quote: "On 20 December 2004 the Frankfurt am Main Regional Court delivered judgments against the deputy chief of the Frankfurt police, D., and detective officer E."
+    note: "Both convicted -- E. of coercion by an official -- but sentenced only to
+      cautions and suspended fines. Direction Favourable to the applicant in that his
+      allegations were upheld, though the sentences are the substance of his
+      complaint. Terminal for this chain: no appeal is narrated."
+
+  # ---- Chain C: official liability / legal aid ----
+  - id: 12
+    type: DomesticProceeding
+    body: "the Frankfurt am Main Regional Court"
+    authority_kind: Judicial
+    start_date: "2005-12-28"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Land of Hesse"
+        side: Responding
+        natural_person: false
+    follows: null
+    quote: "On 28 December 2005 the applicant applied to the Frankfurt am Main Regional Court for legal aid for bringing official liability proceedings against the Land of Hesse for the payment of compensation."
+    note: "Filing half of a §3.1 pair and head of a third chain: legal aid for
+      official liability proceedings against the Land of Hesse. The dismissal is
+      id 13."
+
+  - id: 13
+    type: DomesticProceeding
+    body: "the Frankfurt am Main Regional Court"
+    authority_kind: Judicial
+    decision_date: "2006-08-28"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Land of Hesse"
+        side: Responding
+        natural_person: false
+    follows: 12
+    quote: "On 28 August 2006 the Frankfurt am Main Regional Court dismissed the applicant’s application for legal aid and the applicant appealed."
+    note: "Decision half of the pair opened at id 12. The Frankfurt police
+      headquarters' submissions of 27 Mar 2006 fall in the gap but are argument, not
+      a decision. The applicant's appeal in the same sentence is undated, so it gets
+      no filing event of its own (§3.1)."
+
+  - id: 14
+    type: DomesticProceeding
+    body: "the Frankfurt am Main Court of Appeal"
+    authority_kind: Judicial
+    decision_date: "2007-02-28"
+    level: Appeal
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Land of Hesse"
+        side: Responding
+        natural_person: false
+    follows: 13
+    quote: "On 28 February 2007 the Frankfurt am Main Court of Appeal dismissed the applicant’s appeal."
+    note: "Confirmed that D. and E. had infringed human dignity while still refusing
+      legal aid."
+
+  - id: 15
+    type: DomesticProceeding
+    body: "the Federal Constitutional Court"
+    authority_kind: Judicial
+    decision_date: "2008-01-19"
+    level: Cassation
+    proceeding_type: Constitutional
+    outcome: Remitted
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Land of Hesse"
+        side: Responding
+        natural_person: false
+    follows: 14
+    quote: "On 19 January 2008 the Federal Constitutional Court, allowing a constitutional complaint by the applicant, quashed the Court of Appeal’s decision and remitted the case to that court."
+    note: "The applicant's only constitutional success."
+
+  - id: 16
+    type: DomesticProceeding
+    body: "the Frankfurt am Main Regional Court"
+    authority_kind: Judicial
+    decision_date:
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Land of Hesse"
+        side: Responding
+        natural_person: false
+    follows: 15
+    quote: "The remitted proceedings are still pending before the Frankfurt am Main Regional Court."
+    note: "PENDING, so no decision_date and no final_domestic_decision on this chain.
+      Note the text says remitted to the Court of Appeal (id 12) but pending before
+      the Regional Court -- an inconsistency in the source, not in the annotation."
+
+document_note: >
+  THREE chains. (A) The criminal case against the applicant, ids 1-9, ending in the
+  Federal Constitutional Court. (B) The prosecution of the two police officers,
+  ids 10-11, arising from the same events and ending in convictions with cautions
+  and suspended fines. (C) Official liability and legal aid, ids 12-16, still
+  pending. Chains A and B both descend from id 2 -- D.'s order to question the
+  applicant under threat -- which is the pivot of the whole case.
+
+  Records are grouped BY CHAIN rather than in strict date order, so chain B opens
+  at Jan 2003, earlier than the end of chain A. That predates this revision; guide
+  §5.1 asks for chronological order, and re-sorting would interleave three chains
+  and destroy the grouping the comments rely on. REVIEW.
+
+  Two chains carry final_domestic_decision (ids 9, 11); chain C does not, because
+  it is pending.
+
+  SPLIT UNDER §3.1: three pairs are now two events each -- the appeal on points of
+  law (6 -> 7), the constitutional complaint (8 -> 9) and the legal-aid application
+  (12 -> 13). Note id 6, where start_date is DERIVED rather than stated: the text
+  says only "the day following his conviction". Ids were renumbered and do NOT
+  correspond to the pre-v1.1 numbering.
+
+  ids 3 and 4 are the judgement call here: two rulings by one court on one day on
+  two preliminary applications, recorded as separate events because each disposes of
+  a distinct application and each matters legally. Fold them into id 5 if
+  preliminary rulings are steps inside a trial.
+
+  ¶63 onwards is comparative and international material -- the Inter-American Court,
+  US "fruit of the poisonous tree" doctrine, the South African Supreme Court of
+  Appeal in Mthembu -- all cited as authority and therefore excluded by guide §4.2.

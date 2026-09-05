@@ -1,13 +1,9 @@
 # =============================================================================
 # CASE OF MEGRELISHVILI v. GEORGIA
-# 001-202419 | COMMITTEE | 2020 | GEO
+# 001-202419 | COMMITTEE | 2020
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
-#
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-202419)
-# Do not open any pipeline output before this file is finished.
+# AI-GENERATED DRAFT -- read the source and amend.
+# Source: annotation/gold_text/001-202419.txt | Rules: annotation/annotation_guide.txt
 # =============================================================================
 
 case_id: "001-202419"
@@ -15,44 +11,246 @@ case_name: "CASE OF MEGRELISHVILI v. GEORGIA"
 court_level: "COMMITTEE"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
+    type: ProsecutorialReview
+    body: "the Special Operations Department of the Ministry of the Interior (“the SOD”)"
+    authority_kind: Prosecutorial
+    decision_date: "2007-07-03"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    quote: "Criminal proceedings were immediately initiated against the applicant and unidentified persons under Article 260 § 1 of the Criminal Code for the unlawful purchase, storage and sale of drugs."
+    note: "The opening of the investigation. Prompted by the deputy head's report of
+      the same date on operational information."
+
+  - id: 2
+    type: ProsecutorialReview
+    body: "the investigator in charge, R.M."
+    authority_kind: Prosecutorial
+    decision_date: "2007-07-03"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 1
+    borderline: true
+    borderline_reason: "the four searches of 3 July 2007 -- body, car, apartment,
+      garage. Evidence-gathering carried out on an investigator's decision; whether
+      that is a DomesticEvent or investigative activity is the open boundary"
+    quote: "According to the relevant police report, the search was conducted in urgent circumstances on the basis of a decision taken by the investigator in charge, R.M., with the participation of the latter and two officers, G.J. and G.T., between 10.40 and 10.50 a.m."
+    note: "ALL FOUR SEARCHES ARE RECORDED AS ONE EVENT -- body 10.40-10.50, car
+      11.05, apartment 11.15-13.30, garage 14.25-14.55, one decision, one day. Split
+      into four if each search is its own event; that choice alone changes this
+      document's event count by three. The arrest at 11.00 is id 3."
+
+  - id: 3
+    type: ProsecutorialReview
+    body: "the Special Operations Department of the Ministry of the Interior (“the SOD”)"
+    authority_kind: Prosecutorial
+    decision_date: "2007-07-03"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 1
+    borderline: true
+    borderline_reason: "an arrest -- same boundary question as the searches; treated
+      consistently with 001-59859 id 1"
+    quote: "At 11.00 a.m. the applicant was formally arrested on suspicion of drug offences."
     note: ""
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 4
+    type: ProsecutorialReview
+    body: "the supervising prosecutor"
+    authority_kind: Prosecutorial
+    decision_date: "2007-07-04"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 3
+    quote: "According to the investigation file, on 4 July 2007 the applicant was charged with aggravated drug offences under Article 260 § 3 (a) of the Criminal Code."
+    note: "The bringing of charges. Not flagged: charging is a formal prosecutorial
+      decision rather than evidence-gathering."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the Tbilisi District Court"
+    authority_kind: Judicial
+    start_date: "2007-07-04"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the supervising prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 2
+    quote: "On the same date a supervising prosecutor applied to the Tbilisi District Court to have the four searches of 3 July 2007, which he claimed had been urgent, validated."
+    note: "Filing half of a §3.1 pair; the decision is id 6, taken the SAME DAY.
+      §3.1 splits on whether both acts are narrated, not on how long the interval is,
+      and here each has its own sentence and its own actor. “On the same date”
+      dates this to 4 Jul 2007."
+
+  - id: 6
+    type: DomesticProceeding
+    body: "the Tbilisi District Court"
+    authority_kind: Judicial
+    decision_date: "2007-07-04"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the supervising prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 5
+    quote: "On the same date the court examined the four requests in writing, without allowing the applicant to submit observations, and declared that the searches had been lawful."
+    note: "Decision half of the pair opened at id 5. A judicial decision, so
+      DomesticProceeding rather than ProsecutorialReview. The applicant did not use
+      the 72-hour appeal window, so no further event follows."
+
+  - id: 7
+    type: ProsecutorialReview
+    body: "the investigator"
+    authority_kind: Prosecutorial
+    start_date: "2007-08-06"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 6
+    quote: "On 6 August 2007 the applicant’s defence counsel wrote to R.M., the investigator in charge of the case. ... He also claimed that the searches had been video recorded and requested access to the relevant recordings."
+    note: "Filing half of a §3.1 pair; the refusal is id 8. The applicant is
+      Initiating here, having been Responding throughout the investigation. The
+      quote is elided across one sentence of the same paragraph; the omitted part
+      sets out the other complaints in the same letter. The questioning of the wife
+      and mother-in-law on 4 Aug 2007 is evidence-gathering and is not recorded."
+
+  - id: 8
+    type: ProsecutorialReview
+    body: "the investigator"
+    authority_kind: Prosecutorial
+    decision_date: "2007-08-09"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 7
+    quote: "By a decision of 9 August 2007 the investigator dismissed the defence’s request, stating that no video recording of the relevant searches had been made."
+    note: "Decision half of the pair opened at id 7."
+
+  - id: 9
+    type: DomesticProceeding
+    body: "the Tbilisi City Court"
+    authority_kind: Judicial
+    decision_date: "2008-03-31"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the supervising prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 4
+    quote: "On 31 March 2008 the Tbilisi City Court convicted the applicant of unlawful possession of a large quantity of drugs, an offence under Article 260 § 3 of the Criminal Code."
+    note: "Twelve years' imprisonment; charges of sale dropped for lack of evidence,
+      so direction is arguably Mixed rather than Unfavourable. The applicant's
+      repeated applications to exclude evidence (¶17) are steps inside this trial."
+
+  - id: 10
+    type: DomesticProceeding
+    body: "the Tbilisi Court of Appeal"
+    authority_kind: Judicial
+    decision_date: "2008-07-16"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the supervising prosecutor"
+        side: Responding
+        natural_person: false
+    follows: 9
+    quote: "On 16 July 2008 the Tbilisi Court of Appeal upheld the applicant’s conviction."
+    note: "The daughter's evidence (¶19) is taken within these proceedings."
+
+  - id: 11
+    type: DomesticProceeding
+    body: "the Supreme Court of Georgia"
+    authority_kind: Judicial
+    decision_date: "2008-11-19"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the supervising prosecutor"
+        side: Responding
+        natural_person: false
+    follows: 10
+    final_domestic_decision: true
+    quote: "On 19 November 2008 the Supreme Court of Georgia rejected the applicant’s appeal on points of law as inadmissible."
+    note: "Terminal."
+
+document_note: >
+  A criminal investigation and trial arising from four searches conducted on
+  3 July 2007. The investigative events (ids 1-8) are dense and near-simultaneous;
+  the trial chain (ids 9-11) is straightforward.
+
+  SPLIT UNDER §3.1: two pairs are now two events each -- the prosecutor's
+  validation request and the court's ruling on it (5 -> 6), and defence counsel's
+  request for the video recordings and the investigator's refusal (7 -> 8). The
+  first pair is worth noting: filing and decision fall on the SAME DATE, 4 July
+  2007. §3.1 splits on whether the text narrates both acts, not on the length of
+  the interval, and here each act has its own sentence and its own actor. Ids 7-9
+  shifted to 9-11; the numbering does NOT correspond to the pre-v1.1 version.

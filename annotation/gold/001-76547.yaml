@@ -1,13 +1,12 @@
 # =============================================================================
 # CASE OF IMSIROVIC v. SLOVENIA
-# 001-76547 | CHAMBER | 2006 | SVN
+# 001-76547 | CHAMBER | 2006
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
+# AI-GENERATED DRAFT -- read the source and amend.
+# Source: annotation/gold_text/001-76547.txt | Rules: annotation/annotation_guide.txt
 #
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-76547)
-# Do not open any pipeline output before this file is finished.
+# Revised under guide v1.1 §3.1: a narrated filing and its narrated decision are
+# TWO events. Two pairs split here. Ids renumbered chronologically.
 # =============================================================================
 
 case_id: "001-76547"
@@ -15,44 +14,129 @@ case_name: "CASE OF IMSIROVIC v. SLOVENIA"
 court_level: "CHAMBER"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
-    note: ""
+    type: DomesticProceeding
+    body: "the Celje District Court ( Okrožno sodišče v Celju )"
+    authority_kind: Judicial
+    start_date: "1999-03-15"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "S-G"
+        side: Responding
+        natural_person: false
+    follows: null
+    quote: "On 15 March 1999 the applicant instituted civil proceedings against his employer, S-G, in the Celje District Court ( Okrožno sodišče v Celju ) seeking damages in the amount of 12,002,774 Slovenian tolars (approximately 50,000 euros) for the injuries sustained."
+    note: "Filing half of a §3.1 pair; the decision is id 2, four years later. Six
+      written submissions, four requests for a hearing date, three hearings and the
+      appointment of a safety expert all fall in that gap but are steps inside the
+      proceeding, not events (guide §3) -- they are why the length complaint exists."
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 2
+    type: DomesticProceeding
+    body: "the Celje District Court ( Okrožno sodišče v Celju )"
+    authority_kind: Judicial
+    decision_date: "2003-06-05"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: Mixed
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "S-G"
+        side: Responding
+        natural_person: false
+    follows: 1
+    quote: "At the last hearing, the court decided to deliver a written judgment. The judgment, upholding the applicant’s claim in part, was served on the applicant on 5 June 2003."
+    note: "Decision half of the pair opened at id 1. decision_date is the date the
+      judgment was SERVED; the judgment date itself is never given, only that the
+      court decided to deliver a written judgment at the last hearing on
+      18 Mar 2003. Direction is Mixed -- the claim was upheld in part."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the Celje Higher Court ( Višje sodišče v Celju )"
+    authority_kind: Judicial
+    start_date: "2003-06-06"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "S-G"
+        side: Initiating
+        natural_person: false
+    follows: 2
+    quote: "On 6 June 2003 the applicant appealed to the Celje Higher Court ( Višje sodišče v Celju ). S-G cross-appealed."
+    note: "Filing half of a §3.1 pair; the decision is id 5. Both sides are
+      Initiating: the applicant appealed and S-G cross-appealed. The cross-appeal
+      is undated and not recorded separately."
+
+  - id: 4
+    type: DomesticProceeding
+    body: "the Celje District Court ( Okrožno sodišče v Celju )"
+    authority_kind: Judicial
+    decision_date: "2003-07-11"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties: []
+    follows: 2
+    borderline: true
+    borderline_reason: "a decision correcting the judgment in id 2 -- arguably a
+      separate decision by the court, arguably a step inside the same proceeding"
+    quote: "On 11 July 2003 the decision correcting the judgement was served on the applicant."
+    note: "Only the service date is given, and the deciding body is not named again.
+      Delete and fold into id 2 if corrections are steps rather than events. No
+      §3.1 split: the text never narrates anyone applying for the correction."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the Celje Higher Court ( Višje sodišče v Celju )"
+    authority_kind: Judicial
+    decision_date: "2004-09-23"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: Mixed
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "S-G"
+        side: Initiating
+        natural_person: false
+    follows: 3
+    final_domestic_decision: true
+    quote: "On 23 September 2004 the court allowed both appeals in part and accordingly changed the first-instance court’s judgement."
+    note: "Decision half of the pair opened at id 3. Served on the applicant
+      2 Nov 2004. Terminal: no further instance is narrated."
+
+document_note: >
+  A single length-of-proceedings chain over one workplace-injury damages claim.
+  The document gives service dates rather than decision dates throughout, which is
+  the main annotation difficulty here. The correcting decision (id 4) is the
+  boundary question.
+
+  SPLIT UNDER §3.1: two filing/decision pairs are now two events each -- the
+  first-instance claim (1 -> 2) and the appeal (3 -> 5). This document is the
+  clearest illustration of why: the old id 1 carried start_date 1999-03-15 and
+  decision_date 2003-06-05 but quoted only the institution sentence, so its
+  decision date rested on no quoted text at all. Ids were renumbered
+  chronologically and do NOT correspond to the pre-v1.1 numbering.

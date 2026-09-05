@@ -2,12 +2,8 @@
 # CASE OF GUÐMUNDUR ANDRI ÁSTRÁÐSSON v. ICELAND
 # 001-206582 | GRANDCHAMBER | 2020 | ISL
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
-#
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-206582)
-# Do not open any pipeline output before this file is finished.
+# AI-GENERATED DRAFT -- read the source and amend.
+# Source: annotation/gold_text/001-206582.txt | Rules: annotation/annotation_guide.txt
 # =============================================================================
 
 case_id: "001-206582"
@@ -15,44 +11,627 @@ case_name: "CASE OF GUÐMUNDUR ANDRI ÁSTRÁÐSSON v. ICELAND"
 court_level: "GRANDCHAMBER"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
+  # ---- Chain A: the appointment of the Court of Appeal judges ----
+
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
+    type: AdministrativeAction
+    body: "the Minister of Justice"
+    authority_kind: Administrative
+    decision_date: "2017-02-10"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties: []
+    follows: null
+    quote: "On 10 February 2017 a call for applications was issued for the posts of fifteen judges at the Court of Appeal."
+    note: "Opens the appointment process. The issuing body is not named in this
+      sentence. No parties -- this is a public call, not a dispute."
+
+  - id: 2
+    type: AdministrativeAction
+    body: "the Evaluation Committee"
+    authority_kind: Administrative
+    decision_date: "2017-05-19"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties: []
+    follows: 1
+    quote: "on 19 May 2017 the Evaluation Committee also submitted a m"
+    note: "The Committee's assessment ranking the fifteen most qualified candidates --
+      the benchmark the Minister then departed from, and the origin of every dispute
+      in this document. QUOTE IS TRUNCATED, replace it with a clean span from ¶32."
+
+  - id: 3
+    type: AdministrativeAction
+    body: "the Minister of Justice"
+    authority_kind: Administrative
+    decision_date: "2017-05"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties: []
+    follows: 2
+    quote: "In an email dated 26 May 2017, the Minister of Justice sent to two in ‑ house legal advisors the draft of the letter that she was planning to submit to Parliament concerning the appointments to the Court of Appeal and a"
+    note: "The Minister's proposal to Parliament, departing from the Committee's list
+      in respect of four candidates -- including A.E., who later sat on the
+      applicant's appeal. The decision the Supreme Court held unlawful at id 12.
+      QUOTE IS TRUNCATED and is about a draft email rather than the proposal itself;
+      replace with a cleaner span."
+
+  - id: 4
+    type: AdministrativeAction
+    body: "the CSC"
+    authority_kind: Administrative
+    start_date: "2017-05-29"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties: []
+    follows: 3
+    quote: "Upon receipt of the Minister’s proposals, the CSC held a meeting on 29 May 2017."
+    note: "Filing half of a §3.1 pair; the CSC's proposal is the next id. The institution
+      here is the committee convening on the Minister's proposal of the same date
+      (¶43), not a party's application."
+
+  - id: 5
+    type: AdministrativeAction
+    body: "the CSC"
+    authority_kind: Administrative
+    decision_date: "2017-05-31"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties: []
+    follows: 4
+    quote: "On 31 May 2017 the majority of the CSC, divided along party lines, proposed a parliamentary resolution, recommending that Parliament approve the Minister’s proposal."
+    note: "Decision half of the pair opened at the previous id."
+
+  - id: 6
+    type: AdministrativeAction
+    body: "Parliament"
+    authority_kind: Administrative
+    decision_date: "2017-06-01"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties: []
+    follows: 5
+    quote: "In a letter of 2 June 2017, the Minister of Justice was informed that at its session on 1 June 2017 Parliament had approved the list of fifteen candidates that she had proposed to be appointed as Court of Appeal judges"
+    note: "Parliament voting on the list as a single block rather than candidate by
+      candidate is one of the procedural irregularities in issue. The authority-kind
+      vocabulary has no legislative value; Administrative is the closest -- compare
+      001-200430 id 14."
+
+  - id: 7
+    type: AdministrativeAction
+    body: "the President of Iceland"
+    authority_kind: Administrative
+    decision_date: "2017-06-08"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties: []
+    follows: 6
+    quote: "On 8 June 2017 the President of Iceland signed the letters of appointment in respect of the fifteen judges of the Court of Appeal, as proposed by the Minister of Justice and accepted by Parliament."
+    note: "Completes the appointment. Everything downstream turns on this act."
+
+  # ---- Chain B: J.R.J. and Á.H., the excluded candidates ----
+
+  - id: 8
+    type: DomesticProceeding
+    body: "the District Court of Reykjavik"
+    authority_kind: Judicial
+    decision_date: "2017-07-07"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Inadmissible
+    outcome_direction: Unknown
+    parties:
+      - name: "J.R.J."
+        side: Initiating
+        natural_person: true
+      - name: "Á.H."
+        side: Initiating
+        natural_person: true
+      - name: "the Icelandic State"
+        side: Responding
+        natural_person: false
+    follows: 7
+    quote: "On 7 July 2017 the District Court dismissed the plaintiffs’ claims for annulment and pecuniary damage as inadmissible by way of a preliminary decision."
+    note: "Neither plaintiff is the applicant; in scope under guide §4.3 because the
+      judgment narrates these proceedings as part of this case's history."
+
+  - id: 9
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    start_date: "2017-07-10"
+    decision_date:
+    level: Appeal
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "J.R.J."
+        side: Initiating
+        natural_person: true
+      - name: "Á.H."
+        side: Initiating
+        natural_person: true
+      - name: "the Icelandic State"
+        side: Responding
+        natural_person: false
+    follows: 8
+    quote: "On 10 July 2017 both J.R.J. and Á.H. appealed against the decisions of the District Court before the Supreme Court."
+    note: "The outcome is in ¶64, which was not read for this draft -- CHECK AND FILL
+      IN decision_date and outcome."
+
+  - id: 10
+    type: DomesticProceeding
+    body: "the District Court"
+    authority_kind: Judicial
+    decision_date: "2017-09-15"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "J.R.J."
+        side: Initiating
+        natural_person: true
+      - name: "Á.H."
+        side: Initiating
+        natural_person: true
+      - name: "the Icelandic State"
+        side: Responding
+        natural_person: false
+    follows: 9
+    quote: "On 15 September 2017 the District Court found in favour of the Icelandic State and rejected the claims of J.R.J. and Á.H. for pecuniary and non ‑ pecuniary damage."
     note: ""
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 11
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    start_date: "2017-09-19"
+    level: Cassation
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "J.R.J."
+        side: Initiating
+        natural_person: true
+      - name: "Á.H."
+        side: Initiating
+        natural_person: true
+      - name: "the Icelandic State"
+        side: Responding
+        natural_person: false
+    follows: 10
+    quote: "On 19 September 2017 J.R.J. and Á.H. appealed to the Supreme Court against the judgments of the District Court."
+    note: "Filing half of a §3.1 pair; the Supreme Court's judgments are the next id."
+
+  - id: 12
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "2017-12-19"
+    level: Cassation
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "J.R.J."
+        side: Initiating
+        natural_person: true
+      - name: "Á.H."
+        side: Initiating
+        natural_person: true
+      - name: "the Icelandic State"
+        side: Responding
+        natural_person: false
+    follows: 11
+    final_domestic_decision: true
+    quote: "On 19 December 2017 the Supreme Court upheld the District Court’s conclusions regarding the claims for pecuniary damage."
+    note: "Decision half of the pair opened at the previous id. THE PIVOTAL RULING: the
+      Supreme Court found the Minister's procedure unlawful."
+
+  - id: 13
+    type: ProsecutorialReview
+    body: "the public prosecutor"
+    authority_kind: Prosecutorial
+    decision_date: "2017-01-31"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    quote: "On 31 January 2017 the applicant was indicted for a violation of the Traffic Act no. 50/1987, on the charges of driving without a valid driving licence and driving under the influence of drugs."
+    note: "Head of the applicant's own chain, and the only chain he is a party to. The
+      indicting body is not named."
+
+  - id: 14
+    type: DomesticProceeding
+    body: "the District Court of Reykjanes"
+    authority_kind: Judicial
+    decision_date: "2017-03-23"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the public prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 13
+    quote: "On 23 March 2017 the District Court of Reykjanes convicted the applicant on the charges against him."
+    note: "Summary procedure -- the applicant accepted the charges and pleaded guilty."
+
+  - id: 15
+    type: DomesticProceeding
+    body: "the Court of Appeal"
+    authority_kind: Judicial
+    start_date: "2017-04-06"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the public prosecutor"
+        side: Responding
+        natural_person: false
+    follows: 14
+    quote: "On 6 April 2017 the applicant appealed against the judgment to the Supreme Court. He did not as such challenge his conviction, but requested his sentence to be reduced."
+    note: "Filing half of a §3.1 pair; the ruling is the next id. NOTE THE MISMATCH: the
+      appeal was lodged with the SUPREME COURT, but the case was transferred to the
+      newly created Court of Appeal at the end of 2017 and decided there. `body` is
+      carried over from the decision half rather than named as the text names it at
+      the filing, which §5.2 would not sanction; §8 also matches on authority.
+      REVIEW."
+
+  - id: 16
+    type: DomesticProceeding
+    body: "the Court of Appeal"
+    authority_kind: Judicial
+    decision_date: "2018-02-22"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the public prosecutor"
+        side: Responding
+        natural_person: false
+    follows: 15
+    quote: "On 22 February 2018 the Court of Appeal, with the participation of A.E., rejected the applicant’s motion for A.E. to withdraw from the case."
+    note: "Decision half of the pair opened at the previous id. A.E., whose appointment is
+      the subject of the whole case, sat on the bench that rejected the motion
+      against her."
+
+  - id: 17
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "2018-03-08"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the public prosecutor"
+        side: Responding
+        natural_person: false
+    follows: 16
+    quote: "On 8 March 2018 the Supreme Court dismissed the appeal on the ground that the conditions for appeal had not been fulfilled for procedural reasons."
+    note: "Dismissed on procedural grounds, so Inadmissible. The Court of Appeal
+      proceedings then continued with A.E. still sitting."
+
+  - id: 18
+    type: DomesticProceeding
+    body: "the Court of Appeal"
+    authority_kind: Judicial
+    decision_date: "2018-03-23"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the public prosecutor"
+        side: Responding
+        natural_person: false
+    follows: 17
+    quote: "On 23 March 2018 the Court of Appeal upheld the District Court’s judgment on the merits."
+    note: "The applicant changed his pleadings on 13 Mar 2018 to seek acquittal on the
+      ground that the appointments breached Article 6."
+
+  - id: 19
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    start_date: "2018-04-17"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the public prosecutor"
+        side: Responding
+        natural_person: false
+    follows: 18
+    quote: "On 17 April 2018 the Supreme Court granted leave to appeal and on 20 April 2018 the applicant appealed against the judgment to the Supreme Court, by way of an appeal lodged by the prosecutor at his request."
+    note: "Filing half of a §3.1 pair; the judgment is the next id. Two dates in one
+      sentence -- leave granted 17 Apr, appeal lodged 20 Apr; start_date is the
+      earlier, as at 001-97246 id 2. REVIEW if you prefer the lodging date."
+
+  - id: 20
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "2018-05-24"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the public prosecutor"
+        side: Responding
+        natural_person: false
+    follows: 19
+    final_domestic_decision: true
+    quote: "On 24 May 2018 the Supreme Court rejected the applicant’s claims and upheld the judgment of the Court of Appeal."
+    note: "Decision half of the pair opened at the previous id."
+
+  - id: 21
+    type: DomesticProceeding
+    body: "the District Court of Reykjavik"
+    authority_kind: Judicial
+    start_date: "2017-02"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "E.J."
+        side: Initiating
+        natural_person: true
+      - name: "J.H."
+        side: Initiating
+        natural_person: true
+      - name: "the Icelandic State"
+        side: Responding
+        natural_person: false
+    follows: 7
+    quote: "In February and March 2017 E.J. and J.H. – the two other candidates who were among the fifteen candidates that the Evaluation Committee had considered to be the most qualified, but had been removed from the final list proposed to Parliament by the Minister of Justice – brought judicial proceedings in the District Court of Reykjavik against the Icelandic State."
+    note: "Filing half of a §3.1 pair; the judgments are the next id. start_date is a month
+      only, and the text gives a range (February and March 2017) covering two
+      separate actions; recorded as the earlier month. REVIEW."
+
+  - id: 22
+    type: DomesticProceeding
+    body: "the District Court of Reykjavik"
+    authority_kind: Judicial
+    decision_date: "2018-10-25"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "E.J."
+        side: Initiating
+        natural_person: true
+      - name: "J.H."
+        side: Initiating
+        natural_person: true
+      - name: "the Icelandic State"
+        side: Responding
+        natural_person: false
+    follows: 21
+    quote: "In two separate judgments of 25 October 2018, the District Court of Reykjavik found for the plaintiffs."
+    note: "Decision half of the pair opened at the previous id. TWO SEPARATE JUDGMENTS
+      recorded as one event because the text never separates them; split into two if
+      you prefer."
+
+  - id: 23
+    type: DomesticProceeding
+    body: "the Court of Appeal"
+    authority_kind: Judicial
+    decision_date: "2020-03-27"
+    level: Appeal
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "E.J."
+        side: Responding
+        natural_person: true
+      - name: "J.H."
+        side: Responding
+        natural_person: true
+      - name: "the Icelandic State"
+        side: Initiating
+        natural_person: false
+    follows: 22
+    quote: "Following the appeals lodged by the Icelandic State, on 27 March 2020 the Court of Appeal overturned both District Court judgments – partly in J.H.’s case and entirely in E.J.’s – by a two-to-one majority."
+    note: "The State is Initiating here, having been Responding at id 17."
+
+  - id: 24
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    start_date: "2020-05-08"
+    decision_date:
+    level: Cassation
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "E.J."
+        side: Initiating
+        natural_person: true
+      - name: "J.H."
+        side: Initiating
+        natural_person: true
+      - name: "the Icelandic State"
+        side: Responding
+        natural_person: false
+    follows: 23
+    quote: "By two decisions dated 8 May 2020, a three-judge panel of the Supreme Court granted E.J. and J.H. leave to appeal against the Court of Appeal’s judgments, having regard to the precedential value of the cases."
+    note: "STILL PENDING, so no final_domestic_decision on chain D."
+
+  # ---- Chain E: parliamentary and administrative aftermath ----
+
+  - id: 25
+    type: AdministrativeAction
+    body: "Parliament"
+    authority_kind: Administrative
+    start_date: "2018-03-05"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Minister of Justice"
+        side: Responding
+        natural_person: true
+    follows: 7
+    borderline: true
+    borderline_reason: "a parliamentary motion of no confidence -- a political vote
+      rather than a legal determination, though it concerns the same appointments"
+    quote: "On 5 March 2018 a motion of no confidence was tabled in Parliament against the Minister of Justice by several members of two opposition parties, on the grounds of the breaches committed by her in the process of the appointment of Court of Appeal judges."
+    note: "Filing half of a §3.1 pair; the vote is the next id."
+
+  - id: 26
+    type: AdministrativeAction
+    body: "Parliament"
+    authority_kind: Administrative
+    decision_date: "2018-03-06"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "the Minister of Justice"
+        side: Responding
+        natural_person: true
+    follows: 25
+    borderline: true
+    borderline_reason: "a parliamentary motion of no confidence -- a political vote
+      rather than a legal determination, though it concerns the same appointments"
+    quote: "On 6 March 2018 Parliament rejected the motion by a vote of thirty ‑ three MPs voting against the motion and twenty-nine in favour, with one MP abstaining."
+    note: "Decision half of the pair opened at the previous id."
+
+  - id: 27
+    type: AdministrativeAction
+    body: "the new Minister of Justice"
+    authority_kind: Administrative
+    start_date: "2020-04-17"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "A.E."
+        side: Initiating
+        natural_person: true
+    follows: 7
+    quote: "On 17 April 2020 a new call for applications was made for a post of judge at the Court of Appeal, in response to which A.E. applied."
+    note: "Filing half of a §3.1 pair; the re-appointment is the next id."
+
+  - id: 28
+    type: AdministrativeAction
+    body: "the new Minister of Justice"
+    authority_kind: Administrative
+    decision_date: "2020-06-16"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "A.E."
+        side: Initiating
+        natural_person: true
+    follows: 27
+    quote: "On 16 June 2020 the new Minister of Justice announced that she would follow the Evaluation Committee’s opinion and would propose to the President of Iceland that A.E. be appointed to the advertised post at the Court of Appeal, with effect from 1 July 2020."
+    note: "Decision half of the pair opened at the previous id. A.E.'s re-appointment
+      through a fresh, regular procedure -- the remedy for the original
+      irregularity."
+
+document_note: >
+  FIVE NARRATIVE THREADS, but only TWO weakly-connected components in the
+  `followsProceeding` graph. The appointment process (A, ids 1-7), the excluded
+  candidates' proceedings (B, ids 8-12), the parallel compensation claims (D, ids
+  21-24) and the parliamentary and remedial aftermath (E, ids 25-28) all root back
+  to id 7 -- each of B, D and E is a court or parliamentary challenge to that same
+  appointment decision, so guide §3's rule ("an administrative decision and the
+  court challenge to it are TWO events, linked by `follows`") applies to all
+  three, not just B. Component two is chain C (ids 13-20), the applicant's own,
+  entirely unrelated criminal prosecution -- the only event in this document with
+  no connection to the appointment saga at all.
+
+  The applicant is a party to only one thread (C). The rest are narrated as this
+  case's history and are in scope under guide §4.3, which is the clearest
+  illustration in the sample of why that rule matters. Without chain A there is
+  nothing for the applicant's complaint to attach to, and without chain B the
+  Supreme Court's finding of unlawfulness
+  (id 12) is invisible.
+
+  SPLIT UNDER §3.1: seven pairs are now two events each -- the CSC's consideration
+  (4 -> 5), the excluded candidates' appeal (11 -> 12), the applicant's own appeal
+  (15 -> 16), his appeal to the Supreme Court (19 -> 20), the E.J./J.H. proceedings
+  (21 -> 22), the no-confidence motion (25 -> 26) and A.E.'s re-appointment
+  (27 -> 28). This is the largest number of splits in the sample. Two further
+  records were ALREADY filing-shaped before this revision and are untouched: ids 9
+  and 24, both appeals still pending when the Court gave judgment.
+
+  THREE §3.1 PROBLEM CASES, all flagged REVIEW in their notes. id 15: the appeal was
+  lodged with the Supreme Court but decided by the Court of Appeal after the case
+  was transferred, so one proceeding spans two authorities and the filing half has
+  no body of its own to name. id 19: the sentence carries two dates -- leave granted
+  17 Apr 2018, appeal lodged 20 Apr -- and the earlier is recorded. id 21: the text
+  gives only a range, "In February and March 2017", for two separate actions.
+
+  RECORDS ARE GROUPED BY CHAIN, NOT BY DATE, and were before this revision too --
+  chain C opens in Jan 2017, after chain B has run to Dec 2017. Guide §5.1 asks for
+  chronological order; re-sorting would interleave five chains and destroy the
+  grouping, so it was left alone. REVIEW.
+
+  Ids were renumbered and do NOT correspond to the pre-v1.1 numbering.

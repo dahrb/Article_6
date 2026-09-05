@@ -2,12 +2,8 @@
 # CASE OF DANILOV v. RUSSIA
 # 001-206264 | CHAMBER | 2020 | RUS
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
-#
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-206264)
-# Do not open any pipeline output before this file is finished.
+# AI-GENERATED DRAFT -- read the source and amend.
+# Source: annotation/gold_text/001-206264.txt | Rules: annotation/annotation_guide.txt
 # =============================================================================
 
 case_id: "001-206264"
@@ -15,44 +11,315 @@ case_name: "CASE OF DANILOV v. RUSSIA"
 court_level: "CHAMBER"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
+    type: ProsecutorialReview
+    body: "an investigator from the Federal Security Service (“the FSB”, Федеральная служба безопасности РФ )"
+    authority_kind: Prosecutorial
+    decision_date: "2000-05-18"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    quote: "On 18 May 2000 an investigator from the Federal Security Service (“the FSB”, Федеральная служба безопасности РФ ) opened a case in relation to a suspicion that State secrets had been disclosed by a person with security clearance."
+    note: "Opening the investigation, plus the questioning and initial charging
+      described in the same paragraph. Eventually high treason and fraud."
+
+  - id: 2
+    type: DomesticProceeding
+    body: "the Krasnoyarsk Regional Court (“the Regional Court”)"
+    authority_kind: Judicial
+    decision_date: "2002-02-06"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Remitted
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 1
+    quote: "On 6 February 2002 the Krasnoyarsk Regional Court (“the Regional Court”) granted that application."
+    note: "First remittal for further investigation, on the prosecutor's own
+      application after the defence produced scientists' opinions. The eight expert
+      examinations ordered by the investigator (¶13, 19) are evidence-gathering
+      within the investigation and are not recorded as events.
+      NO §3.1 SPLIT, and a start_date REMOVED: the pre-v1.1 record carried
+      start_date 2002-01-24, but that is the applicant's request to admit the
+      scientists' opinions (¶15) -- a step inside the proceeding -- whereas the
+      application granted on 6 Feb is the PROSECUTOR's request for remittal (¶16),
+      which the text never dates. The two were conflated. REVIEW."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the Supreme Court of Russia (“the Supreme Court”)"
+    authority_kind: Judicial
+    decision_date: "2002-04-24"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 2
+    quote: "On 24 April 2002 the Supreme Court of Russia (“the Supreme Court”) rejected an appeal by the applicant and upheld the decision of 6 February 2002."
     note: ""
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 4
+    type: ProsecutorialReview
+    body: "the investigator"
+    authority_kind: Prosecutorial
+    decision_date: "2002-07-24"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 2
+    quote: "By a decision of 24 July 2002 the charges were amended."
+    note: "An amendment of the charges during the fresh investigation. The deciding
+      body is not named. Borderline against id 1 -- if amendments are steps within
+      the prosecution, delete."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the Regional Court"
+    authority_kind: Judicial
+    decision_date: "2002-12-03"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Remitted
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 4
+    quote: "On 3 December 2002, having received the case file from the prosecution, the Regional Court refused to examine it, and returned the case to the investigating authorities for further investigation."
+    note: "Second remittal."
+
+  - id: 6
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "2003-02-05"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 5
+    quote: "On 5 February 2003 the Supreme Court, presided over by Judge K., upheld the above decision on appeal."
+    note: "First of FOUR appearances by Judge K. (ids 6, 8, 10, 13) -- the impartiality
+      complaint turns on this."
+
+  - id: 7
+    type: DomesticProceeding
+    body: "the Regional Court"
+    authority_kind: Judicial
+    decision_date: "2003-05-16"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Remitted
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 6
+    quote: "On 16 May 2003 the Regional Court held a preliminary hearing in the applicant’s case. By a decision of that date the court found that the investigator had committed various breaches of domestic procedure, and once again it remitted the case for further investigation, citing reasons which were largely the same as those in the decision of 3 December 2002 (see paragraph 22 above)."
+    note: "Third remittal."
+
+  - id: 8
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "2003-07-23"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: Remitted
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the prosecution"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 7
+    quote: "On 23 July 2003 the Supreme Court, sitting in a composition which included Judge K., granted the appeal and remitted the case to the Regional Court for examination on the merits."
+    note: "Reverses id 7 and sends the case to trial."
+
+  - id: 9
+    type: DomesticProceeding
+    body: "the Regional Court"
+    authority_kind: Judicial
+    start_date: "2003-09-03"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the prosecution"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 8
+    quote: "On 3 September 2003 the Regional Court decided to have the case heard by a jury."
+    note: "Filing half of a §3.1 pair; the acquittal is id 10. Like 001-177299 id 3,
+      the institution here is the COURT's own dated act rather than a party's
+      application. REVIEW if you read an own-motion opening as not an institution."
+
+  - id: 10
+    type: DomesticProceeding
+    body: "the Regional Court"
+    authority_kind: Judicial
+    decision_date: "2003-12-30"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the prosecution"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 9
+    quote: "By a verdict of 29 December 2003 the jury acquitted the applicant, and on 30 December 2003 the Regional Court rendered a judgment clearing him of all charges."
+    note: "Decision half of the pair opened at id 9 -- the FIRST trial, by jury. The
+      exclusion of the defence's scientific evidence on 3 Dec 2003 falls in the gap
+      but is a step inside this trial."
+
+  - id: 11
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "2004-06-09"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: Remitted
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the prosecution"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 10
+    quote: "On 9 June 2004 the Supreme Court, presided over by Judge K., accepted the prosecution’s arguments and quashed the judgment, owing to various procedural irregularities, including errors in the procedure for counting and submitting the votes of the jury."
+    note: "Quashes the acquittal and orders a retrial."
+
+  - id: 12
+    type: DomesticProceeding
+    body: "the Regional Court"
+    authority_kind: Judicial
+    start_date: "2004-07-12"
+    level: Reopening
+    proceeding_type: Criminal
+    parties:
+      - name: "the prosecution"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    outcome: Unknown
+    outcome_direction: Unknown
+    follows: 11
+    quote: "On 12 July 2004 the Regional Court initiated the jury selection procedure."
+    note: "Filing half of a §3.1 pair; the conviction is id 13. The RETRIAL, so level
+      Reopening rather than FirstInstance -- compare id 9, which is recorded as
+      FirstInstance. As at id 9 the institution is the court's own dated act."
+
+  - id: 13
+    type: DomesticProceeding
+    body: "the Regional Court"
+    authority_kind: Judicial
+    decision_date: "2004-11-24"
+    level: Reopening
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the prosecution"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 12
+    quote: "On 24 November 2004 the Regional Court convicted the applicant as charged for having committed high treason by disclosing to Chinese nationals information about the space simulator and the “Aquagen” space simulation system which constituted a State secret, in breach of Article 275 of the Criminal Code (see paragraph 58 below); the applicant was also convicted of fraud in respect of his former employer, the University, an offence in breach of Article 159 § 3 of the Criminal Code (see paragraph 59 below)."
+    note: "Decision half of the pair opened at id 12. Fourteen years' imprisonment.
+      The refused jury challenges (¶34-35) and the refused application to question
+      27 experts (¶37-39) are steps inside this trial, and are the substance of the
+      Article 6 complaint."
+
+  - id: 14
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "2005-06-29"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: Mixed
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the prosecution"
+        side: Responding
+        natural_person: false
+    follows: 11
+    final_domestic_decision: true
+    quote: "On the same day the Supreme Court upheld, for the most part, the judgment of 24 November 2004, reducing the sentence to thirteen years’ imprisonment."
+    note: "Direction Mixed: conviction upheld but the sentence reduced from fourteen
+      to thirteen years. Judge K. presided, having sat at ids 6, 8 and 10; the
+      defence's challenge to her was rejected in the same proceedings (¶54-55) and is
+      a step within this event. Terminal."
+
+document_note: >
+  A criminal case running from the FSB investigation of 2000 through two
+  remittals, an acquittal by jury, its quashing, and a retrial ending in
+  conviction. One linear chain.
+
+  SPLIT UNDER §3.1: two pairs are now two events each -- the first jury trial
+  (9 -> 10) and the retrial (12 -> 13). Both are unusual in that the institution is
+  the COURT's own dated act (deciding to empanel a jury; initiating jury selection)
+  rather than a party's application, the same pattern as 001-177299 id 3. Flagged
+  REVIEW on both.
+
+  A START_DATE WAS ALSO REMOVED at id 2. The pre-v1.1 record carried start_date
+  2002-01-24, but that date belongs to the applicant's request to admit the
+  scientists' opinions (¶15), a step inside the proceeding, while the application
+  the court granted on 6 Feb 2002 was the PROSECUTOR's request for remittal (¶16),
+  which the text never dates. That is a conflation rather than a folding, and
+  fixing it means id 2 now carries a decision_date only.
+
+  Ids were renumbered chronologically and do NOT correspond to the pre-v1.1
+  numbering.

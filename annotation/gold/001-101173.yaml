@@ -2,12 +2,8 @@
 # CASE OF PETUKHOV v. UKRAINE
 # 001-101173 | CHAMBER | 2010 | UKR
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
-#
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-101173)
-# Do not open any pipeline output before this file is finished.
+# AI-GENERATED DRAFT -- read the source and amend.
+# Source: annotation/gold_text/001-101173.txt | Rules: annotation/annotation_guide.txt
 # =============================================================================
 
 case_id: "001-101173"
@@ -15,44 +11,522 @@ case_name: "CASE OF PETUKHOV v. UKRAINE"
 court_level: "CHAMBER"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
+    type: ProsecutorialReview
+    body: "policemen attached to the Kominternovsky District Police Department of Kharkiv"
+    authority_kind: Prosecutorial
+    decision_date: "2001-06-06"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    borderline: true
+    borderline_reason: "an arrest -- same boundary as 001-59859 id 1 and 001-202419 id 3"
+    quote: "On 6 June 2001 policemen attached to the Kominternovsky District Police Department of Kharkiv ( Комінтернівський РВ ХМУ УМВС України в Харківській обл. ), acting on information from an unknown source, arrested and detained the applicant on suspicion of murder and robbery."
+    note: "The applicant says he was arrested on 5 June; the date is disputed."
+
+  - id: 2
+    type: ProsecutorialReview
+    body: "the Prosecutor's Office of the Minsky District of Kyiv"
+    authority_kind: Prosecutorial
+    decision_date: "2001-06-12"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 1
+    quote: "On 12 June 2001 the Prosecutor's Office of the Minsky District of Kyiv ( Прокуратура Мінського району м. Києва ) remanded the applicant in custody on the grounds that the applicant could escape and obstruct justice."
+    note: "A remand decision by a prosecutor, not a court -- hence ProsecutorialReview."
+
+  - id: 3
+    type: ProsecutorialReview
+    body: "the Prosecutor's Office of the Minsky District of Kyiv"
+    authority_kind: Prosecutorial
+    decision_date: "2001-06-21"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 2
+    quote: "On 21 June 2001 formal charges were brought against the applicant on several counts of murder and attempted murder, attempted murder of police officers on duty, robbery and participation in an organised gang."
+    note: "The charging decision. The body is not named in this sentence; taken from
+      the remanding prosecutor's office. The applicant's confession the same day is
+      evidence, not an event."
+
+  - id: 4
+    type: DomesticProceeding
+    body: "the Minsky District Court of Kyiv"
+    authority_kind: Judicial
+    decision_date: "2001-08-02"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 3
+    quote: "On 2 August 2001 the Minsky District Court of Kyiv extended the applicant's pre-trial detention to a maximum of four months since “it was necessary to carry out a large scale investigation”."
+    note: "First of ELEVEN judicial detention decisions (ids 4, 5, 8, 9, 10, 11, 12,
+      13, 14, 15). Each is recorded as its own event because each is a separate
+      decision by a court on a separate application -- see document_note."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the Kyiv City Court of Appeal (hereinafter - “the Court of Appeal”)"
+    authority_kind: Judicial
+    decision_date: "2001-10-05"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 4
+    quote: "On 5 October 2001 the Kyiv City Court of Appeal (hereinafter - “the Court of Appeal”) decided to extend the term of his pre-trial detention until 8 December 2001 given “the information on the applicant's personality” and the gravity of charges."
     note: ""
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 6
+    type: ProsecutorialReview
+    body: "the investigator"
+    authority_kind: Prosecutorial
+    decision_date: "2001-11-29"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 3
+    quote: "On 29 November 2001 the investigator declared the pre-trial investigation complete and granted the applicant and his lawyer access to the case file, which they finished studying on 30 October 2002."
+    note: "Closing the investigation is a formal prosecutorial decision. The eleven
+      months the applicant spent studying the file is not a separate event."
+
+  - id: 7
+    type: DomesticProceeding
+    body: "the Court of Appeal"
+    authority_kind: Judicial
+    decision_date: "2002-12-09"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Remitted
+    outcome_direction: Mixed
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 6
+    quote: "On 9 December 2002, in the course of a preparatory hearing attended by the applicant and his lawyer, the Court of Appeal found that the case was not ready for consideration on the merits and decided to remit it to the prosecution for further investigation."
+    note: "Also continued detention. Direction Mixed: remittal delays the trial but
+      detention was maintained."
+
+  - id: 8
+    type: DomesticProceeding
+    body: "the Supreme Court of Ukraine"
+    authority_kind: Judicial
+    decision_date: "2003-04-24"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 7
+    quote: "On 24 April 2003, after a hearing attended by the applicant's lawyer, the Supreme Court of Ukraine upheld the decision of 9 December 2002 on the main points and decided that the applicant should remain in pre-trial detention as he could obstruct justice if released."
+    note: "The case file reached the Obolonsky District Prosecutor's Office on
+      19 Jun 2003 -- a transfer, not an event."
+
+  - id: 9
+    type: DomesticProceeding
+    body: "the Court of Appeal"
+    authority_kind: Judicial
+    decision_date: "2003-07-18"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 8
+    quote: "The Court of Appeal decided to extend the applicant's pre-trial detention for up to a maximum of nine months"
+    note: "The lawyer's request for release was refused in the same decision."
+
+  - id: 10
+    type: DomesticProceeding
+    body: "the Supreme Court of Ukraine"
+    authority_kind: Judicial
+    decision_date: "2003-09-17"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the Prosecutor's Office of the Obolonsky District of Kyiv"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 9
+    quote: "On 17 September 2003 the Supreme Court of Ukraine, at the request of the Prosecutor's Office of the Obolonsky District of Kyiv, extended the applicant's pre-trial detention to a maximum of twelve months."
+    note: "Additional investigations completed 26 Aug 2003; file access from 27 Aug."
+
+  - id: 11
+    type: DomesticProceeding
+    body: "the Supreme Court of Ukraine"
+    authority_kind: Judicial
+    decision_date: "2003-12-18"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 10
+    quote: "On 18 December 2003 the Supreme Court of Ukraine granted the prosecution's request to extend the applicant's pre-trial detention until 19 March 2004."
+    note: ""
+
+  - id: 12
+    type: DomesticProceeding
+    body: "the Supreme Court of Ukraine"
+    authority_kind: Judicial
+    decision_date: "2004-03-16"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 11
+    quote: "On 16 March 2004 the applicant's pre-trial detention was extended by the Supreme Court of Ukraine until 19 May 2004."
+    note: "The lawyer's request for release on medical grounds was not addressed."
+
+  - id: 13
+    type: DomesticProceeding
+    body: "the Supreme Court of Ukraine"
+    authority_kind: Judicial
+    decision_date: "2004-05-18"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 12
+    quote: "On 18 May 2004 the Supreme Court of Ukraine dismissed the prosecution's application for a further extension of the applicant's pre-trial detention."
+    note: "The only detention decision in the applicant's favour -- set aside three
+      days later by id 14."
+
+  - id: 14
+    type: DomesticProceeding
+    body: "the Criminal and Military Boards ( Судова палата з кримінальних справ і Військова колегія ) of the Supreme Court"
+    authority_kind: Judicial
+    start_date: "2004-05-20"
+    level: SupervisoryReview
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 13
+    quote: "On 20 May 2004 five judges of the Supreme Court lodged an application for extraordinary review ( подання в порядку виключного провадження ) of the decision of 18 May 2004."
+    note: "Filing half of a §3.1 pair; the joint session's decision is id 15. Itself
+      prompted by the Prosecutor General's request of 19 May, recorded as id 17."
+
+  - id: 15
+    type: DomesticProceeding
+    body: "the Criminal and Military Boards ( Судова палата з кримінальних справ і Військова колегія ) of the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "2004-05-21"
+    level: SupervisoryReview
+    proceeding_type: Criminal
+    outcome: Remitted
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 14
+    quote: "In the course of a joint session held on 21 May 2004 which was attended by the prosecutor but not by the applicant or his lawyer, with judge P. acting as judge-rapporteur, the Criminal and Military Boards ( Судова палата з кримінальних справ і Військова колегія ) of the Supreme Court set aside the decision of 18 May 2004 on the ground that the reasons given for the dismissal of the prosecution's request to extend the applicant's detention were insufficient and irrelevant, and ordered a rehearing."
+    note: "Decision half of the pair opened at id 14. Extraordinary review."
+
+  - id: 16
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "2004-05-24"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 15
+    quote: "On 24 May 2004 the Supreme Court granted the prosecution's application for an extension of the applicant's pre-trial detention until 19 June 2004, as the applicant still needed time to study the case file."
+    note: "The rehearing ordered by id 14."
+
+  - id: 17
+    type: ProsecutorialReview
+    body: "the Prosecutor General's Office ( Генеральна Прокуратура України )"
+    authority_kind: Prosecutorial
+    decision_date: "2004-05-19"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 13
+    borderline: true
+    borderline_reason: "a request that the Supreme Court seek extraordinary review --
+      an application rather than a decision"
+    quote: "On 19 May 2004 the Prosecutor General's Office ( Генеральна Прокуратура України ) asked the Supreme Court to lodge an application for an extraordinary review of this decision, considering, inter alia , that such decision would allow “persons who have committed serious offences to avoid isolation from society”."
+    note: "Fold into id 14 if applications are steps."
+
+  - id: 18
+    type: DomesticProceeding
+    body: "the Court of Appeal"
+    authority_kind: Judicial
+    decision_date: "2004-12-03"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 7
+    quote: "On 3 December 2004 the Court of Appeal found the applicant guilty as charged and sentenced him to life imprisonment."
+    note: "The trial on the merits, resuming the chain remitted at id 7. Three
+      co-accused were also sentenced; they are not named and are not recorded."
+
+  - id: 19
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "2005-05-24"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 18
+    quote: "On 24 May 2005 the three Supreme Court judges, including judge P., upheld this judgment."
+    note: "Judge P. had been judge-rapporteur at id 14."
+
+  - id: 20
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    decision_date: "2007-05-30"
+    level: SupervisoryReview
+    proceeding_type: Criminal
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 19
+    final_domestic_decision: true
+    quote: "On 30 May 2007 the Supreme Court rejected the applicant's request for review of his case under the extraordinary review procedure."
+    note: "Terminal event of the criminal chain."
+
+  - id: 21
+    type: ProsecutorialReview
+    body: "the investigator in charge of the applicant's case"
+    authority_kind: Prosecutorial
+    start_date: "2004-02-05"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the administration of SIZO no. 13"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: ThirdParty
+        natural_person: true
+    follows: 12
+    quote: "On 5 February 2004 the administration of SIZO no. 13 asked the investigator in charge of the applicant's case to consider the possibility of the releasing the applicant, referring, inter alia , to the fact that his condition required a lengthy period of treatment in a specialist hospital."
+    note: "Filing half of a §3.1 pair; the refusal is id 22. NOTE THE MISMATCH: the
+      request is addressed to the INVESTIGATOR while the reply comes from the
+      Prosecutor of the Obolonskiy District, so the two halves name different
+      authorities and §8 matches on authority. The applicant is ThirdParty -- the
+      SIZO administration, not he, asked for his release. REVIEW both."
+
+  - id: 22
+    type: ProsecutorialReview
+    body: "the Prosecutor of the Obolonskiy District of Kyiv"
+    authority_kind: Prosecutorial
+    decision_date: "2004-02-21"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 21
+    quote: "On 21 February 2004 the Prosecutor of the Obolonskiy District of Kyiv replied that the applicant's detention had been extended by the Supreme Court and that there were no reasons to change this decision."
+    note: "Decision half of the pair opened at id 21."
+
+  - id: 23
+    type: DomesticProceeding
+    body: "the Shevchenkivskyy District Court of Kyiv"
+    authority_kind: Judicial
+    start_date: "2004-12-02"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the head of SIZO no. 13"
+        side: Responding
+        natural_person: false
+      - name: "the head of its medical ward"
+        side: Responding
+        natural_person: false
+    follows: null
+    quote: "On 2 December 2004 the applicant instituted proceedings in the Shevchenkivskyy District Court of Kyiv against the head of SIZO no. 13 and the head of its medical ward seeking his transfer to a specialised hospital and complaining that the information provided in the certificate of 8 October 2004 had not been true."
+    note: "Filing half of a §3.1 pair and head of a second, independent chain about
+      medical care in detention. The judgment is id 24."
+
+  - id: 24
+    type: DomesticProceeding
+    body: "the Shevchenkivskyy District Court of Kyiv"
+    authority_kind: Judicial
+    decision_date: "2005-02-11"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the head of SIZO no. 13"
+        side: Responding
+        natural_person: false
+      - name: "the head of its medical ward"
+        side: Responding
+        natural_person: false
+    follows: 23
+    final_domestic_decision: true
+    quote: "On 11 February 2005 the court rejected the applicant's complaints. In particular, the court found that the certificate in question had been accepted by the Court of Appeal and included in the applicant's criminal case file, therefore, there were no reasons to question its veracity."
+    note: "Decision half of the pair opened at id 23, quoting ¶60. Terminal: the
+      applicant did not appeal. `body` is carried over from id 23 -- ¶60 says only
+      “the court”."
+
+  - id: 25
+    type: DomesticProceeding
+    body:
+    authority_kind: Unknown
+    start_date: "2005"
+    decision_date: "2007"
+    level: Unknown
+    proceeding_type: Civil
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the judges of the Court of Appeal"
+        side: Responding
+        natural_person: false
+    follows: null
+    borderline: true
+    borderline_reason: "an undifferentiated summary of several sets of proceedings and
+      their appeals over two years -- no court, no dates, no individual decisions"
+    quote: "Between 2005 and 2007 the applicant instituted proceedings against the judges of the Court of Appeal complaining of different procedural shortcomings in the course of consideration of his criminal case."
+    note: "A third chain, recorded as one event because the text never separates the
+      complaints or the appeals. Delete if a summary of this kind cannot be one event."
+
+document_note: >
+  THE DETENTION QUESTION DOMINATES THIS DOCUMENT. Eleven separate judicial
+  decisions extend, refuse or restore the applicant's pre-trial detention between
+  Aug 2001 and May 2004 (ids 4, 5, 9-16), each on a fresh application. They are
+  recorded as separate events on the guide's rule that the ORDER imposing detention
+  is an event while the period itself is echr:PreTrialDetention and out of scope. If
+  detention decisions inside a running prosecution are instead steps, this document
+  drops from 25 events to about 12 -- the single largest count swing in the sample.
+
+  SPLIT UNDER §3.1: three pairs are now two events each -- the five judges'
+  application for extraordinary review (14 -> 15), the SIZO administration's
+  request that the applicant's release be considered (21 -> 22) and the medical-care
+  claim in the Shevchenkivskyy District Court (23 -> 24). The detention decisions
+  themselves are NOT split: the text gives each as a single ruling, without
+  separately dating the application that prompted it.
+
+  id 21 is worth attention: the request goes to the INVESTIGATOR while the reply
+  (id 22) comes from the Prosecutor of the Obolonskiy District, so one §3.1 pair
+  spans two authorities. §8 matches events on authority. Flagged REVIEW, as is the
+  parallel case at 001-177299 id 12.
+
+  id 25 KEEPS BOTH DATES: "Between 2005 and 2007 the applicant instituted
+  proceedings against the judges of the Court of Appeal" is an undifferentiated
+  summary of several sets of proceedings over two years, with no distinct filing or
+  decision to separate. §3.1 does not reach it.
+
+  RECORDS ARE NOT IN STRICT DATE ORDER, and were not before this revision: id 17
+  (19 May 2004) sits after id 16 (24 May 2004), and ids 21-22 (Feb 2004) sit after
+  id 20 (2007). The annotator grouped by topic rather than by date. Guide §5.1 asks
+  for chronological order; re-sorting was left alone here so the revision stays a
+  §3.1 change only. REVIEW.
+
+  Ids were renumbered and do NOT correspond to the pre-v1.1 numbering.

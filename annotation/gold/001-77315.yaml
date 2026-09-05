@@ -1,58 +1,190 @@
 # =============================================================================
-# CASE OF JONCZYK v. POLAND
+# CASE OF JOŃCZYK v. POLAND
 # 001-77315 | CHAMBER | 2006 | POL
 #
-# Annotate against annotation/annotation_guide.txt.
-# Read the whole judgment first, then fill in one record per domestic event,
-# ordered by decision_date, earliest first.
-#
-# Source text: results/ablation_250_mv1/input.jsonl  (case_id 001-77315)
-# Do not open any pipeline output before this file is finished.
+# AI-GENERATED DRAFT -- read the source and amend. Delete what does not belong,
+# add what is missing, fix what is wrong. Source: annotation/gold_text/001-77315.txt
+# Rules: annotation/annotation_guide.txt
 # =============================================================================
 
 case_id: "001-77315"
-case_name: "CASE OF JONCZYK v. POLAND"
+case_name: "CASE OF JOŃCZYK v. POLAND"
 court_level: "CHAMBER"
 annotator: ""
 annotated_utc: ""
-mode: cold
-guide_version: "1.0"
+mode: assisted
+guide_version: "1.1"
 
 proceedings:
 
-  # Copy this block for each event. Delete any key the document gives you
-  # nothing for -- an omitted key and an empty value are not the same thing.
-  # Closed vocabularies are in guide §6; write the short form.
   - id: 1
-    type:                            # §6.5  DomesticProceeding | AdministrativeAction
-                                     #       | EnforcementAction | ProsecutorialReview
-    body: ""                         # authority name, verbatim from this passage
-    authority_kind:                  # §6.6  Judicial | Prosecutorial | Administrative
-                                     #       | Disciplinary | Unknown
-    start_date:                      # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
-    level:                           # §6.1  Investigative | AdministrativeReview
-                                     #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
-    proceeding_type:                 # §6.2  Criminal | Civil | Administrative
-                                     #       | Constitutional | Disciplinary | Other | Unknown
-    outcome:                         # §6.3  MeritsDecided | Inadmissible
-                                     #       | SettledOrWithdrawn | Remitted | Other | Unknown
-    outcome_direction:               # §6.4  FavourableToApplicant
-                                     #       | UnfavourableToApplicant | Mixed | Unknown
-    final_domestic_decision:         # true on the terminal event of each chain; omit otherwise
-    parties: []                      # - name: ""
-                                     #   side:              # §6.7 Initiating | Responding
-                                     #                      #      | ThirdParty | Unknown
-                                     #   natural_person:    # true for ONE human being
-                                     # the deciding body is never a party to its own event
-    follows:                         # id of the event this procedurally continues, or null
-    borderline:                      # true if you could not decide whether it belongs (§4.4)
-    borderline_reason: ""
-    quote: ""                        # verbatim span, COPIED not retyped
-    para:                            # paragraph number
-    note: ""
+    type: AdministrativeAction
+    body: "the State Insurance Company (Powszechny Zakład Ubezpieczeniowy - “PZU”)"
+    authority_kind: Administrative
+    decision_date:                   # ¶5 gives no date -- "subsequently" after the 1983 accident
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: null
+    borderline: true
+    borderline_reason: "PZU is described only as a State Insurance Company; whether
+      the pension grant is a state body's decision (AdministrativeAction) or a
+      private insurer's is not settled by the text"
+    quote: "He was subsequently granted a special disability pension from the State Insurance Company ( Powszechny Zakład Ubezpieczeniowy - “PZU”)."
+    note: "The decision the whole chain contests. No date given."
 
-# Anything about the judgment as a whole: an unusual structure, a section you
-# judged out of scope, a chain you could not resolve.
-document_note: ""
+  - id: 2
+    type: DomesticProceeding
+    body: "the Łask District Court ( Sąd Rejonowy)"
+    authority_kind: Judicial
+    start_date: "1992-03-31"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the defendant"
+        side: Responding
+        natural_person: false
+    follows: 1
+    quote: "The applicant was not satisfied with the amount of the pension and on 31 March 1992 he lodged a claim for a reassessment of the amount with the Łask District Court ( Sąd Rejonowy) ."
+    note: "Filing half of a §3.1 pair; the judgment is id 3, two years later. The
+      defendant is never named; presumably PZU."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the Łask District Court"
+    authority_kind: Judicial
+    decision_date: "1994-03-30"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the defendant"
+        side: Responding
+        natural_person: false
+    follows: 2
+    quote: "On 30 March 1994 the Łask District Court gave judgment and dismissed the applicant’s claim."
+    note: "Decision half of the pair opened at id 2. Hearings of 21 Apr 1993, 17 May
+      and 28 Oct 1993, 23 Mar 1994 and the adjournment of 24 Dec 1993 fall in the
+      gap but are steps inside the proceeding, not separate events (guide §3)."
+
+  - id: 4
+    type: DomesticProceeding
+    body: "the Łódź Regional Court ( Sąd Okręgowy )"
+    authority_kind: Judicial
+    decision_date: "1994-08-25"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: Remitted
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the defendant"
+        side: Responding
+        natural_person: false
+    follows: 3
+    quote: "On 25 August 1994, upon the applicant’s appeal, the Łódź Regional Court ( Sąd Okręgowy ) quashed the first-instance judgment and remitted the case in respect of part of the claims to the Łask District Court."
+    note: "No §3.1 split: the applicant's appeal is narrated only as “upon the
+      applicant's appeal”, with no date of its own."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the Łask District Court"
+    authority_kind: Judicial
+    start_date: "1994-08-25"
+    decision_date: "1999-02-12"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the defendant"
+        side: Responding
+        natural_person: false
+    follows: 4
+    quote: "On 12 February 1999 the District Court gave judgment."
+    note: "Separate event from id 3 although before the same court -- the retrial
+      after remittal (guide §3). KEEPS BOTH DATES and is not split under §3.1: the
+      retrial is instituted by the remittal at id 4, which is already its own
+      event, so there is no separate filing act to date or quote. start_date is
+      therefore the remittal date. Level could be Reopening rather than
+      FirstInstance; recorded as FirstInstance because it is the first-instance
+      court rehearing. Direction Unknown: the text does not say which way it went,
+      only that both parties appealed. Roughly a dozen hearings and the expert
+      evidence order of 28 Jun 1996 are steps inside this proceeding."
+
+  - id: 6
+    type: DomesticProceeding
+    body: "the Sieradz Regional Court"
+    authority_kind: Judicial
+    decision_date: "1999-06-30"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the defendant"
+        side: Responding
+        natural_person: false
+    follows: 5
+    quote: "On 30 June 1999 the Sieradz Regional Court dismissed the applicant’s claim."
+    note: "A different regional court from the 1994 appeal (Łódź). Both parties
+      appealed, so both sides are Initiating on one reading; recorded from the
+      applicant's appeal, which is the one the judgment follows. The appeals are
+      undated, so no §3.1 filing event precedes this."
+
+  - id: 7
+    type: DomesticProceeding
+    body: "the Supreme Court ( Sąd Najwyższy )"
+    authority_kind: Judicial
+    decision_date: "2000-01-21"
+    level: Cassation
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the defendant"
+        side: Responding
+        natural_person: false
+    follows: 6
+    final_domestic_decision: true
+    quote: "The proceedings were terminated by the judgment of the Supreme Court ( Sąd Najwyższy ) of 21 January 2000."
+    note: "Terminal event of the only chain. The text says the proceedings were
+      terminated but not what the Supreme Court decided, so outcome is Unknown."
+
+document_note: >
+  One linear chain, no parallel tracks. The judgment is a length-of-proceedings
+  case, so it narrates hearings and adjournments densely; under guide §3 those are
+  steps inside a proceeding rather than events, and Adjournment/InactivityPeriod
+  are outside this annotation. The ECtHR proceedings in ¶1-3 are out of scope.
+
+  SPLIT UNDER §3.1: only one pair splits here -- the 1992 claim to the Łask
+  District Court (2 -> 3). Every later step is set in motion by an appeal the text
+  mentions without dating ("upon the applicant's appeal", "both parties appealed"),
+  and id 5 is instituted by the remittal at id 4 rather than by any filing, so it
+  keeps both dates. Ids 3-6 shifted by one; the numbering does NOT correspond to
+  the pre-v1.1 version.

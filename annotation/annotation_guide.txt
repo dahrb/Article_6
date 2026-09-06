@@ -315,6 +315,13 @@ participation node, D the case document.
       than "the text does not say".
 
       Rules, in order:
+        - RESPONDENT STATE ONLY. Domestic remedies within the meaning of
+          Article 35 § 1 are remedies in the respondent State's own legal
+          order. Never write `true` on an event whose `jurisdiction_state`
+          (§5.2) is not the respondent State, however terminal that event is
+          within its own narrative — a foreign court's final word (a Michigan
+          divorce court, an Uzbek conviction) is not domestic-remedy
+          exhaustion for a Strasbourg application against Turkey or Austria.
         - ONE PER CHAIN, not one per document. A judgment with two independent
           chains has two flags. §3 defines the chain.
         - NOT NECESSARILY THE LATEST EVENT. Enforcement, or an unrelated later
@@ -340,6 +347,27 @@ participation node, D the case document.
 
   authority_kind
       A echr:hasAuthorityKind echr:Authority<X> .  Closed vocabulary, §6.6.
+
+  jurisdiction_state
+      A echr:hasJurisdictionState "<state>" .
+      The State whose legal order this authority belongs to. Almost always
+      the respondent State (§4.3 already puts foreign proceedings in scope
+      where the facts narrate them — this is what tells the two apart on the
+      record itself, not just in a note).
+
+      Write the plain English name of the state ("Turkey", "the United
+      States", "Uzbekistan"), not an ISO code and not the demonym used in the
+      passage ("Turkish police" -> "Turkey"). Not a closed vocabulary — same
+      treatment as echr:hasNationality (§5.3): free text, because the corpus
+      includes contested and historical states this cannot be normalised
+      against a fixed list without loss.
+
+      A THIRD-STATE AUTHORITY (a foreign court, prosecutor or government named
+      in the facts) still gets this field — that is the whole point of having
+      it: it is what makes the authority's state a fact on the record instead
+      of something a reader has to infer from `body` or a borderline note.
+      Mark such an event `borderline` per §4.4 as before; `jurisdiction_state`
+      does not replace that flag, it makes the flag checkable.
 
 --------------------------------------------------------------------------------
 5.3 The parties

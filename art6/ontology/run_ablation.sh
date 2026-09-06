@@ -244,8 +244,17 @@ run_arm() {
     else
         cp -rn "${dir}/raw/." "${dir}/repaired/" 2>/dev/null || true
     fi
+    # --original-jsonl is ALWAYS the raw judgment file, on both arms. Only
+    # stage 2 differs between arms: "raw" extracts from the judgment, "comp"
+    # from the digest. Review is the same stage in both and reads the same
+    # judgment in both, or the compressed arm's review can never recover what
+    # compression dropped -- which is the one thing a document-reading
+    # backstop is for. --input-jsonl still names the arm's own file because
+    # stage 2 named its outputs after it (bundles.jsonl -> bundles.L194);
+    # new_repair joins the two on case_id.
     (cd "${REPO_ROOT}" && PYTHONUNBUFFERED=1 uv run python -m art6.ontology.new_repair \
         --facts-dir "${dir}/repaired" --input-jsonl "${input}" \
+        --original-jsonl "${INPUT_JSONL}" \
         --model "${MODEL}" --base-url "${BASE_URL}" \
         --temperature 0.0) || echo "${label} stage 3 returned $?"
     echo "${label} stage 3 done in $(( $(now) - t ))s"

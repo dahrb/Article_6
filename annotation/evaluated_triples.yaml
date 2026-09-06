@@ -104,6 +104,13 @@ tier_b:
     triples: ["A echr:hasAuthorityKind ?k"]
     metric: accuracy over matched events
 
+  - name: jurisdiction_state
+    yaml_field: jurisdiction_state
+    triples: ["A echr:hasJurisdictionState ?s"]
+    metric: accuracy over matched events
+    note: Free text, not a closed vocabulary -- compare normalised (case/whitespace),
+      same treatment as body naming variants (guide §8).
+
   - name: proceeding_type
     yaml_field: proceeding_type
     triples: ["E echr:hasProceedingType ?t"]

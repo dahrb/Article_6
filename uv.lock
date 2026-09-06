@@ -69,6 +69,9 @@ ontology = [
     { name = "python-dotenv" },
     { name = "sentence-transformers" },
 ]
+viz = [
+    { name = "matplotlib" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -82,6 +85,7 @@ requires-dist = [
     { name = "ipykernel", specifier = ">=7.2.0" },
     { name = "lxml", specifier = ">=5.3.0" },
     { name = "matplotlib", marker = "extra == 'ontology'", specifier = ">=3.10.8" },
+    { name = "matplotlib", marker = "extra == 'viz'", specifier = ">=3.10.8" },
     { name = "openai", specifier = ">=2.7.1" },
     { name = "owlready2", marker = "extra == 'ontology'", specifier = ">=0.50" },
     { name = "pandas", specifier = ">=3.0.0" },
@@ -94,7 +98,7 @@ requires-dist = [
     { name = "scikit-learn", specifier = ">=1.8.0" },
     { name = "sentence-transformers", marker = "extra == 'ontology'", specifier = ">=5.4.1" },
 ]
-provides-extras = ["ontology"]
+provides-extras = ["ontology", "viz"]
 
 [package.metadata.requires-dev]
 dev = [

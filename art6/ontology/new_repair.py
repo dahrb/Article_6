@@ -5,8 +5,14 @@ A simpler repair pass: one violation-driven loop, then one review call that
 sees the document, then a final gate.
 
     stage 1+2   loop, max 3 rounds:  collect findings -> model -> apply
-    stage 3     review: full graph + full case text -> additions only
+    stage 3     review: full graph + the JUDGMENT -> additions only
     stage 4     final SHACL report
+
+Review reads the judgment in EVERY arm, never the arm's own stage-2 input.
+On the compressed arm that input is the digest, and a review confined to it
+can only re-check what compression already kept -- it could never recover a
+proceeding compression dropped, which is the one failure a document-reading
+backstop is for. Pass `--original-jsonl`; see load_source_texts.
 
 WHY THIS EXISTS ALONGSIDE repair_facts.py
 ------------------------------------------
@@ -713,10 +719,18 @@ def run_review(
     `source_text` is passed to apply_patch so every quote it adds is checked
     verbatim against the source before it lands.
     """
-    # Given EXACTLY what the original extraction was given -- the same facts
-    # prompt, the same full ontology, the same untruncated document -- plus the
-    # graph that extraction produced. Anything less and this stage is judging
-    # the extraction against a different brief than the one it was set.
+    # Given the same facts prompt and the same full ontology the original
+    # extraction was given -- anything less and this stage is judging the
+    # extraction against a different brief than the one it was set -- plus the
+    # graph that extraction produced.
+    #
+    # The DOCUMENT, though, is the judgment, which on the compressed arm is
+    # NOT what stage 2 read. That asymmetry is deliberate and is the point of
+    # the stage: matching stage 2's input would mean the compressed arm's
+    # review re-checks the digest against itself and can never see what the
+    # digest left out. Judging the extraction against the source it was
+    # supposed to represent is the job; judging it against its own summary is
+    # not a check at all.
     prompt = (
         "EXTRACTION INSTRUCTIONS\nThese are the instructions the graph below "
         "was extracted under. They bind you too.\n\n"
@@ -948,24 +962,75 @@ def repair_document(
     }
 
 
-def load_source_texts(input_jsonl: Path | None) -> dict[str, str]:
+def load_source_texts(
+    input_jsonl: Path | None, original_jsonl: Path | None = None
+) -> dict[str, str]:
+    """Map each graph's file key (`bundles.L194`, `input.L194`) to the text the
+    review stage should read.
+
+    KEY ON THE INPUT FILE'S OWN STEM, not the literal "input". Stage 2 names
+    its outputs after the file it was given -- input.jsonl -> input.L1, but
+    bundles.jsonl -> bundles.L1 -- so hardcoding "input" meant every lookup
+    missed on the compressed arm. source_text then came back None, which
+    SILENTLY disables both the review stage and the unverified-quote finder:
+    measured 2026-08-30, C3->C4 ran 79 loop operations and zero review
+    operations across 20 documents while C1->C2 ran 396, and the run reported
+    success either way.
+
+    REVIEW READS THE JUDGMENT, NOT THE ARM'S OWN INPUT. `original_jsonl`, when
+    given, supplies the text; `input_jsonl` supplies only the file keys. The
+    two are joined ON case_id, never on line position -- the files happen to
+    be parallel today, but nothing enforces that, and a join that is wrong by
+    one silently reviews every graph against a different case's judgment.
+
+    Without this the compressed arm's review saw `bundles.jsonl` -- the same
+    digest stage 2 extracted from -- so it could never recover anything
+    compression had already dropped, which is the one failure a
+    document-reading backstop exists to catch. Observed on 001-68183: the
+    Uzbek Supreme Court conviction is in the judgment, absent from the digest,
+    added by review in C2 and missing from C4 entirely. Review is meant to be
+    the same stage in both arms; only what stage 2 read differs.
+    """
     if not input_jsonl or not input_jsonl.exists():
         return {}
-    # KEY ON THE INPUT FILE'S OWN STEM, not the literal "input". Stage 2 names
-    # its outputs after the file it was given -- input.jsonl -> input.L1, but
-    # bundles.jsonl -> bundles.L1 -- so hardcoding "input" meant every lookup
-    # missed on the compressed arm. source_text then came back None, which
-    # SILENTLY disables both the review stage and the unverified-quote finder:
-    # measured 2026-08-30, C3->C4 ran 79 loop operations and zero review
-    # operations across 20 documents while C1->C2 ran 396, and the run reported
-    # success either way.
+
     stem = input_jsonl.stem
+    records = [
+        json.loads(line)
+        for line in input_jsonl.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+    texts: list[str] = []
+    if original_jsonl is None:
+        texts = [r.get("text", "") for r in records]
+    else:
+        by_case = {}
+        for line in original_jsonl.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                r = json.loads(line)
+                if case_id := r.get("case_id"):
+                    by_case[case_id] = r.get("text", "")
+        missing = [
+            r.get("case_id") or f"<record {i}, no case_id>"
+            for i, r in enumerate(records, 1)
+            if r.get("case_id") not in by_case
+        ]
+        if missing:
+            # Loud, not lossy: an unmatched case would review against no text
+            # at all, and the run would still report success.
+            raise SystemExit(
+                f"ABORT: {len(missing)} record(s) in {input_jsonl} have no "
+                f"case_id match in --original-jsonl {original_jsonl}: "
+                f"{missing[:5]}. Review needs the judgment for every graph; "
+                "a partial join would silently skip review on the rest."
+            )
+        texts = [by_case[r["case_id"]] for r in records]
+
     out = {}
-    for i, line in enumerate(input_jsonl.read_text(encoding="utf-8").splitlines(), 1):
-        if line.strip():
-            text = json.loads(line).get("text", "")
-            out[f"{stem}.L{i}"] = text
-            out[f"input.L{i}"] = text  # tolerate older runs named this way
+    for i, text in enumerate(texts, 1):
+        out[f"{stem}.L{i}"] = text
+        out[f"input.L{i}"] = text  # tolerate older runs named this way
     return out
 
 
@@ -979,6 +1044,16 @@ def main() -> None:
     ap.add_argument("--max-tokens", type=int, default=8000)
     ap.add_argument("--max-rounds", type=int, default=MAX_ROUNDS)
     ap.add_argument("--input-jsonl", type=Path, default=None)
+    ap.add_argument(
+        "--original-jsonl",
+        type=Path,
+        default=None,
+        help="JSONL holding the FULL judgment text, joined to --input-jsonl on "
+        "case_id. Pass this on the compressed arm so review reads the judgment "
+        "rather than the digest stage 2 extracted from -- review is the same "
+        "stage in every arm, and only what stage 2 read should differ. Omit it "
+        "and review falls back to --input-jsonl's own text.",
+    )
     ap.add_argument("--timeout", type=float, default=300.0)
     ap.add_argument(
         "--overwrite",
@@ -1002,7 +1077,7 @@ def main() -> None:
     global CAPTURE_RAW
     CAPTURE_RAW = args.capture_raw is not None
     client = OpenAI(base_url=args.base_url, api_key=args.api_key, timeout=args.timeout)
-    sources = load_source_texts(args.input_jsonl)
+    sources = load_source_texts(args.input_jsonl, args.original_jsonl)
     files = sorted(args.facts_dir.glob("*.facts.ttl"))
     if not files:
         print(f"no *.facts.ttl under {args.facts_dir}", file=sys.stderr)

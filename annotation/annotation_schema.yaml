@@ -33,6 +33,10 @@ proceedings:
                                      #        E echr:hasCourt A .
                                      #        A echr:hasAuthorityName "..."
     authority_kind: Prosecutorial    # §6.6   A echr:hasAuthorityKind ...
+    jurisdiction_state: "Bulgaria"   #        A echr:hasJurisdictionState "..."
+                                     #        the respondent State, almost always
+                                     #        (§5.2) -- free text, not a closed
+                                     #        vocabulary, same as hasNationality
     start_date: "2005-02-01"          #        E echr:hasProceedingStartDate
     decision_date: "2005-03-14"       #        E echr:hasDecisionDate
     level: Investigative             # §6.1   E echr:hasInstanceLevel
@@ -65,6 +69,7 @@ proceedings:
     type: DomesticProceeding
     body: "the Sofia City Court"
     authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
     start_date: "2005-04-02"
     decision_date: "2005-11-20"
     level: FirstInstance
@@ -91,6 +96,7 @@ proceedings:
     type: DomesticProceeding
     body: "the Supreme Court of Cassation"
     authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
     decision_date: "2007"
     level: Cassation
     proceeding_type: Criminal
@@ -116,6 +122,7 @@ proceedings:
     type: ProsecutorialReview
     body: "the investigator"
     authority_kind: Prosecutorial
+    jurisdiction_state: "Bulgaria"
     decision_date: "2005-01-20"
     level: Investigative
     proceeding_type: Criminal
@@ -143,6 +150,7 @@ proceedings:
     type: DomesticProceeding
     body: "the Celje District Court"
     authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
     start_date: "1999-03-15"         # no decision_date on a filing event
     level: FirstInstance
     proceeding_type: Civil
@@ -161,6 +169,7 @@ proceedings:
     type: DomesticProceeding
     body: "the Celje District Court"   # same body, level, type as id 5
     authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
     decision_date: "2003-06-05"        # no start_date on a decision event
     level: FirstInstance
     proceeding_type: Civil
@@ -184,6 +193,7 @@ proceedings:
     type: DomesticProceeding
     body: "the Regional Court"
     authority_kind: Judicial
+    jurisdiction_state: "Austria"
     decision_date: "1996-08-29"
     level: Appeal
     proceeding_type: Civil
@@ -204,6 +214,35 @@ proceedings:
       the transfer (id 3) and the mother's against the enforcement order (id 6).
       Do not force this onto a single id or split the decision into two events
       to work around it -- a list is the correct representation."
+
+  # ---------------------------------------------------------------------------
+  # Worked example 8 — a THIRD-STATE authority. Illustrates: `jurisdiction_state`
+  # naming a state other than the respondent, and why `final_domestic_decision`
+  # can never land here even though nothing else in this chain postdates it.
+  # ---------------------------------------------------------------------------
+  - id: 8
+    type: DomesticProceeding
+    body: "the Oakland Circuit Court"
+    authority_kind: Judicial
+    jurisdiction_state: "the United States"
+    decision_date: "1996-04-16"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+    follows: 7
+    borderline: true
+    borderline_reason: "a UNITED STATES court -- narrated as part of this history
+      but not a proceeding of the respondent State, so arguably not 'domestic'"
+    quote: "By a decision of 16 April 1996, the court pronounced a default judgment of divorce."
+    note: "NO final_domestic_decision here, however terminal within its own
+      narrative -- Article 35 exhaustion runs on the respondent State's own
+      courts (§5.1). `jurisdiction_state` is what makes that a checkable fact
+      rather than something inferred from `body` or the borderline note alone."
 
 # =============================================================================
 # Document-level notes: anything about the judgment as a whole -- an unusual

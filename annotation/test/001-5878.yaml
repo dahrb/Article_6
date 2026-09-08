@@ -1,0 +1,245 @@
+# =============================================================================
+# SAWONIUK v. THE UNITED KINGDOM
+# 001-5878 | ADMISSIBILITY | 2001 | GBR
+#
+# AI-GENERATED DRAFT -- read the source and amend. Delete what does not belong,
+# add what is missing, fix what is wrong. Source: annotation/test_text/001-5878.txt
+# Rules: annotation/annotation_guide.txt
+# =============================================================================
+
+case_id: "001-5878"
+case_name: "SAWONIUK v. THE UNITED KINGDOM"
+court_level: "ADMISSIBILITY"
+annotator: ""
+annotated_utc: ""
+mode: assisted
+guide_version: "1.1"
+
+proceedings:
+
+  - id: 1
+    type: AdministrativeAction
+    body: "the British police"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "the United Kingdom"
+    start_date: "1996-04-01"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    quote: "On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities in Domachevo during the German occupation."
+    note: "The only event representing the investigation stage, and recorded for
+      that reason: the denials the applicant made here are what the prosecution
+      later used against him. TWO dates in one sentence -- 1 and 3 April 1996 --
+      and start_date takes the first; the record stands for both interviews, since
+      the text treats them as one exercise. A reviewer who reads interviews as
+      steps should delete this."
+
+  - id: 2
+    type: DomesticProceeding
+    body: "the judge"
+    authority_kind: Judicial
+    jurisdiction_state: "the United Kingdom"
+    decision_date: "1999-03-25"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    occurs_during: 5
+    quote: "On 25 March 1999, before the closing speeches were due to begin and a long adjournment over a weekend, the judge after consulting counsel decided to withdraw the applicant’s bail."
+    note: "Recorded because §4 says in terms to record what “authorised or ended a
+      deprivation of liberty”; the applicant spent the weekend in Belmarsh. This is
+      an INTERLOCUTORY ruling inside the trial at id 5. `follows` is left null: it
+      encodes procedural antecedence (an appeal follows the decision it appeals),
+      and this isn't that -- id 5 didn't happen before this event, id 5 CONTAINS
+      it. `occurs_during: 5` records that instead. EXPERIMENTAL FIELD, not yet in
+      the ontology or guide -- see prompt_tweaks.md. Unfavourable despite the
+      judge's stated reason being the applicant's own protection."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the High Court"
+    authority_kind: Judicial
+    jurisdiction_state: "the United Kingdom"
+    start_date: "1999-03-26"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 2
+    occurs_during: 5
+    quote: "An application was made to the High Court to review bail on 26 March 1999. It was refused."
+    note: "NO §3.1 split and no decision_date: the application is dated and the
+      refusal that follows it in the next sentence is not, so there is only one
+      datable act. Kept as a single record with the real outcome, since the refusal
+      is narrated in the same breath. The applicant says the judge declined to
+      interfere given the stage the trial had reached. `occurs_during: 5` alongside
+      `follows: 2`: this is still a step of the same bail episode nested inside the
+      trial (26 March, within the 8 Feb-1 Apr span) -- follows records the true
+      procedural antecedent (the withdrawal being reviewed), occurs_during records
+      the containment, and nothing stops an event asserting both."
+
+  - id: 4
+    type: DomesticProceeding
+    body: "the trial judge"
+    authority_kind: Judicial
+    jurisdiction_state: "the United Kingdom"
+    decision_date: "1999-03-29"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 3
+    occurs_during: 5
+    quote: "On hearing re-assurances from defence counsel that arrangements would be made for transporting the applicant to and from the court room and for ensuring his welfare in his own home, and having regard to the shortness of the overnight adjournment of the trial, the trial judge reinstated bail."
+    note: "Ends the deprivation of liberty begun at id 2, four days later. The quote
+      is the sentence that evidences the reinstatement; the date comes from the
+      first sentence of the same paragraph, which records the defence
+      representations of 29 March 1999 that produced it. `occurs_during: 5` for
+      the same reason as ids 2-3: 29 March falls inside the trial's 8 Feb-1 Apr
+      span, and this ruling ends the bail episode that ran nested inside it."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "Mr Justice Potts and a jury"
+    authority_kind: Judicial
+    jurisdiction_state: "the United Kingdom"
+    start_date: "1999-02-08"
+    decision_date: "1999-04-01"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: Mixed
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 1
+    quote: "On 1 April 1999, the jury convicted the applicant of counts 1 and 3."
+    note: "KEEPS BOTH DATES and is not split under §3.1: the trial's opening is
+      reported (“In the trial which took place between 8 February and 1 April
+      1999”) rather than narrated as an act of institution, so there is no second
+      sentence to quote -- exactly the §3.1 exception. start_date is therefore
+      unsupported by the quote, which §3.1 says is what happens to one date in a
+      folded record. Direction MIXED: the judge acquitted on counts 2 and 4 at the
+      close of the prosecution case and the jury convicted on counts 1 and 3. The
+      acquittal is narrated but UNDATED (“At the close of the prosecution case”), so
+      it cannot be its own event and lives only in this direction value. Ordered
+      here, after ids 2-4, because §5.1 orders by decision_date and the bail rulings
+      fell inside the trial -- ids 2-4 now record that containment directly via the
+      experimental `occurs_during: 5` field, each on its own record rather than
+      only at the head of the bail sub-chain."
+
+  - id: 6
+    type: DomesticProceeding
+    body: "the Court of Appeal"
+    authority_kind: Judicial
+    jurisdiction_state: "the United Kingdom"
+    decision_date: "2000-02-10"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 5
+    quote: "In its judgment of 10 February 2000, the Court of Appeal rejected the applicant’s appeal."
+    note: "The appeal itself is undated (“The applicant appealed against conviction
+      to the Court of Appeal”), so no §3.1 filing event. The refusal of leave to
+      appeal to the House of Lords, with two certified points of law, is part of
+      this same disposal and carries no separate date, so §8 makes it the same
+      event rather than a further one."
+
+  - id: 7
+    type: DomesticProceeding
+    body: "the House of Lords"
+    authority_kind: Judicial
+    jurisdiction_state: "the United Kingdom"
+    decision_date: "2000-06-15"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 6
+    final_domestic_decision: true
+    quote: "On 15 June 2000, the House of Lords refused the petition for leave to appeal."
+    note: "Inadmissible: leave was refused, so no merits were reached, and “No
+      reasons were given”. The petition itself is undated. Terminal event of the
+      chain; the application to Strasbourg was introduced on 5 December 2000."
+
+document_note: >
+  A war crimes prosecution under the War Crimes Act 1991, tried in 1999 for
+  murders committed in Domachevo in 1942. ONE chain: investigation, trial,
+  appeal, refusal of leave, with a four-day bail episode inside the trial. ONE
+  final_domestic_decision, on id 7.
+
+  THIS DOCUMENT IS DOMINATED BY UNDATED ACTS, and that is the main thing to check
+  in it. A decision text is more compressed than a judgment, and it narrates
+  several genuinely significant procedural acts without ever dating them. Every
+  one of the following is described, mattered, and CANNOT be recorded, because
+  §3.1 requires an event to be placeable in time and §4.5 forbids inferring what
+  the text does no
+
+  t state:
+
+  - THE INDICTMENT on four counts of murder. §4 names a bill of indictment as an
+    event in so many words, and this one is set out count by count -- but the text
+    never says when he was charged.
+  - THE ACQUITTAL ON COUNTS 2 AND 4, directed by the judge at the close of the
+    prosecution case. A substantive disposal of half the indictment, dated only as
+    "At the close of the prosecution case". It survives in this file only as the
+    Mixed direction on id 5.
+  - THE ABUSE-OF-PROCESS APPLICATION to stay the trial for lapse of time, and its
+    refusal. The central fair-trial issue in the case, dated only as "Before the
+    commencement of the proceedings".
+  - THE APPEAL to the Court of Appeal and the PETITION for leave to the House of
+    Lords. Both undated, so ids 6 and 7 have no §3.1 filing halves.
+  - THE LORD CHIEF JUSTICE'S TARIFF RECOMMENDATION of five years, and the Home
+    Secretary's fixing of the tariff, which "has yet to" happen. The first is
+    undated; the second had not occurred, and a pending matter with no start date
+    cannot be recorded either.
+
+  DELIBERATELY NOT RECORDED although dated: the evidentiary rulings of 8 and
+  26 February 1999 admitting the evidence of Ivan Baglay and Evgeny Melianuk, and
+  the refusal of 24 March 1999 to let the prosecution prove the provenance of the
+  missing persons document. All three are rulings inside the trial at id 5, and
+  §3 treats what happens inside a proceeding as steps, not events. The bail
+  rulings at ids 2-4 are recorded despite being equally interlocutory, because
+  §4 singles out anything that authorised or ended a deprivation of liberty. A
+  reviewer who finds that line too fine has two consistent alternatives: record
+  the evidentiary rulings too, or drop ids 2-4 into id 5's note.
+
+  Also not recorded: the judge and jury's site visit to Domachevo, and the
+  judge's direction to the jury about hearsay. Steps inside the trial.
+
+  OUT OF SCOPE: the historical narrative of the German occupation and the
+  September 1942 massacre. Those are the FACTS THE OFFENCES CONSIST OF, not
+  procedural history -- no domestic authority acted in them. Also out of scope:
+  the War Crimes Act 1991 (§2, statutes) and the Court of Appeal's long summaries
+  of the prosecution evidence at ¶50-51, which are evidence rather than events.
+  The source text refers to a "Relevant Domestic Law and Practice" section that
+  the extracted text does not contain.

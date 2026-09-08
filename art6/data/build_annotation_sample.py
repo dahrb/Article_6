@@ -82,7 +82,7 @@ proceedings:
     decision_date:                   # "YYYY-MM-DD" | "YYYY-MM" | "YYYY"  -- QUOTED
     level:                           # §6.1  Investigative | AdministrativeReview
                                      #       | FirstInstance | Appeal | Cassation
-                                     #       | SupervisoryReview | Reopening | Unknown
+                                     #       | CaseReview | Reopening | Unknown
     proceeding_type:                 # §6.2  Criminal | Civil | Administrative
                                      #       | Constitutional | Disciplinary | Other | Unknown
     outcome:                         # §6.3  MeritsDecided | Inadmissible

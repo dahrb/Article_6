@@ -1,0 +1,563 @@
+# =============================================================================
+# KLIMENTYEV v. RUSSIA
+# 001-22669 | ADMISSIBILITY | 2002 | RUS
+# =============================================================================
+
+case_id: "001-22669"
+case_name: "KLIMENTYEV v. RUSSIA"
+court_level: "ADMISSIBILITY"
+mode: assisted
+guide_version: "1.1"
+
+proceedings:
+
+  - id: 1
+    type: ProsecutorialReview
+    body: "the Nizhniy Novgorod prosecutor’s office"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Russia"
+    start_date: "1995-03-07"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+      - name: "another person"
+        side: Responding
+        natural_person: true
+    follows: null
+    matter: Charge
+    quote: "The applicant, together with another person, was charged with embezzlement and other economic crimes on 7 March 1995."
+    note: "The charge that opens everything. `body` omitted -- the sentence is
+      passive and names nobody. authority_kind Prosecutorial rests on ¶54, which
+      says an investigation was instituted in March 1995 and that the Nizhniy
+      Novgorod prosecutor's office was ordering property freezes in it, not on
+      background knowledge of Russian procedure (§7)."
+
+  - id: 2
+    type: ProsecutorialReview
+    body: "the Nizhniy Novgorod prosecutor’s office"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Russia"
+    decision_date: "1995-10-05"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 1
+    matter: Investigation
+    quote: "Following the institution of an investigation against the applicant in March 1995, on 5 October 1995 property belonging to the applicant - the ship Stavanger and a floating drydock - was frozen on the order of the Nizhniy Novgorod prosecutor’s office."
+    note: "Head of the property chain. Recorded as the prosecutor's ORDER rather than
+      as an EnforcementAction: the physical arrest of the Stavanger at a shipyard
+      near Astrakhan, narrated in the next sentence, is the execution of this order
+      and is folded in here. `follows: 1`, not `part_of`: the freeze is an
+      interlocutory property measure taken during the still-open investigation
+      opened at id 1, not the decision that disposes of it -- id 1 isn't decided
+      until the conviction at id 9, so treating the freeze as id 1's `part_of` act
+      misstated what kind of decision it is."
+
+  - id: 3
+    type: ProsecutorialReview
+    body: "the prosecutor of Nizhniy Novgorod"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Russia"
+    start_date: "1995-10"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Makhachkala International Sea Port"
+        side: Initiating
+        natural_person: false
+    follows: 2
+    matter: Investigation
+    quote: "In October 1995 the Makhachkala International Sea Port contacted the prosecutor of Nizhniy Novgorod and informed him that the Stavanger had been purchased by the Port before the arrest."
+    note: "A THIRD PARTY's request, and in scope for that reason -- §4.3 puts
+      proceedings the applicant was not a party to squarely in scope where the facts
+      narrate them as part of his history. Filing half of a §3.1 pair; the release
+      is id 4. Dated to the month, all the text gives. `follows: 2`, not id 1: the
+      Port is responding to the FREEZE, not the original charge. The Port's
+      forwarding of the purchase contract in December 1995 is a further submission
+      inside this request, not an event."
+
+  - id: 4
+    part_of: 3
+    matter: Investigation
+    type: ProsecutorialReview
+    body: "the prosecutor of Nizhniy Novgorod"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Russia"
+    decision_date: "1996-01-19"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the Makhachkala International Sea Port"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    quote: "On 19 January 1996 the Stavanger was freed from arrest - and on 11 March 1996 the proceeds from the ship sale were frozen on the order of the Nizhniy Novgorod prosecutor’s office."
+    note: "Decision half of the pair opened at id 3. `body` omitted: the release is in
+      the passive and names no authority, though id 5 in the same sentence names the
+      prosecutor's office for the freeze that replaced it. Favourable in itself,
+      immediately undone by id 5. The Port's transfer of USD 2.5 million to the city
+      administration in January 1996 is a private payment, not an event."
+
+  - id: 5
+    type: ProsecutorialReview
+    body: "the Nizhniy Novgorod prosecutor’s office"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Russia"
+    decision_date: "1996-03-11"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 3
+    matter: Investigation
+    quote: "On 19 January 1996 the Stavanger was freed from arrest - and on 11 March 1996 the proceeds from the ship sale were frozen on the order of the Nizhniy Novgorod prosecutor’s office."
+    note: "Shares id 4's quote -- one sentence narrates the release of the ship and
+      the freezing of what it sold for."
+
+  - id: 6
+    type: ProsecutorialReview
+    body: "the Nizhniy Novgorod prosecutor’s office"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Russia"
+    start_date: "1996-05"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Head of the Industry department of the Nizhniy Novgorod regional administration"
+        side: Initiating
+        natural_person: true
+    follows: 5
+    matter: Investigation
+    quote: "In May 1996 the Head of the Industry department of the Nizhniy Novgorod regional administration asked the Nizhniy Novgorod prosecutor for permission to use the proceeds from the Stavanger for the needs of the “Oka” shipyard, which had built the vessel, and which had been declared bankrupt in February 1996."
+    note: "Filing half of a §3.1 pair; the decision is id 8. Another third-party
+      request in the applicant's history (§4.3). The Oka shipyard's bankruptcy in
+      February 1996 is reported in a subordinate clause with no deciding body and
+      is not recorded."
+
+  - id: 7
+    type: ProsecutorialReview
+    authority_kind: Unknown
+    jurisdiction_state: "Russia"
+    decision_date: "1996-05"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "the Norwegian company “Aroko”"
+        side: Unknown
+        natural_person: false
+    follows: 2
+    matter: Investigation
+    borderline: true
+    borderline_reason: "hedged with “It appears that”, names no deciding body, and
+      concerns property the same sentence says belonged to a Norwegian company
+      rather than to the applicant"
+    quote: "It appears that the order freezing the drydock was lifted in May 1996, as it belonged to a Norwegian company “Aroko”."
+    note: "Direction Unknown: the drydock was not the applicant's, so releasing it
+      cut neither way for him -- and ¶59 adds that he was never given a copy of the
+      order. Follows id 2, which froze the drydock along with the ship."
+
+  - id: 8
+    part_of: 6
+    matter: Investigation
+    type: ProsecutorialReview
+    body: "the Nizhniy Novgorod prosecutor’s office"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Russia"
+    decision_date: "1996-05-18"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the Head of the Industry department of the Nizhniy Novgorod regional administration"
+        side: Initiating
+        natural_person: true
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    quote: "On 18 May 1996 the Nizhniy Novgorod prosecutor’s office unfroze the account and transferred the money to the yard."
+    note: "Decision half of the pair opened at id 6, and the act the Regional Court
+      later criticised at id 19: the applicant's money was handed to the alleged
+      victim two years before any final finding of guilt."
+
+  - id: 9
+    type: DomesticProceeding
+    body: "the Nizhniy Novgorod Regional Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Russia"
+    decision_date: "1997-04-21"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: Mixed
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+      - name: "the “Oka” shipyard"
+        side: ThirdParty
+        natural_person: false
+    follows: 1
+    matter: [Conviction, Damages]
+    quote: "On 21 April 1997 the Nizhniy Novgorod Regional Court found the applicant guilty on some of the charges, and not guilty on most."
+    note: "Mixed on the face of the sentence -- guilty on some charges, not guilty on
+      most, and sentenced only to time already served in pre-trial detention. ¶60
+      shows this same judgment also ordered him to pay damages to “Oka”; same
+      authority, same date, so §8 makes that the same event and Oka is listed as a
+      civil third party. `Damages` added alongside `Conviction`: this judgment,
+      later quashed by the Supreme Court, also fixed the Oka damages award at the
+      amount already transferred to the yard at id 8."
+
+  - id: 10
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Russia"
+    decision_date: "1997-07"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: Remitted
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 9
+    matter: Conviction
+    quote: "In July 1997 the Supreme Court quashed the conviction on the applicant’s appeal and remitted the case to the Nizhniy Novgorod Regional Court."
+    note: "Dated to the month only. level Cassation because ¶48 and ¶63 call the
+      Supreme Court stage “the cassation hearing” and “their cassation appeal”, so
+      the label comes from the text. The appeal itself is undated, so no §3.1 filing
+      event."
+
+  - id: 11
+    type: DomesticProceeding
+    body: "the Nizhniy Novgorod Regional Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Russia"
+    start_date: "1998-03-30"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 10
+    matter: Detention
+    quote: "On 30 March 1998, during the new trial, the prosecutor applied to the court to detain the applicant for violations of the undertaking not to leave the city during the trial and obstruction of justice."
+    note: "NO §3.1 split and no decision_date: the motion is dated, the rejection in
+      the next sentence is not, so there is one datable act carrying the real
+      outcome -- the same shape as the High Court bail review in Sawoniuk
+      (001-5878, id 3). Recorded rather than treated as trial management because it
+      sought a deprivation of liberty (§4)."
+
+  - id: 12
+    type: AdministrativeAction
+    body: "the local electoral committee"
+    authority_kind: Administrative
+    jurisdiction_state: "Russia"
+    decision_date: "1998-04-01"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    quote: "On 1 April 1998 the local electoral committee declared the elections invalid on the ground of irregularities committed during the campaign by some candidates, including the applicant."
+    note: "A decision by a state body naming the applicant, three days after he won
+      the mayoral election. His WINNING of that election on 29 March 1998 is not
+      recorded: an electorate is not an authority, so the win types as none of the
+      four subclasses. Contrast Martynovskiy (001-248395, id 1), where an election
+      IS recorded because there the electing body was itself an institution of the
+      Bar acting under its own statute."
+
+  - id: 13
+    part_of: 11
+    matter: [Arrest, Detention]
+    type: DomesticProceeding
+    body: "the Nizhniy Novgorod Regional Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Russia"
+    decision_date: "1998-04-02"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    quote: "On 2 April 1998 the Nizhniy Novgorod Regional Court granted the prosecutor’s renewed motion for detention on grounds of obstruction of justice and violations of the undertaking not to leave the city, and the applicant was arrested in the course of the hearing."
+    note: "The renewed motion three days after id 11 failed, this time granted, with
+      the applicant arrested in the courtroom. ONE event also covering the order in
+      the following sentence that the rest of the trial be held in camera: same
+      court, same day, so §8 merges them. The renewed motion itself is not
+      separately dated."
+
+  - id: 14
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Russia"
+    start_date: "1998-04-23"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 11
+    matter: Detention
+    quote: "On 23 April 1998 the applicant’s “civil defender”, who participated in the process with a status similar to that of a lawyer, lodged with the Supreme Court an appeal against the court order of 2 April to detain the applicant."
+    note: "Filing half of a §3.1 pair; the reply is id 17. The appeal also asked for
+      transfer of the case to another region for jury trial and questioned the
+      presiding judge's impartiality; all of that was disposed of by the single
+      reply at id 17."
+
+  - id: 15
+    type: DomesticProceeding
+    body: "the Regional Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Russia"
+    start_date: "1998-05-19"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 11
+    matter: Requests
+    quote: "On 19 May the applicant’s “civil defender” requested the Regional Court to dismiss the judge presiding in the case for bias."
+    note: "¶38 GIVES NO YEAR -- “On 19 May” alone; 1998 comes from the surrounding
+      narrative between 23 April and 27 May 1998. The rejection is undated
+      (“Both requests were rejected by the Regional Court”), so this stays one
+      record carrying the outcome. Follows id 13 because ¶38 says the alleged bias
+      was shown partly “by his order to detain the applicant”. `matter: Requests`,
+      not Detention: a recusal-for-bias motion is about judicial impartiality, not
+      about the deprivation of liberty, even though this one happens to cite the
+      detention order as evidence of bias -- it was previously tagged Detention for
+      lack of a better bucket."
+
+  - id: 16
+    type: DomesticProceeding
+    body: "the Regional Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Russia"
+    start_date: "1998-05-19"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: null
+    matter: Requests
+    borderline: true
+    borderline_reason: "concerns trial management more than legal issues but could also affect Fair trial considerations so leaving for now"
+    quote: "On the same day the applicant requested to admit Mrs Moskalenko as his lawyer in the trial because one of his lawyers was on sick leave."
+    note: "SEPARATE from id 15 although both were made on 19 May 1998 and rejected in
+      the same sentence: one attacks the judge, the other concerns representation,
+      and they are different applications with different subject matter. A reviewer
+      who reads “Both requests were rejected” as one disposal should merge them.
+      Recorded rather than treated as trial management because refusing a defence
+      lawyer goes to a right, not to the conduct of the hearing -- see
+      document_note."
+
+  - id: 17
+    part_of: 14
+    matter: Detention
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Russia"
+    decision_date: "1998-05-19"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    quote: "The reply from the Supreme Court, dated 19 May 1998, stated that the national law did not allow appeals against that type of trial court orders separately from appeals against judgments."
+    note: "Decision half of the pair opened at id 14. Inadmissible: no merits were
+      reached, the appeal was simply not available. Same date as ids 15 and 16 but a
+      different court and a different matter."
+
+  - id: 18
+    type: DomesticProceeding
+    body: "the Nizhniy Novgorod Regional Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Russia"
+    decision_date: "1998-05-27"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+      - name: "the shipyard “Oka”"
+        side: ThirdParty
+        natural_person: false
+      - name: "“Zhanto”"
+        side: ThirdParty
+        natural_person: false
+      - name: "“NL TOP”"
+        side: ThirdParty
+        natural_person: false
+      - name: "“Slot”"
+        side: ThirdParty
+        natural_person: false
+    follows: 10
+    matter: [Conviction, Damages]
+    quote: "On 27 May 1998 the Nizhniy Novgorod Regional Court found the applicant guilty on charges of misappropriation and embezzlement, larceny, bribery and attempt not to return money from abroad."
+    note: "The retrial after the id 10 remittal, and a SEPARATE event from id 9
+      although the same court -- §3 says a retrial is a new proceeding. level
+      FirstInstance follows the gold set's treatment of retrials; Reopening is
+      defensible. No start_date: the retrial was instituted by the remittal, which
+      is already its own event. The four companies are ThirdParty because they
+      joined civil damages claims to the criminal trial (§6.7); ¶44 says the last
+      three lodged theirs on 20 April 1998, mid-trial, which the applicant
+      complained of. The 35-plus witnesses, the admitted statements and the
+      contested expert reports at ¶39-42 are evidence within this proceeding.
+      `Damages` added alongside `Conviction`: this judgment (confirmed at id 21)
+      again ordered the applicant to pay Oka damages, with the Stavanger's sale
+      proceeds -- frozen at id 5, handed to Oka at id 8 -- deducted from the
+      amount awarded."
+
+  - id: 19
+    type: DomesticProceeding
+    body: "the Regional Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Russia"
+    decision_date: "1998-05-27"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: Mixed
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 18
+    quote: "On 27 May 1998 the Regional Court made a number of further orders ( частные определения ) in the case."
+    note: "SEPARATE from id 18 despite the same court and the same date: §8 asks
+      whether the two mentions share the same DECISION, and these are distinct
+      rulings on the conduct of the investigation rather than the conviction.
+      Direction Mixed, but NOT because every breach found was cured -- they were
+      not."
+
+  - id: 20
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Russia"
+    start_date: "1998-07"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 18
+    matter: Requests
+    borderline: true
+    borderline_reason: "an adjournment request -- trial management rather than a
+      distinct right, which is the line this file draws between rulings that are
+      events and rulings that are steps"
+    quote: "Her request to adjourn the hearing was not granted by the Supreme Court, and it appears that the issues of the judgment and access to the case file have not been addressed by the Supreme Court."
+    note: "Requests made “In July and on 10 August 1998”; start_date takes the
+      earlier and the record stands for both. Flagged because it sits on the wrong
+      side of the line this file draws, but recorded because the same requests also
+      raised the non-service of the judgment and the denial of access to the
+      15-volume verbatim record, which go to more than scheduling."
+
+  - id: 21
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Russia"
+    decision_date: "1998-08-10"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: Mixed
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 18
+    final_domestic_decision: true
+    matter: Conviction
+    quote: "On 10 August 1998 the Supreme Court confirmed the judgment of the Nizhniy Novgorod Regional Court, with some alterations."
+    note: "Mixed: it dropped certain charges and reclassified others under the 1997
+      Criminal Code, but upheld the six-year sentence and every evidential ruling.
+      The cassation appeal by Mr O. is undated, so no §3.1 filing event. Terminal
+      event of the criminal chain and flagged final -- the application was lodged
+      with the Commission the very next day, 11 August 1998. It did not address the
+      частные определения at id 19 or the property complaint."
+
+  - id: 22
+    type: EnforcementAction
+    authority_kind: Unknown
+    jurisdiction_state: "Russia"
+    decision_date: "2000-10"
+    level: Unknown
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 21
+    matter: Detention
+    quote: "In October 2000 the applicant was released from detention."
+    note: "Recorded under §4's “ended a deprivation of liberty” limb. `body` omitted
+      and authority_kind Unknown: the sentence names nobody."

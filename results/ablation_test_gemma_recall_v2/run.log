@@ -1,0 +1,287 @@
+=== ablation: art6_domestic_test_set.json -> results/ablation_test_gemma_recall_v2 @ 2026-09-08T14:36:16+02:00 ===
+preflight ok: gemma-4-31b @ http://localhost:8005/v1
+records: 10   facts prompt: 25,398 chars
+  L1: 001-108690    23,996 chars
+  L2: 001-58299     34,551 chars
+  L3: 001-248393    28,861 chars
+  L4: 001-77778     25,237 chars
+  L5: 001-248395    26,542 chars
+  L6: 001-189419    17,298 chars
+  L7: 001-5878      19,724 chars
+  L8: 001-22669     19,512 chars
+  L9: 001-188177    17,640 chars
+  L10: 001-202468    38,275 chars
+
+--- C0  O1 schema-light ---
+condition O1: 10 document(s)
+  model:  gemma-4-31b @ http://localhost:8005/v1
+  output: results/ablation_test_gemma_recall_v2/C0
+  input.L1: 19.1s, 1710 completion tokens
+  input.L3: 30.1s, 2827 completion tokens
+  input.L4: 21.1s, 1970 completion tokens
+  input.L5: 13.2s, 1231 completion tokens
+  input.L6: 12.6s, 1187 completion tokens
+  input.L7: 17.8s, 1677 completion tokens
+  input.L8: 30.8s, 2914 completion tokens
+  input.L9: 18.0s, 1671 completion tokens
+  input.L10: 46.6s, 4402 completion tokens
+
+resumed: 1 document(s) already present, skipped
+
+O1 complete in 209.2s
+  parsed cleanly: 9/10
+C0 done in 210s
+
+--- stage 1  compression -> evidence bundles ---
+stage 1: gemma-4-31b @ http://localhost:8005/v1 (temperature 0.0)
+  001-108690:  15 events,  9 persons,  1 applicants,  223/ 224 spans verbatim ( 99.6%),   1 dropped,  0 body-as-party,  0 actless-outcome removed, + 4 parties (2nd pass) [60s]
+  001-58299:   3 events,  2 persons,  2 applicants,   63/  64 spans verbatim ( 98.4%),   1 dropped,  0 body-as-party,  0 actless-outcome removed, + 2 parties (2nd pass) [15s]
+  001-248393:  18 events,  3 persons,  1 applicants,  196/ 198 spans verbatim ( 99.0%),   2 dropped,  9 body-as-party,  0 actless-outcome removed, + 3 parties (2nd pass) [54s]
+  001-77778:  13 events,  9 persons,  1 applicants,  192/ 198 spans verbatim ( 97.0%),   6 dropped,  2 body-as-party,  0 actless-outcome removed, + 2 parties (2nd pass) [49s]
+  001-248395:   8 events,  5 persons,  1 applicants,  136/ 138 spans verbatim ( 98.6%),   2 dropped,  0 body-as-party,  0 actless-outcome removed, + 3 parties (2nd pass) [36s]
+  001-189419:   8 events,  3 persons,  1 applicants,  146/ 148 spans verbatim ( 98.6%),   2 dropped,  0 body-as-party,  0 actless-outcome removed, + 0 parties (2nd pass) [36s]
+  001-5878:   8 events,  3 persons,  1 applicants,  109/ 110 spans verbatim ( 99.1%),   1 dropped,  0 body-as-party,  1 actless-outcome removed, + 0 parties (2nd pass) [27s]
+  001-22669:  19 events,  6 persons,  1 applicants,  224/ 225 spans verbatim ( 99.6%),   1 dropped,  0 body-as-party,  1 actless-outcome removed, + 2 parties (2nd pass) [60s]
+  001-188177:  16 events,  7 persons,  1 applicants,  181/ 181 spans verbatim (100.0%),   0 dropped,  0 body-as-party,  0 actless-outcome removed, + 3 parties (2nd pass) [48s]
+  001-202468:  22 events,  3 persons,  1 applicants,  299/ 316 spans verbatim ( 94.6%),  17 dropped,  4 body-as-party,  0 actless-outcome removed, + 4 parties (2nd pass) [84s]
+
+total: 1769/1802 spans verbatim (98.2%), 33 dropped, 15 deciding-body parties, 2 actless outcomes removed
+  001-108690: 12,481 chars ( 15 events) <- was 23,996
+  001-58299:  3,367 chars (  3 events) <- was 34,551
+  001-248393:  9,493 chars ( 18 events) <- was 28,861
+  001-77778:  9,974 chars ( 13 events) <- was 25,237
+  001-248395:  8,068 chars (  8 events) <- was 26,542
+  001-189419:  8,076 chars (  8 events) <- was 17,298
+  001-5878:  5,235 chars (  8 events) <- was 19,724
+  001-22669: 12,014 chars ( 19 events) <- was 19,512
+  001-188177:  9,453 chars ( 16 events) <- was 17,640
+  001-202468: 15,921 chars ( 22 events) <- was 38,275
+
+wrote 10 record(s) to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_test_gemma_recall_v2/bundles.jsonl
+stage 1 done in 471s
+
+--- raw  stage 2  extraction -> results/ablation_test_gemma_recall_v2/C1_C2/raw ---
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 199/199 [00:00<00:00, 16805.93it/s]
+
+total wall time: 10.2m  (2026-09-08T12:47:40+00:00 -> 2026-09-08T12:57:54+00:00)
+0 unrecovered parse failure(s), 0 chunk render failure(s) logged
+complete: all 10 document(s) kept every unit
+report written to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_test_gemma_recall_v2/C1_C2/extract_report.json
+raw stage 2 done in 619s
+
+--- raw  stage 3  repair -> results/ablation_test_gemma_recall_v2/C1_C2/repaired ---
+model: gemma-4-31b @ http://localhost:8005/v1 (temperature 0.0)
+10 document(s), max 3 loop round(s)
+
+  input.L1.facts.ttl: 0 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: nothing left to fix - stopping
+    review: carrying 7 unanswered gap(s) forward
+    review: 25 op(s) proposed, 25 applied [24.0s]
+    post-review: nothing left to fix
+  input.L1.facts.ttl: 0 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+  input.L10.facts.ttl: 0 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: nothing left to fix - stopping
+    review: carrying 7 unanswered gap(s) forward
+    review: 1 group(s) refused as incomplete
+    review: 60 op(s) proposed, 27 applied [47.7s]
+    post-review: nothing left to fix
+  input.L10.facts.ttl: 0 -> 1 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+    shared participations split on input: 1
+  input.L2.facts.ttl: 0 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: 1 finding(s), 0 op(s) proposed, 1 applied [2.5s]
+    loop round 2: nothing left to fix - stopping
+    review: carrying 3 unanswered gap(s) forward
+    review: 3 op(s) proposed, 2 applied [5.9s]
+    post-review: 1 violation(s) left
+    post-review round 1: 1 finding(s), 3 op(s) proposed, 3 applied [3.1s]
+  input.L2.facts.ttl: 0 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+    shared participations split on input: 1
+  input.L3.facts.ttl: 2 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: 2 finding(s), 3 op(s) proposed, 3 applied [3.4s]
+    loop round 2: nothing left to fix - stopping
+    review: carrying 8 unanswered gap(s) forward
+    review: 37 op(s) proposed, 37 applied [32.4s]
+    post-review: 2 violation(s) left
+    post-review round 1: 2 finding(s), 2 op(s) proposed, 2 applied [2.9s]
+  input.L3.facts.ttl: 2 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+  input.L4.facts.ttl: 1 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: 1 finding(s), 1 op(s) proposed, 1 applied [2.0s]
+    loop round 2: nothing left to fix - stopping
+    review: 32 op(s) proposed, 32 applied [28.0s]
+    post-review: nothing left to fix
+  input.L4.facts.ttl: 1 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+  input.L5.facts.ttl: 0 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: nothing left to fix - stopping
+    review: 1 group(s) refused as incomplete
+    review: 36 op(s) proposed, 17 applied [28.7s]
+    post-review: nothing left to fix
+  input.L5.facts.ttl: 0 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+    entailed types completed on input: 8
+    shared participations split on input: 1
+  input.L6.facts.ttl: 0 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: nothing left to fix - stopping
+    review: carrying 1 unanswered gap(s) forward
+    review: 18 op(s) proposed, 19 applied [18.1s]
+    post-review: 1 violation(s) left
+    post-review round 1: 1 finding(s), 10 op(s) proposed, 2 applied [8.7s]
+  input.L6.facts.ttl: 0 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+  input.L7.facts.ttl: 0 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: nothing left to fix - stopping
+    review: carrying 1 unanswered gap(s) forward
+    review: 17 op(s) proposed, 17 applied [15.4s]
+    post-review: nothing left to fix
+  input.L7.facts.ttl: 0 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+    shared participations split on input: 1
+  input.L8.facts.ttl: 0 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: nothing left to fix - stopping
+    review: carrying 1 unanswered gap(s) forward
+    review: 18 op(s) proposed, 18 applied [15.6s]
+    post-review: nothing left to fix
+  input.L8.facts.ttl: 0 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+  input.L9.facts.ttl: 6 SHACL violation(s), 6 disjoint-type conflict(s) in
+    loop round 1: 13 finding(s), 12 op(s) proposed, 12 applied [10.8s]
+    loop round 2: nothing left to fix - stopping
+    review: carrying 2 unanswered gap(s) forward
+    review: 22 op(s) proposed, 22 applied [18.4s]
+    post-review: 1 violation(s) left
+    post-review round 1: WARNING, new defect kind (unchained_events 0->1)
+    post-review round 1: 1 finding(s), 1 op(s) proposed, 1 applied [2.0s]
+    party labels mirrored: 1
+  input.L9.facts.ttl: 6 -> 0 SHACL violation(s), 6 -> 0 disjoint-type conflict(s)
+
+total: 9 -> 1 SHACL violation(s), 6 -> 0 disjoint-type conflict(s) over 10 document(s) in 273.5s
+raw stage 3 done in 274s
+
+--- comp  stage 2  extraction -> results/ablation_test_gemma_recall_v2/C3_C4/raw ---
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 199/199 [00:00<00:00, 12587.91it/s]
+
+total wall time: 18.3m  (2026-09-08T13:02:33+00:00 -> 2026-09-08T13:20:51+00:00)
+0 unrecovered parse failure(s), 0 chunk render failure(s) logged
+complete: all 10 document(s) kept every unit
+report written to /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_test_gemma_recall_v2/C3_C4/extract_report.json
+comp stage 2 done in 1102s
+
+--- comp  stage 3  repair -> results/ablation_test_gemma_recall_v2/C3_C4/repaired ---
+model: gemma-4-31b @ http://localhost:8005/v1 (temperature 0.0)
+10 document(s), max 3 loop round(s)
+
+    shared participations split on input: 2
+  bundles.L1.facts.ttl: 3 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: 3 finding(s), 2 op(s) proposed, 2 applied [4.1s]
+    loop round 2: nothing left to fix - stopping
+    review: carrying 3 unanswered gap(s) forward
+    review: 14 op(s) proposed, 14 applied [15.2s]
+    post-review: nothing left to fix
+  bundles.L1.facts.ttl: 3 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+    shared participations split on input: 22
+  bundles.L10.facts.ttl: 6 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: 9 finding(s), 5 op(s) proposed, 7 applied [7.2s]
+    loop round 2: 4 finding(s), 2 op(s) proposed, 3 applied [9.2s]
+    loop round 3: 3 finding(s), 2 op(s) proposed, 2 applied [4.3s]
+    review: carrying 2 unanswered gap(s) forward
+    review: 15 op(s) proposed, 15 applied [14.8s]
+    post-review: 3 violation(s) left
+    post-review round 1: 3 finding(s), 2 op(s) proposed, 2 applied [4.4s]
+  bundles.L10.facts.ttl: 6 -> 3 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+    shared participations split on input: 1
+  bundles.L2.facts.ttl: 0 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: 1 finding(s), 0 op(s) proposed, 1 applied [1.5s]
+    loop round 2: nothing left to fix - stopping
+    review: carrying 3 unanswered gap(s) forward
+    review: 3 op(s) proposed, 2 applied [6.0s]
+    post-review: 1 violation(s) left
+    post-review round 1: 1 finding(s), 3 op(s) proposed, 3 applied [3.0s]
+  bundles.L2.facts.ttl: 0 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+    shared participations split on input: 2
+    unbuilt proceeding references pruned on input: 6
+  bundles.L3.facts.ttl: 3 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: WARNING, new defect kind (shacl:this event's hasProceedingStartDate is earlier than the hasD 0->1)
+    loop round 1: 4 finding(s), 3 op(s) proposed, 4 applied [5.2s]
+    loop round 2: 1 finding(s), 0 op(s) proposed, 0 applied [1.3s]
+    loop round 2 applied nothing - stopping
+    review: carrying 3 unanswered gap(s) forward
+    review: 7 op(s) proposed, 8 applied [9.7s]
+    post-review: 1 violation(s) left
+    post-review round 1: 1 finding(s), 0 op(s) proposed, 0 applied [1.5s]
+  bundles.L3.facts.ttl: 3 -> 1 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+    shared participations split on input: 5
+  bundles.L4.facts.ttl: 0 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: nothing left to fix - stopping
+    review: carrying 3 unanswered gap(s) forward
+    review: 18 op(s) proposed, 18 applied [17.7s]
+    post-review: nothing left to fix
+  bundles.L4.facts.ttl: 0 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+    shared participations split on input: 2
+  bundles.L5.facts.ttl: 0 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: nothing left to fix - stopping
+    review: 12 op(s) proposed, 10 applied [13.3s]
+    post-review: 2 violation(s) left
+    post-review round 1: 2 finding(s), 2 op(s) proposed, 2 applied [3.8s]
+  bundles.L5.facts.ttl: 0 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+    shared participations split on input: 9
+  bundles.L6.facts.ttl: 1 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: 1 finding(s), 1 op(s) proposed, 1 applied [2.4s]
+    loop round 2: nothing left to fix - stopping
+    review: carrying 1 unanswered gap(s) forward
+    review: 18 op(s) proposed, 18 applied [16.2s]
+    post-review: nothing left to fix
+  bundles.L6.facts.ttl: 1 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+    shared participations split on input: 3
+  bundles.L7.facts.ttl: 1 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: nothing left to fix - stopping
+    review: carrying 2 unanswered gap(s) forward
+    review: 16 op(s) proposed, 15 applied [14.8s]
+    post-review: nothing left to fix
+  bundles.L7.facts.ttl: 1 -> 2 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+    shared participations split on input: 1
+  bundles.L8.facts.ttl: 2 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: 4 finding(s), 1 op(s) proposed, 3 applied [4.5s]
+    loop round 2: nothing left to fix - stopping
+    review: carrying 10 unanswered gap(s) forward
+    review: 9 op(s) proposed, 9 applied [13.4s]
+    post-review: nothing left to fix
+  bundles.L8.facts.ttl: 2 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+    shared participations split on input: 3
+  bundles.L9.facts.ttl: 0 SHACL violation(s), 0 disjoint-type conflict(s) in
+    loop round 1: 1 finding(s), 0 op(s) proposed, 1 applied [2.0s]
+    loop round 2: nothing left to fix - stopping
+    review: carrying 11 unanswered gap(s) forward
+    review: 8 op(s) proposed, 8 applied [10.4s]
+    post-review: nothing left to fix
+  bundles.L9.facts.ttl: 0 -> 0 SHACL violation(s), 0 -> 0 disjoint-type conflict(s)
+
+total: 16 -> 6 SHACL violation(s), 0 -> 0 disjoint-type conflict(s) over 10 document(s) in 192.7s
+comp stage 3 done in 194s
+
+--- boundary check  stage 1 inventory -> stage 2 graphs ---
+
+=== C3 (stage 2 output) ===
+  documents scored     10
+  stage-1 events       130
+  kept in graph        123  (94.6%)
+  paraphrased quote    1  (0.8%)
+  dropped outright     6  (4.6%)
+  documents with loss  2 / 10
+    001-248393  18 -> 12   dropped e4,e5,e6,e7,e8,e9
+    001-5878  8 -> 7   paraphrased e4
+
+=== C4 (after repair) ===
+  documents scored     10
+  stage-1 events       130
+  kept in graph        123  (94.6%)
+  paraphrased quote    1  (0.8%)
+  dropped outright     6  (4.6%)
+  documents with loss  2 / 10
+    001-248393  18 -> 12   dropped e4,e5,e6,e7,e8,e9
+    001-5878  8 -> 7   paraphrased e4
+
+report -> /home/dahrb/Projects/article_6/domestic_proceedings/results/ablation_test_gemma_recall_v2/stage_boundary.json
+
+--- done ---
+manifest -> results/ablation_test_gemma_recall_v2/manifest.json

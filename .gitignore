@@ -48,8 +48,15 @@ prompt_tweaks.md
 # gold/*.yaml (the annotations themselves) is not matched by any rule above.
 !annotation/annotation_guide.txt
 !annotation/gold/manifest.json
+!annotation/test/manifest.json
 
 # NOT tracked: annotation/gold_text/*.txt -- the 20 source judgments. They are
 # corpus text, which this repo does not track anywhere (see data/ rules), and
 # they regenerate from data/ via the seeded sampler:
 #   uv run python -m art6.data.build_annotation_sample --n 20 --seed 42
+#
+# Same for annotation/test_text/*.txt -- the 10 pilot documents. Those regenerate
+# from data/art6_domestic_test_set.json, which is itself untracked corpus text
+# rebuilt by:
+#   uv run python -m art6.data.build_ontocast_test_set
+# annotation/test/*.yaml, like gold/*.yaml, is not matched by any rule above.

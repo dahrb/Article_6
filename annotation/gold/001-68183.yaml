@@ -1,20 +1,11 @@
 # =============================================================================
 # CASE OF MAMATKULOV AND ASKAROV v. TURKEY
 # 001-68183 | GRANDCHAMBER | 2005 | TUR
-#
-# AI-GENERATED DRAFT -- read the source and amend.
-# Source: annotation/gold_text/001-68183.txt | Rules: annotation/annotation_guide.txt
-#
-# Revised under guide v1.1 §3.1: a narrated filing and its narrated decision are
-# TWO events. Five pairs split here. Ids renumbered chronologically, which
-# interleaves the two applicants' chains.
 # =============================================================================
 
 case_id: "001-68183"
 case_name: "CASE OF MAMATKULOV AND ASKAROV v. TURKEY"
 court_level: "GRANDCHAMBER"
-annotator: ""
-annotated_utc: ""
 mode: assisted
 guide_version: "1.1"
 
@@ -39,6 +30,7 @@ proceedings:
     borderline: true
     borderline_reason: "an arrest, executing an international warrant -- the
       investigative-step boundary again, and arguably an EnforcementAction"
+    matter: Arrest
     quote: "He was arrested by the Turkish police at Atatürk Airport (Istanbul) under an international arrest warrant and taken into police custody on suspicion of homicide, causing injuries through the explosion of a bomb in Uzbekistan and an attempted terrorist attack on the President of Uzbekistan."
     note: "Consistent with 001-59859 id 1, 001-202419 id 3, 001-101173 id 1."
 
@@ -60,6 +52,7 @@ proceedings:
     follows: null
     borderline: true
     borderline_reason: "an arrest -- same question as id 1"
+    matter: Arrest
     quote: "On 5 March 1999, acting on a request for his extradition by the Republic of Uzbekistan, the Turkish police arrested him and took him into police custody."
     note: ""
 
@@ -81,12 +74,14 @@ proceedings:
         side: Responding
         natural_person: true
     follows: 1
+    matter: Detention
     quote: "On 5 March 1999 the Bakırköy public prosecutor made an application to the investigating judge for the first applicant to be remanded in custody."
     note: "Filing half of a §3.1 pair; the remand is id 4, the SAME DAY. Split
       because the text narrates the prosecutor's application and the judge's order
       as separate acts by separate actors, which is what §3.1 turns on."
 
   - id: 4
+    part_of: 3
     type: DomesticProceeding
     body: "the investigating judge"
     authority_kind: Judicial
@@ -103,7 +98,7 @@ proceedings:
       - name: "the first applicant"
         side: Responding
         natural_person: true
-    follows: 3
+    matter: Detention
     quote: "The first applicant, who was assisted by his lawyer, was brought before the judge on the same day and remanded in custody for forty-five days, in accordance with the European Convention on Mutual Assistance in Criminal Matters."
     note: "Decision half of the pair opened at id 3. Forty-five days, under the
       European Convention on Mutual Assistance in Criminal Matters."
@@ -126,11 +121,13 @@ proceedings:
         side: Responding
         natural_person: true
     follows: 2
+    matter: Detention
     quote: "On 7 March 1999 the Bakırköy public prosecutor made an application to the investigating judge for the second applicant to be remanded in custody."
     note: "Filing half of a §3.1 pair; the remand is id 6, the same day. The mirror
       of id 3 for the second applicant."
 
   - id: 6
+    part_of: 5
     type: DomesticProceeding
     body: "the investigating judge"
     authority_kind: Judicial
@@ -147,7 +144,7 @@ proceedings:
       - name: "the second applicant"
         side: Responding
         natural_person: true
-    follows: 5
+    matter: Detention
     quote: "On the same day the second applicant was brought before the judge, who remanded him in custody."
     note: "Decision half of the pair opened at id 5."
 
@@ -165,7 +162,8 @@ proceedings:
       - name: "the first applicant"
         side: Responding
         natural_person: true
-    follows: 4
+    follows: 3
+    matter: Extradition
     quote: "In an order made on the same day under the expedited applications procedure, the judge referred to the charges against the first applicant and noted that the offences concerned were not political or military in nature but ordinary criminal offences."
     note: "The substantive extradition ruling for the first applicant: offences held
       to be ordinary rather than political, and a further remand pending extradition.
@@ -191,9 +189,10 @@ proceedings:
       - name: "the second applicant"
         side: Responding
         natural_person: true
-    follows: 6
+    follows: 5
     borderline: true
     borderline_reason: "not a direct proceeding but a letter for information from the court"
+    matter: Extradition
     quote: "In a letter of 12 March 1999 the Fatih public prosecutor applied to the Fatih Criminal Court for a determination of the second applicant’s nationality and of the nature of the alleged offence."
     note: "Filing half of a §3.1 pair; the determination is id 10."
 
@@ -212,10 +211,12 @@ proceedings:
         side: Initiating
         natural_person: true
     follows: 7
+    matter: Extradition
     quote: "On 15 March 1999 the first applicant appealed to the Bakırköy Assize Court against the order made under the expedited applications procedure on 11 March 1999."
     note: "Filing half of a §3.1 pair; the dismissal is id 12."
 
   - id: 10
+    part_of: 8
     type: DomesticProceeding
     body: "the Fatih Criminal Court"
     authority_kind: Judicial
@@ -232,7 +233,7 @@ proceedings:
       - name: "the second applicant"
         side: Responding
         natural_person: true
-    follows: 8
+    matter: Extradition
     quote: "In a decision of 15 March 1999, after hearing the applicant, the Criminal Court determined his nationality and the nature of the offence pursuant to Article 9 of the Turkish Criminal Code."
     note: "Decision half of the pair opened at id 8, and the mirror of id 7 for the
       second applicant. Same holding -- ordinary rather than political offences --
@@ -252,11 +253,13 @@ proceedings:
       - name: "the second applicant"
         side: Initiating
         natural_person: true
-    follows: 10
+    follows: 8
+    matter: Extradition
     quote: "On 18 March 1999 the second applicant appealed to the Istanbul Assize Court against the judgment of 15 March 1999."
     note: "Filing half of a §3.1 pair; the dismissal is id 14."
 
   - id: 12
+    part_of: 9
     type: DomesticProceeding
     body: "the Bakırköy Assize Court"
     authority_kind: Judicial
@@ -270,8 +273,8 @@ proceedings:
       - name: "the first applicant"
         side: Initiating
         natural_person: true
-    follows: 9
     final_domestic_decision: true
+    matter: Extradition
     quote: "Having examined the case file, the Assize Court dismissed the first applicant’s appeal on 19 March 1999."
     note: "Decision half of the pair opened at id 9. Terminal judicial event for the
       first applicant."
@@ -295,12 +298,14 @@ proceedings:
         side: Responding
         natural_person: true
     follows: 7
+    matter: Extradition
     quote: "On 19 March 1999 the Turkish government issued a decree ordering the applicants’ extradition."
     note: "One decree covering both applicants, so `follows` can point at only one
       chain; recorded as 7, the first applicant's substantive extradition ruling.
       Issued while the second applicant's appeal (id 11) was still pending."
 
   - id: 14
+    part_of: 11
     type: DomesticProceeding
     body: "the Istanbul Assize Court"
     authority_kind: Judicial
@@ -314,8 +319,8 @@ proceedings:
       - name: "the second applicant"
         side: Initiating
         natural_person: true
-    follows: 11
     final_domestic_decision: true
+    matter: Extradition
     quote: "Having examined the case file, the Assize Court dismissed the appeal on 26 March 1999."
     note: "Decision half of the pair opened at id 11. Terminal judicial event for the
       second applicant. Note it postdates the extradition decree (id 13) by a week."
@@ -338,6 +343,7 @@ proceedings:
         side: Responding
         natural_person: true
     follows: 13
+    matter: Extradition
     quote: "On 27 March 1999 the applicants were handed over to the Uzbek authorities."
     note: "Execution of the decree -- a clear EnforcementAction. The acting body is
       not named; attributed to the government that issued the decree. REVIEW."
@@ -364,6 +370,7 @@ proceedings:
     borderline: true
     borderline_reason: "an UZBEK court -- not a proceeding of the respondent State
       (Turkey); same question as the United States decisions in 001-61054"
+    matter: Conviction
     quote: "In a letter of 8 July 1999, the Government informed the Court that by a judgment of 28 June 1999 the Supreme Court of the Republic of Uzbekistan had found the applicants guilty of the offences charged and had sentenced them to terms of imprisonment."
     note: "Twenty years and eleven years respectively (¶32). Known to the Court only
       through diplomatic correspondence, which is itself a reason to question whether

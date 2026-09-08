@@ -35,6 +35,14 @@ Two variants:
 Node fill = echr:hasInstanceLevel (categorical, fixed order); a two-letter
 badge on the node repeats the same information as text, so identity never
 rests on colour alone. Border style = the echr:DomesticEvent subclass.
+
+A small glyph at the node's top-right corner repeats echr:hasOutcomeDirection
+as both shape and colour (never colour alone): a green up-triangle for
+FavourableToApplicant, a red down-triangle for UnfavourableToApplicant, an
+amber diamond for Mixed. Unknown/absent direction draws no glyph -- adding a
+"?" mark for the majority-Unknown case (see
+annotation/gold/001-77315.yaml or the Section 6.4 guidance in
+art6/data/build_annotation_sample.py) would out-clutter the signal it carries.
 """
 
 from __future__ import annotations
@@ -48,6 +56,7 @@ from datetime import date
 from pathlib import Path
 
 import matplotlib.dates as mdates
+import matplotlib.patheffects as mpatheffects
 from rdflib import RDF, RDFS, Graph, Namespace
 from rdflib.term import Node
 
@@ -73,7 +82,7 @@ LEVEL_ORDER = [
     ("LevelFirstInstance", "First instance", "FI", "#1baf7a"),
     ("LevelAppeal", "Appeal", "AP", "#eda100"),
     ("LevelCassation", "Cassation", "CA", "#e87ba4"),
-    ("LevelSupervisoryReview", "Supervisory review", "SR", "#008300"),
+    ("LevelCaseReview", "Case review", "CR", "#008300"),
     ("LevelReopening", "Reopening", "RO", "#4a3aa7"),
 ]
 LEVEL_STYLE = {
@@ -86,6 +95,22 @@ EVENT_CLASSES = {
     "AdministrativeAction": "dashed",
     "EnforcementAction": "dashdot",
     "ProsecutorialReview": "dotted",
+}
+
+# (node glyph, legend marker code, colour, legend label) -- shape carries the
+# meaning, colour reinforces it. Legend marker is matplotlib's own code
+# ("^"/"v"/"D") since Line2D markers don't accept arbitrary unicode glyphs;
+# the node glyph is plain text so it can share the badge's text rendering.
+# Keys are echr:OutcomeDirection individuals' local names (echr.ttl §6.4).
+OUTCOME_DIRECTION_STYLE = {
+    "DirectionFavourableToApplicant": ("▲", "^", "#1baf7a", "Favourable to applicant"),
+    "DirectionUnfavourableToApplicant": (
+        "▼",
+        "v",
+        "#c2453a",
+        "Unfavourable to applicant",
+    ),
+    "DirectionMixed": ("◆", "D", "#c98a00", "Mixed"),
 }
 
 
@@ -137,6 +162,7 @@ class Event:
     court: str | None
     level_local: str | None
     outcome_local: str | None
+    outcome_direction_local: str | None
     decision_date: date | None
     decision_text: str
     start_date: date | None
@@ -208,6 +234,7 @@ def load_events(g: Graph) -> tuple[dict, list[Event]]:
             )
             level = g.value(node, ECHR.hasInstanceLevel)
             outcome = g.value(node, ECHR.hasOutcome)
+            outcome_direction = g.value(node, ECHR.hasOutcomeDirection)
             dec_date, dec_text = parse_date(g.value(node, ECHR.hasDecisionDate))
             start_date, _ = parse_date(g.value(node, ECHR.hasProceedingStartDate))
             follows = list(g.objects(node, ECHR.followsProceeding))
@@ -261,6 +288,9 @@ def load_events(g: Graph) -> tuple[dict, list[Event]]:
                     court=court_label,
                     level_local=local_name(level) if level else None,
                     outcome_local=local_name(outcome) if outcome else None,
+                    outcome_direction_local=(
+                        local_name(outcome_direction) if outcome_direction else None
+                    ),
                     decision_date=dec_date,
                     decision_text=dec_text,
                     start_date=start_date,
@@ -610,6 +640,23 @@ def plot(
             ha="left",
             zorder=4,
         )
+        direction_style = OUTCOME_DIRECTION_STYLE.get(e.outcome_direction_local or "")
+        if direction_style is not None:
+            glyph, _marker, glyph_color, _label = direction_style
+            ax.text(
+                cx + box_w / 2 - box_w * 0.03,
+                cy + box_h / 2 - box_h * 0.06,
+                glyph,
+                fontsize=9,
+                fontweight="bold",
+                color=glyph_color,
+                va="top",
+                ha="right",
+                zorder=4,
+                path_effects=[
+                    mpatheffects.withStroke(linewidth=1.6, foreground="white")
+                ],
+            )
         court_line = truncate(e.court or e.label)
         date_line = e.decision_text or ""
         ax.text(
@@ -702,8 +749,32 @@ def plot(
         if cls in used_classes
     ]
 
+    used_directions = {e.outcome_direction_local for e in events} & set(
+        OUTCOME_DIRECTION_STYLE
+    )
+    direction_handles = [
+        plt.Line2D(
+            [0],
+            [0],
+            marker=OUTCOME_DIRECTION_STYLE[local][1],
+            markerfacecolor=OUTCOME_DIRECTION_STYLE[local][2],
+            markeredgecolor=OUTCOME_DIRECTION_STYLE[local][2],
+            linestyle="none",
+            markersize=8,
+            label=OUTCOME_DIRECTION_STYLE[local][3],
+        )
+        for local in OUTCOME_DIRECTION_STYLE
+        if local in used_directions
+    ]
+
     spacer = mpatches.Patch(facecolor="none", edgecolor="none", label="")
-    handles = level_handles + ([spacer] if class_handles else []) + class_handles
+    handles = (
+        level_handles
+        + ([spacer] if class_handles else [])
+        + class_handles
+        + ([spacer] if direction_handles else [])
+        + direction_handles
+    )
     ax.legend(
         handles=handles,
         title="Legend",

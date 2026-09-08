@@ -1,24 +1,12 @@
 # =============================================================================
 # CASE OF SYLVESTER v. AUSTRIA
 # 001-61054 | CHAMBER | 2003
-#
-# AI-GENERATED DRAFT -- read the source and amend.
-# Source: annotation/gold_text/001-61054.txt | Rules: annotation/annotation_guide.txt
-#
-# Revised under guide v1.1 §3.1: a narrated filing and its narrated decision are
-# TWO events. Four pairs split here -- the return request, the custody claim, and
-# both enforcement applications. Ids renumbered chronologically throughout.
-#
-# Further revised: the mother's appeal of 15 May 1996 (¶25), previously left
-# unrecorded and only referenced in notes, is now its own event (id 10). Ids
-# renumbered again to accommodate it.
+
 # =============================================================================
 
 case_id: "001-61054"
 case_name: "CASE OF SYLVESTER v. AUSTRIA"
 court_level: "CHAMBER"
-annotator: ""
-annotated_utc: ""
 mode: assisted
 guide_version: "1.1"
 
@@ -27,7 +15,7 @@ proceedings:
   # ---- Chain A: the Hague Convention return order (1, 3, 4, 5) ----
   - id: 1
     type: DomesticProceeding
-    body: "the Austrian courts"
+    body: "the Graz District Civil Court"
     authority_kind: Judicial
     jurisdiction_state: "Austria"
     start_date: "1995-10-31"
@@ -43,6 +31,7 @@ proceedings:
         side: Responding
         natural_person: true
     follows: null
+    matter: Custody
     quote: "On 31 October 1995 the first applicant, relying on the 1980 Hague Convention on the Civil Aspects of International Child Abduction (“the Hague Convention”), requested the Austrian courts to order the second applicant's return."
     note: "Filing half of a §3.1 pair; the decision is id 3. `body` is VERBATIM as
       this passage writes it (§5.2) -- the text says only “the Austrian courts”
@@ -69,6 +58,7 @@ proceedings:
         side: Responding
         natural_person: true
     follows: null
+    matter: Custody
     quote: "On 3 November 1995 the second applicant's mother filed an application with the Graz District Civil Court ( Bezirksgericht für Zivilrechtssachen ) for the award of sole custody over the second applicant."
     note: "Filing half of a §3.1 pair; the decision is id 20, over two years later
       -- the claim lay dormant under Article 16 of the Hague Convention while the
@@ -81,6 +71,7 @@ proceedings:
       enforcement chain's response to that filing, not to this custody chain."
 
   - id: 3
+    part_of: 1
     type: DomesticProceeding
     body: "the Graz District Civil Court"
     authority_kind: Judicial
@@ -97,7 +88,7 @@ proceedings:
       - name: "the second applicant’s mother"
         side: Responding
         natural_person: true
-    follows: 1
+    matter: Custody
     quote: "On 20 December 1995 the Graz District Civil Court, after having heard evidence from the first applicant and his wife and the oral statement of an expert in child psychology, Dr. K., ordered that the second applicant be returned to the first applicant at her former place of residence in Michigan."
     note: "Decision half of the pair opened at id 1. The second applicant (the
       child) is a party to the Strasbourg case but is the subject rather than a
@@ -120,7 +111,8 @@ proceedings:
       - name: "the first applicant"
         side: Responding
         natural_person: true
-    follows: 3
+    follows: 1
+    matter: Custody
     quote: "On 19 January 1996 the Graz Regional Civil Court ( Landesgericht für Zivilrechtssachen ) dismissed an appeal by the second applicant's mother."
     note: "The mother is Initiating here, having been Responding at ids 1 and 3.
       The appeal itself is not separately narrated -- only its dismissal -- so
@@ -145,6 +137,7 @@ proceedings:
         natural_person: true
     follows: 4
     final_domestic_decision: true
+    matter: Custody
     quote: "On 27 February 1996 the Supreme Court ( Oberster Gerichtshof ) dismissed a further appeal by the second applicant's mother."
     note: "Terminal event of the return-order chain; the order became final."
 
@@ -167,6 +160,7 @@ proceedings:
         side: Responding
         natural_person: true
     follows: 5
+    matter: Custody
     quote: "On 27 February 1996 the first applicant filed an application for enforcement of the return order of 20 December 1995."
     note: "Filing half of a §3.1 pair; the decision is id 8. Same date as id 5 but
       a separate act, narrated at ¶20 immediately after it. `body` is not named in
@@ -194,6 +188,7 @@ proceedings:
     borderline: true
     borderline_reason: "a UNITED STATES court -- narrated as part of this history but
       not a proceeding of the respondent State, so arguably not 'domestic'"
+    matter: Custody
     quote: "By a decision of 16 April 1996, the court pronounced a default judgment of divorce."
     note: "Divorce, sole custody to the first applicant, and an order that the child
       reside with him on return. See document_note -- ids 7, 11, 16 stand or fall
@@ -202,6 +197,7 @@ proceedings:
       put in start_date and no second act to quote."
 
   - id: 8
+    part_of: 6
     type: DomesticProceeding
     body: "the Graz District Civil Court"
     authority_kind: Judicial
@@ -218,7 +214,7 @@ proceedings:
       - name: "the second applicant’s mother"
         side: Responding
         natural_person: true
-    follows: 6
+    matter: Custody
     quote: "On 8 May 1996 the Graz District Civil Court ordered the enforcement of the return order under section 19 (1) of the Non-Contentious Proceedings Act ( Ausserstreitgesetz )."
     note: "Decision half of the pair opened at id 6. The judicial order authorising
       coercive measures; the physical attempt to execute it is id 9."
@@ -240,7 +236,8 @@ proceedings:
       - name: "the second applicant’s mother"
         side: Responding
         natural_person: true
-    follows: 8
+    follows: 6
+    matter: Custody
     quote: "In the early hours of 10 May 1996, an attempt to enforce the return order was made in accordance with the terms set out in the order of 8 May."
     note: "The clearest EnforcementAction in the sample: physical execution of an
       earlier decision. Unsuccessful -- the search did not find the child -- so
@@ -263,7 +260,8 @@ proceedings:
       - name: "the first applicant"
         side: Responding
         natural_person: true
-    follows: 8
+    follows: 6
+    matter: Custody
     quote: "On 15 May 1996 the second applicant's mother appealed against the decision of 8 May 1996 and again filed an application for the award of sole custody of the second applicant."
     note: "Previously left unrecorded -- flagged only in the notes on ids 2, 12 and
       13 of the prior revision -- now given its own event. Bundles TWO acts in one
@@ -296,6 +294,7 @@ proceedings:
     borderline: true
     borderline_reason: "a United States court; also an arrest warrant, which is the
       investigative-step boundary"
+    matter: Arrest
     quote: "On 29 May 1996 the United States District Court, Eastern District of Michigan, issued an arrest warrant against the second applicant's mother on suspicion of international parental kidnapping."
     note: "Two separate reasons to question this one."
 
@@ -316,7 +315,8 @@ proceedings:
       - name: "the second applicant’s mother"
         side: Responding
         natural_person: true
-    follows: 8
+    follows: 6
+    matter: Custody
     quote: "On 18 June 1996 the first applicant made a further application for enforcement of the return order."
     note: "Filing half of a §3.1 pair; the decision is id 17, ten months later.
       A transfer of jurisdiction, an appeal against it and a cassation (ids 13-15)
@@ -341,13 +341,17 @@ proceedings:
         side: Responding
         natural_person: true
     follows: 10
+    matter: Requests
     borderline: true
     borderline_reason: "a transfer of jurisdiction to another district court -- a
       procedural ruling rather than a determination of anything"
     quote: "By a decision of 25 June 1996 the Graz District Civil Court, at the request of the second applicant's mother, transferred jurisdiction to the Leibnitz District Court, in the judicial district of which the second applicant had purportedly established her residence."
     note: "RESOLVED: `follows` changed from 8 to 10 -- this is the disposition of
       the request made at id 10 (the second applicant's mother's filing of 15 May
-      1996), not a fresh, unlinked application. Quashed on appeal within id 14."
+      1996), not a fresh, unlinked application. Quashed on appeal within id 14.
+      `matter: Requests`, not Custody: this ruling is specifically the jurisdiction
+      transfer, not the custody question itself, which id 10 keeps as its own
+      matter and id 14 goes on to decide."
 
   - id: 14
     type: DomesticProceeding
@@ -367,6 +371,7 @@ proceedings:
         side: Initiating
         natural_person: true
     follows: [13, 10]
+    matter: Custody
     quote: "On 29 August 1996 the Graz Regional Civil Court granted an appeal by the first applicant against the transfer of jurisdiction and, on the mother's appeal, quashed the Graz District Civil Court's enforcement order of 8 May 1996 and referred the case back to it."
     note: "ONE decision disposing of TWO appeals -- the first applicant's against
       the transfer (id 13) and the mother's against the enforcement order, filed
@@ -392,6 +397,7 @@ proceedings:
         side: Responding
         natural_person: true
     follows: 14
+    matter: Custody
     quote: "On 15 October 1996 the Supreme Court dismissed an appeal by the first applicant and set aside the enforcement order of 8 May 1996."
     note: "Case referred back to the Graz District Civil Court (¶35)."
 
@@ -415,6 +421,7 @@ proceedings:
     follows: 7
     borderline: true
     borderline_reason: "a United States court"
+    matter: Custody
     quote: "On 23 April 1997 the Oakland Circuit Court issued a “safe harbour” order, valid until 21 October 1997, which provided, inter alia , that pending determination of custody in expedited proceedings, the first applicant would not exercise his right to sole custody of the child; the second applicant would live with her mother away from the first applicant, who would undertake to cover their living expenses; and the arrest warrant against the mother would be set aside as soon as she and the second applicant boarded a direct flight to Michigan."
     note: ""
 
@@ -436,6 +443,7 @@ proceedings:
         side: Responding
         natural_person: true
     follows: [12, 15]
+    matter: Custody
     quote: "On 29 April 1997 the Graz District Civil Court dismissed an application by the first applicant for enforcement of the return order."
     note: "Decision half of the pair opened at id 12 (§3.1), AND the remittal named
       in id 15's decision: ¶35 -- \"In accordance with the Supreme Court's
@@ -463,6 +471,7 @@ proceedings:
         side: Responding
         natural_person: true
     follows: 17
+    matter: Custody
     quote: "On 28 May 1997 the Graz Regional Civil Court dismissed an appeal by the first applicant."
     note: ""
 
@@ -490,8 +499,9 @@ proceedings:
       than MeritsDecided. Terminal event of the enforcement chain."
 
   - id: 20
+    part_of: 2
     type: DomesticProceeding
-    body: "the Graz District Civil Court"
+    body: "the Graz District Civil Court ( Bezirksgericht für Zivilrechtssachen )"
     authority_kind: Judicial
     jurisdiction_state: "Austria"
     decision_date: "1997-12-29"
@@ -506,7 +516,7 @@ proceedings:
       - name: "the first applicant"
         side: Responding
         natural_person: true
-    follows: 2
+    matter: Custody
     quote: "On 29 December 1997 the second applicant's mother was awarded sole custody of the second applicant by the Graz District Civil Court."
     note: "Decision half of the pair opened at id 2, reached once Article 16 of the
       Hague Convention no longer barred a custody ruling -- the enforcement chain
@@ -530,7 +540,8 @@ proceedings:
       - name: "the second applicant’s mother"
         side: Responding
         natural_person: true
-    follows: 20
+    follows: 2
     final_domestic_decision: true
+    matter: Custody
     quote: "Following appeal proceedings the judgment became final on 31 March 1998."
     note: "Almost nothing is stated."

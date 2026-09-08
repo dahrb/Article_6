@@ -1,0 +1,619 @@
+# =============================================================================
+# CASE OF STANEV v. BULGARIA
+# 001-108690 | GRANDCHAMBER | 2012 | BGR
+# =============================================================================
+
+case_id: "001-108690"
+case_name: "CASE OF STANEV v. BULGARIA"
+court_level: "GRANDCHAMBER"
+mode: assisted
+guide_version: "1.1"
+
+proceedings:
+
+  - id: 1
+    type: AdministrativeAction
+    body: "a panel of occupational physicians"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "1990-12-20"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Mixed
+    parties:
+      - name: "the applicant"
+        side: Unknown
+        natural_person: true
+    follows: null
+    borderline: true
+    borderline_reason: "a medical panel's disablement finding; whether an
+      occupational-fitness assessment is a milestone in the PROCEDURAL history or
+      simply the medical background the later proceedings rest on is genuinely
+      arguable"
+    quote: "On 20 December 1990 a panel of occupational physicians declared him unfit to work."
+    note: "Recorded because it created the invalidity pension that funds the
+      placement agreement at id 9."
+
+  - id: 2
+    type: DomesticProceeding
+    body: "the Ruse Regional Court ( Окръжен съд )"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    start_date: "2000"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Ruse regional prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    matter: Custody
+    quote: "On an unspecified date in 2000, at the request of the applicant’s two relatives, the Ruse regional prosecutor applied to the Ruse Regional Court ( Окръжен съд ) for a declaration of total legal incapacity in respect of the applicant."
+    note: "Filing half of a §3.1 pair; the judgment is id 3. start_date is the bare
+      year, which is all the text allows (“an unspecified date in 2000”). The two
+      relatives who asked the prosecutor to act are not parties to the court
+      proceeding and are not listed."
+
+  - id: 3
+    part_of: 2
+    matter: Custody
+    type: DomesticProceeding
+    body: "the Ruse Regional Court ( Окръжен съд )"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2000-11-20"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the Ruse regional prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    quote: "In a judgment of 20 November 2000, the court declared the applicant to be partially incapacitated on the grounds that he had been suffering from simple schizophrenia since 1975, and that his ability to manage his own affairs and interests and to realise the consequences of his own acts had been impaired."
+    note: "Decision half of the pair opened at id 2. Direction is contestable and
+      could be read as Mixed: the applicant lost legal capacity, but the court
+      refused the TOTAL incapacity the prosecutor had asked for. Recorded as
+      Unfavourable because the deprivation of capacity is what the applicant
+      spent the next six years trying to undo. The expert medical report and the
+      interviews are steps inside this proceeding (§3), not events."
+
+  - id: 4
+    type: DomesticProceeding
+    body: "the Veliko Tarnovo Court of Appeal ( Апелативен съд )"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2001-04-12"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Ruse regional prosecutor"
+        side: Responding
+        natural_person: false
+    follows: 2
+    matter: Custody
+    quote: "That judgment was upheld in a judgment of 12 April 2001 by the Veliko Tarnovo Court of Appeal ( Апелативен съд ) on an appeal by the applicant, and was subsequently transmitted to the Ruse Municipal Council on 7 June 2001 for the appointment of a guardian."
+    note: "No §3.1 split: the appeal is narrated only as “on an appeal by the
+      applicant”, with no date of its own."
+
+  - id: 5
+    type: AdministrativeAction
+    body: "the Municipal Council"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2002-05-23"
+    level: AdministrativeReview
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "Ms R.P."
+        side: Unknown
+        natural_person: true
+      - name: "the applicant"
+        side: Unknown
+        natural_person: true
+    follows: 4
+    matter: Custody
+    quote: "Since the applicant’s family members had refused to take on any guardianship responsibilities, on 23 May 2002 the Municipal Council appointed Ms R.P., a council officer, as the applicant’s guardian until 31 December 2002."
+    note: "Direction is arguable -- someone had to be appointed once id 3 stood, so
+      the appointment is as much a consequence as a decision against him. FOLDED:
+      the transmission of the appeal judgment to the Council for the appointment of
+      a guardian (\"and was subsequently transmitted to the Ruse Municipal Council
+      on 7 June 2001 for the appointment of a guardian\") was previously its own
+      borderline EnforcementAction record; it named no decision of its own and
+      shared id 4's quote entirely, so it is folded in here as the bureaucratic step
+      that led to this appointment rather than kept as a separate event."
+
+  - id: 6
+    type: AdministrativeAction
+    body: "the Ruse social services"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2002-07-23"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "R.P."
+        side: Initiating
+        natural_person: true
+      - name: "the applicant"
+        side: Unknown
+        natural_person: true
+    follows: 5
+    quote: "On 29 May 2002 R.P. asked the Ruse social services to place the applicant in a social care home for people with mental disorders. She appended to the application form a series of documents including a psychiatric diagnosis. Social services drew up a welfare report on the applicant, noting on 23 July 2002 that he was suffering from schizophrenia, that he lived alone in a small, run-down annexe to his half-sister’s house and that his half-sister and his father’s second wife had stated that they did not wish to act as his guardian. The requirements for placement in a social care home were therefore deemed to be fulfilled."
+    note: "R.P.'s request of 29 May 2002 and the resulting welfare report of 23 July
+      2002, folded into one record: the report's own language (\"drew up a welfare
+      report... noting\") is evidence-gathering, the same treatment this file gives
+      the expert medical report at id 3 and the social assessment at what is now id
+      24 -- not a decision in its own right. Previously modelled as a §3.1
+      filing/decision pair (ids 7-8); dropped that split because id 9 (now id 7),
+      the actual placement instrument, already `follows` the request directly and
+      never referenced the report as the decision it was responding to."
+
+  - id: 7
+    type: AdministrativeAction
+    body: "the Pastra social care home"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2002-12-10"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "R.P."
+        side: Initiating
+        natural_person: true
+      - name: "the applicant"
+        side: Unknown
+        natural_person: true
+    follows: 6
+    borderline: true
+    borderline_reason: "an AGREEMENT between the guardian and the home rather than a
+      decision by a body -- §4.4 names signed agreements as the hard case, and the
+      home is on one side of it as well as being the `body` here"
+    quote: "On 10 December 2002 a welfare-placement agreement was signed between R.P. and the social care home for adults with mental disorders near the village of Pastra in the municipality of Rila (“the Pastra social care home”), an institution under the responsibility of the Ministry of Labour and Social Policy."
+    note: "This is the instrument that placed the applicant, so it is recorded
+      despite the awkwardness the borderline note describes. `body` uses the short
+      name the same sentence establishes."
+
+  - id: 8
+    type: EnforcementAction
+    body: "the Pastra social care home"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2002-12-10"
+    level: Unknown
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Unknown
+        natural_person: true
+    follows: 7
+    quote: "Later that day, the applicant was taken by ambulance to the Pastra social care home, some 400 km from Ruse."
+    note: "Not borderline: “forced relocation to an institution” is the ontology's
+      own worked example of echr:EnforcementAction. `level` is Unknown because the
+      vocabulary has no value that fits an execution step."
+
+  - id: 9
+    type: AdministrativeAction
+    body: "the municipality of Rila"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2002-12-14"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the Director of the Pastra social care home"
+        side: Initiating
+        natural_person: true
+      - name: "the applicant"
+        side: Unknown
+        natural_person: true
+    follows: 8
+    borderline: true
+    borderline_reason: "a registration made at someone else's request -- §4.4 names
+      exactly this as the boundary case"
+    quote: "On 14 December 2002, at the request of the Director of the Pastra social care home, the applicant was registered as having his home address in the municipality of Rila."
+    note: "Recorded because the residence certificate stated the change was for
+      “permanent supervision”, which made the placement his official address."
+
+  - id: 10
+    type: ProsecutorialReview
+    body: "the public prosecutor’s office"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Bulgaria"
+    start_date: "2004-11-25"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 4
+    matter: Custody
+    quote: "On 25 November 2004 the applicant, through his lawyer, asked the public prosecutor’s office to apply to the Regional Court to have his legal capacity restored."
+    note: "Filing half of a §3.1 pair; the refusal is id 13. `follows: 4` because the
+      request procedurally attacks the incapacity declaration as upheld on appeal.
+      level FirstInstance rather than Investigative: this is a civil capacity
+      matter, not a criminal investigation, so the prosecutor is deciding at the
+      first tier of his own hierarchy (contrast worked example 1 in the schema).
+      The prosecutor's request of 2 March 2005 for medical documents and the
+      applicant's admission to a psychiatric hospital from 31 May to 15 June 2005
+      are evidence-gathering steps inside this request, not separate events -- see
+      document_note, which flags that as a reversible call."
+
+  - id: 11
+    type: AdministrativeAction
+    body: "the Municipal Council"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2005-02-02"
+    level: AdministrativeReview
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the Director of the Pastra social care home"
+        side: Unknown
+        natural_person: true
+      - name: "the applicant"
+        side: Unknown
+        natural_person: true
+    follows: 5
+    matter: Custody
+    quote: "In a letter dated 16 September 2005, she was informed that the Municipal Council had decided on 2 February 2005 to appoint the Director of the Pastra social care home as the applicant’s guardian."
+    note: "Replaces R.P. (id 5), whose appointment ran only to 31 December 2002. The
+      applicant's guardian was thereby the Director of the institution he was
+      trying to leave. Narrated out of chronological order -- the text reports it
+      inside the September 2005 letter -- but placed here by its own date."
+
+  - id: 12
+    type: AdministrativeAction
+    body: "the Municipal Council"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    start_date: "2005"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant’s guardian"
+        side: Initiating
+        natural_person: true
+      - name: "the applicant"
+        side: Unknown
+        natural_person: true
+    follows: null
+    matter: Pension
+    quote: "The case file indicates that in 2005 the applicant’s guardian asked the Municipal Council to grant a social allowance to facilitate his reintegration into the community."
+    note: "Filing half of a §3.1 pair; the grant is id 24. Head of an independent
+      chain -- the allowance track has no procedural link to the guardianship or
+      capacity chains. start_date is the bare year, all the text gives."
+
+  - id: 13
+    part_of: 10
+    matter: Custody
+    type: ProsecutorialReview
+    body: "the public prosecutor’s office"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2005-08-10"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    quote: "On 10 August 2005 the regional prosecutor refused to bring an action for restoration of the applicant’s legal capacity on the grounds that, in the opinion of the doctors, the Director of the Pastra social care home and the home’s social worker, the applicant was unable to cope on his own, and that the home, where he could undergo medical treatment, was the most suitable place for him to live."
+    note: "Decision half of the pair opened at id 10. MeritsDecided rather than
+      Inadmissible: the refusal turns on whether the applicant could cope, not on
+      any procedural bar. The lawyer's challenge to this refusal is undated, so it
+      gets no §3.1 filing event of its own."
+
+  - id: 14
+    type: AdministrativeAction
+    body: "the mayor of Rila"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    start_date: "2005-09-09"
+    level: AdministrativeReview
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: null
+    matter: Custody
+    quote: "On 9 September 2005 the applicant, through his lawyer, asked the mayor of Rila to bring a court action for his release from partial guardianship."
+    note: "Filing half of a §3.1 pair; the refusal is id 16. Head of its own chain:
+      the mayor's refusal cites the prosecutor's conclusions, but the text supports
+      no PROCEDURAL link back to id 13, and §5.4 says to record only links the text
+      supports."
+
+  - id: 15
+    type: AdministrativeAction
+    body: "the Rila Municipal Council"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    start_date: "2005-09-09"
+    level: AdministrativeReview
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: null
+    matter: Custody
+    quote: "On 9 September 2005 the applicant’s lawyer requested the Rila Municipal Council to appoint a guardian for her client."
+    note: "SEPARATE from id 14 although both are dated 9 September 2005 and both were
+      answered by a letter of 16 September: this one asks the COUNCIL to appoint a
+      guardian, id 14 asks the MAYOR to bring a court action for release. Different
+      addressee, different subject. A reviewer who reads ¶17 and ¶39 as two
+      accounts of one exchange should merge them under §8. No decision half: the
+      reply told the lawyer only that the Council had already appointed the
+      Director in February (id 11)."
+
+  - id: 16
+    part_of: 14
+    matter: Custody
+    type: AdministrativeAction
+    body: "the mayor of Rila"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2005-09-16"
+    level: AdministrativeReview
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    quote: "In a letter of 16 September 2005, the mayor of Rila refused his request, stating that there was no basis for such an action in view of the medical certificate of 15 June 2005, the opinions of the Director and the social worker, and the conclusions reached by the public prosecutor’s office."
+    note: "Decision half of the pair opened at id 14. This refusal is the decision
+      the applicant then took to court at id 17."
+
+  - id: 17
+    type: DomesticProceeding
+    body: "the Dupnitsa District Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    start_date: "2005-09-28"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the mayor of Rila"
+        side: Responding
+        natural_person: false
+    follows: 14
+    matter: Custody
+    quote: "On 28 September 2005 the applicant’s lawyer applied to the Dupnitsa District Court for judicial review of the mayor’s decision, under Article 115 of the Family Code (“the FC”) (see paragraph 49 below)."
+    note: "Filing half of a §3.1 pair; the judgment is id 20. proceeding_type Civil
+      because the review is brought under the Family Code, though Administrative is
+      defensible for a judicial review of a mayor's decision. The court's letter of
+      7 October 2005 about the form of authority and the hearing of 18 January 2006
+      are steps inside this proceeding (§3)."
+
+  - id: 18
+    type: ProsecutorialReview
+    body: "the appellate prosecutor"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2005-10-11"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 10
+    matter: Custody
+    quote: "Despite those objections, the regional prosecutor’s refusal was upheld on 11 October 2005 by the appellate prosecutor, and subsequently on 29 November 2005 by the Chief Public Prosecutor’s Office at the Supreme Court of Cassation."
+    note: "One sentence narrates two tiers of review; id 19 is the second. Shares
+      the quote for that reason."
+
+  - id: 19
+    type: ProsecutorialReview
+    body: "the Chief Public Prosecutor’s Office at the Supreme Court of Cassation"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2005-11-29"
+    level: Cassation
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 18
+    matter: Custody
+    quote: "Despite those objections, the regional prosecutor’s refusal was upheld on 11 October 2005 by the appellate prosecutor, and subsequently on 29 November 2005 by the Chief Public Prosecutor’s Office at the Supreme Court of Cassation."
+    note: "level Cassation reflects the top tier of the prosecutorial hierarchy, not
+      a court of cassation -- the body is a prosecutor's office attached to the
+      Supreme Court of Cassation. Unknown is the alternative if that stretches the
+      vocabulary too far. NO final_domestic_decision: this chain ends in a refusal
+      to bring an action, not in a court's disposal of one; the Article 6 complaint
+      runs through id 20."
+
+  - id: 20
+    part_of: 17
+    matter: Custody
+    type: DomesticProceeding
+    body: "the Dupnitsa District Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2006-03-10"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the mayor of Rila"
+        side: Responding
+        natural_person: false
+    final_domestic_decision: true
+    quote: "The Dupnitsa District Court gave judgment on 10 March 2006."
+    note: "Decision half of the pair opened at id 17, and the terminal event of the
+      chain the Article 6 complaint runs on: the court held the application
+      admissible but dismissed it on the merits, finding the guardian had no
+      legitimate interest, and “Since the judgment was not subject to appeal, it
+      became final.” That sentence is why the flag sits here rather than on any
+      later-dated event."
+
+  - id: 21
+    type: AdministrativeAction
+    body: "the Ruse municipal police"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Bulgaria"
+    start_date: "2006-10-13"
+    level: Unknown
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Director of the home"
+        side: Initiating
+        natural_person: true
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    matters: Request
+    borderline: true
+    borderline_reason: "an institution director's letter asking the police to find a
+      resident -- arguably an internal management act rather than a milestone in
+      any procedural history"
+    quote: "After the applicant failed to return on the scheduled date, the Director of the home wrote to the Ruse municipal police on 13 October 2006, asking them to search for the applicant and transfer him to Sofia, where employees of the home would be able to collect him and take him back to Pastra."
+    note: "Filing half of a §3.1 pair; the police decision is id 22. Recorded because
+      it sought a deprivation of liberty and drew a reasoned refusal. authority_kind
+      Prosecutorial per §6.6, which puts police with investigative bodies, even
+      though the event itself types as AdministrativeAction."
+
+  - id: 22
+    part_of: 21
+    type: AdministrativeAction
+    body: "the Ruse municipal police"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2006-10-19"
+    level: Unknown
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the Director of the home"
+        side: Initiating
+        natural_person: true
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    quote: "On 19 October 2006 the Ruse police informed the Director that the applicant’s whereabouts had been discovered but that the police could not transfer him because he was not the subject of a wanted notice."
+    note: "Decision half of the pair opened at id 21. Favourable to the applicant:
+      the police declined to return him against his will. He was taken back anyway
+      eleven days later (id 23), which is the point the judgment is making."
+
+  - id: 23
+    type: EnforcementAction
+    body: "the Pastra social care home"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2006-10-31"
+    level: Unknown
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Unknown
+        natural_person: true
+    follows: 21
+    borderline: true
+    borderline_reason: "a return carried out with no decision authorising it -- the
+      police had just refused -- and the text itself hedges on who did it
+      (“apparently by staff of the home”)"
+    quote: "He was driven back to the social care home on 31 October 2006, apparently by staff of the home."
+    note: "Recorded under §4's asymmetry rule: an unauthorised return to an
+      institution is exactly the kind of event that is invisible downstream if left
+      out. §4.5 cuts the other way, since the text does not firmly state who acted."
+
+  - id: 24
+    type: AdministrativeAction
+    body: "the municipal social assistance department"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2007-02-07"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 12
+    matter: Pension
+    quote: "On 7 February 2007 the municipal social assistance department granted the applicant a monthly allowance of BGN 16.50 (approximately EUR 8)."
+    note: "Decision half of the pair opened at id 12. The “social assessment” of
+      30 December 2005 is an evidence-gathering step inside this procedure, not a
+      separate event -- the same treatment the gold set gives expert reports."
+
+  - id: 25
+    type: AdministrativeAction
+    body: "the municipal social assistance department"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2009-02-03"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 24
+    quote: "On 3 February 2009 the allowance was increased to BGN 19.50 (approximately EUR 10)."
+    note: "The sentence is passive and names no body; `body` is carried over from the
+      department that granted the allowance in the preceding sentence."

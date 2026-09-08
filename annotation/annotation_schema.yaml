@@ -2,7 +2,7 @@
 # ANNOTATION SCHEMA — one file per document, named <case_id>.yaml
 # Companion to annotation/annotation_guide.txt. Section refs below point into it.
 #
-# Every key maps to exactly one construct in ontology/echr.ttl (v3.5.0).
+# Every key maps to exactly one construct in ontology/echr.ttl (v3.7.0).
 # annotation/evaluated_triples.yaml lists which of them are scored, and how.
 #
 # Conventions
@@ -46,7 +46,7 @@ proceedings:
                                      # §6.4   E echr:hasOutcomeDirection
     parties:                         #        one entry per party per event (§5)
       - name: "the applicant"        #        P echr:hasPartyName / hasPersonName
-        side: Initiating             # §6.7   p echr:hasPartySide echr:Side...
+        side: Initiating             # §6.8   p echr:hasPartySide echr:Side...
         natural_person: true         #        P a echr:NaturalPerson
     follows: null                    #        E echr:followsProceeding E'
                                      #        null = head of a chain. Not
@@ -54,6 +54,11 @@ proceedings:
                                      #        give a list [n, m] where one decision
                                      #        disposes of more than one predecessor
                                      #        (worked example 7).
+    matter: Investigation            # §6.7   E echr:hasMatter echr:Matter...
+                                     #        NOT filled on every event (§5.1) --
+                                     #        here because refusing to open an
+                                     #        investigation IS substantively about
+                                     #        the investigation.
     quote: "On 14 March 2005 the Sofia District Prosecutor's Office refused to
       open a criminal investigation into the applicant's complaint."
                                      #        E echr:hasSupportingQuote                         #        not a triple -- audit locator
@@ -137,14 +142,18 @@ proceedings:
     note: ""
 
   # ---------------------------------------------------------------------------
-  # Worked examples 5 and 6 — A FILING AND ITS DECISION, SPLIT (§3.1).
-  # The judgment narrates the institution and the judgment as two separate
-  # sentences, so they are two events. This is the NORMAL case; a record with
-  # both dates (example 1) is the exception.
+  # Worked examples 5 and 6 — A FILING AND ITS DECISION, SPLIT (§3.1), grouped
+  # as ONE PROCEEDING (§3.2). The judgment narrates the institution and the
+  # judgment as two separate sentences, so they are two RECORDS -- but one
+  # proceeding, one authority, decided once. This is the NORMAL case; a record
+  # with both dates (example 1) is the exception.
   #
-  # The filing half carries start_date and no decision_date; the decision half
-  # carries decision_date and no start_date. Everything that followed the
-  # proceeding -- appeals, enforcement -- follows the DECISION half.
+  # The filing half carries start_date and no decision_date, and heads the
+  # proceeding (no `part_of`). The decision half carries decision_date and no
+  # start_date, and takes `part_of: 5` -- NOT `follows` (§3.2: an act with
+  # `part_of` never also carries `follows`). Everything that followed the
+  # proceeding -- appeals, enforcement -- follows the FILING (id 5), which is
+  # the id that stands for the proceeding as a whole.
   # ---------------------------------------------------------------------------
   - id: 5
     type: DomesticProceeding
@@ -160,14 +169,16 @@ proceedings:
       - name: "the applicant"
         side: Initiating
         natural_person: true
-    follows: null
+    follows: null                    # heads its own proceeding (§3.2); id 5 is
+                                     # what anything continuing it points at
     quote: "On 15 March 1999 the applicant instituted civil proceedings against
       his employer in the Celje District Court seeking damages."
-    note: "Filing half of a §3.1 pair; the decision is id 6."
+    note: "Filing half of a §3.1 pair; the decision is id 6, part_of: 5."
 
   - id: 6
     type: DomesticProceeding
-    body: "the Celje District Court"   # same body, level, type as id 5
+    body: "the Celje District Court"   # same body, level, type as id 5 (§3.2
+                                       # requires the five shared fields agree)
     authority_kind: Judicial
     jurisdiction_state: "Slovenia"
     decision_date: "2003-06-05"        # no start_date on a decision event
@@ -179,7 +190,8 @@ proceedings:
       - name: "the applicant"
         side: Initiating
         natural_person: true
-    follows: 5                         # the decision follows its own filing
+    part_of: 5                         # second act of the SAME proceeding
+                                       # (§3.2) -- NOT `follows`
     quote: "On 5 June 2003 the court dismissed the claim."
     note: "Decision half of a §3.1 pair. Note the four-year gap is irrelevant to
       the split -- what matters is that the text narrates both acts."
@@ -244,6 +256,92 @@ proceedings:
       courts (§5.1). `jurisdiction_state` is what makes that a checkable fact
       rather than something inferred from `body` or the borderline note alone."
 
+  # ---------------------------------------------------------------------------
+  # Worked example 9 — A PENDING PROCEEDING (§4.1, §5.1 `is_pending`).
+  # Same shape as a §3.1 filing (start_date, no decision_date, outcome
+  # Unknown), but `is_pending` is what tells them apart: this one has no
+  # decision anywhere in the file because the text says there is none yet, not
+  # because it is written elsewhere at the id named by `part_of`.
+  # ---------------------------------------------------------------------------
+  - id: 9
+    type: DomesticProceeding
+    body: "the Ljubljana Higher Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    start_date: "2003-07-01"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 6
+    is_pending: true                   # E echr:isPending true -- set on the
+                                       # head of the proceeding, never on an
+                                       # act carrying `part_of`
+    quote: "The applicant's appeal against that judgment is still pending
+      before the Ljubljana Higher Court."
+    note: "No decision_date anywhere for this proceeding -- is_pending says
+      why: the text reports it as undecided, not merely unreported."
+
+  # ---------------------------------------------------------------------------
+  # Worked example 10 — A NON-OCCURRING EVENT (§5.1 `non_occurring`). The text
+  # narrates something that was NOT done, not something that happened. Typed
+  # as what it would have been; no decision_date; outcome stays Unknown.
+  # ---------------------------------------------------------------------------
+  - id: 10
+    type: DomesticProceeding
+    body: "the Ljubljana Higher Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 6
+    non_occurring: true                # E echr:isNonOccurring true -- typed as
+                                       # what an appeal from this court would
+                                       # have been, not as a real proceeding
+    quote: "The applicant did not appeal against that judgment."
+    note: "No start_date, no decision_date -- nothing happened to date. Contrast
+      example 9: pending is a real proceeding awaiting decision; this one never
+      started."
+
+  # ---------------------------------------------------------------------------
+  # Worked example 11 — `matter` AS A LIST (§5.1, §6.7). One decision ruling on
+  # two distinct substantive matters at once: continuing detention AND setting
+  # bail conditions for its future end. Contrast example 1's single `matter`.
+  # ---------------------------------------------------------------------------
+  - id: 11
+    type: DomesticProceeding
+    body: "the Sofia City Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2005-12-01"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: Mixed
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 2
+    matter: [Detention, Bail]          # NOT functional -- one decision, two
+                                       # substantive matters (§5.1)
+    quote: "The court extended the applicant's detention by two months but
+      ordered his release on bail of BGN 5,000 once that sum was paid."
+    note: "Mixed direction: continued detention is unfavourable, the bail
+      route out of it is favourable, on the same request. Contrast a plain
+      detention extension with no bail offered, which would carry only
+      `matter: Detention`."
+
 # =============================================================================
 # Document-level notes: anything about the judgment as a whole -- an unusual
 # structure, a section you judged out of scope, a chain you could not resolve.
@@ -253,3 +351,11 @@ document_note: >
   Two unconnected chains: the criminal complaint (events 1-3) and the unrelated
   civil compensation claim (events 4-6). No procedural link between them in the
   text, so no `follows` crosses.
+
+# =============================================================================
+# subject_matter (§5.6): free text, open vocabulary, what the case was
+# actually about -- not the procedural track (proceeding_type). Give more than
+# one value where the document's chains are about different things.
+# =============================================================================
+subject_matter:
+  - "custody of the applicant's children"

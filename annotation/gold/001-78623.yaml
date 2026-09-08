@@ -1,16 +1,11 @@
 # =============================================================================
 # CASE OF MARKOVIC AND OTHERS v. ITALY
 # 001-78623 | GRANDCHAMBER | 2006
-#
-# AI-GENERATED DRAFT -- read the source and amend.
-# Source: annotation/gold_text/001-78623.txt | Rules: annotation/annotation_guide.txt
 # =============================================================================
 
 case_id: "001-78623"
 case_name: "CASE OF MARKOVIC AND OTHERS v. ITALY"
 court_level: "GRANDCHAMBER"
-annotator: ""
-annotated_utc: ""
 mode: assisted
 guide_version: "1.1"
 
@@ -68,6 +63,7 @@ proceedings:
         side: Responding
         natural_person: false
     follows: null
+    matter: Damages
     quote: "On 31 May 2000 the first four applicants brought an action in damages in the Rome District Court under Article 2043 of the Italian Civil Code. The other six applicants applied to be joined to the proceedings on 3 November 2000."
     note: "No outcome: the supplied text stops before this proceeding is decided --
       see document_note. Ten separate party entries because the judgment names each
@@ -97,28 +93,12 @@ proceedings:
         side: Initiating
         natural_person: false
     follows: 1
+    matter: Requests
     quote: "The Prime Minister’s Office and the Ministry of Defence subsequently sought a preliminary ruling from the Court of Cassation on the question of jurisdiction ( regolamento preventivo di giurisdizione ) under Article 41 of the Italian Code of Civil Procedure."
     note: "An interlocutory jurisdiction reference, not an appeal -- the defendants
       are Initiating here having been Responding in id 1. No date for the
       application and NO RULING IS RECORDED; the text ends inside Assistant
       Principal State Counsel's submissions of 16 Nov 2001. Those submissions are an
-      advocate's argument, not a decision, so they are not an event."
-
-document_note: >
-  THE SUPPLIED TEXT IS TRUNCATED. It ends mid-quotation inside ¶17, before the
-  Court of Cassation rules and before the Rome District Court disposes of the
-  claim, so no event has an outcome and NO EVENT IS MARKED final_domestic_decision
-  -- nothing in this text concludes.
-
-  Check this against the source before accepting: if the truncation is an artefact
-  of corpus preparation rather than of the judgment, the annotation is measuring a
-  broken document. It is still a FAIR comparison, because every arm was given this
-  same truncated text.
-
-  The extensive NATO background (¶11-12, quoting Banković) narrates a military
-  operation, not domestic proceedings, and yields no events.
-
-  NO §3.1 SPLIT (guide v1.1). Neither record folds a filing into a decision: the
-  supplied text stops before either proceeding is decided, so both already carry a
-  start_date and no decision_date -- the same shape a §3.1 filing event takes, but
-  for the opposite reason.
+      advocate's argument, not a decision, so they are not an event. `matter:
+      Requests`: a jurisdictional reference goes to which forum conducts the
+      proceeding, not to the underlying claim."

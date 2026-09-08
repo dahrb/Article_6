@@ -70,7 +70,7 @@ echr:DomesticEventAtomicShape a sh:NodeShape ;
         sh:maxCount 1 ;
         sh:in ( echr:LevelInvestigative echr:LevelAdministrativeReview echr:LevelFirstInstance
                 echr:LevelAppeal echr:LevelCassation
-                echr:LevelSupervisoryReview echr:LevelReopening
+                echr:LevelCaseReview echr:LevelReopening
                 echr:LevelUnknown ) ;
         sh:message "hasInstanceLevel must be a single value from the closed InstanceLevel vocabulary" ;
     ] ;
@@ -96,11 +96,13 @@ echr:DomesticEventAtomicShape a sh:NodeShape ;
         sh:message "hasOutcomeDirection must be a single value from the closed OutcomeDirection vocabulary" ;
     ] ;
     sh:property [
-        sh:path echr:hasStatusApplied ;
-        sh:maxCount 1 ;
-        sh:in ( echr:StatusPartialIncapacity echr:StatusFullIncapacity
-                echr:StatusCapacityRestored echr:StatusOther echr:StatusUnknown ) ;
-        sh:message "hasStatusApplied must be a single value from the closed StatusAlteration vocabulary" ;
+        sh:path echr:hasMatter ;
+        sh:in ( echr:MatterArrest echr:MatterDetention echr:MatterBail echr:MatterCharge
+                echr:MatterConviction echr:MatterInvestigation echr:MatterDamages echr:MatterCustody
+                echr:MatterEmployment echr:MatterPension echr:MatterProperty echr:MatterExtradition
+                echr:MatterLegalAid echr:MatterVetting echr:MatterDisciplinary echr:MatterRequests
+                echr:MatterOther echr:MatterUnknown ) ;
+        sh:message "hasMatter must be one or more values from the closed Matter vocabulary -- not maxCount 1, since one event may rule on more than one matter" ;
     ] ;
     sh:property [
         sh:path echr:hasProceedingStartDate ;
@@ -127,14 +129,10 @@ echr:DomesticEventAtomicShape a sh:NodeShape ;
         sh:message "isFinalDomesticDecision must be a single boolean" ;
     ] ;
     sh:property [
-        sh:path echr:hasInactivityPeriod ;
-        sh:class echr:InactivityPeriod ;
-        sh:message "echr:hasInactivityPeriod must point at a node typed echr:InactivityPeriod" ;
-    ] ;
-    sh:property [
-        sh:path echr:hasAdjournment ;
-        sh:class echr:Adjournment ;
-        sh:message "echr:hasAdjournment must point at a node typed echr:Adjournment" ;
+        sh:path echr:isNonOccurring ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:boolean ;
+        sh:message "isNonOccurring must be a single boolean" ;
     ] ;
     sh:property [
         sh:path echr:hasParticipation ;
@@ -146,6 +144,20 @@ echr:DomesticEventAtomicShape a sh:NodeShape ;
         sh:or ( [ sh:class echr:DomesticProceeding ] [ sh:class echr:AdministrativeAction ]
                 [ sh:class echr:EnforcementAction ] [ sh:class echr:ProsecutorialReview ] ) ;
         sh:message "echr:followsProceeding must point at a node typed as one of the four DomesticEvent subclasses" ;
+    ] ;
+    sh:property [
+        sh:path echr:partOfProceeding ;
+        sh:maxCount 1 ;
+        sh:or ( [ sh:class echr:DomesticProceeding ] [ sh:class echr:AdministrativeAction ]
+                [ sh:class echr:EnforcementAction ] [ sh:class echr:ProsecutorialReview ] ) ;
+        sh:message "echr:partOfProceeding must be a single value, pointing at a node typed as one of the four DomesticEvent subclasses" ;
+    ] ;
+    sh:property [
+        sh:path echr:occursDuring ;
+        sh:maxCount 1 ;
+        sh:or ( [ sh:class echr:DomesticProceeding ] [ sh:class echr:AdministrativeAction ]
+                [ sh:class echr:EnforcementAction ] [ sh:class echr:ProsecutorialReview ] ) ;
+        sh:message "echr:occursDuring must be a single value, pointing at a node typed as one of the four DomesticEvent subclasses" ;
     ] .
 
 echr:AuthorityAtomicShape a sh:NodeShape ;
@@ -435,7 +447,7 @@ echr:GenderCueTextShape a sh:NodeShape ;
 echr:SingleLabelShape a sh:NodeShape ;
     sh:targetClass echr:DomesticAuthority, echr:DomesticProceeding, echr:AdministrativeAction,
         echr:EnforcementAction, echr:ProsecutorialReview, echr:CaseDocument,
-        echr:InactivityPeriod, echr:Adjournment, echr:Party, echr:NaturalPerson,
+        echr:Party, echr:NaturalPerson,
         echr:LegalRepresentative, echr:PreTrialDetention ;
     sh:property [
         sh:path rdfs:label ;
@@ -443,52 +455,10 @@ echr:SingleLabelShape a sh:NodeShape ;
         sh:message "a node with more than one rdfs:label is asserting that two distinct entities are the same one -- split it instead of labelling it twice" ;
     ] .
 
-echr:InactivityAtomicShape a sh:NodeShape ;
-    sh:targetClass echr:InactivityPeriod ;
-    sh:property [
-        sh:path echr:hasInactivityCause ;
-        sh:maxCount 1 ;
-        sh:in ( echr:DelayAttributedToAuthorities echr:DelayAttributedToApplicant echr:DelayUnattributed ) ;
-        sh:message "hasInactivityCause must be a single value from the closed DelayAttribution vocabulary" ;
-    ] ;
-    sh:property [
-        sh:path echr:hasInactivityStartDate ;
-        sh:maxCount 1 ;
-        sh:node echr:PartialDateShape ;
-        sh:message "an inactivity period may have at most one start date" ;
-    ] ;
-    sh:property [
-        sh:path echr:hasInactivityEndDate ;
-        sh:maxCount 1 ;
-        sh:node echr:PartialDateShape ;
-        sh:message "an inactivity period may have at most one end date" ;
-    ] .
-
-echr:AdjournmentAtomicShape a sh:NodeShape ;
-    sh:targetClass echr:Adjournment ;
-    sh:property [
-        sh:path echr:hasAdjournmentCause ;
-        sh:maxCount 1 ;
-        sh:in ( echr:DelayAttributedToAuthorities echr:DelayAttributedToApplicant echr:DelayUnattributed ) ;
-        sh:message "hasAdjournmentCause must be a single value from the closed DelayAttribution vocabulary" ;
-    ] ;
-    sh:property [
-        sh:path echr:hasAdjournmentDate ;
-        sh:maxCount 1 ;
-        sh:node echr:PartialDateShape ;
-        sh:message "an adjournment may have at most one adjournment date" ;
-    ] ;
-    sh:property [
-        sh:path echr:hasResumptionDate ;
-        sh:maxCount 1 ;
-        sh:node echr:PartialDateShape ;
-        sh:message "an adjournment may have at most one resumption date" ;
-    ] .
-
 echr:CaseDocumentAtomicShape a sh:NodeShape ;
     sh:targetClass echr:CaseDocument ;
-    sh:property [ sh:path echr:hasHudocId ; sh:maxCount 1 ] ;
     sh:property [ sh:path echr:hasCaseName ; sh:maxCount 1 ] ;
+    sh:property [ sh:path echr:hasSubjectMatter ; sh:datatype xsd:string ; sh:minLength 3 ] ;
     sh:property [ sh:path echr:hasRespondentState ; sh:maxCount 1 ] ;
     sh:property [ sh:path echr:hasJudgmentDate ; sh:maxCount 1 ; sh:node echr:PartialDateShape ] ;
     sh:property [
@@ -519,11 +489,10 @@ echr:PartyLinkShape a sh:NodeShape ;
         sh:message "echr:isRepresentedBy must point at a node typed echr:LegalRepresentative" ;
     ] .
 
-# The pre-trial detention module (echr:PreTrialDetention, echr:CustodialMeasure)
-# has carried five owl:FunctionalProperty datatype/object properties since it
-# was added, with no shape ever enforcing the cardinality OWL itself does not
-# -- the same silent-clobbering gap this whole file exists to close for every
-# other class. Mirrors InactivityAtomicShape/AdjournmentAtomicShape.
+# The pre-trial detention module (echr:PreTrialDetention) has carried several
+# owl:FunctionalProperty datatype/object properties since it was added, with no
+# shape ever enforcing the cardinality OWL itself does not -- the same
+# silent-clobbering gap this whole file exists to close for every other class.
 echr:PreTrialDetentionAtomicShape a sh:NodeShape ;
     sh:targetClass echr:PreTrialDetention ;
     sh:property [
@@ -531,13 +500,6 @@ echr:PreTrialDetentionAtomicShape a sh:NodeShape ;
         sh:maxCount 1 ;
         sh:class echr:NaturalPerson ;
         sh:message "a pre-trial detention must record at most one detainee" ;
-    ] ;
-    sh:property [
-        sh:path echr:hasCustodialMeasure ;
-        sh:maxCount 1 ;
-        sh:in ( echr:MeasurePoliceCustody echr:MeasureRemandInCustody echr:MeasureHouseArrest
-                echr:MeasurePsychiatricConfinement echr:MeasureOther echr:MeasureUnknown ) ;
-        sh:message "hasCustodialMeasure must be a single value from the closed CustodialMeasure vocabulary" ;
     ] ;
     sh:property [
         sh:path echr:hasDetentionStartDate ;
@@ -577,7 +539,7 @@ echr:PreTrialDetentionAtomicShape a sh:NodeShape ;
 # extracted before the rule existed is incomplete, not wrong.
 echr:EvidenceAnchoringShape a sh:NodeShape ;
     sh:targetClass echr:DomesticProceeding, echr:AdministrativeAction, echr:EnforcementAction,
-        echr:ProsecutorialReview, echr:InactivityPeriod, echr:Adjournment, echr:PreTrialDetention,
+        echr:ProsecutorialReview, echr:PreTrialDetention,
         echr:Participation ;
     sh:property [
         sh:path echr:hasSupportingQuote ;
@@ -618,42 +580,6 @@ echr:DomesticEventDateOrderShape a sh:NodeShape ;
         """ ;
     ] .
 
-echr:InactivityDateOrderShape a sh:NodeShape ;
-    sh:targetClass echr:InactivityPeriod ;
-    sh:sparql [
-        a sh:SPARQLConstraint ;
-        sh:message "hasInactivityEndDate is earlier than hasInactivityStartDate on the same period" ;
-        sh:select """
-            PREFIX echr: <https://growgraph.dev/echr#>
-            PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-            SELECT $this
-            WHERE {
-                $this echr:hasInactivityStartDate ?start ;
-                      echr:hasInactivityEndDate ?end .
-                FILTER(datatype(?start) = xsd:date && datatype(?end) = xsd:date)
-                FILTER(?end < ?start)
-            }
-        """ ;
-    ] .
-
-echr:AdjournmentDateOrderShape a sh:NodeShape ;
-    sh:targetClass echr:Adjournment ;
-    sh:sparql [
-        a sh:SPARQLConstraint ;
-        sh:message "hasResumptionDate is earlier than hasAdjournmentDate on the same adjournment" ;
-        sh:select """
-            PREFIX echr: <https://growgraph.dev/echr#>
-            PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-            SELECT $this
-            WHERE {
-                $this echr:hasAdjournmentDate ?adj ;
-                      echr:hasResumptionDate ?res .
-                FILTER(datatype(?adj) = xsd:date && datatype(?res) = xsd:date)
-                FILTER(?res < ?adj)
-            }
-        """ ;
-    ] .
-
 echr:DetentionDateOrderShape a sh:NodeShape ;
     sh:targetClass echr:PreTrialDetention ;
     sh:sparql [
@@ -668,6 +594,22 @@ echr:DetentionDateOrderShape a sh:NodeShape ;
                       echr:hasDetentionEndDate ?end .
                 FILTER(datatype(?start) = xsd:date && datatype(?end) = xsd:date)
                 FILTER(?end < ?start)
+            }
+        """ ;
+    ] .
+
+echr:NonOccurringNoDecisionShape a sh:NodeShape ;
+    sh:targetClass echr:DomesticProceeding, echr:AdministrativeAction, echr:EnforcementAction,
+        echr:ProsecutorialReview ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "isNonOccurring is true but this event also carries a hasDecisionDate -- an event the facts narrate as never having happened cannot also have been decided" ;
+        sh:select """
+            PREFIX echr: <https://growgraph.dev/echr#>
+            SELECT $this
+            WHERE {
+                $this echr:isNonOccurring true ;
+                      echr:hasDecisionDate ?d .
             }
         """ ;
     ] .
@@ -691,6 +633,28 @@ echr:ProceduralChainOrderShape a sh:NodeShape ;
                 ?prior echr:hasDecisionDate ?priorDecision .
                 FILTER(datatype(?thisStart) = xsd:date && datatype(?priorDecision) = xsd:date)
                 FILTER(?thisStart < ?priorDecision)
+            }
+        """ ;
+    ] .
+
+# A proceeding cannot follow itself round a loop. Property-path `+` gives a
+# transitive check in one query rather than one hop at a time; a cycle among
+# PROCEEDINGS is what matters (echr:followsProceeding relates proceedings, not
+# acts -- see its skos:scopeNote), so this targets only nodes with no
+# echr:partOfProceeding of their own, same as ProceduralChainOrderShape.
+# Mirrors the DFS cycle check in art6/data/check_annotations.py, which runs the
+# same check over annotation YAML rather than an extracted graph.
+echr:FollowsProceedingCycleShape a sh:NodeShape ;
+    sh:targetSubjectsOf echr:followsProceeding ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "this proceeding is reachable from itself via echr:followsProceeding -- the chain forms a cycle" ;
+        sh:select """
+            PREFIX echr: <https://growgraph.dev/echr#>
+            SELECT $this
+            WHERE {
+                FILTER NOT EXISTS { $this echr:partOfProceeding ?anyGroup }
+                $this echr:followsProceeding+ $this .
             }
         """ ;
     ] .

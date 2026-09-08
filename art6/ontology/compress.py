@@ -398,13 +398,34 @@ def call_with_recovery(client: OpenAI, *, label: str, method: str = "create", **
     TRANSIENT_MAX_WAIT_SECONDS of retrying has not helped -- at which point the
     endpoint is down rather than restarting, and the caller should record the
     document as failed and carry on to the next one.
+
+    Cached on the request when LLM_CACHE_ENABLED is on
+    (art6.ontology.llm_cache), for `create` only. `parse` returns a
+    ParsedChatCompletion carrying a live pydantic object, which does not
+    survive a JSON round trip intact; it is only used by run_conditions.py's
+    C0 baseline, which is not part of the staged pipeline, so it stays
+    uncached rather than being cached wrongly.
     """
+    from art6.ontology import llm_cache
+
+    cache_key = None
+    if method == "create":
+        cache_key = llm_cache.make_key("compress_call", {"kwargs": kwargs})
+        cached = llm_cache.load("compress_call", cache_key)
+        if cached is not llm_cache.MISS:
+            from openai.types.chat import ChatCompletion
+
+            return ChatCompletion.model_validate(cached)
+
     endpoint = getattr(client.chat.completions, method)
     waited = 0.0
     index = 0
     while True:
         try:
-            return endpoint(**kwargs)
+            response = endpoint(**kwargs)
+            if cache_key is not None:
+                llm_cache.store("compress_call", cache_key, response.model_dump())
+            return response
         except Exception as exc:
             if not _is_transient(exc) or waited >= TRANSIENT_MAX_WAIT_SECONDS:
                 raise

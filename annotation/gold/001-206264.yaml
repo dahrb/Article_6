@@ -31,6 +31,7 @@ proceedings:
         side: Responding
         natural_person: true
     follows: null
+    matter: [Investigation, Charge]
     quote: "On 18 May 2000 an investigator from the Federal Security Service (“the FSB”, Федеральная служба безопасности РФ ) opened a case in relation to a suspicion that State secrets had been disclosed by a person with security clearance."
     note: "Opening the investigation, plus the questioning and initial charging
       described in the same paragraph. Eventually high treason and fraud."
@@ -97,6 +98,7 @@ proceedings:
         side: Responding
         natural_person: true
     follows: 2
+    matter: Charge
     quote: "By a decision of 24 July 2002 the charges were amended."
     note: "An amendment of the charges during the fresh investigation. The deciding
       body is not named. Borderline against id 1 -- if amendments are steps within
@@ -202,6 +204,7 @@ proceedings:
       application. REVIEW if you read an own-motion opening as not an institution."
 
   - id: 10
+    part_of: 9
     type: DomesticProceeding
     body: "the Regional Court"
     authority_kind: Judicial
@@ -218,7 +221,7 @@ proceedings:
       - name: "the applicant"
         side: Responding
         natural_person: true
-    follows: 9
+    matter: Conviction
     quote: "By a verdict of 29 December 2003 the jury acquitted the applicant, and on 30 December 2003 the Regional Court rendered a judgment clearing him of all charges."
     note: "Decision half of the pair opened at id 9 -- the FIRST trial, by jury. The
       exclusion of the defence's scientific evidence on 3 Dec 2003 falls in the gap
@@ -241,7 +244,8 @@ proceedings:
       - name: "the applicant"
         side: Responding
         natural_person: true
-    follows: 10
+    follows: 9
+    matter: Conviction
     quote: "On 9 June 2004 the Supreme Court, presided over by Judge K., accepted the prosecution’s arguments and quashed the judgment, owing to various procedural irregularities, including errors in the procedure for counting and submitting the votes of the jury."
     note: "Quashes the acquittal and orders a retrial."
 
@@ -269,6 +273,7 @@ proceedings:
       FirstInstance. As at id 9 the institution is the court's own dated act."
 
   - id: 13
+    part_of: 12
     type: DomesticProceeding
     body: "the Regional Court"
     authority_kind: Judicial
@@ -285,7 +290,7 @@ proceedings:
       - name: "the applicant"
         side: Responding
         natural_person: true
-    follows: 12
+    matter: Conviction
     quote: "On 24 November 2004 the Regional Court convicted the applicant as charged for having committed high treason by disclosing to Chinese nationals information about the space simulator and the “Aquagen” space simulation system which constituted a State secret, in breach of Article 275 of the Criminal Code (see paragraph 58 below); the applicant was also convicted of fraud in respect of his former employer, the University, an offence in breach of Article 159 § 3 of the Criminal Code (see paragraph 59 below)."
     note: "Decision half of the pair opened at id 12. Fourteen years' imprisonment.
       The refused jury challenges (¶34-35) and the refused application to question
@@ -311,6 +316,7 @@ proceedings:
         natural_person: false
     follows: 11
     final_domestic_decision: true
+    matter: Conviction
     quote: "On the same day the Supreme Court upheld, for the most part, the judgment of 24 November 2004, reducing the sentence to thirteen years’ imprisonment."
     note: "Direction Mixed: conviction upheld but the sentence reduced from fourteen
       to thirteen years. Judge K. presided, having sat at ids 6, 8 and 10; the

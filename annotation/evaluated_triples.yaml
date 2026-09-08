@@ -142,6 +142,64 @@ tier_b:
       chains has one flag per exhausted chain, and a chain still pending at the
       time of application has none.
 
+  - name: is_pending
+    yaml_field: is_pending
+    triples: ["E echr:isPending true"]
+    metric: precision, recall, F1 over flagged proceedings
+    note: >
+      Set on the head of a proceeding only (guide §5.1), never on one of its
+      acts. TIER B because C0's flat schema has no field for it, on the same
+      terms as final_domestic_decision above.
+
+  - name: proceeding_grouping
+    yaml_field: part_of
+    triples: ["A echr:partOfProceeding P"]
+    metric: precision, recall, F1 over grouped acts
+    note: >
+      Guide §3.2's two-layer model: a §3.1 filing/decision pair, or two acts of
+      one proceeding, sharing one proceeding id. C0's flat schema cannot
+      express grouping distinct from `follows`, so this is TIER B.
+
+  - name: occurs_during_edge
+    yaml_field: occurs_during
+    triples: ["P echr:occursDuring P'"]
+    metric: precision, recall, F1 over edges
+    note: >
+      Guide §5.4: a proceeding decided while its container was still pending,
+      where `followsProceeding` would misstate that the container had already
+      been decided. TIER B for the same reason as chain_edge and
+      proceeding_grouping above.
+
+  - name: non_occurring
+    yaml_field: non_occurring
+    triples: ["E echr:isNonOccurring true"]
+    metric: precision, recall, F1 over flagged events
+    note: >
+      Guide §5.1: the text narrates something that was NOT done ("did not
+      appeal"), not something that happened. Rare by construction. TIER B --
+      C0's flat schema has no field for it.
+
+  - name: matter
+    yaml_field: matter
+    triples: ["E echr:hasMatter ?m"]
+    metric: precision, recall over matched events; closed-vocabulary conformance
+    note: >
+      Guide §5.1, §6.7: what a specific event was substantively about (bail,
+      damages, arrest, ...), NOT filled on every event -- scored as
+      precision/recall over the events either side actually tagged, not
+      accuracy over every matched event, since omission is the expected value
+      for most events. Not owl:FunctionalProperty: an event may carry more
+      than one value. TIER B -- C0's flat schema has no field for it.
+
+  - name: subject_matter
+    yaml_field: subject_matter
+    triples: ["D echr:hasSubjectMatter ?s"]
+    metric: judge-scored similarity (descriptive, not precision/recall)
+    note: >
+      Free text, open vocabulary (guide §5.6) -- there is no fixed reference
+      value to match against, so this is reported descriptively via judge
+      comparison, not scored the way closed-vocabulary fields are. TIER B.
+
 # -----------------------------------------------------------------------------
 # TIER C -- structural, mechanical only, no annotation needed.
 # Computed by art6/ontology/diagnostics/ablation_auto_eval.py over all arms.
@@ -159,14 +217,10 @@ tier_c:
 # State as a scope limit in Methods.
 # -----------------------------------------------------------------------------
 out_of_scope:
-  - echr:InactivityPeriod, echr:hasInactivityCause
-  - echr:Adjournment, echr:hasAdjournmentCause
   - echr:PreTrialDetention and all its properties (the ORDER imposing detention
     is in scope as an event; the detention period is not)
   - echr:hasGender, echr:hasGenderCue, echr:hasGenderCueText
   - echr:isRepresentedBy, echr:LegalRepresentative
-  - echr:hasStatusApplied
-  - echr:isPending
   - echr:hasApplicant on the case document
   - echr:hasProceedingStartDate is ANNOTATED but not scored -- it disambiguates
     one-event-or-two during alignment, and C0 has no field for it

@@ -19,7 +19,7 @@ patch from each stage is applied before the next stage's findings are derived.
     1. missing echr:followsProceeding links between domestic proceedings,
        flagged deterministically wherever hasInstanceLevel places the
        proceeding at an appeal-shaped level (echr:LevelAppeal,
-       echr:LevelCassation, echr:LevelSupervisoryReview, echr:LevelReopening)
+       echr:LevelCassation, echr:LevelCaseReview, echr:LevelReopening)
        or hasOutcome is echr:OutcomeRemitted, and no link is present;
     2. echr:isFinalDomesticDecision asserted true on more than one proceeding
        in the same document;
@@ -220,7 +220,7 @@ def unknown_echr_terms(*candidates: str) -> list[str]:
 APPEAL_SHAPED_LEVELS = {
     ECHR.LevelAppeal,
     ECHR.LevelCassation,
-    ECHR.LevelSupervisoryReview,
+    ECHR.LevelCaseReview,
     ECHR.LevelReopening,
 }
 APPEAL_SHAPED_OUTCOMES = {
@@ -764,8 +764,6 @@ def complete_entailed_types(graph: Graph, doc_ns: str) -> int:
     """
     entailed = (
         (ECHR.hasParticipation, ECHR.Participation),
-        (ECHR.hasInactivityPeriod, ECHR.InactivityPeriod),
-        (ECHR.hasAdjournment, ECHR.Adjournment),
         (ECHR.hasPreTrialDetention, ECHR.PreTrialDetention),
     )
     added = 0
@@ -1769,6 +1767,12 @@ def _stream_patch_text(
 ) -> tuple[str, str | None, bool]:
     """Stream one patch, aborting the moment the generation stalls.
 
+    Cached on the request when LLM_CACHE_ENABLED is on (art6.ontology.llm_cache).
+    Stage 3 makes tens of calls per document and had no cache at all, so C2/C4
+    could not be reproduced even with OntoCast's own cache warm. The cached
+    value is the returned tuple, not the stream: a replayed call does not stall,
+    so `stalled` is whatever the original generation reported.
+
     Returns (raw_text, finish_reason, stalled).
 
     Streaming exists here purely to make the stall CHEAP. The pathology cannot
@@ -1781,6 +1785,22 @@ def _stream_patch_text(
     that into about a second and hands back the prefix, which is what the
     salvage below needs anyway.
     """
+    from art6.ontology import llm_cache
+
+    cache_key = llm_cache.make_key(
+        "repair_patch",
+        {
+            "model": model,
+            "messages": messages,
+            "temperature": temperature,
+            "token_kwargs": token_kwargs,
+            "guided": guided,
+        },
+    )
+    cached = llm_cache.load("repair_patch", cache_key)
+    if cached is not llm_cache.MISS:
+        return cached[0], cached[1], cached[2]
+
     parts: list[str] = []
     finish_reason: str | None = None
     stalled = False
@@ -1821,7 +1841,9 @@ def _stream_patch_text(
                 stalled = True
                 break
 
-    return "".join(parts), finish_reason, stalled
+    result = ("".join(parts), finish_reason, stalled)
+    llm_cache.store("repair_patch", cache_key, list(result))
+    return result
 
 
 def _salvage_candidates(raw: str) -> Iterator[str]:

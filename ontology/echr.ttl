@@ -21,11 +21,11 @@ entity in the factual narrative, every link direction is canonical, and controll
 vocabularies are strictly closed by explicit owl:oneOf enumerations with explicit escape 
 values (echr:LevelUnknown, echr:TypeOther, echr:OutcomeOther, etc.)."""@en ;
     dcterms:created "2026-07-24T00:00:00+00:00"^^xsd:dateTime ;
-    dcterms:modified "2026-08-23T00:00:00+00:00"^^xsd:dateTime ;
+    dcterms:modified "2026-09-08T00:00:00+00:00"^^xsd:dateTime ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     vann:preferredNamespacePrefix "echr" ;
-    owl:versionIRI <https://growgraph.dev/echr/3.5.0> ;
-    owl:versionInfo "3.5.0" .
+    owl:versionIRI <https://growgraph.dev/echr/3.7.0> ;
+    owl:versionInfo "3.7.0" .
 
 ################################################################
 # 0. Datatypes
@@ -86,27 +86,11 @@ echr:DomesticAuthority a owl:Class ;
     rdfs:subClassOf foaf:Organization ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
-echr:InactivityPeriod a owl:Class ;
-    rdfs:label "Inactivity Period"@en ;
-    skos:definition "A dormant stretch during which the facts record that no procedural step was taken within a proceeding."@en ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
-echr:Adjournment a owl:Class ;
-    rdfs:label "Adjournment"@en ;
-    skos:definition "A hearing that was listed and subsequently postponed to a later date."@en ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
 echr:PreTrialDetention a owl:Class ;
     rdfs:label "Pre-Trial Detention"@en ;
     skos:definition "A continuous period during which a person was deprived of liberty in connection with proceedings not yet finally determined, as narrated in the facts."@en ;
-    skos:scopeNote "Pre-trial only. Detention serving a sentence after final conviction is out of scope, as is detention on grounds unconnected with these proceedings. Detention continuing after a first-instance conviction while an appeal is pending is the hard case: it is in scope, and echr:hasExtractionNote should say so."@en ;
+    skos:scopeNote "Pre-trial only. Detention serving a sentence after final conviction is out of scope, as is detention on grounds unconnected with these proceedings. Detention continuing after a first-instance conviction while an appeal is pending is the hard case: it is in scope, and echr:hasSupportingQuote on the detention node should say so."@en ;
     rdfs:subClassOf prov:Activity ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
-echr:CustodialMeasure a owl:Class ;
-    rdfs:label "Custodial Measure"@en ;
-    skos:definition "Controlled vocabulary: the form the deprivation of liberty took."@en ;
-    rdfs:subClassOf skos:Concept ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
 #---------------------------------------------------------------
@@ -142,7 +126,7 @@ echr:Participation a owl:Class ;
 [] a owl:AllDisjointClasses ;
     owl:members ( echr:CaseDocument echr:DomesticProceeding echr:AdministrativeAction
                   echr:EnforcementAction echr:ProsecutorialReview echr:DomesticAuthority
-                  echr:InactivityPeriod echr:Adjournment echr:NaturalPerson echr:Participation
+                  echr:NaturalPerson echr:Participation
                   echr:PreTrialDetention ) .
 
 [] a owl:AllDisjointClasses ;
@@ -151,10 +135,9 @@ echr:Participation a owl:Class ;
                   echr:PreTrialDetention ) .
 
 [] a owl:AllDisjointClasses ;
-    owl:members ( echr:InstanceLevel echr:ProceedingType echr:ProceedingOutcome 
-                  echr:OutcomeDirection echr:AuthorityKind echr:DelayAttribution 
-                  echr:StatusAlteration echr:PartySide echr:Gender echr:GenderCue
-                  echr:CustodialMeasure ) .
+    owl:members ( echr:InstanceLevel echr:ProceedingType echr:ProceedingOutcome
+                  echr:OutcomeDirection echr:AuthorityKind echr:Matter
+                  echr:PartySide echr:Gender echr:GenderCue ) .
 
 ################################################################
 # 2. Vocabulary Container Classes
@@ -190,16 +173,10 @@ echr:AuthorityKind a owl:Class ;
     rdfs:subClassOf skos:Concept ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
-echr:DelayAttribution a owl:Class ;
-    rdfs:label "Delay Attribution"@en ;
-    skos:definition "Controlled vocabulary: to whom the facts attribute a dormant stretch or adjournment."@en ;
-    rdfs:subClassOf skos:Concept ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
-echr:StatusAlteration a owl:Class ;
-    rdfs:label "Status Alteration"@en ;
-    skos:definition "Controlled vocabulary: a legal-capacity or civil-status restriction imposed on, or restored to, the applicant by a domestic event."@en ;
-    skos:scopeNote "Kept separate from echr:hasOutcomeDirection: direction says which way a decision cut for the applicant in general, this says specifically what capacity restriction resulted, if any."@en ;
+echr:Matter a owl:Class ;
+    rdfs:label "Matter"@en ;
+    skos:definition "Controlled vocabulary: what an event was substantively ABOUT, as distinct from echr:ProceedingType (the procedural TRACK -- civil, criminal, administrative) and from the echr:DomesticEvent subclass (the procedural SHAPE -- a proceeding, an administrative action). Bail and detention are both echr:DomesticProceeding, both criminal-track, and utterly different in substance; this is the vocabulary that tells them apart."@en ;
+    skos:scopeNote "Closed and necessarily coarser than the corpus's real variety -- a fixed list of the recurring substantive categories observed across the annotated corpus, not an attempt at completeness. Not owl:FunctionalProperty on echr:hasMatter: a single decision can rule on more than one matter (e.g. ordering both detention and its conditions). Omit rather than force a value onto a purely procedural act (a remittal, a transfer of jurisdiction) that is not substantively about any of these -- unlike this ontology's other closed vocabularies, there is no expectation that every event carries one; echr:MatterOther and echr:MatterUnknown exist for the event that IS substantively about something but does not fit or cannot be read, not as a catch-all for every unmatched event."@en ;
     rdfs:subClassOf skos:Concept ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
@@ -238,6 +215,23 @@ echr:hasDomesticProceeding a owl:ObjectProperty ;
 echr:followsProceeding a owl:ObjectProperty, owl:AsymmetricProperty, owl:IrreflexiveProperty ;
     rdfs:label "follows proceeding"@en ;
     skos:definition "Links a domestic event to the one immediately before it in the domestic procedural chain (e.g. appeal follows first instance; enforcement follows the decision it enforces)."@en ;
+    skos:scopeNote "Relates PROCEEDINGS, not the individual acts inside one. Two events that are acts of the same proceeding -- a narrated filing and the decision that disposes of it, or two rulings in one track -- are joined by echr:partOfProceeding and are ordered by their dates; echr:followsProceeding between them asserts a procedural step that did not happen. Both ends should therefore be events that carry no echr:partOfProceeding of their own."@en ;
+    rdfs:domain echr:DomesticEvent ;
+    rdfs:range echr:DomesticEvent ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:partOfProceeding a owl:ObjectProperty, owl:FunctionalProperty, owl:AsymmetricProperty, owl:IrreflexiveProperty ;
+    rdfs:label "part of proceeding"@en ;
+    skos:definition "Links an act to the proceeding it is one act of. The target is the earliest recorded act of that proceeding, which stands for the proceeding as a whole; an event carrying no echr:partOfProceeding is a proceeding in its own right. All acts of one proceeding describe the same authority and the same procedure, so they must agree on echr:hasCourt, echr:hasAuthorityKind, echr:hasInstanceLevel and echr:hasProceedingType."@en ;
+    skos:scopeNote "Grouping is one level deep: the target of echr:partOfProceeding must not itself carry echr:partOfProceeding. The proceeding's span is the earliest to the latest date over its acts, and its disposition is that of its last act -- both derived, not asserted, because the acts recorded are only those the text dates."@en ;
+    rdfs:domain echr:DomesticEvent ;
+    rdfs:range echr:DomesticEvent ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:occursDuring a owl:ObjectProperty, owl:FunctionalProperty, owl:AsymmetricProperty, owl:IrreflexiveProperty ;
+    rdfs:label "occurs during"@en ;
+    skos:definition "Links a proceeding to another proceeding within whose span it ran. Distinct from echr:followsProceeding, which asserts that one proceeding came after another had been decided: a proceeding linked by echr:occursDuring began and was decided while its container was still undecided (e.g. an interim-relief application decided while the main claim is pending, or a reference to a higher court answered back into the proceeding that made it)."@en ;
+    skos:scopeNote "Distinct also from echr:partOfProceeding: the contained proceeding has its own authority or its own procedure and so is not one of the container's acts. Where the same authority decides an interlocutory question inside its own proceeding, that is echr:partOfProceeding, not this."@en ;
     rdfs:domain echr:DomesticEvent ;
     rdfs:range echr:DomesticEvent ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
@@ -284,39 +278,12 @@ echr:hasOutcomeDirection a owl:ObjectProperty, owl:FunctionalProperty ;
     rdfs:range echr:OutcomeDirection ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
-echr:hasStatusApplied a owl:ObjectProperty, owl:FunctionalProperty ;
-    rdfs:label "has status applied"@en ;
-    skos:definition "The specific legal-capacity or civil-status restriction this domestic event imposed on or restored to the applicant, if any."@en ;
+echr:hasMatter a owl:ObjectProperty ;
+    rdfs:label "has matter"@en ;
+    skos:definition "What this event was substantively about (bail, damages, arrest, ...), from the closed echr:Matter vocabulary. Distinct from echr:hasProceedingType (the procedural track) and from rdf:type (the procedural shape)."@en ;
+    skos:scopeNote "NOT owl:FunctionalProperty: assert more than one value where a single event genuinely rules on more than one matter. Omit where the event is not substantively about any of these -- see echr:Matter's own scopeNote for why this vocabulary, unlike this ontology's others, has no expectation of universal coverage."@en ;
     rdfs:domain echr:DomesticEvent ;
-    rdfs:range echr:StatusAlteration ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
-echr:hasInactivityPeriod a owl:ObjectProperty ;
-    rdfs:label "has inactivity period"@en ;
-    skos:definition "A dormant period occurring within this domestic event."@en ;
-    rdfs:domain echr:DomesticEvent ;
-    rdfs:range echr:InactivityPeriod ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
-echr:hasInactivityCause a owl:ObjectProperty, owl:FunctionalProperty ;
-    rdfs:label "has inactivity cause"@en ;
-    skos:definition "To whom the facts attribute responsibility for this dormant stretch."@en ;
-    rdfs:domain echr:InactivityPeriod ;
-    rdfs:range echr:DelayAttribution ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
-echr:hasAdjournment a owl:ObjectProperty ;
-    rdfs:label "has adjournment"@en ;
-    skos:definition "A hearing in this domestic event that was postponed."@en ;
-    rdfs:domain echr:DomesticEvent ;
-    rdfs:range echr:Adjournment ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
-echr:hasAdjournmentCause a owl:ObjectProperty, owl:FunctionalProperty ;
-    rdfs:label "has adjournment cause"@en ;
-    skos:definition "To whom the facts attribute responsibility for this adjournment."@en ;
-    rdfs:domain echr:Adjournment ;
-    rdfs:range echr:DelayAttribution ;
+    rdfs:range echr:Matter ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
 echr:hasApplicant a owl:ObjectProperty ;
@@ -397,7 +364,15 @@ echr:isPending a owl:DatatypeProperty, owl:FunctionalProperty ;
 
 echr:isFinalDomesticDecision a owl:DatatypeProperty, owl:FunctionalProperty ;
     rdfs:label "is final domestic decision"@en ;
-    skos:definition "True for the domestic event that concluded the domestic remedies prior to Strasbourg."@en ;
+    skos:definition "True for the domestic event that concluded its chain of domestic proceedings -- the last decision the text records in it, one per chain, whether or not it falls before the Strasbourg application was lodged. Whether it served exhaustion for a particular application is a downstream inference from comparing dates, not part of this property's own meaning; a chain the text leaves open with no concluding decision narrated gets no value at all rather than false."@en ;
+    rdfs:domain echr:DomesticEvent ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:isNonOccurring a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "is non-occurring"@en ;
+    skos:definition "True where the facts narrate this event as something that was NOT done, rather than something that happened -- e.g. \"the applicant did not appeal\", \"no request for release was ever lodged\". Omit for every ordinary event, which is the overwhelming majority; omission does not mean the event happened without incident, it means non-occurrence was never in question."@en ;
+    skos:scopeNote "Distinct from echr:isPending, which marks a real proceeding still awaiting a decision. A non-occurring event never started at all -- the negation is the entire content of the narration. Kept as a flag on an ordinary echr:DomesticEvent node rather than a separate class so the same four subclasses, the same echr:hasCourt and the same echr:hasSupportingQuote apply unchanged: what the applicant did not do is still typed by what it would have been (an appeal not lodged is still echr:DomesticProceeding), just flagged as not having occurred."@en ;
     rdfs:domain echr:DomesticEvent ;
     rdfs:range xsd:boolean ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
@@ -479,42 +454,7 @@ echr:hasPlaceOfResidence a owl:DatatypeProperty ;
     rdfs:range xsd:string ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
-# Delay Event Properties
-echr:hasInactivityStartDate a owl:DatatypeProperty, owl:FunctionalProperty ;
-    rdfs:label "has inactivity start date"@en ;
-    skos:definition "Date of the last procedural step before dormancy."@en ;
-    rdfs:domain echr:InactivityPeriod ;
-    rdfs:range echr:PartialDate ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
-echr:hasInactivityEndDate a owl:DatatypeProperty, owl:FunctionalProperty ;
-    rdfs:label "has inactivity end date"@en ;
-    skos:definition "Date of the first procedural step after dormancy."@en ;
-    rdfs:domain echr:InactivityPeriod ;
-    rdfs:range echr:PartialDate ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
-echr:hasAdjournmentDate a owl:DatatypeProperty, owl:FunctionalProperty ;
-    rdfs:label "has adjournment date"@en ;
-    skos:definition "Date of the hearing that was adjourned."@en ;
-    rdfs:domain echr:Adjournment ;
-    rdfs:range echr:PartialDate ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
-echr:hasResumptionDate a owl:DatatypeProperty, owl:FunctionalProperty ;
-    rdfs:label "has resumption date"@en ;
-    skos:definition "Date to which the adjourned hearing was postponed."@en ;
-    rdfs:domain echr:Adjournment ;
-    rdfs:range echr:PartialDate ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
 # Case Document Metadata
-echr:hasHudocId a owl:DatatypeProperty, owl:FunctionalProperty ;
-    rdfs:label "has HUDOC id"@en ;
-    rdfs:domain echr:CaseDocument ;
-    rdfs:range xsd:string ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
 echr:hasApplicationNumber a owl:DatatypeProperty ;
     rdfs:label "has application number"@en ;
     rdfs:domain echr:CaseDocument ;
@@ -539,6 +479,14 @@ echr:hasJudgmentDate a owl:DatatypeProperty, owl:FunctionalProperty ;
     rdfs:range echr:PartialDate ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
+echr:hasSubjectMatter a owl:DatatypeProperty ;
+    rdfs:label "has subject matter"@en ;
+    skos:definition "A short, free-text description of what the underlying dispute was about, as the document frames it -- e.g. \"custody of the applicant's children\", \"compensation for unlawful detention\", \"planning permission for an extension\"."@en ;
+    skos:scopeNote "Deliberately open text, not a closed vocabulary: unlike echr:hasProceedingType (the procedural TRACK -- civil, criminal, administrative), this is what the case was actually ABOUT, and a fixed list drawn up in advance would not fit the corpus. Populate bottom-up, from what documents actually turn out to be about, rather than against a predetermined scheme. Not functional: a document may have more than one value where its several chains are about different things."@en ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
 # Pre-trial detention properties
 
 echr:hasPreTrialDetention a owl:ObjectProperty ;
@@ -553,13 +501,6 @@ echr:hasDetainee a owl:ObjectProperty, owl:FunctionalProperty ;
     skos:definition "The person held. Usually the future applicant; record a co-accused only where the facts turn on the comparison."@en ;
     rdfs:domain echr:PreTrialDetention ;
     rdfs:range echr:NaturalPerson ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
-echr:hasCustodialMeasure a owl:ObjectProperty, owl:FunctionalProperty ;
-    rdfs:label "has custodial measure"@en ;
-    skos:definition "The form this deprivation of liberty took."@en ;
-    rdfs:domain echr:PreTrialDetention ;
-    rdfs:range echr:CustodialMeasure ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
 echr:hasDetentionStartDate a owl:DatatypeProperty, owl:FunctionalProperty ;
@@ -601,13 +542,6 @@ echr:hasSupportingQuote a owl:DatatypeProperty ;
     rdfs:range xsd:string ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
-echr:hasExtractionNote a owl:DatatypeProperty ;
-    rdfs:label "has extraction note"@en ;
-    skos:definition "A short note explaining ambiguities or approximate dates."@en ;
-    rdfs:subPropertyOf skos:note ;
-    rdfs:range xsd:string ;
-    rdfs:isDefinedBy <https://growgraph.dev/echr> .
-
 ################################################################
 # 6. Controlled Vocabularies
 ################################################################
@@ -636,8 +570,9 @@ echr:LevelCassation a echr:InstanceLevel ;
     skos:prefLabel "cassation or supreme court"@en ;
     skos:inScheme echr:InstanceLevelScheme .
 
-echr:LevelSupervisoryReview a echr:InstanceLevel ;
-    skos:prefLabel "supervisory review"@en ;
+echr:LevelCaseReview a echr:InstanceLevel ;
+    skos:prefLabel "case review"@en ;
+    skos:definition "A review of an already-decided stage of the case by a body external to the panel or instance that decided it, outside the ordinary appeal ladder -- e.g. a presidium-level supervisory review (Russia/Ukraine-style nadzor), or an extraordinary review of a final or otherwise-standing decision. Distinct from echr:LevelReopening, which recommences the whole proceeding rather than reviewing one already-decided stage of it."@en ;
     skos:inScheme echr:InstanceLevelScheme .
 
 echr:LevelReopening a echr:InstanceLevel ;
@@ -653,7 +588,7 @@ echr:InstanceLevelScheme a skos:ConceptScheme ;
 
 echr:InstanceLevel owl:equivalentClass [ a owl:Class ;
     owl:oneOf ( echr:LevelInvestigative echr:LevelAdministrativeReview echr:LevelFirstInstance
-        echr:LevelAppeal echr:LevelCassation echr:LevelSupervisoryReview
+        echr:LevelAppeal echr:LevelCassation echr:LevelCaseReview
         echr:LevelReopening echr:LevelUnknown ) ] .
 
 #---------------------------------------------------------------
@@ -798,61 +733,111 @@ echr:AuthorityKind owl:equivalentClass [ a owl:Class ;
         echr:AuthorityDisciplinary echr:AuthorityUnknown ) ] .
 
 #---------------------------------------------------------------
-# 6.6 Delay Attribution
+# 6.6 Matter
 #---------------------------------------------------------------
 
-echr:DelayAttributedToAuthorities a echr:DelayAttribution ;
-    skos:prefLabel "attributed to the authorities"@en ;
-    skos:inScheme echr:DelayAttributionScheme .
+echr:MatterArrest a echr:Matter ;
+    skos:prefLabel "arrest"@en ;
+    skos:definition "The initial act of apprehending or taking a person into custody, distinct from an order continuing that custody afterwards (echr:MatterDetention)."@en ;
+    skos:inScheme echr:MatterScheme .
 
-echr:DelayAttributedToApplicant a echr:DelayAttribution ;
-    skos:prefLabel "attributed to the applicant"@en ;
-    skos:inScheme echr:DelayAttributionScheme .
+echr:MatterDetention a echr:Matter ;
+    skos:prefLabel "detention"@en ;
+    skos:definition "An order placing, continuing, extending, reviewing or ending pre-trial/remand detention -- the deprivation of liberty itself, as opposed to the decision to release on bail (echr:MatterBail)."@en ;
+    skos:inScheme echr:MatterScheme .
 
-echr:DelayUnattributed a echr:DelayAttribution ;
-    skos:prefLabel "unattributed"@en ;
-    skos:inScheme echr:DelayAttributionScheme .
+echr:MatterBail a echr:Matter ;
+    skos:prefLabel "bail"@en ;
+    skos:definition "An application for, grant of, refusal of, or review of release from detention pending trial, however the domestic system names the mechanism."@en ;
+    skos:inScheme echr:MatterScheme .
 
-echr:DelayAttributionScheme a skos:ConceptScheme ;
-    rdfs:label "Delay attribution vocabulary"@en .
+echr:MatterCharge a echr:Matter ;
+    skos:prefLabel "charge"@en ;
+    skos:definition "The formal act of charging or indicting a person, as distinct from the trial that follows (echr:MatterConviction) or the investigative steps that precede it (echr:MatterInvestigation)."@en ;
+    skos:inScheme echr:MatterScheme .
 
-echr:DelayAttribution owl:equivalentClass [ a owl:Class ;
-    owl:oneOf ( echr:DelayAttributedToAuthorities echr:DelayAttributedToApplicant
-        echr:DelayUnattributed ) ] .
+echr:MatterConviction a echr:Matter ;
+    skos:prefLabel "conviction"@en ;
+    skos:definition "A trial verdict or appeal against one -- conviction, acquittal, or sentence -- ruling on the criminal charge itself."@en ;
+    skos:inScheme echr:MatterScheme .
 
-#---------------------------------------------------------------
-# 6.7 Status Alteration
-#---------------------------------------------------------------
+echr:MatterInvestigation a echr:Matter ;
+    skos:prefLabel "investigation"@en ;
+    skos:definition "An investigative step short of a charge or a detention decision -- a search, a seizure, an expert order, a request refused during an investigation."@en ;
+    skos:inScheme echr:MatterScheme .
 
-echr:StatusPartialIncapacity a echr:StatusAlteration ;
-    skos:prefLabel "partial legal incapacity imposed"@en ;
-    skos:inScheme echr:StatusAlterationScheme .
+echr:MatterDamages a echr:Matter ;
+    skos:prefLabel "damages"@en ;
+    skos:definition "A claim for damages or compensation, and any decision on it."@en ;
+    skos:inScheme echr:MatterScheme .
 
-echr:StatusFullIncapacity a echr:StatusAlteration ;
-    skos:prefLabel "full legal incapacity imposed"@en ;
-    skos:inScheme echr:StatusAlterationScheme .
+echr:MatterCustody a echr:Matter ;
+    skos:prefLabel "custody (of a person)"@en ;
+    skos:definition "Custody of or guardianship over a person -- parental custody of a child, a child-abduction return order, or the legal capacity/guardianship of an adult. Not to be confused with echr:MatterDetention, which is deprivation of liberty in a criminal matter."@en ;
+    skos:inScheme echr:MatterScheme .
 
-echr:StatusCapacityRestored a echr:StatusAlteration ;
-    skos:prefLabel "legal capacity restored"@en ;
-    skos:inScheme echr:StatusAlterationScheme .
+echr:MatterEmployment a echr:Matter ;
+    skos:prefLabel "employment"@en ;
+    skos:definition "A labour dispute -- dismissal, reinstatement, wages, or the terms of employment."@en ;
+    skos:inScheme echr:MatterScheme .
 
-echr:StatusOther a echr:StatusAlteration ;
-    skos:prefLabel "other status alteration"@en ;
-    skos:inScheme echr:StatusAlterationScheme .
+echr:MatterPension a echr:Matter ;
+    skos:prefLabel "pension or welfare benefit"@en ;
+    skos:definition "An entitlement to a pension, social-security payment, or welfare benefit -- its grant, refusal, amount, or reassessment."@en ;
+    skos:inScheme echr:MatterScheme .
 
-echr:StatusUnknown a echr:StatusAlteration ;
+echr:MatterProperty a echr:Matter ;
+    skos:prefLabel "property"@en ;
+    skos:definition "A dispute over property, restitution, tenancy, or a planning/permit decision affecting property."@en ;
+    skos:inScheme echr:MatterScheme .
+
+echr:MatterExtradition a echr:Matter ;
+    skos:prefLabel "extradition or removal"@en ;
+    skos:definition "An extradition, deportation, or removal decision or its execution."@en ;
+    skos:inScheme echr:MatterScheme .
+
+echr:MatterLegalAid a echr:Matter ;
+    skos:prefLabel "legal aid"@en ;
+    skos:definition "An application for, grant of, or refusal of legal aid or legal-aid counsel."@en ;
+    skos:inScheme echr:MatterScheme .
+
+echr:MatterVetting a echr:Matter ;
+    skos:prefLabel "vetting or security clearance"@en ;
+    skos:definition "A decision granting, refusing or revoking a security clearance or other vetting status."@en ;
+    skos:inScheme echr:MatterScheme .
+
+echr:MatterDisciplinary a echr:Matter ;
+    skos:prefLabel "professional discipline"@en ;
+    skos:definition "A professional or employment disciplinary proceeding -- distinct from echr:AuthorityDisciplinary, which describes the deciding body rather than the matter."@en ;
+    skos:inScheme echr:MatterScheme .
+
+echr:MatterRequests a echr:Matter ;
+    skos:prefLabel "requests"@en ;
+    skos:definition "An application going to the fairness or conduct of the proceeding itself, rather than to the underlying charge, claim or deprivation of liberty -- recusal of the judge, admission or replacement of counsel, an adjournment, access to the case file or the verbatim record. Petitions are included under this value. Distinct from Bail (a request specifically for release from detention, which keeps its own value) and from a request that is itself about one of this vocabulary's other substantive matters (e.g. an application for damages stays Damages)."@en ;
+    skos:inScheme echr:MatterScheme .
+
+echr:MatterOther a echr:Matter ;
+    skos:prefLabel "other"@en ;
+    skos:definition "The event IS substantively about one identifiable matter, but not one of the values above. Not a catch-all for events with no substantive matter at all -- see echr:Matter's scopeNote: omit those instead."@en ;
+    skos:inScheme echr:MatterScheme .
+
+echr:MatterUnknown a echr:Matter ;
     skos:prefLabel "unknown"@en ;
-    skos:inScheme echr:StatusAlterationScheme .
+    skos:definition "The event is substantively about one of these matters, but the text does not let you tell which."@en ;
+    skos:inScheme echr:MatterScheme .
 
-echr:StatusAlterationScheme a skos:ConceptScheme ;
-    rdfs:label "Status alteration vocabulary"@en .
+echr:MatterScheme a skos:ConceptScheme ;
+    rdfs:label "Matter vocabulary"@en .
 
-echr:StatusAlteration owl:equivalentClass [ a owl:Class ;
-    owl:oneOf ( echr:StatusPartialIncapacity echr:StatusFullIncapacity
-        echr:StatusCapacityRestored echr:StatusOther echr:StatusUnknown ) ] .
+echr:Matter owl:equivalentClass [ a owl:Class ;
+    owl:oneOf ( echr:MatterArrest echr:MatterDetention echr:MatterBail echr:MatterCharge
+        echr:MatterConviction echr:MatterInvestigation echr:MatterDamages echr:MatterCustody
+        echr:MatterEmployment echr:MatterPension echr:MatterProperty echr:MatterExtradition
+        echr:MatterLegalAid echr:MatterVetting echr:MatterDisciplinary echr:MatterRequests
+        echr:MatterOther echr:MatterUnknown ) ] .
 
 #---------------------------------------------------------------
-# 6.8 Party Side
+# 6.7 Party Side
 #---------------------------------------------------------------
 
 echr:SideInitiating a echr:PartySide ;
@@ -882,7 +867,7 @@ echr:PartySide owl:equivalentClass [ a owl:Class ;
     owl:oneOf ( echr:SideInitiating echr:SideResponding echr:SideThirdParty echr:SideUnknown ) ] .
 
 #---------------------------------------------------------------
-# 6.9 Gender
+# 6.8 Gender
 #---------------------------------------------------------------
 
 echr:GenderMale a echr:Gender ;
@@ -924,42 +909,3 @@ echr:GenderCueScheme a skos:ConceptScheme ;
 
 echr:GenderCue owl:equivalentClass [ a owl:Class ;
     owl:oneOf ( echr:GenderCueHonorific echr:GenderCuePronoun echr:GenderCueGenderedNoun ) ] .
-
-#---------------------------------------------------------------
-# 6.10 Custodial measures
-#---------------------------------------------------------------
-
-echr:MeasurePoliceCustody a echr:CustodialMeasure ;
-    skos:prefLabel "police custody"@en ;
-    skos:definition "Short initial custody at a police station or by an investigating authority, before any judicial order — garde à vue and its equivalents. Where an arrest date is given at all, this is usually the measure it belongs to."@en ;
-    skos:inScheme echr:CustodialMeasureScheme .
-
-echr:MeasureRemandInCustody a echr:CustodialMeasure ;
-    skos:prefLabel "remand in custody"@en ;
-    skos:definition "Detention on remand ordered by a court or prosecutor pending investigation or trial."@en ;
-    skos:inScheme echr:CustodialMeasureScheme .
-
-echr:MeasureHouseArrest a echr:CustodialMeasure ;
-    skos:prefLabel "house arrest"@en ;
-    skos:inScheme echr:CustodialMeasureScheme .
-
-echr:MeasurePsychiatricConfinement a echr:CustodialMeasure ;
-    skos:prefLabel "psychiatric confinement"@en ;
-    skos:definition "Compulsory placement for psychiatric assessment or treatment ordered in these proceedings."@en ;
-    skos:inScheme echr:CustodialMeasureScheme .
-
-echr:MeasureOther a echr:CustodialMeasure ;
-    skos:prefLabel "other"@en ;
-    skos:inScheme echr:CustodialMeasureScheme .
-
-echr:MeasureUnknown a echr:CustodialMeasure ;
-    skos:prefLabel "unknown"@en ;
-    skos:definition "The facts record that the person was detained but not under what measure."@en ;
-    skos:inScheme echr:CustodialMeasureScheme .
-
-echr:CustodialMeasureScheme a skos:ConceptScheme ;
-    rdfs:label "Custodial measure vocabulary"@en .
-
-echr:CustodialMeasure owl:equivalentClass [ a owl:Class ;
-    owl:oneOf ( echr:MeasurePoliceCustody echr:MeasureRemandInCustody echr:MeasureHouseArrest
-        echr:MeasurePsychiatricConfinement echr:MeasureOther echr:MeasureUnknown ) ] .

@@ -1,0 +1,355 @@
+# =============================================================================
+# CASE OF MARTYNOVSKIY v. UKRAINE
+# 001-248395 | COMMITTEE | 2026 | UKR
+# =============================================================================
+
+case_id: "001-248395"
+case_name: "CASE OF MARTYNOVSKIY v. UKRAINE"
+court_level: "COMMITTEE"
+mode: assisted
+guide_version: "1.1"
+
+proceedings:
+
+  - id: 1
+    type: AdministrativeAction
+    body: "the head of the HQDCB"
+    authority_kind: Disciplinary
+    jurisdiction_state: "Ukraine"
+    decision_date: "2013-01-24"
+    level: AdministrativeReview
+    proceeding_type: Disciplinary
+    outcome: Other
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+      - name: "Lawyer D."
+        side: Initiating
+        natural_person: true
+    follows: null
+    quote: "On 24 January 2013 the head of the HQDCB transferred D.’s complaint to the Qualification and Disciplinary Commission of the Regional Bar of Zakarpattya (“the QDC of Zakarpattya”)."
+    note: "A jurisdiction transfer, so outcome Other and outcome_direction Unknown: a
+      procedural routing decision disposes of nothing and does not cut for or
+      against a party on the face of the text, however hard the applicant later
+      fought it. Ids 10 and 12 get the same treatment. `follows` is
+      null because D.'s complaint -- the act this responds to -- carries NO DATE
+      anywhere in the judgment (¶5 says a copy is not even available to the Court),
+      so it cannot be recorded as an event (§3.1). DROPPED the applicant's 12
+      October 2012 election by the Sevastopol Bar to the HQDCB (formerly id 1,
+      borderline): an election by fellow bar members is not a decision about the
+      applicant, the same treatment given elsewhere to the HQDCB meeting of
+      7 December 2012, also not recorded as an event for the same reason.
+      Background only: per ¶6, Article 33 § 3 of the Law on the Bar required a
+      complaint against an advocate elected to a self-government body to be
+      examined by a regional Bar OUTSIDE the region where he was elected -- the
+      election is why that rule reached him at all, and so why the transfer
+      recorded here happened."
+
+  - id: 2
+    type: DomesticProceeding
+    body: "the Disciplinary Chamber of the QDC of Zakarpattya"
+    authority_kind: Disciplinary
+    jurisdiction_state: "Ukraine"
+    decision_date: "2013-04-17"
+    level: FirstInstance
+    proceeding_type: Disciplinary
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+      - name: "Lawyer D."
+        side: Initiating
+        natural_person: true
+    follows: 1
+    matter: Disciplinary
+    quote: "On 17 April 2013, in the applicant’s absence, the Disciplinary Chamber of the QDC of Zakarpattya suspended the applicant’s licence to practise as an advocate for six months for his failure to attend the meeting of 7 December 2012 and violating Article 62 of the Rules of Professional Conduct."
+    note: "The measure the whole case is about. Taken in the applicant's absence; he
+      was told about it on 22 April 2013 (¶10), five days later. His letter of
+      5 March 2013 setting out his defence (¶8) is a submission inside this
+      proceeding, not an event of its own. DROPPED the applicant's exclusion from
+      the HQDCB's 19 April 2013 meeting (formerly id 3, borderline) as a
+      consequence rather than a decision: the sentence is passive and names no
+      body as having excluded him. Background only: it kept him out of the very
+      body his October 2012 election had placed him on, two days after this
+      suspension took effect."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the QDC of Zakarpattya"
+    authority_kind: Disciplinary
+    jurisdiction_state: "Ukraine"
+    decision_date: "2013-05-16"
+    level: Appeal
+    proceeding_type: Disciplinary
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "Lawyer D."
+        side: Responding
+        natural_person: true
+    follows: 2
+    matter: Disciplinary
+    quote: "On 16 May the QDC of Zakarpattya upheld the decision of 17 April 2013."
+    note: "¶11 GIVES NO YEAR -- “On 16 May” alone. 2013 is taken from ¶12, which
+      names “the decisions of 17 April and 16 May 2013”, so the year comes from the
+      text and not from inference (§7). The QDC reviewing its own Disciplinary
+      Chamber is recorded as Appeal; AdministrativeReview is defensible."
+
+  - id: 4
+    type: AdministrativeAction
+    body: "the Bar Council of Ukraine"
+    authority_kind: Disciplinary
+    jurisdiction_state: "Ukraine"
+    decision_date: "2014-07"
+    level: AdministrativeReview
+    proceeding_type: Disciplinary
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties: []
+    follows: null
+    borderline: true
+    borderline_reason: "a general NORMATIVE act -- an amendment to rules of procedure
+      binding on everyone, not a decision in the applicant's case, so arguably
+      caught by §2's exclusion of statutes and rules"
+    quote: "In July 2014 the Bar Council of Ukraine adopted changes to the HQDCB’s Rules of Procedure, according to which a draft decision was considered as rejected unless a majority of the HQDCB members voted in its favour."
+    note: "Recorded despite the flag because it decided the case: ¶20 shows the
+      applicant's appeal failed in 2016 for no reason other than this rule, on a
+      vote of 11 for and 6 against. Unfavourable for the same reason. Dated to the
+      month, which is all ¶16 gives. Its retroactive application to decisions
+      predating it is one of the applicant's central complaints."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the HQDCB"
+    authority_kind: Disciplinary
+    jurisdiction_state: "Ukraine"
+    decision_date: "2016-07-22"
+    level: Appeal
+    proceeding_type: Disciplinary
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "Lawyer D."
+        side: Responding
+        natural_person: true
+    follows: [2, 3]
+    matter: Disciplinary
+    quote: "On 22 July 2016 the draft decision was put to vote at a HQDCB meeting where 19 out of 30 HQDCB members were present."
+    note: "`follows` is a LIST because ¶12 and ¶19 show the appeal ran against both
+      the 17 April and the 16 May decisions and this one vote disposed of it against
+      both -- the §5.4 case. The applicant's appeal itself is undated, so it gets no
+      §3.1 filing event. Three years and two months after that appeal was lodged:
+      two hearings in 2013 that reached no decision, none in 2014, a hearing
+      cancelled in 2015 for a change of rapporteur. Those are steps inside this
+      proceeding, and they are what the length complaint is about."
+
+  - id: 6
+    type: DomesticProceeding
+    body: "the Kyiv District Administrative Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    start_date: "2016-10-05"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the HQDCB"
+        side: Responding
+        natural_person: false
+    follows: 5
+    matter: Disciplinary
+    quote: "On 5 October 2016 the applicant lodged an appeal with the Kyiv District Administrative Court against the decisions of the Zakarpattya Bar and the decision of the HQDCB."
+    note: "Filing half of a §3.1 pair; the decision is id 12, four and a half years
+      later. The Court treats this date as the point from which the length of
+      proceedings becomes imputable to the Government (¶52)."
+
+  - id: 7
+    type: DomesticProceeding
+    body: "the Podilskyy District Court of Kyiv"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    start_date: "2016"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the HQDCB"
+        side: Responding
+        natural_person: false
+    follows: 5
+    matter: Disciplinary
+    quote: "On an unspecified date in 2016 the applicant also lodged an appeal against the HQDCB’s decision with the Podilskyy District Court of Kyiv."
+    note: "Filing half of a §3.1 pair; the decision is id 8. A PARALLEL action to
+      id 6 against the same HQDCB decision, and the reason the id 6 proceedings were
+      stayed for fifteen months (id 9). start_date is the bare year, all ¶22 gives;
+      it must postdate id 5 but the text does not say when in 2016."
+
+  - id: 8
+    part_of: 7
+    matter: Disciplinary
+    type: DomesticProceeding
+    body: "the Podilskyy District Court of Kyiv"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    decision_date: "2016-12-22"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the HQDCB"
+        side: Responding
+        natural_person: false
+    quote: "On 22 December 2016 the Podilskyy District Court decided not to examine the applicant’s appeal."
+    note: "Decision half of the pair opened at id 7. Inadmissible: the court declined
+      to examine the appeal rather than deciding it. The applicant's appeal against
+      this decision to the Kyiv Administrative Court of Appeal is undated, so it gets
+      no filing event; its outcome is id 10."
+
+  - id: 9
+    part_of: 6
+    type: DomesticProceeding
+    body: "the Kyiv District Administrative Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    decision_date: "2017-02-16"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Other
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the HQDCB"
+        side: Responding
+        natural_person: false
+    matter: Requests
+    quote: "On 16 February 2017 the Kyiv District Administrative Court granted the request and suspended the examination of the appeal of 5 October 2016."
+    note: "A procedural stay, so outcome Other and direction Unknown -- it disposed of
+      nothing and cut neither way on the face of the text, even though the fifteen
+      months it cost are central to the length complaint. The HQDCB representative's
+      request and the applicant's non-objection are steps inside the proceeding.
+      `matter: Requests`: a stay/suspension application is the guide's adjournment
+      example in substance, even though the word itself is “suspended”."
+
+  - id: 10
+    type: DomesticProceeding
+    body: "the Kyiv Administrative Court of Appeal"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    decision_date: "2017-03-06"
+    level: Appeal
+    proceeding_type: Administrative
+    outcome: Remitted
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the HQDCB"
+        side: Responding
+        natural_person: false
+    follows: 7
+    matter: Disciplinary
+    quote: "On 6 March 2017 the Kyiv Administrative Court of Appeal quashed the decision of 22 December 2016."
+    note: "¶25 adds that “The outcome of that set of proceedings remains unknown”, so
+      this chain simply stops here -- there is no further event to record and no
+      terminal decision to flag."
+
+  - id: 11
+    type: DomesticProceeding
+    body: "the Kyiv District Administrative Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    decision_date: "2018-05-15"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Other
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the HQDCB"
+        side: Responding
+        natural_person: false
+    follows: 6
+    quote: "On 15 May 2018 the Kyiv District Administrative Court resumed the examination of the applicant’s appeal lodged on 5 October 2016."
+    note: "Lifts the stay imposed at id 9, fourteen months after the ground for it
+      fell away at id 10. Procedural, so Other/Unknown on the same reasoning as
+      id 9. The scheduling of a hearing for 13 June 2018 on the same day (¶28) is a
+      step, not a further event, and the applicant's enquiries of January 2019 and
+      January and August 2020 (¶29) are correspondence."
+
+  - id: 12
+    type: DomesticProceeding
+    body: "the Kyiv District Administrative Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    decision_date: "2021-04-08"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the HQDCB"
+        side: Responding
+        natural_person: false
+    follows: 11
+    matter: Disciplinary
+    quote: "On 8 April 2021 the Kyiv District Administrative Court found that all the decisions issued by the self-government bodies of the Bar against the applicant had been lawful."
+    note: "Decision half of the pair opened at id 6."
+
+  - id: 13
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    decision_date: "2021-12-09"
+    level: Cassation
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the HQDCB"
+        side: Responding
+        natural_person: false
+    follows: 12
+    final_domestic_decision: true
+    matter: Disciplinary
+    quote: "The applicant’s appeals were rejected (final decision of the Supreme Court of 9 December 2021)."
+    note: "¶31 says “appeals”, plural, so there was an intermediate appellate decision
+      between id 12 and this one -- but the text neither dates it nor names the
+      court, so it cannot be recorded (§3.1, §4.5). Flagged final_domestic_decision
+      under §5.1's revised rule: the text calls this the final decision in so many
+      words, and that no longer gets discarded just because it postdates the
+      application (19 September 2013) by eight years. The applicant says he only
+      saw it in November 2022."

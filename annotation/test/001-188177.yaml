@@ -1,0 +1,454 @@
+# =============================================================================
+# BADUASHVILI v. GEORGIA
+# 001-188177 | ADMISSIBILITYCOM | 2018 | GEO
+#
+# AI-GENERATED DRAFT -- read the source and amend. Delete what does not belong,
+# add what is missing, fix what is wrong. Source: annotation/test_text/001-188177.txt
+# Rules: annotation/annotation_guide.txt
+# =============================================================================
+
+case_id: "001-188177"
+case_name: "BADUASHVILI v. GEORGIA"
+court_level: "ADMISSIBILITYCOM"
+annotator: ""
+annotated_utc: ""
+mode: assisted
+guide_version: "1.1"
+
+proceedings:
+
+  - id: 1
+    type: EnforcementAction
+    authority_kind: Unknown
+    jurisdiction_state: "Georgia"
+    decision_date: "2005-07-10"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    matter: Investigation
+    quote: "On 10 July 2005 a gun was seized from the applicant’s home."
+    note: "A seizure of property, which is the ontology's own worked example of
+      echr:EnforcementAction, and §4 names investigative seizures as events in
+      terms. NOT flagged borderline for that reason. `body` omitted and
+      authority_kind Unknown: the sentence is passive and names no authority (§7).
+      The firearms limb of the conviction at id 11 rests on this gun, which ¶22
+      says was never shown to be the murder weapon."
+
+  - id: 2
+    type: AdministrativeAction
+    authority_kind: Unknown
+    jurisdiction_state: "Georgia"
+    decision_date: "2005-07-14"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 1
+    matter: Investigation
+    quote: "On 14 July 2005 a search warrant was issued in respect of the applicant."
+    note: "§4 names “a search ordered by an investigator” as an event. `body`
+      omitted -- the sentence names no issuing authority. Recorded as the text
+      writes it, a search warrant, although what follows in the same paragraph is
+      an arrest rather than a search (§4.5: annotate what the judgment states)."
+
+  - id: 3
+    type: AdministrativeAction
+    authority_kind: Unknown
+    jurisdiction_state: "Georgia"
+    decision_date: "2005-07-27"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 2
+    matter: [Arrest, Detention]
+    quote: "He was arrested and remanded in custody on 27 July 2005."
+    note: "ONE event for the arrest and the remand, which the sentence narrates
+      together. NOT flagged borderline, unlike the bare street arrest in Matko
+      (001-77778, id 1): a remand in custody is a formal authorisation of
+      detention, which §4 says squarely to record. `body` omitted -- the text does
+      not say who remanded him. His placement in Tbilisi Prison no. 5 the next day
+      is prison administration, not an event; see document_note."
+
+  - id: 4
+    type: ProsecutorialReview
+    body: "the investigating authorities"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Georgia"
+    decision_date: "2005-09-20"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "M.T."
+        side: ThirdParty
+        natural_person: true
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 3
+    matter: Investigation
+    borderline: true
+    borderline_reason: "a crime-scene inspection -- the exact example §4.4 gives, and
+      the schema's own worked example 4: an investigative measure with no decision
+      by any body"
+    quote: "On 20 September 2005 the investigating authorities carried out an inspection of the crime scene, involving M.T., to verify the particulars of his earlier statements."
+    note: "Recorded despite the flag because both domestic courts later relied on
+      this inspection, and on A.T.'s account of M.T.'s demeanour during it, to
+      reject the claim that M.T.'s statements had been coerced (¶23, ¶25). It is
+      the single most load-bearing investigative act in the document."
+
+  - id: 5
+    type: ProsecutorialReview
+    body: "the investigator"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Georgia"
+    start_date: "2005-10-26"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "M.T."
+        side: Initiating
+        natural_person: true
+    follows: 4
+    matter: Investigation
+    quote: "On 26 October 2005 M.T. asked to be questioned again."
+    note: "Filing half of a §3.1 pair; the refusal is id 6. A WITNESS's request, not
+      the applicant's -- §4.3 puts it in scope anyway, and it matters more than
+      anything the applicant himself asked for at this stage. `body` is the
+      investigator who decided it, named at ¶12."
+
+  - id: 6
+    part_of: 5
+    matter: Investigation
+    type: ProsecutorialReview
+    body: "the investigator"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Georgia"
+    decision_date: "2005-10-29"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "M.T."
+        side: Initiating
+        natural_person: true
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    quote: "On 29 October 2005 M.T.’s request was rejected by the investigator."
+    note: "Decision half of the pair opened at id 5. Unfavourable to the applicant:
+      the sole claimed eyewitness was refused the chance to retract the statement
+      implicating him. M.T.'s own statement of 3 September 2005 about threats from
+      the applicant, relied on in the refusal, is reported rather than narrated as
+      an act and gets no event of its own."
+
+  - id: 7
+    type: ProsecutorialReview
+    body: "the regional prosecutor’s office"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Georgia"
+    start_date: "2005-11-03"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "M.T."
+        side: Initiating
+        natural_person: true
+      - name: "the investigator"
+        side: Responding
+        natural_person: false
+    follows: 5
+    matter: Investigation
+    quote: "On 3 November 2005 M.T. appealed to the regional prosecutor’s office against the investigator’s refusal to question him again."
+    note: "A PROCEEDING THAT WAS NEVER DETERMINED, and recorded as §4.1 says to
+      record one: start_date, no decision_date, outcome Unknown. ¶13 adds “It does
+      not appear that M.T. received any response to his appeal”, and ¶13 also records
+      that in this appeal M.T. said all his statements had been obtained through
+      coercion."
+
+  - id: 8
+    type: ProsecutorialReview
+    body: "the investigator"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Georgia"
+    start_date: "2005-11-03"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "M.T."
+        side: Responding
+        natural_person: true
+    follows: 3
+    matter: Investigation
+    quote: "On 3 November 2005 the applicant asked to confront M.T. His request was rejected by the investigator on account of M.T.’s request of 3 September 2005 not to have a confrontation with the applicant owing to concerns for his safety."
+    note: "NO §3.1 split: the request is dated and the refusal in the same sentence is
+      not, so one record carries both. ¶14 says the refusals were amenable to appeal
+      to the regional prosecutor's office but that it does not appear the applicant
+      appealed -- so unlike id 7 this thread simply stops."
+
+  - id: 9
+    type: ProsecutorialReview
+    body: "the investigator"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Georgia"
+    start_date: "2005-11-15"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "M.T."
+        side: Responding
+        natural_person: true
+    follows: 8
+    matter: Investigation
+    quote: "A second request by the applicant to have a confrontation with M.T., dated 15 November 2005, was rejected by the investigator on 16 November 2005 on identical grounds."
+    note: "Filing half of a §3.1 pair; the refusal is id 10. This one DOES split,
+      because the sentence dates both the request and its rejection -- §3.1 in
+      action: “Three refused requests, each narrated twice, are six.” Shares its
+      quote with id 10."
+
+  - id: 10
+    part_of: 9
+    matter: Investigation
+    type: ProsecutorialReview
+    body: "the investigator"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Georgia"
+    decision_date: "2005-11-16"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "M.T."
+        side: Responding
+        natural_person: true
+    quote: "A second request by the applicant to have a confrontation with M.T., dated 15 November 2005, was rejected by the investigator on 16 November 2005 on identical grounds."
+    note: "Decision half of the pair opened at id 9."
+
+  - id: 11
+    type: DomesticProceeding
+    body: "the court of first instance"
+    authority_kind: Judicial
+    jurisdiction_state: "Georgia"
+    decision_date: "2006-12-08"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 3
+    matter: Conviction
+    quote: "On 8 December 2006 the court of first instance convicted the applicant of aggravated murder and the illegal acquisition, possession and carrying of firearms, and sentenced him to 17 years’ imprisonment."
+    note: "`follows: 3` because the text narrates NO charging, indictment or committal
+      act between the remand and the trial -- the gap has to be bridged to the last
+      recorded step against the applicant himself. No start_date: the hearings of
+      17 July and 21 August 2006 at which M.T. and Z.T. changed their testimony are
+      steps inside this proceeding (§3), not its institution. The court's dismissal
+      of the application to exclude M.T.'s and Z.T.'s pre-trial statements (¶23) is
+      an undated evidentiary ruling and gets no event."
+
+  - id: 12
+    type: DomesticProceeding
+    authority_kind: Judicial
+    jurisdiction_state: "Georgia"
+    decision_date: "2006-12-26"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "M.T."
+        side: Responding
+        natural_person: true
+    follows: null
+    matter: Conviction
+    quote: "On 26 December 2006 and 23 January 2007 respectively they were convicted at first instance of obstructing justice by giving false testimony."
+    note: "PROCEEDINGS AGAINST SOMEONE ELSE that form part of this applicant's
+      history, which §4.3 puts in scope: the man who claimed to have witnessed the
+      murder was convicted of lying about it eighteen days after the applicant was
+      convicted on the strength of his statements. `body` omitted -- “at first
+      instance” names no court. `follows` is null because ¶27 says the proceedings
+      were opened “On an unspecified date” and so that opening cannot be an event.
+      Direction UNKNOWN deliberately: the conviction plainly cuts one way or the
+      other depending on WHICH testimony was found false, the pre-trial statement or
+      the retraction, and ¶27 does not say. ¶27 also records that the final outcome
+      of these proceedings is unknown."
+
+  - id: 13
+    type: DomesticProceeding
+    authority_kind: Judicial
+    jurisdiction_state: "Georgia"
+    decision_date: "2007-01-23"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "Z.T."
+        side: Responding
+        natural_person: true
+    follows: null
+    matter: Conviction
+    quote: "On 26 December 2006 and 23 January 2007 respectively they were convicted at first instance of obstructing justice by giving false testimony."
+    note: "The second of the two witness convictions; shares id 12's quote, which
+      pairs the two dates with the two men in order. See id 12 on the omitted body
+      and the Unknown direction."
+
+  - id: 14
+    type: DomesticProceeding
+    body: "the Tbilisi Court of Appeal"
+    authority_kind: Judicial
+    jurisdiction_state: "Georgia"
+    decision_date: "2007-06-27"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 11
+    matter: Conviction
+    quote: "On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction."
+    note: "The appeal itself is undated (“The applicant appealed, arguing that there
+      was insufficient evidence to convict him”), so no §3.1 filing event. The
+      appellate court's rehearing of A.T. is a step inside this proceeding."
+
+  - id: 15
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Georgia"
+    decision_date: "2008-02-20"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 14
+    final_domestic_decision: true
+    quote: "On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant inadmissible."
+    note: "Terminal event of the criminal chain; the application to Strasbourg was
+      lodged seven weeks later, on 8 April 2008. Inadmissible, so no merits reached."
+
+  - id: 16
+    type: ProsecutorialReview
+    body: "the Chief Prosecutor"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Georgia"
+    start_date: "2010-08-25"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the governor of Rustavi Prison no. 6"
+        side: Responding
+        natural_person: true
+    follows: null
+    matter: Investigation
+    quote: "On 25 and 26 August 2010 the applicant complained to the Chief Prosecutor that on 19 August 2010, directly before being transferred to Kutaisi Prison no. 2, he had been severely beaten by the governor of Rustavi Prison no. 6 and had sustained serious injuries to his ribs, head and backbone."
+    note: "Filing half of a §3.1 pair; the decision to open an investigation is id 17.
+      Head of a chain unconnected to the criminal case: this is about the applicant's
+      treatment in prison and an alleged attempt to make him withdraw his Strasbourg
+      application. Complaint made on two consecutive days; start_date takes the
+      first."
+
+  - id: 17
+    part_of: 16
+    matter: Investigation
+    type: ProsecutorialReview
+    body: "the Chief Prosecutor"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Georgia"
+    decision_date: "2010-08-31"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the governor of Rustavi Prison no. 6"
+        side: Responding
+        natural_person: true
+    quote: "On 31 August 2010 an investigation was opened into the applicant’s allegations."
+    note: "Decision half of the pair opened at id 16, and Favourable in the narrow
+      sense that the complaint was acted on. `body` omitted -- the sentence is
+      passive. THE INVESTIGATION IT OPENED NEVER CONCLUDED: ¶47 says neither party
+      updated the Court on its outcome. A reviewer may prefer to add a third record
+      for the investigation itself, on the §4.1 pattern of id 7 -- start_date
+      2010-08-31, no decision_date, outcome Unknown. Everything at ¶41-46 -- the
+      forensic examination commissioned the same day and concluded on 3 September
+      2010, the questioning of the applicant and his cellmate, of the prison doctor
+      on 2 September 2010, of the governor and chief inspector, of the admitting
+      doctor on 25 November 2010, and of the hospital staff on 27 April 2011 -- are
+      steps inside that investigation."
+
+  - id: 18
+    type: EnforcementAction
+    authority_kind: Unknown
+    jurisdiction_state: "Georgia"
+    decision_date: "2018-04-26"
+    level: Unknown
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 15
+    borderline: true
+    borderline_reason: "a bare fact of release with no decision, no body and no
+      stated reason -- most likely just the sentence expiring"
+    quote: "The applicant was released from prison on 26 April 2018."
+    note: "Recorded under §4's “ended a deprivation of liberty” limb, the same
+      treatment as Klimentyev (001-22669, id 25). This is the reason the six prison
+      transfers in this document are NOT recorded while this is -- see
+      document_note."

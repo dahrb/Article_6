@@ -39,6 +39,26 @@ PROJECT_BASE="${PROJECT_BASE:-art6_abl_$(basename "${OUT_DIR}")}"
 FUSEKI_CONTAINER="${FUSEKI_CONTAINER:-ontocast-fuseki}"
 BASE_ENV_FILE="${BASE_ENV_FILE:-${REPO_ROOT}/ontology/ontology_vllm.env}"
 
+# CACHE ON BY DEFAULT, and EXPORTED AT TOP LEVEL so all three stages inherit
+# it -- stage 1 and stage 3 run in their own subshells and would not see an
+# export made inside stage 2's. One variable, read by OntoCast for stage 2 and
+# by art6.ontology.llm_cache for stages 1 and 3.
+#
+# A cache hit replays the model's own bytes, so graph quality is unaffected and
+# a re-run reproduces a result exactly. What it destroys is any measurement OF
+# THE MODEL, and there are exactly two:
+#
+#   * §5.2 run variance -- the same config run twice, counting byte-identical
+#     documents. Against a warm cache the second run never calls the model, so
+#     it reports zero variance by construction rather than by finding.
+#   * timing and cost -- a hit costs milliseconds. Three of the nine rows in
+#     the 2026-08-20 cost table were unusable for exactly this reason
+#     (run_arms.sh header).
+#
+# Both of those runs must set LLM_CACHE_ENABLED=false. The manifest records
+# which mode ran so neither can be mistaken for the other after the fact.
+export LLM_CACHE_ENABLED="${LLM_CACHE_ENABLED:-true}"
+
 die() { echo "ABORT: $*" >&2; exit 1; }
 now() { date +%s; }
 
@@ -192,8 +212,39 @@ run_arm() {
     (
         set -a; source <(grep -vE '^(LLM_API_KEY|FUSEKI_AUTH)=' "${BASE_ENV_FILE}"); set +a
         export LLM_MODEL_NAME="${MODEL}" LLM_BASE_URL="${BASE_URL}" LLM_TEMPERATURE="${STAGE2_TEMPERATURE}"
-        export LLM_GRAPH_FORMAT=jsonld LLM_CACHE_ENABLED=false LLM_MAX_INFLIGHT=4
-        export CHUNK_SECTION_CLASSIFIER=off CHUNK_MIN_SIZE=200000 CHUNK_MAX_SIZE=400000
+        export LLM_GRAPH_FORMAT=jsonld LLM_MAX_INFLIGHT=4
+        # LLM_CACHE_ENABLED is exported at the top of this script so stages 1
+        # and 3 inherit it too; OntoCast reads it here for stage 2.
+        # CHUNKING APPLIES TO BOTH ARMS -- this block is inside run_arm(), so
+        # "raw" and "comp" get identical settings and the compression contrast
+        # stays a contrast about compression. Changing it on one arm only would
+        # confound C1/C3 and C2/C4 with a stage-2 configuration difference.
+        #
+        # 10k/25k from 2026-09-06 -- the base env file's calibrated 20k/50k,
+        # halved. CHUNK_MIN_SIZE is the lever that matters: it is the size at
+        # which a chunk is closed, which is why setting it above any document
+        # length (the old 200k) disabled chunking altogether. CHUNK_MAX_SIZE is
+        # a ceiling and does not bind here, since the largest digest in the
+        # 250-case corpus is 20,360 chars.
+        #
+        # Stage 2 was losing 26.6% of stage 1's events on the eight documents
+        # whose digest exceeds 15k chars (3.9% corpus wide -- see
+        # stage_boundary.json). NOT truncation: those graphs end on a complete
+        # triple and produced 4-5k output tokens where other documents in the
+        # same run produced up to 20k. It is coverage decay across a ~110k-token
+        # prompt, so a bigger output cap would do nothing and a smaller unit is
+        # the actual remedy.
+        #
+        # This is NOT the configuration the 2026-09-02 check found "clearly
+        # worse" (docs/ontocast_v062_chunk_check.md). That arm ran 20k/50k WITH
+        # CHUNK_SECTION_CLASSIFIER=heuristic, and its damage was attributed to
+        # the classifier isolating markdown headings into standalone units that
+        # rendered zero triples. The classifier stays off here. That makes this
+        # an untested configuration rather than a known-bad one -- validate on
+        # the 10-doc test/holdout sets before committing a full corpus to it.
+        export CHUNK_SECTION_CLASSIFIER=off
+        export CHUNK_MIN_SIZE="${CHUNK_MIN_SIZE:-10000}" \
+               CHUNK_MAX_SIZE="${CHUNK_MAX_SIZE:-25000}"
         export ONTOLOGY_CONTEXT_FIXED_ONTOLOGY_ID=echr
         export ONTOCAST_ONTOLOGY_DIRECTORY="${SEED_DIR}"
         export FACTS_SHAPES_DIR="${SHAPES_DIR}" FACTS_SHACL_INFERENCE=rdfs \
@@ -263,6 +314,16 @@ run_arm() {
 run_arm "raw"  "${INPUT_JSONL}"          "${OUT_DIR}/C1_C2"
 run_arm "comp" "${OUT_DIR}/bundles.jsonl" "${OUT_DIR}/C3_C4"
 
+# Stage 1 states an event inventory; this is the only place on the pipeline
+# where recall has an exact denominator and needs neither gold nor a model
+# call. NON-GATING on purpose -- it is an instrument, and a run that loses
+# events should still finish and leave its output for inspection. Add
+# --fail-under once a run has a baseline worth holding itself to.
+phase "boundary check  stage 1 inventory -> stage 2 graphs"
+(cd "${REPO_ROOT}" && uv run python -m art6.ontology.check_stage_boundary \
+    --run-dir "${OUT_DIR}" --out "${OUT_DIR}/stage_boundary.json") \
+    || echo "boundary check returned $? (non-gating)"
+
 phase "done"
 cat > "${OUT_DIR}/manifest.json" <<JSON
 {
@@ -272,6 +333,11 @@ cat > "${OUT_DIR}/manifest.json" <<JSON
   "base_url": "${BASE_URL}",
   "temperature_stage2_3": ${STAGE2_TEMPERATURE},
   "temperature_stage1": 0.0,
+  "llm_cache_enabled": ${LLM_CACHE_ENABLED:-true},
+  "_llm_cache_note": "true means any of the three stages may have been served from cache: the graphs are still the model's own bytes, but timings and call counts from this run mean nothing and it cannot be used as a §5.2 variance repeat. Set LLM_CACHE_ENABLED=false for either of those measurements.",
+  "chunk_min_size": ${CHUNK_MIN_SIZE:-10000},
+  "chunk_max_size": ${CHUNK_MAX_SIZE:-25000},
+  "chunk_section_classifier": "off",
   "conditions": {
     "C0": "C0/",
     "C1": "C1_C2/raw/",

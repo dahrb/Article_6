@@ -1,19 +1,10 @@
 # =============================================================================
 # CASE OF REGNER v. THE CZECH REPUBLIC
 # 001-177299 | GRANDCHAMBER | 2017
-#
-# AI-GENERATED DRAFT -- read the source and amend.
-# Source: annotation/gold_text/001-177299.txt | Rules: annotation/annotation_guide.txt
-#
-# Revised under guide v1.1 §3.1: a narrated filing and its narrated decision are
-# TWO events. Five pairs split here. Ids renumbered chronologically.
 # =============================================================================
 
 case_id: "001-177299"
 case_name: "CASE OF REGNER v. THE CZECH REPUBLIC"
-court_level: "GRANDCHAMBER"
-annotator: ""
-annotated_utc: ""
 mode: assisted
 guide_version: "1.1"
 
@@ -38,6 +29,7 @@ proceedings:
         side: ThirdParty
         natural_person: true
     follows: null
+    matter: Vetting
     quote: "On 27 December 2004, the Ministry’s authorised representative requested the National Security Authority ( Národní bezpečnostní úřad – “the Authority”) to issue the applicant with security clearance ( osvědčení ) giving him access to State classified information in the “secret” category ( tajné ) in accordance with the duties to be carried out by him."
     note: "Filing half of a §3.1 pair; the clearance is id 2. The Ministry, not the
       applicant, requested the clearance, so the applicant is recorded as ThirdParty
@@ -46,6 +38,7 @@ proceedings:
       behalf."
 
   - id: 2
+    part_of: 1
     type: AdministrativeAction
     body: "the National Security Authority ( Národní bezpečnostní úřad – “the Authority”)"
     authority_kind: Administrative
@@ -62,7 +55,7 @@ proceedings:
       - name: "the applicant"
         side: ThirdParty
         natural_person: true
-    follows: 1
+    matter: Vetting
     quote: "On 19 July 2005 the Authority issued the applicant with security clearance, valid until 18 July 2010, confirming that he had access to State classified information in the “secret” category."
     note: "Decision half of the pair opened at id 1."
 
@@ -80,7 +73,8 @@ proceedings:
       - name: "the applicant"
         side: Responding
         natural_person: true
-    follows: 2
+    follows: 1
+    matter: Vetting
     quote: "On 7 October 2005 the Authority received confidential information from the intelligence service, classified “restricted” ( vyhrazené ) and dated 5 October 2005. It started an investigation in order to verify the information received."
     note: "Filing half of a §3.1 pair; the revocation is id 4. Unusual in that the
       proceeding is opened by the AUTHORITY of its own motion rather than by a
@@ -89,6 +83,7 @@ proceedings:
       as not an institution at all."
 
   - id: 4
+    part_of: 3
     type: AdministrativeAction
     body: "the National Security Authority ( Národní bezpečnostní úřad – “the Authority”)"
     authority_kind: Administrative
@@ -102,7 +97,7 @@ proceedings:
       - name: "the applicant"
         side: Responding
         natural_person: true
-    follows: 3
+    matter: Vetting
     quote: "On the basis of that information the Authority revoked the security clearance on 5 September 2006."
     note: "Decision half of the pair opened at id 3. Two grounds: undisclosed
       directorships and foreign accounts, and a national security risk. The further
@@ -128,6 +123,7 @@ proceedings:
     borderline_reason: "removal from office at the applicant's own request for health
       reasons, under the Labour Code -- an employment act rather than a procedural
       step, and the deciding body is his employer"
+    matter: Employment
     quote: "He was removed from office on the same day under Article 65 § 2 of the Labour Code (see paragraph 26 below)."
     note: "The mutual-consent termination agreement of 20 Oct 2006, effective
       31 Jan 2007, is folded in here rather than recorded separately -- an agreement
@@ -149,7 +145,8 @@ proceedings:
       - name: "the applicant"
         side: Initiating
         natural_person: true
-    follows: 4
+    follows: 3
+    matter: Vetting
     quote: "On an administrative appeal ( rozklad ) by the applicant, the director of the Authority, after obtaining an opinion from the appeals board, confirmed on 18 December 2006 the Authority’s decision of 5 September 2006, but on partly different grounds."
     note: "An internal administrative appeal within the same Authority, so
       AdministrativeAction rather than DomesticProceeding -- no court involved. The
@@ -174,6 +171,7 @@ proceedings:
         side: Responding
         natural_person: false
     follows: 6
+    matter: Vetting
     quote: "On 19 January 2007 the applicant lodged an application with the Prague Municipal Court ( městský soud ) for judicial review of the decision revoking his security clearance."
     note: "Filing half of a §3.1 pair; the judgment is id 8. Judicial review of the
       revocation, so it follows the administrative appeal (id 6) rather than the
@@ -181,6 +179,7 @@ proceedings:
       the public hearing are steps inside this proceeding."
 
   - id: 8
+    part_of: 7
     type: DomesticProceeding
     body: "the Prague Municipal Court ( městský soud )"
     authority_kind: Judicial
@@ -197,7 +196,7 @@ proceedings:
       - name: "the National Security Authority ( Národní bezpečnostní úřad – “the Authority”)"
         side: Responding
         natural_person: false
-    follows: 7
+    matter: Vetting
     quote: "In a judgment of 1 September 2009 the court dismissed the application for judicial review."
     note: "Decision half of the pair opened at id 7."
 
@@ -218,7 +217,8 @@ proceedings:
       - name: "the National Security Authority ( Národní bezpečnostní úřad – “the Authority”)"
         side: Responding
         natural_person: false
-    follows: 8
+    follows: 7
+    matter: Vetting
     quote: "In a judgment of 15 July 2010 the Supreme Administrative Court ( Nejvyšší správní soud ) dismissed an appeal on points of law ( kasační stížnost ) lodged by the applicant as unfounded."
     note: "The kasační stížnost is narrated but undated, so no §3.1 split."
 
@@ -241,6 +241,7 @@ proceedings:
     note: "Filing half of a §3.1 pair; the judgment is id 11."
 
   - id: 11
+    part_of: 10
     type: DomesticProceeding
     body: "the Constitutional Court ( Ústavní soud )"
     authority_kind: Judicial
@@ -254,7 +255,6 @@ proceedings:
       - name: "the applicant"
         side: Initiating
         natural_person: true
-    follows: 10
     final_domestic_decision: true
     quote: "In a judgment of 18 November 2010 the court dismissed his complaint as manifestly ill-founded."
     note: "Decision half of the pair opened at id 10. The instance-level vocabulary
@@ -282,6 +282,7 @@ proceedings:
         side: Responding
         natural_person: true
     follows: null
+    matter: Charge
     quote: "On 16 March 2011 the prosecution service lodged a bill of indictment against the applicant and 51 other persons on charges of influencing the award of public contracts at the Ministry of Defence from 2005 to 2007."
     note: "Filing half of a §3.1 pair and head of a SECOND, independent chain; the
       conviction is id 13. `body` is the prosecution service, which lodged the
@@ -307,6 +308,7 @@ proceedings:
         side: Responding
         natural_person: true
     follows: 12
+    matter: Conviction
     quote: "In a judgment of 25 March 2014 the České Budějovice Regional Court ( krajský soud ) found the applicant guilty and sentenced him, inter alia , to three years’ imprisonment."
     note: "Decision half of the pair opened at id 12."
 
@@ -329,6 +331,7 @@ proceedings:
         natural_person: false
     follows: 13
     final_domestic_decision: true
+    matter: Conviction
     quote: "In a judgment of 27 May 2016 the Prague High Court ( Vrchní soud ) upheld the first-instance judgment convicting the applicant, but suspended execution of his prison sentence for a two-year probationary period."
     note: "Direction Mixed: conviction upheld but the prison sentence suspended. The
       text says this judgment became final, so it is the terminal event of chain 2.

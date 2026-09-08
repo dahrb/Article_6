@@ -1,0 +1,631 @@
+# =============================================================================
+# CASE OF MATKO v. SLOVENIA
+# 001-77778 | CHAMBER | 2006 | SVN
+
+# =============================================================================
+
+case_id: "001-77778"
+case_name: "CASE OF MATKO v. SLOVENIA"
+court_level: "CHAMBER"
+mode: assisted
+guide_version: "1.1"
+
+proceedings:
+
+  - id: 1
+    type: AdministrativeAction
+    body: "officers of the Special Unit and the Slovenj Gradec Police"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Slovenia"
+    decision_date: "1995-04-05"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    matter: Arrest
+    borderline: true
+    borderline_reason: "an arrest -- §4.4 names it as the boundary case, and no body
+      decided anything here in the sense the four subclasses assume"
+    quote: "On 5 April 1995 at about 8.30 p.m. the applicant, driving a car, was arrested in Slovenj Gradec by officers of the Special Unit and the Slovenj Gradec Police."
+    note: "The incident the whole document is about, and the head of both chains.
+      §4 says explicitly that an arrest is an event. MeritsDecided on the “measure
+      imposed” limb of §6.3. `body` is the description ¶12 gives -- no single
+      authority is named. The search of the applicant's car, his questioning at the
+      station and his release at about 00.30 on 6 April are all part of this one
+      episode."
+
+  - id: 2
+    type: ProsecutorialReview
+    body: "the Slovenj Gradec Police"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Slovenia"
+    start_date: "1995-04-07"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the officers of the Special Unit"
+        side: Responding
+        natural_person: false
+    follows: 1
+    matter: Investigation
+    quote: "On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint against the officers of the Special Unit concerning the events of 5 April 1995."
+    note: "The applicant's ORAL complaint against the police, two days after the
+      arrest. Distinct from the written criminal complaint at id 5, which is
+      lodged five weeks later through a lawyer and names an offence. The officers
+      are one entry with natural_person false because the text never separates
+      them (§5.3)."
+
+  - id: 3
+    type: ProsecutorialReview
+    body: "the Slovenj Gradec Police"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Slovenia"
+    start_date: "1995-04-12"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 1
+    matter: Investigation
+    quote: "On 12 April 1995 the Slovenj Gradec Police lodged a criminal complaint against the applicant for the criminal offence of “obstructing an official in the course of his duties” under section 302, paragraph 4-1 of the Slovenian Criminal Code, which referred to the same incident as the applicant’s criminal complaint."
+    note: "The MIRROR complaint: five days after the applicant complained about the
+      police, the police complained about him, on the same incident. Head of the
+      second chain. `body` names the acting authority because ¶37 never says which
+      office the complaint was lodged with -- the same reading is used at id 14."
+
+  - id: 4
+    type: AdministrativeAction
+    body: "the MIA"
+    authority_kind: Administrative
+    jurisdiction_state: "Slovenia"
+    decision_date: "1995-04-20"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties: []
+    follows: 1
+    matter: Investigation
+    quote: "It transpires from the MIA’s report that, on 20 April 1995, the MIA had appointed a “working group” ( delovna skupina ) consisting of officers from the Slovenj Gradec Police and the MIA to assess the lawfulness of the procedures carried out by the Special Unit and the Slovenj Gradec Police."
+    note: "A ministry setting up an internal lawfulness review of the operation --
+      a decision by a state body, so AdministrativeAction rather than a step. Its
+      finding is id 6, and the parallel Police report is id 7. Direction Unknown:
+      the appointment itself cut neither way, whatever the working group went on
+      to conclude."
+
+  - id: 5
+    type: ProsecutorialReview
+    body: "the Slovenj Gradec Police"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Slovenia"
+    start_date: "1995-05-15"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "D.P."
+        side: Responding
+        natural_person: true
+      - name: "J.K."
+        side: Responding
+        natural_person: true
+    follows: 2
+    matter: Investigation
+    quote: "On 15 May 1995 the applicant lodged, through his lawyer, a written criminal complaint ( kazenska ovadba ) with the Slovenj Gradec Police against unidentified police officers for causing minor bodily harm ( lahka telesna poškodba ) and an unlawful deprivation of liberty ( protipraven odvzem prostosti )."
+    note: "Filing half of a §3.1 pair; the decision is id 8. D.P. and J.K. are named
+      in the complaint although ¶29 says they were present but not involved in the
+      alleged ill-treatment -- listed because the text names them, and because the
+      prosecutor's decision at id 8 treats them as the accused."
+
+  - id: 6
+    type: AdministrativeAction
+    body: "the MIA"
+    authority_kind: Administrative
+    jurisdiction_state: "Slovenia"
+    decision_date: "1995-11-15"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties: []
+    follows: 4
+    matter: Investigation
+    quote: "Subsequently, two reports concerning the relevant police operation were submitted to the Public Prosecutor: one by the MIA on 15 November 1995 and one by the Slovenj Gradec Police on 5 February 1996."
+    note: "The working group's determination, quoted at ¶32: “all the measures and
+      procedures were lawful”, and no grounds for suspicion against the officers.
+      Recorded as an event because it contains a lawfulness FINDING by a review
+      body appointed for the purpose. The Slovenj Gradec Police report named in
+      the same sentence is the parallel event at id 7."
+
+  - id: 7
+    type: ProsecutorialReview
+    body: "the Slovenj Gradec Police"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Slovenia"
+    decision_date: "1996-02-05"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Other
+    outcome_direction: Unknown
+    parties: []
+    follows: 4
+    matter: Investigation
+    quote: "The Slovenj Gradec Police report finds, inter alia , that D.P. and J.K. stopped the applicant’s car and that the Special Unit’s officers were under the command of M.J. It explains that the Head of the Special Unit was authorised to give statements concerning the procedure of the Special Unit."
+    note: "RECONSIDERED: previously left out as evidence rather than a determination
+      (¶33 has no lawfulness finding, unlike id 6's ¶32). Restored as its own event
+      because it is still a dated report submitted by a named authority to the
+      Public Prosecutor as part of the same review process opened at id 4 -- the
+      absence of a finding goes to outcome (Other, not MeritsDecided), not to
+      whether the act belongs in the record at all. `follows: 4`, matching id 6:
+      parallel product of the same working-group review, not a continuation of
+      id 6 itself. outcome Other/Unknown because the report states facts (who
+      stopped the car, chain of command, who was authorised to speak for the Unit)
+      without ruling on lawfulness either way."
+
+  - id: 8
+    type: ProsecutorialReview
+    body: "the Public Prosecutor"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Slovenia"
+    decision_date: "1997-01-17"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "D.P."
+        side: Responding
+        natural_person: true
+      - name: "J.K."
+        side: Responding
+        natural_person: true
+      - name: "M.J."
+        side: Responding
+        natural_person: true
+    follows: 5
+    final_domestic_decision: true
+    matter: Investigation
+    quote: "On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal complaint."
+    note: "Decision half of the pair opened at id 5, and the end of the applicant's
+      chain. Flagged final under §5.1's stopped-short rule: ¶36 records that the
+      decision told him he could prosecute as a subsidiary prosecutor within eight
+      days and that “He did not avail himself of this opportunity”, so this is the
+      last decision he actually obtained. Served on his lawyer on 22 January 1997;
+      dated here by the decision, not the service. Note the date is the SAME DAY the
+      prosecutor asked the court to investigate him (id 9) -- ¶35 shows the decision
+      itself relies on that request."
+
+  - id: 9
+    type: DomesticProceeding
+    body: "the Slovenj Gradec District Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    start_date: "1997-01-17"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Public Prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 3
+    matter: Investigation
+    quote: "On 17 January 1997 the Public Prosecutor requested the Slovenj Gradec District Court to open a criminal investigation against the applicant."
+    note: "Filing half of a §3.1 pair; the decision is id 10. Twenty-one months after
+      the police complaint at id 3."
+
+  - id: 10
+    part_of: 9
+    matter: Investigation
+    type: DomesticProceeding
+    body: "the Slovenj Gradec District Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    decision_date: "1997-05-08"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the Public Prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    quote: "On 8 May 1997, further to a proposal of the investigating judge, the Slovenj Gradec District Court decided not to open a criminal investigation against the applicant."
+    note: "Decision half of the pair opened at id 9. Favourable: the court refused to
+      investigate him, noting the contradiction between the Ministry's report and
+      the prosecutor's request. The investigating judge's questioning of the
+      applicant on 8 April 1997 is a step inside this proceeding (§3)."
+
+  - id: 11
+    type: DomesticProceeding
+    body: "the Maribor Higher Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    start_date: "1997-05-12"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Public Prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 9
+    matter: Investigation
+    quote: "On 12 May 1997 the Public Prosecutor appealed against this decision."
+    note: "Filing half of a §3.1 pair; the decision is id 12. The appeal IS dated, so
+      unlike most appeals in this document it earns its own event. Sides: the
+      prosecutor initiates at this instance and the applicant responds, per §6.7."
+
+  - id: 12
+    part_of: 11
+    matter: Investigation
+    type: DomesticProceeding
+    body: "the Maribor Higher Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    decision_date: "1997-12-04"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the Public Prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    quote: "On 4 December 1997 the Maribor Higher Court upheld her appeal finding that, despite the shortcomings mentioned in the first-instance decision, there were sufficient grounds for suspicion that the applicant had committed the alleged offence."
+    note: "Decision half of the pair opened at id 11. It changed the first-instance
+      decision and opened the criminal investigation against the applicant, so
+      MeritsDecided rather than Remitted -- it substituted its own decision instead
+      of sending the matter back."
+
+  - id: 13
+    type: DomesticProceeding
+    body: "the investigating judge"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    decision_date: "1998-03-17"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 11
+    matter: Investigation
+    quote: "On 17 March 1998 the criminal investigation was concluded with the investigating judge’s decision ordering the exclusion of certain documents from the case-file in accordance with section 83, paragraph 3, of the Criminal Procedure Act."
+    note: "Recorded because it is a dated judicial decision that both closed the
+      investigation and excluded evidence. The interviews of five officers, M.J. and
+      the witness A.K. between 19 February and 10 March 1998 are steps inside the
+      investigation. ¶43 says it is not known when this decision was served."
+
+  - id: 14
+    type: DomesticProceeding
+    body: "the Public Prosecutor"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Slovenia"
+    start_date: "1998-12-28"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Public Prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 13
+    matter: Charge
+    quote: "On 28 December 1998 the Public Prosecutor filed an indictment against the applicant for “attempting to obstruct an official in the course of his duties” ( poskus kaznivega dejanja preprečitve uradnega dejanja uradni osebi )."
+    note: "§4 names a bill of indictment as an event. `body` and `authority_kind` name
+      the acting prosecutor because ¶44 does not say which court it was filed with,
+      though ¶45 shows it was the Slovenj Gradec District Court. type
+      DomesticProceeding rather than ProsecutorialReview: the indictment opens the
+      trial rather than deciding anything inside the prosecutor's office."
+
+  - id: 15
+    type: DomesticProceeding
+    body: "the Slovenj Gradec District Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    start_date: "1999-01-27"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Public Prosecutor"
+        side: Responding
+        natural_person: false
+    follows: 14
+    quote: "On 27 January 1999 the applicant filed an objection to the indictment."
+    note: "Filing half of a §3.1 pair; the decision is id 16. Sides flip again: the
+      applicant initiates the objection. level Investigative because an objection to
+      an indictment is a pre-trial step, decided before the trial opens."
+
+  - id: 16
+    part_of: 15
+    type: DomesticProceeding
+    body: "the Slovenj Gradec District Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    decision_date: "1999-02-16"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Public Prosecutor"
+        side: Responding
+        natural_person: false
+    quote: "His objection was rejected by the Slovenj Gradec District Court on 16 February 1999."
+    note: "Decision half of the pair opened at id 15."
+
+  - id: 17
+    type: DomesticProceeding
+    body: "the Slovenj Gradec District Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    decision_date: "1999-11-22"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the Public Prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 15
+    matter: Conviction
+    quote: "By a judgment of 22 November 1999 the court acquitted the applicant."
+    note: "The trial. Hearings on 13 September and 22 November 1999 are steps inside
+      it (§3), and the judgment closing the second one is the same event as that
+      hearing, not a further one."
+
+  - id: 18
+    type: DomesticProceeding
+    body: "the Maribor Higher Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    start_date: "2000-01-05"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Public Prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 17
+    matter: Conviction
+    quote: "On 5 January 2000 the Public Prosecutor appealed against the judgment and on 27 September 2000 the Maribor Higher Court quashed the judgment and remitted the case to a new panel for retrial."
+    note: "Filing half of a §3.1 pair; the decision is id 19. One sentence narrates
+      both acts, so the two share a quote."
+
+  - id: 19
+    part_of: 18
+    matter: Conviction
+    type: DomesticProceeding
+    body: "the Maribor Higher Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    decision_date: "2000-09-27"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: Remitted
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the Public Prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    quote: "On 5 January 2000 the Public Prosecutor appealed against the judgment and on 27 September 2000 the Maribor Higher Court quashed the judgment and remitted the case to a new panel for retrial."
+    note: "Decision half of the pair opened at id 18. Remitted, and unfavourable: it
+      took away the applicant's acquittal."
+
+  - id: 20
+    type: DomesticProceeding
+    body: "the Slovenj Gradec District Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    decision_date: "2001-02-12"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the Public Prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 18
+    matter: Conviction
+    quote: "By a judgment of 12 February 2001, the Slovenj Gradec District Court convicted the applicant as charged and sentenced him to 3 months’ imprisonment, suspended for 3 years."
+    note: "A SEPARATE event from id 17 although the same court: §3 says a retrial
+      after remittal is a new proceeding. level FirstInstance rather than Reopening,
+      following the gold set's treatment of retrials (see 001-77315 id 5) --
+      Reopening is defensible and the text does call it a retrial. No start_date: the
+      retrial is instituted by the remittal at id 19, which is already its own event,
+      so there is no separate filing act to date. Hearings on 15 December and
+      12 February 2001, and the new witness D.Č., are steps inside it. ¶21 refers
+      back to this same judgment; §8 makes those one event, not two."
+
+  - id: 21
+    type: DomesticProceeding
+    body: "the Maribor Higher Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    start_date: "2001-03-12"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the Public Prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 20
+    matter: Conviction
+    quote: "On 12 March 2001 the Public Prosecutor appealed against this judgment and applied for a heavier sentence."
+    note: "Filing half of a §3.1 pair; the decision is id 22. BOTH parties are
+      Initiating: ¶49 adds “The applicant also appealed”, undated, so his appeal
+      folds into this record rather than getting one of its own (§3.1's undated-filing
+      rule)."
+
+  - id: 22
+    part_of: 21
+    matter: Conviction
+    type: DomesticProceeding
+    body: "the Maribor Higher Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    decision_date: "2001-05-09"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the Public Prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    quote: "On 9 May 2001 the Maribor Higher Court upheld the conviction but amended the judgment with respect to the costs of the proceedings."
+    note: "Decision half of the pair opened at id 21. Direction could be read as Mixed
+      -- the conviction stood, the prosecutor's application for a heavier sentence
+      apparently failed, and the costs were amended in an unstated direction.
+      Recorded as Unfavourable because the conviction is what mattered. ¶49 records
+      that the applicant did not appeal to the Supreme Court."
+
+  - id: 23
+    type: DomesticProceeding
+    body: "the Slovenj Gradec District Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Slovenia"
+    decision_date: "2001-10-11"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 21
+    final_domestic_decision: true
+    quote: "Lastly, on 11 October 2001 the Slovenj Gradec District Court ordered the applicant to pay an additional sum to cover the costs of one of the witnesses heard during the proceedings."
+    note: "A costs order after the appeal, and the day ¶50 says the proceedings were
+      “finally concluded” -- the terminal decision of chain (b) under §5.1's
+      revised rule, even though it postdates the application lodged on 22 July
+      1998 by three years; see document_note."
+
+document_note: >
+  Two chains that mirror each other and start from the same incident. (a) THE
+  APPLICANT'S COMPLAINT against the police: ids 1, 2, 5, 8, with the internal
+  reviews of the operation feeding into it at ids 4, 6 and 7 -- the MIA's
+  working-group appointment, the MIA's own finding, and the parallel Police
+  report, all submitted to the Public Prosecutor. It died at the prosecutor's
+  desk in January 1997, twenty-one months after it was lodged, and the applicant
+  did not take up subsidiary prosecution. (b) THE POLICE COMPLAINT against the
+  applicant, on the same incident, lodged five days after his: ids 3, 9-23. It
+  ran for six and a half years, produced a refusal to investigate, an appeal that
+  reversed it, an acquittal, a remittal, a conviction on retrial and a costs
+  order.
+
+  TWO final_domestic_decision flags, one per chain -- ids 8 and 23. Chain (a)
+  concluded on 17 January 1997, well before the application. Chain (b) concluded
+  on 11 October 2001, when ¶50 says the proceedings were "finally concluded" --
+  three years AFTER the application was lodged on 22 July 1998, when chain (b)
+  was still at the investigation stage. Under §5.1's revised rule the flag marks
+  each chain's own terminal decision regardless of that timing; whether id 23
+  actually served exhaustion for the application as filed is a downstream date
+  comparison, not something decided by withholding the flag. (Superseded: an
+  earlier revision of this file left id 23 unflagged on the theory that a chain
+  still pending when the application was lodged gets no flag at all -- that
+  reading has been dropped because it discarded the fact of how chain (b)
+  actually ended rather than just leaving the exhaustion question open.)
+
+  DELIBERATELY NOT RECORDED:
+
+  - The two-day police operation of 4 and 5 April 1995 and the two entries into
+    the Pik Bar (¶10-11). A general operation against a criminal organisation,
+    with no decision and no connection to the applicant beyond setting up his
+    arrest. About thirty people were arrested and injured over the two days
+    (¶15); none of that is this applicant's procedural history.
+  - The Public Prosecutor's request of 14 July 1995 that the police identify and
+    interview the officers, and her request of 15 June 1995 that the applicant's
+    lawyer file a deposition, filed on 20 June 1995 (¶30-31). Evidence-gathering
+    steps inside the consideration of the complaint at id 5, not decisions --
+    the same treatment given to the prosecutor's document request in Stanev
+    (001-108690).
+  - The lawyer's enquiries about progress on 21 October 1996 and 6 January 1997
+    (¶30). Correspondence, not acts of any authority. They matter to the
+    length-of-investigation complaint but are not events.
+  - The applicant's hospital admissions on 6 and 7 April 1995 and the x-ray of
+    19 April 1995 (¶26-27). Medical treatment and evidence; no body decided
+    anything.
+  - The officers' testimony at ¶21-25 and the two versions of events at ¶13-20:
+    evidence about id 1, not further events.
+
+  OUT OF SCOPE: ¶1-8, the Commission and Court proceedings (§2). The source text
+  stops at ¶50, so the RELEVANT DOMESTIC LAW section referred to at ¶36 ("see
+  paragraphs 55 and 58 below") is not present in this file -- the cross-references
+  point outside the text given to the pipeline.

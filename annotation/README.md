@@ -37,10 +37,31 @@ standard, and agreement measured against it would not mean what it claims to.
 | [`evaluated_triples.yaml`](evaluated_triples.yaml) | what is scored, in which tier, and how borderline events are handled. **Scoring only — annotators do not need it** |
 | `gold/` | 20 blank templates, one per case, plus `manifest.json` |
 | `gold_text/` | the 20 source texts, byte-identical to what the pipeline was given |
+| `test/` | the 10 pilot documents, **pre-filled drafts** to correct — a different thing from the calibration set, see [`test/README.md`](test/README.md) |
+| `test_text/` | the 10 pilot source texts, byte-identical to what the pipeline was given |
 
 The guide deliberately contains no reference to judges, arms or scoring. It is an
 annotation guide, not a judging guide, and knowing how a field is used downstream
 would only bias the annotation.
+
+`test/` is **not part of the calibration set** and cannot be used for agreement
+measurement: those drafts were pre-filled by a model and then corrected, which is
+exactly what the cold-annotation rule above rules out. They exist to give the 10
+pilot documents a human-checked reference cheaply. Keep the two directories
+distinct in anything that consumes them.
+
+Both directories are validated by the same checker:
+
+```bash
+uv run python -m art6.data.check_annotations                     # gold
+uv run python -m art6.data.check_annotations --dir annotation/test \
+                                             --text-dir annotation/test_text
+```
+
+It catches the three things a proofread does not: a quote that was retyped rather
+than copied (§5), a value outside a closed vocabulary (§6), and a `follows`
+pointing at an id that is not there (§5.4). It also flags events carrying no date
+at all, which §3.1 does not allow.
 
 ---
 

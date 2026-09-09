@@ -1,7 +1,6 @@
 # =============================================================================
 # CASE OF MATKO v. SLOVENIA
 # 001-77778 | CHAMBER | 2006 | SVN
-
 # =============================================================================
 
 case_id: "001-77778"
@@ -28,9 +27,6 @@ proceedings:
         natural_person: true
     follows: null
     matter: Arrest
-    borderline: true
-    borderline_reason: "an arrest -- §4.4 names it as the boundary case, and no body
-      decided anything here in the sense the four subclasses assume"
     quote: "On 5 April 1995 at about 8.30 p.m. the applicant, driving a car, was arrested in Slovenj Gradec by officers of the Special Unit and the Slovenj Gradec Police."
     note: "The incident the whole document is about, and the head of both chains.
       §4 says explicitly that an arrest is an event. MeritsDecided on the “measure
@@ -103,7 +99,7 @@ proceedings:
     quote: "It transpires from the MIA’s report that, on 20 April 1995, the MIA had appointed a “working group” ( delovna skupina ) consisting of officers from the Slovenj Gradec Police and the MIA to assess the lawfulness of the procedures carried out by the Special Unit and the Slovenj Gradec Police."
     note: "A ministry setting up an internal lawfulness review of the operation --
       a decision by a state body, so AdministrativeAction rather than a step. Its
-      finding is id 6, and the parallel Police report is id 7. Direction Unknown:
+      finding is id 6. Direction Unknown:
       the appointment itself cut neither way, whatever the working group went on
       to conclude."
 
@@ -130,10 +126,10 @@ proceedings:
     follows: 2
     matter: Investigation
     quote: "On 15 May 1995 the applicant lodged, through his lawyer, a written criminal complaint ( kazenska ovadba ) with the Slovenj Gradec Police against unidentified police officers for causing minor bodily harm ( lahka telesna poškodba ) and an unlawful deprivation of liberty ( protipraven odvzem prostosti )."
-    note: "Filing half of a §3.1 pair; the decision is id 8. D.P. and J.K. are named
+    note: "Filing half of a §3.1 pair; the decision is id 7. D.P. and J.K. are named
       in the complaint although ¶29 says they were present but not involved in the
       alleged ill-treatment -- listed because the text names them, and because the
-      prosecutor's decision at id 8 treats them as the accused."
+      prosecutor's decision at id 7 treats them as the accused."
 
   - id: 6
     type: AdministrativeAction
@@ -152,35 +148,9 @@ proceedings:
     note: "The working group's determination, quoted at ¶32: “all the measures and
       procedures were lawful”, and no grounds for suspicion against the officers.
       Recorded as an event because it contains a lawfulness FINDING by a review
-      body appointed for the purpose. The Slovenj Gradec Police report named in
-      the same sentence is the parallel event at id 7."
+      body appointed for the purpose."
 
   - id: 7
-    type: ProsecutorialReview
-    body: "the Slovenj Gradec Police"
-    authority_kind: Prosecutorial
-    jurisdiction_state: "Slovenia"
-    decision_date: "1996-02-05"
-    level: Investigative
-    proceeding_type: Criminal
-    outcome: Other
-    outcome_direction: Unknown
-    parties: []
-    follows: 4
-    matter: Investigation
-    quote: "The Slovenj Gradec Police report finds, inter alia , that D.P. and J.K. stopped the applicant’s car and that the Special Unit’s officers were under the command of M.J. It explains that the Head of the Special Unit was authorised to give statements concerning the procedure of the Special Unit."
-    note: "RECONSIDERED: previously left out as evidence rather than a determination
-      (¶33 has no lawfulness finding, unlike id 6's ¶32). Restored as its own event
-      because it is still a dated report submitted by a named authority to the
-      Public Prosecutor as part of the same review process opened at id 4 -- the
-      absence of a finding goes to outcome (Other, not MeritsDecided), not to
-      whether the act belongs in the record at all. `follows: 4`, matching id 6:
-      parallel product of the same working-group review, not a continuation of
-      id 6 itself. outcome Other/Unknown because the report states facts (who
-      stopped the car, chain of command, who was authorised to speak for the Unit)
-      without ruling on lawfulness either way."
-
-  - id: 8
     type: ProsecutorialReview
     body: "the Public Prosecutor"
     authority_kind: Prosecutorial
@@ -213,10 +183,10 @@ proceedings:
       days and that “He did not avail himself of this opportunity”, so this is the
       last decision he actually obtained. Served on his lawyer on 22 January 1997;
       dated here by the decision, not the service. Note the date is the SAME DAY the
-      prosecutor asked the court to investigate him (id 9) -- ¶35 shows the decision
+      prosecutor asked the court to investigate him (id 8) -- ¶35 shows the decision
       itself relies on that request."
 
-  - id: 9
+  - id: 8
     type: DomesticProceeding
     body: "the Slovenj Gradec District Court"
     authority_kind: Judicial
@@ -236,11 +206,11 @@ proceedings:
     follows: 3
     matter: Investigation
     quote: "On 17 January 1997 the Public Prosecutor requested the Slovenj Gradec District Court to open a criminal investigation against the applicant."
-    note: "Filing half of a §3.1 pair; the decision is id 10. Twenty-one months after
+    note: "Filing half of a §3.1 pair; the decision is id 9. Twenty-one months after
       the police complaint at id 3."
 
-  - id: 10
-    part_of: 9
+  - id: 9
+    part_of: 8
     matter: Investigation
     type: DomesticProceeding
     body: "the Slovenj Gradec District Court"
@@ -259,12 +229,12 @@ proceedings:
         side: Responding
         natural_person: true
     quote: "On 8 May 1997, further to a proposal of the investigating judge, the Slovenj Gradec District Court decided not to open a criminal investigation against the applicant."
-    note: "Decision half of the pair opened at id 9. Favourable: the court refused to
+    note: "Decision half of the pair opened at id 8. Favourable: the court refused to
       investigate him, noting the contradiction between the Ministry's report and
       the prosecutor's request. The investigating judge's questioning of the
       applicant on 8 April 1997 is a step inside this proceeding (§3)."
 
-  - id: 11
+  - id: 10
     type: DomesticProceeding
     body: "the Maribor Higher Court"
     authority_kind: Judicial
@@ -281,15 +251,15 @@ proceedings:
       - name: "the applicant"
         side: Responding
         natural_person: true
-    follows: 9
+    follows: 8
     matter: Investigation
     quote: "On 12 May 1997 the Public Prosecutor appealed against this decision."
-    note: "Filing half of a §3.1 pair; the decision is id 12. The appeal IS dated, so
+    note: "Filing half of a §3.1 pair; the decision is id 11. The appeal IS dated, so
       unlike most appeals in this document it earns its own event. Sides: the
       prosecutor initiates at this instance and the applicant responds, per §6.7."
 
-  - id: 12
-    part_of: 11
+  - id: 11
+    part_of: 10
     matter: Investigation
     type: DomesticProceeding
     body: "the Maribor Higher Court"
@@ -308,12 +278,12 @@ proceedings:
         side: Responding
         natural_person: true
     quote: "On 4 December 1997 the Maribor Higher Court upheld her appeal finding that, despite the shortcomings mentioned in the first-instance decision, there were sufficient grounds for suspicion that the applicant had committed the alleged offence."
-    note: "Decision half of the pair opened at id 11. It changed the first-instance
+    note: "Decision half of the pair opened at id 10. It changed the first-instance
       decision and opened the criminal investigation against the applicant, so
       MeritsDecided rather than Remitted -- it substituted its own decision instead
       of sending the matter back."
 
-  - id: 13
+  - id: 12
     type: DomesticProceeding
     body: "the investigating judge"
     authority_kind: Judicial
@@ -327,7 +297,7 @@ proceedings:
       - name: "the applicant"
         side: Responding
         natural_person: true
-    follows: 11
+    follows: 10
     matter: Investigation
     quote: "On 17 March 1998 the criminal investigation was concluded with the investigating judge’s decision ordering the exclusion of certain documents from the case-file in accordance with section 83, paragraph 3, of the Criminal Procedure Act."
     note: "Recorded because it is a dated judicial decision that both closed the
@@ -335,7 +305,7 @@ proceedings:
       the witness A.K. between 19 February and 10 March 1998 are steps inside the
       investigation. ¶43 says it is not known when this decision was served."
 
-  - id: 14
+  - id: 13
     type: DomesticProceeding
     body: "the Public Prosecutor"
     authority_kind: Prosecutorial
@@ -352,7 +322,7 @@ proceedings:
       - name: "the applicant"
         side: Responding
         natural_person: true
-    follows: 13
+    follows: 12
     matter: Charge
     quote: "On 28 December 1998 the Public Prosecutor filed an indictment against the applicant for “attempting to obstruct an official in the course of his duties” ( poskus kaznivega dejanja preprečitve uradnega dejanja uradni osebi )."
     note: "§4 names a bill of indictment as an event. `body` and `authority_kind` name
@@ -361,7 +331,7 @@ proceedings:
       DomesticProceeding rather than ProsecutorialReview: the indictment opens the
       trial rather than deciding anything inside the prosecutor's office."
 
-  - id: 15
+  - id: 14
     type: DomesticProceeding
     body: "the Slovenj Gradec District Court"
     authority_kind: Judicial
@@ -378,14 +348,14 @@ proceedings:
       - name: "the Public Prosecutor"
         side: Responding
         natural_person: false
-    follows: 14
+    follows: 13
     quote: "On 27 January 1999 the applicant filed an objection to the indictment."
-    note: "Filing half of a §3.1 pair; the decision is id 16. Sides flip again: the
+    note: "Filing half of a §3.1 pair; the decision is id 15. Sides flip again: the
       applicant initiates the objection. level Investigative because an objection to
       an indictment is a pre-trial step, decided before the trial opens."
 
-  - id: 16
-    part_of: 15
+  - id: 15
+    part_of: 14
     type: DomesticProceeding
     body: "the Slovenj Gradec District Court"
     authority_kind: Judicial
@@ -403,9 +373,9 @@ proceedings:
         side: Responding
         natural_person: false
     quote: "His objection was rejected by the Slovenj Gradec District Court on 16 February 1999."
-    note: "Decision half of the pair opened at id 15."
+    note: "Decision half of the pair opened at id 14."
 
-  - id: 17
+  - id: 16
     type: DomesticProceeding
     body: "the Slovenj Gradec District Court"
     authority_kind: Judicial
@@ -422,14 +392,14 @@ proceedings:
       - name: "the applicant"
         side: Responding
         natural_person: true
-    follows: 15
+    follows: 14
     matter: Conviction
     quote: "By a judgment of 22 November 1999 the court acquitted the applicant."
     note: "The trial. Hearings on 13 September and 22 November 1999 are steps inside
       it (§3), and the judgment closing the second one is the same event as that
       hearing, not a further one."
 
-  - id: 18
+  - id: 17
     type: DomesticProceeding
     body: "the Maribor Higher Court"
     authority_kind: Judicial
@@ -446,14 +416,14 @@ proceedings:
       - name: "the applicant"
         side: Responding
         natural_person: true
-    follows: 17
+    follows: 16
     matter: Conviction
     quote: "On 5 January 2000 the Public Prosecutor appealed against the judgment and on 27 September 2000 the Maribor Higher Court quashed the judgment and remitted the case to a new panel for retrial."
-    note: "Filing half of a §3.1 pair; the decision is id 19. One sentence narrates
+    note: "Filing half of a §3.1 pair; the decision is id 18. One sentence narrates
       both acts, so the two share a quote."
 
-  - id: 19
-    part_of: 18
+  - id: 18
+    part_of: 17
     matter: Conviction
     type: DomesticProceeding
     body: "the Maribor Higher Court"
@@ -472,10 +442,10 @@ proceedings:
         side: Responding
         natural_person: true
     quote: "On 5 January 2000 the Public Prosecutor appealed against the judgment and on 27 September 2000 the Maribor Higher Court quashed the judgment and remitted the case to a new panel for retrial."
-    note: "Decision half of the pair opened at id 18. Remitted, and unfavourable: it
+    note: "Decision half of the pair opened at id 17. Remitted, and unfavourable: it
       took away the applicant's acquittal."
 
-  - id: 20
+  - id: 19
     type: DomesticProceeding
     body: "the Slovenj Gradec District Court"
     authority_kind: Judicial
@@ -492,19 +462,19 @@ proceedings:
       - name: "the applicant"
         side: Responding
         natural_person: true
-    follows: 18
+    follows: 17
     matter: Conviction
     quote: "By a judgment of 12 February 2001, the Slovenj Gradec District Court convicted the applicant as charged and sentenced him to 3 months’ imprisonment, suspended for 3 years."
-    note: "A SEPARATE event from id 17 although the same court: §3 says a retrial
+    note: "A SEPARATE event from id 16 although the same court: §3 says a retrial
       after remittal is a new proceeding. level FirstInstance rather than Reopening,
       following the gold set's treatment of retrials (see 001-77315 id 5) --
       Reopening is defensible and the text does call it a retrial. No start_date: the
-      retrial is instituted by the remittal at id 19, which is already its own event,
+      retrial is instituted by the remittal at id 18, which is already its own event,
       so there is no separate filing act to date. Hearings on 15 December and
       12 February 2001, and the new witness D.Č., are steps inside it. ¶21 refers
       back to this same judgment; §8 makes those one event, not two."
 
-  - id: 21
+  - id: 20
     type: DomesticProceeding
     body: "the Maribor Higher Court"
     authority_kind: Judicial
@@ -521,16 +491,16 @@ proceedings:
       - name: "the applicant"
         side: Initiating
         natural_person: true
-    follows: 20
+    follows: 19
     matter: Conviction
     quote: "On 12 March 2001 the Public Prosecutor appealed against this judgment and applied for a heavier sentence."
-    note: "Filing half of a §3.1 pair; the decision is id 22. BOTH parties are
+    note: "Filing half of a §3.1 pair; the decision is id 21. BOTH parties are
       Initiating: ¶49 adds “The applicant also appealed”, undated, so his appeal
       folds into this record rather than getting one of its own (§3.1's undated-filing
       rule)."
 
-  - id: 22
-    part_of: 21
+  - id: 21
+    part_of: 20
     matter: Conviction
     type: DomesticProceeding
     body: "the Maribor Higher Court"
@@ -549,13 +519,13 @@ proceedings:
         side: Initiating
         natural_person: true
     quote: "On 9 May 2001 the Maribor Higher Court upheld the conviction but amended the judgment with respect to the costs of the proceedings."
-    note: "Decision half of the pair opened at id 21. Direction could be read as Mixed
+    note: "Decision half of the pair opened at id 20. Direction could be read as Mixed
       -- the conviction stood, the prosecutor's application for a heavier sentence
       apparently failed, and the costs were amended in an unstated direction.
       Recorded as Unfavourable because the conviction is what mattered. ¶49 records
       that the applicant did not appeal to the Supreme Court."
 
-  - id: 23
+  - id: 22
     type: DomesticProceeding
     body: "the Slovenj Gradec District Court"
     authority_kind: Judicial
@@ -569,7 +539,7 @@ proceedings:
       - name: "the applicant"
         side: Responding
         natural_person: true
-    follows: 21
+    follows: 20
     final_domestic_decision: true
     quote: "Lastly, on 11 October 2001 the Slovenj Gradec District Court ordered the applicant to pay an additional sum to cover the costs of one of the witnesses heard during the proceedings."
     note: "A costs order after the appeal, and the day ¶50 says the proceedings were
@@ -579,26 +549,26 @@ proceedings:
 
 document_note: >
   Two chains that mirror each other and start from the same incident. (a) THE
-  APPLICANT'S COMPLAINT against the police: ids 1, 2, 5, 8, with the internal
-  reviews of the operation feeding into it at ids 4, 6 and 7 -- the MIA's
-  working-group appointment, the MIA's own finding, and the parallel Police
-  report, all submitted to the Public Prosecutor. It died at the prosecutor's
+  APPLICANT'S COMPLAINT against the police: ids 1, 2, 5, 7, with the internal
+  reviews of the operation feeding into it at ids 4 and 6 -- the MIA's
+  working-group appointment and the MIA's own finding, both submitted to the
+  Public Prosecutor. It died at the prosecutor's
   desk in January 1997, twenty-one months after it was lodged, and the applicant
   did not take up subsidiary prosecution. (b) THE POLICE COMPLAINT against the
-  applicant, on the same incident, lodged five days after his: ids 3, 9-23. It
+  applicant, on the same incident, lodged five days after his: ids 3, 8-22. It
   ran for six and a half years, produced a refusal to investigate, an appeal that
   reversed it, an acquittal, a remittal, a conviction on retrial and a costs
   order.
 
-  TWO final_domestic_decision flags, one per chain -- ids 8 and 23. Chain (a)
+  TWO final_domestic_decision flags, one per chain -- ids 7 and 22. Chain (a)
   concluded on 17 January 1997, well before the application. Chain (b) concluded
   on 11 October 2001, when ¶50 says the proceedings were "finally concluded" --
   three years AFTER the application was lodged on 22 July 1998, when chain (b)
   was still at the investigation stage. Under §5.1's revised rule the flag marks
-  each chain's own terminal decision regardless of that timing; whether id 23
+  each chain's own terminal decision regardless of that timing; whether id 22
   actually served exhaustion for the application as filed is a downstream date
   comparison, not something decided by withholding the flag. (Superseded: an
-  earlier revision of this file left id 23 unflagged on the theory that a chain
+  earlier revision of this file left id 22 unflagged on the theory that a chain
   still pending when the application was lodged gets no flag at all -- that
   reading has been dropped because it discarded the fact of how chain (b)
   actually ended rather than just leaving the exhaustion question open.)

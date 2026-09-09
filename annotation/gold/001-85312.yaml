@@ -1,0 +1,166 @@
+# =============================================================================
+# CASE OF UÇMA v. TURKEY
+# 001-85312 | CHAMBER | 2008 | TUR
+# =============================================================================
+
+case_id: "001-85312"
+case_name: "CASE OF UÇMA v. TURKEY"
+court_level: "CHAMBER"
+mode: cold
+guide_version: "1.4"
+
+proceedings:
+
+  - id: 1
+    type: ProsecutorialReview
+    body: "the police"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Turkey"
+    decision_date: "2001-04-28"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: null
+    matter: Arrest
+    quote: "On 28 April 2001 the applicants were taken into police custody."
+    note: "The passage is passive and names no authority: `body` is written from
+      the words 'police custody', which is as far as the text goes. Recorded for
+      consistency with the treatment of arrests elsewhere in the set."
+
+  - id: 2
+    type: DomesticProceeding
+    body: "the investigating judge"
+    authority_kind: Judicial
+    jurisdiction_state: "Turkey"
+    decision_date: "2001-04-30"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 1
+    matter: Detention
+    quote: "On 30 April 2001 the applicants were brought before the investigating judge, who ordered their detention on remand."
+    note: "The judicial ORDER is the event; the remand period itself is not."
+
+  - id: 3
+    type: ProsecutorialReview
+    body: "the Izmir State Security Court public prosecutor"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Turkey"
+    decision_date: "2001-05-03"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 2
+    matter: Charge
+    quote: "On 3 May 2001 the Izmir State Security Court public prosecutor filed an indictment against the applicants"
+    note: "The bill of indictment as an event in its own right rather than as the
+      trial's start_date, following the treatment in 001-59859. The two applicants
+      were charged with different offences -- aiding and abetting an illegal
+      organisation, and membership of one -- but the indictment is one act.
+      The quote stops where it does because the source runs two sentences together
+      without a full stop ('against the applicants He accused'); this is a verbatim
+      prefix, not a tidied one."
+
+  - id: 4
+    type: DomesticProceeding
+    body: "the Izmir State Security Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Turkey"
+    decision_date: "2001-09-13"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the Izmir State Security Court public prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 3
+    matter: Conviction
+    quote: "On 13 September 2001 the Izmir State Security Court found the applicants guilty as charged and sentenced each of them to ten months’ imprisonment and a fine."
+    note: "Instituted by the indictment (id 3), so no start_date of its own."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the Court of Cassation"
+    authority_kind: Judicial
+    jurisdiction_state: "Turkey"
+    decision_date: "2002-01-24"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: Remitted
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicants"
+        side: Initiating
+        natural_person: false
+    follows: 4
+    matter: Conviction
+    quote: "On 24 January 2002 the Court of Cassation quashed the first-instance court’s judgment on the ground that the applicants should have been sanctioned under Article 169 of the Criminal Code for aiding and abetting an illegal armed organisation."
+    note: "The lodging of the appeal is reported but never narrated as its own
+      dated act, so §3.1 does not split this record --
+      see the undated-filing rule. Direction Unknown, not Unfavourable: a quashing
+      grants and denies nothing on the merits (§6.4), even though the stated ground
+      pointed towards a heavier characterisation of the offence."
+
+  - id: 6
+    type: DomesticProceeding
+    body: "the Izmir State Security Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Turkey"
+    decision_date: "2002-05-16"
+    level: Reopening
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicants"
+        side: Responding
+        natural_person: false
+    follows: 5
+    matter: Conviction
+    quote: "On 16 May 2002 the Izmir State Security Court adhered to the reasoning of the Court of Cassation and convicted the applicants pursuant to Article 169 of the Criminal Code."
+    note: "A separate proceeding from id 4 even though the same court decided it --
+      §3 says remittal makes a new event. Level Reopening per §6.1 (retrial), as in
+      001-206264."
+
+  - id: 7
+    type: DomesticProceeding
+    body: "the Court of Cassation"
+    authority_kind: Judicial
+    jurisdiction_state: "Turkey"
+    decision_date: "2002-11-28"
+    level: Cassation
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicants"
+        side: Initiating
+        natural_person: false
+    follows: 6
+    final_domestic_decision: true
+    matter: Conviction
+    quote: "On 28 November 2002, the Court of Cassation, in conformity with the opinion of the Principal Public Prosecutor, upheld the first instance judgment."
+    note: "Terminal event of the single chain."
+
+subject_matter:
+  - "conviction for aiding and abetting an illegal armed organisation"

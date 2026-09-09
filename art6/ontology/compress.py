@@ -1196,9 +1196,20 @@ def main() -> None:
     ap.add_argument(
         "--only", default="", help="comma-separated doc ids, e.g. input.L1,input.L6"
     )
+    ap.add_argument(
+        "--prompt-file",
+        type=Path,
+        default=None,
+        help="Override the stage-1 prompt file (default: prompts/compress.txt). "
+        "For comparing prompt variants across models/arms without touching the "
+        "repo's default prompt.",
+    )
     args = ap.parse_args()
 
     SPLIT_OUTPUT_TOKENS = args.split_max_tokens
+    if args.prompt_file is not None:
+        global PROMPT
+        PROMPT = args.prompt_file
 
     client = OpenAI(base_url=args.base_url, api_key=args.api_key, timeout=900.0)
     args.out_dir.mkdir(parents=True, exist_ok=True)

@@ -1,11 +1,14 @@
 """
 new_repair.py
 -------------
-A simpler repair pass: one violation-driven loop, then one review call that
-sees the document, then a final gate.
+A simpler repair pass: one violation-driven loop, then two document-reading
+review calls, then a final gate.
 
     stage 1+2   loop, max 3 rounds:  collect findings -> model -> apply
-    stage 3     review: full graph + the JUDGMENT -> additions only
+    stage 3a    review_fix: full graph + the JUDGMENT -> fix existing nodes
+                (chaining, participation, anchors, person-merge shape)
+    stage 3b    review_recall: full graph + the JUDGMENT -> mint whole
+                proceedings the graph has no node for at all
     stage 4     final SHACL report
 
 Review reads the judgment in EVERY arm, never the arm's own stage-2 input.
@@ -596,7 +599,9 @@ EVENT_CLASSES = frozenset(
 )
 
 
-def drop_unanchored_additions(patch: RepairPatch) -> tuple[RepairPatch, list[dict]]:
+def drop_unanchored_additions(
+    patch: RepairPatch, *, stage: str = "review"
+) -> tuple[RepairPatch, list[dict]]:
     """Remove any group that mints a domestic event without anchoring it,
     siting it, or peopling it.
 
@@ -684,7 +689,7 @@ def drop_unanchored_additions(patch: RepairPatch) -> tuple[RepairPatch, list[dic
             )
             rejected.append(
                 {
-                    "stage": "review",
+                    "stage": stage,
                     "action": "reject_group",
                     "finding": group.finding,
                     "rationale": group.rationale,
@@ -699,7 +704,7 @@ def drop_unanchored_additions(patch: RepairPatch) -> tuple[RepairPatch, list[dic
     return RepairPatch(groups=kept, merges=patch.merges), rejected
 
 
-def run_review(
+def run_review_fix(
     graph: Graph,
     *,
     client: OpenAI,
@@ -711,13 +716,20 @@ def run_review(
     absences: dict | None = None,
 ) -> tuple[Graph, list[dict]]:
     """One pass with the full graph and the full case text, for what the loop
-    cannot see: events the extraction never captured at all, and the ABSENCES
-    the blind loop is no longer permitted to guess at.
+    cannot see: chaining, participation and anchor GAPS on nodes the graph
+    already has, plus the person/party shape check -- everything the blind
+    loop is not permitted to guess at because answering it needs the document.
 
-    This is the only stage permitted to add an evidence anchor, and the only
-    one that can add an event, because it is the only one reading the document.
-    `source_text` is passed to apply_patch so every quote it adds is checked
-    verbatim against the source before it lands.
+    This is the DOCUMENT-LED FIX half of what used to be one review pass (see
+    run_review_recall for the other half). Splitting them keeps this call's
+    job local -- fix what already has a node -- so the finding it is not
+    equipped to judge well, whether a whole missing proceeding exists at all
+    and what rung/outcome/matter it would carry, is not competing for the same
+    call's attention. This pass may still add an evidence anchor (a quote for
+    a gap it fills), but it must NOT mint a new domestic event -- that is
+    run_review_recall's job, and it is enforced below by the same
+    drop_unanchored_additions check that guards the recall call, as a
+    defence-in-depth measure against a group that mints one anyway.
     """
     # Given the same facts prompt and the same full ontology the original
     # extraction was given -- anything less and this stage is judging the
@@ -752,7 +764,7 @@ def run_review(
         "is not.\n"
         + json.dumps(absences or {}, indent=1, default=str)
         + "\n\nYOUR TASK\n"
-        + _prompt("new_repair_review.txt")
+        + _prompt("new_repair_review_fix.txt")
         + "\n\nOUTPUT SCHEMA\n"
         + _schema_block()
     )
@@ -763,13 +775,94 @@ def run_review(
         prompt,
         temperature=temperature,
         max_tokens=max_tokens,
-        label="review",
+        label="review_fix",
     )
     if patch is None:
-        print("    review: model returned nothing usable")
+        print("    review_fix: model returned nothing usable")
         return graph, []
     proposed = sum(len(g.ops) for g in patch.groups)
-    patch, rejected = drop_unanchored_additions(patch)
+    patch, rejected = drop_unanchored_additions(patch, stage="review_fix")
+    graph, audit = apply_patch(
+        graph,
+        patch,
+        doc_ns,
+        source_text=source_text,
+        allow_quote_adds=True,
+        unverified_quotes=find_unverified_quotes(graph, source_text),
+    )
+    # This stage adds participations, and adds them untyped. Typing them here
+    # means the next stage sees the true state of what this one left behind
+    # rather than one flattered by missing types.
+    complete_entailed_types(graph, doc_ns)
+    applied = sum(1 for a in audit if a["status"].startswith("applied"))
+    for a in audit:
+        a["stage"] = "review_fix"
+    audit.extend(rejected)
+    if rejected:
+        print(f"    review_fix: {len(rejected)} group(s) refused as incomplete")
+    print(
+        f"    review_fix: {proposed} op(s) proposed, {applied} applied "
+        f"[{time.perf_counter() - t0:.1f}s]"
+    )
+    return graph, audit
+
+
+def run_review_recall(
+    graph: Graph,
+    *,
+    client: OpenAI,
+    model: str,
+    doc_ns: str,
+    source_text: str,
+    temperature: float,
+    max_tokens: int,
+) -> tuple[Graph, list[dict]]:
+    """One pass with the full graph and the full case text, for the one thing
+    NOTHING else in the pipeline can do: finding a domestic event the
+    extraction never captured at all and minting it.
+
+    This is the GLOBAL RECALL half of what used to be one review pass (see
+    run_review_fix for the other half). It is given the same facts.txt and
+    full ontology as the fix call, for the ontology-term mapping, PLUS
+    new_repair_review_recall.txt's own condensed restatement of compress.txt's
+    rung/outcome/matter classification rules -- facts.txt alone assumes that
+    classification has already happened ("where the input gives you an
+    `instance_level:` line"), which is true of stage 2's own input but not of
+    an event this call is minting fresh from raw prose. Without that
+    restatement this call has no guidance for the judgement call a genuinely
+    new event always requires, and no warning against the specific failure
+    modes (trial management recorded as an event, a shared disposal sentence
+    read as one entry instead of several) compress.txt exists to prevent.
+    """
+    prompt = (
+        "EXTRACTION INSTRUCTIONS\nThese are the instructions the graph below "
+        "was extracted under. They bind you too.\n\n"
+        + _extraction_prompt()
+        + "\n\nONTOLOGY\n"
+        + _full_ontology()
+        + "\n\nSOURCE DOCUMENT\n<<<SOURCE\n"
+        + source_text
+        + "\nSOURCE\n\nGRAPH EXTRACTED FROM THAT DOCUMENT\n"
+        + graph.serialize(format="turtle")
+        + "\n\nYOUR TASK\n"
+        + _prompt("new_repair_review_recall.txt")
+        + "\n\nOUTPUT SCHEMA\n"
+        + _schema_block()
+    )
+    t0 = time.perf_counter()
+    patch = call_model(
+        client,
+        model,
+        prompt,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        label="review_recall",
+    )
+    if patch is None:
+        print("    review_recall: model returned nothing usable")
+        return graph, []
+    proposed = sum(len(g.ops) for g in patch.groups)
+    patch, rejected = drop_unanchored_additions(patch, stage="review_recall")
     graph, audit = apply_patch(
         graph,
         patch,
@@ -784,12 +877,12 @@ def run_review(
     complete_entailed_types(graph, doc_ns)
     applied = sum(1 for a in audit if a["status"].startswith("applied"))
     for a in audit:
-        a["stage"] = "review"
+        a["stage"] = "review_recall"
     audit.extend(rejected)
     if rejected:
-        print(f"    review: {len(rejected)} group(s) refused as incomplete")
+        print(f"    review_recall: {len(rejected)} group(s) refused as incomplete")
     print(
-        f"    review: {proposed} op(s) proposed, {applied} applied "
+        f"    review_recall: {proposed} op(s) proposed, {applied} applied "
         f"[{time.perf_counter() - t0:.1f}s]"
     )
     return graph, audit
@@ -871,13 +964,17 @@ def repair_document(
     )
 
     if source_text and not skip_review:
-        # The absences the loop was not allowed to touch are handed to the one
-        # stage that can answer them from evidence.
+        # The absences the loop was not allowed to touch are handed to the
+        # fix call, the one that can answer them from evidence. Fix runs
+        # BEFORE recall: it resolves existing nodes' chaining, participation
+        # and person-merge shape first, so recall reads a graph that is
+        # already as clean as the document can make it before it goes
+        # looking for whole proceedings the graph has no node for at all.
         pre_review = collect_findings(graph, doc_ns, source_text)
         n_absences = pre_review.count("absences")
         if n_absences:
-            print(f"    review: carrying {n_absences} unanswered gap(s) forward")
-        graph, review_audit = run_review(
+            print(f"    review_fix: carrying {n_absences} unanswered gap(s) forward")
+        graph, fix_audit = run_review_fix(
             graph,
             client=client,
             model=model,
@@ -887,7 +984,18 @@ def repair_document(
             max_tokens=max_tokens,
             absences=pre_review.as_prompt_payload("absences"),
         )
-        audit.extend(review_audit)
+        audit.extend(fix_audit)
+
+        graph, recall_audit = run_review_recall(
+            graph,
+            client=client,
+            model=model,
+            doc_ns=doc_ns,
+            source_text=source_text,
+            temperature=temperature,
+            max_tokens=max_tokens,
+        )
+        audit.extend(recall_audit)
 
         # ONE MORE LOOP ROUND AFTER THE REVIEW, because the review is the one
         # stage whose output nothing else inspects. It adds events, and an

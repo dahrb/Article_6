@@ -1,0 +1,307 @@
+# =============================================================================
+# CASE OF EASTERBROOK v. THE UNITED KINGDOM
+# 001-61134 | CHAMBER | 2003 | GBR
+# =============================================================================
+
+case_id: "001-61134"
+case_name: "CASE OF EASTERBROOK v. THE UNITED KINGDOM"
+court_level: "CHAMBER"
+mode: cold
+guide_version: "1.4"
+
+proceedings:
+
+  - id: 1
+    type: ProsecutorialReview
+    body: "the police"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "the United Kingdom"
+    decision_date: "1987-11-23"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    borderline: true
+    borderline_reason: "an arrest and immediate detention -- a police measure with no
+      decision by any body, the boundary §4.4 leaves open; and the date is taken
+      from the offence rather than from a sentence about the arrest itself"
+    matter: Arrest
+    quote: "He was arrested and immediately detained."
+    note: "decision_date is the date of the robbery, given earlier in the same
+      paragraph ('a single robbery which occurred on 23 November 1987'), because
+      the arrest is narrated as happening during the flight from it. That is one
+      inferential step further than the quoted sentence alone supports -- drop
+      the date to '1987' if that is too far. `body` is written from 'the police',
+      whom the same paragraph names as intercepting and returning fire."
+
+  - id: 2
+    type: DomesticProceeding
+    body: "the Central Criminal Court in London"
+    authority_kind: Judicial
+    jurisdiction_state: "the United Kingdom"
+    decision_date: "1988-11-30"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 1
+    matter: Conviction
+    quote: "On 30 November 1988, the applicant was convicted at the Central Criminal Court in London of robbery, wounding with intent, possessing firearms with intent to endanger life and possessing ammunition with intent to endanger life."
+    note: "The life sentence, the applicant's lack of representation and his
+      counsel's withdrawal are all narrated undated in the next paragraph and
+      belong to this trial -- a hearing and the judgment closing it are one event
+      (§3). No start_date: the institution of the prosecution is never narrated."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the Court of Appeal"
+    authority_kind: Judicial
+    jurisdiction_state: "the United Kingdom"
+    decision_date: "1990-06"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 2
+    matter: Conviction
+    quote: "In June 1990, the Court of Appeal refused the applicant’s renewed application for leave to appeal against conviction, leave having already been refused by a single judge."
+    note: "One event, not two: the same hearing refused leave against conviction
+      and rejected the appeal against sentence. The earlier refusal of leave by a
+      single judge is reported without a date, so under §3.1 it gets no record of
+      its own."
+
+  - id: 4
+    type: AdministrativeAction
+    body: "the Secretary of State"
+    authority_kind: Administrative
+    jurisdiction_state: "the United Kingdom"
+    decision_date: "1992-12-09"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 2
+    matter: Other
+    quote: "On 9 December 1992, a certificate was issued on behalf of the Secretary of State, stating that the provisions of the Criminal Justice Act 1991 for certifying the tariffs of discretionary life sentence prisoners would not apply to the applicant."
+    note: "Follows the sentence (id 2), which is what the tariff regime attaches
+      to, not the appeal. `matter: Other`: the setting of a life-sentence tariff
+      is an identifiable substantive matter that §6.7 does not name -- it is not
+      Detention, which is remand. Unfavourable: it left release to the Home
+      Secretary's discretion with no Parole Board review until 2004. The
+      applicant's statement that he never received the document is not a separate
+      event."
+
+  - id: 5
+    type: AdministrativeAction
+    body: "the Prison Service"
+    authority_kind: Administrative
+    jurisdiction_state: "the United Kingdom"
+    decision_date: "1995-07-27"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Other
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 4
+    borderline: true
+    borderline_reason: "a notification of a change of policy following a House of
+      Lords judgment, rather than a decision taken in the applicant's case"
+    matter: Other
+    quote: "On 27 July 1995, the Prison Service informed the applicant that, following a judgment of the House of Lords, the Secretary of State would now be setting a specific tariff which would be disclosed to the applicant, along with the judicial recommendations and any reasons for any departure from them."
+    note: "Recorded because it reversed id 4 and opened the process that produced
+      ids 6-8: the judicial recommendation was disclosed and the applicant invited
+      to make representations. The House of Lords judgment behind it is another
+      case cited for the rule it lays down, so it is out of scope under §4.2."
+
+  - id: 6
+    type: AdministrativeAction
+    body: "the Home Secretary"
+    authority_kind: Administrative
+    jurisdiction_state: "the United Kingdom"
+    decision_date: "1998-02-05"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: Mixed
+    parties:
+      - name: "the applicant"
+        side: Responding
+        natural_person: true
+    follows: 5
+    matter: Other
+    quote: "On 5 February 1998, the Home Secretary agreed to certify that the applicant should be subject to the arrangements for the release of discretionary life prisoners, despite having previously qualified the applicant as someone serving a mandatory life sentence."
+    note: "One decision doing two things: reclassifying the applicant as a
+      discretionary life prisoner (what he wanted) and fixing his tariff at 16
+      years, expiring 24 November 2003 (what he then fought). Mixed on that
+      reading; FavourableToApplicant is the alternative, if the 16-year figure is
+      read as quantifying a benefit rather than denying anything."
+
+  - id: 7
+    type: AdministrativeAction
+    body: "the Lord Chief Justice"
+    authority_kind: Judicial
+    jurisdiction_state: "the United Kingdom"
+    decision_date: "1998-08-13"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 6
+    matter: [Other, Requests]
+    quote: "The applicant’s solicitors were informed by a letter of 13 August 1998 that the Lord Chief Justice had revised his opinion and that he recommended a tariff of 12-13 years, but that no oral hearing would be allowed."
+    note: "The applicant's solicitors' written submissions on tariff length, and
+      their request for an oral hearing before the Lord Chief Justice, are
+      narrated in the preceding sentence but undated, so under §3.1 they stay in
+      this record rather than becoming a filing event. authority_kind Judicial
+      because the Lord Chief Justice is a judge, though the act itself is a
+      recommendation into an executive process -- typed AdministrativeAction for
+      that reason (§4.1: read what was done). Direction Favourable on the
+      substance (the recommendation fell from 'life should mean life' to 12-13
+      years); the refusal of an oral hearing is procedural and, per §6.4, does not
+      make this Mixed -- though it is the act complained of at Strasbourg.
+      `matter` is a list: the tariff (Other) and the oral-hearing request
+      (Requests)."
+
+  - id: 8
+    type: AdministrativeAction
+    body: "the Home Secretary"
+    authority_kind: Administrative
+    jurisdiction_state: "the United Kingdom"
+    decision_date: "1998-11-27"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 7
+    matter: Other
+    quote: "On 27 November 1998, the Prison Service informed the applicant’s solicitor that the Home Secretary had decided on a tariff of 12.5 years, to expire in May 2000."
+    note: "`body` is the Home Secretary, who decided; the Prison Service only
+      conveyed it. Favourable on the substance -- the tariff fell from 16 years to
+      12.5, expiring in May 2000 rather than November 2003 -- although this is the
+      decision the applicant then sought to review."
+
+  - id: 9
+    type: DomesticProceeding
+    authority_kind: Judicial
+    jurisdiction_state: "the United Kingdom"
+    start_date: "1999-01-08"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Home Secretary"
+        side: Responding
+        natural_person: false
+    follows: 8
+    matter: Other
+    quote: "On 8 January 1999, the applicant made an application for judicial review of the Home Secretary’s decision of 27 November 1998."
+    note: "Filing half of a §3.1 pair; the decision is id 10, part_of: 9. No
+      `body`: the text never names the court, and §7 forbids supplying one.
+      authority_kind Judicial rests on the words 'judicial review' alone."
+
+  - id: 10
+    part_of: 9
+    type: DomesticProceeding
+    authority_kind: Judicial
+    jurisdiction_state: "the United Kingdom"
+    decision_date: "1999-02-11"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Home Secretary"
+        side: Responding
+        natural_person: false
+    matter: Other
+    quote: "The application was dismissed on 11 February 1999."
+    note: "Outcome Unknown, direction Unfavourable: the text says the application
+      was dismissed but not on what basis, so whether the merits were reached is
+      exactly what §7 says to leave as the escape value."
+
+  - id: 11
+    type: DomesticProceeding
+    authority_kind: Judicial
+    jurisdiction_state: "the United Kingdom"
+    decision_date: "1999-03-22"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Home Secretary"
+        side: Responding
+        natural_person: false
+    follows: 9
+    final_domestic_decision: true
+    matter: Other
+    quote: "A renewed application was dismissed on 22 March 1999."
+    note: "A fresh application, so a separate proceeding from id 9 (§3), linked by
+      `follows` to that proceeding's head. Only the dismissal is dated -- the
+      renewal itself is not narrated as its own act -- so no §3.1 split. Terminal
+      event of the chain, hence the only final_domestic_decision flag; the Parole
+      Board branch at id 12 never produced a decision to flag."
+
+  - id: 12
+    type: AdministrativeAction
+    body: "the Parole Board"
+    authority_kind: Administrative
+    jurisdiction_state: "the United Kingdom"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Unknown
+        natural_person: true
+    follows: 8
+    non_occurring: true
+    matter: Other
+    quote: "He has stated however that he has decided not to participate in the procedures due to his continuing belief that the Government have breached his human rights and still refuses to acknowledge those breaches."
+    note: "A narrated non-event (§5.1): the applicant became eligible for Parole
+      Board review when the tariff expired in May 2000 but declined to take part,
+      so no review happened. Follows id 8, the decision that fixed the expiring
+      tariff. Side Unknown -- the text places him in the procedure but, since he
+      never entered it, on no side of it."
+
+subject_matter:
+  - "the fixing of a discretionary life prisoner's tariff by the executive, without an oral hearing"

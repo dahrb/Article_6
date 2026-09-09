@@ -1,16 +1,11 @@
 # =============================================================================
 # CASE OF MEGRELISHVILI v. GEORGIA
 # 001-202419 | COMMITTEE | 2020
-#
-# AI-GENERATED DRAFT -- read the source and amend.
-# Source: annotation/gold_text/001-202419.txt | Rules: annotation/annotation_guide.txt
 # =============================================================================
 
 case_id: "001-202419"
 case_name: "CASE OF MEGRELISHVILI v. GEORGIA"
 court_level: "COMMITTEE"
-annotator: ""
-annotated_utc: ""
 mode: assisted
 guide_version: "1.1"
 
@@ -51,10 +46,6 @@ proceedings:
         side: Responding
         natural_person: true
     follows: 1
-    borderline: true
-    borderline_reason: "the four searches of 3 July 2007 -- body, car, apartment,
-      garage. Evidence-gathering carried out on an investigator's decision; whether
-      that is a DomesticEvent or investigative activity is the open boundary"
     matter: Investigation
     quote: "According to the relevant police report, the search was conducted in urgent circumstances on the basis of a decision taken by the investigator in charge, R.M., with the participation of the latter and two officers, G.J. and G.T., between 10.40 and 10.50 a.m."
     note: "ALL FOUR SEARCHES ARE RECORDED AS ONE EVENT -- body 10.40-10.50, car
@@ -77,9 +68,6 @@ proceedings:
         side: Responding
         natural_person: true
     follows: 1
-    borderline: true
-    borderline_reason: "an arrest -- same boundary question as the searches; treated
-      consistently with 001-59859 id 1"
     matter: Arrest
     quote: "At 11.00 a.m. the applicant was formally arrested on suspicion of drug offences."
     note: ""
@@ -268,21 +256,6 @@ proceedings:
     quote: "On 19 November 2008 the Supreme Court of Georgia rejected the applicant’s appeal on points of law as inadmissible."
     note: "Terminal."
 
-document_note: >
-  A criminal investigation and trial arising from four searches conducted on
-  3 July 2007. The investigative events (ids 1-8) are dense and near-simultaneous;
-  the trial chain (ids 9-11) is straightforward.
-
-  SPLIT UNDER §3.1: two pairs are now two events each -- the prosecutor's
-  validation request and the court's ruling on it (5 -> 6), and defence counsel's
-  request for the video recordings and the investigator's refusal (7 -> 8). The
-  first pair is worth noting: filing and decision fall on the SAME DATE, 4 July
-  2007. §3.1 splits on whether the text narrates both acts, not on the length of
-  the interval, and here each act has its own sentence and its own actor. Ids 7-9
-  shifted to 9-11; the numbering does NOT correspond to the pre-v1.1 version.
-
-  TWO final_domestic_decision flags, one per independent chain -- id 6 and id 11.
-  The search-validation chain (5-6) is a judicial ruling the applicant never
-  appealed within the 72-hour window; it never rejoins the trial chain (id 9
-  follows id 4, not id 6), so it needed its own flag rather than being absorbed
-  into the trial's.
+subject_matter:
+  - "the fairness of criminal proceedings given how the principal evidence -- searches later judicially validated without the applicant's input -- was obtained and used"
+  - "a conviction for aggravated drug offences"

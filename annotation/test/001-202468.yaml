@@ -13,32 +13,6 @@ proceedings:
 
   - id: 1
     type: AdministrativeAction
-    body: "the Belgian embassy in Beirut"
-    authority_kind: Administrative
-    jurisdiction_state: "Belgium"
-    start_date: "2016-08-22"
-    level: AdministrativeReview
-    proceeding_type: Administrative
-    outcome: Unknown
-    outcome_direction: Unknown
-    parties:
-      - name: "the applicants"
-        side: Initiating
-        natural_person: false
-    follows: null
-    quote: "On 22 August 2016 the applicant couple, accompanied by one of their children, travelled to the Belgian embassy in Beirut to submit visa applications for themselves and their two children."
-    note: "Filing half of a §3.1 pair; the refusal is id 2. `natural_person: false`
-      throughout this file: “the applicants” is a married couple and their two
-      minor children, and §5.3 is strict that a node standing for several people is
-      not a natural person -- this case is the schema's own example. The text never
-      separates them, so one entry. jurisdiction_state is BELGIUM even though the
-      embassy sits in Lebanon: §5.2 asks whose legal order the authority belongs
-      to. `body` is the embassy because that is where ¶9 says the applications were
-      submitted; ¶44 makes clear embassies cannot refuse a visa, and id 2 names the
-      body that actually decided."
-
-  - id: 2
-    type: AdministrativeAction
     body: "the Aliens Office"
     authority_kind: Administrative
     jurisdiction_state: "Belgium"
@@ -51,15 +25,25 @@ proceedings:
       - name: "the applicants"
         side: Initiating
         natural_person: false
-    follows: 1
+    follows: null
     quote: "On 13 September 2016 the Aliens Office, the administrative body responsible for issuing visas (see paragraph 45 below), refused to grant “humanitarian visas” to the applicants and informed them of its decisions by an email of 29 September 2016, transmitted through the visa department of the Belgian embassy in Beirut."
-    note: "Decision half of the pair opened at id 1, dated by the DECISION rather
-      than by the email of 29 September that conveyed it. The single most
-      consequential event in the document: because no application was ever brought
-      to have these particular decisions set aside, they became final, and that
-      fact is what defeats the applicants at ids 18, 19, 20 and 21."
+    note: "`follows: null`: the applicants' visit to the Belgian embassy in Beirut
+      on 22 August 2016 to submit the visa applications is the factual predicate
+      for this decision, not a procedural step of its own, so it is not recorded
+      (§4 -- see document_note); this refusal is the first event of the file.
+      Dated by the DECISION rather than by the email of 29 September that conveyed
+      it. `natural_person: false` throughout this file: “the applicants” is a
+      married couple and their two minor children, and §5.3 is strict that a node
+      standing for several people is not a natural person -- this case is the
+      schema's own example. The text never separates them, so one entry.
+      jurisdiction_state is BELGIUM even though the applications were submitted at
+      the embassy in Lebanon: §5.2 asks whose legal order the authority belongs
+      to. The single most consequential event in the document: because no
+      application was ever brought to have these particular decisions set aside,
+      they became final, and that fact is what defeats the applicants at ids 17,
+      18, 19 and 20."
 
-  - id: 3
+  - id: 2
     type: DomesticProceeding
     body: "the Aliens Appeals Board"
     authority_kind: Judicial
@@ -76,7 +60,7 @@ proceedings:
       - name: "the Belgian State"
         side: Responding
         natural_person: false
-    follows: 2
+    follows: 1
     quote: "On 7 October 2016 the Aliens Appeals Board, acting under the extremely urgent procedure, ordered a stay of execution of the refusals by the Aliens Office to grant visas and instructed the Belgian State to take new decisions within 48 hours, giving adequate legal grounds, that is, by giving reasons which took account of the extremely dangerous situation in Syria."
     note: "authority_kind Judicial because ¶52 says in terms that “The Aliens Appeals
       Board is an administrative court”; level FirstInstance because it is the first
@@ -84,7 +68,7 @@ proceedings:
       judgment (¶14) is undated, so no §3.1 filing event -- which is true of every
       application to the Board in this document."
 
-  - id: 4
+  - id: 3
     type: AdministrativeAction
     body: "the Aliens Office"
     authority_kind: Administrative
@@ -98,13 +82,13 @@ proceedings:
       - name: "the applicants"
         side: Initiating
         natural_person: false
-    follows: 3
+    follows: 2
     quote: "As required by the order of the Aliens Appeals Board (see paragraph 15 above), the Aliens Office issued new decisions, dated 10 October 2016, refusing to grant the visas; however, it provided the same reasons as in the previous refusals."
-    note: "The first of two re-refusals on identical reasoning; the second is id 6.
-      Recorded as distinct events from id 2 because each is a fresh decision on a
+    note: "The first of two re-refusals on identical reasoning; the second is id 5.
+      Recorded as distinct events from id 1 because each is a fresh decision on a
       fresh date, however identical the reasons."
 
-  - id: 5
+  - id: 4
     type: DomesticProceeding
     body: "the Aliens Appeals Board"
     authority_kind: Judicial
@@ -121,12 +105,12 @@ proceedings:
       - name: "the Belgian State"
         side: Responding
         natural_person: false
-    follows: 4
+    follows: 3
     quote: "By a judgment of 14 October 2016 the Aliens Appeals Board, acting under the extremely urgent procedure, again ordered a stay of execution of the decision of 10 October 2016 refusing to issue the visas, and instructed the Aliens Office to take new decisions, this time giving adequate legal grounds, within 48 hours."
     note: "¶21 records the Board reiterating the res judicata nature of its judgment
       of 7 October 2016, “which had nonetheless not been executed”."
 
-  - id: 6
+  - id: 5
     type: AdministrativeAction
     body: "the Aliens Office"
     authority_kind: Administrative
@@ -140,11 +124,11 @@ proceedings:
       - name: "the applicants"
         side: Initiating
         natural_person: false
-    follows: 5
+    follows: 4
     quote: "On 17 October 2016 the Aliens Office again took decisions refusing to issue the visas, citing the same reasons as in the previous refusals."
     note: "Third refusal in five weeks, same reasons each time."
 
-  - id: 7
+  - id: 6
     type: DomesticProceeding
     body: "the Aliens Appeals Board"
     authority_kind: Judicial
@@ -161,16 +145,16 @@ proceedings:
       - name: "the Belgian State"
         side: Responding
         natural_person: false
-    follows: 6
+    follows: 5
     quote: "By a judgment of 20 October 2016 the Aliens Appeals Board, essentially reiterating the substance of its previous judgments, ordered a stay of execution of the refusal decisions of 17 October 2016."
     note: "THE judgment the Article 6 complaint is about. It went beyond staying the
       refusals and directed the State to issue laissez-passers or visas valid for
       three months within 48 hours, citing the imminent danger to the applicants,
       the State's persistent refusal to comply with res judicata authority and the
-      need for an effective remedy. Everything from id 8 to id 21 is the fight over
+      need for an effective remedy. Everything from id 7 to id 20 is the fight over
       whether it would be executed."
 
-  - id: 8
+  - id: 7
     type: DomesticProceeding
     body: "the acting president of the French-language TPI"
     authority_kind: Judicial
@@ -187,14 +171,14 @@ proceedings:
       - name: "the Belgian State"
         side: Responding
         natural_person: false
-    follows: 7
+    follows: 6
     quote: "By an order of 25 October 2016, considering that the failure by the Aliens Office to comply with a judgment of the Aliens Appeals Board, notwithstanding the fact that it had been immediately enforceable, constituted “an unacceptable illegal action”, the acting president of the French-language TPI ordered the State, as an urgent measure, to comply with the Board’s judgment of 20 October 2016, that is, to issue the applicants with visas or laissez-passers , and made the order subject to a penalty payment of 1,000 euros (EUR) per day of delay and per applicant."
     note: "Where the case crosses from the administrative courts into the ordinary
       civil courts. The formal notice served by bailiff and the unilateral
       application that produced this order (¶29) are both undated, so neither gets
       a §3.1 filing event."
 
-  - id: 9
+  - id: 8
     type: DomesticProceeding
     body: "another judge acting as president of the French ‑ language TPI"
     authority_kind: Judicial
@@ -211,14 +195,14 @@ proceedings:
       - name: "the Belgian State"
         side: Responding
         natural_person: false
-    follows: 8
+    follows: 7
     quote: "On 7 November 2016 another judge acting as president of the French ‑ language TPI declared their application admissible but unfounded, considering that the Belgian authorities could not be criticised for failing voluntarily to comply with a judgment by the Aliens Appeals Board, even one that was immediately enforceable, if these same authorities intended to challenge the legality of the judgment by pursuing an appeal procedure provided for by law."
     note: "The inter partes action that ¶31 says the applicants were required to
-      bring to have the id 8 order confirmed is undated, so no filing event.
+      bring to have the id 7 order confirmed is undated, so no filing event.
       MeritsDecided rather than Inadmissible: the judge held the application
       admissible and then rejected it on its merits."
 
-  - id: 10
+  - id: 9
     type: AdministrativeAction
     body: "the Belgian authorities"
     authority_kind: Administrative
@@ -232,16 +216,16 @@ proceedings:
       - name: "the applicants"
         side: Initiating
         natural_person: false
-    follows: 2
+    follows: 1
     quote: "The applicants subsequently submitted such an application, which was rejected by the Belgian authorities in December 2016 (see paragraph 34 below)."
-    note: "The LONG-STAY visa route, which id 2 itself had invited the applicants to
+    note: "The LONG-STAY visa route, which id 1 itself had invited the applicants to
       try. Dated to the month, which is all ¶13 gives; ¶34 dates only the
       correspondence of 12 and 13 December 2016 in which the State's lawyers
       conveyed the refusal, not the decision. The application itself is undated
       (“subsequently”), so no §3.1 filing event. A separate track from the
       humanitarian-visa chain, and it went nowhere."
 
-  - id: 11
+  - id: 10
     type: DomesticProceeding
     body: "the Brussels Court of Appeal"
     authority_kind: Judicial
@@ -258,14 +242,14 @@ proceedings:
       - name: "the Belgian State"
         side: Responding
         natural_person: false
-    follows: 9
+    follows: 8
     quote: "On an appeal by the applicants, the Brussels Court of Appeal delivered a judgment on 7 December 2016 varying the order of 7 November 2016."
     note: "The second judgment the Article 6 complaint is about. ¶33 shows it ordered
       the State to execute the Board's judgment of 20 October 2016, declared the
       order immediately enforceable and imposed a penalty of EUR 1,000 per day per
       applicant. The appeal is undated, so no filing event."
 
-  - id: 12
+  - id: 11
     type: EnforcementAction
     authority_kind: Unknown
     jurisdiction_state: "Belgium"
@@ -281,14 +265,14 @@ proceedings:
       - name: "the Belgian State"
         side: Responding
         natural_person: false
-    follows: 11
+    follows: 10
     quote: "On 13 December 2016 a payment order in respect of the penalties accrued was served on the Belgian State."
     note: "Recorded because echr:EnforcementAction is defined as the “physical or
       bureaucratic execution of an earlier decision”, which is exactly what this is,
-      and because it is the act the whole of ids 13-16 and 21-22 is fought over.
+      and because it is the act the whole of ids 12-15 and 20-21 is fought over.
       `body` omitted and authority_kind Unknown."
 
-  - id: 13
+  - id: 12
     type: DomesticProceeding
     body: "the President of the Brussels Dutch ‑ speaking TPI"
     authority_kind: Judicial
@@ -305,17 +289,17 @@ proceedings:
       - name: "the applicants"
         side: Responding
         natural_person: false
-    follows: 11
+    follows: 10
     quote: "The Belgian State, which sought for its part a stay of execution of the Brussels Court of Appeal’s judgment of 7 December 2016, lodged a unilateral action to that effect with the President of the Brussels Dutch ‑ speaking TPI on 13 December 2016, but was unsuccessful (order of the same date)."
     note: "NO §3.1 split: the action and the order refusing it fall on the same day,
       so there is one event, dated by the order. SIDES ARE REVERSED here and at ids
-      16 and 17 -- the State initiates, the applicants respond, which is the
+      15 and 16 -- the State initiates, the applicants respond, which is the
       per-event reading §6.7 requires. Favourable because the State's request
       failed. Note the State moves to the DUTCH-speaking court while the applicants
       are before the French-language one; the resulting jurisdictional tangle is
       what ¶40 describes."
 
-  - id: 14
+  - id: 13
     type: DomesticProceeding
     body: "the court of appeal"
     authority_kind: Judicial
@@ -332,13 +316,13 @@ proceedings:
       - name: "the applicants"
         side: Responding
         natural_person: false
-    follows: 13
+    follows: 12
     quote: "However, on an appeal by the Belgian State, the court of appeal varied the decision of the first-instance court in a judgment of 14 December 2016."
     note: "It ordered the applicants not to pursue further enforcement proceedings
       pending a decision by the enforcement judge -- the first thing to actually
       stop the enforcement machinery. The State's appeal is undated."
 
-  - id: 15
+  - id: 14
     type: DomesticProceeding
     body: "the enforcement judge at the Brussels French-language TPI"
     authority_kind: Judicial
@@ -355,12 +339,12 @@ proceedings:
       - name: "the Belgian State"
         side: Responding
         natural_person: false
-    follows: 12
+    follows: 11
     quote: "On 15 December 2016 the applicants brought an action against the Belgian State before the enforcement judge at the Brussels French-language TPI, seeking to ensure that the payment order of 13 December 2016 was executed."
-    note: "Filing half of a §3.1 pair; the decision is id 22, a year later and by
+    note: "Filing half of a §3.1 pair; the decision is id 21, a year later and by
       then moot."
 
-  - id: 16
+  - id: 15
     type: DomesticProceeding
     body: "the enforcement judge at the Brussels Dutch ‑ language TPI"
     authority_kind: Judicial
@@ -377,15 +361,15 @@ proceedings:
       - name: "the applicants"
         side: Responding
         natural_person: false
-    follows: 11
+    follows: 10
     quote: "On the same date the Belgian State brought proceedings against the applicants before the enforcement judge at the Brussels Dutch ‑ language TPI, seeking a stay of execution of the principal sentence ( condamnation principale ) resulting from the Aliens Appeals Boards’ judgment of 20 October 2016 (obligation to issue visas or laissez ‑ passers ) and/or a stay of execution of the court of appeal’s judgment of 7 December 2016, and/or to prevent other enforcement measures, such as penalty payments."
-    note: "The MIRROR of id 15, filed the same day before the enforcement judge of
+    note: "The MIRROR of id 14, filed the same day before the enforcement judge of
       the other language division. Outcome Unknown and no decision_date: the text
       never says how these proceedings ended -- ¶40 says only that the State's
-      earlier action at id 13 was the first to reach the Court of Appeal. A running
+      earlier action at id 12 was the first to reach the Court of Appeal. A running
       proceeding recorded as §4.1 requires."
 
-  - id: 17
+  - id: 16
     type: DomesticProceeding
     authority_kind: Judicial
     jurisdiction_state: "Belgium"
@@ -402,14 +386,14 @@ proceedings:
       - name: "the applicants"
         side: Responding
         natural_person: false
-    follows: 11
+    follows: 10
     quote: "On 27 February 2017 the Belgian State lodged an appeal on points of law against the court of appeal’s judgment of 7 December 2016."
     note: "Still pending: ¶36 says “Those proceedings are currently pending”, so
       start_date, no decision_date, outcome Unknown (§4.1). `body` omitted -- ¶36
       names no court; level Cassation rests on the phrase “appeal on points of law”
       rather than on knowledge of the Belgian system."
 
-  - id: 18
+  - id: 17
     type: DomesticProceeding
     body: "the Aliens Appeals Board"
     authority_kind: Judicial
@@ -426,11 +410,34 @@ proceedings:
       - name: "the Belgian State"
         side: Responding
         natural_person: false
-    follows: 3
+    follows: 2
     quote: "On 6 March 2017 the Aliens Appeals Board noted that no application had been brought to have the decisions of 13 September 2016 refusing to issue the visas set aside, and decided in consequence to lift the stay of execution of the visa refusal decisions and the interim measures."
     note: "The unwinding begins. Because no set-aside application was ever lodged
-      against id 2, the thirty-day rule at ¶53 caused every stay and interim measure
+      against id 1, the thirty-day rule at ¶53 caused every stay and interim measure
       to fall away."
+
+  - id: 18
+    type: DomesticProceeding
+    body: "the Aliens Appeals Board"
+    authority_kind: Judicial
+    jurisdiction_state: "Belgium"
+    decision_date: "2017-03-24"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicants"
+        side: Initiating
+        natural_person: false
+      - name: "the Belgian State"
+        side: Responding
+        natural_person: false
+    follows: 3
+    quote: "On 24 March 2017 the Aliens Appeals Board dismissed the application to have those decisions set aside, finding that the Aliens Office’s decisions of 13 September 2016 (see paragraph 11 above) had become final and that, in consequence, the applicants no longer had standing to challenge the subsequent decisions."
+    note: "Inadmissible: dismissed for want of standing, not on the substance. The
+      set-aside application (¶22) is undated. THE FIRST of two Aliens Appeals Board
+      judgments of 24 March 2017 -- see id 19."
 
   - id: 19
     type: DomesticProceeding
@@ -449,40 +456,17 @@ proceedings:
       - name: "the Belgian State"
         side: Responding
         natural_person: false
-    follows: 4
-    quote: "On 24 March 2017 the Aliens Appeals Board dismissed the application to have those decisions set aside, finding that the Aliens Office’s decisions of 13 September 2016 (see paragraph 11 above) had become final and that, in consequence, the applicants no longer had standing to challenge the subsequent decisions."
-    note: "Inadmissible: dismissed for want of standing, not on the substance. The
-      set-aside application (¶22) is undated. THE FIRST of two Aliens Appeals Board
-      judgments of 24 March 2017 -- see id 20."
-
-  - id: 20
-    type: DomesticProceeding
-    body: "the Aliens Appeals Board"
-    authority_kind: Judicial
-    jurisdiction_state: "Belgium"
-    decision_date: "2017-03-24"
-    level: FirstInstance
-    proceeding_type: Administrative
-    outcome: Inadmissible
-    outcome_direction: UnfavourableToApplicant
-    parties:
-      - name: "the applicants"
-        side: Initiating
-        natural_person: false
-      - name: "the Belgian State"
-        side: Responding
-        natural_person: false
-    follows: [6, 7]
+    follows: [5, 6]
     quote: "By a judgment of 24 March 2017 the Aliens Appeals Board dismissed the application to have the decisions set aside and ordered that the stay of execution in respect of the visa refusal decisions be lifted, together with the interim measures, based on the same reasoning as that set out in its first judgment of the same date (see paragraph 22 above)."
-    note: "SEPARATE from id 19 despite the same court, the same date and the same
+    note: "SEPARATE from id 18 despite the same court, the same date and the same
       reasoning: ¶26 says in terms “its first judgment of the same date”, so there
       are two. §8's identity rule would merge them wrongly -- the same trap as the
       two 9 December 2014 judgments in Erol Aksoy (001-248393, ids 19 and 20).
       `follows` is a LIST because this one judgment both dismissed the set-aside
-      application against id 6 and lifted the stay granted at id 7 (§5.4). Lifting
+      application against id 5 and lifted the stay granted at id 6 (§5.4). Lifting
       that stay is what left the applicants with nothing to enforce."
 
-  - id: 21
+  - id: 20
     type: DomesticProceeding
     body: "a Dutch-language division of the Court of Appeal"
     authority_kind: Judicial
@@ -499,7 +483,7 @@ proceedings:
       - name: "the applicants"
         side: Responding
         natural_person: false
-    follows: 14
+    follows: 13
     final_domestic_decision: true
     quote: "By a judgment of 30 June 2017 a Dutch-language division of the Court of Appeal held that the Aliens Appeals Boards’ judgment of 20 October 2016 was no longer operative, given that the applicants had not lodged an application to have the visa refusal decisions of 13 September 2016 set aside."
     note: "The decision that ended the enforcement fight: with the Board's judgment
@@ -510,8 +494,8 @@ proceedings:
       advised there was no reasonable prospect of success. See document_note on why
       this is the only flag."
 
-  - id: 22
-    part_of: 15
+  - id: 21
+    part_of: 14
     type: DomesticProceeding
     body: "the enforcement judge at the Brussels French-language TPI"
     authority_kind: Judicial
@@ -529,12 +513,12 @@ proceedings:
         side: Responding
         natural_person: false
     quote: "On 20 December 2017 the French-language enforcement judge, examining the action brought by the applicants on 15 December 2016, found that the case had become devoid of purpose following the Brussels Court of Appeal’s judgment of 30 June 2017."
-    note: "Decision half of the pair opened at id 15. Outcome Other: a finding that a
+    note: "Decision half of the pair opened at id 14. Outcome Other: a finding that a
       case has become devoid of purpose is neither a merits disposal nor a
-      procedural bar in the §6.3 sense. It is the tail of id 21 rather than an
-      independent conclusion, which is why the flag sits on id 21."
+      procedural bar in the §6.3 sense. It is the tail of id 20 rather than an
+      independent conclusion, which is why the flag sits on id 20."
 
-  - id: 23
+  - id: 22
     type: DomesticProceeding
     body: "the Conseil d’État"
     authority_kind: Judicial
@@ -551,17 +535,17 @@ proceedings:
       - name: "the Belgian State"
         side: Responding
         natural_person: false
-    follows: 18
+    follows: 17
     final_domestic_decision: true
     quote: "On 8 February 2018 the Conseil d’État dismissed an appeal on points of law by the applicants against the judgment of 6 March 2017."
     note: "One month AFTER the application to Strasbourg was lodged on 10 January
       2018. Flagged final_domestic_decision under §5.1's revised rule regardless:
-      this is the terminal decision of the sub-chain id 2 (refusal) -> id 18
+      this is the terminal decision of the sub-chain id 1 (refusal) -> id 17
       (stay lifted) -> this appeal, and the timing goes to whether it served
       exhaustion for the application as filed, not to whether the flag is
       asserted -- see document_note. The appeal itself is undated."
 
-  - id: 24
+  - id: 23
     type: DomesticProceeding
     body: "the Conseil d’État"
     authority_kind: Judicial
@@ -578,13 +562,40 @@ proceedings:
       - name: "the applicants"
         side: Responding
         natural_person: false
-    follows: 3
+    follows: 2
     quote: "On the same date the Conseil d’État dismissed an appeal on points of law brought by the Belgian State against the judgment of 7 October 2016 on the grounds that, following the lifting of the stay of execution on 6 March 2017, the contested judgment no longer adversely affected the Belgian State."
     note: "A SECOND Conseil d'État judgment of 8 February 2018, on the STATE's appeal
       rather than the applicants' -- same court, same date, different case. Direction
       Unknown, not Favourable: the State's appeal failed, but only because the
       applicants had already lost everything it was directed at, so it cut neither
       way for them. Inadmissible: dismissed for want of adverse effect."
+
+  - id: 24
+    type: DomesticProceeding
+    body: "the Conseil d’État"
+    authority_kind: Judicial
+    jurisdiction_state: "Belgium"
+    decision_date: "2018-05-17"
+    level: Cassation
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicants"
+        side: Initiating
+        natural_person: false
+      - name: "the Belgian State"
+        side: Responding
+        natural_person: false
+    follows: 18
+    final_domestic_decision: true
+    quote: "An administrative appeal on points of law lodged by the applicants against that judgment was dismissed by the Conseil d’État on 17 May 2018."
+    note: "¶23 records that it rested on the CJEU's ruling of 7 March 2017 that the
+      Visa Code applies only to stays under 90 days. That CJEU judgment is in
+      ANOTHER CASE and is not recorded -- see document_note. Flagged
+      final_domestic_decision as the terminal decision of the id 3 -> id 18
+      sub-chain, under §5.1's revised rule -- see document_note on why this file
+      now carries four flags rather than one."
 
   - id: 25
     type: DomesticProceeding
@@ -605,36 +616,9 @@ proceedings:
         natural_person: false
     follows: 19
     final_domestic_decision: true
-    quote: "An administrative appeal on points of law lodged by the applicants against that judgment was dismissed by the Conseil d’État on 17 May 2018."
-    note: "¶23 records that it rested on the CJEU's ruling of 7 March 2017 that the
-      Visa Code applies only to stays under 90 days. That CJEU judgment is in
-      ANOTHER CASE and is not recorded -- see document_note. Flagged
-      final_domestic_decision as the terminal decision of the id 4 -> id 19
-      sub-chain, under §5.1's revised rule -- see document_note on why this file
-      now carries four flags rather than one."
-
-  - id: 26
-    type: DomesticProceeding
-    body: "the Conseil d’État"
-    authority_kind: Judicial
-    jurisdiction_state: "Belgium"
-    decision_date: "2018-05-17"
-    level: Cassation
-    proceeding_type: Administrative
-    outcome: MeritsDecided
-    outcome_direction: UnfavourableToApplicant
-    parties:
-      - name: "the applicants"
-        side: Initiating
-        natural_person: false
-      - name: "the Belgian State"
-        side: Responding
-        natural_person: false
-    follows: 20
-    final_domestic_decision: true
     quote: "An appeal on points of law against this judgment was dismissed by the Conseil d’État in a judgment of 17 May 2018, on the same grounds as those set out in the above-cited judgment of the same date (see paragraph 23 above)."
     note: "The SECOND Conseil d'État judgment of 17 May 2018, disposing of the appeal
-      against id 20 as id 25 disposed of the appeal against id 19. ¶27's own
+      against id 19 as id 24 disposed of the appeal against id 18. ¶27's own
       cross-reference to “the above-cited judgment of the same date” is what shows
       there are two. Flagged final_domestic_decision as the terminal decision of
-      the id 6/7 -> id 20 sub-chain -- see document_note."
+      the id 5/6 -> id 19 sub-chain -- see document_note."

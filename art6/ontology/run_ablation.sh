@@ -20,13 +20,19 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 ONTOCAST_REPO="${ONTOCAST_REPO:-$(cd "${REPO_ROOT}/../.." && pwd)/ontocast}"
 
-SET_JSON=""; OUT_DIR=""; LIMIT="${LIMIT:-}"; FRESH=""
+SET_JSON=""; OUT_DIR=""; LIMIT="${LIMIT:-}"; FRESH=""; C4_ONLY=""
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --set) SET_JSON="$2"; shift 2;;
         --out) OUT_DIR="$2"; shift 2;;
         --limit) LIMIT="$2"; shift 2;;
         --fresh) FRESH=1; shift;;
+        # Skip C0 (schema-light baseline) and the "raw" arm (C1/C2, judgment
+        # -> graph with no compression) entirely. Those two exist only to
+        # produce the ablation CONTRAST against C3/C4 -- a corpus build or a
+        # reproducibility replicate cares only about the pipeline's actual
+        # output (C4) and gets nothing from paying for C0-C2 as well.
+        --c4-only) C4_ONLY=1; shift;;
         *) echo "unknown arg: $1" >&2; exit 2;;
     esac
 done
@@ -35,6 +41,16 @@ done
 MODEL="${MODEL:-gemma-4-31b}"
 BASE_URL="${BASE_URL:-http://localhost:8003/v1}"
 TEMPERATURE="${TEMPERATURE:-0.4}"          # stage 2/3; stage 1 is 0.0
+# Stage 1 only can run on a different model/endpoint than stage 2/3 -- default
+# to MODEL/BASE_URL so this is a no-op unless explicitly overridden. Used to
+# compare a stage-1 backbone (e.g. a hosted model) against the stage-2/3 model
+# without also changing what extracts and repairs the graph.
+STAGE1_MODEL="${STAGE1_MODEL:-${MODEL}}"
+STAGE1_BASE_URL="${STAGE1_BASE_URL:-${BASE_URL}}"
+STAGE1_API_KEY="${STAGE1_API_KEY:-${VLLM_API_KEY:-EMPTY}}"
+# Same compress.txt for every stage-1 call unless overridden, so a prompt
+# comparison across models/arms is guaranteed to run identical wording.
+COMPRESS_PROMPT_FILE="${COMPRESS_PROMPT_FILE:-}"
 PROJECT_BASE="${PROJECT_BASE:-art6_abl_$(basename "${OUT_DIR}")}"
 FUSEKI_CONTAINER="${FUSEKI_CONTAINER:-ontocast-fuseki}"
 BASE_ENV_FILE="${BASE_ENV_FILE:-${REPO_ROOT}/ontology/ontology_vllm.env}"
@@ -138,7 +154,9 @@ done_phase()  { [[ -z "${FRESH}" && -f "${DONE_DIR}/$1" ]]; }
 mark_phase()  { touch "${DONE_DIR}/$1"; }
 
 # ---- C0: O1 schema-light, no ontology --------------------------------------
-if done_phase C0; then
+if [[ -n "${C4_ONLY}" ]]; then
+    echo; echo "--- C0  (skipped -- --c4-only) ---"
+elif done_phase C0; then
     echo; echo "--- C0  (already done, skipping) ---"
 else
 phase "C0  O1 schema-light"
@@ -168,8 +186,10 @@ phase "stage 1  compression -> evidence bundles"
 t0=$(now)
 (cd "${REPO_ROOT}" && uv run python -m art6.ontology.compress \
     --input-jsonl "${INPUT_JSONL}" --out-dir "${OUT_DIR}/stage1" \
-    --model "${MODEL}" --base-url "${BASE_URL}" --temperature 0.0 \
+    --model "${STAGE1_MODEL}" --base-url "${STAGE1_BASE_URL}" --api-key "${STAGE1_API_KEY}" \
+    --temperature 0.0 \
     ${SPLIT_MAX_TOKENS:+--split-max-tokens "${SPLIT_MAX_TOKENS}"} \
+    ${COMPRESS_PROMPT_FILE:+--prompt-file "${COMPRESS_PROMPT_FILE}"} \
     --parties-pass)
 (cd "${REPO_ROOT}" && uv run python -m art6.ontology.render_bundles \
     --compress-dir "${OUT_DIR}/stage1" --source-jsonl "${INPUT_JSONL}" \
@@ -311,7 +331,7 @@ run_arm() {
     echo "${label} stage 3 done in $(( $(now) - t ))s"
 }
 
-run_arm "raw"  "${INPUT_JSONL}"          "${OUT_DIR}/C1_C2"
+[[ -n "${C4_ONLY}" ]] || run_arm "raw"  "${INPUT_JSONL}"          "${OUT_DIR}/C1_C2"
 run_arm "comp" "${OUT_DIR}/bundles.jsonl" "${OUT_DIR}/C3_C4"
 
 # Stage 1 states an event inventory; this is the only place on the pipeline
@@ -330,6 +350,9 @@ cat > "${OUT_DIR}/manifest.json" <<JSON
   "set": "${SET_JSON}",
   "finished": "$(date -Is)",
   "model": "${MODEL}",
+  "stage1_model": "${STAGE1_MODEL}",
+  "stage1_base_url": "${STAGE1_BASE_URL}",
+  "compress_prompt_file": "${COMPRESS_PROMPT_FILE:-<default compress.txt>}",
   "base_url": "${BASE_URL}",
   "temperature_stage2_3": ${STAGE2_TEMPERATURE},
   "temperature_stage1": 0.0,
@@ -338,10 +361,14 @@ cat > "${OUT_DIR}/manifest.json" <<JSON
   "chunk_min_size": ${CHUNK_MIN_SIZE:-10000},
   "chunk_max_size": ${CHUNK_MAX_SIZE:-25000},
   "chunk_section_classifier": "off",
+  "c4_only": $([[ -n "${C4_ONLY}" ]] && echo true || echo false),
   "conditions": {
+$([[ -n "${C4_ONLY}" ]] || cat <<'COND'
     "C0": "C0/",
     "C1": "C1_C2/raw/",
     "C2": "C1_C2/repaired/",
+COND
+)
     "C3": "C3_C4/raw/",
     "C4": "C3_C4/repaired/"
   }

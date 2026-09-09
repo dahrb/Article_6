@@ -573,9 +573,22 @@ def find_duplicate_candidates(graph: Graph) -> list[dict]:
     one entity. Two keys, both chosen because a false positive is expensive
     (merging two genuinely distinct proceedings asserts a falsehood):
 
-      DomesticProceeding  same hasCourt AND same hasDecisionDate. One court
-                          cannot decide the same case twice on one day, so a
-                          collision here is a duplicate rather than a coincidence.
+      DomesticProceeding  same hasCourt AND same hasDecisionDate. This is a
+                          CANDIDATE, not a verdict: a court deciding the same
+                          case twice on one day is unusual but not rare, and
+                          this test corpus alone has it happen for real at
+                          least five times -- twin appeals by the applicant
+                          and by the respondent State against different
+                          judgments, two rulings on two different requests
+                          disposed of in one shared sentence, a same-day
+                          "further orders" ruling separate from that day's
+                          main judgment. Measured 2026-09-08: this key's own
+                          candidates, merged without checking who the parties
+                          were or what was decided, silently undid several of
+                          exactly those genuine splits. `_members` therefore
+                          returns each candidate's participating parties and
+                          `hasMatter` values alongside its quotes -- read them
+                          before merging, not just the court and the date.
       DomesticAuthority   same normalized hasAuthorityName / rdfs:label.
       NaturalPerson       same normalized hasPersonName / rdfs:label, MINUS any
                           group whose members disagree on a birth year or a
@@ -593,6 +606,21 @@ def find_duplicate_candidates(graph: Graph) -> list[dict]:
     doc_ns = str(next((ns for prefix, ns in graph.namespaces() if prefix == "doc"), ""))
     groups: list[dict] = []
 
+    def _party_names(n: URIRef) -> list[str]:
+        names = []
+        for participation in graph.objects(n, ECHR.hasParticipation):
+            party = next(graph.objects(participation, ECHR.participatingParty), None)
+            if party is None:
+                continue
+            name = (
+                next(graph.objects(party, ECHR.hasPartyName), None)
+                or next(graph.objects(party, ECHR.hasPersonName), None)
+                or next(graph.objects(party, RDFS.label), None)
+            )
+            if name is not None:
+                names.append(str(name))
+        return names
+
     def _members(nodes: list[URIRef]) -> list[dict]:
         out = []
         for n in nodes:
@@ -608,6 +636,10 @@ def find_duplicate_candidates(graph: Graph) -> list[dict]:
                     "quotes": [
                         str(o) for o in graph.objects(n, ECHR.hasSupportingQuote)
                     ],
+                    "parties": _party_names(n),
+                    "matter": sorted(
+                        _curie(graph, m) for m in graph.objects(n, ECHR.hasMatter)
+                    ),
                 }
             )
         return out

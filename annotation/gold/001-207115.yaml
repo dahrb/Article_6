@@ -1,0 +1,458 @@
+# =============================================================================
+# CASE OF GESTUR JÓNSSON AND RAGNAR HALLDÓR HALL v. ICELAND
+# 001-207115 | GRANDCHAMBER | 2020 | ISL
+# =============================================================================
+
+case_id: "001-207115"
+case_name: "CASE OF GESTUR JÓNSSON AND RAGNAR HALLDÓR HALL v. ICELAND"
+court_level: "GRANDCHAMBER"
+mode: cold
+guide_version: "1.4"
+
+proceedings:
+
+  - id: 1
+    type: ProsecutorialReview
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Iceland"
+    decision_date: "2012-02-16"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "Y"
+        side: Responding
+        natural_person: true
+      - name: "Z"
+        side: Responding
+        natural_person: true
+    follows: null
+    matter: Charge
+    quote: "On 16 February 2012 Y and Z were indicted, along with two other individuals, for participating in fraud and market manipulation."
+    note: "The criminal case against Y and Z is in scope under §4.3 even though the
+      applicants were never parties to it: it is the history out of which their own
+      case arises. No `body` -- the sentence is passive and names no prosecutor
+      (§7). Direction Unknown: this decision was about Y and Z, not about the
+      applicants, and §6.4's 'applicant' is the Strasbourg applicant. The two other
+      accused are not named and get no party entry."
+
+  - id: 2
+    type: AdministrativeAction
+    authority_kind: Unknown
+    jurisdiction_state: "Iceland"
+    decision_date: "2012-03-07"
+    level: Unknown
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: Unknown
+    parties:
+      - name: "the first applicant"
+        side: Unknown
+        natural_person: true
+      - name: "the second applicant"
+        side: Unknown
+        natural_person: true
+    follows: 1
+    matter: LegalAid
+    quote: "On 7 March 2012, in accordance with section 31 of the Criminal Procedure Act no. 88/2008 (hereinafter “the CPA”), the first and second applicants were respectively appointed as Y’s and Z’s defence counsel."
+    note: "The appointment that created the duties the applicants were later fined
+      for abandoning -- the origin of the whole case, so recorded. The sentence is
+      passive: no `body`, authority_kind Unknown, level Unknown. The Supreme Court
+      later states that appointing defence lawyers is a judge's task, but that is
+      its statement of the general law, not a finding about who signed this
+      appointment, and §7 forbids filling the gap from it."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the District Court of Reykjavik"
+    authority_kind: Judicial
+    jurisdiction_state: "Iceland"
+    start_date: "2012-03-07"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the prosecution"
+        side: Initiating
+        natural_person: false
+      - name: "Y"
+        side: Responding
+        natural_person: true
+      - name: "Z"
+        side: Responding
+        natural_person: true
+    follows: 1
+    matter: Conviction
+    quote: "On 7 March 2012 the prosecution’s bill of indictment against, inter alios , Y and Z was filed with the District Court of Reykjavik."
+    note: "Head of the District Court proceeding. Ids 4-6 and 8-12 are all acts of
+      it under §3.2 -- the same court ruling repeatedly in the same track -- and
+      each of them writes `body` as it is written here, per §3.2's requirement that
+      the acts of one proceeding agree, even where the passage itself says only
+      'the District Court' or 'the District Court judge'. Three undated Supreme
+      Court rulings on procedural matters are mentioned in the same paragraph; with
+      no dates they cannot be placed in time and get no records (§3.1)."
+
+  - id: 4
+    part_of: 3
+    type: DomesticProceeding
+    body: "the District Court of Reykjavik"
+    authority_kind: Judicial
+    jurisdiction_state: "Iceland"
+    decision_date: "2012-12-19"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Other
+    outcome_direction: Unknown
+    parties:
+      - name: "the prosecution"
+        side: Initiating
+        natural_person: false
+      - name: "the first applicant"
+        side: Unknown
+        natural_person: true
+      - name: "the second applicant"
+        side: Unknown
+        natural_person: true
+    quote: "On 19 December 2012, having consulted the prosecution, the applicants and the other defence counsel, the District Court judge decided that the trial would take place from 11 to 23 April 2013."
+    note: "The trial date whose keeping or moving is the substance of everything
+      that follows. No `matter`: fixing a hearing date has no substantive content
+      of its own (§5.1). The second applicant's objection by email, and the judge's
+      'Merry Christmas!' reply, are correspondence, not events."
+
+  - id: 5
+    part_of: 3
+    type: DomesticProceeding
+    body: "the District Court of Reykjavik"
+    authority_kind: Judicial
+    jurisdiction_state: "Iceland"
+    decision_date: "2013-03-07"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+    matter: Requests
+    quote: "By a decision of the same date the District Court rejected the request."
+    note: "The request refused is the applicants' and the other defence counsel's
+      application, made at the preliminary hearing of 7 March 2013, for more time
+      to study the evidence and for the trial to be postponed. The application
+      itself is narrated only as something done 'during' that hearing, with no
+      separate dated act, so no §3.1 split. `matter: Requests` -- an adjournment
+      application goes to the conduct of the proceeding, not to the charge."
+
+  - id: 6
+    part_of: 3
+    type: DomesticProceeding
+    body: "the District Court of Reykjavik"
+    authority_kind: Judicial
+    jurisdiction_state: "Iceland"
+    decision_date: "2013-03-26"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+    matter: Requests
+    quote: "By decisions of 26 March 2013, the District Court rejected both requests."
+    note: "One event although the text says 'decisions', plural: same authority,
+      same date, one act of deciding (§8). The two requests were for disclosure of
+      documentary evidence (21 March) and for a 6-8 week postponement (25 March)."
+
+  - id: 7
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Iceland"
+    decision_date: "2013-04-04"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+    follows: null
+    occurs_during: 3
+    matter: Requests
+    quote: "By a decision of 4 April 2013, the Supreme Court dismissed an appeal against these decisions."
+    note: "`occurs_during: 3`, not `follows: 3`, and not `part_of: 3`. It cannot
+      follow proceeding 3, which was still undecided -- §5.4's second example, a
+      higher court answering out of a pending proceeding; and it cannot be an act
+      of it, because a different authority decided it. No final_domestic_decision
+      despite heading its own `follows` chain: it is an interlocutory ruling
+      contained in proceeding 3, whose chain ends at id 15."
+
+  - id: 8
+    part_of: 3
+    type: DomesticProceeding
+    body: "the District Court of Reykjavik"
+    authority_kind: Judicial
+    jurisdiction_state: "Iceland"
+    start_date: "2013-04-08"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+    matter: Requests
+    quote: "On 8 April 2013 each applicant wrote a letter to the District Court judge in the case, arguing that, for reasons of conscience, they were unable to continue to perform their duties as defence counsel for their clients."
+    note: "The applicants' request to be released from their appointment -- §3.1
+      says a request and the decision refusing it, both narrated, are two events,
+      and id 9 is the refusal. Both are acts of proceeding 3 rather than a
+      sub-pair of their own: §3.2 keeps groups one level deep, and §5.4 says an
+      interlocutory question decided by the SAME authority inside its own
+      proceeding is another act of it."
+
+  - id: 9
+    part_of: 3
+    type: DomesticProceeding
+    body: "the District Court of Reykjavik"
+    authority_kind: Judicial
+    jurisdiction_state: "Iceland"
+    decision_date: "2013-04-08"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+    matter: Requests
+    quote: "On the same date the District Court judge replied to the applicants’ letters, refusing their requests."
+    note: "The refusal that made the applicants' non-appearance a breach of duty --
+      the finding both domestic courts rested the fines on. The applicants' reply
+      the same day, stating they would not attend, is their conduct, not an act of
+      any authority."
+
+  - id: 10
+    part_of: 3
+    type: DomesticProceeding
+    body: "the District Court of Reykjavik"
+    authority_kind: Judicial
+    jurisdiction_state: "Iceland"
+    decision_date: "2013-04-11"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Other
+    outcome_direction: Unknown
+    parties:
+      - name: "Y"
+        side: Responding
+        natural_person: true
+      - name: "Z"
+        side: Responding
+        natural_person: true
+      - name: "the first applicant"
+        side: Unknown
+        natural_person: true
+      - name: "the second applicant"
+        side: Unknown
+        natural_person: true
+    matter: LegalAid
+    quote: "New defence counsel were then appointed for Y and Z and the trial was postponed for an unspecified period."
+    note: "The hearing of 11 April 2013, at which the applicants did not appear:
+      the court released them after all and appointed replacements. decision_date
+      comes from the sentence opening the same paragraph ('On 11 April 2013 Y and Z
+      attended the scheduled hearing'); the quoted sentence is the one that
+      evidences the act itself. The applicants' claim that the presiding judge
+      expressly refused the prosecutor's request for fines at this point is
+      contested by the Government and recorded by the Court as a disagreement about
+      what the record shows, so it is not annotated (§4.5)."
+
+  - id: 11
+    part_of: 3
+    type: DomesticProceeding
+    body: "the District Court of Reykjavik"
+    authority_kind: Judicial
+    jurisdiction_state: "Iceland"
+    start_date: "2013-04-11"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the prosecutor"
+        side: Initiating
+        natural_person: false
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+      - name: "the second applicant"
+        side: Responding
+        natural_person: true
+    matter: Other
+    quote: "He therefore requested that the applicants be fined for contempt of court."
+    note: "The prosecutor's application for the fines, made at the hearing of 11
+      April 2013 -- a request narrated as its own act, so an event under §3.1. Its
+      start_date comes from the paragraph's opening sentence. `matter: Other`:
+      contempt-of-court fines are an identifiable substantive matter §6.7 does not
+      name. It is not the filing half of a pair with id 12, because the fines were
+      ultimately imposed by the court of its own motion in its judgment, which the
+      Supreme Court treated as the alternative route under section 222(1) CPA."
+
+  - id: 12
+    part_of: 3
+    type: DomesticProceeding
+    body: "the District Court of Reykjavik"
+    authority_kind: Judicial
+    jurisdiction_state: "Iceland"
+    decision_date: "2013-12-12"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the prosecution"
+        side: Initiating
+        natural_person: false
+      - name: "Y"
+        side: Responding
+        natural_person: true
+      - name: "Z"
+        side: Responding
+        natural_person: true
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+      - name: "the second applicant"
+        side: Responding
+        natural_person: true
+    matter: [Conviction, Other]
+    quote: "By a judgment of 12 December 2013, Y and Z, along with the other two accused, were convicted."
+    note: "ONE event, not two, although this judgment did two quite different
+      things: it convicted Y and Z, and it fined each applicant ISK 1,000,000
+      (approximately EUR 6,200) under section 223(1)(a) and (d) of the CPA without
+      having heard them. Same authority, same decision, so §8 makes it one event,
+      and §3's ambiguity rule says not to split on suspicion; `matter` carries the
+      two subjects instead (§5.1 -- not functional). Direction is read on the
+      applicants, per §6.4: for them it was simply unfavourable. The trial hearings
+      of 4-14 November 2013 are steps inside this proceeding (§3), and the
+      presiding judge's withdrawal and replacement in the interim is narrated
+      without a date, so neither gets a record."
+
+  - id: 13
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Iceland"
+    start_date: "2013-12-13"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the State Prosecutor"
+        side: Initiating
+        natural_person: false
+    follows: 3
+    matter: Other
+    quote: "On 13 December 2013 the applicants appealed to the Supreme Court as regards the imposition of fines, by way of an appeal lodged by the State Prosecutor at their request."
+    note: "Filing half of a §3.1 pair; the judgment is id 15, part_of: 13. `follows:
+      3`, the head of the District Court proceeding, not id 12 -- §5.4 requires
+      both ends of `follows` to be proceedings. Both the applicants and the State
+      Prosecutor are Initiating: he lodged the appeal, but at their request, and
+      §5.3 puts the movant on the Initiating side whoever it is. proceeding_type
+      Criminal because the fines were imposed in the criminal case under the CPA
+      and the Supreme Court held them to be a penalty -- the Grand Chamber's
+      contrary conclusion, that no 'criminal charge' was involved, is Strasbourg's
+      characterisation and not the domestic track."
+
+  - id: 14
+    type: ProsecutorialReview
+    body: "the State Prosecutor"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "Iceland"
+    decision_date: "2014-03-26"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: Other
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Responding
+        natural_person: true
+      - name: "the second applicant"
+        side: Responding
+        natural_person: true
+    follows: null
+    occurs_during: 13
+    borderline: true
+    borderline_reason: "a written brief arguing a position, not a decision -- as with
+      the prosecutor's opinions in 001-85312, whether a pleading is a milestone in
+      the procedural history is contestable"
+    matter: Other
+    quote: "In his brief of 26 March 2014, the State Prosecutor endorsed the District Court’s decision to fine the applicants and underlined that, under section 34 of the CPA, a defence counsel’s request to withdraw from a case was to be granted unless there was a risk that the case would be delayed as a consequence, which was the situation in the applicants’ case."
+    note: "The State Prosecutor lodged the appeal on the applicants' behalf (id 13)
+      and then argued against them on it. `occurs_during: 13`: a different
+      authority acting inside an undecided proceeding, which §5.4 distinguishes
+      from `part_of`."
+
+  - id: 15
+    part_of: 13
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Iceland"
+    decision_date: "2014-05-28"
+    level: Appeal
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the State Prosecutor"
+        side: Responding
+        natural_person: false
+    final_domestic_decision: true
+    matter: Other
+    quote: "By a judgment of 28 May 2014, by a majority of three to two, the Supreme Court confirmed the District Court judgment as regards the fines imposed on the applicants."
+    note: "Decision half of the §3.1 pair headed by id 13, and the terminal event of
+      the chain -- so the only final_domestic_decision flag in the file. The
+      Supreme Court held the fines to be a penalty and accepted that the District
+      Court had not heard the applicants, but found the defect cured by the oral
+      hearing on appeal; the two dissenting judges would have quashed the fines.
+      The minority's reasoning and the majority's are one decision, not two. The
+      Supreme Court's oral hearing is a step inside this proceeding (§3)."
+
+subject_matter:
+  - "fines imposed on defence counsel for contempt of court after they failed to appear at their clients' trial"
+  - "the criminal prosecution of Y and Z for fraud and market manipulation"

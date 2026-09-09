@@ -1,0 +1,323 @@
+# =============================================================================
+# CASE OF RAMSAHAI AND OTHERS v. THE NETHERLANDS
+# 001-80563 | GRANDCHAMBER | 2007 | NLD
+# =============================================================================
+
+case_id: "001-80563"
+case_name: "CASE OF RAMSAHAI AND OTHERS v. THE NETHERLANDS"
+court_level: "GRANDCHAMBER"
+mode: cold
+guide_version: "1.4"
+
+proceedings:
+
+  - id: 1
+    type: ProsecutorialReview
+    body: "the public prosecutor"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "the Netherlands"
+    decision_date: "1998-09-11"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the third applicant"
+        side: Initiating
+        natural_person: true
+      - name: "Officer Brons"
+        side: Responding
+        natural_person: true
+    follows: null
+    matter: Charge
+    quote: "On 11 September 1998 the public prosecutor wrote to the parents of Moravia Ramsahai informing them that she had come to the conclusion that the shooting had been an act of self-defence and had therefore decided not to bring a prosecution against Officer Brons."
+    note: "The decision not to prosecute, taken by Public Prosecutor De Vries
+      -- the same prosecutor who had been in charge of criminal investigation
+      work at Officer Brons's own police station, which the applicants relied
+      on. `matter: Charge`: the decision is about whether Officer Brons would
+      be charged. Head of the file: the investigation it closed is in section
+      A and out of scope, hence `follows: null`."
+
+  - id: 2
+    type: ProsecutorialReview
+    body: "the public prosecutor"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "the Netherlands"
+    start_date: "1998-09-23"
+    level: Investigative
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the third applicant"
+        side: Initiating
+        natural_person: true
+    follows: 1
+    borderline: true
+    borderline_reason: "a letter announcing an intention to apply to a court
+      -- notice of a future step rather than a step in any proceeding"
+    matter: Charge
+    quote: "On 23 September 1998 Mr Hamer wrote to the public prosecutor announcing the intention of the third applicant to seek a court order for the prosecution of Officer Brons."
+    note: "Mr Hamer is the applicants' lawyer; §5.3 says a lawyer acting for a
+      party is representation, not participation, so the third applicant is
+      the party recorded. Recorded and flagged under §4.4; delete if letters
+      of intention are out."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the Amsterdam Court of Appeal"
+    authority_kind: Judicial
+    jurisdiction_state: "the Netherlands"
+    start_date: "1998-10-02"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the third applicant"
+        side: Initiating
+        natural_person: true
+      - name: "Officer Brons"
+        side: Responding
+        natural_person: true
+    follows: 1
+    matter: Charge
+    quote: "On 2 October 1998 they applied for such an order to the Amsterdam Court of Appeal ( gerechtshof ) by means of a complaint about the failure to bring a prosecution (Article 12 of the Code of Criminal Procedure ( Wetboek van Strafvordering ) – see below)."
+    note: "HEAD OF THE ARTICLE 12 PROCEEDING -- the complaint against the
+      failure to prosecute, and the only judicial stage in the case. Ids 5,
+      6, 8, 9 and 10 are its acts. Level FirstInstance because this was the
+      first and only court to determine the matter, notwithstanding the body's
+      name; Appeal, or CaseReview under §6.1, are the readings to weigh
+      against that. `follows: 1`, the non-prosecution decision complained of.
+      The applicants' grounds are set out at length in this paragraph and are,
+      in substance, the Article 2 procedural complaint later made at
+      Strasbourg."
+
+  - id: 4
+    type: ProsecutorialReview
+    body: "the Acting Procurator General at the Amsterdam Court of Appeal"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "the Netherlands"
+    decision_date: "1999-01-08"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Other
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the third applicant"
+        side: Initiating
+        natural_person: true
+      - name: "Officer Brons"
+        side: Responding
+        natural_person: true
+    follows: null
+    occurs_during: 3
+    matter: Charge
+    quote: "It followed that the applicants’ complaint of 2 October 1998 was unfounded."
+    note: "`occurs_during: 3`: a different authority acting inside the
+      court's undecided proceeding (§5.4). Narrowed to the Procurator
+      General's conclusion only; his reasoning (self-defence, no bias in the
+      non-prosecution decision) is submission content, not the event."
+
+  - id: 5
+    part_of: 3
+    type: DomesticProceeding
+    body: "the Amsterdam Court of Appeal"
+    authority_kind: Judicial
+    jurisdiction_state: "the Netherlands"
+    start_date: "1999-02-23"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the third applicant"
+        side: Initiating
+        natural_person: true
+    matter: Requests
+    quote: "On 23 February 1999, Mr Hamer, having been informed of the date on which a hearing would be held to consider the applicants’ said complaint, wrote to the Court of Appeal asking for the hearing to be public."
+    note: "Two requests made that day, so one event (§8): that the hearing be
+      public, and that the registry provide copies of the complete case file.
+      `matter: Requests` -- both go to the conduct of the proceeding, and both
+      became Article 6 complaints at Strasbourg."
+
+  - id: 6
+    part_of: 3
+    type: DomesticProceeding
+    body: "the Amsterdam Court of Appeal"
+    authority_kind: Judicial
+    jurisdiction_state: "the Netherlands"
+    decision_date: "1999-02-24"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the third applicant"
+        side: Initiating
+        natural_person: true
+    matter: Requests
+    quote: "The Registrar of the Court of Appeal replied on 24 February 1999, pointing out that the question to be decided was whether to hold a public hearing; in such circumstances it was appropriate for participants in the hearing to be allowed to view the file, but for reasons of caution copies were refused."
+    note: "The refusal of both requests at id 5, in two letters of the same
+      date from the Registrar -- one event. `body` written as at id 3; §8
+      makes the Registrar's office and the court one authority for these
+      purposes, though treating the Registrar as a separate body and using
+      `occurs_during` is the alternative reading."
+
+  - id: 7
+    type: ProsecutorialReview
+    body: "the Acting Procurator General at the Amsterdam Court of Appeal"
+    authority_kind: Prosecutorial
+    jurisdiction_state: "the Netherlands"
+    decision_date: "1999-02-25"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the third applicant"
+        side: Initiating
+        natural_person: true
+    follows: null
+    occurs_during: 3
+    matter: Requests
+    quote: "The Acting Procurator General replied on 25 February 1999 that he was not an appellate body competent to review decisions of the Registrar of the Court of Appeal to withhold documents."
+    note: "Outcome Inadmissible: he declined the complaint about the file for
+      want of competence rather than deciding it."
+
+  - id: 8
+    part_of: 3
+    type: DomesticProceeding
+    body: "the Amsterdam Court of Appeal"
+    authority_kind: Judicial
+    jurisdiction_state: "the Netherlands"
+    decision_date: "1999-03-01"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Other
+    outcome_direction: Unknown
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the third applicant"
+        side: Initiating
+        natural_person: true
+      - name: "Officer Brons"
+        side: Responding
+        natural_person: true
+    matter: Charge
+    quote: "The applicants’ complaint under Article 12 of the Code of Criminal Procedure was heard in chambers by a “judge delegate” ( raadsheer-commissaris ) on 1 March 1999."
+    note: "The hearing, held in chambers rather than in public -- the Article
+      6 complaint the Grand Chamber examined. A hearing is ordinarily a step
+      inside a proceeding rather than an event of its own (§3); it is recorded
+      here because the judge delegate's decision to sit in chambers was itself
+      a ruling, endorsed later by the full court at id 10."
+
+  - id: 9
+    part_of: 3
+    type: DomesticProceeding
+    body: "the Amsterdam Court of Appeal"
+    authority_kind: Judicial
+    jurisdiction_state: "the Netherlands"
+    start_date: "1999-03-19"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the third applicant"
+        side: Initiating
+        natural_person: true
+    matter: Investigation
+    quote: "On 19 March 1999, with the consent of the Advocate General in charge of the case, Mr Hamer wrote to the judge presiding over the chamber of the Court of Appeal which was to hear the applicants’ complaint about the failure to prosecute, referring to an alleged inconsistency between the statements of Officers Brons and Bultstra and the statements of other police officers, as reported in the press release, which in his submission would justify a further criminal investigation."
+    note: "A submission asking for a further criminal investigation, on an
+      alleged inconsistency between the officers' statements and those of
+      other officers reported in the press release. No separate ruling on it
+      is narrated."
+
+  - id: 10
+    part_of: 3
+    type: DomesticProceeding
+    body: "the Amsterdam Court of Appeal"
+    authority_kind: Judicial
+    jurisdiction_state: "the Netherlands"
+    decision_date: "1999-04-26"
+    level: FirstInstance
+    proceeding_type: Criminal
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the second applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the third applicant"
+        side: Initiating
+        natural_person: true
+      - name: "Officer Brons"
+        side: Responding
+        natural_person: true
+    final_domestic_decision: true
+    matter: Charge
+    quote: "On 26 April 1999 the Court of Appeal dismissed the applicants’ complaint against the public prosecutor’s decision not to prosecute."
+    note: "Terminal event of the single chain (1 -> 3),
+      so the only final_domestic_decision. The court found that Officer Brons
+      had acted in legitimate self-defence, endorsed the judge delegate's
+      refusal to sit in public, agreed that a reconstruction would have been
+      desirable but found the evidence conscientiously investigated, and held
+      that the refusal of access to documents made no difference. The judgment
+      records nothing after this date, so this is where the domestic history
+      ends."
+
+
+subject_matter:
+  - "the refusal to prosecute the police officer who shot the applicants' grandson and son"
+  - "the applicants' Article 12 complaint against that refusal, and the conduct of those proceedings"

@@ -1,0 +1,177 @@
+# =============================================================================
+# CASE OF BEREZOVSKIYE v. UKRAINE
+# 001-197258 | COMMITTEE | 2019 | UKR
+# =============================================================================
+
+case_id: "001-197258"
+case_name: "CASE OF BEREZOVSKIYE v. UKRAINE"
+court_level: "COMMITTEE"
+mode: cold
+guide_version: "1.4"
+
+proceedings:
+
+  - id: 1
+    type: DomesticProceeding
+    body: "the Suvorovskyy District Court of Odessa"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    start_date: "2002-06"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+    follows: null
+    matter: [Pension, Damages]
+    quote: "In June 2002 the first applicant lodged a claim with the national courts seeking payment, under the Status and Social Protection of Chernobyl Victims Act, of his annual health-improvement lump sum (five minimum wages)."
+    note: "Filing half of a §3.1 pair; the decision is id 2, part_of: 1. This
+      passage says only 'the national courts'; `body` is written as the court
+      named in id 2, because §3.2 requires the two acts of one proceeding to
+      agree on it and the narrative leaves no doubt which court received the
+      claim. The claim also covered the second applicant's Chernobyl allowance
+      and non-pecuniary damage for both, but the text shows only the first
+      applicant lodging it, so he is the only party recorded."
+
+  - id: 2
+    part_of: 1
+    type: DomesticProceeding
+    body: "the Suvorovskyy District Court of Odessa"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    decision_date: "2003-12-12"
+    level: FirstInstance
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+    matter: [Pension, Damages]
+    quote: "On 12 December 2003 the Suvorovskyy District Court of Odessa rejected the claim."
+    note: "Decision half of the §3.1 pair headed by id 1."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the Court of Appeal of the Odessa Region"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    decision_date: "2004-06-03"
+    level: Appeal
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+    follows: 1
+    matter: [Pension, Damages]
+    quote: "On 3 June 2004 the Court of Appeal of the Odessa Region upheld the decision of the first-instance court."
+    note: "The lodging of this appeal is never narrated, so no §3.1 split.
+      `follows: 1`, the head of the first-instance proceeding, not id 2 (§5.4)."
+
+  - id: 4
+    type: DomesticProceeding
+    body: "the Suvorovskyy District Court of Odessa"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    start_date: "2004-07-02"
+    level: Cassation
+    proceeding_type: Civil
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+    follows: 3
+    matter: [Pension, Damages]
+    quote: "On 2 July 2004 the first applicant sent an appeal in cassation by registered mail to the Suvorovskyy District Court of Odessa, in accordance with the legal procedure provided for by Article 323 of the Code of Civil Procedure, pursuant to which a cassation appeal was to be lodged with the court of first instance that had considered the case."
+    note: "Heads the cassation proceeding. `body` is the District Court because
+      that is the authority this passage names as receiving the appeal -- domestic
+      procedure required cassation appeals to be filed there. NOT the head of a
+      §3.2 group with ids 5 and 6: those were decided by different authorities
+      (the Supreme Court and the Higher Administrative Court), which §3.2 says
+      cannot be acts of the same proceeding, so they are linked by `follows`
+      instead. Which date this appeal counts as lodged on -- 2, 5 or 6 July -- is
+      the whole dispute in the case; start_date takes the date of the act this
+      sentence narrates."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the Supreme Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    decision_date: "2006-11-10"
+    level: Cassation
+    proceeding_type: Civil
+    outcome: Other
+    outcome_direction: Unknown
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+    follows: 4
+    quote: "On 10 November 2006 the Supreme Court, acting in accordance with the provisions of the Code of Administrative Procedure, referred the case for examination to the Higher Administrative Court."
+    note: "A transfer of the cassation appeal to another court. Nothing was granted
+      or denied, so outcome_direction stays Unknown (§6.4) and `matter` is omitted:
+      a transfer of jurisdiction has no substantive matter of its own (§5.1)."
+
+  - id: 6
+    type: DomesticProceeding
+    body: "the Higher Administrative Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    decision_date: "2007-11-01"
+    level: Cassation
+    proceeding_type: Civil
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+    follows: 5
+    quote: "On 1 November 2007 the Higher Administrative Court rendered a ruling refusing to examine the cassation appeal on the basis that it had been lodged on 6 July 2004 and thus outside the statutory time-limit."
+    note: "Inadmissible: refused on a time-limit without reaching the Chernobyl
+      claim. `matter` omitted for the same reason -- the ruling is about the
+      admissibility of the appeal, not about the pension or the damages. The 6
+      July date it relies on is the first-instance court registry's stamp on the
+      cassation appeal (the letter itself was delivered on 5 July and signed for
+      by 'a certain E.'); not given its own record since no body decided
+      anything by stamping it, but it is the sole fact this ruling turns on."
+
+  - id: 7
+    type: DomesticProceeding
+    body: "the Supreme Court of Ukraine"
+    authority_kind: Judicial
+    jurisdiction_state: "Ukraine"
+    decision_date: "2007-12-26"
+    level: Reopening
+    proceeding_type: Civil
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the first applicant"
+        side: Initiating
+        natural_person: true
+    follows: 6
+    final_domestic_decision: true
+    quote: "On 26 December 2007 the Supreme Court of Ukraine refused to reopen the proceedings."
+    note: "The first applicant's appeal to this court is narrated (¶14, 'The first
+      applicant appealed to the Supreme Court, asking it to quash the decision of
+      the Higher Administrative Court') but carries no date, so under §3.1 it stays
+      inside this record rather than becoming a filing event of its own. Level
+      Reopening because the request the court refused was to reopen. Outcome
+      MeritsDecided: it decided the reopening request, though the text gives no
+      reasons -- Inadmissible would be the alternative reading. Terminal event of
+      the single chain."
+
+subject_matter:
+  - "Chernobyl social-protection allowances and compensation for non-pecuniary damage"
+  - "access to a court on a cassation appeal rejected as out of time"

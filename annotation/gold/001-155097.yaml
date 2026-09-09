@@ -1,0 +1,413 @@
+# =============================================================================
+# CASE OF BRATANOVA v. BULGARIA
+# 001-155097 | CHAMBER | 2015 | BGR
+# =============================================================================
+
+case_id: "001-155097"
+case_name: "CASE OF BRATANOVA v. BULGARIA"
+court_level: "CHAMBER"
+mode: cold
+guide_version: "1.4"
+
+proceedings:
+
+  - id: 1
+    type: AdministrativeAction
+    body: "the Bankya land commission"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    start_date: "1992"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: null
+    matter: Property
+    quote: "In 1992, following the adoption of the Agricultural Land Act, the applicant requested that her property rights to the plot be restored."
+    note: "Filing half of a §3.1 pair; the decision is id 2, part_of: 1. `body` is
+      taken from the next sentence, which names the commission that decided --
+      §3.2 requires the two acts to agree on it."
+
+  - id: 2
+    part_of: 1
+    type: AdministrativeAction
+    body: "the Bankya land commission"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "1994-09-07"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Other
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    matter: Property
+    quote: "In a decision of 7 September 1994 the Bankya land commission held that, since the plot had become part of the urban territory, the procedure could only continue after the presentation of a plan of the plot and a certificate, showing whether any part of the plot had been constructed upon"
+    note: "Decision half of the pair headed by id 1. It neither restored nor
+      refused: it made the restitution procedure conditional on documents, so
+      outcome Other and direction Unknown (§6.4 -- nothing granted, nothing
+      denied)."
+
+  - id: 3
+    type: AdministrativeAction
+    body: "the Bankya land commission"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2000-06-19"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Other
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 1
+    matter: Property
+    quote: "In a letter dated 19 June 2000, in response to an inquiry of the applicant as to the status of her request for restitution, the Bankya land commission stated once again that it needed a plan and a certificate."
+    note: "A separate event from id 2, not a second act of it: §8 makes same
+      authority + different date a different event, and this restatement is six
+      years later. Recorded because it is what sent the applicant to the mayor."
+
+  - id: 4
+    type: AdministrativeAction
+    body: "the Bankya district authorities"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 3
+    non_occurring: true
+    matter: Property
+    quote: "Nevertheless, the documents sought by the applicant were not issued."
+    note: "The mayor's tacit refusal, recorded under §5.1 `non_occurring` as
+      something the text narrates as NOT done. Two undated acts are folded in
+      here rather than given records of their own, per §3.1's undated-filing
+      rule: the applicant's request to the mayor ('On an unspecified date after
+      that the applicant requested the Bankya district mayor to issue these
+      documents') and the years of instructions to submit further papers. No
+      dates anywhere, which is why nothing here can be a dated event -- and why
+      it is this record that id 5 challenges."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the Sofia Administrative Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    start_date: "2007-02-27"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Bankya district mayor"
+        side: Responding
+        natural_person: false
+    follows: 4
+    matter: Property
+    quote: "On 27 February 2007 the applicant applied for judicial review of the mayor’s tacit refusal to issue the documents at issue."
+    note: "No §3.1 decision half: the court's first ruling is narrated only as
+      'Initially, the Sofia Administrative Court dismissed the application as
+      inadmissible', with no date at all, and every event must be placed in time
+      (§3.1). That undated dismissal is what id 6 quashed. `body` is taken from
+      that next sentence, which names the court."
+
+  - id: 6
+    type: DomesticProceeding
+    body: "the Supreme Administrative Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2008-05-19"
+    level: Appeal
+    proceeding_type: Administrative
+    outcome: Remitted
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Bankya district mayor"
+        side: Responding
+        natural_person: false
+    follows: 5
+    quote: "Upon an appeal by the applicant, on 19 May 2008 the Supreme Administrative Court quashed that decision and ordered the lower court to examine the merits of the application."
+    note: "Direction Unknown, not Favourable: a remittal grants and denies nothing
+      on the merits (§6.4), even though the court's obiter criticism of the
+      municipal bodies was plainly on the applicant's side. No `matter` -- the
+      ruling is on admissibility, not on the restitution."
+
+  - id: 7
+    type: DomesticProceeding
+    body: "the Sofia Administrative Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2009-01-09"
+    level: Reopening
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Bankya district mayor"
+        side: Responding
+        natural_person: false
+    follows: 6
+    matter: Property
+    quote: "After a fresh examination of the case, in a judgment of 9 January 2009 the Sofia Administrative Court quashed the mayor’s refusal, finding that the mayor enjoyed no discretion as to whether to issue the documents sought by the applicant, and ordered him to issue these documents within one month."
+    note: "A separate proceeding from id 5 even though the same court decided it:
+      §3 says remittal makes a new event. Level Reopening per §6.1, as in
+      001-206264; FirstInstance is the alternative reading, since this is still
+      the first-instance court."
+
+  - id: 8
+    type: DomesticProceeding
+    authority_kind: Unknown
+    jurisdiction_state: "Bulgaria"
+    level: Appeal
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties: []
+    follows: 7
+    non_occurring: true
+    quote: "The above judgment was not appealed against and became final."
+    note: "A narrated non-event (§5.1): typed as the appeal it would have been. No
+      `body` and authority_kind Unknown -- the sentence names no court, and §7
+      forbids supplying the Supreme Administrative Court from the surrounding
+      narrative. Not the end of the chain: the mayor's fresh refusal (id 9-10)
+      continues it."
+
+  - id: 9
+    type: AdministrativeAction
+    body: "the Bankya district mayor"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2009-03-05"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Other
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 7
+    matter: Property
+    quote: "On 5 March 2009 the Bankya district mayor once again instructed the applicant to submit additional documents so that a plan of the plot and a certificate could be issued."
+    note: "Follows id 7, the judgment ordering the mayor to issue the documents:
+      this instruction is his response to it. The applicant's challenge to the
+      instructions is narrated but undated, so it stays here (§3.1)."
+
+  - id: 10
+    type: AdministrativeAction
+    body: "the mayor"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2010-02-24"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+    follows: 9
+    matter: Property
+    quote: "Nevertheless, in a decision of 24 February 2010 the mayor refused to issue a certificate and a plan because the instructions had not been complied with."
+    note: "`body` verbatim from this passage, which says only 'the mayor' (§5.2);
+      §8 makes it the same authority as id 9. A separate event from id 9 rather
+      than a second act of it: the instruction and the refusal are the mayor
+      acting twice, and neither is the filing of the other."
+
+  - id: 11
+    type: DomesticProceeding
+    body: "the Sofia Administrative Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2010-06-25"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Inadmissible
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the mayor"
+        side: Responding
+        natural_person: false
+    follows: 10
+    quote: "In a decision of 25 June 2010 the Sofia Administrative Court dismissed the application for judicial review as inadmissible, considering that the case concerned the enforcement of its judgment of 9 January 2009."
+    note: "The application is narrated ('The applicant applied once again for
+      judicial review') but undated, so no §3.1 split. No `matter`: decided on
+      admissibility."
+
+  - id: 12
+    type: DomesticProceeding
+    body: "the Supreme Administrative Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2010-09-23"
+    level: Appeal
+    proceeding_type: Administrative
+    outcome: Remitted
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the mayor"
+        side: Responding
+        natural_person: false
+    follows: 11
+    quote: "However, upon an appeal by the applicant, on 23 September 2010 the Supreme Administrative Court quashed that decision, finding that the fresh refusal by the mayor to issue the documents sought was subject to separate judicial review."
+    note: "As id 6: Remitted, so direction Unknown (§6.4)."
+
+  - id: 13
+    type: DomesticProceeding
+    body: "the Sofia Administrative Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2011-06-27"
+    level: Reopening
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the mayor"
+        side: Responding
+        natural_person: false
+    follows: 12
+    matter: Property
+    quote: "In a new judgment of 27 June 2011 the Sofia Administrative Court dismissed the application for judicial review."
+    note: "The fresh examination after the remittal at id 12; level Reopening for
+      the same reason as id 7."
+
+  - id: 14
+    type: DomesticProceeding
+    body: "the Supreme Administrative Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2012-05-08"
+    level: Appeal
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the mayor"
+        side: Responding
+        natural_person: false
+    follows: 13
+    matter: Property
+    quote: "Upon an appeal by the applicant, in a final judgment of 8 May 2012 the Supreme Administrative Court set the above judgment aside, pronounced the mayor’s refusal null and void, remitted the case to him, and ordered him to issue the documents sought by the applicant."
+    note: "Outcome MeritsDecided rather than Remitted: the court did not send the
+      question back to be decided again, it decided it -- the refusal was null and
+      the mayor was ordered to issue. The 'remittal' is to the mayor for
+      execution only. Remitted/Unknown is the alternative reading. Not the final
+      domestic decision: the enforcement events (ids 16-17) continue this chain."
+
+  - id: 15
+    type: EnforcementAction
+    body: "the Bankya district administration"
+    authority_kind: Administrative
+    jurisdiction_state: "Bulgaria"
+    start_date: "2012-10"
+    level: AdministrativeReview
+    proceeding_type: Administrative
+    outcome: Other
+    outcome_direction: Unknown
+    parties: []
+    follows: 14
+    borderline: true
+    borderline_reason: "three letters requesting information -- steps towards
+      complying with id 14 rather than a decision by anyone, and the paragraph is
+      mainly about what the administration did NOT then do"
+    matter: Property
+    quote: "Following the above judgment, between October 2012 and January 2013 the Bankya district administration sent three letters to the Sofia municipal administration requesting information about the plot’s current status in the land register"
+    note: "start_date only, at the coarsest precision the text allows: the passage
+      gives a span, October 2012 to January 2013, not a decision date. The
+      applicant's assertion that no further efforts followed, and that her own
+      lawyer obtained the information at the end of 2013, is her account rather
+      than a finding, so it is not given an event."
+
+  - id: 16
+    type: EnforcementAction
+    body: "a judge from the Supreme Administrative Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2014-08-18"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Bankya district mayor"
+        side: Responding
+        natural_person: false
+    follows: 14
+    matter: Other
+    quote: "On 18 August 2014, upon a request by the applicant, a judge from the Supreme Administrative Court imposed a fine of 1,000 Bulgarian levs (BGN) on the Bankya district mayor for his failure to comply with the judgment of 8 May 2012"
+    note: "Typed EnforcementAction because what was DONE was to enforce id 14 --
+      §4.1 says read the act, not the authority, which is why authority_kind is
+      Judicial while the type is not DomesticProceeding. `matter: Other`: a
+      penalty for non-compliance is an identifiable substantive matter that §6.7
+      does not name, so it takes the escape value rather than an omission.
+      Follows id 14, the judgment enforced, not id 15."
+
+  - id: 17
+    type: DomesticProceeding
+    body: "a three ‑ member panel of the Supreme Administrative Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Bulgaria"
+    decision_date: "2014-10-30"
+    level: Appeal
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: FavourableToApplicant
+    parties:
+      - name: "the applicant"
+        side: Initiating
+        natural_person: true
+      - name: "the Bankya district mayor"
+        side: Responding
+        natural_person: false
+    follows: 16
+    final_domestic_decision: true
+    matter: Other
+    quote: "On 30 October 2014 the judge’s decision was upheld by a three ‑ member panel of the Supreme Administrative Court."
+    note: "Typed DomesticProceeding, not EnforcementAction: this panel reviewed the
+      fine rather than executing anything (§4.1). Terminal event of the single
+      chain in this document, so this is the only flag. The odd spacing in `body`
+      and `quote` is the source text's, reproduced rather than tidied (§5)."
+
+
+subject_matter:
+  - "restitution of agricultural land expropriated in 1952"
+  - "a mayor's refusal to issue the documents a final judgment ordered him to issue"

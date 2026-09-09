@@ -30,6 +30,17 @@ A link flagged for pointing at a node of the wrong type (echr:hasDomesticProceed
 
 A duplicate pair is merged with a `merge` operation naming which node to keep and which to drop, not by hand-editing triples. Check first: two people can share a name, and two courts of the same level are not the same court. Where the evidence points at two different entities, leave them alone.
 
+TWO PROCEEDINGS SHARING A COURT AND A DATE ARE OFTEN NOT THE SAME PROCEEDING. A court deciding two genuinely different things on one day is unusual but not rare, and merging them asserts a falsehood the source document does not support -- do not merge on court-plus-date alone. Read each candidate's `parties` and `matter` before deciding, and treat any of these as evidence they are DIFFERENT proceedings, not the same one merely reported twice:
+
+  - the parties differ (one side's own appeal against a judgment, and the OTHER side's appeal against a different judgment, decided by the same court the same day)
+  - the quotes describe different acts even where they share a sentence ("both requests were rejected" can dispose of two different applications, filed by different people about different things, in the one sentence that gives you the date)
+  - `matter` differs between the candidates, or one carries a matter the other does not
+  - one quote is explicitly marked as first-of-two or second-of-two in the source ("a second judgment of the same date", "based on the same reasoning as its first judgment"), which is the document itself telling you there are two
+
+Only where the parties match (or neither carries any), the matter matches (or neither carries any), and the quotes read as two reports of the identical act -- not two acts that happen to read alike -- is a court-plus-date collision an actual duplicate. When genuinely unsure, leave both: a wrongly-kept pair is a defect the next stage can still see and split; a wrongly-merged pair reads as one correct proceeding and the lost one is gone.
+
+CHECK THE PARTIES FIRST, BEFORE THE QUOTE, EVERY TIME -- an identical quote is the WEAKEST of the four signals above, not the strongest, because a shared disposal sentence ("both requests were rejected") is exactly what TWO different filers sharing one date's ruling produces. A real case measured on this pipeline: two candidates shared court, date, matter, AND an identical quote, and were merged on exactly that basis -- but their `parties` field named two different people, one the applicant's own representative, the other the applicant himself, filing two different requests the shared sentence disposed of together. Matching quotes and matter said "duplicate"; the parties said otherwise, and the parties were right. If the `parties` lists differ by even one name, that alone is enough to leave the pair unmerged -- do not let three matching fields (court, date, quote) outvote a fourth that disagrees. Name-check the parties explicitly in your rationale before proposing a merge; a rationale that never mentions parties is a sign you skipped this check, not evidence there was nothing to check.
+
 WHAT YOU MAY NOT DO
 
 QUOTES ARE NOT YOURS TO TOUCH. You may not write a echr:hasSupportingQuote, and you may not move one either. Both are refused.

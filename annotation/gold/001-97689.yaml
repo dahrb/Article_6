@@ -1,0 +1,206 @@
+# =============================================================================
+# CASE OF ORŠUŠ AND OTHERS v. CROATIA
+# 001-97689 | GRANDCHAMBER | 2010 | HRV
+# =============================================================================
+
+case_id: "001-97689"
+case_name: "CASE OF ORŠUŠ AND OTHERS v. CROATIA"
+court_level: "GRANDCHAMBER"
+mode: cold
+guide_version: "1.4"
+
+proceedings:
+
+  - id: 1
+    type: DomesticProceeding
+    body: "the Čakovec Municipal Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Croatia"
+    start_date: "2002-04-19"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicants"
+        side: Initiating
+        natural_person: false
+      - name: "the above-mentioned primary schools and Kuršanec Primary School"
+        side: Responding
+        natural_person: false
+      - name: "the State"
+        side: Responding
+        natural_person: false
+      - name: "Međimurje County"
+        side: Responding
+        natural_person: false
+    follows: null
+    matter: Other
+    quote: "On 19 April 2002 the applicants brought an action under section 67 of the Administrative Disputes Act in the Čakovec Municipal Court ( Općinski sud u Čakovcu ) against the above-mentioned primary schools and Kuršanec Primary School, the State and Međimurje County (“the defendants”)."
+    note: "Filing half of a §3.1 pair; the judgment is id 2, part_of: 1. `follows:
+      null`: the action attacked the practice of Roma-only classes in general
+      rather than any one of the administrative decisions recorded above, so there
+      is no `follows` the text supports (§5.4 -- record only a link the text
+      gives). proceeding_type Administrative because the action was brought under
+      the Administrative Disputes Act. `matter: Other` -- segregated schooling is
+      an identifiable substantive matter §6.7 does not name; it is not Property,
+      Employment or any of the rest. 'the applicants' is one party entry with
+      natural_person false: the text never separates them in this proceeding, and
+      §5.3 is strict that a node standing for several people is not a natural
+      person. The psychological study produced with the action is evidence, not an
+      event."
+
+  - id: 2
+    part_of: 1
+    type: DomesticProceeding
+    body: "the Čakovec Municipal Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Croatia"
+    decision_date: "2002-09-26"
+    level: FirstInstance
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicants"
+        side: Initiating
+        natural_person: false
+      - name: "the defendants"
+        side: Responding
+        natural_person: false
+    matter: Other
+    quote: "On 26 September 2002 the Čakovec Municipal Court dismissed the applicants’ action, accepting the defendants’ argument that the reason why most Roma pupils were placed in separate classes was that they were not fluent in Croatian."
+    note: "Decision half of the §3.1 pair headed by id 1. The defendants' written
+      replies are pleadings inside this proceeding, not events."
+
+  - id: 3
+    type: DomesticProceeding
+    body: "the Čakovec County Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Croatia"
+    start_date: "2002-10-17"
+    level: Appeal
+    proceeding_type: Administrative
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicants"
+        side: Initiating
+        natural_person: false
+      - name: "the defendants"
+        side: Responding
+        natural_person: false
+    follows: 1
+    matter: Other
+    quote: "On 17 October 2002 the applicants appealed against the first-instance judgment, claiming that it was arbitrary and contradictory."
+    note: "Filing half of a §3.1 pair; the judgment is id 4, part_of: 3. This
+      sentence names no court; `body` is written as the next sentence names it,
+      because §3.2 requires the two acts of one proceeding to agree. `follows: 1`,
+      the head of the first-instance proceeding, not id 2 (§5.4)."
+
+  - id: 4
+    part_of: 3
+    type: DomesticProceeding
+    body: "the Čakovec County Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Croatia"
+    decision_date: "2002-11-14"
+    level: Appeal
+    proceeding_type: Administrative
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicants"
+        side: Initiating
+        natural_person: false
+      - name: "the defendants"
+        side: Responding
+        natural_person: false
+    matter: Other
+    quote: "On 14 November 2002 the Čakovec County Court ( Županijski sud u Čakovcu ) dismissed the applicants’ appeal, upholding the reasoning of the first-instance judgment."
+    note: "Decision half of the §3.1 pair headed by id 3."
+
+  - id: 5
+    type: DomesticProceeding
+    body: "the Constitutional Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Croatia"
+    start_date: "2002-12-19"
+    level: Cassation
+    proceeding_type: Constitutional
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicants"
+        side: Initiating
+        natural_person: false
+      - name: "the defendants"
+        side: Responding
+        natural_person: false
+    follows: 3
+    matter: Other
+    quote: "Subsequently, on 19 December 2002, the applicants lodged a complaint with the Constitutional Court ( Ustavni sud Republike Hrvatske ) under section 62 of the Constitutional Act on the Constitutional Court."
+    note: "Filing half of a §3.1 group; ids 6 and 7 are its other acts. Level
+      Cassation: §6.1 has no constitutional-court value, and this was the highest
+      instance reached. `follows: 3`, the head of the appeal proceeding."
+
+  - id: 6
+    part_of: 5
+    type: DomesticProceeding
+    body: "the Constitutional Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Croatia"
+    start_date: "2003-11-03"
+    level: Cassation
+    proceeding_type: Constitutional
+    outcome: Unknown
+    outcome_direction: Unknown
+    parties:
+      - name: "the applicants"
+        side: Initiating
+        natural_person: false
+    matter: Requests
+    quote: "On 3 November 2003 the applicants’ lawyer lodged an application with the Constitutional Court to expedite the proceedings."
+    note: "A request, narrated as its own dated act, so an event under §3.1 -- and
+      an act of the constitutional proceeding rather than a proceeding of its own,
+      because the same court would have decided it (§5.4). No decision on it is
+      ever narrated: the next thing the text records is the judgment on the
+      complaint itself, more than three years later. `matter: Requests` -- an
+      application about the conduct of the proceeding, not its subject."
+
+  - id: 7
+    part_of: 5
+    type: DomesticProceeding
+    body: "the Constitutional Court"
+    authority_kind: Judicial
+    jurisdiction_state: "Croatia"
+    decision_date: "2007-02-07"
+    level: Cassation
+    proceeding_type: Constitutional
+    outcome: MeritsDecided
+    outcome_direction: UnfavourableToApplicant
+    parties:
+      - name: "the applicants"
+        side: Initiating
+        natural_person: false
+      - name: "the defendants"
+        side: Responding
+        natural_person: false
+    final_domestic_decision: true
+    matter: Other
+    quote: "On 7 February 2007 the Constitutional Court dismissed the applicants’ complaint in its decision no. U-III-3138/2002, published in Official Gazette no. 22 of 26 February 2007."
+    note: "Terminal act of the litigation chain (ids 1 -> 3 -> 5) and the only
+      final_domestic_decision in the file. The administrative acts by which each
+      applicant was assigned to a Roma-only class or an adapted curriculum are out
+      of scope of this file (procedural events only -- the litigation and
+      constitutional complaint challenging that practice, not the underlying
+      school placements). The long quotation of the Constitutional Court's
+      reasoning that follows in the judgment is part of this decision, not a
+      further event; the Belgian Linguistic case it cites is authority, out of
+      scope under §4.2. The first applicant withdrew at Strasbourg, which is not a
+      domestic event either."
+
+
+subject_matter:
+  - "the placement of Roma children in Roma-only primary school classes"
+  - "the length of the discrimination proceedings before the national courts"

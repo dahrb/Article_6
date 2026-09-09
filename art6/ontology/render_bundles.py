@@ -73,13 +73,19 @@ def render(payload: dict) -> str:
         ):
             out += _line(key.removesuffix("_span"), event.get(key))
         # instance_span / outcome_span render like any other span.
-        # instance_level / outcome are CLASSIFICATIONS: no offsets, so _line
-        # would drop them. They are evidenced by the event's own
-        # what_happened_span above, and corroborated by their _span partner
-        # wherever the document stated the rung or result outright.
+        # instance_level / outcome / proceeding_type / outcome_direction are
+        # CLASSIFICATIONS: no offsets, so _line would drop them. They are
+        # evidenced by the event's own what_happened_span above, and
+        # corroborated by their _span partner wherever the document stated
+        # the rung or result outright.
         out += _line("outcome_span", event.get("outcome_span"))
         out += _line("instance_span", event.get("instance_span"))
-        for key in ("instance_level", "outcome"):
+        for key in (
+            "instance_level",
+            "outcome",
+            "proceeding_type",
+            "outcome_direction",
+        ):
             if event.get(key):
                 out.append(f"  {key}: {event[key]}")
         if event.get("follows"):
@@ -142,6 +148,7 @@ def render(payload: dict) -> str:
                 "birth_year_span",
                 "nationality_span",
                 "residence_span",
+                "gender_span",
                 "description_span",
             ):
                 out += _line(key.removesuffix("_span"), applicant.get(key), "    ")

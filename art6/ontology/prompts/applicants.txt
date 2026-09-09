@@ -13,6 +13,10 @@ Return JSON and nothing else:
       "birth_year_span": "the words giving THIS applicant's year of birth",
       "nationality_span": "the words giving THIS applicant's nationality",
       "residence_span": "the words saying where THIS applicant lives",
+      "gender_span": "a SHORT span containing an honorific, pronoun or gendered noun that
+                      refers to THIS applicant -- 'Mr', 'Mrs', 'she', 'his wife'. Anywhere
+                      in the description sentence, not only at the front of it. Omit
+                      entirely if the sentence never marks this applicant's gender.",
       "description_span": "the sentence the fields above were read from, copied whole"
     }
   ]
@@ -52,4 +56,4 @@ were theirs alone.
 Applicants only. Do not describe lawyers, agents, judges, witnesses or relatives, however
 fully the opening describes them. Where the applicant is a company or public body ("Scholz
 AG"), give its entry a `name_span` and a `description_span` and leave the birth year,
-nationality and residence out — those belong to human beings.
+nationality, residence and gender out — those belong to human beings.

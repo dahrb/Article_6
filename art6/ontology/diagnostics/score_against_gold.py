@@ -79,12 +79,31 @@ def norm_authority(text: str | None) -> str:
 
 
 def authorities_match(a: str | None, b: str | None) -> bool:
-    """Naming-variant heuristic: substring match after normalisation, in
-    either direction ("regional court" in "sofia regional court")."""
+    """Naming-variant heuristic: TOKEN-SET containment after normalisation --
+    every content word of the shorter name appears somewhere in the longer
+    one, in any order. Not literal substring containment (that was the
+    original implementation, replaced 2026-09-10): a manual audit of 238
+    real same-date candidate pairs found zero false positives from
+    containment but a real, repeated false-negative class -- a shorthand
+    whose head noun sits in a different position than in the full name
+    ("the Leninskyy COURT" vs "Leninskyy District COURT of Zaporizhzhya"),
+    or a modifier word inserted between two otherwise-matching halves
+    ("Bismil public prosecutor" vs "Bismil CHIEF public prosecutor"). Token
+    sets fix both without the false-positive risk a character-similarity
+    threshold has in this domain: Ukrainian/domestic authority names are
+    heavily templated ("the Prosecutor's Office of the X District of Kyiv"),
+    so two DIFFERENT district prosecutors can share 80%+ of their characters
+    while sharing none of the token that actually names the district.
+    Verified end to end on gold30: +3.2 to +4.8 F1 at C4 over literal
+    substring, on both backbones, with no new false positives found in the
+    same audit re-run against the token-set version.
+    """
     na, nb = norm_authority(a), norm_authority(b)
     if not na or not nb:
         return False
-    return na in nb or nb in na
+    ta, tb = set(na.split()), set(nb.split())
+    shorter, longer = (ta, tb) if len(ta) <= len(tb) else (tb, ta)
+    return shorter.issubset(longer)
 
 
 _DATE_RE = re.compile(r"^(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?$")
@@ -233,9 +252,20 @@ def event_identity(gold: Event, arm: Event) -> bool:
     """
     if not authorities_match(gold.body, arm.body):
         return False
-    if gold.is_filing:
-        return dates_match(gold.start_date, arm.start_date)
-    return dates_match(gold.decision_date, arm.decision_date)
+    key = "start_date" if gold.is_filing else "decision_date"
+    gv, av = getattr(gold, key), getattr(arm, key)
+    # dates_match's coarser-precision rule OR date_sim's character-similarity
+    # threshold -- a strict superset of the old exact/coarser-precision gate,
+    # so no existing match is lost. Added for the same reason date_quote mode
+    # uses date_sim (2026-09-09, case 001-101173): stage 1 occasionally emits
+    # a date span missing its leading digit ("16 March 2004" -> "6 March
+    # 2004"), which is still a valid substring of the source so it passes
+    # span-verbatim checks silently, and dates_match's exact rule turned an
+    # otherwise-correct event into a hard zero over one dropped character.
+    return (
+        dates_match(gv, av)
+        or date_sim(str(gv or ""), str(av or "")) >= DATE_SIM_THRESHOLD
+    )
 
 
 @dataclass
@@ -308,25 +338,60 @@ def date_sim(a: str | None, b: str | None) -> float:
     return SequenceMatcher(None, a, b).ratio()
 
 
+# Three points on one lenient -> strict spectrum, all sharing the same 1:1
+# bipartite engine below so they differ ONLY in how much must agree, not in
+# matching cardinality too (that conflation is what made the original
+# existence/date_quote pairing incoherent -- see git history 2026-09-10:
+# Spearman rank correlation between them across the 10 arm x backbone cells
+# was +0.018, i.e. they ranked configurations independently, because
+# `existence` mixed in an unrelated change -- independent per-side counting
+# instead of 1:1 assignment -- that swamped the authority-gate difference
+# this table is actually meant to isolate).
+#
+#   lenient: date only.        Answers "did we find this event at all".
+#   medium:  date + authority. Answers "...and did we get the deciding body
+#            right too".
+#   strict:  date + authority + quote_sim >= 0.25. 0.25 is calibrated, not
+#            arbitrary: the 10th percentile of quote_sim among LENIENT's own
+#            accepted matches on gold30 (so it trims the weak tail without
+#            rejecting real matches). A stricter-looking 0.7 was tried and
+#            rejected: on the pairs that actually win the 1:1 assignment
+#            under `medium`, median quote_sim is 0.58 and 67.5% fall below
+#            0.7, because arm quotes are systematically TERSER than gold's
+#            (compress.py's own instructions ask for "the decisive words",
+#            gold's guide captures the fuller narrative sentence) -- same
+#            event, different span length, not a wrong pairing. 0.7 would
+#            have rejected two-thirds of genuinely correct matches.
+MODE_PARAMS = {
+    "lenient": {"require_authority": False, "quote_floor": 0.0},
+    "medium": {"require_authority": True, "quote_floor": 0.0},
+    "strict": {"require_authority": True, "quote_floor": 0.25},
+    "date_quote": {"require_authority": False, "quote_floor": 0.0},  # = lenient
+}
+
+
 def score_document_date_quote(
-    case_id: str, gold: list[Event], arm: list[Event] | None
+    case_id: str,
+    gold: list[Event],
+    arm: list[Event] | None,
+    *,
+    require_authority: bool = False,
+    quote_floor: float = 0.0,
 ) -> DocResult:
-    """Alternate alignment, requested to isolate whether the default scorer's
-    authority-substring gate (authorities_match) is what makes C0 look
-    artificially strong or the pipeline look artificially weak. Two changes
-    from score_document/event_identity:
+    """Alternate alignment to score_document/event_identity's independent
+    existence check. Always a genuine 1:1 bipartite match (score_document's
+    independent check lets one arm node satisfy many gold entries at once,
+    which a plain P/R/F1 table does not assume -- see MODE_PARAMS above for
+    why that distinction matters). Three knobs, all off by default
+    (`require_authority=False, quote_floor=0.0` reproduces the original
+    "date_quote" mode byte-for-byte):
 
-      1. NO AUTHORITY GATE AT ALL -- a pair is a candidate purely on date.
-      2. DATE NEEDS ONLY date_sim >= DATE_SIM_THRESHOLD (0.6), not exact
-         equality and not dates_match's bare-year/year-month leniency --
-         a plain character-similarity gate on the ISO strings instead.
-
-    This is also a genuine 1:1 bipartite match (score_document's independent
-    existence check lets one arm node satisfy many gold entries at once,
-    which a plain P/R/F1 table does not assume): among candidates clearing
-    the date-similarity gate, ties are broken by quote similarity, but there
-    is no separate minimum quote-similarity threshold -- the date gate is
-    what admits a pair as a candidate, quote is only for ranking among them.
+      DATE:      always gated on date_sim >= DATE_SIM_THRESHOLD (0.6), not
+                 exact equality and not dates_match's bare-year/year-month
+                 leniency -- a character-similarity gate on the ISO strings.
+      AUTHORITY: gated on authorities_match iff require_authority.
+      QUOTE:     used to rank/break ties among candidates always; additionally
+                 REQUIRED to clear quote_floor iff quote_floor > 0.
     """
     r = DocResult(case_id=case_id)
     if arm is None:
@@ -349,7 +414,12 @@ def score_document_date_quote(
                 < DATE_SIM_THRESHOLD
             ):
                 continue
-            pairs.append((quote_sim(g.quote, a.quote), gi, ai))
+            if require_authority and not authorities_match(g.body, a.body):
+                continue
+            qs = quote_sim(g.quote, a.quote)
+            if quote_floor and qs < quote_floor:
+                continue
+            pairs.append((qs, gi, ai))
     pairs.sort(key=lambda t: t[0], reverse=True)
     gu, au = set(), set()
     for _, gi, ai in pairs:
@@ -383,7 +453,11 @@ def score_arm(
     subdir, stage, stem = ARM_PATHS[arm]
     total_matched = total_gold_only = total_arm_matched = total_arm_only = 0
     per_doc = []
-    score_doc = score_document if mode == "existence" else score_document_date_quote
+    if mode == "existence":
+        score_doc = score_document
+    else:
+        params = MODE_PARAMS[mode]  # KeyError on a typo'd mode is the point
+        score_doc = lambda cid, g, a: score_document_date_quote(cid, g, a, **params)
     for doc in docs:
         case_id, line_id = doc["case_id"], doc["line_id"]
         gold = load_gold(case_id)
@@ -432,11 +506,15 @@ def main() -> None:
     )
     ap.add_argument(
         "--mode",
-        choices=["existence", "date_quote"],
+        choices=["existence", "lenient", "medium", "strict", "date_quote"],
         default="existence",
         help="existence (default): per-guide-Sec-8 authority+date, independent "
-        "existence check each side. date_quote: no authority gate, EXACT "
-        "date required, quote similarity only breaks ties in a 1:1 match.",
+        "existence check each side (one arm node CAN satisfy multiple gold "
+        "entries -- not a 1:1 match, read this scale separately from the "
+        "other four). The other four all share one 1:1 bipartite engine and "
+        "differ only in what must agree: lenient (date_sim>=0.6 only), "
+        "medium (+ authorities_match), strict (+ quote_sim>=0.25). "
+        "date_quote is an alias for lenient, kept for backward compatibility.",
     )
     args = ap.parse_args()
 

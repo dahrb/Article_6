@@ -72,6 +72,9 @@ def to_num(d: date) -> float:
 INK_PRIMARY = "#0b0b0b"
 INK_SECONDARY = "#52514e"
 INK_MUTED = "#898781"
+MATTER_INK = "#6b4fa3"
+REL_PART_OF = "#0f8ea8"
+REL_OCCURS_DURING = "#a8690f"
 GRIDLINE = "#e1e0d9"
 BASELINE = "#c3c2b7"
 SURFACE = "#fcfcfb"
@@ -89,6 +92,11 @@ LEVEL_STYLE = {
     local: (label, badge, color) for local, label, badge, color in LEVEL_ORDER
 }
 UNKNOWN_STYLE = ("Unknown / unspecified", "?", INK_MUTED)
+
+# Characters per line for the horizontal labels under a node. Sets how wide
+# a node's column has to be, so declutter_x's minimum gap is derived from it
+# rather than guessed -- change one and the other follows.
+LABEL_WRAP = 16
 
 EVENT_CLASSES = {
     "DomesticProceeding": "solid",
@@ -166,7 +174,11 @@ class Event:
     decision_date: date | None
     decision_text: str
     start_date: date | None
+    matters: list[str] = field(default_factory=list)
+    proceeding_type: str | None = None
     follows: list[Node] = field(default_factory=list)
+    part_of: list[Node] = field(default_factory=list)
+    occurs_during: list[Node] = field(default_factory=list)
     participants: list[tuple[Node, str, str, bool]] = field(
         default_factory=list
     )  # (party_uri, label, side, is_applicant)
@@ -175,6 +187,18 @@ class Event:
     @property
     def date_for_x(self) -> date | None:
         return self.decision_date or self.start_date
+
+    @property
+    def chain_preds(self) -> list[Node]:
+        """Predecessors for LAYOUT: followsProceeding plus partOfProceeding.
+
+        Both mean "same thread" for the purpose of which lane an event sits
+        in -- a filing and the decision that closes it (the guide's Sec 3.1
+        split, carried by partOfProceeding) are one proceeding and belong on
+        one line. Laying out on followsProceeding alone split those pairs
+        into separate lanes and made a two-chain case render as five.
+        """
+        return self.follows + self.part_of
 
 
 def get_label(g: Graph, node: Node, fallback_props=()) -> str:
@@ -237,7 +261,20 @@ def load_events(g: Graph) -> tuple[dict, list[Event]]:
             outcome_direction = g.value(node, ECHR.hasOutcomeDirection)
             dec_date, dec_text = parse_date(g.value(node, ECHR.hasDecisionDate))
             start_date, _ = parse_date(g.value(node, ECHR.hasProceedingStartDate))
+            # echr:hasMatter is the closed echr:Matter vocabulary and is NOT
+            # functional -- one decision can rule on several matters (order
+            # detention AND set its conditions), so keep every value. The
+            # ontology also does not expect it on every event (a remittal is
+            # about nothing substantive), so an empty list is normal, not a
+            # gap to paper over in the drawing.
+            matters = sorted(
+                local_name(m).removeprefix("Matter")
+                for m in g.objects(node, ECHR.hasMatter)
+            )
             follows = list(g.objects(node, ECHR.followsProceeding))
+            part_of = list(g.objects(node, ECHR.partOfProceeding))
+            occurs_during = list(g.objects(node, ECHR.occursDuring))
+            ptype = g.value(node, ECHR.hasProceedingType)
 
             participants = []
             for part in g.objects(node, ECHR.hasParticipation):
@@ -294,7 +331,11 @@ def load_events(g: Graph) -> tuple[dict, list[Event]]:
                     decision_date=dec_date,
                     decision_text=dec_text,
                     start_date=start_date,
+                    matters=matters,
+                    proceeding_type=local_name(ptype) if ptype else None,
                     follows=follows,
+                    part_of=part_of,
+                    occurs_during=occurs_during,
                     participants=participants,
                     detentions=detentions,
                 )
@@ -307,7 +348,7 @@ def topo_rank(events: list[Event]) -> dict[Node, int]:
     successors: dict[Node, list[Node]] = defaultdict(list)
     indegree: dict[Node, int] = {e.uri: 0 for e in events}
     for e in events:
-        for pred in e.follows:
+        for pred in e.chain_preds:
             if pred in by_uri:
                 successors[pred].append(e.uri)
                 indegree[e.uri] += 1
@@ -396,7 +437,7 @@ def assign_chain_lanes(
     next_lane = 0
 
     for uri in order:
-        preds = [p for p in by_uri[uri].follows if p in by_uri]
+        preds = [p for p in by_uri[uri].chain_preds if p in by_uri]
         if not preds:
             lane_of[uri] = next_lane
             next_lane += 1
@@ -429,10 +470,17 @@ def name_lanes(
     one node is standing in for both -- rather than inventing a distinction
     the graph does not contain.
 
+    A lane with no APPLICANT on it is not thereby anonymous: the opposing
+    party in a neighbour dispute is a named person who simply is not one of
+    the Strasbourg applicants, and labelling their chain "Track 3" throws away
+    a name the graph does contain. So the fallback is by party, and only a
+    lane whose events carry no echr:hasParticipation at all is unnamed -- and
+    that one says so ("no parties extracted"), because it is an extraction
+    gap and should read as one rather than as a naming convention.
+
     Returns (header, detail) per lane: header is "Applicant 1" / "Applicants
-    1, 2" / "Track N" (no applicant participant at all -- e.g. a purely
-    administrative side-chain); detail is the name(s), rendered smaller below
-    it so a long name list never has to fight a box for the same line.
+    1, 2" / "Other party" / "Track N"; detail is the name(s), rendered smaller
+    below it so a long name list never has to fight a box for the same line.
     """
     index_of = {uri: i + 1 for i, uri in enumerate(applicant_uris)}
     name_of = {}
@@ -442,16 +490,24 @@ def name_lanes(
                 name_of[party_uri] = label
 
     by_lane: dict[int, set[Node]] = defaultdict(set)
+    others_by_lane: dict[int, list[str]] = defaultdict(list)
     for e in events:
-        for party_uri, _label, _side, is_applicant in e.participants:
+        for party_uri, label, _side, is_applicant in e.participants:
             if is_applicant:
                 by_lane[lane_of[e.uri]].add(party_uri)
+            elif label not in others_by_lane[lane_of[e.uri]]:
+                others_by_lane[lane_of[e.uri]].append(label)
 
     result: list[tuple[str, str]] = [("", "")] * (max(lane_of.values()) + 1)
     for lane in range(len(result)):
         applicants = sorted(by_lane.get(lane, ()), key=lambda u: index_of[u])
         if not applicants:
-            result[lane] = (f"Track {lane + 1}", "")
+            others = others_by_lane.get(lane, [])
+            if others:
+                word = "Other party" if len(others) == 1 else "Other parties"
+                result[lane] = (word, truncate(", ".join(others), max_len=42))
+            else:
+                result[lane] = (f"Track {lane + 1}", "no parties extracted")
             continue
         numbers = ", ".join(str(index_of[u]) for u in applicants)
         detail = truncate(", ".join(name_of[u] for u in applicants), max_len=42)
@@ -460,20 +516,75 @@ def name_lanes(
     return result
 
 
+def measure_label_in(lines: list[str], fontsize: float) -> float:
+    """Width in inches of the WIDEST line actually going into the figure.
+
+    Estimating this from a character count and a per-character constant is
+    what let adjacent authority names touch -- proportional text has no such
+    constant, and every value tuned for one case was wrong for the next.
+    Matplotlib can measure the exact strings about to be drawn, so measure
+    those and size the columns from the answer.
+    """
+    import matplotlib.pyplot as plt
+
+    fig = plt.figure(figsize=(1, 1))
+    r = fig.canvas.get_renderer()
+    widest = 0.0
+    for line in lines:
+        t = fig.text(0, 0, line, fontsize=fontsize)
+        widest = max(widest, t.get_window_extent(r).width)
+        t.remove()
+    plt.close(fig)
+    return widest / fig.dpi
+
+
+def _label_line_count(e: Event) -> int:
+    """How many wrapped text lines hang under this node in total."""
+    n = (
+        wrap(
+            truncate(e.court or e.label, max_len=LABEL_WRAP * 3 - 2), width=LABEL_WRAP
+        ).count("\n")
+        + 1
+    )
+    if e.outcome_local:
+        n += (
+            wrap(
+                humanize(e.outcome_local.removeprefix("Outcome")), width=LABEL_WRAP
+            ).count("\n")
+            + 1
+        )
+    if e.matters:
+        n += wrap(" · ".join(e.matters), width=LABEL_WRAP).count("\n") + 1
+    return n
+
+
+def _by_lane(events: list[Event], lanes: dict[Node, int]) -> dict[int, list[Node]]:
+    grouped: dict[int, list[Node]] = defaultdict(list)
+    for e in events:
+        grouped[lanes[e.uri]].append(e.uri)
+    return grouped
+
+
 def declutter_x(
-    events: list[Event], x: dict[Node, float], lanes: dict[Node, int]
+    events: list[Event],
+    x: dict[Node, float],
+    lanes: dict[Node, int],
+    min_gap: float,
 ) -> dict[Node, float]:
     """Push apart events crowded into the same lane so their labels don't overlap.
 
     Chronological order within a lane is preserved; only spacing changes.
-    """
-    vals = list(x.values())
-    span = max(vals) - min(vals) if len(vals) > 1 else 1.0
-    min_gap = max(span * 0.16, 1e-6)
 
-    by_lane: dict[int, list[Node]] = defaultdict(list)
-    for e in events:
-        by_lane[lanes[e.uri]].append(e.uri)
+    min_gap is one label column expressed in x-data units. Spreading events
+    apart ENLARGES the span, so the caller cannot express this as a fraction
+    of the span it measured beforehand -- doing so silently re-narrowed every
+    column the moment a crowded lane pushed the axis wider. The caller instead
+    fixes the column in data units here and sizes the figure from whatever
+    span comes back, so one column is always one column's worth of inches.
+    """
+    min_gap = max(min_gap, 1e-6)
+
+    by_lane = _by_lane(events, lanes)
 
     result = dict(x)
     for uris in by_lane.values():
@@ -513,17 +624,89 @@ def plot(
         raise SystemExit(f"No echr:DomesticEvent instances found in {ttl_path}")
 
     x = assign_x(events, variant)
-    is_dated = variant != "dag" and any(e.date_for_x for e in events)
+    has_dates = any(e.date_for_x for e in events)
+    # Two different reasons the x-axis can stop being a date axis, and the
+    # label has to say WHICH: --variant dag ignores dates on purpose, which is
+    # not the same claim as "this graph has no dates in it". Conflating them
+    # made a fully-dated case read as an extraction failure.
+    is_dated = variant != "dag" and has_dates
     lanes, primary_of = assign_chain_lanes(events)
     lane_names = name_lanes(events, lanes, case_info["applicant_uris"])
-    x = declutter_x(events, x, lanes)
 
     by_uri = {e.uri: e for e in events}
     n_lanes = max(1, len(lane_names))
     longest_label = max((max(len(h), len(d)) for h, d in lane_names), default=0)
     left_margin_in = min(0.55 + 0.065 * longest_label, 3.5)
-    fig_w = max(9.0, 1.9 * len(events) + 2.5) + left_margin_in
-    fig_h = max(4.0, 1.7 * n_lanes + 2.0)
+
+    # One label column is LABEL_WRAP characters of 7.6pt text (~0.062in per
+    # character at this font) plus a gutter, and the figure is sized so the
+    # busiest lane gets that much room per event. Everything downstream that
+    # needs a horizontal size -- the decluttering gap, the node box width --
+    # is derived from these same inches rather than guessed in data units, so
+    # the layout holds whatever the aspect ratio turns out to be. Sizing in
+    # data units held for a one-lane case and fell apart the moment extra
+    # lanes changed the figure's shape.
+    label_lines = (
+        [
+            line
+            for e in events
+            for line in wrap(
+                truncate(e.court or e.label, max_len=LABEL_WRAP * 3 - 2),
+                width=LABEL_WRAP,
+            ).split("\n")
+        ]
+        + [
+            line
+            for e in events
+            if e.matters
+            for line in wrap(" · ".join(e.matters), width=LABEL_WRAP).split("\n")
+        ]
+        + [
+            line
+            for e in events
+            if e.outcome_local
+            for line in wrap(
+                humanize(e.outcome_local.removeprefix("Outcome")), width=LABEL_WRAP
+            ).split("\n")
+        ]
+    )
+    col_in = measure_label_in(label_lines, fontsize=7.6) + 0.22
+
+    # Vertical room per lane is now driven by how many label lines actually
+    # hang under a node (authority, then outcome, then matter). These offsets
+    # are in DATA units while the text is a fixed point size, so the figure
+    # height and the offsets have to be derived from each other rather than
+    # both guessed -- a hardcoded per-line offset was what let the deepest
+    # lane's matter band collide with the next lane's dates.
+    line_in = 7.6 / 72 * 1.30
+    deepest = max(_label_line_count(e) for e in events)
+    # The gap between two lane baselines has to hold, top to bottom: this
+    # node's lower half, its whole label stack (deepest lines), the two fixed
+    # gaps between the stack's three parts, the NEXT lane's date line, and
+    # that node's upper half. That is deepest + ~1 date line + ~1.5 lines of
+    # gaps, so +3.6 leaves a line of slack; +1.4 and +2.6 both overran on a
+    # three-line court name above a two-line outcome.
+    lane_in = 0.55 + (deepest + 3.6) * line_in
+
+    # One column is fixed in DATA units first, events are spread to respect
+    # it, and only then is the figure sized from the span that results -- so
+    # the inches per column are the measured label width no matter how far
+    # decluttering had to push the axis out.
+    xs0 = list(x.values())
+    span0 = (max(xs0) - min(xs0)) if len(xs0) > 1 else 1.0
+    widest_lane = max(len(v) for v in _by_lane(events, lanes).values())
+    col_data = span0 / max(widest_lane - 1, 1)
+    x = declutter_x(events, x, lanes, min_gap=col_data)
+
+    xs1 = list(x.values())
+    span1 = (max(xs1) - min(xs1)) if len(xs1) > 1 else col_data
+    axes_w_in = max(col_in * (span1 / col_data) + col_in, 6.0)
+    fig_h = max(4.5, lane_in * n_lanes + 2.0)
+    fig_w = axes_w_in + left_margin_in + 2.5
+    # One text line expressed in y-data units, given the axes height the
+    # figure just committed to and the y range it will span.
+    y_range = n_lanes + 0.85
+    line_h = line_in / max(fig_h - 2.0, 1.0) * y_range
     fig, ax = plt.subplots(figsize=(fig_w, fig_h), facecolor=SURFACE)
     ax.set_facecolor(SURFACE)
     left_frac = left_margin_in / fig_w
@@ -587,31 +770,86 @@ def plot(
 
     # -- edges: straight within a lane, curved where a chain converges into it --
     for e in events:
-        preds = [p for p in e.follows if p in by_uri]
+        preds = [p for p in e.chain_preds if p in by_uri]
         primary = primary_of.get(e.uri)
-        for pred_uri in preds:
-            p0 = (x[pred_uri], lane_y[lanes[pred_uri]])
-            p1 = (x[e.uri], lane_y[lanes[e.uri]])
-            is_convergence = len(preds) > 1 and pred_uri != primary
-            rad = 0.0 if p0[1] == p1[1] else 0.18
-            arrow = FancyArrowPatch(
-                p0,
-                p1,
-                connectionstyle=f"arc3,rad={rad}",
-                arrowstyle="-|>",
-                mutation_scale=14,
-                lw=1.4 if not is_convergence else 1.1,
-                linestyle="solid" if not is_convergence else "dashed",
-                color=INK_SECONDARY,
-                zorder=2,
-                shrinkA=16,
-                shrinkB=16,
-            )
-            ax.add_patch(arrow)
+        for rel, rel_style, rel_colour in (
+            ("follows", "solid", INK_SECONDARY),
+            ("part_of", (0, (4, 2)), REL_PART_OF),
+            ("occurs_during", (0, (1, 2)), REL_OCCURS_DURING),
+        ):
+            for pred_uri in getattr(e, rel):
+                if pred_uri not in by_uri:
+                    continue
+                p0 = (x[pred_uri], lane_y[lanes[pred_uri]])
+                p1 = (x[e.uri], lane_y[lanes[e.uri]])
+                # A convergence (this event has several predecessors and this
+                # is not the one whose lane it continued) still reads as its
+                # own relation type, just lighter.
+                is_convergence = (
+                    rel == "follows" and len(preds) > 1 and pred_uri != primary
+                )
+                rad = 0.0 if p0[1] == p1[1] else 0.18
+                ax.add_patch(
+                    FancyArrowPatch(
+                        p0,
+                        p1,
+                        connectionstyle=f"arc3,rad={rad}",
+                        arrowstyle="-|>",
+                        mutation_scale=14,
+                        lw=1.1 if is_convergence else 1.4,
+                        linestyle="dashed" if is_convergence else rel_style,
+                        color=rel_colour,
+                        zorder=2,
+                        shrinkA=16,
+                        shrinkB=16,
+                    )
+                )
 
     # -- nodes ----------------------------------------------------------------
-    box_w = max((xmax - xmin) / max(len(events), 1) * 0.6, (xmax - xmin) * 0.02)
+    # 0.52in wide, converted into data units through the axes' actual width,
+    # so a node is the same physical size in a 1-lane and a 5-lane figure.
+    box_w = (xmax - xmin) * (0.52 / axes_w_in)
     box_h = 0.34
+
+    # Every matter label in a lane hangs at the SAME depth -- under the tallest
+    # authority block in that lane -- so the row of them reads as one band of
+    # "about what" instead of a ragged line that tracks how long each court's
+    # name happens to be.
+    events_by_uri = {e.uri: e for e in events}
+    court_lines = {
+        e.uri: wrap(
+            truncate(e.court or e.label, max_len=LABEL_WRAP * 3 - 2), width=LABEL_WRAP
+        ).count("\n")
+        + 1
+        for e in events
+    }
+    outcome_y = {
+        lane: -0.10 - (max(court_lines[u] for u in uris) * line_h) - 0.03
+        for lane, uris in _by_lane(events, lanes).items()
+    }
+    # The matter band clears the outcome line above it (outcomes wrap to at
+    # most two lines at this width).
+    outcome_lines = {
+        lane: max(
+            (
+                wrap(
+                    humanize(
+                        (events_by_uri[u].outcome_local or "").removeprefix("Outcome")
+                    ),
+                    width=LABEL_WRAP,
+                ).count("\n")
+                + 1
+                if events_by_uri[u].outcome_local
+                else 0
+            )
+            for u in uris
+        )
+        for lane, uris in _by_lane(events, lanes).items()
+    }
+    matter_y = {
+        lane: outcome_y[lane] - outcome_lines[lane] * line_h - 0.03
+        for lane in outcome_y
+    }
     for e in events:
         cx, cy = x[e.uri], lane_y[lanes[e.uri]]
         _level_label, badge, color = LEVEL_STYLE.get(e.level_local or "", UNKNOWN_STYLE)
@@ -657,20 +895,61 @@ def plot(
                     mpatheffects.withStroke(linewidth=1.6, foreground="white")
                 ],
             )
-        court_line = truncate(e.court or e.label)
-        date_line = e.decision_text or ""
+        # Labels are horizontal, centred under the node, and wrapped -- never
+        # rotated. A slanted court name reads at a slant no matter how much
+        # room there is, and a figure whose text has to be tilted to fit is
+        # a figure that needs wider spacing, which declutter_x now supplies.
+        # Three lines is as much vertical room as the lane has; a longer body
+        # name (e.g. "Special Operations Department of the Ministry of the
+        # Interior") is cut rather than allowed to run into the lane below.
+        court_line = wrap(
+            truncate(e.court or e.label, max_len=LABEL_WRAP * 3 - 2), width=LABEL_WRAP
+        )
         ax.text(
-            cx + box_w * 0.15,
-            cy - box_h / 2 - 0.13,
+            cx,
+            cy - box_h / 2 - 0.10,
             court_line,
             fontsize=7.6,
             color=INK_PRIMARY,
-            ha="right",
+            ha="center",
             va="top",
-            rotation=-30,
-            rotation_mode="anchor",
+            linespacing=1.25,
             zorder=4,
         )
+        if e.outcome_local:
+            # echr:hasOutcome was loaded but never drawn: only its DIRECTION
+            # reached the page as a glyph, so "Remitted" -- the outcome the
+            # whole relational argument turns on -- was invisible.
+            otext = humanize(e.outcome_local.removeprefix("Outcome"))
+            ax.text(
+                cx,
+                cy - box_h / 2 + outcome_y[lanes[e.uri]],
+                wrap(otext, width=LABEL_WRAP),
+                fontsize=7.4,
+                color=INK_SECONDARY,
+                ha="center",
+                va="top",
+                linespacing=1.25,
+                zorder=4,
+            )
+        if e.matters:
+            # echr:hasMatter -- what the event was substantively ABOUT, where
+            # everything else on the node says who/when/how far up the ladder.
+            # Several matters on one event are real (see its scopeNote), so
+            # join them rather than picking one.
+            ax.text(
+                cx,
+                cy - box_h / 2 + matter_y[lanes[e.uri]],
+                wrap(" · ".join(e.matters), width=LABEL_WRAP),
+                fontsize=7.2,
+                color=MATTER_INK,
+                style="italic",
+                ha="center",
+                va="top",
+                linespacing=1.25,
+                zorder=4,
+            )
+        date_line = e.decision_text or ""
         if date_line:
             ax.text(
                 cx,
@@ -684,7 +963,7 @@ def plot(
             )
 
     ax.set_xlim(xmin, xmax)
-    ax.set_ylim(-1.7, n_lanes - 0.3)
+    ax.set_ylim(-1.1, n_lanes - 0.25)
     ax.set_yticks([])
     for spine in ("top", "right", "left"):
         ax.spines[spine].set_visible(False)
@@ -697,8 +976,17 @@ def plot(
         ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
         ax.set_xlabel("Date", color=INK_SECONDARY, fontsize=9)
     else:
+        if variant == "dag":
+            n_dated = sum(1 for e in events if e.date_for_x)
+            reason = (
+                f"dates ignored by --variant dag; {n_dated}/{len(events)} events are dated"
+                if n_dated
+                else "no dates in the graph"
+            )
+        else:
+            reason = "no dates in the graph"
         ax.set_xlabel(
-            "Procedural sequence (no usable dates in the graph)",
+            f"Procedural sequence in followsProceeding order ({reason})",
             color=INK_SECONDARY,
             fontsize=9,
         )
@@ -740,6 +1028,35 @@ def plot(
             )
         )
 
+    by_uri_leg = {e.uri for e in events}
+    rel_handles = []
+    if any(p in by_uri_leg for e in events for p in e.follows):
+        rel_handles.append(
+            plt.Line2D([0], [0], color=INK_SECONDARY, lw=1.4, label="followsProceeding")
+        )
+    if any(p in by_uri_leg for e in events for p in e.part_of):
+        rel_handles.append(
+            plt.Line2D(
+                [0],
+                [0],
+                color=REL_PART_OF,
+                lw=1.4,
+                linestyle=(0, (4, 2)),
+                label="partOfProceeding",
+            )
+        )
+    if any(p in by_uri_leg for e in events for p in e.occurs_during):
+        rel_handles.append(
+            plt.Line2D(
+                [0],
+                [0],
+                color=REL_OCCURS_DURING,
+                lw=1.4,
+                linestyle=(0, (1, 2)),
+                label="occursDuring",
+            )
+        )
+
     used_classes = {e.cls for e in events}
     class_handles = [
         plt.Line2D(
@@ -770,6 +1087,8 @@ def plot(
     spacer = mpatches.Patch(facecolor="none", edgecolor="none", label="")
     handles = (
         level_handles
+        + ([spacer] if rel_handles else [])
+        + rel_handles
         + ([spacer] if class_handles else [])
         + class_handles
         + ([spacer] if direction_handles else [])
@@ -788,6 +1107,30 @@ def plot(
     )
 
     fig.tight_layout(rect=(left_frac, 0, 0.80, 1))
+
+    # tight_layout reserves room for ticks, labels and the title, so the axes
+    # ends up narrower than the figure width implied -- which quietly squeezed
+    # the columns back under one label width. Measure what the axes ACTUALLY
+    # got, and if it is short of the columns * col_in the labels need, widen
+    # the figure by exactly that shortfall and lay out once more.
+    n_cols = span1 / col_data + 1
+    needed_in = col_in * n_cols
+    bbox = ax.get_window_extent(fig.canvas.get_renderer())
+    actual_in = bbox.width / fig.dpi
+    grow_w = max(needed_in - actual_in, 0.0)
+
+    # Same correction vertically. One lane has to be at least lane_in tall or
+    # the label stack under a node runs into the next lane's dates, and the
+    # axes height after layout is smaller than the figure height by whatever
+    # the title and x-axis took. Growing the figure only ever widens the gaps
+    # (the text is a fixed point size), so this converges in one step.
+    actual_lane_in = (bbox.height / fig.dpi) / y_range
+    grow_h = max((lane_in - actual_lane_in) * y_range, 0.0)
+
+    if grow_w > 0.01 or grow_h > 0.01:
+        fig.set_size_inches(fig_w + grow_w, fig_h + grow_h)
+        fig.tight_layout(rect=(left_margin_in / fig.get_size_inches()[0], 0, 0.80, 1))
+
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_path, dpi=200, facecolor=SURFACE)
     plt.close(fig)

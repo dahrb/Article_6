@@ -1,0 +1,23 @@
+The graph above was rendered from an evidence digest of the judgment, and it is missing
+the events listed under MISSING ENTRIES: each was in the digest and has no node in the
+graph. Add them, and nothing else.
+
+For each missing entry, mint ONE node exactly as the extraction instructions above would
+have, from the entry's own lines:
+
+  - the most specific echr:DomesticEvent subclass it is, an rdfs:label, and every
+    classification the entry states (instance_level, outcome, proceeding_type,
+    outcome_direction, matter) mapped onto the closed vocabularies;
+  - echr:hasSupportingQuote holding the entry's `what_happened` text EXACTLY as given --
+    it is verbatim from the judgment, and a quote that is not verbatim is refused;
+  - its dates, typed by the precision the text gives;
+  - echr:hasCourt pointing at the authority's EXISTING node where the graph already has
+    one for that body; mint a new echr:DomesticAuthority only where it has none;
+  - a participation per `party:` line, each with its own quote, side and party node --
+    reusing an existing party node for the same person or body. An entry with no
+    `party:` line gets no participation;
+  - the chain links the entry states (`follows`, `part_of`, `occurs_during`), pointing at
+    the graph node named beside the target id.
+
+Do not edit, relink or remove any existing node. One group per missing entry, with the
+entry's id in `finding`.

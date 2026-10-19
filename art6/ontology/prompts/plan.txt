@@ -1,0 +1,84 @@
+TASK: You are given the domestic events already extracted from a European Court of Human
+Rights judgment, and the judgment itself. Organise the events into TRACKS and say which
+earlier event each one continues. You do not add, remove, merge or reclassify events --
+a later pass does that. You only plan the structure.
+
+## TRACKS
+
+A track is one matter carried forward through the domestic system: a prosecution from
+investigation to cassation, a civil claim from filing through every appeal and remittal,
+a run of enforcement steps on one judgment, a sequence of detention-extension orders.
+
+Applicants often pursue SEVERAL tracks at once, and the judgment interleaves them in date
+order. Separate them. Three things are NOT the same track, however close in time or however
+often the same court appears:
+
+  - proceedings against a DIFFERENT PERSON (a co-accused tried in their own case);
+  - a NEW MATTER arising later (a fresh investigation into new allegations does not
+    continue a closed case just because the applicant is the same);
+  - a PARALLEL TRACK (civil and criminal proceedings over the same facts, a damages
+    claim brought about the length of another set of proceedings, neither continuing
+    the other).
+
+Give each track a short label in your own words ("criminal proceedings against the
+applicant", "claim for compensation for detention"). Every event belongs to exactly one
+track. A track of one event is a correct answer.
+
+## LINKS
+
+For each event that continues an earlier one, name its PREDECESSOR: the event it
+continues, reviews, appeals, enforces, or answers. The predecessor MUST be one of the ids
+listed as that event's `candidates` -- the list is everything that could have come before
+it. If none of them is what this event continues, give it no link: it heads its track.
+
+Choose the IMMEDIATE predecessor, not the first event of the track:
+
+  - an appeal continues the decision appealed against;
+  - a cassation ruling continues the appeal ruling it reviewed;
+  - a remitted first-instance hearing continues the ruling that quashed and remitted;
+  - a decision continues the filing it disposes of (a narrated filing and its decision
+    are two events, and the decision links to the filing);
+  - each step of an authority's run of decisions in one process (seize, value, offer,
+    re-offer, award) continues the step before it;
+  - a trial continues the investigation that produced the charges; enforcement continues
+    the judgment it enforces; a court challenge continues the administrative decision it
+    contests.
+
+Name the kind of each link:
+
+  continues   the predecessor had been decided, and this event carries the matter on
+  during      this event began AND was decided while the predecessor was still pending --
+              an interim-relief ruling inside a main claim, a reference to a higher court
+              answered back into the proceeding that made it
+
+Do NOT decide whether two events are acts of the same proceeding or two proceedings --
+that is computed afterwards from their courts and rungs. Just say what continues what.
+
+A `continues` link joins two events of the SAME track; if you find yourself linking across
+tracks, one of your tracks is wrong. A `during` link may cross tracks.
+
+Copy the words that show the link into `evidence_span`, VERBATIM from the judgment: "upheld
+it", "quashed both decisions and remitted the case", "appealed against that decision".
+Omit `evidence_span` where the link is shown only by the sequence itself.
+
+THE TEST IS "THE SAME MATTER CONTINUED", NOT "THE NEXT THING THAT HAPPENED". Nearness in
+time is not continuity, and neither is sharing a court or a prosecutor. When unsure, LEAVE
+THE EVENT UNLINKED: a missing link is a gap a reader can see, a wrong one is a false
+history that reads as authoritative.
+
+Before you finish, look at every event with no link that is not the first of its track and
+ask what came before it in this matter.
+
+## OUTPUT
+
+A single JSON object, no prose around it:
+
+{
+  "tracks": [
+    {"id": "T1", "label": "...", "events": ["e1", "e2", "e4"]}
+  ],
+  "links": [
+    {"event": "e2", "predecessor": "e1", "kind": "continues",
+     "evidence_span": "verbatim words from the judgment"}
+  ]
+}

@@ -48,8 +48,18 @@ TEMPERATURE="${TEMPERATURE:-0.4}"          # stage 2/3; stage 1 is 0.0
 STAGE1_MODEL="${STAGE1_MODEL:-${MODEL}}"
 STAGE1_BASE_URL="${STAGE1_BASE_URL:-${BASE_URL}}"
 STAGE1_API_KEY="${STAGE1_API_KEY:-${VLLM_API_KEY:-EMPTY}}"
-# Same compress.txt for every stage-1 call unless overridden, so a prompt
+# STAGE 1 is agentic_stage1.py (extract -> plan -> critic -> fix) unless
+# STAGE1_IMPL=compress selects the single-call compress.py it replaced. STAGE 3
+# is reconcile.py (diff the graph against stage 1, model only for missing
+# events) unless REPAIR_IMPL=new_repair selects the old violation loop +
+# document review. The old paths stay only so a comparison run can use them.
+STAGE1_IMPL="${STAGE1_IMPL:-agentic}"
+REPAIR_IMPL="${REPAIR_IMPL:-reconcile}"
+case "${STAGE1_IMPL}" in agentic|compress) ;; *) echo "STAGE1_IMPL must be agentic or compress" >&2; exit 2;; esac
+case "${REPAIR_IMPL}" in reconcile|new_repair) ;; *) echo "REPAIR_IMPL must be reconcile or new_repair" >&2; exit 2;; esac
+# Same extraction prompt for every stage-1 call unless overridden, so a prompt
 # comparison across models/arms is guaranteed to run identical wording.
+# Defaults: prompts/extract.txt (agentic) or prompts/compress.txt (compress).
 COMPRESS_PROMPT_FILE="${COMPRESS_PROMPT_FILE:-}"
 PROJECT_BASE="${PROJECT_BASE:-art6_abl_$(basename "${OUT_DIR}")}"
 FUSEKI_CONTAINER="${FUSEKI_CONTAINER:-ontocast-fuseki}"
@@ -122,6 +132,12 @@ cp "${REPO_ROOT}/ontology/echr.ttl" "${SEED_DIR}/"
 cp "${REPO_ROOT}/ontology/echr-shapes.ttl" "${SHAPES_DIR}/"
 cp "${SCRIPT_DIR}/prompts/facts.txt" "${OUT_DIR}/facts.prompt.snapshot"
 cp "${SCRIPT_DIR}/prompts/compress.txt" "${OUT_DIR}/compress.prompt.snapshot"
+for p in extract plan critic fix reconcile_mint; do
+    cp "${SCRIPT_DIR}/prompts/${p}.txt" "${OUT_DIR}/${p}.prompt.snapshot"
+done
+[[ -z "${COMPRESS_PROMPT_FILE}" ]] || cp "${COMPRESS_PROMPT_FILE}" "${OUT_DIR}/stage1_override.prompt.snapshot"
+ONTOCAST_VERSION="$(git -C "${ONTOCAST_REPO}" describe --tags --always 2>/dev/null || echo unknown)"
+echo "ontocast: ${ONTOCAST_VERSION}   stage 1: ${STAGE1_IMPL}   stage 3: ${REPAIR_IMPL}"
 
 # ---- input: rebuild the JSONL with the LIVE facts prompt -------------------
 INPUT_JSONL="${OUT_DIR}/input.jsonl"
@@ -182,9 +198,9 @@ fi
 if done_phase stage1; then
     echo; echo "--- stage 1  (already done, skipping) ---"
 else
-phase "stage 1  compression -> evidence bundles"
+phase "stage 1  ${STAGE1_IMPL} -> evidence bundles"
 t0=$(now)
-(cd "${REPO_ROOT}" && uv run python -m art6.ontology.compress \
+(cd "${REPO_ROOT}" && uv run python -m "art6.ontology.$([[ "${STAGE1_IMPL}" == agentic ]] && echo agentic_stage1 || echo compress)" \
     --input-jsonl "${INPUT_JSONL}" --out-dir "${OUT_DIR}/stage1" \
     --model "${STAGE1_MODEL}" --base-url "${STAGE1_BASE_URL}" --api-key "${STAGE1_API_KEY}" \
     --temperature 0.0 \
@@ -232,7 +248,10 @@ run_arm() {
     (
         set -a; source <(grep -vE '^(LLM_API_KEY|FUSEKI_AUTH)=' "${BASE_ENV_FILE}"); set +a
         export LLM_MODEL_NAME="${MODEL}" LLM_BASE_URL="${BASE_URL}" LLM_TEMPERATURE="${STAGE2_TEMPERATURE}"
-        export LLM_GRAPH_FORMAT=jsonld LLM_MAX_INFLIGHT=4
+        # LLM_OUTPUT_LAYOUT=free keeps the pre-0.6.7 response layout: 0.6.7
+        # made `compact` (minified JSON) the default, which changes what the
+        # renderer is asked to write. One change at a time.
+        export LLM_GRAPH_FORMAT=jsonld LLM_OUTPUT_LAYOUT=free LLM_MAX_INFLIGHT=4
         # LLM_CACHE_ENABLED is exported at the top of this script so stages 1
         # and 3 inherit it too; OntoCast reads it here for stage 2.
         # CHUNKING APPLIES TO BOTH ARMS -- this block is inside run_arm(), so
@@ -315,6 +334,20 @@ run_arm() {
     else
         cp -rn "${dir}/raw/." "${dir}/repaired/" 2>/dev/null || true
     fi
+    if [[ "${REPAIR_IMPL}" == reconcile ]]; then
+    # RECONCILE AGAINST STAGE 1, ON BOTH ARMS. Each graph is diffed against
+    # the stage-1 payload for its case (joined on case_id through the arm's
+    # own input file) and repaired only where they disagree; the model is
+    # called only for stage-1 events the graph has no node for. On the raw
+    # arm this imports stage 1's decisions into C2 -- read C1 vs C2 as "what
+    # reconciling with the evidence stage adds", not as an evidence-free
+    # repair. --original-jsonl is the judgment, for verifying minted quotes.
+    (cd "${REPO_ROOT}" && PYTHONUNBUFFERED=1 uv run python -m art6.ontology.reconcile \
+        --facts-dir "${dir}/repaired" --input-jsonl "${input}" \
+        --stage1-dir "${OUT_DIR}/stage1" --original-jsonl "${INPUT_JSONL}" \
+        --model "${MODEL}" --base-url "${BASE_URL}" \
+        --temperature 0.0) || echo "${label} stage 3 returned $?"
+    else
     # --original-jsonl is ALWAYS the raw judgment file, on both arms. Only
     # stage 2 differs between arms: "raw" extracts from the judgment, "comp"
     # from the digest. Review is the same stage in both and reads the same
@@ -328,6 +361,7 @@ run_arm() {
         --original-jsonl "${INPUT_JSONL}" \
         --model "${MODEL}" --base-url "${BASE_URL}" \
         --temperature 0.0) || echo "${label} stage 3 returned $?"
+    fi
     echo "${label} stage 3 done in $(( $(now) - t ))s"
 }
 
@@ -352,7 +386,11 @@ cat > "${OUT_DIR}/manifest.json" <<JSON
   "model": "${MODEL}",
   "stage1_model": "${STAGE1_MODEL}",
   "stage1_base_url": "${STAGE1_BASE_URL}",
-  "compress_prompt_file": "${COMPRESS_PROMPT_FILE:-<default compress.txt>}",
+  "compress_prompt_file": "${COMPRESS_PROMPT_FILE:-<default for stage 1 impl>}",
+  "stage1_impl": "${STAGE1_IMPL}",
+  "stage3_impl": "${REPAIR_IMPL}",
+  "ontocast_version": "${ONTOCAST_VERSION}",
+  "llm_output_layout": "free",
   "base_url": "${BASE_URL}",
   "temperature_stage2_3": ${STAGE2_TEMPERATURE},
   "temperature_stage1": 0.0,

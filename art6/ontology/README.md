@@ -26,8 +26,8 @@ shapes are in `ontology/`.
 | component | what it does | implementation |
 |---|---|---|
 | **Ontology guidance** (stage 2) | extraction is rendered as RDF against a fixed domain ontology, with closed vocabularies, typed nodes and SHACL shapes | [OntoCast](https://growgraph.github.io/ontocast/), an external LLM-to-knowledge-graph framework, in `render_mode=facts`; invoked by `run_native.py` |
-| **Evidence stage** (stage 1) | an extractive pass returns *verbatim spans* of the source; character offsets are computed programmatically, and any span that cannot be located in the source is discarded. The graph stage then sees the verified spans instead of the judgment | `compress.py` + `render_bundles.py` |
-| **Repair stage** (stage 3) | a validation-driven pass: deterministic structural rewrites, an LLM loop over constraint violations, and one document-reading review restricted to adding evidence-anchored facts | `new_repair.py` |
+| **Evidence stage** (stage 1) | an extractive pass returns *verbatim spans* of the source, then a track planner, a critic and a fixer turn them into a checked procedural history with typed chain links; offsets are computed programmatically, and any span that cannot be located in the source is discarded. The graph stage then sees the verified evidence instead of the judgment | `agentic_stage1.py` + `render_bundles.py` |
+| **Repair stage** (stage 3) | the graph is diffed against stage 1 and transcription gaps are fixed in code; the model is called only to mint events the graph lacks and to repair SHACL violations | `reconcile.py` |
 
 ### 1.2 Conditions
 
@@ -162,18 +162,23 @@ C2 and C4 are those same two graphs after repair, which is why the repair
 contrast is measured from identical input on each side.
 
 **What happens inside each stage.** Hexagons are model calls; rectangles are
-deterministic steps.
+deterministic steps. Dashed calls run only when the step before them found
+something to act on.
 
 ```mermaid
 flowchart TD
-    subgraph ST1["stage 1 · evidence selection — 3 calls / document, temp 0.0"]
+    subgraph ST1["stage 1 · agentic evidence stage — 4 to 6 calls / document, temp 0.0"]
         direction LR
-        E1["split oversize<br/>documents"] --> E2{{"LLM · events,<br/>persons, parties"}}
+        E1{{"LLM · extract<br/>events, persons"}} --> E2["verify spans<br/>unlocatable dropped"]
         E2 --> E3{{"LLM · applicants"}}
-        E3 --> E4{{"LLM · parties<br/>per event"}}
-        E4 --> E5["verify spans against source<br/>offsets computed<br/>unlocatable spans dropped"]
-        E5 --> E6["deterministic<br/>filters and merge"]
-        E6 --> E7["render evidence<br/>bundle"]
+        E3 --> E4["candidate<br/>predecessors"]
+        E4 --> E5{{"LLM · track planner<br/>tracks + links"}}
+        E5 --> E6["hints: uncovered paragraphs,<br/>same-day clusters, backward links"]
+        E6 --> E7{{"LLM · critic<br/>evidenced findings"}}
+        E7 -.-> E8{{"LLM · fix<br/>validated operations"}}
+        E8 --> E9["typed links<br/>follows / part_of / occurs_during"]
+        E9 --> E10{{"LLM · parties<br/>per event"}}
+        E10 --> E11["filters: judges,<br/>deciding body as party,<br/>actless outcomes"]
     end
 
     subgraph ST2["stage 2 · OntoCast — 1 call / document, temp 0.4"]
@@ -182,95 +187,157 @@ flowchart TD
         G2 --> G3["write graph<br/>and triple store"]
     end
 
-    subgraph ST3["stage 3 · repair — up to 5 calls / document, temp 0.0"]
+    subgraph ST3["stage 3 · reconcile — 0 to 4 calls / document, temp 0.0"]
         direction LR
-        P1["deterministic<br/>rewrites"] --> P2["collect findings<br/>SHACL · graph finders · source"]
-        P2 --> P3{{"LLM · violation patch,<br/>graph only, ≤3 gated rounds"}}
-        P3 --> P4{{"LLM · review,<br/>graph + full document"}}
-        P4 --> P5{{"LLM · one further<br/>violation round"}}
-        P5 --> P6["deterministic rewrites<br/>+ final SHACL count"]
+        P1["lossless rewrites"] --> P2["match graph nodes<br/>to stage-1 events"]
+        P2 --> P3["transcribe: fields and<br/>chain links to stage 1"]
+        P3 -.-> P4{{"LLM · mint events<br/>the graph lacks, gated"}}
+        P4 -.-> P5{{"LLM · SHACL violation loop,<br/>≤3 rounds"}}
+        P5 --> P6["transcribe again<br/>+ final counts"]
     end
 ```
 
-### 2.1 Stage 1 — evidence selection
+### 2.1 Stage 1 — the agentic evidence stage
 
-The extractive pass asks the model for *text* and never for positions. Language
-models do not count characters reliably, so offsets are produced by locating
-each returned span in the source, under a normalisation that folds the
-differences that make a true quotation look false (Unicode composition, curly
-versus straight quotes, dash variants, whitespace runs). This serves two
-purposes at once: it yields exact character offsets, and it *proves* the span is
-verbatim. A span that cannot be located is discarded and counted, not passed
-through with a warning.
+Stage 1 decides *what happened and how it hangs together*; stage 2 only renders
+those decisions into the ontology. It is a fixed sequence of narrow passes
+rather than one call that does everything, because the single-call version
+failed in a specific place: it found events well and chained them badly. On the
+30-judgment gold set its graphs held half as many chains as gold (69 against 129)
+at a near-correct event count, so separate matters were being merged into one.
+Each pass below has one job, and everything a model returns is checked in code
+before it is kept.
 
-Because `render_bundles.py` hands the downstream stage the rendered spans
-*instead of* the judgment, the graph stage cannot introduce content that did not
-survive this check. That is the structural property distinguishing C3/C4 from
-C1/C2, and it is a property of the pipeline's shape rather than of the model's
-behaviour.
+**Extract** (`prompts/extract.txt`). The model selects the evidence: one entry
+per domestic act, every field a *verbatim span*, plus the closed-vocabulary
+judgements (instance level, outcome, procedure, direction, matter). It is not
+asked to link entries. Language models do not count characters reliably, so
+offsets are produced by locating each span in the source, under a normalisation
+that folds the differences that make a true quotation look false (Unicode
+composition, curly versus straight quotes, dash variants, whitespace runs). This
+yields exact offsets and *proves* the span is verbatim; a span that cannot be
+located is discarded and counted. Documents longer than the context window are
+halved at the paragraph boundary nearest the midpoint and extracted in
+independent passes, with spans located against the whole document so offsets
+stay global. The applicants' own description comes from a separate small call
+over the document's opening.
 
-Documents longer than the context window are halved at the paragraph boundary
-nearest the midpoint and extracted in independent passes, with spans located
-against the *whole* document so offsets remain global. Parts are sized so that
-the prompt and the output budget both fit; a chain link crossing the seam is
-dropped rather than guessed.
+**Plan** (`prompts/plan.txt`). The model groups the events into *tracks* — one
+matter carried forward, such as a prosecution from investigation to cassation, or
+a civil claim through its appeals and remittals — and names, for each event, the
+earlier event it continues and whether it ran *during* that event rather than
+after it. It chooses each predecessor from a candidate list computed in code:
+events dated no later, the same procedure ranked first. Code refuses a link
+outside the candidates, a `continues` link across tracks, and a cycle.
+
+**Critique** (`prompts/critic.txt`). The model reads the judgment against the
+draft and reports what is wrong: missing or duplicated events, non-events, wrong
+classifications, wrong or missing links, parallel tracks merged into one. It is
+pointed at the likeliest defects by deterministic hints: dated paragraphs inside
+the facts that no event quotes (the check that catches an extraction which stops
+partway through a long judgment), several events by one body on one day,
+links that run backwards in time, and events that continue nothing midway
+through a track. A finding without a locatable verbatim evidence span is
+discarded.
+
+**Fix** (`prompts/fix.txt`), only when the critic reported something. The model
+answers each finding with typed operations — add, remove or merge an event, set a
+field, a link or a track — and code applies them: an operation that answers no
+finding is refused, every span is located in the source, every classification is
+checked against its vocabulary, and a link may not point forward in time or
+close a cycle. An added event is inserted where the judgment narrates it.
+
+**Typed links, computed.** Whether a link is `part_of` or `follows` is not left
+to a model. Two events with the same deciding body, instance level, procedure and
+track are acts of one proceeding (`part_of`); a `during` link becomes
+`occurs_during`; every other link is `follows`. As `echr.ttl` requires, every
+link targets the proceeding's earliest act.
+
+**Parties and filters.** The parties pass runs on the final event list, so
+events the fixer added are covered too. Then three deterministic filters: no
+judge — domestic or of the Court — is ever a person or a party (the bench is
+recovered separately); the body deciding an event is never a party to it; and an
+investigative act that answered no request carries no outcome.
+
+`render_bundles.py` hands stage 2 the result *instead of* the judgment: tracks,
+events with their spans and offsets, and each link stated with its type. Stage 2
+therefore cannot introduce content that did not survive span verification.
+
+Each document gets a `.compress.json` (the payload, in the shape every
+diagnostic reads) and an `.agentic.json` holding each pass's raw response, what
+was accepted, and what was refused and why. `--reuse-extraction <dir>` runs the
+plan, critic and fix passes over an earlier extraction, which isolates them from
+extraction variance.
 
 ### 2.2 Stage 2 — ontology-guided extraction with OntoCast
 
 The graph stage is **not implemented here**: it is OntoCast, an external
 framework that renders text into RDF against an ontology catalogue, run in its
-`facts` mode against a fixed ontology. This repository supplies the ontology,
-the shapes, the extraction instruction and the driver (`run_native.py`); the
-ontology-guided extraction itself, its triple-store integration and its SHACL
-pass are OntoCast's. That division is what the C0 vs C1 contrast tests: C1 is
-OntoCast as it comes, and the study's contribution is the stages around it.
+`facts` mode against a fixed ontology, with its own critic loop off
+(`MAX_VISITS=1`). This repository supplies the ontology, the shapes, the
+extraction instruction (`prompts/facts.txt`) and the driver (`run_native.py`);
+the rendering, the triple-store integration and the SHACL pass are OntoCast's.
+Where the input states a typed link, `facts.txt` requires stage 2 to transcribe
+it rather than re-derive it.
 
-Extraction is performed against a fixed ontology, with the ontology
-serialised into each prompt and SHACL shapes applied post-hoc. Both input forms
-are run under an identical configuration; the only difference between the arms
-is whether the text is the judgment or the rendered evidence bundle.
-
-Two configuration points matter for validity. First, each input form is given
-its **own triple-store project**, created fresh: an ontology is synchronised
-into a store only when its IRI is absent, matched on IRI and not on version, so
-a reused project can silently extract against a superseded ontology. Second,
+Two configuration points matter for validity. First, each run is given its
+**own triple-store project**, created fresh: an ontology is synchronised into a
+store only when its IRI is absent, matched on IRI and not on version, so a
+reused project can silently extract against a superseded ontology. Second,
 extraction is invoked **in-process** (`run_native.py`) rather than as a
-subprocess, so that the response-recovery patches this repository applies —
-which repair malformed model replies that would otherwise silently drop an
-entire unit's extraction — are active in every arm. Running one arm patched and
-another unpatched would compare implementations rather than conditions.
+subprocess, so the run's log can be parsed for units that produced no output,
+and a run that wrote fewer graphs than it was given documents exits non-zero.
 
-### 2.3 Stage 3 — validation-driven repair
+### 2.3 Stage 3 — reconciliation and repair
 
-Repair separates three kinds of work, and the separation is the method:
+Stage 1 decides and stage 2 renders, so most of what can go wrong in the graph
+is *transcription*: a classification stage 1 made that the graph does not carry
+(on the gold set, stage 1 carried `matter` on 78% of events and the graph on
+barely a quarter as many), a filing and its decision chained with
+`followsProceeding` where stage 1 said `part_of`, an event dropped outright. Stage
+3 diffs each graph against its stage-1 payload and repairs the difference:
 
-1. **Deterministic rewrites.** Asserting entailed types, splitting participation
-   nodes shared between events, and mirroring labels are entailments and
-   refactorings, not judgements. They are computed, not requested from a model,
-   and they run *before* the first violation count so that latent defects appear
-   in the baseline rather than as apparent damage caused by a later round.
-2. **A violation loop over graph-decidable defects.** A *violation* is fully
-   determined by the graph itself — a date typed as a string, a link whose
-   target lacks the required type, two labels on one node. Everything needed to
-   fix it is visible in the graph, so the model performing the fix is not shown
-   the document. Rounds are gated: a round is kept only if it strictly reduces
-   findings *per kind*, which prevents trading one shape's violations for
-   another's.
-3. **A document-reading review over absences.** An *absence* — "this event
-   records no parties", "this event is chained to nothing", "this quotation is
-   not in the source" — is not answerable from the graph; the answer is in the
-   document or nowhere. A model asked to close such a gap without the document
-   in front of it fills it from what is already adjacent in the graph — most
-   often naming the authority that decided a proceeding as a party to it — and
-   an aggregate finding count *falls* while the graph gets worse. Absences
-   therefore go only to the review stage, which reads the source, and the patch
-   applier refuses any added participation or event that does not carry a
-   verbatim supporting quotation.
+1. **Lossless rewrites.** Asserting entailed types, splitting participation
+   nodes shared between events, mirroring labels, and pruning references to
+   proceedings that were never built. These are computed, not requested.
+2. **Match.** Each stage-1 event is matched to its graph node by its verbatim
+   quote, falling back to decision date plus authority where stage 2 re-quoted
+   it. A narrated filing split into a filing node and a decision node matches
+   both.
+3. **Transcribe, in code.** For every matched event, a missing classification
+   is added and a conflicting one replaced; between matched events, missing
+   chain edges are added, mistyped ones retyped, and edges stage 1 did not
+   assert are removed — those are the over-linking stage 1's planner exists to
+   prevent. Stage 1 wins every disagreement: it read the judgment, with the
+   whole document in view, and was critiqued; stage 2 read only the digest of
+   those decisions.
+4. **Mint** (model, only if stage 1 has events the graph lacks). The missing
+   events are minted from their own digest entries through
+   `repair_facts.apply_patch`, whose guards refuse a quote that is not verbatim
+   in the judgment; a minted event without a surviving quote is removed. The
+   call is kept only if it placed at least one missing event and added no SHACL
+   violation.
+5. **SHACL repair** (model, only if the graph has violations). The violation
+   loop over SHACL errors, disjoint-type conflicts and duplicate nodes. These
+   are fully determined by the graph, so the model performing the fix sees the
+   graph and the ontology but not the document, and may not add evidence.
+   Rounds are capped at three and stop on a round that applies nothing.
+6. **Transcribe again.** The loop may undo a stage-1 decision on its way to
+   clearing a shape, so transcription runs once more: stage 1 keeps the last
+   word, and a violation only a stage-1 decision could clear is left standing
+   and counted.
 
-Missing participation is counted and reported as **coverage**, not repaired as a
-defect: a graph that records no party is declining to make a claim, not making a
-false one, and a constraint that can only be satisfied by guessing manufactures
-guesses.
+A graph that already agrees with stage 1 and has no violations goes through
+untouched apart from the lossless rewrites, and no model is called for it.
+Missing participation is counted and reported as **coverage**, not repaired: a
+graph that records no party is declining to make a claim, not making a false
+one, and a constraint that can only be satisfied by guessing manufactures
+guesses. Each graph gets a `.reconcile.json` recording every change, which is
+also its resume marker.
+
+The previous stage 3 (`new_repair.py`: violation loop, then document-reading
+review passes) remains available as `REPAIR_IMPL=new_repair`, and the single-call
+stage 1 as `STAGE1_IMPL=compress`.
 
 ---
 
@@ -282,7 +349,7 @@ guesses.
 |---|---|
 | **LLM server** | any OpenAI-compatible endpoint; all entry points take `--base-url` / `--model`. The reported runs use vLLM serving `gemma-4-31b` (`RedHatAI/gemma-4-31B-it-FP8-dynamic`) with `--max-model-len 98304` — 81,920 is the workable minimum, and below 65,536 the configuration cannot run. For a hosted API see §3.6. |
 | **Triple store** | Apache Fuseki in a container named `ontocast-fuseki`, reachable via `docker exec`, with credentials matching `FUSEKI_AUTH` in the base environment file. |
-| **OntoCast** | **v0.6.2** (commit `2504579`, tagged `v0.6.2`, 2026-08-29) — a checkout beside this repository (`$ONTOCAST_REPO`, default `<repo>/../../ontocast`), installed with its SHACL extra. Not a dependency of this package: it is invoked from the checkout, in-process, by `run_native.py`. **The version is load-bearing** — v0.6.2 absorbed the JSON-recovery patches this project previously carried locally, so an earlier version needs those patches reapplied. Pin it with `git -C $ONTOCAST_REPO checkout v0.6.2`. |
+| **OntoCast** | **v0.6.9** (tag `v0.6.9`) — a checkout beside this repository (`$ONTOCAST_REPO`, default `<repo>/../../ontocast`), installed with its SHACL extra. Not a dependency of this package: it is invoked from the checkout, in-process, by `run_native.py`. Pin it with `git -C $ONTOCAST_REPO checkout v0.6.9`; the run manifest records the version actually used. From v0.6.7 the default response layout is minified; the driver sets `LLM_OUTPUT_LAYOUT=free` to keep the earlier layout. Runs reported before 2026-10 used v0.6.2. |
 | **This repository** | `uv sync`. All Python entry points are `uv run python -m art6....` |
 | **Configuration** | `ontology/ontology_vllm.env` — the OntoCast settings surface. Credentials are read from it into the environment and are never written into generated run files. |
 | **Ontology** | `ontology/echr.ttl` and `ontology/echr-shapes.ttl`. |
@@ -361,10 +428,16 @@ referenced:
 ```
 <out>/ontology_seed/echr.ttl      ontology given to the graph stage
 <out>/shapes/echr-shapes.ttl      shapes used for validation and repair
-<out>/compress.prompt.snapshot    stage-1 prompt as it was at run time
+<out>/extract.prompt.snapshot     stage-1 prompts as they were at run time:
+<out>/plan.prompt.snapshot          extract, plan, critic, fix
+<out>/critic.prompt.snapshot
+<out>/fix.prompt.snapshot
+<out>/reconcile_mint.prompt.snapshot  stage-3 minting prompt
+<out>/compress.prompt.snapshot    single-call stage-1 prompt (STAGE1_IMPL=compress)
 <out>/facts.prompt.snapshot       stage-2 instruction as it was at run time
 <out>/input.jsonl                 documents + the live instruction, rebuilt
-<out>/manifest.json               model, endpoints, temperatures, condition → path
+<out>/manifest.json               model, endpoints, temperatures, stage
+                                  implementations, OntoCast version, condition → path
 ```
 
 `input.jsonl` is rebuilt from the JSON array on every run rather than read from
@@ -391,13 +464,14 @@ new output directory.
 ```
 results/<name>/
 ├── C0/                     *.o1.json, *.o1.txt, run_report.json         → C0
-├── stage1/                 *.compress.json  (per-document span statistics)
+├── stage1/                 *.compress.json  (payload + span statistics)
+│                           *.agentic.json   (plan / critic / fix log)
 ├── bundles.jsonl           rendered evidence bundles
 ├── C1_C2/
 │   ├── raw/                *.facts.ttl                                  → C1
 │   ├── repaired/           same filenames, repaired in place            → C2
 │   │   ├── backup/         pre-repair copy of every graph
-│   │   └── *.newrepair.json  per-document log of every operation applied
+│   │   └── *.reconcile.json  per-document log of every change applied
 │   └── extract_report.json
 ├── C3_C4/  (same structure)                                       → C3 / C4
 ├── run.log · manifest.json · .done/
@@ -449,7 +523,7 @@ Three things do need attention when the endpoint is hosted:
   `gpt-5-mini` or an o-series model, reasoning tokens are billed against
   `max_completion_tokens`, so the caps that suffice for a non-reasoning model
   can truncate a patch or an extraction. Raise `--max-tokens` on
-  `compress.py` and `new_repair.py` before concluding that a document failed.
+  `agentic_stage1.py` and `reconcile.py` before concluding that a document failed.
 
 Stage 2 remains OntoCast: it is configured through the environment
 (`LLM_BASE_URL`, `LLM_MODEL_NAME`, `LLM_API_KEY`), which `run_ablation.sh`
@@ -517,12 +591,12 @@ of each pair from any statistic that assumes independent documents.
 
 ## 5 · Limitations and expected behaviour
 
-- **Extraction varies between runs even at temperature 0.** Repeated runs of the
-  same input on the same server disagree materially. Single-run differences
-  between conditions should not be read as effects; the paired design and the
-  shared-extraction structure of §1.4 limit but do not eliminate this. Stage 1
-  is reproducible byte-for-byte only on its sequential path (`--workers 1`,
-  the default); concurrency changes server-side batch composition.
+- **The full pipeline varies between runs.** Stage 1 is reproducible
+  byte-for-byte on its sequential path (`--workers 1`, the default);
+  concurrency changes server-side batch composition and with it the output.
+  Stage 2 runs at temperature 0.4 and is not reproducible, and stage 3 inherits
+  that. Single-run differences should not be read as effects; report the spread
+  over replicates.
 - **The baseline fails outright on some documents, and that is a result.** A
   long judgment can drive the flat-JSON response past the completion-token
   limit, yielding nothing parseable. Such failures are recorded and carried
@@ -551,15 +625,17 @@ of each pair from any statistic that assumes independent documents.
 | path | role |
 |---|---|
 | [run_ablation.sh](run_ablation.sh) | the whole five-condition driver |
-| [compress.py](compress.py) | stage 1: evidence selection, span verification, oversize splitting |
+| [agentic_stage1.py](agentic_stage1.py) | stage 1 (default): extract -> track planner over computed candidate predecessors -> critic with deterministic hints -> fix (only on findings) -> typed links (follows / part_of / occurs_during) computed in code; judges filtered out |
+| [compress.py](compress.py) | the single-call stage 1 (`STAGE1_IMPL=compress`); span verification, oversize splitting, applicants and parties passes reused by agentic_stage1 |
 | [render_bundles.py](render_bundles.py) | renders verified spans as the document the graph stage sees |
 | [run_native.py](run_native.py) | stage 2: in-process invocation of OntoCast with response recovery installed |
 | [json_closers.py](json_closers.py) | rebuilds mismatched JSON container closers in a model reply (used by repair_facts.py; the three OntoCast monkeypatches this came from were removed once v0.6.2 absorbed the fix) |
-| [new_repair.py](new_repair.py) | stage 3: deterministic rewrites, violation loop, document-reading review |
+| [reconcile.py](reconcile.py) | stage 3 (default): diff each graph against its stage-1 payload and transcribe disagreements in code; the model is called only to mint stage-1 events the graph lacks (gated) and to repair SHACL violations |
+| [new_repair.py](new_repair.py) | the previous stage 3 (`REPAIR_IMPL=new_repair`): deterministic rewrites, violation loop, document-reading review |
 | [repair_facts.py](repair_facts.py) | finders, patch application, and the evidence constraints on additions |
 | [validate_shapes.py](validate_shapes.py) | SHACL conformance reporting |
 | [diagnostics/](diagnostics/) | content measures, repair impact, quotation and date verification, run comparison |
-| [prompts/](prompts/) | `compress.txt`, `applicants.txt`, `parties.txt`, `facts.txt`, `new_repair_*.txt` |
+| [prompts/](prompts/) | stage 1: `extract.txt`, `plan.txt`, `critic.txt`, `fix.txt`, `applicants.txt`, `parties.txt`; stage 2: `facts.txt`; stage 3: `reconcile_mint.txt`, `new_repair_loop.txt`, `new_repair_system.txt`. Earlier versions kept for replication: `compress.txt`, `compress_v2.txt`, `compress_old.txt`, `new_repair_review_*.txt` |
 | `../conditions/` | the no-ontology baseline: driver, comparison schema, triple projection, prompt |
 | `../../ontology/` | `echr.ttl`, `echr-shapes.ttl`, and the OntoCast configuration |
 | `../../docs/JURIX_2.md` | the experiment plan, sampling design and evaluation protocol |

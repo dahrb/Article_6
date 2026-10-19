@@ -1,0 +1,534 @@
+TASK: Read this European Court of Human Rights judgment and SELECT THE EVIDENCE for the
+domestic procedural history — everything that happened in the respondent State before the
+case reached Strasbourg.
+
+You are a SELECTOR, not a summariser. Every value you output must be text COPIED CHARACTER
+FOR CHARACTER from the judgment — not paraphrased, not tidied, not stitched together from
+two places. If you cannot copy it exactly, leave the field out. Keep each span SHORT — the
+few words that carry the fact.
+
+The rules below are the annotation guide used to build this corpus by hand, condensed for a
+single-pass reading. Read it once, then work from the OUTPUT shape at the end, which is
+where every field below actually lands.
+
+================================================================================
+1. SCOPE
+================================================================================
+
+IN SCOPE: the domestic (national) procedural history, wherever the judgment narrates it —
+normally "THE FACTS" / "THE CIRCUMSTANCES OF THE CASE", and in decisions also "PROCEDURE".
+
+OUT OF SCOPE, always: proceedings before the European Court of Human Rights itself (the
+domestic chain ends at the last national decision); "RELEVANT DOMESTIC LAW AND PRACTICE"
+and any other case cited as legal authority or comparison rather than as a step in this
+applicant's own history; the Court's own legal reasoning, admissibility analysis and
+Article 41 award.
+
+Scope is the WHOLE narrated history, not just the exhaustion chain. All of these are in:
+PRIOR proceedings (an earlier conviction, an administrative decision later challenged —
+the challenge follows it); PARALLEL proceedings (a civil claim running alongside a
+criminal case — independent chains are normal, each with its own head); CONSEQUENT
+proceedings (enforcement, reopening, supervisory review after the chain otherwise closed);
+proceedings where the applicant was not a party but which the facts narrate as part of
+their history (a guardian's application concerning them, a prosecutor's decision about a
+relative's death).
+
+================================================================================
+2. THE UNIT — ONE EVENT OR TWO?
+================================================================================
+
+The unit is ONE AUTHORITY DECIDING ONCE. Consequences:
+
+  - A hearing and the judgment closing it on the same date are ONE event. Several hearings
+    across two years before one court, ending in one judgment, are still ONE event: put the
+    institution date in start_date_span and the judgment date in decision_date_span.
+  - A first-instance trial and its appeal are TWO events, linked by follows.
+  - Remittal makes a new event even before the same court — a retrial after remittal is a
+    separate proceeding linked by follows, not folded into the original.
+  - An administrative decision and the court challenge to it are TWO events, the challenge
+    linked back by follows.
+
+--------------------------------------------------------------------------------
+2.1 A FILING NARRATED SEPARATELY FROM ITS DECISION IS TWO EVENTS
+--------------------------------------------------------------------------------
+
+Where the text separately narrates the institution of a proceeding and the decision closing
+it, write TWO entries:
+
+  THE FILING    start_date_span, institution_narrated_span (the filing sentence), NO
+                decision_date_span, NO outcome. follows = whatever it responded to, or
+                nothing if it heads a chain.
+  THE DECISION  decision_date_span, the outcome, NO start_date_span. follows = the filing's
+                id (the filing is the id that stands for the whole proceeding going
+                forward — anything that later reviews, appeals or enforces this proceeding
+                follows the filing, not the decision).
+
+APPLY THIS WHENEVER THE TEXT NARRATES BOTH ACTS, however short the interval and whatever
+else happened in between. The question is only whether the judgment gives two sentences or
+one, not how long the proceeding took:
+
+  NARRATED (two sentences, two acts -> TWO entries): "On 15 March 1999 the applicant
+  instituted civil proceedings against his employer... On 5 June 2003 the court dismissed
+  the claim."
+
+  REPORTED (one sentence -> ONE entry): "On 5 June 2003 the court dismissed a claim brought
+  in 1999." The institution is reported, not narrated — there is no second act to quote.
+  Put 1999 in start_date_span and 2003 in decision_date_span on the SAME entry, and leave
+  institution_narrated_span out.
+
+  A request and the decision refusing it, both narrated, are TWO events. Three refused
+  requests, each narrated twice, are six.
+
+THE REASON IS THE QUOTE: each entry's span must be the passage that evidences THAT entry. A
+folded entry has two distinct textual acts and can carry only one, so one of its two dates
+is always left unsupported. Splitting is what makes every entry's span actually support
+that entry.
+
+THE FILER DOES NOT HAVE TO BE THE APPLICANT. A company, an official, a relative or a
+co-accused asking for something is narrated exactly the same way — "In October 1995 the
+Port contacted the prosecutor... He requested its release", followed later by "the ship was
+freed from arrest", is NARRATED, two entries, even though the filer is a company.
+
+AN UNDATED FILING DOES NOT GET ITS OWN ENTRY. "The prosecutor appealed", with no date, is
+narrated but undatable — keep it inside the decision's entry rather than writing a second
+entry with no date to place it.
+
+WHEN GENUINELY AMBIGUOUS whether something is one event or two, write one event. This is
+not a rule to reach for on suspicion: either the text narrates the filing as its own act,
+with a sentence you can quote, or it does not.
+
+--------------------------------------------------------------------------------
+2.2 A SHARED DISPOSAL SENTENCE DOES NOT MEAN A SHARED ENTRY
+--------------------------------------------------------------------------------
+
+"Both requests were rejected by the Regional Court", answering two requests about
+different subjects, is TWO entries even though one sentence disposes of both and is the
+only date either gets. Ask what each request was ABOUT, not how the ruling is reported: a
+motion to disqualify the judge for bias and a motion to admit a different lawyer are
+separate matters on their own facts, sharing a date and an outcome span across two entries
+— that is correct here, not duplication to avoid. Worked example — "the applicant's civil
+defender requested the Regional Court to dismiss the judge presiding in the case for
+bias... On the same day the applicant requested to admit Mrs Moskalenko as his lawyer...
+Both requests were rejected": entry A is the bias motion (institution_narrated_span
+"requested ... to dismiss the judge ... for bias", decision_date_span the shared date,
+outcome_span "Both requests were rejected", party the civil defender); entry B is the
+lawyer motion (institution_narrated_span "requested to admit Mrs Moskalenko as his
+lawyer", the SAME decision_date_span and outcome_span, party the applicant). One entry
+with both requests folded into its parties list is the wrong shape — it would have to fit
+a single outcome that cannot truthfully describe two different matters at once. The same
+applies to a court's further rulings issued alongside a judgment the same day: further
+orders on the conduct of an investigation, issued the same day as a conviction, are a
+separate entry from the conviction even though only the date links them.
+
+Where a judgment has MORE THAN ONE APPLICANT, a sentence narrating their filings or
+decisions together ("respective actions", "both decisions", "each of the applicants") is
+usually shorthand for reporting separately-brought actions in one breath — give EACH
+applicant their own entry, even where the quote, date and outcome are identical for both.
+Worked example — "In October and November 1993 the applicants instituted proceedings
+before the Darmstadt Labour Court against ESA... On 21 March 1995 the Court declared the
+applicants' respective actions inadmissible. In both decisions..." is FOUR entries: a
+filing and a decision entry for the first applicant, and the same pair for the second.
+"Respective actions" and "both decisions" are the document telling you the court decided
+TWICE. Name which applicant each split entry is about — "the first applicant" on one, "the
+second applicant" on the other — rather than writing the plural "the applicants" on both:
+that shows the court decided twice but throws away which decision was about whom, which is
+the whole reason to split. Where the document gives no such signal — one joint
+application, one shared outcome, no "respective"/"each"/"both" language — one entry naming
+both applicants is correct; the split applies only where the text itself marks the actions
+as separate.
+
+================================================================================
+3. WHICH EVENTS TO RECORD
+================================================================================
+
+If it moved the case, created or removed a right, started or stopped a clock, or
+authorised or ended a deprivation of liberty, record it — including non-judicial steps:
+administrative decisions, prosecutorial rulings, enforcement actions. Include instances
+that went nowhere: a request refused, an appeal declared inadmissible, a claim left
+unexamined. A proceeding still running is still an event — a claim lodged and never
+determined has a start_date_span, no decision_date_span, and pending_span filled instead of
+an outcome.
+
+RECORD EVERY INSTANCE THAT QUALIFIES, especially in a long run of similar-looking ones. The
+asymmetry is what matters: an entry you wrote and should not have is visible and can be
+removed later; an entry you never wrote is invisible and nothing downstream can recover it.
+
+A DECISION DOES NOT NEED A DECIDING VERB. A body decides something just as clearly when
+the sentence reports what it FOUND, CONCLUDED or DETERMINED as when it "dismissed" or
+"granted" — read for whether something was settled, not for a specific verb.
+
+WHAT NOT TO RECORD — trial management. Not everything asked and answered during a hearing
+is its own entry. Record a ruling made during an already-open trial only if it authorised
+or ended a deprivation of liberty, created or removed a right independent of the trial's
+own merits (refusing chosen defence counsel, disqualifying the judge, refusing legal aid),
+or disposed of the case or a charge in it. An ordinary ruling on the conduct of a hearing —
+admitting evidence, refusing to sever counts, ruling there is a case to answer — is trial
+management, not an event, even where it was refused: losing does not turn it into one.
+
+Some things sit genuinely on the boundary — an inspection, an arrest, a registration made
+at someone's request. Do not agonise and do not invent a rule: RECORD IT, and if the call
+is genuinely hard, say so briefly in a note field if the schema allows one; otherwise just
+record it and move on. Reserve doubt for cases where a careful colleague could disagree
+with you, not for anything you merely had to think about.
+
+Annotate what the judgment states, not what must have happened. An event you infer from
+the shape of the procedure is not in the document and is not annotated.
+
+================================================================================
+4. THE CHAIN — follows
+================================================================================
+
+Every entry except the first of a track continues, reviews, appeals or enforces an earlier
+one. Set follows and copy the linking words into follows_span. "Immediately before" is
+PROCEDURAL, not chronological — two events merely consecutive in time with no procedural
+relation are not linked.
+
+Three continuations are missed constantly, beyond the obvious appeal:
+
+  a. THE SAME BODY ACTING AGAIN IN THE SAME MATTER — a succession of decisions carrying one
+     process forward (seizes an asset, values it, resolves to sell it, offers it, awards
+     it, transfers ownership) is one entry per step, each following the one before.
+  b. A NEW PHASE CONTINUING AN EARLIER ONE — a trial follows the investigation that
+     produced the charges; enforcement follows the judgment it enforces; a judicial
+     challenge follows the administrative decision it contests. The bodies differing is not
+     a reason to break the chain.
+  c. A REMITTAL GOING BACK DOWN — the fresh hearing follows the quashing, not the original
+     first-instance decision.
+
+THE TEST IS "THE SAME MATTER CONTINUED", NOT "THE NEXT THING THAT HAPPENED". Three things
+are NOT continuations, each starting its own track: proceedings against a different person
+(a co-accused tried separately is their own track); a new matter arising later (a fresh
+investigation into new allegations does not continue a closed case); a parallel track
+(civil and criminal proceedings over the same facts, neither continuing the other). When
+unsure, leave them unlinked — a missing link is a visible gap, a wrong one is a false
+history that reads as authoritative.
+
+LINKING IS NOT MERGING. When one entry continues another, keep BOTH entries and link them —
+do not fold a filing's date into the decision that answered it, or vice versa.
+
+Before finishing, check every entry whose follows is empty and ask what came before it in
+this matter. A genuinely separate track or the earliest thing recorded are legitimate
+answers — an entry that plainly continues something already recorded and is left unlinked
+is the error that turns a procedural history back into an unordered list.
+
+================================================================================
+5. THE FIELDS AND THEIR VOCABULARIES
+================================================================================
+
+Two fields are judgements you make from the event's own content, filled on EVERY event
+regardless of whether the document uses the exact word:
+
+instance_level — which rung:
+  a first hearing of a claim, charge or application         -> first instance
+  a review of a lower body's decision on the merits          -> appeal
+  a review limited to points of law                          -> cassation
+  a step inside a criminal investigation (warrant, arrest,
+  a prosecutor's refusal, an expert order)                   -> investigative
+  an internal review by an administrative body                -> administrative review
+  a review of an already-decided stage by a body outside the
+  ordinary appeal ladder, after finality                      -> case review
+  a case reopened after a final decision                       -> reopening
+
+outcome — which result, filled only where something was ASKED and ANSWERED (an arrest, a
+seizure, a warrant are things DONE, not requests decided — leave outcome out; instance_level
+is still filled):
+  the body ruled on the substance, whichever way               -> merits decided
+  a claim or appeal refused without reaching merits              -> inadmissible
+  sent back to a lower body                                       -> remitted
+  withdrawn, discontinued or settled                                -> settled or withdrawn
+  a real outcome none of these fit                                    -> other
+There is no value for "granted a request" as distinct from "ruled on the merits": a body
+that grants a request (appointing a guardian, ordering a release) has ruled on the
+substance of it, so it is merits decided. A housekeeping order deciding nothing (a transfer
+on jurisdictional grounds) is other, not merits decided. `other` is a last resort: a claim
+left unexamined is inadmissible, not other.
+
+Two more judgements, same treatment, evidenced by the event's own content:
+
+proceeding_type — the branch of law, on every event:
+  a criminal charge, conviction, sentence, arrest, detention, prosecution   -> criminal
+  a civil claim between private parties, damages, contract, family, property -> civil
+  a decision by a state body outside a court — a licence, a benefit, a
+  disciplinary or vetting body, a public-law claim against the state         -> administrative
+  a challenge to a law's or measure's constitutionality                      -> constitutional
+  a professional or judicial disciplinary proceeding                        -> disciplinary
+  a real branch none of these fit                                            -> other
+  not enough said to tell                                                    -> unknown
+
+outcome_direction — did THIS decision come out for or against the future Strasbourg
+applicant, filled under the same condition as outcome (an act with no outcome has no
+direction either):
+  the claim granted, the charge not made out, the appeal that sought this
+  result succeeded, in full                                     -> favourable to applicant
+  the claim dismissed, the charge made out, the appeal that
+  sought this result failed, in full                            -> unfavourable to applicant
+  THIS decision itself grants something AND denies something on
+  the SAME claim (a conviction with a reduced sentence, damages
+  awarded below what was sought where framed as a partial award) -> mixed
+  remitted, referred onward, left unexamined, inadmissible —
+  nothing granted or denied on the merits, nothing to be
+  favourable, unfavourable or mixed ABOUT                        -> unknown
+Test: reading only THIS decision, would the applicant say they partly won and partly lost
+on the SAME claim? If yes, mixed. A later proceeding reversing an earlier one does not make
+either event mixed — each keeps its own single direction, the case's ups and downs live in
+the follows chain. A procedural side-effect (costs, legal aid) that is not the substance of
+the claim does not make an otherwise-lost claim mixed. Direction tracks the claim or charge
+actually being decided, not every incidental ruling inside the decision.
+
+matter — what the event was substantively ABOUT (bail, damages, arrest), a DIFFERENT AXIS
+from proceeding_type (the track). NOT filled on every event — an appeal, a cassation
+review, a remittal are usually not substantively about any of these; leave it out entirely
+unless the event's own content is recognisably one of:
+  Arrest        the initial act of apprehending or taking into custody
+  Detention     placing, continuing, extending, reviewing or ending pre-trial/remand
+                detention — the deprivation of liberty itself; contrast Bail
+  Bail          application for, grant, refusal or review of release pending trial
+  Charge        the formal act of charging or indicting
+  Conviction    a trial verdict or appeal against one — conviction, acquittal, sentence
+  Investigation an investigative step short of a charge or detention decision — a search, a
+                seizure, an expert order, a request refused during an investigation
+  Damages       a claim for damages or compensation, and any decision on it
+  Custody       custody of or guardianship over a person — parental custody, a
+                child-abduction return, legal capacity/guardianship of an adult. NOT
+                detention.
+  Employment    a labour dispute — dismissal, reinstatement, wages, terms of employment
+  Pension       a pension, social-security or welfare-benefit entitlement
+  Property      a dispute over property, restitution, tenancy, or a planning/permit
+                decision
+  Extradition   an extradition, deportation or removal decision, or its execution
+  LegalAid      application for, grant or refusal of legal aid or legal-aid counsel
+  Vetting       granting, refusing or revoking a security clearance or vetting status
+  Disciplinary  a professional or employment disciplinary proceeding — suspending,
+                revoking or restoring a licence to practise
+  Other         the event IS about one identifiable matter the list does not name
+  Unknown       clearly about one of these matters, but the text does not say which
+Give more than one value where one event genuinely rules on more than one matter (an order
+continuing detention while setting bail conditions is Detention + Bail). Neither Other nor
+Unknown is a default for an event with no substantive matter at all — that gets no matter
+field at all, the same way an act with no result gets no outcome.
+
+authority_kind — the deciding body:
+  Judicial        a formal court or tribunal within the national judiciary
+  Prosecutorial   a public prosecutor's office or police/investigative body
+  Administrative  an executive, municipal, regulatory or welfare authority
+  Disciplinary    a professional regulatory or internal disciplinary body
+
+party side (in each party's role_span, in your own words from what the text shows):
+  Initiating   the party who moved the authority to act at THIS instance — claimant,
+               plaintiff, prosecution, appellant, the party seeking review or reopening
+  Responding   the party the proceeding was brought against at THIS instance — defendant,
+               accused, respondent on appeal
+  ThirdParty   joined without being on either side — intervener, a body appearing to be
+               heard
+The deciding body of THIS event is NEVER a party to it, though it may be a party to a
+DIFFERENT event in the chain (a prosecutor who decided at first instance may be the
+responding party on appeal). Sides usually swap on review — whoever lost below is usually
+the appellant above; read who brought THIS instance from THIS entry's own words, never by
+copying the role across from the entry it follows.
+
+--------------------------------------------------------------------------------
+PARTIES — every entry needs them
+--------------------------------------------------------------------------------
+
+Somebody brought every step and somebody answered it. Name the party itself, never their
+lawyer — a lawyer acting for a party is representation, not participation, and is recorded
+only where the lawyer was themselves a party.
+
+role_span must show STANDING IN THIS INSTANCE — who brought it and who answered it — not
+the most recent thing they did inside it. A party who files a motion partway through does
+NOT thereby become the party who brought the instance: if the applicant sued and the
+respondent later moved to strike out, the applicant still brought it.
+
+THE OTHER SIDE IS OFTEN NAMED ONLY ONCE. A first-instance judgment names both sides; the
+appeal names only whoever appealed, because the other side is already known to the reader.
+Where the entry this one follows recorded an opposing party and nothing suggests they
+dropped out, record that party here too — otherwise they vanish from the upper half of the
+chain.
+
+ONE PARTY IS A CORRECT ANSWER. NO PARTIES IS A CORRECT ANSWER. Many entries genuinely have
+one — an application to an authority, a prosecutor acting of his own motion, a review
+opened ex officio. Do not manufacture a second party, and never reach for the deciding body
+OF THIS ENTRY to fill the gap: the body in this entry's authority_span is not available as
+this entry's missing party, precisely because it is the nearest name to hand.
+
+BUT AN AUTHORITY IS THE PARTY WHEN ITS OWN DECISION IS THE THING UNDER REVIEW — the
+single most-missed party in the corpus. A permit is refused by a District Authority; the
+applicant appeals to a Regional Government, which refuses too; he appeals to an
+Administrative Court, which quashes the Regional Government's decision. On the first two
+entries those bodies decide. On the third, the court decides and the REGIONAL GOVERNMENT IS
+THE RESPONDING PARTY. The test is who is DECIDING THIS ENTRY: everyone else named is
+eligible, including a public body, including one that decided an earlier entry in the
+chain.
+
+THE FILER OR MOVANT IS A PARTY, side Initiating, whoever it is — including a prosecutor
+bringing a case of their own motion or an administrative body applying for a measure. Do
+not let the deciding body of THIS event crowd out who moved it.
+
+An empty parties list says the text names no party, and is worth writing — it records that
+you looked.
+
+--------------------------------------------------------------------------------
+DELAY, POSTPONEMENT, FINALITY AND PENDING
+--------------------------------------------------------------------------------
+
+Where the text says a case lay dormant or was stayed between two dates, record it in
+inactivity with the bounding spans and any words attributing the cause. Where a hearing was
+adjourned and later resumed, record it in adjournments. Length-of-proceedings is a core
+Article 6 complaint and the delays are usually explicit.
+
+pending_span: copy in words showing a matter was still outstanding when the judgment was
+written — "the appeal is currently pending", "has yet to rule". A proceeding recorded this
+way has a start_date_span, no decision_date_span, and no outcome — exactly like a filing
+half of a §2.1 split. What tells the two apart is only that a pending proceeding's decision
+was never written, where a filing's decision exists elsewhere in your own list of entries.
+
+non_occurring_span: fill where the text narrates something that was NOT done — "the
+applicant did not appeal", "no request for release was ever lodged" — rather than something
+that happened. Type and classify the event as what it would have been had it happened,
+quote the words stating the negation, and give it no decision_date_span — nothing was
+decided, because nothing happened. Distinct from pending: a pending proceeding is real and
+under way, just not yet decided; a non-occurring one never started.
+
+finality_span: copy in words showing a decision was final or that remedies were exhausted.
+
+================================================================================
+6. WHEN TO WRITE "unknown" AND WHEN TO OMIT
+================================================================================
+
+OMIT the field entirely when the text gives you nothing and there is no escape value —
+dates, quotes, names.
+
+WRITE the escape value (unknown) when the field has a closed vocabulary, the event exists,
+and the text does not tell you which value applies. Unknown is a real answer meaning "the
+document does not say" — it is not the same as omitting the field.
+
+NEVER GUESS from background knowledge of the legal system. If the judgment does not say
+the Regional Court sat on appeal, instance_level is unknown even where you know that
+country's regional courts usually do. You are annotating the document, not the
+jurisdiction.
+
+================================================================================
+7. IDENTITY — WHEN ARE TWO MENTIONS THE SAME EVENT
+================================================================================
+
+Two mentions are the SAME event when they share the same deciding authority and the same
+decision date. Naming variants are the same authority ("the Regional Court", "the Sofia
+Regional Court", "the Sofia City Regional Court" are one body where the text is plainly
+referring to the same one). Same authority, different dates -> different events: the
+filing and its decision are always two events once split under §2.1, this carries no
+exception. A date given only as a year matches a full date in that year where the
+authority and surrounding narrative agree.
+
+Filing events have no decision to match on — match them on authority and start_date
+instead. A filing event never matches a decision event, even for the same authority and
+proceeding: they are the two halves of a split pair and must be kept apart.
+
+================================================================================
+8. BEFORE YOU FINISH — COVERAGE CHECK
+================================================================================
+
+List every body that decided anything about these applicants — wider than courts: courts,
+tribunals, prosecutors at every level, municipal councils, ministries, mayors, governors,
+social assistance and welfare departments (granting, refusing, increasing or reducing an
+allowance is a dated event with an acting body), police and enforcement officers (a search,
+an arrest, a seizure, a payment order carried out), the end of a detention ("the applicant
+was released" is an event with a date even where no authority is named — record it with
+authority_kind_span omitted rather than dropping it), medical and social assessment bodies
+whose findings decided something, care homes, hospitals, guardianship authorities,
+registrars. EVERY one of them must be the authority_span of at least one entry. The
+non-judicial periphery is what gets missed: a welfare decision or a police action reads as
+background narrative rather than as a step it actually is.
+
+HEDGED LANGUAGE IS NOT A REASON TO DROP AN ENTRY. "It appears that the order was lifted in
+May 1996" is the document's own uncertainty about a fact it still asserts happened — copy
+"it appears that" into the span along with the rest.
+
+Where the document names a person at all — applicant, lawyer, guardian, relative, witness,
+co-accused — give them an entry in persons, and copy a gender cue (an honorific, pronoun or
+gendered noun) if the document marks them anywhere, even paragraphs after they are first
+named.
+
+Be exhaustive about evidence and silent about judgement. If the document does not say, do
+not supply it.
+
+================================================================================
+OUTPUT
+================================================================================
+
+A single JSON object, no prose around it, matching this shape. Omit any field you have no
+verbatim text for. Omit any list that is empty.
+
+{
+  "case": {
+    "case_name_span": "...", "application_number_span": "...",
+    "respondent_state_span": "...", "judgment_date_span": "...",
+    "subject_matter_spans": ["short spans naming what the underlying dispute was about, in
+      the document's own words -- 'custody of the applicant's children'. The substance,
+      not the track. One per distinct subject matter; omit if too varied to characterise."]
+  },
+  "events": [
+    {
+      "id": "e1",
+      "order": 1,
+      "what_happened_span": "the decisive words: what was decided or done",
+      "decision_date_span": "the date it was decided, as written",
+      "start_date_span": "the date it was begun or lodged, if separately given",
+      "institution_narrated_span": "words from a SEPARATE SENTENCE narrating the act of
+        lodging or instituting THIS entry. See §2.1.",
+      "authority_span": "the body that decided it, as named",
+      "authority_kind_span": "words showing what kind of body (court, prosecutor, council)",
+      "outcome": "merits decided | inadmissible | remitted | settled or withdrawn | other.
+        See §5.",
+      "outcome_span": "the words stating the result, IF the document states them",
+      "instance_level": "first instance | appeal | cassation | investigative |
+        administrative review | case review | reopening. On EVERY event. See §5.",
+      "instance_span": "the words naming the rung, IF the document states them literally",
+      "proceeding_type": "criminal | civil | administrative | constitutional | disciplinary |
+        other | unknown. On EVERY event. See §5.",
+      "proceeding_type_span": "words showing the branch (criminal, civil, administrative)",
+      "outcome_direction": "favourable to applicant | unfavourable to applicant | mixed |
+        unknown. Same condition as outcome. See §5.",
+      "matter": ["zero or more of: arrest | detention | bail | charge | conviction |
+        investigation | damages | custody | employment | pension | property | extradition |
+        legal aid | vetting | disciplinary | other | unknown. NOT on every event. See §5."],
+      "finality_span": "words showing it was final or that remedies were exhausted",
+      "pending_span": "words showing it was still pending",
+      "non_occurring_span": "words showing this was something a party did NOT do -- 'did
+        not appeal', 'no request for release was ever lodged'. Fill INSTEAD of
+        decision_date_span, never alongside it. Rare.",
+      "interim_spans": ["steps before the SAME body between start and decision"],
+      "follows": "id of the event this continues, reviews, appeals or enforces. See §4.",
+      "follows_span": "the words linking them",
+      "parties": [
+        {"name_span": "the party as named",
+         "role_span": "words showing their STANDING in this instance -- who brought it, who
+          answered it. NOT the last thing they did. See §5, party side."}
+      ],
+      "inactivity": [
+        {"start_span": "...", "end_span": "...", "cause_span": "words attributing the delay"}
+      ],
+      "adjournments": [
+        {"date_span": "...", "resumption_span": "...", "cause_span": "..."}
+      ],
+      "detention": [
+        {"detainee_span": "...", "start_span": "...", "end_span": "...",
+         "measure_span": "words naming the custodial measure",
+         "duration_span": "a stated total duration, if the text gives one",
+         "still_detained_span": "words showing they remain detained"}
+      ]
+    }
+  ],
+  "persons": [
+    {
+      "name_span": "the person as named",
+      "role_span": "words showing who they are (the applicant, her lawyer, his guardian)",
+      "gender_cue_span": "a SHORT span containing an honorific, pronoun or gendered noun
+        referring to this person: 'Ms A. Genova', 'she was informed', 'his half-sister'.
+        Anywhere in the document. Omit if the document never marks them.",
+      "represents_span": "words showing they act for someone, and for whom"
+    }
+  ],
+  "authorities": [
+    {"name_span": "the body as named", "kind_span": "words showing what kind of body it is"}
+  ]
+}

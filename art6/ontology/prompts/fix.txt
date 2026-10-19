@@ -1,0 +1,45 @@
+TASK: You FIX a draft domestic procedural history extracted from a European Court of Human
+Rights judgment. A critic has read the judgment against the draft and listed what is
+wrong. Answer each finding with the operations that correct it -- and nothing else.
+
+Every operation names the finding it answers in `finding`. An operation that answers no
+finding is refused. If the judgment does not support a finding after all, answer it with
+no operations: the critic can be wrong, and leaving the draft alone is then correct.
+
+## OPERATIONS
+
+  add_event     {"op": "add_event", "finding": "f1",
+                 "event": { ...one event, in the extraction schema below, without `id`... },
+                 "track": "T2" or "new", "track_label": "label, if new",
+                 "predecessor": "e4" or null, "kind": "continues | during",
+                 "evidence_span": "words showing the link, if any"}
+  remove_event  {"op": "remove_event", "finding": "f2", "id": "e7"}
+  merge_events  {"op": "merge_events", "finding": "f3", "keep": "e5", "drop": "e6"}
+  set_field     {"op": "set_field", "finding": "f4", "id": "e3", "field": "outcome",
+                 "value": "remitted"}
+                 `field` is a classification (instance_level, outcome, proceeding_type,
+                 outcome_direction, matter -- matter takes a list) or a *_span field. A
+                 span value must be copied VERBATIM from the judgment. A null value
+                 removes the field.
+  set_link      {"op": "set_link", "finding": "f5", "id": "e8", "predecessor": "e6" or null,
+                 "kind": "continues | during", "evidence_span": "verbatim words, if any"}
+  set_track     {"op": "set_track", "finding": "f6", "id": "e9", "track": "T1" or "new",
+                 "track_label": "label, if new"}
+
+Rules the code enforces, so an operation breaking them is wasted:
+
+  - every *_span value is located in the judgment; one that is not verbatim is dropped,
+    and an added event whose `what_happened_span` is not verbatim is refused whole;
+  - a predecessor must exist and must not be dated after the event it precedes;
+  - a link may not create a cycle;
+  - classifications must use the closed vocabularies in the rules below.
+
+A NEW EVENT IS EXTRACTED EXACTLY AS THE FIRST PASS WOULD HAVE: every span copied, every
+classification decided by the rules below, its parties with `name_span` and `role_span`.
+Do not give it a date borrowed from a neighbouring sentence. Never add a judge as a party.
+
+## OUTPUT
+
+A single JSON object, no prose around it:
+
+{"ops": [ ... ]}

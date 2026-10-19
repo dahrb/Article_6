@@ -10,7 +10,7 @@ The repository holds three things that can be used independently:
 | | what it is | where |
 |---|---|---|
 | **the ontology** | `echr:` — an extraction schema for domestic procedural history, with closed vocabularies and SHACL shapes | `ontology/` |
-| **the pipeline** | evidence stage → ontology-guided extraction (OntoCast) → validation-driven repair, plus a no-ontology baseline | `art6/ontology/`, `art6/conditions/` |
+| **the pipeline** | agentic evidence stage (extract → track planner → critic → fix) → ontology-guided extraction (OntoCast) → reconciliation against the evidence stage with SHACL repair, plus a no-ontology baseline | `art6/ontology/`, `art6/conditions/` |
 | **the evaluation** | a five-condition ablation over 250 judgments, an annotation standard, and the protocol scoring it | `art6/ontology/README.md`, `annotation/` |
 
 ---
@@ -84,20 +84,23 @@ regenerated from the run rather than from the repository's current state.
 
 | | version |
 |---|---|
-| **OntoCast** | **v0.6.2** (commit `2504579`, 2026-08-29), `render_mode=facts`, invoked in-process by `art6/ontology/run_native.py` |
+| **OntoCast** | **v0.6.9**, `render_mode=facts`, critic off (`MAX_VISITS=1`), `LLM_OUTPUT_LAYOUT=free`, invoked in-process by `art6/ontology/run_native.py`. Results reported before 2026-10 used v0.6.2 (commit `2504579`) |
 | **model** | `gemma-4-31b` — `RedHatAI/gemma-4-31B-it-FP8-dynamic`, served by vLLM with `--max-model-len 98304` |
 | **ontology** | `ontology/echr.ttl` v3.5.0 |
-| **temperature** | stage 1 `0.0` (fixed); stages 2 and 3 `0.4` |
+| **temperature** | stage 1 `0.0` (fixed); stage 2 `0.4`; stage 3 `0.0` |
 | **Python** | >= 3.12, `uv sync` |
 
 OntoCast is **not** installed as a dependency — it is a checkout beside this
 repository (`$ONTOCAST_REPO`, default `../../ontocast`) and is invoked from
-there. v0.6.2 matters specifically: it absorbed the JSON-recovery patches this
+there. Use v0.6.2 or later: v0.6.2 absorbed the JSON-recovery patches this
 project previously carried locally, so earlier versions need those patches back.
+Each run records the OntoCast version it used in its `manifest.json`.
 
-> Extraction is **not deterministic at temperature 0**. Two identical stage 1
-> runs disagree materially on which proceedings they find. Compare conditions
-> within a run, never a condition in one run against a condition in another.
+> Stage 1 is reproducible byte for byte on its sequential path (`--workers 1`,
+> the default); concurrency changes server-side batching and with it the output.
+> Stage 2 runs at temperature 0.4 and is not reproducible, so the full pipeline
+> varies between runs: compare configurations within a run, or report the spread
+> over replicates.
 
 ---
 

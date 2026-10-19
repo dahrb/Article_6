@@ -47,6 +47,19 @@ def render(payload: dict) -> str:
             out += _line(key.removesuffix("_span"), case.get(key))
         out.append("")
 
+    # Tracks are a planning device, not an ontology class: they tell stage 2
+    # which events belong to one matter, and every link below stays inside one
+    # unless it is occurs_during. Absent on payloads from compress.py.
+    tracks = payload.get("tracks") or []
+    labels = {t.get("id"): t.get("label") or "" for t in tracks}
+    if tracks:
+        out.append(
+            f"TRACKS ({len(tracks)}) -- the separate matters these events belong to"
+        )
+        for track in tracks:
+            out.append(f"  {track.get('id')}: {track.get('label') or '(unlabelled)'}")
+        out.append("")
+
     events = payload.get("events") or []
     out.append(
         f"DOMESTIC EVENTS ({len(events)}), in the order the judgment gives them."
@@ -60,6 +73,9 @@ def render(payload: dict) -> str:
     out.append("")
     for event in events:
         out.append(f"EVENT {event.get('id', '?')}")
+        if event.get("track"):
+            label = labels.get(event["track"])
+            out.append(f"  track: {event['track']}" + (f" ({label})" if label else ""))
         for key in (
             "what_happened_span",
             "authority_span",
@@ -88,8 +104,13 @@ def render(payload: dict) -> str:
         ):
             if event.get(key):
                 out.append(f"  {key}: {event[key]}")
-        if event.get("follows"):
-            out.append(f"  follows: {event['follows']}")
+        # Chain links. Payloads from agentic_stage1 carry them TYPED and aimed
+        # at the target proceeding's earliest act; compress.py payloads carry
+        # an untyped `follows`, which facts.txt tells stage 2 to type itself.
+        for key in ("follows", "part_of", "occurs_during"):
+            if event.get(key):
+                out.append(f"  {key}: {event[key]}")
+        out += _line("link_words", event.get("link_span"))
         for party in event.get("parties") or []:
             name, role = _span(party.get("name_span")), _span(party.get("role_span"))
             if name:

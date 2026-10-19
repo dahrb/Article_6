@@ -988,6 +988,83 @@ def merge_parties(payload: dict, by_event: dict) -> tuple[int, int]:
     return added, events_touched
 
 
+def _add_span_stats(stats: dict, extra: dict) -> None:
+    for key in ("spans", "located", "dropped"):
+        stats[key] = stats.get(key, 0) + extra.get(key, 0)
+    stats.setdefault("dropped_values", []).extend(extra.get("dropped_values", []))
+
+
+def attach_applicants(
+    client: OpenAI,
+    model: str,
+    text: str,
+    payload: dict,
+    stats: dict,
+    *,
+    temperature: float,
+    raw_path: Path,
+) -> None:
+    """Run compress_applicants and store its verified result on `payload`.
+
+    The applicants call is separate (see compress_applicants) but its spans are
+    held to exactly the same standard: verified against the FULL source, not
+    the 8,000-character head it was asked about, so the offsets that travel to
+    stage 2 refer to the document as a whole like every other span.
+    """
+    applicants, applicants_raw = compress_applicants(
+        client, model, text, temperature=temperature
+    )
+    if applicants:
+        verified_applicants, applicant_stats = verify({"applicants": applicants}, text)
+        _add_span_stats(stats, applicant_stats)
+        payload["applicants"] = verified_applicants.get("applicants", [])
+    elif applicants_raw:
+        raw_path.write_text(applicants_raw, encoding="utf-8")
+
+
+def attach_parties(
+    client: OpenAI,
+    model: str,
+    text: str,
+    payload: dict,
+    stats: dict,
+    *,
+    temperature: float,
+    raw_path: Path,
+) -> int:
+    """Run compress_parties over payload's events and merge additively.
+
+    Returns the number of parties added; the per-document counts go to stats.
+    """
+    by_event, parties_raw = compress_parties(
+        client,
+        model,
+        text,
+        payload.get("events") or [],
+        temperature=temperature,
+    )
+    # An empty string is not a span. The second pass emits "role_span": ""
+    # where the document states no role, and feeding those to verify() counted
+    # 79 phantom drops on one ten-document run -- a span-fidelity figure that
+    # looked like a fabrication problem and was punctuation.
+    for _parties in by_event.values():
+        for _party in _parties:
+            if isinstance(_party, dict):
+                for _k in [k for k, v in _party.items() if not str(v).strip()]:
+                    _party.pop(_k)
+    if by_event:
+        verified, party_stats = verify({"e": by_event}, text)
+        _add_span_stats(stats, party_stats)
+        p_added, p_events = merge_parties(payload, verified.get("e", {}))
+    else:
+        p_added = p_events = 0
+        if parties_raw:
+            raw_path.write_text(parties_raw, encoding="utf-8")
+    stats["parties_pass_added"] = p_added
+    stats["parties_pass_events"] = p_events
+    return p_added
+
+
 # Words describing something DONE in an investigation rather than a request
 # answered. Deliberately narrow: each is an act with no respondent and no
 # ruling, and none of the five ProceedingOutcome values is true of it.
@@ -1266,61 +1343,29 @@ def main() -> None:
             print(f"  {doc_id}: FAILED ({stats.get('error')})")
             (args.out_dir / f"{doc_id}.raw.txt").write_text(raw, encoding="utf-8")
             return
-        # The applicants call is separate (see compress_applicants) but its spans
-        # are held to exactly the same standard: verified against the FULL source,
-        # not the 8,000-character head it was asked about, so the offsets that
-        # travel to stage 2 refer to the document as a whole like every other span.
-        applicants, applicants_raw = compress_applicants(
-            client, args.model, text, temperature=args.temperature
+        attach_applicants(
+            client,
+            args.model,
+            text,
+            payload,
+            stats,
+            temperature=args.temperature,
+            raw_path=args.out_dir / f"{doc_id}.applicants.raw.txt",
         )
-        if applicants:
-            verified_applicants, applicant_stats = verify(
-                {"applicants": applicants}, text
-            )
-            for key in ("spans", "located", "dropped"):
-                stats[key] = stats.get(key, 0) + applicant_stats[key]
-            stats["dropped_values"] += applicant_stats["dropped_values"]
-            payload["applicants"] = verified_applicants.get("applicants", [])
-        elif applicants_raw:
-            (args.out_dir / f"{doc_id}.applicants.raw.txt").write_text(
-                applicants_raw, encoding="utf-8"
-            )
         if args.parties_pass:
-            by_event, parties_raw = compress_parties(
+            p_added = attach_parties(
                 client,
                 args.model,
                 text,
-                payload.get("events") or [],
+                payload,
+                stats,
                 temperature=args.temperature,
+                raw_path=args.out_dir / f"{doc_id}.parties.raw.txt",
             )
-            # An empty string is not a span. The second pass emits
-            # "role_span": "" where the document states no role, and feeding
-            # those to verify() counted 79 phantom drops on one ten-document
-            # run -- a span-fidelity figure that looked like a fabrication
-            # problem and was punctuation.
-            for _parties in by_event.values():
-                for _party in _parties:
-                    if isinstance(_party, dict):
-                        for _k in [k for k, v in _party.items() if not str(v).strip()]:
-                            _party.pop(_k)
-            if by_event:
-                verified, party_stats = verify({"e": by_event}, text)
-                for key in ("spans", "located", "dropped"):
-                    stats[key] = stats.get(key, 0) + party_stats[key]
-                stats["dropped_values"] += party_stats["dropped_values"]
-                p_added, p_events = merge_parties(payload, verified.get("e", {}))
-            else:
-                p_added = p_events = 0
-                if parties_raw:
-                    (args.out_dir / f"{doc_id}.parties.raw.txt").write_text(
-                        parties_raw, encoding="utf-8"
-                    )
-            stats["parties_pass_added"] = p_added
-            stats["parties_pass_events"] = p_events
             with lock:
                 totals["p_added"] = totals.get("p_added", 0) + p_added
         else:
-            p_added = p_events = 0
+            p_added = 0
         actless, actless_ids = drop_actless_outcomes(payload)
         stats["actless_outcomes_dropped"] = actless
         stats["actless_outcomes_dropped_ids"] = actless_ids

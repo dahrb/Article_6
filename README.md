@@ -10,7 +10,7 @@ The repository holds three things that can be used independently:
 | | what it is | where |
 |---|---|---|
 | **the ontology** | `echr:` — an extraction schema for domestic procedural history, with closed vocabularies and SHACL shapes | `ontology/` |
-| **the pipeline** | agentic evidence stage (extract → track planner → critic → fix) → ontology-guided extraction (OntoCast) → reconciliation against the evidence stage with SHACL repair, plus a no-ontology baseline | `art6/ontology/`, `art6/conditions/` |
+| **the pipeline** | agentic evidence stage (event detection → linking → person identifier → critic, which routes to a parallel-track agent, a parties pass and a fixer) → ontology-guided extraction (OntoCast) → reconciliation, SHACL repair and a final critic, plus a no-ontology baseline | `art6/ontology/`, `art6/conditions/` |
 | **the evaluation** | a five-condition ablation over 250 judgments, an annotation standard, and the protocol scoring it | `art6/ontology/README.md`, `annotation/` |
 
 ---

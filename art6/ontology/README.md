@@ -26,8 +26,8 @@ shapes are in `ontology/`.
 | component | what it does | implementation |
 |---|---|---|
 | **Ontology guidance** (stage 2) | extraction is rendered as RDF against a fixed domain ontology, with closed vocabularies, typed nodes and SHACL shapes | [OntoCast](https://growgraph.github.io/ontocast/), an external LLM-to-knowledge-graph framework, in `render_mode=facts`; invoked by `run_native.py` |
-| **Evidence stage** (stage 1) | an extractive pass returns *verbatim spans* of the source, then a track planner, a critic and a fixer turn them into a checked procedural history with typed chain links; offsets are computed programmatically, and any span that cannot be located in the source is discarded. The graph stage then sees the verified evidence instead of the judgment | `agentic_stage1.py` + `render_bundles.py` |
-| **Repair stage** (stage 3) | the graph is diffed against stage 1 and transcription gaps are fixed in code; the model is called only to mint events the graph lacks and to repair SHACL violations | `reconcile.py` |
+| **Evidence stage** (stage 1) | an extractive pass returns *verbatim spans* of the source, then linking, person and critic agents — with a parallel-track agent, a targeted parties pass and a fixer triggered by the critic's flags — turn them into a checked procedural history with typed chain links; offsets are computed programmatically, and any span that cannot be located in the source is discarded. The graph stage then sees the verified evidence instead of the judgment | `agentic_stage1.py` + `render_bundles.py` |
+| **Repair stage** (stage 3) | the graph is diffed against stage 1 and transcription gaps are fixed in code; the model is called to mint events the graph lacks, to repair SHACL violations, and as a final critic and graph fixer that may not change what stage 1 decided | `reconcile.py` |
 
 ### 1.2 Conditions
 
@@ -161,113 +161,184 @@ C1 and C3 are the two stage-2 runs — same configuration, different input text.
 C2 and C4 are those same two graphs after repair, which is why the repair
 contrast is measured from identical input on each side.
 
-**What happens inside each stage.** Hexagons are model calls; rectangles are
-deterministic steps. Dashed calls run only when the step before them found
-something to act on.
+**The agents and their order.** Hexagons are model calls; rectangles are
+deterministic steps; diamonds are routing decisions. A conditional agent runs
+only when an earlier agent's mandatory flags, or a deterministic check, call
+for it.
 
 ```mermaid
 flowchart TD
-    subgraph ST1["stage 1 · agentic evidence stage — 4 to 6 calls / document, temp 0.0"]
-        direction LR
-        E1{{"LLM · extract<br/>events, persons"}} --> E2["verify spans<br/>unlocatable dropped"]
-        E2 --> E3{{"LLM · applicants"}}
-        E3 --> E4["candidate<br/>predecessors"]
-        E4 --> E5{{"LLM · track planner<br/>tracks + links"}}
-        E5 --> E6["hints: uncovered paragraphs,<br/>same-day clusters, backward links"]
-        E6 --> E7{{"LLM · critic<br/>evidenced findings"}}
-        E7 -.-> E8{{"LLM · fix<br/>validated operations"}}
-        E8 --> E9["typed links<br/>follows / part_of / occurs_during"]
-        E9 --> E10{{"LLM · parties<br/>per event"}}
-        E10 --> E11["filters: judges,<br/>deciding body as party,<br/>actless outcomes"]
+    J[/"judgment"/]
+
+    subgraph S1["Stage 1 — evidence → stage-1 payload (agentic_stage1.py)"]
+        ED{{"Event detection<br/>events + parties + persons<br/>flag: domestic_events_found"}}
+        Q0{"events found?"}
+        LA{{"Linking<br/>tracks + predecessors"}}
+        PI{{"Person identifier<br/>applicants + chain-aware parties<br/>(additive)"}}
+        F1["filters + hints (code)"]
+        CR{{"Stage-1 critic<br/>findings<br/>flags: needs_fix · parallel_tracks ·<br/>parties_incomplete"}}
+        QP{"parallel_tracks<br/>= yes?"}
+        TA{{"Parallel track agent<br/>re-partition + track relations"}}
+        RL{{"Linking, re-run<br/>within the new tracks"}}
+        QY{"parties_incomplete<br/>= yes?"}
+        PT{{"Targeted parties pass<br/>on the named events"}}
+        QF{"needs_fix<br/>= yes?"}
+        FX{{"Stage-1 fixer<br/>ops on payload"}}
+        T["re-filter + type links (code)"]
     end
 
-    subgraph ST2["stage 2 · OntoCast — 1 call / document, temp 0.4"]
-        direction LR
-        G1{{"LLM · facts render,<br/>RDF against the fixed ontology"}} --> G2["SHACL validation<br/>+ conservative autofix"]
-        G2 --> G3["write graph<br/>and triple store"]
+    subgraph S2["Stage 2"]
+        OC{{"OntoCast"}}
     end
 
-    subgraph ST3["stage 3 · reconcile — 0 to 4 calls / document, temp 0.0"]
-        direction LR
-        P1["lossless rewrites"] --> P2["match graph nodes<br/>to stage-1 events"]
-        P2 --> P3["transcribe: fields and<br/>chain links to stage 1"]
-        P3 -.-> P4{{"LLM · mint events<br/>the graph lacks, gated"}}
-        P4 -.-> P5{{"LLM · SHACL violation loop,<br/>≤3 rounds"}}
-        P5 --> P6["transcribe again<br/>+ final counts"]
+    subgraph S3["Stage 3 — repair → graph (reconcile.py)"]
+        RC["reconcile: transcribe (code)"]
+        QM{"events<br/>missing?"}
+        MI{{"Event recovery<br/>gated"}}
+        QS{"violations?"}
+        SV{{"SHACL violation agent<br/>≤3 rounds"}}
+        RT["restore stage-1 decisions (code)"]
+        FC{{"Final critic<br/>flags: needs_fix · stage1_dispute"}}
+        QG{"needs_fix<br/>= yes?"}
+        GF{{"Graph fixer<br/>gated per group,<br/>stage-1 triples locked"}}
+        END["final counts (code)"]
     end
+
+    EMPTY[/"empty bundle"/]
+
+    J --> ED --> Q0
+    Q0 -- no --> EMPTY
+    Q0 -- yes --> LA --> PI --> F1 --> CR --> QP
+    QP -- yes --> TA --> RL --> QY
+    QP -- no --> QY
+    QY -- yes --> PT --> QF
+    QY -- no --> QF
+    QF -- yes --> FX --> T
+    QF -- no --> T
+    T -->|"bundle"| OC --> RC --> QM
+    QM -- yes --> MI --> QS
+    QM -- no --> QS
+    QS -- yes --> SV --> RT --> FC
+    QS -- no --> FC
+    FC --> QG
+    QG -- yes --> GF --> END
+    QG -- no --> END
 ```
+
+| agent | runs | reads | writes | prompt |
+|---|---|---|---|---|
+| **Event detection** | always | judgment | events (verbatim spans, classifications, parties), persons, authorities; flag `domestic_events_found` | `extract.txt` |
+| **Linking** | if any events | judgment + events + computed candidates | tracks; each event's predecessor and `continues` / `during` | `plan.txt` |
+| **Person identifier** | if any events | judgment opening; judgment + events with their chain | applicants; parties added per event, shown the predecessor's parties | `applicants.txt`, `parties.txt` |
+| **Stage-1 critic** | `--critic-rounds` ≥ 1 | judgment + full draft + hints | evidenced findings; flags `needs_fix`, `parallel_tracks`, `parties_incomplete` | `critic.txt` |
+| **Parallel track agent** | `parallel_tracks = yes` | judgment + draft + the critic's evidence | tracks (`kind`, `subject`) and track relations (`during`, `arises_from`), then the linker re-runs inside them | `tracks.txt`, `link.txt` |
+| **Targeted parties** | `parties_incomplete = yes` | the named events only | parties added | `parties.txt` |
+| **Stage-1 fixer** | `needs_fix = yes` | judgment + draft + findings | validated operations on the payload | `fix.txt` |
+| **OntoCast** | always | rendered bundle | the graph | `facts.txt` |
+| **Event recovery** | stage-1 events missing from the graph | graph + their digest entries | minted events, kept only if they place one and add no violation | `reconcile_mint.txt` |
+| **SHACL violation agent** | graph has violations; `SHACL_ROUNDS` ≥ 1 | graph + ontology, no judgment | patches for SHACL errors, disjoint-type conflicts, duplicates | `new_repair_loop.txt` |
+| **Final critic** | `FINAL_CRITIC=1` | judgment + finished graph | evidenced findings; flags `needs_fix`, `stage1_dispute` | `final_critic.txt` |
+| **Graph fixer** | `needs_fix = yes` | judgment + graph + findings | patch groups, each kept only if it adds no violation; stage-1 triples locked | `final_fix.txt` |
+
+**Flags are mandatory and enforced in code.** A flag that is absent, or not
+exactly `yes` / `no`, sends the answer back once with a reminder; still absent,
+it is derived from the agent's own findings (`parallel_tracks` from any
+`wrong_track` finding, `parties_incomplete` from any `missing_party`,
+`needs_fix` from any finding). A `yes` that must carry evidence and carries none
+locatable in the judgment is read as `no`, and a flag its own findings
+contradict follows the findings. Every flag is logged with how it was reached —
+`trusted`, `defaulted`, `inconsistent` or `unevidenced` — so the logs show how
+often each route fires and how far the flags can be trusted.
 
 ### 2.1 Stage 1 — the agentic evidence stage
 
 Stage 1 decides *what happened and how it hangs together*; stage 2 only renders
-those decisions into the ontology. It is a fixed sequence of narrow passes
-rather than one call that does everything, because the single-call version
-failed in a specific place: it found events well and chained them badly. On the
-30-judgment gold set its graphs held half as many chains as gold (69 against 129)
-at a near-correct event count, so separate matters were being merged into one.
-Each pass below has one job, and everything a model returns is checked in code
-before it is kept.
+those decisions into the ontology. It is a sequence of narrow agents rather than
+one call that does everything, because the single-call version failed in a
+specific place: it found events well and chained them badly. On the 30-judgment
+gold set its graphs held half as many chains as gold (69 against 129) at a
+near-correct event count, so separate matters were being merged into one.
 
-**Extract** (`prompts/extract.txt`). The model selects the evidence: one entry
-per domestic act, every field a *verbatim span*, plus the closed-vocabulary
-judgements (instance level, outcome, procedure, direction, matter). It is not
-asked to link entries. Language models do not count characters reliably, so
-offsets are produced by locating each span in the source, under a normalisation
-that folds the differences that make a true quotation look false (Unicode
-composition, curly versus straight quotes, dash variants, whitespace runs). This
-yields exact offsets and *proves* the span is verbatim; a span that cannot be
-located is discarded and counted. Documents longer than the context window are
-halved at the paragraph boundary nearest the midpoint and extracted in
-independent passes, with spans located against the whole document so offsets
-stay global. The applicants' own description comes from a separate small call
-over the document's opening.
+**Event detection** (`prompts/extract.txt`). The model selects the evidence: one
+entry per domestic act, every field a *verbatim span* — dates, authority, what
+was decided, and the parties on each side — plus the closed-vocabulary
+judgements (instance level, outcome, procedure, direction, matter), the persons
+named and the authorities. It is not asked to link entries. Offsets are produced
+by locating each span in the source under a normalisation that folds the
+differences that make a true quotation look false (Unicode composition, curly
+versus straight quotes, dash variants, whitespace runs); this yields exact
+offsets and *proves* the span is verbatim, and a span that cannot be located is
+discarded and counted. Documents longer than the context window are halved at
+the paragraph boundary nearest the midpoint and extracted in independent passes,
+with spans located against the whole document. A judgment with no domestic
+events goes straight to an empty bundle.
 
-**Plan** (`prompts/plan.txt`). The model groups the events into *tracks* — one
-matter carried forward, such as a prosecution from investigation to cassation, or
-a civil claim through its appeals and remittals — and names, for each event, the
-earlier event it continues and whether it ran *during* that event rather than
-after it. It chooses each predecessor from a candidate list computed in code:
-events dated no later, the same procedure ranked first. Code refuses a link
-outside the candidates, a `continues` link across tracks, and a cycle.
+**Linking** (`prompts/plan.txt`). The model groups the events into *tracks* —
+one matter carried forward — and names, for each event, the earlier event it
+continues and whether it ran *during* that event rather than after it. It
+chooses each predecessor from a candidate list computed in code (events dated
+no later, the same procedure ranked first); code refuses a link outside the
+candidates, a `continues` link across tracks, and a cycle.
 
-**Critique** (`prompts/critic.txt`). The model reads the judgment against the
-draft and reports what is wrong: missing or duplicated events, non-events, wrong
-classifications, wrong or missing links, parallel tracks merged into one. It is
-pointed at the likeliest defects by deterministic hints: dated paragraphs inside
-the facts that no event quotes (the check that catches an extraction which stops
-partway through a long judgment), several events by one body on one day,
-links that run backwards in time, and events that continue nothing midway
-through a track. A finding without a locatable verbatim evidence span is
-discarded.
+**Person identifier.** The applicants' own description comes from a small call
+over the document's opening. Then the parties question is asked again with the
+chain in view: each event is listed with the event it continues and that
+event's parties, so carrying the other side up to an appeal becomes a question
+about a named earlier event rather than a guess. This pass only adds parties;
+those the extraction found are never removed by it. Three deterministic filters
+follow: no judge — domestic or of the Court — is a person or a party; the body
+deciding an event is never a party to it; and an investigative act that
+answered no request carries no outcome.
 
-**Fix** (`prompts/fix.txt`), only when the critic reported something. The model
-answers each finding with typed operations — add, remove or merge an event, set a
-field, a link or a track — and code applies them: an operation that answers no
-finding is refused, every span is located in the source, every classification is
-checked against its vocabulary, and a link may not point forward in time or
-close a cycle. An added event is inserted where the judgment narrates it.
+**Stage-1 critic** (`prompts/critic.txt`). The model reads the judgment against
+the whole draft and reports missing, duplicated and non-events, wrong
+classifications, wrong or missing links, merged tracks, and missing or wrong
+parties. Deterministic hints point it at the likeliest defects: dated
+paragraphs inside the facts that no event quotes (the check that catches an
+extraction which stopped partway through a long judgment), several events by
+one body on one day, links that run backwards in time, events that continue
+nothing midway through a track, and tracks that mix procedures. Hints are
+inputs only — the critic decides. A finding without locatable verbatim evidence
+is discarded. Its three flags route the rest of the round:
+
+- **`parallel_tracks = yes`** runs the **parallel track agent**
+  (`prompts/tracks.txt`), which re-partitions the events into tracks, each with
+  a `kind` and a `subject` (whose proceeding it is), and states how tracks
+  relate: `during` (ran inside another's pending span; becomes `occurs_during`)
+  or `arises_from` (a new matter caused by another; context only, since the
+  ontology has no property for it and `followsProceeding` would be false). Each
+  relation needs verbatim evidence. The linker then runs again
+  (`prompts/link.txt`) with candidates restricted to the event's own track and,
+  for a contained track, its container; the critic's track findings are treated
+  as answered.
+- **`parties_incomplete = yes`** re-runs the chain-aware parties pass on the
+  events the critic named, and on those alone.
+- **`needs_fix = yes`** runs the **fixer** (`prompts/fix.txt`), which answers
+  each remaining finding with typed operations — add, remove or merge an event,
+  set a field, a link or a track, add or remove a party — that code applies:
+  an operation answering no finding is refused, every span is located in the
+  source, every classification is checked against its vocabulary, a link may
+  not point forward in time or close a cycle, and a party may not be the
+  deciding body or a judge.
+
+The filters run again after the round. With `--critic-rounds 2` or more, the
+critic reads the draft again, but only if the round changed something.
 
 **Typed links, computed.** Whether a link is `part_of` or `follows` is not left
 to a model. Two events with the same deciding body, instance level, procedure and
-track are acts of one proceeding (`part_of`); a `during` link becomes
-`occurs_during`; every other link is `follows`. As `echr.ttl` requires, every
-link targets the proceeding's earliest act.
+track are acts of one proceeding (`part_of`); a `during` link — or the first
+event of a track that ran `during` another — becomes `occurs_during`; every
+other link is `follows`. As `echr.ttl` requires, every link targets the
+proceeding's earliest act.
 
-**Parties and filters.** The parties pass runs on the final event list, so
-events the fixer added are covered too. Then three deterministic filters: no
-judge — domestic or of the Court — is ever a person or a party (the bench is
-recovered separately); the body deciding an event is never a party to it; and an
-investigative act that answered no request carries no outcome.
-
-`render_bundles.py` hands stage 2 the result *instead of* the judgment: tracks,
-events with their spans and offsets, and each link stated with its type. Stage 2
-therefore cannot introduce content that did not survive span verification.
-
-Each document gets a `.compress.json` (the payload, in the shape every
-diagnostic reads) and an `.agentic.json` holding each pass's raw response, what
-was accepted, and what was refused and why. `--reuse-extraction <dir>` runs the
-plan, critic and fix passes over an earlier extraction, which isolates them from
-extraction variance.
+`render_bundles.py` hands stage 2 the result *instead of* the judgment: tracks
+and their relations, events with their spans and offsets, and each link stated
+with its type. Stage 2 therefore cannot introduce content that did not survive
+span verification. Each document gets a `.compress.json` (the payload) and an
+`.agentic.json` holding every agent's raw response, the flags and how each was
+resolved, what was accepted, and what was refused and why.
+`--reuse-extraction <dir>` runs everything after event detection over an
+earlier extraction.
 
 ### 2.2 Stage 2 — ontology-guided extraction with OntoCast
 
@@ -327,8 +398,20 @@ barely a quarter as many), a filing and its decision chained with
    word, and a violation only a stage-1 decision could clear is left standing
    and counted.
 
-A graph that already agrees with stage 1 and has no violations goes through
-untouched apart from the lossless rewrites, and no model is called for it.
+7. **Final critic → graph fixer** (`FINAL_CRITIC=1`, the default). The final
+   critic reads the finished graph against the judgment for what reconcile does
+   not own — participations and their sides, representatives, which authority
+   node an event points at, dates, quotes, spurious events — and must set
+   `needs_fix` and `stage1_dispute`. On `needs_fix` the graph fixer answers its
+   findings with a patch through `apply_patch`'s evidence guards. Stage 1's
+   fields, chain links and the existence of its events are **locked**: an
+   operation on them is recorded as a `stage1_dispute` and never applied, as is
+   any disagreement the critic raises about them. Each patch group is applied on
+   its own and kept only if it adds no violation. The step is skipped, and the
+   skip logged, if the prompt would not fit the context window.
+
+A graph that already agrees with stage 1, has no violations and draws no
+final-critic findings goes through untouched apart from the lossless rewrites.
 Missing participation is counted and reported as **coverage**, not repaired: a
 graph that records no party is declining to make a claim, not making a false
 one, and a constraint that can only be satisfied by guessing manufactures
@@ -409,7 +492,12 @@ takes a few minutes:
 | `--fresh` | ignore completion markers and rerun every phase |
 | `MODEL` | default `gemma-4-31b` |
 | `BASE_URL` | default `http://localhost:8003/v1` |
-| `TEMPERATURE` | stages 2 and 3; default `0.4`. Stage 1 is fixed at `0.0` |
+| `TEMPERATURE` | stage 2; default `0.4`. Stages 1 and 3 are fixed at `0.0` |
+| `CRITIC_ROUNDS` | stage-1 critic rounds, default `1`; `0` turns off the critic and everything it routes to |
+| `PARTIES` | `0` skips the person identifier's parties pass |
+| `SHACL_ROUNDS` | SHACL violation agent rounds, default `3`; `0` turns it off |
+| `FINAL_CRITIC` | `0` turns off the final critic and graph fixer |
+| `STAGE1_IMPL` / `REPAIR_IMPL` | `compress` / `new_repair` select the previous stages |
 | `PROJECT_BASE` | triple-store project prefix, default `art6_abl_<outdir>` |
 | `FUSEKI_CONTAINER` | default `ontocast-fuseki` |
 | `BASE_ENV_FILE` | default `ontology/ontology_vllm.env` |
@@ -428,11 +516,10 @@ referenced:
 ```
 <out>/ontology_seed/echr.ttl      ontology given to the graph stage
 <out>/shapes/echr-shapes.ttl      shapes used for validation and repair
-<out>/extract.prompt.snapshot     stage-1 prompts as they were at run time:
-<out>/plan.prompt.snapshot          extract, plan, critic, fix
-<out>/critic.prompt.snapshot
-<out>/fix.prompt.snapshot
-<out>/reconcile_mint.prompt.snapshot  stage-3 minting prompt
+<out>/<name>.prompt.snapshot      every agent's prompt as it was at run time:
+                                  extract, plan, link, tracks, applicants,
+                                  parties, critic, fix, reconcile_mint,
+                                  final_critic, final_fix
 <out>/compress.prompt.snapshot    single-call stage-1 prompt (STAGE1_IMPL=compress)
 <out>/facts.prompt.snapshot       stage-2 instruction as it was at run time
 <out>/input.jsonl                 documents + the live instruction, rebuilt
@@ -465,7 +552,7 @@ new output directory.
 results/<name>/
 ├── C0/                     *.o1.json, *.o1.txt, run_report.json         → C0
 ├── stage1/                 *.compress.json  (payload + span statistics)
-│                           *.agentic.json   (plan / critic / fix log)
+│                           *.agentic.json   (every agent, its flags, accepted / refused)
 ├── bundles.jsonl           rendered evidence bundles
 ├── C1_C2/
 │   ├── raw/                *.facts.ttl                                  → C1
@@ -625,17 +712,17 @@ of each pair from any statistic that assumes independent documents.
 | path | role |
 |---|---|
 | [run_ablation.sh](run_ablation.sh) | the whole five-condition driver |
-| [agentic_stage1.py](agentic_stage1.py) | stage 1 (default): extract -> track planner over computed candidate predecessors -> critic with deterministic hints -> fix (only on findings) -> typed links (follows / part_of / occurs_during) computed in code; judges filtered out |
+| [agentic_stage1.py](agentic_stage1.py) | stage 1 (default): event detection → linking → person identifier → stage-1 critic, whose mandatory flags route to the parallel track agent (+ re-link), a targeted parties pass and the fixer; typed links computed in code; judges filtered out |
 | [compress.py](compress.py) | the single-call stage 1 (`STAGE1_IMPL=compress`); span verification, oversize splitting, applicants and parties passes reused by agentic_stage1 |
 | [render_bundles.py](render_bundles.py) | renders verified spans as the document the graph stage sees |
 | [run_native.py](run_native.py) | stage 2: in-process invocation of OntoCast with response recovery installed |
 | [json_closers.py](json_closers.py) | rebuilds mismatched JSON container closers in a model reply (used by repair_facts.py; the three OntoCast monkeypatches this came from were removed once v0.6.2 absorbed the fix) |
-| [reconcile.py](reconcile.py) | stage 3 (default): diff each graph against its stage-1 payload and transcribe disagreements in code; the model is called only to mint stage-1 events the graph lacks (gated) and to repair SHACL violations |
+| [reconcile.py](reconcile.py) | stage 3 (default): diff each graph against its stage-1 payload and transcribe in code; event recovery (if events are missing), SHACL violation agent (if there are violations), final critic → graph fixer with stage-1 triples locked |
 | [new_repair.py](new_repair.py) | the previous stage 3 (`REPAIR_IMPL=new_repair`): deterministic rewrites, violation loop, document-reading review |
 | [repair_facts.py](repair_facts.py) | finders, patch application, and the evidence constraints on additions |
 | [validate_shapes.py](validate_shapes.py) | SHACL conformance reporting |
 | [diagnostics/](diagnostics/) | content measures, repair impact, quotation and date verification, run comparison |
-| [prompts/](prompts/) | stage 1: `extract.txt`, `plan.txt`, `critic.txt`, `fix.txt`, `applicants.txt`, `parties.txt`; stage 2: `facts.txt`; stage 3: `reconcile_mint.txt`, `new_repair_loop.txt`, `new_repair_system.txt`. Earlier versions kept for replication: `compress.txt`, `compress_v2.txt`, `compress_old.txt`, `new_repair_review_*.txt` |
+| [prompts/](prompts/) | stage 1: `extract.txt`, `plan.txt`, `link.txt`, `tracks.txt`, `applicants.txt`, `parties.txt`, `critic.txt`, `fix.txt`; stage 2: `facts.txt`; stage 3: `reconcile_mint.txt`, `new_repair_loop.txt`, `new_repair_system.txt`, `final_critic.txt`, `final_fix.txt`. Earlier versions kept for replication: `compress.txt`, `compress_v2.txt`, `compress_old.txt`, `new_repair_review_*.txt` |
 | `../conditions/` | the no-ontology baseline: driver, comparison schema, triple projection, prompt |
 | `../../ontology/` | `echr.ttl`, `echr-shapes.ttl`, and the OntoCast configuration |
 | `../../docs/JURIX_2.md` | the experiment plan, sampling design and evaluation protocol |

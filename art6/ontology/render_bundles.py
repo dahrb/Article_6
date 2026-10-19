@@ -57,7 +57,23 @@ def render(payload: dict) -> str:
             f"TRACKS ({len(tracks)}) -- the separate matters these events belong to"
         )
         for track in tracks:
-            out.append(f"  {track.get('id')}: {track.get('label') or '(unlabelled)'}")
+            extra = ", ".join(
+                f"{k}: {track[k]}" for k in ("kind", "subject") if track.get(k)
+            )
+            out.append(
+                f"  {track.get('id')}: {track.get('label') or '(unlabelled)'}"
+                + (f" [{extra}]" if extra else "")
+            )
+        for rel in payload.get("track_relations") or []:
+            words = (
+                rel.get("span", {}).get("text")
+                if isinstance(rel.get("span"), dict)
+                else ""
+            )
+            out.append(
+                f"  {rel['track']} {rel['relation'].replace('_', ' ')} {rel['other']}"
+                + (f' -- "{words}"' if words else "")
+            )
         out.append("")
 
     events = payload.get("events") or []

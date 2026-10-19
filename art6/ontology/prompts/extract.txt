@@ -31,9 +31,13 @@ non-judicial steps: administrative decisions, prosecutorial rulings, enforcement
 ## OUTPUT
 
 A single JSON object, no prose around it, matching this shape. Omit any field you have no
-verbatim text for. Omit any list that is empty.
+verbatim text for. Omit any list that is empty -- except `domestic_events_found`, which is
+MANDATORY and must be exactly "yes" or "no": "no" only when the judgment narrates no
+domestic step concerning these applicants at all, and then `events` is empty. Later passes
+are skipped on a "no".
 
 {
+  "domestic_events_found": "yes | no",
   "case": {
     "case_name_span": "...", "application_number_span": "...",
     "respondent_state_span": "...", "judgment_date_span": "...",

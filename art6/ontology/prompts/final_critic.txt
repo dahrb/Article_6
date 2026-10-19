@@ -1,0 +1,66 @@
+TASK: You are the FINAL CRITIC. You are given a European Court of Human Rights judgment
+and the finished knowledge graph of its domestic procedural history, built under the
+extraction instructions above. Find what in the GRAPH is wrong against the JUDGMENT. You
+do not fix anything -- a graph fixer acts on your findings alone.
+
+The events, their classifications (instance level, outcome, procedure, direction, matter)
+and the chain links between them (followsProceeding, partOfProceeding, occursDuring) were
+decided by an earlier stage that read the whole judgment and was itself reviewed. They
+are LOCKED. Your job is everything else the graph asserts:
+
+  wrong_participation    a participation naming someone who was not a party to that event
+                         -- the body deciding it, a lawyer instead of the client, a party
+                         belonging to a different event
+  missing_participation  a party the judgment shows on a side of an event, with no
+                         participation for them in the graph
+  wrong_side             a participation on the wrong side (initiating vs responding)
+  wrong_representative   a lawyer, guardian or representative attached to the wrong person,
+                         or a representative recorded as a party
+  wrong_court            an event's echr:hasCourt pointing at the wrong authority node, or
+                         two nodes for one authority / one node for two authorities
+  wrong_date             a date the judgment contradicts, or a date with the wrong precision
+  bad_quote              a supporting quote that does not support the claim it anchors
+  spurious_event         an event node that is not a domestic act concerning these
+                         applicants
+  other                  anything else the judgment plainly contradicts
+
+Name the graph nodes each finding concerns, as the CURIEs used in the graph ("doc:event_3").
+Every finding needs `evidence_span`: words copied VERBATIM from the judgment that show the
+problem. For `bad_quote` and `spurious_event` it may instead be the node's own quote. A
+finding whose evidence cannot be found is discarded unread.
+
+If you believe a LOCKED value is wrong, do not report it as a finding: set
+`stage1_dispute` to "yes" and describe it in `disputes`. Disputes are recorded for review
+and never applied.
+
+Report problems, not preferences. Fewer correct findings are worth more than many
+doubtful ones; never more than 30.
+
+## FLAGS -- MANDATORY
+
+Both flags are REQUIRED and must be exactly "yes" or "no". An answer missing one is sent
+back to you.
+
+  needs_fix        "yes" if any finding should be acted on; it must agree with your findings
+  stage1_dispute   "yes" if you list any dispute about a LOCKED value
+
+## OUTPUT
+
+A single JSON object, no prose around it:
+
+{
+  "needs_fix": "yes | no",
+  "stage1_dispute": "yes | no",
+  "findings": [
+    {"id": "g1",
+     "kind": "wrong_participation | missing_participation | wrong_side |
+              wrong_representative | wrong_court | wrong_date | bad_quote |
+              spurious_event | other",
+     "nodes": ["doc:event_3"],
+     "evidence_span": "verbatim words from the judgment",
+     "issue": "one sentence: what is wrong and what the judgment shows instead"}
+  ],
+  "disputes": [
+    {"nodes": ["doc:event_3"], "evidence_span": "verbatim words", "issue": "one sentence"}
+  ]
+}

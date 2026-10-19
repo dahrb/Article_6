@@ -54,6 +54,13 @@ STAGE1_API_KEY="${STAGE1_API_KEY:-${VLLM_API_KEY:-EMPTY}}"
 # events) unless REPAIR_IMPL=new_repair selects the old violation loop +
 # document review. The old paths stay only so a comparison run can use them.
 STAGE1_IMPL="${STAGE1_IMPL:-agentic}"
+# Agent switches. Conditional agents (parallel tracks, targeted parties, the
+# fixers, event recovery, the SHACL loop) run only when an earlier agent's
+# flags or a deterministic check call for them; these turn whole agents off.
+CRITIC_ROUNDS="${CRITIC_ROUNDS:-1}"        # stage-1 critic rounds; 0 = no critic
+PARTIES="${PARTIES:-1}"                    # 0 = skip the parties pass
+SHACL_ROUNDS="${SHACL_ROUNDS:-3}"          # 0 = no SHACL violation agent
+FINAL_CRITIC="${FINAL_CRITIC:-1}"          # 0 = no final critic / graph fixer
 REPAIR_IMPL="${REPAIR_IMPL:-reconcile}"
 case "${STAGE1_IMPL}" in agentic|compress) ;; *) echo "STAGE1_IMPL must be agentic or compress" >&2; exit 2;; esac
 case "${REPAIR_IMPL}" in reconcile|new_repair) ;; *) echo "REPAIR_IMPL must be reconcile or new_repair" >&2; exit 2;; esac
@@ -132,7 +139,7 @@ cp "${REPO_ROOT}/ontology/echr.ttl" "${SEED_DIR}/"
 cp "${REPO_ROOT}/ontology/echr-shapes.ttl" "${SHAPES_DIR}/"
 cp "${SCRIPT_DIR}/prompts/facts.txt" "${OUT_DIR}/facts.prompt.snapshot"
 cp "${SCRIPT_DIR}/prompts/compress.txt" "${OUT_DIR}/compress.prompt.snapshot"
-for p in extract plan critic fix reconcile_mint; do
+for p in extract plan link tracks critic fix parties applicants reconcile_mint final_critic final_fix; do
     cp "${SCRIPT_DIR}/prompts/${p}.txt" "${OUT_DIR}/${p}.prompt.snapshot"
 done
 [[ -z "${COMPRESS_PROMPT_FILE}" ]] || cp "${COMPRESS_PROMPT_FILE}" "${OUT_DIR}/stage1_override.prompt.snapshot"
@@ -206,6 +213,8 @@ t0=$(now)
     --temperature 0.0 \
     ${SPLIT_MAX_TOKENS:+--split-max-tokens "${SPLIT_MAX_TOKENS}"} \
     ${COMPRESS_PROMPT_FILE:+--prompt-file "${COMPRESS_PROMPT_FILE}"} \
+    $([[ "${STAGE1_IMPL}" == agentic ]] && echo --critic-rounds "${CRITIC_ROUNDS}") \
+    $([[ "${STAGE1_IMPL}" == agentic && "${PARTIES}" == 0 ]] && echo --no-parties) \
     --parties-pass)
 (cd "${REPO_ROOT}" && uv run python -m art6.ontology.render_bundles \
     --compress-dir "${OUT_DIR}/stage1" --source-jsonl "${INPUT_JSONL}" \
@@ -345,6 +354,7 @@ run_arm() {
     (cd "${REPO_ROOT}" && PYTHONUNBUFFERED=1 uv run python -m art6.ontology.reconcile \
         --facts-dir "${dir}/repaired" --input-jsonl "${input}" \
         --stage1-dir "${OUT_DIR}/stage1" --original-jsonl "${INPUT_JSONL}" \
+        --max-rounds "${SHACL_ROUNDS}" $([[ "${FINAL_CRITIC}" == 0 ]] && echo --no-final-critic) \
         --model "${MODEL}" --base-url "${BASE_URL}" \
         --temperature 0.0) || echo "${label} stage 3 returned $?"
     else
@@ -389,6 +399,7 @@ cat > "${OUT_DIR}/manifest.json" <<JSON
   "compress_prompt_file": "${COMPRESS_PROMPT_FILE:-<default for stage 1 impl>}",
   "stage1_impl": "${STAGE1_IMPL}",
   "stage3_impl": "${REPAIR_IMPL}",
+  "agents": {"critic_rounds": ${CRITIC_ROUNDS}, "parties": ${PARTIES}, "shacl_rounds": ${SHACL_ROUNDS}, "final_critic": ${FINAL_CRITIC}},
   "ontocast_version": "${ONTOCAST_VERSION}",
   "llm_output_layout": "free",
   "base_url": "${BASE_URL}",

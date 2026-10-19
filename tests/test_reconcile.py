@@ -1,8 +1,9 @@
 """Offline tests for stage 3's diff-and-transcribe against stage 1."""
 
 import json
+from types import SimpleNamespace
 
-from rdflib import RDF, Graph, Literal, Namespace
+from rdflib import RDF, RDFS, Graph, Literal, Namespace
 
 from art6.ontology import reconcile as r
 
@@ -306,3 +307,177 @@ def test_shacl_loop_runs_only_on_violations_and_cannot_undo_stage1(
         max_tokens=10,
     )
     assert calls == [] and report["shacl_loop"]["called"] is False
+
+
+# -- final critic -> graph fixer ----------------------------------------------
+
+SOURCE = (
+    "the applicant instituted civil proceedings against her employer. "
+    "the District Court dismissed the claim in its entirety. "
+    "the Regional Court of Appeal upheld that judgment on appeal."
+)
+
+
+def _final(tmp_path, monkeypatch, answer, patch, *, capacity=None, violations=None):
+    from art6.ontology import agentic_stage1, new_repair
+
+    calls = []
+    monkeypatch.setattr(
+        agentic_stage1, "ask_with_flags", lambda *a, **k: (answer, "raw", [])
+    )
+
+    def fake_call_model(*a, **k):
+        calls.append("fix")
+        return patch
+
+    monkeypatch.setattr(new_repair, "call_model", fake_call_model)
+    if violations is not None:
+        monkeypatch.setattr(r, "_violation_count", violations)
+    ttl = tmp_path / "bundles.L1.facts.ttl"
+    ttl.write_text(_graph().serialize(format="turtle"), encoding="utf-8")
+    payload = {**PAYLOAD, "events": PAYLOAD["events"][:4]}
+    report = r.reconcile_document(
+        ttl,
+        payload,
+        client=SimpleNamespace(base_url="http://x/v1", api_key=""),
+        model="m",
+        source_text=SOURCE,
+        temperature=0,
+        max_tokens=10,
+        max_rounds=0,
+        final_critic=True,
+        capacity=capacity,
+    )
+    g = Graph()
+    g.parse(ttl)
+    return report["final_critic"], g, calls
+
+
+def _label_op(node, text):
+    return {
+        "action": "add",
+        "subject": f"doc:{node}",
+        "predicate": "rdfs:label",
+        "object": text,
+        "object_is_literal": True,
+        "lang": "en",
+    }
+
+
+def test_final_critic_locks_stage1_and_gates_each_group(tmp_path, monkeypatch):
+    from art6.ontology.repair_facts import MergeOp
+
+    answer = {
+        "needs_fix": "yes",
+        "stage1_dispute": "no",
+        "findings": [
+            {
+                "kind": "wrong_court",
+                "nodes": ["doc:appeal"],
+                "evidence_span": "upheld that judgment",
+                "issue": "x",
+            },
+            {
+                "kind": "other",
+                "nodes": ["doc:nowhere"],
+                "evidence_span": "upheld that judgment",
+            },
+            {
+                "kind": "other",
+                "nodes": ["doc:appeal"],
+                "evidence_span": "words not in the judgment",
+            },
+        ],
+    }
+    patch = _patch(
+        [
+            ("g1", [_label_op("appeal", "Appeal ruling")]),
+            (
+                "g1",
+                [
+                    {
+                        "action": "remove",
+                        "subject": "doc:decision",
+                        "predicate": "echr:hasOutcome",
+                        "object": "",
+                        "object_is_literal": False,
+                    }
+                ],
+            ),
+            ("g1", [_label_op("filing", "BAD")]),
+        ]
+    )
+    patch.merges = [MergeOp(keep="doc:filing", drop="doc:decision", rationale="r")]
+
+    def violations(g, ns):  # a "BAD" label is a violation
+        return sum(1 for o in g.objects(None, RDFS.label) if str(o) == "BAD")
+
+    report, g, calls = _final(
+        tmp_path, monkeypatch, answer, patch, violations=violations
+    )
+    assert [f["id"] for f in report["findings"]] == ["g1"]
+    assert len(report["findings_refused"]) == 2
+    assert calls == ["fix"]
+    # the label landed; the locked outcome and the stage-1 merge did not
+    assert (DOC.appeal, RDFS.label, Literal("Appeal ruling", lang="en")) in g
+    assert set(g.objects(DOC.decision, ECHR.hasOutcome)) == {ECHR.OutcomeMeritsDecided}
+    assert (DOC.decision, RDF.type, ECHR.DomesticProceeding) in g
+    reasons = sorted(d["reason"] for d in report["stage1_disputes"])
+    assert reasons == ["locked by stage 1", "merges a stage-1 event"]
+    # the violating group was gated
+    assert report["fix"]["groups_kept"] == 1
+    assert [x["finding"] for x in report["fix"]["groups_gated"]] == ["g1"]
+    assert not any(str(o) == "BAD" for o in g.objects(None, RDFS.label))
+
+
+def test_final_critic_without_findings_skips_the_fixer(tmp_path, monkeypatch):
+    answer = {
+        "needs_fix": "no",
+        "stage1_dispute": "yes",
+        "findings": [],
+        "disputes": [{"nodes": ["doc:decision"], "issue": "outcome looks wrong"}],
+    }
+    report, _, calls = _final(tmp_path, monkeypatch, answer, None)
+    assert calls == [] and report["fix"] == {"skipped": "no findings"}
+    assert report["stage1_disputes"][0]["issue"] == "outcome looks wrong"
+
+
+def test_final_critic_skipped_when_the_prompt_does_not_fit(tmp_path, monkeypatch):
+    from art6.ontology import compress
+
+    monkeypatch.setattr(compress, "count_prompt_tokens", lambda *a: 50_000)
+    report, _, calls = _final(tmp_path, monkeypatch, {}, None, capacity=40_000)
+    assert report["status"].startswith("skipped") and calls == []
+
+
+def test_final_fixer_cannot_delete_a_stage1_event(tmp_path, monkeypatch):
+    answer = {
+        "needs_fix": "yes",
+        "stage1_dispute": "no",
+        "findings": [
+            {
+                "kind": "spurious_event",
+                "nodes": ["doc:crim"],
+                "evidence_span": "the applicant was arrested by the police on suspicion of fraud",
+            }
+        ],
+    }
+    patch = _patch(
+        [
+            (
+                "g1",
+                [
+                    {
+                        "action": "remove",
+                        "subject": "doc:crim",
+                        "predicate": "rdf:type",
+                        "object": "echr:DomesticProceeding",
+                        "object_is_literal": False,
+                    }
+                ],
+            )
+        ]
+    )
+    report, g, _ = _final(tmp_path, monkeypatch, answer, patch)
+    assert (DOC.crim, RDF.type, ECHR.DomesticProceeding) in g
+    assert report["stage1_disputes"][0]["reason"] == "locked by stage 1"

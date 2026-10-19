@@ -1,8 +1,8 @@
 TASK: You are the CRITIC. You are given a European Court of Human Rights judgment and a
-DRAFT of its domestic procedural history: the events extracted from it, the tracks they
-were grouped into, and the link from each event to the one it continues. Find what is
-WRONG with the draft. You do not fix anything -- a later pass does that, from your
-findings alone. A problem you do not report will not be fixed.
+DRAFT of its domestic procedural history: the events extracted from it, their parties, the
+tracks they were grouped into, and the link from each event to the one it continues. Find
+what is WRONG with the draft. You do not fix anything -- later passes do that, from your
+findings and your flags alone. A problem you do not report will not be fixed.
 
 Read the judgment against the draft, paragraph by paragraph. Report a finding for each of:
 
@@ -23,30 +23,57 @@ Read the judgment against the draft, paragraph by paragraph. Report a finding fo
   wrong_track      an event grouped with a matter it does not continue -- above all two
                    PARALLEL tracks (civil and criminal over the same facts, proceedings
                    against a co-accused, a new matter arising later) chained into one.
+  missing_party    a party the judgment shows on a side of an event that the draft omits.
+  wrong_party      a draft party that is not a party to that event: the body deciding it,
+                   a lawyer named instead of the client, a person on the wrong side, a
+                   party belonging to a different event.
 
 Every finding needs `evidence_span`: words copied VERBATIM from the judgment that show
 the problem -- the sentence narrating the missing act, the words stating the true outcome,
-the words showing what an appeal was against. For `duplicate_event` and `not_an_event`
-it may instead be the draft event's own quoted words. A finding whose evidence cannot be
-found in the judgment is discarded unread.
+the words showing what an appeal was against, the words naming the missing party. For
+`duplicate_event`, `not_an_event` and `wrong_party` it may instead be the draft's own
+quoted words for that event or party. A finding whose evidence cannot be found in the
+judgment is discarded unread.
 
 Report problems, not preferences. If the draft's reading is defensible on the judgment's
 words, leave it. Do not report a field the judgment does not settle either way. Fewer
 correct findings are worth more than many doubtful ones; never more than 40.
 
+## FLAGS -- MANDATORY
+
+Your answer decides which agents run next, through three flags. Every flag is REQUIRED and
+must be exactly "yes" or "no". An answer missing one is sent back to you.
+
+  needs_fix          "yes" if any finding below should be acted on, "no" if the draft can
+                     stand as it is. It must agree with your findings.
+  parallel_tracks    "yes" if the judgment narrates two or more SEPARATE matters that the
+                     draft merges or confuses -- the PARALLEL TRACK agent then re-partitions
+                     the whole draft. "no" if the draft's tracks already keep separate
+                     matters separate, or there is only one matter. When "yes", copy into
+                     `parallel_tracks_evidence` the judgment's words showing the separate
+                     matter; without locatable evidence the flag is read as "no".
+  parties_incomplete "yes" if events are missing parties the judgment names -- a party
+                     pass then re-reads those events. List them in
+                     `parties_incomplete_events`.
+
 The draft follows the extraction rules below. Hold it to them -- they define what counts
-as an event and how each classification is decided.
+as an event, how each classification is decided, and who is a party.
 
 ## OUTPUT
 
-A single JSON object, no prose around it. An empty list is a correct answer for a good
-draft.
+A single JSON object, no prose around it. An empty findings list with every flag "no" is
+a correct answer for a good draft.
 
 {
+  "needs_fix": "yes | no",
+  "parallel_tracks": "yes | no",
+  "parallel_tracks_evidence": "verbatim words, when parallel_tracks is yes",
+  "parties_incomplete": "yes | no",
+  "parties_incomplete_events": ["e4"],
   "findings": [
     {"id": "f1",
      "kind": "missing_event | duplicate_event | not_an_event | wrong_field | missing_link |
-              wrong_link | wrong_track",
+              wrong_link | wrong_track | missing_party | wrong_party",
      "events": ["e3"],
      "field": "outcome  (wrong_field only)",
      "evidence_span": "verbatim words from the judgment",

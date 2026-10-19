@@ -3,6 +3,7 @@ end-to-end plan -> critic -> fix pass against a scripted model."""
 
 import json
 from types import SimpleNamespace
+from typing import ClassVar
 
 import pytest
 
@@ -348,109 +349,387 @@ def test_apply_fixes_validates_every_op():
 
 
 class ScriptedClient:
-    """Answers each pass from a script, keyed on the prompt's first line."""
+    """Answers each agent from a script, keyed on a phrase near the start of
+    its prompt. A list answers successive calls in turn (its last item
+    repeats); every call is recorded with its prompt."""
 
     base_url = "http://127.0.0.1:9/v1"
     api_key = "x"
+    MARKERS: ClassVar[dict[str, str]] = {
+        "linking": "Organise the events into TRACKS",
+        "link": "already grouped into TRACKS",
+        "critic": "You are the CRITIC",
+        "tracks": "PARALLEL TRACK agent",
+        "fix": "You FIX a draft",
+        "applicants": "opening of a European Court",
+        "parties": "WHO WAS ON EACH SIDE",
+    }
 
     def __init__(self, script):
-        self.script = script
-        self.calls = []
+        self.script = {
+            k: (v if isinstance(v, list) else [v]) for k, v in script.items()
+        }
+        self.calls, self.prompts = [], []
         self.chat = SimpleNamespace(completions=SimpleNamespace(create=self._create))
 
     def _create(self, **kwargs):
         prompt = kwargs["messages"][0]["content"]
-        for marker, reply in self.script.items():
-            if marker in prompt[:200]:
-                self.calls.append(marker)
-                body = json.dumps(reply)
-                break
-        else:
-            raise AssertionError(prompt[:200])
+        agent = next(k for k, m in self.MARKERS.items() if m in prompt[:400])
+        self.calls.append(agent)
+        self.prompts.append(prompt)
+        replies = self.script.get(agent, [{}])
+        n = sum(1 for c_ in self.calls if c_ == agent) - 1
+        body = json.dumps(replies[min(n, len(replies) - 1)])
         message = SimpleNamespace(content=body)
         choice = SimpleNamespace(message=message, finish_reason="stop")
         return SimpleNamespace(choices=[choice], model_dump=dict)
 
 
-def test_agentic_passes_end_to_end(monkeypatch):
+LINK_ALL_CIVIL = {
+    "tracks": [{"id": "A", "label": "everything", "events": ["e1", "e2", "e3", "e4"]}],
+    "links": [
+        {"event": "e2", "predecessor": "e1", "kind": "continues"},
+        {
+            "event": "e3",
+            "predecessor": "e2",
+            "kind": "continues",
+            "evidence_span": "upheld that judgment",
+        },
+    ],
+}
+CLEAN = {
+    "needs_fix": "no",
+    "parallel_tracks": "no",
+    "parties_incomplete": "no",
+    "findings": [],
+}
+
+
+def run(client, p=None, **kw):
+    p = p or payload()
+    stats = {}
+    log = a.run_stage1_agents(
+        client, "m", JUDGMENT, p, stats, temperature=0.0, capacity=100_000, **kw
+    )
+    return p, stats, log
+
+
+@pytest.fixture(autouse=True)
+def _offline_tokens(monkeypatch):
     monkeypatch.setattr(c, "count_prompt_tokens", lambda *args: 100)
-    p = payload()
-    script = {
-        "Organise the events into TRACKS": {
-            "tracks": [
-                {"id": "A", "label": "civil claim", "events": ["e1", "e2", "e3"]},
-                {"id": "B", "label": "criminal", "events": ["e4"]},
-            ],
-            "links": [
-                {"event": "e2", "predecessor": "e1", "kind": "continues"},
-                {
-                    "event": "e3",
-                    "predecessor": "e2",
-                    "kind": "continues",
-                    "evidence_span": "upheld that judgment",
-                },
-            ],
-        },
-        "You are the CRITIC": {
-            "findings": [
-                {
-                    "kind": "missing_event",
-                    "evidence_span": "quashed both decisions and remitted the case",
-                    "issue": "the remittal is missing",
-                }
-            ]
-        },
-        "You FIX a draft": {
-            "ops": [
-                {
-                    "op": "add_event",
-                    "finding": "f1",
-                    "track": "T1",
-                    "predecessor": "e3",
-                    "kind": "continues",
-                    "event": {
-                        "what_happened_span": "quashed both decisions and remitted the case",
-                        "decision_date_span": "10 October 2003",
-                        "authority_span": "Kyiv Regional Court of Appeal",
-                        "instance_level": "appeal",
-                        "proceeding_type": "civil",
-                        "outcome": "remitted",
-                    },
-                }
-            ]
-        },
+
+
+def test_clean_critic_routes_to_nothing():
+    client = ScriptedClient({"linking": LINK_ALL_CIVIL, "critic": CLEAN})
+    _, _, log = run(client)
+    assert client.calls == ["linking", "applicants", "parties", "critic"]
+    assert all(f["how"] == "trusted" for f in log["rounds"][0]["critic"]["flags"])
+    assert log["rounds"][0]["fix"] == {"skipped": "needs_fix: no"}
+
+
+def test_parallel_tracks_route_to_track_agent_then_relink():
+    critic = {
+        "needs_fix": "yes",
+        "parallel_tracks": "yes",
+        "parallel_tracks_evidence": "was arrested by the police on suspicion of fraud",
+        "parties_incomplete": "no",
+        "findings": [
+            {
+                "kind": "wrong_track",
+                "events": ["e4"],
+                "evidence_span": "on suspicion of fraud",
+                "issue": "criminal",
+            }
+        ],
     }
-    client = ScriptedClient(script)
-    log = a.agentic_passes(client, "m", JUDGMENT, p, temperature=0.0, capacity=100_000)
+    tracks = {
+        "tracks": [
+            {
+                "id": "C",
+                "label": "civil claim",
+                "kind": "civil claim",
+                "subject": "the applicant",
+                "events": ["e1", "e2", "e3"],
+            },
+            {
+                "id": "K",
+                "label": "prosecution",
+                "kind": "prosecution",
+                "events": ["e4"],
+            },
+        ],
+        "relations": [
+            {
+                "track": "K",
+                "relation": "during",
+                "other": "C",
+                "evidence_span": "Meanwhile",
+            },
+            {
+                "track": "K",
+                "relation": "arises_from",
+                "other": "C",
+                "evidence_span": "invented",
+            },
+        ],
+    }
+    relink = {
+        "links": [
+            {"event": "e2", "predecessor": "e1", "kind": "continues"},
+            {"event": "e3", "predecessor": "e2", "kind": "continues"},
+            {
+                "event": "e4",
+                "predecessor": "e3",
+                "kind": "continues",
+            },  # not a candidate
+        ]
+    }
+    client = ScriptedClient(
+        {"linking": LINK_ALL_CIVIL, "critic": critic, "tracks": tracks, "link": relink}
+    )
+    p, _, log = run(client)
     assert client.calls == [
-        "Organise the events into TRACKS",
-        "You are the CRITIC",
-        "You FIX a draft",
+        "linking",
+        "applicants",
+        "parties",
+        "critic",
+        "tracks",
+        "link",
     ]
-    summary = a.summarise(log)
-    assert summary["findings"] == 1 and summary["fix_ops_applied"] == 1
+    rnd = log["rounds"][0]
+    assert rnd["tracks"]["audit"]["relations"] == 1  # unevidenced arises_from refused
+    assert rnd["fix"] == {
+        "skipped": "no findings left"
+    }  # the wrong_track finding was answered
+    # the linker could only choose inside the tracks; e4 heads its own
+    link_prompt = client.prompts[client.calls.index("link")]
+    assert "EVENT e4  [track T2]" in link_prompt
+    assert rnd["relink"]["audit"]["links_refused"][0]["reason"].startswith(
+        "predecessor is not"
+    )
     by_what = {e["what_happened_span"]["text"]: e for e in p["events"]}
-    remittal = by_what["quashed both decisions and remitted the case"]
-    appeal = by_what["upheld that judgment"]
-    # same court and rung as the appeal it continues -> an act of that proceeding
-    assert remittal["part_of"] == appeal["id"]
-    assert appeal["follows"] == by_what["instituted civil proceedings"]["id"]
-    assert len({e["track"] for e in p["events"]}) == 2
+    arrest = by_what["was arrested by the police"]
+    # the track relation turned into an occurs_during on the prosecution's head
+    assert arrest["occurs_during"] == by_what["instituted civil proceedings"]["id"]
+    assert [t.get("kind") for t in p["tracks"]] == ["civil claim", "prosecution"]
+    assert p["track_relations"][0]["relation"] == "during"
 
 
-def test_fix_pass_skipped_without_findings(monkeypatch):
-    monkeypatch.setattr(c, "count_prompt_tokens", lambda *args: 100)
+def test_unevidenced_parallel_flag_is_read_as_no():
+    critic = {
+        **CLEAN,
+        "parallel_tracks": "yes",
+        "parallel_tracks_evidence": "not in the judgment",
+    }
+    client = ScriptedClient({"linking": LINK_ALL_CIVIL, "critic": critic})
+    _, _, log = run(client)
+    assert "tracks" not in client.calls
+    flags = {f["flag"]: f for f in log["rounds"][0]["critic"]["flags"]}
+    assert flags["parallel_tracks"] == {
+        "flag": "parallel_tracks",
+        "how": "unevidenced",
+        "value": "no",
+    }
+
+
+def test_missing_flags_are_retried_once_then_derived_from_findings():
+    no_flags = {
+        "findings": [
+            {
+                "kind": "missing_party",
+                "events": ["e3"],
+                "evidence_span": "upheld that judgment",
+                "issue": "x",
+            }
+        ]
+    }
     client = ScriptedClient(
         {
-            "Organise the events into TRACKS": {"tracks": [], "links": []},
-            "You are the CRITIC": {"findings": []},
+            "linking": LINK_ALL_CIVIL,
+            "critic": [no_flags, no_flags],
+            "parties": [{}, {}],
+            "fix": {"ops": []},
         }
     )
-    log = a.agentic_passes(
-        client, "m", JUDGMENT, payload(), temperature=0.0, capacity=100_000
+    _, _, log = run(client)
+    assert client.calls.count("critic") == 2  # one retry, no more
+    assert "omitted" in client.prompts[client.calls.index("critic", 4)]
+    flags = {f["flag"]: f for f in log["rounds"][0]["critic"]["flags"]}
+    assert {k: (v["how"], v["value"]) for k, v in flags.items()} == {
+        "needs_fix": ("defaulted", "yes"),
+        "parallel_tracks": ("defaulted", "no"),
+        "parties_incomplete": ("defaulted", "yes"),
+    }
+    # targeted parties ran on e3 alone, and the fixer still saw the finding
+    targeted = client.prompts[
+        [i for i, k in enumerate(client.calls) if k == "parties"][1]
+    ]
+    assert "[e3]" in targeted and "[e1]" not in targeted
+    assert client.calls[-1] == "fix"
+
+
+def test_needs_fix_no_is_overridden_by_findings():
+    critic = {
+        **CLEAN,
+        "findings": [
+            {
+                "kind": "wrong_field",
+                "events": ["e2"],
+                "field": "outcome",
+                "evidence_span": "dismissed the claim",
+                "issue": "x",
+            }
+        ],
+    }
+    client = ScriptedClient(
+        {"linking": LINK_ALL_CIVIL, "critic": critic, "fix": {"ops": []}}
     )
-    assert log["fix"] == {"skipped": "no findings"}
-    assert client.calls == ["Organise the events into TRACKS", "You are the CRITIC"]
+    _, _, log = run(client)
+    flags = {f["flag"]: f["how"] for f in log["rounds"][0]["critic"]["flags"]}
+    assert flags["needs_fix"] == "inconsistent" and client.calls[-1] == "fix"
+
+
+def test_chain_aware_parties_show_the_predecessor_and_its_parties():
+    p = payload()
+    p["events"][1]["parties"] = [{"name_span": span("the applicant")}]
+    parties = {
+        "parties_by_event": [
+            {
+                "id": "e3",
+                "parties": [
+                    {"name_span": "the applicant"},
+                    {"name_span": "his employer"},
+                ],
+            }
+        ]
+    }
+    client = ScriptedClient(
+        {"linking": LINK_ALL_CIVIL, "critic": CLEAN, "parties": parties}
+    )
+    p, _, log = run(client, p)
+    prompt = client.prompts[client.calls.index("parties")]
+    assert "continues e2 (whose parties are: the applicant)" in prompt
+    names = {x["name_span"]["text"] for x in p["events"][2]["parties"]}
+    assert names == {"the applicant", "his employer"}
+    assert log["persons"]["parties_added"] == 2
+
+
+def test_parties_can_be_switched_off():
+    client = ScriptedClient({"linking": LINK_ALL_CIVIL, "critic": CLEAN})
+    run(client, parties=False)
+    assert "parties" not in client.calls
+
+
+def test_second_round_runs_only_after_a_change():
+    client = ScriptedClient({"linking": LINK_ALL_CIVIL, "critic": CLEAN})
+    _, _, log = run(client, critic_rounds=3)
+    assert len(log["rounds"]) == 1
+    finding = {
+        "kind": "wrong_field",
+        "events": ["e3"],
+        "field": "outcome",
+        "evidence_span": "upheld that judgment",
+        "issue": "x",
+    }
+    fix = {
+        "ops": [
+            {
+                "op": "set_field",
+                "finding": "f1",
+                "id": "e3",
+                "field": "outcome",
+                "value": "merits decided",
+            }
+        ]
+    }
+    client = ScriptedClient(
+        {
+            "linking": LINK_ALL_CIVIL,
+            "critic": [{**CLEAN, "needs_fix": "yes", "findings": [finding]}, CLEAN],
+            "fix": fix,
+        }
+    )
+    _, _, log = run(client, critic_rounds=3)
+    assert [r["round"] for r in log["rounds"]] == [1, 2]
+
+
+def test_critic_rounds_zero_skips_the_critic():
+    client = ScriptedClient({"linking": LINK_ALL_CIVIL})
+    p, _, log = run(client, critic_rounds=0)
+    assert "critic" not in client.calls and log["rounds"] == []
+    assert any(e.get("follows") or e.get("part_of") for e in p["events"])
+
+
+def test_party_ops_are_validated():
+    p = payload()
+    for e in p["events"]:
+        e["track"] = "T1"
+    p["events"][2]["parties"] = [{"name_span": span("the applicant")}]
+    ops = {
+        "ops": [
+            {
+                "op": "add_party",
+                "finding": "f1",
+                "id": "e2",
+                "name_span": "his employer",
+                "role_span": "instituted civil proceedings against his employer",
+            },
+            {
+                "op": "add_party",
+                "finding": "f1",
+                "id": "e2",
+                "name_span": "Kyiv District Court",
+            },
+            {
+                "op": "add_party",
+                "finding": "f1",
+                "id": "e2",
+                "name_span": "invented party",
+            },
+            {
+                "op": "add_party",
+                "finding": "f1",
+                "id": "e2",
+                "name_span": "Judge K. Petrenko",
+            },
+            {
+                "op": "remove_party",
+                "finding": "f1",
+                "id": "e3",
+                "name": "The applicant",
+            },
+            {"op": "remove_party", "finding": "f1", "id": "e3", "name": "nobody"},
+        ]
+    }
+    audit = a.apply_fixes(p, ops, [{"id": "f1"}], JUDGMENT)
+    assert [x["status"] for x in audit] == [
+        "applied",
+        "refused: the deciding body is not a party",
+        "refused: name_span not verbatim",
+        "refused: a judge is not a party",
+        "applied",
+        "refused: no such party on that event",
+    ]
+    assert [x["name_span"]["text"] for x in p["events"][1]["parties"]] == [
+        "his employer"
+    ]
+    assert p["events"][2]["parties"] == []
+
+
+def test_constrained_candidates_follow_tracks_and_containment():
+    p = payload()
+    for e, t in zip(p["events"], ["T1", "T1", "T1", "T2"]):
+        e["track"] = t
+    base = a.candidate_predecessors(p["events"])
+    assert a.constrain_candidates(p, base)["e3"] == ["e2", "e1"]  # e4 is another track
+    p["track_relations"] = [{"track": "T1", "relation": "during", "other": "T2"}]
+    assert "e4" in a.constrain_candidates(p, base)["e3"]
+
+
+def test_read_flag():
+    assert a.read_flag({"x": " Yes "}, "x") == "yes"
+    assert a.read_flag({"x": "maybe"}, "x") is None
+    assert a.read_flag(None, "x") is None
 
 
 def test_added_event_is_inserted_where_the_judgment_narrates_it():

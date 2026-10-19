@@ -40,11 +40,22 @@ difference, and does nothing at all where there is none:
                 again afterwards, so the loop cannot undo a stage-1 decision;
                 a violation that only a stage-1 decision could clear is left
                 standing and counted.
+    final       (model) the final critic reads the finished graph against the
+                judgment for what reconcile does not own -- participations,
+                sides, representatives, courts, dates, quotes, spurious events
+                -- with mandatory flags needs_fix and stage1_dispute. On
+                needs_fix the graph fixer answers its findings with a
+                RepairPatch: stage-1 fields, chain links and the existence of
+                stage-1 events are LOCKED (an operation on them is recorded as
+                a dispute, never applied), and each group lands only if it adds
+                no violation. Skipped, and logged, when the prompt would not
+                fit the window.
 
 Transcription and minting never touch an assertion about a node stage 1 has
 no event for, parties and participations (coverage, reported elsewhere), or
 anything the graph asserts that stage 1 is silent on, other than chain edges
-between matched events. The SHACL loop may touch anything a violation names.
+between matched events. The SHACL loop may touch anything a violation names;
+the graph fixer anything not locked.
 
 Each graph gets `<stem>.reconcile.json`, which is also the resume marker.
 """
@@ -387,9 +398,14 @@ def mint_prompt(graph: Graph, payload: dict, missing: list[str], m: Match) -> st
     )
 
 
-def keep_anchored(patch: RepairPatch) -> tuple[RepairPatch, list[str]]:
+def keep_anchored(
+    patch: RepairPatch, *, adds_only: bool = True
+) -> tuple[RepairPatch, list[str]]:
     """Refuse any group that mints an event without a supporting quote. The
-    quote itself is checked against the judgment by apply_patch."""
+    quote itself is checked against the judgment by apply_patch.
+
+    adds_only (the mint step): drop every remove and every merge -- that call
+    adds missing events and edits nothing. The graph fixer passes False."""
     classes = {_curie_str(c) for c in _event_classes()}
     kept, refused = [], []
     for group in patch.groups:
@@ -408,11 +424,10 @@ def keep_anchored(patch: RepairPatch) -> tuple[RepairPatch, list[str]]:
         if minted - quoted:
             refused.append(group.finding)
             continue
-        # This call adds; it does not edit. A remove would touch a node stage 1
-        # already agrees with.
-        group.ops = [op for op in group.ops if op.action == "add"]
+        if adds_only:
+            group.ops = [op for op in group.ops if op.action == "add"]
         kept.append(group)
-    return RepairPatch(groups=kept, merges=[]), refused
+    return RepairPatch(groups=kept, merges=[] if adds_only else patch.merges), refused
 
 
 def _curie_str(iri: URIRef) -> str:
@@ -500,6 +515,303 @@ def mint_missing(
 # ---------------------------------------------------------------------------
 
 
+# ---------------------------------------------------------------------------
+# Final critic -> graph fixer
+# ---------------------------------------------------------------------------
+
+FINAL_FLAGS = ("needs_fix", "stage1_dispute")
+FINAL_FINDING_KINDS = {
+    "wrong_participation",
+    "missing_participation",
+    "wrong_side",
+    "wrong_representative",
+    "wrong_court",
+    "wrong_date",
+    "bad_quote",
+    "spurious_event",
+    "other",
+}
+SELF_EVIDENCED_FINAL = {"bad_quote", "spurious_event"}
+FINAL_CRITIC_MAX_TOKENS = 8000
+MAX_FINAL_FINDINGS = 30
+
+
+def protected_pairs(
+    graph: Graph, payload: dict, m: Match
+) -> set[tuple[URIRef, URIRef]]:
+    """(subject, predicate) pairs stage 1 owns: every classification stage 1
+    states on a matched node, and every chain predicate on a matched node when
+    the payload's links are typed. The final critic may not change them."""
+    by_id = {e["id"]: e for e in payload.get("events") or [] if isinstance(e, dict)}
+    pairs: set[tuple[URIRef, URIRef]] = set()
+    for eid, nodes in m.nodes.items():
+        event = by_id.get(eid, {})
+        for name, (pred, _, _) in FIELDS.items():
+            if event.get(name):
+                pairs.update((n, pred) for n in nodes)
+        if "tracks" in payload:
+            pairs.update((n, pred) for n in nodes for pred in RELATIONS.values())
+    return pairs
+
+
+def _resolve(graph: Graph, curie: str) -> URIRef | None:
+    try:
+        node = graph.namespace_manager.expand_curie(curie.strip())
+    except (ValueError, TypeError):
+        node = URIRef(curie.strip()) if curie.strip().startswith("http") else None
+    return node if node is not None and (node, None, None) in graph else None
+
+
+def validate_final_findings(
+    raw: dict | None, graph: Graph, source_text: str
+) -> tuple[list[dict], list[dict]]:
+    from art6.ontology.compress import SpanIndex
+
+    index = SpanIndex(source_text)
+    kept, refused = [], []
+    for item in (raw or {}).get("findings") or []:
+        if not isinstance(item, dict):
+            continue
+        kind = str(item.get("kind") or "").strip()
+        nodes = [str(n) for n in item.get("nodes") or []]
+        resolved = [_resolve(graph, n) for n in nodes]
+        evidence = str(item.get("evidence_span") or "")
+        reason = None
+        if kind not in FINAL_FINDING_KINDS:
+            reason = f"unknown kind {kind!r}"
+        elif not nodes or any(r is None for r in resolved):
+            reason = "names no node, or a node the graph does not have"
+        elif not index.locate(evidence):
+            own = " ".join(
+                norm(str(q))
+                for r in resolved
+                for q in graph.objects(r, ECHR.hasSupportingQuote)
+            )
+            if not (
+                kind in SELF_EVIDENCED_FINAL and evidence and norm(evidence) in own
+            ):
+                reason = "evidence_span not found in the judgment"
+        if reason:
+            refused.append({**item, "reason": reason})
+            continue
+        kept.append(
+            {
+                "id": f"g{len(kept) + 1}",
+                "kind": kind,
+                "nodes": nodes,
+                "evidence_span": evidence,
+                "issue": str(item.get("issue") or "")[:400],
+            }
+        )
+        if len(kept) >= MAX_FINAL_FINDINGS:
+            break
+    return kept, refused
+
+
+def final_critic_prompt(graph: Graph, source_text: str) -> str:
+    return (
+        "EXTRACTION INSTRUCTIONS\nThe graph below was built under these.\n\n"
+        + (PROMPT_DIR / "facts.txt").read_text(encoding="utf-8")
+        + "\n\nJUDGMENT\n<<<DOC\n"
+        + source_text
+        + "\nDOC\n\nGRAPH\n"
+        + graph.serialize(format="turtle")
+        + "\n\nYOUR TASK\n"
+        + (PROMPT_DIR / "final_critic.txt").read_text(encoding="utf-8")
+    )
+
+
+def final_fix_prompt(graph: Graph, source_text: str, findings: list[dict]) -> str:
+    return (
+        "EXTRACTION INSTRUCTIONS\nThe graph below was built under these. They bind you too.\n\n"
+        + (PROMPT_DIR / "facts.txt").read_text(encoding="utf-8")
+        + "\n\nONTOLOGY\n"
+        + (Path(__file__).resolve().parents[2] / "ontology" / "echr.ttl").read_text(
+            encoding="utf-8"
+        )
+        + "\n\nJUDGMENT\n<<<DOC\n"
+        + source_text
+        + "\nDOC\n\nGRAPH\n"
+        + graph.serialize(format="turtle")
+        + "\n\nFINDINGS\n"
+        + json.dumps(findings, indent=1, ensure_ascii=False)
+        + "\n\nYOUR TASK\n"
+        + (PROMPT_DIR / "final_fix.txt").read_text(encoding="utf-8")
+        + "\n\nOUTPUT SCHEMA\n"
+        + json.dumps(RepairPatch.model_json_schema(), indent=1)
+    )
+
+
+def drop_protected(
+    graph: Graph, patch: RepairPatch, protected: set, matched: set
+) -> tuple[RepairPatch, list[dict]]:
+    """Remove every op on a stage-1-owned (subject, predicate), and every merge
+    touching a matched event node. Each removal is logged as a dispute."""
+    disputes: list[dict] = []
+    groups = []
+    for group in patch.groups:
+        kept_ops = []
+        for op in group.ops:
+            subject = _resolve(graph, op.subject) or URIRef(op.subject)
+            try:
+                pred = graph.namespace_manager.expand_curie(op.predicate.strip())
+            except (ValueError, TypeError):
+                pred = URIRef(op.predicate)
+            # Whether an event exists is stage 1's call too: retyping is
+            # allowed, deleting a matched event's type is not.
+            if (subject, pred) in protected or (
+                op.action == "remove" and pred == RDF.type and subject in matched
+            ):
+                disputes.append(
+                    {
+                        "finding": group.finding,
+                        "op": op.model_dump(),
+                        "reason": "locked by stage 1",
+                    }
+                )
+                continue
+            kept_ops.append(op)
+        if kept_ops:
+            group.ops = kept_ops
+            groups.append(group)
+    merges = []
+    for merge in patch.merges:
+        if {_resolve(graph, merge.keep), _resolve(graph, merge.drop)} & matched:
+            disputes.append(
+                {"merge": merge.model_dump(), "reason": "merges a stage-1 event"}
+            )
+            continue
+        merges.append(merge)
+    return RepairPatch(groups=groups, merges=merges), disputes
+
+
+def run_final_critic(
+    graph: Graph,
+    payload: dict,
+    m: Match,
+    *,
+    client: OpenAI,
+    model: str,
+    doc_ns: str,
+    source_text: str,
+    temperature: float,
+    max_tokens: int,
+    capacity: int | None,
+) -> tuple[Graph, dict]:
+    """Final critic, then -- only on needs_fix -- the graph fixer, each of its
+    groups applied alone and kept only if it adds no violation."""
+    from art6.ontology import compress as c
+    from art6.ontology.agentic_stage1 import ask_with_flags, read_flag
+    from art6.ontology.new_repair import call_model
+
+    report: dict = {"called": False}
+    prompt = final_critic_prompt(graph, source_text)
+    if capacity:
+        needed = c.count_prompt_tokens(
+            str(client.base_url), model, prompt, client.api_key or ""
+        )
+        if needed + FINAL_CRITIC_MAX_TOKENS > capacity:
+            # A truncated graph would be criticised for what it is missing.
+            report["status"] = f"skipped: prompt {needed:,} tokens exceeds the window"
+            return graph, report
+    t0 = time.perf_counter()
+    answer, raw, missing = ask_with_flags(
+        client,
+        model,
+        prompt,
+        flags=FINAL_FLAGS,
+        label="final critic",
+        temperature=temperature,
+        max_tokens=FINAL_CRITIC_MAX_TOKENS,
+    )
+    findings, refused = validate_final_findings(answer, graph, source_text)
+    derived = "yes" if findings else "no"
+    flag = read_flag(answer, "needs_fix")
+    report.update(
+        {
+            "called": True,
+            "critic_seconds": round(time.perf_counter() - t0, 1),
+            "findings": findings,
+            "findings_refused": refused,
+            "flags": [
+                {
+                    "flag": "needs_fix",
+                    "how": "defaulted"
+                    if "needs_fix" in missing
+                    else "trusted"
+                    if flag == derived
+                    else "inconsistent",
+                    "value": derived,
+                },
+                {
+                    "flag": "stage1_dispute",
+                    "how": "defaulted" if "stage1_dispute" in missing else "trusted",
+                    "value": read_flag(answer, "stage1_dispute")
+                    or ("yes" if (answer or {}).get("disputes") else "no"),
+                },
+            ],
+            "stage1_disputes": [
+                d for d in (answer or {}).get("disputes") or [] if isinstance(d, dict)
+            ],
+            "raw": raw,
+        }
+    )
+    if not findings:
+        report["fix"] = {"skipped": "no findings"}
+        return graph, report
+
+    t0 = time.perf_counter()
+    patch = call_model(
+        client,
+        model,
+        final_fix_prompt(graph, source_text, findings),
+        temperature=temperature,
+        max_tokens=max_tokens,
+        label="graph fix",
+    )
+    if patch is None:
+        report["fix"] = {"status": "no usable patch"}
+        return graph, report
+    patch, unanchored = keep_anchored(patch, adds_only=False)
+    patch, disputes = drop_protected(
+        graph, patch, protected_pairs(graph, payload, m), set(m.entry_of)
+    )
+    report["stage1_disputes"] += disputes
+
+    # THE GATE, per group: a group lands only if it adds no violation.
+    kept, gated = 0, []
+    current = _violation_count(graph, doc_ns)
+    units = [RepairPatch(groups=[g], merges=[]) for g in patch.groups] + [
+        RepairPatch(groups=[], merges=[mg]) for mg in patch.merges
+    ]
+    for unit in units:
+        candidate, ops = apply_patch(
+            graph, unit, doc_ns, source_text=source_text, allow_quote_adds=True
+        )
+        complete_entailed_types(candidate, doc_ns)
+        after = _violation_count(candidate, doc_ns)
+        label = unit.groups[0].finding if unit.groups else "merge"
+        if after <= current and any(
+            str(o.get("status", "")).startswith("applied") for o in ops
+        ):
+            graph, current, kept = candidate, after, kept + 1
+        else:
+            gated.append(
+                {
+                    "finding": label,
+                    "violations_before": current,
+                    "violations_after": after,
+                }
+            )
+    report["fix"] = {
+        "seconds": round(time.perf_counter() - t0, 1),
+        "groups_kept": kept,
+        "groups_gated": gated,
+        "groups_refused_unanchored": unanchored,
+    }
+    return graph, report
+
+
 def _violation_count(graph: Graph, doc_ns: str) -> int:
     """What the SHACL loop works on: SHACL errors (not warnings), disjoint-type
     conflicts and duplicate nodes -- new_repair.Findings' violation scope."""
@@ -530,6 +842,8 @@ def reconcile_document(
     temperature: float,
     max_tokens: int,
     max_rounds: int = 3,
+    final_critic: bool = False,
+    capacity: int | None = None,
 ) -> dict:
     graph = Graph()
     graph.parse(facts_ttl, format="turtle")
@@ -621,6 +935,26 @@ def reconcile_document(
             "stage1_decisions_restored": len(restored),
         }
 
+    # FINAL CRITIC -> GRAPH FIXER. Reads the finished graph against the
+    # judgment for what reconcile does not own -- participations, sides,
+    # representatives, courts, dates, quotes, spurious events. Stage-1 fields
+    # and chain links are locked; a disagreement with them is a dispute, kept
+    # for review and never applied.
+    report["final_critic"] = {"called": False}
+    if final_critic and client is not None and source_text:
+        graph, report["final_critic"] = run_final_critic(
+            graph,
+            payload,
+            m,
+            client=client,
+            model=model,
+            doc_ns=doc_ns,
+            source_text=source_text,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            capacity=capacity,
+        )
+
     lossless_rewrites(graph, doc_ns)
     counts: dict[str, int] = {}
     for row in audit:
@@ -629,7 +963,10 @@ def reconcile_document(
     report.update(
         {
             "status": "consistent"
-            if not audit and not report["missing_before"] and not violations_before_loop
+            if not audit
+            and not report["missing_before"]
+            and not violations_before_loop
+            and not report["final_critic"].get("findings")
             else "reconciled",
             "changes": counts,
             "missing_after": len(missing),
@@ -710,7 +1047,18 @@ def main() -> None:
     ap.add_argument(
         "--no-llm",
         action="store_true",
-        help="transcription only; never mint, never run the SHACL loop",
+        help="transcription only; no model call of any kind",
+    )
+    ap.add_argument(
+        "--no-final-critic",
+        action="store_true",
+        help="skip the final critic and graph fixer",
+    )
+    ap.add_argument(
+        "--token-budget",
+        type=int,
+        default=0,
+        help="context window for the final critic's size check; 0 asks the server",
     )
     ap.add_argument(
         "--max-rounds",
@@ -725,6 +1073,13 @@ def main() -> None:
     if not args.no_llm:
         client = OpenAI(
             base_url=args.base_url, api_key=args.api_key, timeout=args.timeout
+        )
+    capacity = None
+    if client is not None:
+        from art6.ontology.compress import server_token_capacity
+
+        capacity = args.token_budget or server_token_capacity(
+            args.base_url, args.api_key or ""
         )
     cases = load_case_index(args.input_jsonl)
     texts = load_texts(args.original_jsonl)
@@ -762,6 +1117,8 @@ def main() -> None:
                 temperature=args.temperature,
                 max_tokens=args.max_tokens,
                 max_rounds=args.max_rounds,
+                final_critic=not args.no_final_critic,
+                capacity=capacity,
             )
         except Exception as exc:  # noqa: BLE001 -- one document must not end the run
             failed.append(f.name)
@@ -784,6 +1141,12 @@ def main() -> None:
                 if r["shacl_loop"].get("called")
                 else ""
             )
+            + (
+                f", final critic {len(r['final_critic'].get('findings', []))} finding(s)"
+                f" / {r['final_critic'].get('fix', {}).get('groups_kept', 0)} kept"
+                if r["final_critic"].get("called")
+                else ""
+            )
             + f", SHACL {r['shacl_before']}->{r['shacl_after']}",
             flush=True,
         )
@@ -792,7 +1155,10 @@ def main() -> None:
     print(
         f"\n{len(ok)} reconciled in {time.perf_counter() - t0:.0f}s: "
         f"{sum(r['status'] == 'consistent' for r in ok)} already consistent, "
-        f"{sum(bool(r['mint'].get('called')) for r in ok)} needed the model"
+        f"model calls -- mint {sum(bool(r['mint'].get('called')) for r in ok)}, "
+        f"SHACL loop {sum(bool(r['shacl_loop'].get('called')) for r in ok)}, "
+        f"final critic {sum(bool(r['final_critic'].get('called')) for r in ok)}, "
+        f"graph fixer {sum('groups_kept' in r['final_critic'].get('fix', {}) for r in ok)}"
     )
     if resumed:
         print(f"resumed: {resumed} document(s) already reconciled, skipped")

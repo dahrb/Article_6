@@ -1,45 +1,56 @@
-"""Stage 1, agentic: extract -> plan -> critique -> fix.
+"""Stage 1, agentic: a fixed order of agents, routed by their own answers.
 
-The single-call evidence stage (compress.py) asks one model call to find every
-event, classify it on five axes AND decide which earlier event it continues.
-The chain is where it fails: on gold30 the graphs carry half as many chains as
-gold (69 vs 129) at near-correct event counts, so parallel tracks are being
-merged. This module splits that one call into passes with one job each:
+The single-call evidence stage (compress.py) asked one model call to find
+every event, classify it on five axes AND decide which earlier event it
+continues. The chain is where it failed: on gold30 the graphs carried half as
+many chains as gold (69 vs 129) at near-correct event counts, so parallel
+tracks were being merged. Here each agent has one job, everything a model
+returns is checked in code before it is kept, and the CONDITIONAL agents run
+only when an earlier agent's mandatory yes/no flags call for them.
 
-    extract   compress.py's extraction, under prompts/extract.txt -- the same
-              rules minus every instruction about linking. Spans verified.
-    applicants  unchanged (compress.attach_applicants).
-    plan      the model groups the events into TRACKS and picks each event's
-              predecessor from a CANDIDATE list computed here. The candidates
-              are what could have come before it; the model only chooses.
-    critic    the model reads the judgment against the draft and reports
-              findings. Deterministic hints point it at the likeliest defects:
-              dated paragraphs no event covers, several events by one body on
-              one day, links that run backwards in time. Every finding must
-              carry a verbatim evidence span or it is discarded.
-    fix       only when the critic found something: the model answers each
-              finding with typed operations, and every operation is validated
-              and applied here, never by the model.
-    finalize  link TYPES are computed, not asked for: a link between two acts
-              with the same authority, rung, track and procedure is
-              part_of; a `during` link is occurs_during; anything else is
-              follows. Both ends point at the proceeding's earliest act, as
-              echr.ttl requires.
-    parties   compress.attach_parties, on the FINAL event list, so events the
-              fix pass added get the same party treatment as the rest.
-    filters   compress's deciding-body and actless-outcome filters, plus a
-              judge filter: judges are never persons or parties here -- the
-              bench is recovered deterministically elsewhere.
+    1 event detection   extract.txt: events, their parties, persons, verbatim
+                        spans + classifications; no links. Flag
+                        `domestic_events_found` -- with no events, nothing
+                        after this runs.
+    2 linking           plan.txt: tracks + each event's predecessor, chosen
+                        from candidates computed here.
+    3 person identifier applicants (compress.attach_applicants), then a
+                        CHAIN-AWARE parties pass: each event is shown with the
+                        event it continues and that event's parties. Additive.
+      filters           judges, deciding body as party, actless outcomes.
+    4 stage-1 critic    critic.txt, with deterministic hints. Mandatory flags:
+                        needs_fix, parallel_tracks (+ verbatim evidence),
+                        parties_incomplete (+ event ids). Each routes:
+        4a parallel_tracks=yes    -> parallel track agent (tracks.txt):
+                                     re-partition + track relations, then the
+                                     linker again (link.txt) inside the new
+                                     tracks
+        4b parties_incomplete=yes -> parties pass on the named events only
+        4c needs_fix=yes          -> fixer (fix.txt): validated operations on
+                                     the payload
+      filters again; another critic round only if --critic-rounds allows AND
+      the round changed something.
+    5 typed links       code, not a model: same body, rung, procedure and
+                        track -> part_of; a during link (or a track `during`
+                        relation) -> occurs_during; otherwise follows. Every
+                        link targets the proceeding's earliest act.
+
+A flag that is absent or not exactly yes/no gets ONE retry, then is derived
+from the agent's findings; a yes that needs evidence and has none locatable is
+read as no; a flag its own findings contradict follows the findings. Every
+decision is logged with how it was reached (see resolve_critic_flags).
 
 The output is a `.compress.json` in the shape compress.py writes, plus
-`track`, `follows`, `part_of`, `occurs_during` and `link_span` on events and a
-`tracks` list, so render_bundles, check_stage_boundary and every diagnostic
-read it unchanged. Each document also gets a `.agentic.json` holding every
-pass's raw response, what was accepted, and what was refused and why.
+`track`, `follows`, `part_of`, `occurs_during` and `link_span` on events and
+`tracks` / `track_relations` lists, so render_bundles, check_stage_boundary
+and every diagnostic read it unchanged. Each document also gets a
+`.agentic.json` holding every agent's raw response, the flags and how each
+was resolved, what was accepted, and what was refused and why.
 
-Plan, critic and fix are improvements on an extraction that already stands on
-its own, so a pass that returns nothing usable is recorded and skipped rather
-than failing the document. Extraction failing still fails it.
+Linking, the person identifier, the critic and everything it routes to are
+improvements on an extraction that stands on its own, so an agent that
+returns nothing usable is recorded and skipped rather than failing the
+document. Extraction failing still fails it.
 """
 
 from __future__ import annotations
@@ -139,10 +150,27 @@ FINDING_KINDS = {
     "missing_link",
     "wrong_link",
     "wrong_track",
+    "missing_party",
+    "wrong_party",
 }
-# Findings about an event the draft already quotes may cite the draft's own
-# words; every other kind must point at the judgment.
-SELF_EVIDENCED_KINDS = {"duplicate_event", "not_an_event"}
+# Findings about an event or party the draft already quotes may cite the
+# draft's own words; every other kind must point at the judgment.
+SELF_EVIDENCED_KINDS = {"duplicate_event", "not_an_event", "wrong_party"}
+TRACK_KINDS = {
+    "prosecution",
+    "civil claim",
+    "administrative",
+    "detention",
+    "enforcement",
+    "constitutional",
+    "compensation",
+    "disciplinary",
+    "other",
+}
+TRACK_RELATIONS = {"during", "arises_from", "independent"}
+TRACKS_MAX_TOKENS = 8000
+PARTIES_PROMPT = PROMPT_DIR / "parties.txt"
+PLAN_PROMPT = PROMPT_DIR / "plan.txt"
 
 # Keys the extraction schema allows on an event. Anything else an add_event
 # carries is dropped rather than passed to stage 2 as an unknown field.
@@ -406,13 +434,30 @@ def _would_cycle(links: dict[str, str], event_id: str, predecessor: str) -> bool
     return False
 
 
-def apply_plan(payload: dict, plan: dict | None, candidates: dict, source: str) -> dict:
+def apply_plan(
+    payload: dict,
+    plan: dict | None,
+    candidates: dict,
+    source: str,
+    *,
+    keep_tracks: bool = False,
+) -> dict:
     """Write the planner's tracks and links onto the events, refusing what the
-    rules forbid. Returns an audit of accepted and refused items."""
+    rules forbid. Returns an audit of accepted and refused items.
+
+    keep_tracks: the tracks are already settled (by the parallel track agent);
+    only the links are taken from `plan`, and every existing link is replaced.
+    """
     audit = {"links_accepted": 0, "links_refused": [], "tracks": 0, "unassigned": []}
     events = _by_id(payload)
     index = c.SpanIndex(source)
     plan = plan if isinstance(plan, dict) else {}
+    if keep_tracks:
+        track_of = {eid: e.get("track", "") for eid, e in events.items()}
+        audit["tracks"] = len(payload.get("tracks") or [])
+        for event in events.values():
+            event.pop("link", None)
+        return _apply_links(plan, events, candidates, track_of, index, audit)
 
     tracks: list[dict] = []
     track_of: dict[str, str] = {}
@@ -438,7 +483,10 @@ def apply_plan(payload: dict, plan: dict | None, candidates: dict, source: str) 
     for eid, event in events.items():
         event["track"] = track_of[eid]
         event.pop("link", None)
+    return _apply_links(plan, events, candidates, track_of, index, audit)
 
+
+def _apply_links(plan, events, candidates, track_of, index, audit) -> dict:
     chosen: dict[str, str] = {}
     for link in plan.get("links") or []:
         if not isinstance(link, dict):
@@ -576,6 +624,12 @@ def finalize(payload: dict) -> dict:
         if event.get("track") in track_remap:
             event["track"] = track_remap[event["track"]]
     payload["tracks"] = tracks
+    if "track_relations" in payload:
+        payload["track_relations"] = [
+            {**r, "track": track_remap[r["track"]], "other": track_remap[r["other"]]}
+            for r in payload["track_relations"]
+            if r["track"] in track_remap and r["other"] in track_remap
+        ]
     return {"id_map": remap, "relations": counts}
 
 
@@ -665,6 +719,23 @@ def find_hints(payload: dict, source: str) -> list[dict]:
                 }
             )
 
+    # A merged parallel track's commonest signature: one track holding events
+    # of different procedures. A hint, never a trigger -- the critic decides.
+    by_track: dict[str, set[str]] = {}
+    for e in events:
+        if e.get("track") and e.get("proceeding_type") not in (None, "", "unknown"):
+            by_track.setdefault(e["track"], set()).add(e["proceeding_type"])
+    for track, types in by_track.items():
+        if len(types) > 1:
+            hints.append(
+                {
+                    "kind": "mixed_procedure_in_track",
+                    "track": track,
+                    "note": f"track {track} mixes {', '.join(sorted(types))} events -- "
+                    "one matter changing procedure, or parallel tracks merged?",
+                }
+            )
+
     firsts: dict[str, str] = {}
     for e in events:
         firsts.setdefault(e.get("track", ""), e["id"])
@@ -740,7 +811,14 @@ def render_draft(payload: dict, candidates: dict | None = None) -> str:
     tracks = payload.get("tracks") or []
     if tracks:
         out.append("TRACKS")
-        out += [f"  {t['id']}: {t.get('label') or '(no label)'}" for t in tracks]
+        for t in tracks:
+            extra = ", ".join(f"{k}: {t[k]}" for k in ("kind", "subject") if t.get(k))
+            out.append(
+                f"  {t['id']}: {t.get('label') or '(no label)'}"
+                + (f" [{extra}]" if extra else "")
+            )
+        for r in payload.get("track_relations") or []:
+            out.append(f"  {r['track']} {r['relation']} {r['other']}")
         out.append("")
     out.append(f"EVENTS ({len(_events(payload))}), in document order")
     for event in _events(payload):
@@ -885,7 +963,17 @@ def validate_findings(
         elif any(e not in events for e in ids):
             reason = "names an event the draft does not have"
         elif not index.locate(evidence):
-            own = " ".join(_text(events[e].get("what_happened_span")) for e in ids)
+            own = " ".join(
+                " ".join(
+                    [_text(events[e].get("what_happened_span"))]
+                    + [
+                        _text(p.get(k))
+                        for p in events[e].get("parties") or []
+                        for k in ("name_span", "role_span")
+                    ]
+                )
+                for e in ids
+            )
             if not (kind in SELF_EVIDENCED_KINDS and evidence and evidence in own):
                 reason = "evidence_span not found in the judgment"
         if reason:
@@ -1154,6 +1242,47 @@ def apply_fixes(
                     log(op, "applied: track set, cross-track link removed")
                     continue
                 log(op, "applied")
+            elif kind == "add_party":
+                eid = str(op.get("id") or "")
+                if eid not in events:
+                    log(op, "refused: unknown event")
+                    continue
+                hit = index.locate(str(op.get("name_span") or ""))
+                if not hit:
+                    log(op, "refused: name_span not verbatim")
+                    continue
+                party = {"name_span": c._located(index, hit)}
+                if role := index.locate(str(op.get("role_span") or "")):
+                    party["role_span"] = c._located(index, role)
+                name = _norm_name(party["name_span"])
+                existing = events[eid].setdefault("parties", [])
+                if any(_norm_name(p.get("name_span")) == name for p in existing):
+                    log(op, "refused: already a party")
+                    continue
+                # The filters run after the fix and remove a deciding body or a
+                # judge anyway; refusing here keeps the audit honest about why.
+                body = _norm_name(events[eid].get("authority_span"))
+                if body and (name == body or name in body or body in name):
+                    log(op, "refused: the deciding body is not a party")
+                    continue
+                if is_judge(_text(party["name_span"])):
+                    log(op, "refused: a judge is not a party")
+                    continue
+                existing.append(party)
+                log(op, "applied")
+            elif kind == "remove_party":
+                eid = str(op.get("id") or "")
+                if eid not in events:
+                    log(op, "refused: unknown event")
+                    continue
+                name = c._normalise_name(str(op.get("name") or ""))
+                before = events[eid].get("parties") or []
+                kept = [p for p in before if _norm_name(p.get("name_span")) != name]
+                if len(kept) == len(before):
+                    log(op, "refused: no such party on that event")
+                    continue
+                events[eid]["parties"] = kept
+                log(op, "applied")
             else:
                 log(op, f"refused: unknown op {kind!r}")
         except Exception as exc:  # noqa: BLE001 -- one bad op must not cost the rest
@@ -1176,18 +1305,446 @@ def strip_legacy_links(payload: dict) -> int:
     return n
 
 
-def agentic_passes(
+# ---------------------------------------------------------------------------
+# Mandatory flags: how one agent's answer decides which agent runs next
+# ---------------------------------------------------------------------------
+
+
+def read_flag(raw: dict | None, name: str) -> str | None:
+    """'yes', 'no', or None when absent or anything else."""
+    value = str((raw or {}).get(name) or "").strip().lower()
+    return value if value in {"yes", "no"} else None
+
+
+def ask_with_flags(
+    client: OpenAI,
+    model: str,
+    prompt: str,
+    *,
+    flags: tuple[str, ...],
+    label: str,
+    temperature: float,
+    max_tokens: int,
+) -> tuple[dict | None, str, list[str]]:
+    """ask_json, then ONE retry if any mandatory flag is missing or not exactly
+    yes/no. Returns (answer, raw, flags still missing after the retry)."""
+    answer, raw = ask_json(
+        client,
+        model,
+        prompt,
+        label=label,
+        temperature=temperature,
+        max_tokens=max_tokens,
+    )
+    missing = [f for f in flags if read_flag(answer, f) is None]
+    if not missing:
+        return answer, raw, []
+    reminder = (
+        '\n\nYOUR PREVIOUS ANSWER omitted, or did not set to exactly "yes" or "no", '
+        f"these MANDATORY fields: {', '.join(missing)}. Answer again: the complete JSON "
+        "object, with every mandatory field set.\n"
+    )
+    retry, retry_raw = ask_json(
+        client,
+        model,
+        prompt + reminder,
+        label=f"{label} (flag retry)",
+        temperature=temperature,
+        max_tokens=max_tokens,
+    )
+    if isinstance(retry, dict):
+        answer, raw = retry, retry_raw
+    return answer, raw, [f for f in flags if read_flag(answer, f) is None]
+
+
+def resolve_critic_flags(
+    raw: dict | None,
+    findings: list[dict],
+    payload: dict,
+    source: str,
+    missing: list[str],
+) -> tuple[dict, list[dict]]:
+    """Turn the critic's flags into routing decisions, and say how each was
+    reached: `trusted`, `defaulted` (absent after the retry, so derived from
+    the findings), `inconsistent` (contradicted by the findings, which win),
+    or `unevidenced` (a yes whose evidence is not in the judgment)."""
+    notes: list[dict] = []
+    kinds = {f["kind"] for f in findings}
+    events = _by_id(payload)
+
+    def note(flag, how, value):
+        notes.append({"flag": flag, "how": how, "value": value})
+
+    # needs_fix
+    flag = read_flag(raw, "needs_fix")
+    derived = "yes" if findings else "no"
+    if "needs_fix" in missing:
+        note("needs_fix", "defaulted", derived)
+    elif flag != derived:
+        note("needs_fix", "inconsistent", derived)
+    else:
+        note("needs_fix", "trusted", derived)
+    needs_fix = derived == "yes"
+
+    # parallel_tracks
+    flag = read_flag(raw, "parallel_tracks")
+    if "parallel_tracks" in missing:
+        flag = "yes" if "wrong_track" in kinds else "no"
+        note("parallel_tracks", "defaulted", flag)
+        evidence = next(
+            (f["evidence_span"] for f in findings if f["kind"] == "wrong_track"), ""
+        )
+    else:
+        evidence = str((raw or {}).get("parallel_tracks_evidence") or "")
+        if flag == "yes" and not c.SpanIndex(source).locate(evidence):
+            flag = "no"
+            note("parallel_tracks", "unevidenced", flag)
+        else:
+            note("parallel_tracks", "trusted", flag)
+    parallel = flag == "yes"
+
+    # parties_incomplete
+    flag = read_flag(raw, "parties_incomplete")
+    from_findings = [
+        e for f in findings if f["kind"] == "missing_party" for e in f["events"]
+    ]
+    if "parties_incomplete" in missing:
+        flag = "yes" if from_findings else "no"
+        note("parties_incomplete", "defaulted", flag)
+        named = from_findings
+    else:
+        named = [
+            str(e)
+            for e in (raw or {}).get("parties_incomplete_events") or []
+            if str(e) in events
+        ] or from_findings
+        if flag == "yes" and not named:
+            flag = "no"
+            note("parties_incomplete", "unevidenced", flag)
+        else:
+            note("parties_incomplete", "trusted", flag)
+    party_events = list(dict.fromkeys(named)) if flag == "yes" else []
+
+    return (
+        {
+            "needs_fix": needs_fix,
+            "parallel_tracks": parallel,
+            "parallel_tracks_evidence": evidence if parallel else "",
+            "parties_events": party_events,
+        },
+        notes,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Parallel track agent
+# ---------------------------------------------------------------------------
+
+
+def tracks_prompt(
+    payload: dict, evidence: str, findings: list[dict], view: str, excerpt: bool
+) -> str:
+    track_findings = [f for f in findings if f["kind"] == "wrong_track"]
+    return (
+        (PROMPT_DIR / "tracks.txt").read_text(encoding="utf-8")
+        + _document_block(view, excerpt)
+        + "\n\nTHE CRITIC'S EVIDENCE OF A SEPARATE MATTER\n"
+        + (f'"{evidence}"' if evidence else "(none quoted)")
+        + "\n\nTHE CRITIC'S TRACK FINDINGS\n"
+        + (
+            json.dumps(track_findings, indent=1, ensure_ascii=False)
+            if track_findings
+            else "(none)"
+        )
+        + "\n\nDRAFT\n"
+        + render_draft(payload)
+        + "\n"
+    )
+
+
+def apply_tracks(payload: dict, answer: dict | None, source: str) -> dict:
+    """Re-partition the events and record the track relations. Every event
+    ends in exactly one track; links are cleared, since the linking pass that
+    follows rebuilds them inside the new tracks."""
+    audit: dict = {
+        "tracks": 0,
+        "unassigned": [],
+        "relations": 0,
+        "relations_refused": [],
+    }
+    if not isinstance(answer, dict) or not answer.get("tracks"):
+        audit["status"] = "no usable answer -- tracks unchanged"
+        return audit
+    events = _by_id(payload)
+    index = c.SpanIndex(source)
+    tracks, track_of, given = [], {}, {}
+    for n, track in enumerate(answer.get("tracks") or [], 1):
+        if not isinstance(track, dict):
+            continue
+        members = [str(e) for e in track.get("events") or [] if str(e) in events]
+        members = [e for e in members if e not in track_of]
+        if not members:
+            continue
+        tid = f"T{n}"
+        given[str(track.get("id") or tid)] = tid
+        kind = str(track.get("kind") or "").strip().lower()
+        tracks.append(
+            {
+                "id": tid,
+                "label": str(track.get("label") or "").strip(),
+                **({"kind": kind} if kind in TRACK_KINDS else {}),
+                **(
+                    {"subject": str(track["subject"]).strip()}
+                    if track.get("subject")
+                    else {}
+                ),
+            }
+        )
+        for e in members:
+            track_of[e] = tid
+    for eid in events:
+        if eid not in track_of:
+            tid = f"T{len(tracks) + 1}"
+            while any(t["id"] == tid for t in tracks):
+                tid = f"T{int(tid[1:]) + 1}"
+            tracks.append({"id": tid, "label": ""})
+            track_of[eid] = tid
+            audit["unassigned"].append(eid)
+
+    relations, during = [], {}
+    for rel in answer.get("relations") or []:
+        if not isinstance(rel, dict):
+            continue
+        kind = str(rel.get("relation") or "").strip().lower()
+        a, b = given.get(str(rel.get("track"))), given.get(str(rel.get("other")))
+        hit = index.locate(str(rel.get("evidence_span") or ""))
+        reason = None
+        if kind not in TRACK_RELATIONS:
+            reason = f"unknown relation {kind!r}"
+        elif not a or not b or a == b:
+            reason = "names an unknown track, or one track twice"
+        elif not hit:
+            reason = "evidence_span not found in the judgment"
+        elif kind == "during" and (a in during or _would_cycle(during, a, b)):
+            reason = "a track is contained once, and never in itself"
+        if reason:
+            audit["relations_refused"].append({**rel, "reason": reason})
+            continue
+        if kind == "independent":
+            continue  # the default; nothing to record
+        if kind == "during":
+            during[a] = b
+        relations.append(
+            {"track": a, "relation": kind, "other": b, "span": c._located(index, hit)}
+        )
+
+    payload["tracks"] = tracks
+    payload["track_relations"] = relations
+    for eid, event in events.items():
+        event["track"] = track_of[eid]
+        event.pop("link", None)
+    audit.update(
+        {"tracks": len(tracks), "relations": len(relations), "status": "applied"}
+    )
+    return audit
+
+
+def constrain_candidates(payload: dict, candidates: dict) -> dict:
+    """Candidates inside the event's own track, plus -- for a track that ran
+    during another -- the containing track's events."""
+    track_of = {e["id"]: e.get("track") for e in _events(payload)}
+    container = {
+        r["track"]: r["other"]
+        for r in payload.get("track_relations") or []
+        if r["relation"] == "during"
+    }
+    out = {}
+    for eid, cands in candidates.items():
+        own = track_of.get(eid)
+        out[eid] = [
+            p
+            for p in cands
+            if track_of.get(p) == own or track_of.get(p) == container.get(own)
+        ]
+    return out
+
+
+def link_prompt(payload: dict, candidates: dict, view: str, excerpt: bool) -> str:
+    return (
+        (PROMPT_DIR / "link.txt").read_text(encoding="utf-8")
+        + "\n\n"
+        + load_sections(("LINKS",), path=PLAN_PROMPT)
+        + _document_block(view, excerpt)
+        + "\n\nDRAFT\n"
+        + render_draft(payload, candidates)
+        + "\n"
+    )
+
+
+def links_from_track_relations(payload: dict) -> int:
+    """A track that ran DURING another and whose first event the linker left
+    unlinked gets an occurs_during link to the containing proceeding: the
+    latest containing event dated no later than it, else the first."""
+    added = 0
+    events = _events(payload)
+    for rel in payload.get("track_relations") or []:
+        if rel["relation"] != "during":
+            continue
+        inner = [e for e in events if e.get("track") == rel["track"]]
+        outer = [e for e in events if e.get("track") == rel["other"]]
+        if not inner or not outer or inner[0].get("link"):
+            continue
+        head, when = inner[0], event_date(inner[0])
+        eligible = [e for e in outer if date_cmp(event_date(e), when) in (-1, 0)]
+        target = (eligible or outer)[-1 if eligible else 0]
+        head["link"] = {"to": target["id"], "kind": "during"}
+        if rel.get("span"):
+            head["link"]["span"] = rel["span"]
+        added += 1
+    return added
+
+
+# ---------------------------------------------------------------------------
+# Person identifier: chain-aware parties
+# ---------------------------------------------------------------------------
+
+
+def chain_aware_parties(
     client: OpenAI,
     model: str,
     source: str,
     payload: dict,
+    stats: dict,
+    *,
+    temperature: float,
+    event_ids: list[str] | None = None,
+    max_tokens: int = 6000,
+) -> tuple[int, str]:
+    """The parties question, asked with the chain in view.
+
+    The same prompt as compress_parties, but each event is listed with its
+    track and the event it continues, and with the parties that predecessor
+    already has -- so "the other side is often named only once" becomes a
+    question about a named earlier event rather than a guess. Additive only,
+    like merge_parties. `event_ids` restricts it to the events a critic named.
+    Returns (parties added, raw response).
+    """
+    by_id = _by_id(payload)
+    wanted = [e for e in _events(payload) if event_ids is None or e["id"] in event_ids]
+    if not wanted:
+        return 0, ""
+    listing = []
+    for event in wanted:
+        bits = [f"[{event['id']}]"]
+        for key, label in (
+            ("decision_date_span", "date"),
+            ("authority_span", "decided by"),
+            ("what_happened_span", "what happened"),
+        ):
+            if value := _text(event.get(key)):
+                bits.append(f"{label}: {value}")
+        if event.get("track"):
+            bits.append(f"track: {event['track']}")
+        link = event.get("link")
+        if link and link["to"] in by_id:
+            pred = by_id[link["to"]]
+            names = [_text(p.get("name_span")) for p in pred.get("parties") or []]
+            bits.append(
+                f"continues {pred['id']}"
+                + (
+                    f" (whose parties are: {'; '.join(n for n in names if n)})"
+                    if names
+                    else ""
+                )
+            )
+        listing.append(" | ".join(bits))
+    prompt = (
+        PARTIES_PROMPT.read_text(encoding="utf-8")
+        + "\n\nCHAIN CONTEXT. Each entry says which earlier entry it continues and who "
+        "that entry's parties were. A party to the earlier entry who is not shown to "
+        "have dropped out is usually still a party here -- on the side THIS entry's own "
+        "words give them, which on review is often the opposite side. Still copy every "
+        "span from the judgment itself.\n"
+        + "\n\nTHE PROCEEDINGS\n"
+        + "\n".join(listing)
+        + "\n\nTHE JUDGMENT\n<<<DOC\n"
+        + source
+        + "\nDOC\n"
+    )
+    answer, raw = ask_json(
+        client,
+        model,
+        prompt,
+        label="parties",
+        temperature=temperature,
+        max_tokens=max_tokens,
+    )
+    by_event: dict = {}
+    for row in (answer or {}).get("parties_by_event") or []:
+        if isinstance(row, dict) and str(row.get("id")) in by_id:
+            parties = [
+                {k: v for k, v in p.items() if str(v).strip()}
+                for p in row.get("parties") or []
+                if isinstance(p, dict)
+            ]
+            by_event[str(row["id"])] = parties
+    if not by_event:
+        return 0, raw
+    verified, party_stats = c.verify({"e": by_event}, source)
+    c._add_span_stats(stats, party_stats)
+    added, _ = c.merge_parties(payload, verified.get("e", {}))
+    return added, raw
+
+
+def apply_filters(payload: dict, totals: dict) -> None:
+    """The deterministic filters, accumulated into `totals` across runs."""
+    judges = drop_judges(payload)
+    actless, actless_ids = c.drop_actless_outcomes(payload)
+    body, body_names = c.drop_deciding_body_parties(payload)
+    totals.setdefault("judges_dropped", []).extend(judges)
+    totals.setdefault("actless_outcomes_dropped_ids", []).extend(actless_ids)
+    totals.setdefault("deciding_body_parties_dropped_values", []).extend(body_names)
+    totals["actless_outcomes_dropped"] = (
+        totals.get("actless_outcomes_dropped", 0) + actless
+    )
+    totals["deciding_body_parties_dropped"] = (
+        totals.get("deciding_body_parties_dropped", 0) + body
+    )
+
+
+# ---------------------------------------------------------------------------
+# One document: the agents, in order, and the routing between them
+# ---------------------------------------------------------------------------
+
+CRITIC_FLAGS = ("needs_fix", "parallel_tracks", "parties_incomplete")
+
+
+def run_stage1_agents(
+    client: OpenAI,
+    model: str,
+    source: str,
+    payload: dict,
+    stats: dict,
     *,
     temperature: float,
     capacity: int,
-    skip_critic: bool = False,
+    parties: bool = True,
+    critic_rounds: int = 1,
+    raw_dir: Path | None = None,
+    doc_id: str = "doc",
 ) -> dict:
-    """Plan, critique, fix and finalize `payload` in place. Returns the log."""
-    log: dict = {}
+    """Everything after extraction. Returns the log; `payload` is final.
+
+        linking -> person identifier -> filters -> critic --+-> parallel tracks -> re-link
+                                                            +-> targeted parties
+                                                            +-> fixer
+                                                            (repeat to critic_rounds)
+                -> filters -> typed links
+
+    The critic's mandatory flags route each round; see resolve_critic_flags.
+    """
+    log: dict = {"rounds": []}
+    filters: dict = {}
     base_url, key = str(client.base_url), client.api_key or ""
     seen_ids: set[str] = set()
     for n, event in enumerate(_events(payload), 1):
@@ -1205,61 +1762,177 @@ def agentic_passes(
             source, payload, hints, budget_tokens=budget, count_tokens=tokens
         )
 
-    # PLAN
+    clock = {"t": 0.0}
+
+    def tic() -> None:
+        clock["t"] = time.perf_counter()
+
+    def toc() -> float:
+        return round(time.perf_counter() - clock["t"], 1)
+
+    # 1. LINKING (tracks + predecessors, jointly)
     candidates = candidate_predecessors(_events(payload))
     view, excerpt = view_for(
         plan_prompt(payload, candidates, "", False), PLAN_MAX_TOKENS, []
     )
-    t0 = time.perf_counter()
+    tic()
     plan, plan_raw = ask_json(
         client,
         model,
         plan_prompt(payload, candidates, view, excerpt),
-        label="plan",
+        label="linking",
         temperature=temperature,
         max_tokens=PLAN_MAX_TOKENS,
     )
-    plan_audit = apply_plan(payload, plan, candidates, source)
-    log["plan"] = {
+    secs = toc()
+    log["linking"] = {
         "ok": plan is not None,
         "excerpt": excerpt,
-        "seconds": round(time.perf_counter() - t0, 1),
-        "audit": plan_audit,
+        "seconds": secs,
+        "audit": apply_plan(payload, plan, candidates, source),
         "raw": plan_raw,
     }
 
-    # CRITIC
-    if not skip_critic:
+    # 2. PERSON IDENTIFIER: applicants, then chain-aware parties (additive)
+    c.attach_applicants(
+        client,
+        model,
+        source,
+        payload,
+        stats,
+        temperature=temperature,
+        raw_path=(raw_dir or Path(".")) / f"{doc_id}.applicants.raw.txt",
+    )
+    log["persons"] = {"applicants": len(payload.get("applicants") or [])}
+    if parties:
+        tic()
+        added, raw = chain_aware_parties(
+            client, model, source, payload, stats, temperature=temperature
+        )
+        secs = toc()
+        log["persons"].update({"parties_added": added, "seconds": secs, "raw": raw})
+    apply_filters(payload, filters)
+
+    # 3. CRITIC ROUNDS, each routing on the critic's flags
+    for rnd in range(1, critic_rounds + 1):
+        round_log: dict = {"round": rnd}
+        log["rounds"].append(round_log)
         hints = find_hints(payload, source)
         view, excerpt = view_for(
             critic_prompt(payload, hints, "", False), CRITIC_MAX_TOKENS, hints
         )
-        t0 = time.perf_counter()
-        critique, critic_raw = ask_json(
+        tic()
+        critique, critic_raw, missing = ask_with_flags(
             client,
             model,
             critic_prompt(payload, hints, view, excerpt),
+            flags=CRITIC_FLAGS,
             label="critic",
             temperature=temperature,
             max_tokens=CRITIC_MAX_TOKENS,
         )
+        secs = toc()
         findings, refused = validate_findings(critique, payload, source)
-        log["critic"] = {
+        route, flag_notes = resolve_critic_flags(
+            critique, findings, payload, source, missing
+        )
+        round_log["critic"] = {
             "ok": critique is not None,
             "excerpt": excerpt,
-            "seconds": round(time.perf_counter() - t0, 1),
+            "seconds": secs,
             "hints": hints,
             "findings": findings,
             "findings_refused": refused,
+            "flags": flag_notes,
+            "route": route,
             "raw": critic_raw,
         }
+        changed = False
 
-        # FIX -- only when there is something to fix.
-        if findings:
+        # 3a. PARALLEL TRACK AGENT -> re-link inside the new tracks
+        if route["parallel_tracks"]:
+            prompt0 = tracks_prompt(
+                payload, route["parallel_tracks_evidence"], findings, "", False
+            )
+            view, excerpt = view_for(prompt0, TRACKS_MAX_TOKENS, hints)
+            tic()
+            answer, raw = ask_json(
+                client,
+                model,
+                tracks_prompt(
+                    payload,
+                    route["parallel_tracks_evidence"],
+                    findings,
+                    view,
+                    excerpt,
+                ),
+                label="tracks",
+                temperature=temperature,
+                max_tokens=TRACKS_MAX_TOKENS,
+            )
+            secs = toc()
+            audit = apply_tracks(payload, answer, source)
+            round_log["tracks"] = {
+                "seconds": secs,
+                "excerpt": excerpt,
+                "audit": audit,
+                "raw": raw,
+            }
+            if audit.get("status") == "applied":
+                changed = True
+                cands = constrain_candidates(
+                    payload, candidate_predecessors(_events(payload))
+                )
+                view, excerpt = view_for(
+                    link_prompt(payload, cands, "", False), PLAN_MAX_TOKENS, []
+                )
+                tic()
+                links, raw = ask_json(
+                    client,
+                    model,
+                    link_prompt(payload, cands, view, excerpt),
+                    label="relink",
+                    temperature=temperature,
+                    max_tokens=PLAN_MAX_TOKENS,
+                )
+                secs = toc()
+                round_log["relink"] = {
+                    "seconds": secs,
+                    "audit": apply_plan(
+                        payload, links, cands, source, keep_tracks=True
+                    ),
+                    "raw": raw,
+                }
+                # The track findings are answered; the fixer does not redo them.
+                findings = [f for f in findings if f["kind"] != "wrong_track"]
+
+        # 3b. TARGETED PARTIES on the events the critic named
+        if parties and route["parties_events"]:
+            tic()
+            added, raw = chain_aware_parties(
+                client,
+                model,
+                source,
+                payload,
+                stats,
+                temperature=temperature,
+                event_ids=route["parties_events"],
+            )
+            secs = toc()
+            round_log["parties"] = {
+                "events": route["parties_events"],
+                "added": added,
+                "seconds": secs,
+                "raw": raw,
+            }
+            changed = changed or added > 0
+
+        # 3c. FIXER, on whatever findings are left
+        if route["needs_fix"] and findings:
             view, excerpt = view_for(
                 fix_prompt(payload, findings, "", False), FIX_MAX_TOKENS, hints
             )
-            t0 = time.perf_counter()
+            tic()
             ops, fix_raw = ask_json(
                 client,
                 model,
@@ -1268,39 +1941,70 @@ def agentic_passes(
                 temperature=temperature,
                 max_tokens=FIX_MAX_TOKENS,
             )
-            fix_audit = apply_fixes(payload, ops, findings, source)
-            log["fix"] = {
-                "ok": ops is not None,
+            secs = toc()
+            audit = apply_fixes(payload, ops, findings, source)
+            round_log["fix"] = {
+                "seconds": secs,
                 "excerpt": excerpt,
-                "seconds": round(time.perf_counter() - t0, 1),
-                "audit": fix_audit,
+                "audit": audit,
                 "raw": fix_raw,
             }
+            changed = changed or any(
+                str(a["status"]).startswith("applied") for a in audit
+            )
         else:
-            log["fix"] = {"skipped": "no findings"}
+            round_log["fix"] = {
+                "skipped": "no findings left" if route["needs_fix"] else "needs_fix: no"
+            }
 
+        apply_filters(payload, filters)
+        if not changed:
+            break  # a further round would read the same draft
+
+    # 4. TYPED LINKS
+    log["track_relation_links"] = links_from_track_relations(payload)
     log["finalize"] = finalize(payload)
+    stats.update(filters)
     return log
 
 
 def summarise(log: dict) -> dict:
     """The per-document numbers worth carrying in the .compress.json stats."""
-    plan = log.get("plan", {}).get("audit", {})
-    critic = log.get("critic", {})
-    fix = log.get("fix", {})
-    applied = [
-        a for a in fix.get("audit", []) if str(a["status"]).startswith("applied")
-    ]
+    linking = log.get("linking", {}).get("audit", {})
+    rounds = log.get("rounds", [])
+
+    def total(fn):
+        return sum(fn(r) for r in rounds)
+
+    def applied(audit):
+        return sum(1 for a in audit if str(a.get("status", "")).startswith("applied"))
+
     return {
-        "plan_ok": log.get("plan", {}).get("ok"),
-        "tracks": plan.get("tracks", 0),
-        "links_accepted": plan.get("links_accepted", 0),
-        "links_refused": len(plan.get("links_refused", [])),
-        "hints": len(critic.get("hints", [])),
-        "findings": len(critic.get("findings", [])),
-        "findings_refused": len(critic.get("findings_refused", [])),
-        "fix_ops_applied": len(applied),
-        "fix_ops_refused": len(fix.get("audit", [])) - len(applied),
+        "linking_ok": log.get("linking", {}).get("ok"),
+        "links_accepted": linking.get("links_accepted", 0),
+        "links_refused": len(linking.get("links_refused", [])),
+        "critic_rounds": len(rounds),
+        "findings": total(lambda r: len(r.get("critic", {}).get("findings", []))),
+        "findings_refused": total(
+            lambda r: len(r.get("critic", {}).get("findings_refused", []))
+        ),
+        "flags_not_trusted": total(
+            lambda r: sum(
+                1 for f in r.get("critic", {}).get("flags", []) if f["how"] != "trusted"
+            )
+        ),
+        "track_agent_runs": total(lambda r: 1 if "tracks" in r else 0),
+        "targeted_party_runs": total(lambda r: 1 if "parties" in r else 0),
+        "fix_ops_applied": total(lambda r: applied(r.get("fix", {}).get("audit", []))),
+        "fix_ops_refused": total(
+            lambda r: (
+                len(r.get("fix", {}).get("audit", []))
+                - applied(r.get("fix", {}).get("audit", []))
+            )
+        ),
+        "parties_added": log.get("persons", {}).get("parties_added", 0)
+        + total(lambda r: r.get("parties", {}).get("added", 0)),
+        "track_relation_links": log.get("track_relation_links", 0),
         "relations": log.get("finalize", {}).get("relations", {}),
     }
 
@@ -1323,7 +2027,22 @@ def main() -> None:
     ap.add_argument("--workers", type=int, default=1, help="see compress.py --workers")
     ap.add_argument("--token-budget", type=int, default=0)
     ap.add_argument("--overwrite", action="store_true")
-    ap.add_argument("--parties-pass", action="store_true")
+    ap.add_argument(
+        "--parties-pass",
+        action="store_true",
+        help="accepted for compatibility; the parties pass is on unless --no-parties",
+    )
+    ap.add_argument(
+        "--no-parties",
+        action="store_true",
+        help="skip the person identifier's parties pass (applicants still run)",
+    )
+    ap.add_argument(
+        "--critic-rounds",
+        type=int,
+        default=1,
+        help="critic rounds; 0 disables the critic and everything it routes to",
+    )
     ap.add_argument("--max-tokens", type=int, default=16000)
     ap.add_argument("--split-max-tokens", type=int, default=c.SPLIT_OUTPUT_TOKENS)
     ap.add_argument("--only", default="")
@@ -1344,7 +2063,7 @@ def main() -> None:
     ap.add_argument(
         "--skip-critic",
         action="store_true",
-        help="plan only, no critic or fix -- isolates the planner's own effect",
+        help="same as --critic-rounds 0",
     )
     args = ap.parse_args()
 
@@ -1408,59 +2127,57 @@ def main() -> None:
                 (args.out_dir / f"{doc_id}.raw.txt").write_text(raw, encoding="utf-8")
                 return
         stats["legacy_link_fields_stripped"] = strip_legacy_links(payload)
-        c.attach_applicants(
-            client,
-            args.model,
-            text,
-            payload,
-            stats,
-            temperature=args.temperature,
-            raw_path=args.out_dir / f"{doc_id}.applicants.raw.txt",
-        )
         n_extracted = len(_events(payload))
-        log = agentic_passes(
-            client,
-            args.model,
-            text,
-            payload,
-            temperature=args.temperature,
-            capacity=capacity,
-            skip_critic=args.skip_critic,
-        )
-        if args.parties_pass:
-            c.attach_parties(
+
+        # EVENT DETECTION'S FLAG. Not retried -- a retry would be a second
+        # extraction -- so an absent flag is derived from the events, and a
+        # "no" contradicted by events found is overridden by them.
+        flag = read_flag(payload, "domestic_events_found")
+        payload.pop("domestic_events_found", None)
+        derived = "yes" if n_extracted else "no"
+        stats["domestic_events_found"] = {
+            "value": derived,
+            "how": "defaulted"
+            if flag is None
+            else "trusted"
+            if flag == derived
+            else "inconsistent",
+        }
+        if not n_extracted:
+            # Nothing to link, attribute or criticise: straight to an empty
+            # bundle, with no further calls.
+            log = {"skipped": "no domestic events"}
+            payload.setdefault("tracks", [])
+            stats["events_extracted"] = 0
+            stats["agentic"] = {"skipped": "no domestic events"}
+            print(
+                f"  {doc_id}:   0 events -- no further agents [{time.perf_counter() - t0:.0f}s]"
+            )
+        else:
+            log = run_stage1_agents(
                 client,
                 args.model,
                 text,
                 payload,
                 stats,
                 temperature=args.temperature,
-                raw_path=args.out_dir / f"{doc_id}.parties.raw.txt",
+                capacity=capacity,
+                parties=not args.no_parties,
+                critic_rounds=0 if args.skip_critic else args.critic_rounds,
+                raw_dir=args.out_dir,
+                doc_id=doc_id,
             )
-        judges = drop_judges(payload)
-        actless, actless_ids = c.drop_actless_outcomes(payload)
-        body_parties, body_names = c.drop_deciding_body_parties(payload)
-        stats.update(
-            {
-                "judges_dropped": judges,
-                "actless_outcomes_dropped": actless,
-                "actless_outcomes_dropped_ids": actless_ids,
-                "deciding_body_parties_dropped": body_parties,
-                "deciding_body_parties_dropped_values": body_names,
-                "events_extracted": n_extracted,
-                "agentic": summarise(log),
-            }
-        )
-        a = stats["agentic"]
-        print(
-            f"  {doc_id}: {n_extracted:3} extracted -> {len(_events(payload)):3} events, "
-            f"{a['tracks']:2} tracks, {a['links_accepted']:3} links "
-            f"(-{a['links_refused']}), {a['findings']:2} findings, "
-            f"{a['fix_ops_applied']:2} fixes applied, "
-            f"rel {a['relations']}, {len(judges)} judge(s) removed "
-            f"[{time.perf_counter() - t0:.0f}s]",
-            flush=True,
-        )
+            stats["events_extracted"] = n_extracted
+            stats["agentic"] = a = summarise(log)
+            print(
+                f"  {doc_id}: {n_extracted:3} extracted -> {len(_events(payload)):3} events, "
+                f"{len(payload.get('tracks') or []):2} tracks, {a['links_accepted']:3} links, "
+                f"{a['findings']:2} findings, track agent x{a['track_agent_runs']}, "
+                f"{a['fix_ops_applied']:2} fixes, +{a['parties_added']} parties, "
+                f"rel {a['relations']}, {len(stats.get('judges_dropped', []))} judge(s) removed "
+                f"[{time.perf_counter() - t0:.0f}s]",
+                flush=True,
+            )
         (args.out_dir / f"{doc_id}.agentic.json").write_text(
             json.dumps(log, indent=1, ensure_ascii=False, default=str), encoding="utf-8"
         )

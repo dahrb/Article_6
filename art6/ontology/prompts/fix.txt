@@ -25,6 +25,11 @@ no operations: the critic can be wrong, and leaving the draft alone is then corr
                  "kind": "continues | during", "evidence_span": "verbatim words, if any"}
   set_track     {"op": "set_track", "finding": "f6", "id": "e9", "track": "T1" or "new",
                  "track_label": "label, if new"}
+  add_party     {"op": "add_party", "finding": "f7", "id": "e4",
+                 "name_span": "the party as named, verbatim",
+                 "role_span": "words showing their standing in THIS event, verbatim"}
+  remove_party  {"op": "remove_party", "finding": "f8", "id": "e4",
+                 "name": "the party's name exactly as the draft gives it"}
 
 Rules the code enforces, so an operation breaking them is wasted:
 
@@ -32,7 +37,10 @@ Rules the code enforces, so an operation breaking them is wasted:
     and an added event whose `what_happened_span` is not verbatim is refused whole;
   - a predecessor must exist and must not be dated after the event it precedes;
   - a link may not create a cycle;
-  - classifications must use the closed vocabularies in the rules below.
+  - classifications must use the closed vocabularies in the rules below;
+  - a party must not be the body deciding that event, and never a judge;
+  - findings about TRACKS may already have been answered by the parallel track agent --
+    where the draft's tracks already settle a `wrong_track` finding, leave it.
 
 A NEW EVENT IS EXTRACTED EXACTLY AS THE FIRST PASS WOULD HAVE: every span copied, every
 classification decided by the rules below, its parties with `name_span` and `role_span`.

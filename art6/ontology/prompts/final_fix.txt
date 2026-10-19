@@ -1,0 +1,18 @@
+A final critic has read the judgment against the graph above and reported the FINDINGS
+above. Answer each finding with the operations that correct it, one group per finding,
+with the finding's id in `finding`. If the judgment does not support a finding after all,
+answer it with no group: the critic can be wrong.
+
+Rules the pipeline enforces, so an operation breaking them is wasted:
+
+  - the events' classifications (echr:hasInstanceLevel, echr:hasOutcome,
+    echr:hasProceedingType, echr:hasOutcomeDirection, echr:hasMatter) and the chain links
+    between events (echr:followsProceeding, echr:partOfProceeding, echr:occursDuring) are
+    LOCKED -- an operation touching them is refused;
+  - an added echr:hasSupportingQuote must be copied verbatim from the judgment, and a new
+    participation needs its own quote, side and party, as the extraction instructions say;
+  - a group that would add a SHACL violation is refused whole;
+  - the deciding body of an event is never a party to it, and a judge is never a party.
+
+Touch only what a finding names. Use `merges` only where the evidence shows one entity
+described twice.

@@ -74,19 +74,51 @@ class NormalisedProceeding(BaseModel):
     instance_level: str | None = Field(
         default=None,
         description=(
-            "Where this step sits in the hierarchy -- first instance, appeal, "
-            "cassation, constitutional review, investigative, administrative "
-            "review, and so on. Free text: this field is NOT drawn from a "
-            "fixed vocabulary, because two of the three conditions were never "
-            "given one."
+            "Where this step sits in the hierarchy, using the shared "
+            "definitions' values (first instance, appeal, cassation, "
+            "investigative, administrative review, case review, reopening). "
+            "Typed as free text so a value outside them is recorded rather "
+            "than rejected at decoding: conformance is measured, not forced."
         ),
     )
     outcome: str | None = Field(
         default=None,
         description=(
-            "What the body decided. Free text, for the same reason as "
-            "instance_level. Null if the document does not say."
+            "What the body decided, using the shared definitions' values; "
+            "null where the step decided nothing. Free text for the same "
+            "reason as instance_level."
         ),
+    )
+    authority_kind: str | None = Field(
+        default=None, description="Kind of deciding body."
+    )
+    start_date: str | None = Field(
+        default=None, description="Date begun or lodged, ISO, if separately given."
+    )
+    proceeding_type: str | None = Field(
+        default=None, description="The procedural track."
+    )
+    outcome_direction: str | None = Field(
+        default=None, description="Direction of the outcome relative to the applicant."
+    )
+    matter: list[str] | None = Field(
+        default=None,
+        description="What the step was substantively about; not universal.",
+    )
+    is_pending: bool | None = Field(default=None, description="Still pending.")
+    is_final: bool | None = Field(
+        default=None, description="Concluded its chain of domestic proceedings."
+    )
+    is_non_occurring: bool | None = Field(
+        default=None, description="Something a party did not do."
+    )
+    part_of: int | None = Field(
+        default=None,
+        description="`order` of the earliest act of the same proceeding, if a further act of it.",
+    )
+    occurs_during: int | None = Field(
+        default=None,
+        description="`order` of a proceeding still pending while this one ran.",
     )
     supporting_quote: str | None = Field(
         default=None,
@@ -126,5 +158,35 @@ class NormalisedProceeding(BaseModel):
     )
 
 
+class NormalisedCase(BaseModel):
+    case_name: str | None = None
+    application_number: str | None = None
+    respondent_state: str | None = None
+    judgment_date: str | None = None
+
+
+class NormalisedApplicant(BaseModel):
+    name: str | None = None
+    birth_year: str | None = None
+    nationality: str | None = None
+    residence: str | None = None
+    gender: str | None = None
+
+
+class NormalisedPerson(BaseModel):
+    name: str | None = None
+    role: str | None = None
+    gender: str | None = None
+    represents: str | None = None
+
+
 class NormalisedDocument(BaseModel):
+    """Everything the graph holds that a flat record can express -- the same
+    target every condition is given through prompt_spec. The case, applicant
+    and person blocks are optional so a record from before they were asked for
+    still validates."""
+
+    case: NormalisedCase | None = None
+    applicants: list[NormalisedApplicant] | None = None
+    persons: list[NormalisedPerson] | None = None
     proceedings: list[NormalisedProceeding]

@@ -1818,7 +1818,9 @@ def _stream_patch_text(
     salvage below needs anyway.
     """
     from art6.ontology import llm_cache
+    from art6.ontology.provider import extra_body
 
+    routing = extra_body()
     cache_key = llm_cache.make_key(
         "repair_patch",
         {
@@ -1827,6 +1829,7 @@ def _stream_patch_text(
             "temperature": temperature,
             "token_kwargs": token_kwargs,
             "guided": guided,
+            **({"extra_body": routing} if routing else {}),
         },
     )
     cached = llm_cache.load("repair_patch", cache_key)
@@ -1851,6 +1854,7 @@ def _stream_patch_text(
         **temp,
         **fmt,
         **token_kwargs,
+        **({"extra_body": routing} if routing else {}),
     ) as stream:
         for event in stream:
             if event.type == "chunk":

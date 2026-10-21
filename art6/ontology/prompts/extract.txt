@@ -74,7 +74,7 @@ are skipped on a "no".
         TRACK AND THE DIRECTION.",
       "matter": ["zero or more of: arrest | detention | bail | charge | conviction |
         investigation | damages | custody | employment | pension | property | extradition |
-        legal aid | vetting | disciplinary | other | unknown. NOT filled on every event.
+        legal aid | requests | vetting | disciplinary | other | unknown. NOT filled on every event.
         See CLASSIFY THE MATTER."],
       "finality_span": "words showing it was final or that remedies were exhausted",
       "pending_span": "words showing it was still pending",
@@ -86,12 +86,6 @@ are skipped on a "no".
         {"name_span": "the party as named",
          "role_span": "words showing their STANDING in this instance -- who brought it, who
           answered it. NOT the last thing they did."}
-      ],
-      "inactivity": [
-        {"start_span": "...", "end_span": "...", "cause_span": "words attributing the delay"}
-      ],
-      "adjournments": [
-        {"date_span": "...", "resumption_span": "...", "cause_span": "..."}
       ],
       "detention": [
         {"detainee_span": "...", "start_span": "...", "end_span": "...",
@@ -235,6 +229,11 @@ out entirely. Fill it only where the event's own content is recognisably one of:
                 decision affecting property
   extradition   an extradition, deportation or removal decision, or its execution
   legal aid     application for, grant of, or refusal of legal aid or legal-aid counsel
+  requests      an application going to the fairness or conduct of the proceeding itself,
+                not to the underlying charge, claim or detention -- recusal of the judge,
+                admission or replacement of counsel, an adjournment, access to the case file
+                or the verbatim record; petitions. A request for release stays `bail`; a
+                request about one of the other matters keeps that matter.
   vetting       granting, refusing or revoking a security clearance or vetting status
   disciplinary  A PROFESSIONAL OR EMPLOYMENT DISCIPLINARY PROCEEDING -- suspending,
                 revoking or restoring a licence to practise, a bar/medical/police ruling
@@ -469,9 +468,9 @@ A decision to detain, release or extend detention is not an interim span. Put it
 `detention` list of the entry it belongs to, with spans naming who was detained, when it
 started and ended, and what the measure was called.
 
-## FOUR THINGS THAT GET LEFT OUT, AND MUST NOT BE
+## PARTIES — EVERY ENTRY NEEDS THEM
 
-**1. PARTIES — every entry needs them.** Somebody brought every step and somebody answered
+Somebody brought every step and somebody answered
 it. Name the party itself, never their lawyer.
 
 `role_span` must show STANDING IN THIS INSTANCE — who brought it and who answered it — not
@@ -517,7 +516,9 @@ words say was quashed, upheld, appealed against or complained of.
 **THE SIDES USUALLY SWAP ON REVIEW, so do not copy `role_span` across.** Whoever lost below
 is usually the appellant above. Read who brought THIS instance from THIS entry's words.
 
-**2. CONTINUATIONS — every step is its own entry.** Do NOT link entries to each other: a
+## CONTINUATIONS — EVERY STEP IS ITS OWN ENTRY
+
+Do NOT link entries to each other: a
 later stage builds the chain from the entries you write, and it can only chain what you
 wrote. So the steps that carry a matter forward must each be an entry. Three kinds are
 missed constantly:
@@ -538,14 +539,13 @@ Chamber on 19 March 2014 is TWO entries -- not one entry reading "seeking the an
 with the Chamber's date on it. That fusion loses the filing, loses its date, and
 misattributes the applicant's own act to the court that ruled on it.
 
-**3. DELAY AND POSTPONEMENT.** Where the text says a case lay dormant or was stayed between
-two dates, record it in `inactivity` with the bounding spans and any words attributing the
-cause. Where a hearing was adjourned and later resumed, record it in `adjournments`.
-Length-of-proceedings is a core Article 6 complaint and the delays are usually explicit.
+## FINALITY, PENDING AND DETENTION
 
-**4. FINALITY AND PENDING.** Copy into `finality_span` any words showing a decision was
+Copy into `finality_span` any words showing a decision was
 final or that remedies were exhausted; into `pending_span` any words showing a matter was
-still outstanding when the judgment was written.
+still outstanding when the judgment was written. Where an entry ordered, extended or ended a
+deprivation of liberty, record it in that entry's `detention`, with the detainee and the
+bounding dates as the text gives them.
 
 ## BEFORE YOU FINISH — COVERAGE CHECK
 

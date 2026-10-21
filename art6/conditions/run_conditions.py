@@ -62,8 +62,17 @@ CONDITIONS = {
 
 
 def load_condition_prompt(condition: str) -> str:
+    """The condition's own prompt followed by the shared definitions of what
+    the graph holds (art6/ontology/prompt_spec.py) -- the same definitions the
+    OntoCast arms and the evidence stage are held to, so the conditions differ
+    in method and not in target. The composed text is what the run records as
+    `prompt_verbatim`."""
+    from art6.ontology.prompt_spec import condition_prompt
+
     filename, _ = CONDITIONS[condition]
-    return (PROMPTS_DIR / filename).read_text(encoding="utf-8").strip()
+    return condition_prompt(
+        (PROMPTS_DIR / filename).read_text(encoding="utf-8")
+    ).strip()
 
 
 def load_documents(input_path: Path, limit: int | None) -> list[dict]:

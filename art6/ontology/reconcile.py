@@ -77,6 +77,7 @@ from openai import OpenAI
 from rdflib import RDF, Graph, Namespace, URIRef
 
 from art6.ontology.check_stage_boundary import _date_matches
+from art6.ontology.prompt_spec import facts_instruction
 from art6.ontology.repair_facts import (
     RepairPatch,
     _curie,
@@ -382,7 +383,7 @@ def mint_prompt(graph: Graph, payload: dict, missing: list[str], m: Match) -> st
     digest = render({"tracks": payload.get("tracks") or [], "events": wanted})
     return (
         "EXTRACTION INSTRUCTIONS\nThe graph below was extracted under these. They bind you too.\n\n"
-        + (PROMPT_DIR / "facts.txt").read_text(encoding="utf-8")
+        + facts_instruction()
         + "\n\nONTOLOGY\n"
         + (Path(__file__).resolve().parents[2] / "ontology" / "echr.ttl").read_text(
             encoding="utf-8"
@@ -611,7 +612,7 @@ def validate_final_findings(
 def final_critic_prompt(graph: Graph, source_text: str) -> str:
     return (
         "EXTRACTION INSTRUCTIONS\nThe graph below was built under these.\n\n"
-        + (PROMPT_DIR / "facts.txt").read_text(encoding="utf-8")
+        + facts_instruction()
         + "\n\nJUDGMENT\n<<<DOC\n"
         + source_text
         + "\nDOC\n\nGRAPH\n"
@@ -624,7 +625,7 @@ def final_critic_prompt(graph: Graph, source_text: str) -> str:
 def final_fix_prompt(graph: Graph, source_text: str, findings: list[dict]) -> str:
     return (
         "EXTRACTION INSTRUCTIONS\nThe graph below was built under these. They bind you too.\n\n"
-        + (PROMPT_DIR / "facts.txt").read_text(encoding="utf-8")
+        + facts_instruction()
         + "\n\nONTOLOGY\n"
         + (Path(__file__).resolve().parents[2] / "ontology" / "echr.ttl").read_text(
             encoding="utf-8"

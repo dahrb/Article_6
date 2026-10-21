@@ -78,6 +78,8 @@ RULE_SECTIONS = (
     "CLASSIFY THE TRACK AND THE DIRECTION",
     "CLASSIFY THE MATTER",
     "COVERAGE AND GRANULARITY",
+    "PARTIES — EVERY ENTRY NEEDS THEM",
+    "FINALITY, PENDING AND DETENTION",
 )
 FIX_EXTRA_SECTIONS = ("THE ONE RULE", "OUTPUT")
 
@@ -194,8 +196,6 @@ EVENT_KEYS = {
     "non_occurring_span",
     "interim_spans",
     "parties",
-    "inactivity",
-    "adjournments",
     "detention",
 }
 # Fields the extraction prompt used to carry and this stage now owns.

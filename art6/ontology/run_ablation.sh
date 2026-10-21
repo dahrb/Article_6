@@ -47,7 +47,11 @@ TEMPERATURE="${TEMPERATURE:-0.4}"          # stage 2/3; stage 1 is 0.0
 # without also changing what extracts and repairs the graph.
 STAGE1_MODEL="${STAGE1_MODEL:-${MODEL}}"
 STAGE1_BASE_URL="${STAGE1_BASE_URL:-${BASE_URL}}"
-STAGE1_API_KEY="${STAGE1_API_KEY:-${VLLM_API_KEY:-EMPTY}}"
+# Empty means "the same key as stages 2/3". Resolved at the stage-1 call, not
+# here: the key itself is only settled further down (credentials block), and
+# defaulting it this early sent stage 1 the local-server placeholder "EMPTY"
+# against a hosted endpoint (2026-10-21, 401 on every document).
+STAGE1_API_KEY="${STAGE1_API_KEY:-}"
 # STAGE 1 is agentic_stage1.py (extract -> plan -> critic -> fix) unless
 # STAGE1_IMPL=compress selects the single-call compress.py it replaced. STAGE 3
 # is reconcile.py (diff the graph against stage 1, model only for missing
@@ -137,7 +141,11 @@ SEED_DIR="${OUT_DIR}/ontology_seed"; SHAPES_DIR="${OUT_DIR}/shapes"
 rm -rf "${SEED_DIR}" "${SHAPES_DIR}"; mkdir -p "${SEED_DIR}" "${SHAPES_DIR}"
 cp "${REPO_ROOT}/ontology/echr.ttl" "${SEED_DIR}/"
 cp "${REPO_ROOT}/ontology/echr-shapes.ttl" "${SHAPES_DIR}/"
-cp "${SCRIPT_DIR}/prompts/facts.txt" "${OUT_DIR}/facts.prompt.snapshot"
+# The stage-2 instruction is facts.txt PLUS the shared definitions of what the
+# graph holds (art6/ontology/prompt_spec.py), so the snapshot is the composed
+# text actually sent, not facts.txt alone.
+(cd "${REPO_ROOT}" && uv run python -c "from art6.ontology.prompt_spec import facts_instruction; print(facts_instruction())") \
+    > "${OUT_DIR}/facts.prompt.snapshot"
 cp "${SCRIPT_DIR}/prompts/compress.txt" "${OUT_DIR}/compress.prompt.snapshot"
 for p in extract plan link tracks critic fix parties applicants reconcile_mint final_critic final_fix; do
     cp "${SCRIPT_DIR}/prompts/${p}.txt" "${OUT_DIR}/${p}.prompt.snapshot"
@@ -149,7 +157,7 @@ echo "ontocast: ${ONTOCAST_VERSION}   stage 1: ${STAGE1_IMPL}   stage 3: ${REPAI
 # ---- input: rebuild the JSONL with the LIVE facts prompt -------------------
 INPUT_JSONL="${OUT_DIR}/input.jsonl"
 LIMIT="${LIMIT}" INPUT_JSON="${SET_JSON}" INPUT_JSONL="${INPUT_JSONL}" \
-FACTS_PROMPT_FILE="${SCRIPT_DIR}/prompts/facts.txt" python3 - <<'PY'
+FACTS_PROMPT_FILE="${OUT_DIR}/facts.prompt.snapshot" python3 - <<'PY'
 import json, os, pathlib
 records = json.load(open(os.environ["INPUT_JSON"], encoding="utf-8"))
 limit = os.environ.get("LIMIT", "").strip()
@@ -207,9 +215,13 @@ if done_phase stage1; then
 else
 phase "stage 1  ${STAGE1_IMPL} -> evidence bundles"
 t0=$(now)
-(cd "${REPO_ROOT}" && uv run python -m "art6.ontology.$([[ "${STAGE1_IMPL}" == agentic ]] && echo agentic_stage1 || echo compress)" \
+# The key travels in the environment (VLLM_API_KEY, which both stage-1
+# entry points read as their default), never on the command line, where `ps`
+# would show it to every user on the machine.
+(cd "${REPO_ROOT}" && VLLM_API_KEY="${STAGE1_API_KEY:-${VLLM_API_KEY}}" \
+    uv run python -m "art6.ontology.$([[ "${STAGE1_IMPL}" == agentic ]] && echo agentic_stage1 || echo compress)" \
     --input-jsonl "${INPUT_JSONL}" --out-dir "${OUT_DIR}/stage1" \
-    --model "${STAGE1_MODEL}" --base-url "${STAGE1_BASE_URL}" --api-key "${STAGE1_API_KEY}" \
+    --model "${STAGE1_MODEL}" --base-url "${STAGE1_BASE_URL}" \
     --temperature 0.0 \
     ${SPLIT_MAX_TOKENS:+--split-max-tokens "${SPLIT_MAX_TOKENS}"} \
     ${COMPRESS_PROMPT_FILE:+--prompt-file "${COMPRESS_PROMPT_FILE}"} \

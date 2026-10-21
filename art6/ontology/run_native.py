@@ -104,11 +104,14 @@ def units_lost_by_document(log_text: str) -> dict[str, dict[str, int]]:
 
 
 def _live_facts_prompt() -> str | None:
-    """The current prompts/facts.txt, or None if it is not where we expect."""
-    path = pathlib.Path(__file__).resolve().parent / "prompts" / "facts.txt"
+    """The current stage-2 instruction -- prompts/facts.txt plus the shared
+    definitions (prompt_spec.facts_instruction) -- or None if it cannot be
+    built."""
     try:
-        return path.read_text(encoding="utf-8").strip()
-    except OSError:
+        from art6.ontology.prompt_spec import facts_instruction
+
+        return facts_instruction().strip()
+    except (OSError, KeyError):
         return None
 
 
@@ -145,6 +148,36 @@ def _stale_prompt_records(input_path: str) -> list[str]:
     except (OSError, ValueError):
         return []
     return stale
+
+
+def _route_ontocast_requests() -> None:
+    """Send ART6_EXTRA_BODY with every OntoCast request too.
+
+    OntoCast builds its client as langchain's ChatOpenAI and exposes no setting
+    for extra request-body fields, so provider pinning on a gateway such as
+    OpenRouter would reach stages 1 and 3 and not stage 2 -- which could then
+    be served by a different provider at a different quantisation within one
+    run. ChatOpenAI does accept `extra_body`; this supplies it as a default.
+    A no-op when the variable is unset.
+    """
+    from art6.ontology.provider import extra_body
+
+    body = extra_body()
+    if not body:
+        return
+    from langchain_openai import ChatOpenAI
+
+    original = ChatOpenAI.__init__
+    if getattr(original, "_art6_routed", False):
+        return
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("extra_body", body)
+        original(self, *args, **kwargs)
+
+    __init__._art6_routed = True  # type: ignore[attr-defined]
+    ChatOpenAI.__init__ = __init__  # type: ignore[method-assign]
+    print(f"stage 2 requests routed with extra_body keys {sorted(body)}", flush=True)
 
 
 def main() -> int:
@@ -194,6 +227,7 @@ def main() -> int:
         )
         return 2
 
+    _route_ontocast_requests()
     from ontocast.cli.server import cli
 
     argv = [

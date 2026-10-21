@@ -14,15 +14,14 @@ Two exclusions, both important:
   - Nothing that happened at the European Court of Human Rights itself. The chain ends at the last domestic decision.
   - No other cases. Judgments frequently cite decisions from unrelated cases as legal authority ("as the Court held in X v. Y", "cited as a precedent"). Those are not steps in this applicant's proceedings, however decision-like they read.
 
-ONE ENTRY PER INSTANCE -- AND AN INSTANCE IS NOT A HEARING
+WHAT IS ONE ENTRY
 
-Each entry is exactly ONE step decided by ONE body on ONE date. A single entry must never carry two deciding bodies or two decision dates. When a matter is appealed, reaches a different court, or receives a further decision on a different date, that is a NEW entry -- never a modification of the earlier one.
-
-But an "instance" means one JURISDICTIONAL LEVEL -- one passage of the matter before one body, ending in that body's decision. It does not mean every ruling that body made along the way. A single first-instance trial may involve a dozen procedural decisions: rulings on the admissibility of evidence, refusals to stay proceedings, grants and withdrawals of bail, adjournments, acquittals on individual counts. **All of those belong to ONE entry -- the trial -- not to twelve.** Record the trial, its deciding body and its outcome. The same applies at every level.
-
-Two failure modes, and they pull in opposite directions:
-  - Collapsing a whole appellate history into one entry per "case". Wrong: a first-instance judgment, an appeal and a cassation ruling are three entries.
-  - Splitting one instance into one entry per procedural ruling. Also wrong: a trial that took nine months and thirty rulings is still one entry.
+Each entry is ONE domestic event -- one act by one body, on its own date. What counts as an
+event, and how finely to split, is defined in WHAT TO EXTRACT below (COVERAGE AND
+GRANULARITY): a filing narrated as its own act and the decision that disposes of it are TWO
+entries; a trial's procedural rulings are not entries at all; each investigative act -- a
+search, an arrest, the opening of proceedings -- is its own entry. Those definitions are the
+same ones every other extraction in this study follows, and they decide every boundary case.
 
 Do not merge distinct bodies. Two different courts, or a court and the prosecutor's office, are never the same entry even when they dealt with the same matter.
 
@@ -30,17 +29,70 @@ Judgments often describe several proceedings running in PARALLEL -- a criminal p
 
 FIELDS
 
-Return a JSON object with a single key "proceedings", whose value is an array. Each element of that array is one proceeding, with exactly these keys:
+Return a JSON object with these keys. Use null for anything the document does not state.
+Do not guess, and do not leave a field out because you are unsure -- an explicit null is a
+finding, a missing key is not.
 
-  "order"             1-based position in the chain, earliest first, counting across all parallel tracks.
-  "follows"           A list of the "order" values of the earlier entries this step directly reviews or continues -- an appeal names the judgment it appeals; a cassation ruling names that appeal; an enforcement step names the judgment being enforced. Usually one value. Give several only where a single decision disposes of two earlier ones at once. Use null where the step begins a track rather than continuing one, and note that a document often contains SEVERAL independent tracks, each starting with its own null. Do not link two steps merely because one happened after the other: this field records review and continuation, not chronology, and the chronology is already in "order".
-  "deciding_body"     The court, tribunal, prosecutor's office or administrative body that decided this step, named as the document names it ("the Ruse Regional Court", "the Constitutional Court", "the district prosecutor"). Name the BODY, not the individual judge presiding over it. Use null if the document does not say.
-  "decision_date"     ISO date, YYYY-MM-DD. Where the document gives only a month or year, use YYYY-MM or YYYY. Use null if the document does not say. Copy the date the document states; do not compute or infer one.
-  "instance_level"    Where this step sits in the hierarchy, in your own words -- for example first instance, appeal, cassation, constitutional review, investigative, administrative review, supervisory review, reopening. Use null if you cannot tell.
-  "outcome"           What the body actually decided, in your own words -- the claim was dismissed, the appeal was allowed, the case was remitted to the lower court, the complaint was declared inadmissible, the investigation was discontinued, proceedings are still pending. Use null if the document does not say.
-  "supporting_quote"  A span copied EXACTLY from the document, character for character, that evidences this proceeding. Do not paraphrase, reword, tidy punctuation, modernise spelling, or stitch together text from two separate passages. If you cannot find a span that supports the entry, use null rather than approximating one -- an unevidenced entry is recoverable, a falsely evidenced one is not.
-  "parties"           A list of the individuals or bodies participating in this specific step, and which side they were on (e.g., "applicant (appellant)", "State (respondent)", "prosecutor (initiating)"). Do not merge roles across different instances; record only their role at this exact stage. Use null if the document does not say.
-  "custodial_measure" Any deprivation of liberty or legal capacity restriction explicitly applied or maintained during this step (e.g., police custody, remand in custody, psychiatric confinement). Use null if the document does not mention one.Use null for anything the document does not state. Do not guess, and do not leave a field out because you are unsure -- an explicit null is a finding, a missing key is not.
+"case": {"case_name", "application_number", "respondent_state", "judgment_date"} -- as the
+judgment's heading gives them; dates as ISO.
+
+"applicants": a list of {"name", "birth_year", "nationality", "residence", "gender"} -- as
+the document describes the applicants themselves.
+
+"persons": a list of {"name", "role", "gender", "represents"} -- every person the document
+names in the domestic proceedings (applicants, lawyers, guardians, relatives, witnesses,
+co-accused), never a judge. `gender` only where an honorific, pronoun or gendered noun
+marks it; `represents` the name of the person they act for, if any.
+
+"proceedings": an array, one element per entry, each with exactly these keys:
+
+  "order"             1-based position, earliest first, counting across all parallel tracks.
+  "follows"           A list of the "order" values of the earlier entries this one continues,
+                      reviews, appeals or enforces as a NEW proceeding -- an appeal names the
+                      judgment it appeals; a cassation ruling names that appeal; an
+                      enforcement step names the judgment enforced. Usually one value. null
+                      where the entry begins a track, or where `part_of` or `occurs_during`
+                      applies instead. Not chronology: that is already in "order".
+  "part_of"           The "order" of the EARLIEST entry of the same proceeding, where this
+                      entry is a further act of it -- same body, same rung, same procedure:
+                      a decision disposing of a filing narrated as its own entry. null
+                      otherwise.
+  "occurs_during"     The "order" of a proceeding that was still pending when this one began
+                      and was decided -- an interim ruling inside a main claim, a detention
+                      review during a trial. null otherwise.
+  "deciding_body"     The court, tribunal, prosecutor's office or administrative body that
+                      decided this entry, as the document names it. The BODY, never the
+                      individual judge.
+  "authority_kind"    judicial | prosecutorial | administrative | disciplinary | unknown.
+  "decision_date"     ISO date, YYYY-MM-DD, or YYYY-MM / YYYY where that is all the document
+                      gives. Copy the date stated; do not compute one.
+  "start_date"        The date it was begun or lodged, if separately given, same format.
+  "instance_level"    One of the values in WHAT TO EXTRACT: first instance | appeal |
+                      cassation | investigative | administrative review | case review |
+                      reopening.
+  "outcome"           One of: merits decided | inadmissible | remitted | settled or
+                      withdrawn | other -- or null where the entry decided nothing (an
+                      arrest, a search), as WHAT TO EXTRACT defines.
+  "proceeding_type"   criminal | civil | administrative | constitutional | disciplinary |
+                      other | unknown.
+  "outcome_direction" favourable to applicant | unfavourable to applicant | mixed | unknown
+                      -- only where the entry has an outcome.
+  "matter"            A list of zero or more matter values as WHAT TO EXTRACT defines them.
+                      Not on every entry.
+  "is_pending"        true where the document says this was still pending; otherwise null.
+  "is_final"          true on the entry that concluded its chain of domestic proceedings,
+                      where the document says it was final or remedies were exhausted.
+  "is_non_occurring"  true where this is something a party did NOT do ("did not appeal").
+  "supporting_quote"  A span copied EXACTLY from the document, character for character, that
+                      evidences this entry. Do not paraphrase, tidy punctuation or stitch two
+                      passages together. If you cannot find one, null.
+  "parties"           A list of the parties to THIS entry and their side, written
+                      "name (initiating)", "name (responding)" or "name (third party)". Roles
+                      are per entry: who brought this one and who answered it. Never the
+                      deciding body, never a lawyer in place of the client, never a judge.
+  "custodial_measure" Any pre-trial deprivation of liberty ordered, extended or ended in this
+                      entry -- remand, police custody, psychiatric confinement -- with its
+                      dates where the document gives them.
 
 OUTPUT
 

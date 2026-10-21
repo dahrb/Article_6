@@ -28,6 +28,14 @@ EXTRACTION RULES:
 
     Where the input carries a `pending_span`, assert echr:isPending true on that event, with echr:hasSupportingQuote holding that span. Where it does not, assert nothing -- omission means the text did not say, not that the matter was resolved.
 
+    Where the input carries a `finality_span`, or the text shows that a decision concluded its chain of domestic proceedings ("final", "no further appeal lay", "remedies were exhausted"), assert echr:isFinalDomesticDecision true on that event, with echr:hasSupportingQuote holding those words -- once per chain, on its last decision. Where nothing says so, assert nothing.
+
+    Where the input carries a `detention:` block, or the text narrates a pre-trial deprivation of liberty ordered, extended or ended in a proceeding, mint one echr:PreTrialDetention node per continuous period and attach it to that proceeding with echr:hasPreTrialDetention; give it echr:hasDetainee (the person detained), echr:hasDetentionStartDate and echr:hasDetentionEndDate as the text dates them, echr:hasStatedDetentionDuration where a total is stated, and echr:isStillDetained true where the text says the person remains detained. Detention serving a sentence after final conviction is out of scope.
+
+    Record the case itself on the echr:CaseDocument node: echr:hasCaseName, echr:hasApplicationNumber, echr:hasRespondentState and echr:hasJudgmentDate, from the input's CASE lines where it has them, otherwise from the judgment's own heading.
+
+    NO JUDGE IS A PERSON OR A PARTY HERE. Never mint a node, a participation or a person for a judge, magistrate, presiding officer, registrar or rapporteur, domestic or of this Court; the deciding BODY is the event's echr:hasCourt and nothing else.
+
     Where the input carries a `non_occurring_span`, assert echr:isNonOccurring true on that event, with echr:hasSupportingQuote holding that span, and assert NO echr:hasDecisionDate on it -- the input's own `outcome` and `instance_level` classifications still apply, typing the event as what it would have been (an appeal never lodged is still echr:DomesticProceeding at echr:LevelAppeal), but nothing was decided because nothing happened. Where the input carries no `non_occurring_span`, assert nothing -- do not infer non-occurrence from an event merely lacking a decision, which is the ordinary shape of a pending or undated event and is NOT the same claim.
 
     Where the case document's input carries `subject_matter_spans`, assert one echr:hasSubjectMatter on the echr:CaseDocument node per span, as free text in your own words describing what the dispute was about (not copied verbatim like a quote -- there is no vocabulary to pick from, and no echr:hasSupportingQuote is required for it).

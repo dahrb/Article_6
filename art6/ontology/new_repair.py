@@ -332,7 +332,9 @@ def _prompt(name: str) -> str:
 def _extraction_prompt() -> str:
     """The facts prompt the ORIGINAL extraction ran under, read live from the
     same file the pipeline snapshots, so it can never drift out of sync."""
-    return (PROMPT_DIR / "facts.txt").read_text(encoding="utf-8")
+    from art6.ontology.prompt_spec import facts_instruction
+
+    return facts_instruction()
 
 
 def _full_ontology() -> str:

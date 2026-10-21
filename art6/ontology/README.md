@@ -351,6 +351,19 @@ the rendering, the triple-store integration and the SHACL pass are OntoCast's.
 Where the input states a typed link, `facts.txt` requires stage 2 to transcribe
 it rather than re-derive it.
 
+**Every mode is asked for the same content.** The stage-2 instruction is
+`facts.txt` (how to write the graph) followed by the shared definitions of what
+goes in it — the classification, granularity, parties, finality/detention and
+coverage sections of `extract.txt` plus the party rules of `parties.txt` —
+composed by `prompt_spec.py`. The same definitions are appended to the C0
+baseline's prompt and given to stage 1's critic and fixer, and stage 3's calls
+that cite "the instructions the graph was built under" receive the composed
+text too. On the bundle arm they are redundant but cannot disagree with what the
+bundle says; on the raw arm they are the only place OntoCast learns them.
+`tests/test_prompt_consistency.py` fails if a closed-vocabulary value is
+offered by one mode and not another, if `facts.txt` lacks a mapping for one, or
+if a shared section stops reaching every mode.
+
 Two configuration points matter for validity. First, each run is given its
 **own triple-store project**, created fresh: an ontology is synchronised into a
 store only when its IRI is absent, matched on IRI and not on version, so a
@@ -714,6 +727,7 @@ of each pair from any statistic that assumes independent documents.
 | [run_ablation.sh](run_ablation.sh) | the whole five-condition driver |
 | [agentic_stage1.py](agentic_stage1.py) | stage 1 (default): event detection → linking → person identifier → stage-1 critic, whose mandatory flags route to the parallel track agent (+ re-link), a targeted parties pass and the fixer; typed links computed in code; judges filtered out |
 | [compress.py](compress.py) | the single-call stage 1 (`STAGE1_IMPL=compress`); span verification, oversize splitting, applicants and parties passes reused by agentic_stage1 |
+| [prompt_spec.py](prompt_spec.py) | the one definition of what the graph holds, composed into every mode's prompt (OntoCast both arms, C0, stage-1 critic/fixer, stage 3) |
 | [render_bundles.py](render_bundles.py) | renders verified spans as the document the graph stage sees |
 | [run_native.py](run_native.py) | stage 2: in-process invocation of OntoCast with response recovery installed |
 | [json_closers.py](json_closers.py) | rebuilds mismatched JSON container closers in a model reply (used by repair_facts.py; the three OntoCast monkeypatches this came from were removed once v0.6.2 absorbed the fix) |

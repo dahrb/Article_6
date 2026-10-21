@@ -407,6 +407,13 @@ def call_with_recovery(client: OpenAI, *, label: str, method: str = "create", **
     uncached rather than being cached wrongly.
     """
     from art6.ontology import llm_cache
+    from art6.ontology.provider import extra_body
+
+    # Provider routing (ART6_EXTRA_BODY) is part of the request, so it is part
+    # of the cache key too: a response from one provider never replays for
+    # another.
+    if body := extra_body():
+        kwargs.setdefault("extra_body", body)
 
     cache_key = None
     if method == "create":

@@ -521,3 +521,24 @@ def test_stage2_shards_cover_only_missing_and_keep_names(tmp_path):
     assert (raw / "input.L2.facts.ttl").read_text() == "done"  # never overwritten
     assert sorted(p.name for p in raw.glob("*.run.json"))  # renamed with its line
     assert "log" in (raw / "extract.log").read_text()
+
+
+def test_events_deleted_by_the_shacl_loop_are_revived():
+    from rdflib import RDF, Graph, Literal, Namespace, URIRef
+
+    E = Namespace("https://growgraph.dev/echr#")
+    doc = "https://growgraph.dev/doc/abc/"
+    event, other, gone = URIRef(doc + "e1"), URIRef(doc + "e0"), URIRef(doc + "p9")
+    g = Graph()
+    g.add((event, RDF.type, E.DomesticProceeding))
+    g.add((event, E.hasDecisionDate, Literal("2001-01-01")))
+    g.add((event, E.followsProceeding, other))
+    g.add((event, E.hasParticipation, gone))
+    g.add((other, RDF.type, E.DomesticProceeding))
+    kept = {event: list(g.triples((event, None, None)))}
+    g.remove((event, None, None))  # what the loop did
+    audit = r.restore_deleted_events(g, kept)
+    assert audit == [{"kind": "event_revived", "node": str(event), "triples": 3}]
+    assert (event, E.followsProceeding, other) in g
+    assert (event, E.hasParticipation, gone) not in g  # its target no longer exists
+    assert r.restore_deleted_events(g, kept) == []  # present nodes are left alone

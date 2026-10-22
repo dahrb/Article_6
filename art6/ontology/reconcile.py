@@ -278,6 +278,40 @@ def root_node(graph: Graph, nodes: list[URIRef]) -> URIRef:
 # ---------------------------------------------------------------------------
 
 
+def restore_deleted_events(graph: Graph, kept_before: dict) -> list[dict]:
+    """Put back stage-1 events the SHACL loop deleted outright.
+
+    The loop sees only the graph, so a shape it cannot satisfy cheaply -- one
+    participation node shared by several events, say -- it can clear by
+    deleting the events themselves. Transcription cannot undo that: it writes
+    fields onto a matched node, and a deleted node no longer matches.
+    Measured 2026-10-22 on the 10-doc validation set: 9 stage-1 events lost
+    this way across three documents, recall 87 -> 84.
+
+    A node with no rdf:type left is restored from its triples before the
+    loop, minus any pointing at a node that no longer exists. Whatever
+    violation that brings back stays standing and is counted, as for any
+    other stage-1 decision that costs a violation.
+    """
+    present = set(graph.subjects())
+    audit = []
+    for node, triples in kept_before.items():
+        if (node, RDF.type, None) in graph:
+            continue
+        restored = 0
+        for s, p, o in triples:
+            if (
+                isinstance(o, URIRef)
+                and str(o).startswith(str(node).rsplit("/", 1)[0])
+                and o not in present
+            ):
+                continue  # its target went too: do not leave a dangling link
+            graph.add((s, p, o))
+            restored += 1
+        audit.append({"kind": "event_revived", "node": str(node), "triples": restored})
+    return audit
+
+
 def transcribe(graph: Graph, payload: dict, m: Match) -> list[dict]:
     """Make matched nodes agree with stage 1. Returns one audit row per change."""
     audit: list[dict] = []
@@ -913,6 +947,9 @@ def reconcile_document(
         from art6.ontology.new_repair import run_loop
 
         t0 = time.perf_counter()
+        kept_before = {
+            node: list(graph.triples((node, None, None))) for node in m.entry_of
+        }
         graph, loop_audit = run_loop(
             graph,
             client=client,
@@ -924,6 +961,8 @@ def reconcile_document(
             max_rounds=max_rounds,
             label="shacl",
         )
+        revived = restore_deleted_events(graph, kept_before)
+        audit += revived
         m = match_events(graph, events)
         restored = transcribe(graph, payload, m)
         audit += restored
@@ -937,6 +976,7 @@ def reconcile_document(
                 1 for a in loop_audit if str(a.get("status", "")).startswith("applied")
             ),
             "stage1_decisions_restored": len(restored),
+            "stage1_events_revived": len(revived),
         }
 
     # FINAL CRITIC -> GRAPH FIXER. Reads the finished graph against the

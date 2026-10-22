@@ -57,6 +57,7 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import copy
 import json
 import os
 import re
@@ -197,6 +198,7 @@ EVENT_KEYS = {
     "interim_spans",
     "parties",
     "detention",
+    "description",
 }
 # Fields the extraction prompt used to carry and this stage now owns.
 LEGACY_LINK_KEYS = ("follows", "follows_span")
@@ -523,13 +525,14 @@ def is_filing(event: dict) -> bool:
     """A filing: an act narrated as instituting a proceeding, or dated as begun
     and never decided. In the annotation, partOfProceeding targets exactly
     these -- 101 of the 103 gold part_of edges point at a filing."""
-    if event.get("institution_narrated_span"):
-        return True
-    return bool(
-        event.get("start_date_span")
-        and not event.get("decision_date_span")
-        and not event.get("outcome")
-    )
+    # Something decided is never a filing, whatever else it carries: the model
+    # sometimes quotes the request on its decision's entry as well
+    # (2026-10-22, Matko: a District Court decision with the prosecutor's
+    # request in institution_narrated_span), which made it a filing and turned
+    # the decision's own part_of into follows.
+    if event.get("decision_date_span") or event.get("outcome"):
+        return False
+    return bool(event.get("institution_narrated_span") or event.get("start_date_span"))
 
 
 def same_proceeding(a: dict, b: dict) -> bool:
@@ -542,7 +545,18 @@ def same_proceeding(a: dict, b: dict) -> bool:
         if (a.get(key) or "") != (b.get(key) or ""):
             return False
     na, nb = _norm_name(a.get("authority_span")), _norm_name(b.get("authority_span"))
-    return not na or not nb or na == nb or na in nb or nb in na
+    if not na or not nb or na == nb or na in nb or nb in na:
+        return True
+    # A filing's authority is often the FILER ("the Public Prosecutor requested
+    # the District Court to open an investigation"), so a filing whose own words
+    # name the other act's body is lodged with that body.
+    for one, other in ((a, b), (b, a)):
+        name = _norm_name(other.get("authority_span"))
+        if is_filing(one) and name:
+            for key in ("institution_narrated_span", "what_happened_span"):
+                if name in _norm_name(one.get(key)):
+                    return True
+    return False
 
 
 def retype_part_of(payload: dict) -> int:
@@ -579,7 +593,110 @@ def break_cycles(payload: dict) -> int:
     return broken
 
 
-def finalize(payload: dict) -> dict:
+# A sentence ends at a full stop or semicolon followed by a capital (or a
+# markdown paragraph number), or at a line break. The lookbehinds keep the
+# usual abbreviations ("no. 5", "Mr K. Smith") from ending one.
+_SENTENCE_BREAK = re.compile(
+    r"(?<!\bno)(?<!\bnos)(?<!\bMr)(?<!\bMrs)(?<!\bMs)(?<!\bDr)(?<!\bSt)(?<![\s(][A-Z])"
+    r"[.;]\s+(?=[A-Z*(\"“])|\n"
+)
+
+
+def sentence_at(source: str, start: int, end: int) -> tuple[int, int]:
+    """The sentence holding source[start:end], as (start, end) offsets."""
+    lo = 0
+    for m in _SENTENCE_BREAK.finditer(source, 0, start):
+        lo = m.end()
+    number = re.match(r"\*\*\d+\.\*\*\s*", source[lo:start])
+    if number:
+        lo += number.end()
+    m = _SENTENCE_BREAK.search(source, end)
+    hi = (
+        m.start() + 1
+        if m and source[m.start()] in ".;"
+        else (m.start() if m else len(source))
+    )
+    return lo, hi
+
+
+# The guide's REPORTED filing (annotation_guide.txt §3.1): the lodging is a
+# participle phrase on the decision's object -- "a claim brought in 1999" --
+# with no subject and finite verb of its own.
+_REPORTED_FILING = re.compile(
+    r"\b(?:brought|lodged|filed|instituted|introduced|submitted|made|initiated)"
+    r"\s+(?:[\w’'-]+\s+){0,4}?(?:in|on|of)\s+$"
+)
+
+
+def split_narrated_filings(payload: dict, source: str) -> int:
+    """Split an entry that folded a NARRATED filing into its decision.
+
+    extract.txt asks for two entries whenever the lodging is narrated as its
+    own act, and the model still folds them -- 2026-10-22, Stanev (001-108690):
+    "On an unspecified date in 2000 ... the prosecutor applied to the Ruse
+    Regional Court ... In a judgment of 20 November 2000, the court declared"
+    came back as ONE entry carrying both dates. The annotation has two, and
+    links the appeal to the FILING, so every successor's link scored wrong.
+
+    The guide's test (annotation_guide.txt §3.1) is whether the filing is
+    narrated as its own act. Two sentences always are; so is one sentence with
+    two clauses ("the Public Prosecutor appealed ... and on 27 September 2000
+    the Higher Court upheld"), which gold splits too -- only 3 of the ~400 gold
+    entries across both sets keep both dates. What stays ONE entry is the
+    REPORTED filing, a participle phrase in the decision's sentence ("dismissed
+    a claim brought in 1999"). Splitting on sentences alone left those
+    two-clause sentences folded and cost 4 F1 on both events and links
+    (2026-10-22, Stanev + Matko). The filing takes the
+    start date, the sentence narrating it, the body, rung, procedure, track and
+    parties, and the decision's own link to an earlier proceeding; the decision
+    becomes an act of it. Returns how many entries were split.
+    """
+    out, split = [], 0
+    for event in _events(payload):
+        start, decided = event.get("start_date_span"), event.get("decision_date_span")
+        if not (isinstance(start, dict) and isinstance(decided, dict)):
+            out.append(event)
+            continue
+        s_lo, s_hi = sentence_at(source, start["start"], start["end"])
+        lead = source[max(s_lo, start["start"] - 60) : start["start"]]
+        if s_lo <= decided["start"] < s_hi and _REPORTED_FILING.search(lead):
+            out.append(event)  # "a claim brought in 1999": reported, one entry
+            continue
+        sentence = {"text": source[s_lo:s_hi], "start": s_lo, "end": s_hi}
+        filing = {
+            "id": f"{event['id']}f",
+            "what_happened_span": event.get("institution_narrated_span") or sentence,
+            "start_date_span": start,
+            "institution_narrated_span": event.get("institution_narrated_span")
+            or sentence,
+        }
+        for key in (
+            "authority_span",
+            "authority_kind_span",
+            "instance_level",
+            "proceeding_type",
+            "proceeding_type_span",
+            "matter",
+            "track",
+            "parties",
+            "description",
+        ):
+            if event.get(key):
+                filing[key] = copy.deepcopy(event[key])
+        if event.get("link"):
+            filing["link"] = event.pop("link")
+        event.pop("start_date_span")
+        event.pop("institution_narrated_span", None)
+        event["link"] = {"to": filing["id"], "kind": "continues"}
+        # A filing that begins later in the text than its decision is still
+        # written first, so the list keeps the order the acts happened in.
+        out += [filing, event]
+        split += 1
+    payload["events"] = out
+    return split
+
+
+def finalize(payload: dict, source: str | None = None) -> dict:
     """Renumber events e1..eN and turn each planned link into the ontology
     relation it is.
 
@@ -588,7 +705,11 @@ def finalize(payload: dict) -> dict:
     so both ends are proceedings' earliest acts. Hence every target is the
     predecessor's ROOT, computed in document order so a root is always
     settled before anything points at it.
+
+    With `source`, folded narrated filings are split first (see
+    split_narrated_filings), so links to them resolve to the filing.
     """
+    split = split_narrated_filings(payload, source) if source else 0
     # The list is already in document order: extraction writes it that way
     # and apply_fixes inserts added events at their own position.
     events = _events(payload)
@@ -625,13 +746,20 @@ def finalize(payload: dict) -> dict:
             target = resolve(pred["id"])
             if link["kind"] == "during":
                 relation = "occurs_during"
-            elif is_filing(pred) and same_proceeding(by_id[eid], pred):
+            elif (
+                not is_filing(by_id[eid])
+                and is_filing(pred)
+                and same_proceeding(by_id[eid], pred)
+            ):
                 # Only a decision disposing of a narrated filing is an act of
                 # the same proceeding. Successive rulings by one court -- a run
                 # of detention extensions, say -- are a chain (follows), as in
                 # the annotation; typing them part_of collapsed whole chains
                 # into single proceedings (validation, 2026-10-21: 88 part_of
-                # edges asserted against 31 in gold, 12 correct).
+                # edges asserted against 31 in gold, 12 correct). A filing is
+                # never part_of another filing: a written complaint after an
+                # oral one follows it (gold, filing -> filing at one level:
+                # 12 follows, 7 part_of).
                 relation = "part_of"
                 root[eid] = target
             else:
@@ -648,6 +776,7 @@ def finalize(payload: dict) -> dict:
         for rel in ("follows", "part_of", "occurs_during")
     }
     counts["cycles_broken"] = broken
+    counts["filings_split"] = split
 
     used = {e.get("track") for e in events}
     tracks = [t for t in payload.get("tracks") or [] if t["id"] in used]
@@ -1997,7 +2126,7 @@ def run_stage1_agents(
 
     # 4. TYPED LINKS
     log["track_relation_links"] = links_from_track_relations(payload)
-    log["finalize"] = finalize(payload)
+    log["finalize"] = finalize(payload, source)
     stats.update(filters)
     return log
 

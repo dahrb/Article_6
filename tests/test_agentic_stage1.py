@@ -233,6 +233,7 @@ def test_finalize_types_relations_and_points_at_roots():
         "part_of": 1,
         "occurs_during": 1,
         "cycles_broken": 0,
+        "filings_split": 0,
     }
 
 
@@ -244,6 +245,77 @@ def test_finalize_breaks_cycles():
     p["events"][0]["link"] = {"to": "e2", "kind": "continues"}
     p["events"][1]["link"] = {"to": "e1", "kind": "continues"}
     assert a.finalize(p)["relations"]["cycles_broken"] == 1
+
+
+def test_sentence_at_keeps_abbreviations_and_drops_paragraph_numbers():
+    text = "**12.** On 3 May 2001 Mr K. Smith applied to court no. 5. It refused."
+    lo, hi = a.sentence_at(text, text.index("3 May"), text.index("3 May") + 10)
+    assert text[lo:hi] == "On 3 May 2001 Mr K. Smith applied to court no. 5."
+
+
+def test_split_narrated_filing_into_filing_and_decision():
+    # Folded: lodged in paragraph 5, decided in paragraph 6 -- two sentences.
+    folded = ev(
+        "x",
+        "dismissed the claim",
+        "5 June 2003",
+        "Kyiv District Court",
+        outcome="merits decided",
+        start_date_span=span("15 March 1999"),
+        track="T1",
+    )
+    appeal = ev(
+        "y",
+        "upheld that judgment",
+        "1 September 2003",
+        "Kyiv Regional Court of Appeal",
+        level="appeal",
+        track="T1",
+        link={"to": "x", "kind": "continues"},
+    )
+    p = {"events": [folded, appeal], "tracks": [{"id": "T1", "label": ""}]}
+    out = a.finalize(p, JUDGMENT)
+    assert out["relations"]["filings_split"] == 1
+    filing, decision, upheld = p["events"]
+    assert filing["start_date_span"]["text"] == "15 March 1999"
+    assert "decision_date_span" not in filing and "outcome" not in filing
+    assert filing["institution_narrated_span"]["text"].startswith("On 15 March 1999")
+    assert "start_date_span" not in decision
+    assert decision["part_of"] == filing["id"]
+    # the appeal's link to the folded entry now lands on the proceeding's root
+    assert upheld["follows"] == filing["id"]
+
+
+def test_reported_filing_in_one_sentence_stays_one_entry():
+    text = "On 5 June 2003 the court dismissed a claim brought in 1999."
+    s = lambda t: {"text": t, "start": text.index(t), "end": text.index(t) + len(t)}
+    e = {
+        "id": "x",
+        "what_happened_span": s("dismissed a claim"),
+        "decision_date_span": s("5 June 2003"),
+        "start_date_span": s("1999"),
+    }
+    p = {"events": [e]}
+    assert a.split_narrated_filings(p, text) == 0
+    assert len(p["events"]) == 1
+
+
+def test_two_clauses_in_one_sentence_are_two_acts():
+    text = (
+        "On 5 January 2000 the Public Prosecutor appealed against the judgment and"
+        " on 27 September 2000 the Maribor Higher Court quashed it."
+    )
+    s = lambda t: {"text": t, "start": text.index(t), "end": text.index(t) + len(t)}
+    e = {
+        "id": "x",
+        "what_happened_span": s("quashed it"),
+        "decision_date_span": s("27 September 2000"),
+        "start_date_span": s("5 January 2000"),
+        "authority_span": s("Maribor Higher Court"),
+    }
+    p = {"events": [e]}
+    assert a.split_narrated_filings(p, text) == 1
+    assert [x["id"] for x in p["events"]] == ["xf", "x"]
 
 
 # -- hints, findings, fixes ---------------------------------------------------

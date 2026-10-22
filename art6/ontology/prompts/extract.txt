@@ -49,6 +49,11 @@ are skipped on a "no".
     {
       "id": "e1",
       "order": 1,
+      "description": "ONE short plain sentence in YOUR OWN words, not a quote: who did
+        what, before or by which body, with what result -- 'The applicant's lawyer asked
+        the regional office to reconsider the refusal of his pension.' It lets a reader
+        check the entry at a glance. It is never evidence: every fact in it must also be
+        in this entry's spans.",
       "what_happened_span": "the decisive words: what was decided or done",
       "decision_date_span": "the date it was decided, as written",
       "start_date_span": "the date it was begun or lodged, if separately given",
@@ -546,6 +551,30 @@ final or that remedies were exhausted; into `pending_span` any words showing a m
 still outstanding when the judgment was written. Where an entry ordered, extended or ended a
 deprivation of liberty, record it in that entry's `detention`, with the detainee and the
 bounding dates as the text gives them.
+
+## BEFORE YOU FINISH — THE ONE-SENTENCE TEST FOR TWO DATES
+
+Go through your entries once more and stop at EVERY entry that carries BOTH
+`start_date_span` and `decision_date_span`. Find the two dates in the document:
+
+  - SAME SENTENCE ("On 5 June 2003 the court dismissed a claim brought in 1999") -> the
+    filing is only reported: keep ONE entry.
+  - DIFFERENT SENTENCES ("In 2004 the applicant's sister applied to the District Court
+    to have him placed under guardianship. In a decision of 3 March 2005 the court
+    granted the application.") -> the filing is NARRATED: you folded two acts into one. Rewrite it as TWO
+    entries -- the filing (start_date_span, institution_narrated_span = the filing
+    sentence, no decision_date_span, no outcome) and then the decision (decision_date_span,
+    outcome, no start_date_span).
+
+There is no third case. Two sentences means two entries, every time, whoever filed --
+the applicant, a relative, a lawyer, a prosecutor, a company -- and however short the
+text between them. A request to a mayor, a council or a welfare office and its refusal are
+a filing and a decision too.
+
+Splitting changes the NUMBER of entries and nothing else. Both new entries keep the
+original entry's `instance_level`, `proceeding_type`, authority and track: a request to a
+municipal council and the council's answer are both administrative review, a prosecutor's
+refusal is still investigative. Never re-classify an entry because you split it.
 
 ## BEFORE YOU FINISH — COVERAGE CHECK
 

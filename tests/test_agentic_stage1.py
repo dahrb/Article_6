@@ -190,8 +190,9 @@ def test_finalize_types_relations_and_points_at_roots():
             ev(
                 "a",
                 "instituted civil proceedings",
-                "15 March 1999",
+                None,
                 "Kyiv District Court",
+                start_date_span=span("15 March 1999"),
             ),
             ev("b", "dismissed the claim", "5 June 2003", "Kyiv District Court"),
             ev(
@@ -750,3 +751,41 @@ def test_added_event_is_inserted_where_the_judgment_narrates_it():
         "instituted civil proceedings",
         "dismissed the claim",
     ]
+
+
+def test_part_of_only_targets_a_filing():
+    p = {
+        "events": [
+            ev("a", "dismissed the claim", "5 June 2003", "Kyiv District Court"),
+            ev("b", "upheld that judgment", "1 September 2003", "Kyiv District Court"),
+        ],
+        "tracks": [{"id": "T1", "label": ""}],
+    }
+    for e in p["events"]:
+        e["track"] = "T1"
+    p["events"][1]["link"] = {"to": "a", "kind": "continues"}
+    a.finalize(p)
+    # same court, rung, procedure and track -- but the predecessor DECIDED
+    # something, so this is the next step of a chain, not the same proceeding
+    assert p["events"][1].get("follows") == "e1" and "part_of" not in p["events"][1]
+
+
+def test_retype_part_of_migrates_old_payloads():
+    p = {
+        "events": [
+            ev("e1", "dismissed the claim", "5 June 2003"),
+            {**ev("e2", "upheld that judgment", "1 September 2003"), "part_of": "e1"},
+            ev(
+                "e3",
+                "instituted civil proceedings",
+                None,
+                start_date_span=span("15 March 1999"),
+            ),
+            {
+                **ev("e4", "was arrested by the police", "2 February 2001"),
+                "part_of": "e3",
+            },
+        ]
+    }
+    assert a.retype_part_of(p) == 1
+    assert p["events"][1]["follows"] == "e1" and p["events"][3]["part_of"] == "e3"

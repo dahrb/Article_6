@@ -40,9 +40,11 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import datetime
 import json
 import os
+import threading
 import time
 from pathlib import Path
 
@@ -241,6 +243,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="documents in flight at once; >1 for a hosted endpoint, where each "
+        "call is slow but calls do not compete for one server",
+    )
+    parser.add_argument(
         "--overwrite",
         action="store_true",
         help="Re-run a document whose .o1.json already exists.",
@@ -272,7 +281,10 @@ def main(argv: list[str] | None = None) -> int:
     failures = 0
     resumed = 0
 
-    for document in documents:
+    lock = threading.Lock()
+
+    def run_document(document: dict) -> None:
+        nonlocal failures, resumed
         stem = f"input.L{document['line']}"
         # A document is "done" when its .o1.json report exists. Re-running the
         # same command therefore picks up where a dead endpoint left off,
@@ -281,8 +293,9 @@ def main(argv: list[str] | None = None) -> int:
         # 250-document run that died mid-stage-1 with 239/250 C0 outputs
         # already on disk and no way to skip them on retry.
         if not args.overwrite and (args.out_dir / f"{stem}.{suffix}.json").exists():
-            resumed += 1
-            continue
+            with lock:
+                resumed += 1
+            return
         try:
             raw, timing = extract_one(
                 client,
@@ -294,16 +307,17 @@ def main(argv: list[str] | None = None) -> int:
                 token_param=args.token_param,
             )
         except Exception as exc:  # noqa: BLE001 - one document must not end the run
-            failures += 1
+            with lock:
+                failures += 1
+                timings.append(
+                    {
+                        "line": document["line"],
+                        "case_id": document["case_id"],
+                        "error": type(exc).__name__,
+                    }
+                )
             print(f"  FAILED {stem}: {type(exc).__name__}: {str(exc)[:200]}")
-            timings.append(
-                {
-                    "line": document["line"],
-                    "case_id": document["case_id"],
-                    "error": type(exc).__name__,
-                }
-            )
-            continue
+            return
 
         (args.out_dir / f"{stem}.{suffix}.txt").write_text(raw, encoding="utf-8")
         if args.condition == "o1":
@@ -323,9 +337,19 @@ def main(argv: list[str] | None = None) -> int:
         print(
             f"  {stem}: {timing['seconds']}s, "
             f"{timing.get('completion_tokens', '?')} completion tokens"
-            f"{marker}"
+            f"{marker}",
+            flush=True,
         )
-        timings.append(timing)
+        with lock:
+            timings.append(timing)
+
+    if args.workers > 1:
+        with concurrent.futures.ThreadPoolExecutor(args.workers) as pool:
+            list(pool.map(run_document, documents))
+    else:
+        for document in documents:
+            run_document(document)
+    timings.sort(key=lambda t: t.get("line", 0))
 
     run_seconds = time.perf_counter() - run_start
     parsed_ok = sum(1 for t in timings if t.get("parsed"))

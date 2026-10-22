@@ -519,6 +519,19 @@ def _apply_links(plan, events, candidates, track_of, index, audit) -> dict:
     return audit
 
 
+def is_filing(event: dict) -> bool:
+    """A filing: an act narrated as instituting a proceeding, or dated as begun
+    and never decided. In the annotation, partOfProceeding targets exactly
+    these -- 101 of the 103 gold part_of edges point at a filing."""
+    if event.get("institution_narrated_span"):
+        return True
+    return bool(
+        event.get("start_date_span")
+        and not event.get("decision_date_span")
+        and not event.get("outcome")
+    )
+
+
 def same_proceeding(a: dict, b: dict) -> bool:
     """Two acts of ONE proceeding: same track, rung and procedure, and the
     same deciding body. A filing often names no body, so a body missing on one
@@ -530,6 +543,21 @@ def same_proceeding(a: dict, b: dict) -> bool:
             return False
     na, nb = _norm_name(a.get("authority_span")), _norm_name(b.get("authority_span"))
     return not na or not nb or na == nb or na in nb or nb in na
+
+
+def retype_part_of(payload: dict) -> int:
+    """Apply the filing rule to a payload finalized before it existed: any
+    part_of whose target is not a filing becomes follows (to the same target,
+    which finalize already made the proceeding's root). Returns how many."""
+    by_id = {e["id"]: e for e in _events(payload)}
+    changed = 0
+    for event in _events(payload):
+        target = event.get("part_of")
+        if target and target in by_id and not is_filing(by_id[target]):
+            event.pop("part_of")
+            event["follows"] = target
+            changed += 1
+    return changed
 
 
 def break_cycles(payload: dict) -> int:
@@ -597,7 +625,13 @@ def finalize(payload: dict) -> dict:
             target = resolve(pred["id"])
             if link["kind"] == "during":
                 relation = "occurs_during"
-            elif same_proceeding(by_id[eid], pred):
+            elif is_filing(pred) and same_proceeding(by_id[eid], pred):
+                # Only a decision disposing of a narrated filing is an act of
+                # the same proceeding. Successive rulings by one court -- a run
+                # of detention extensions, say -- are a chain (follows), as in
+                # the annotation; typing them part_of collapsed whole chains
+                # into single proceedings (validation, 2026-10-21: 88 part_of
+                # edges asserted against 31 in gold, 12 correct).
                 relation = "part_of"
                 root[eid] = target
             else:
@@ -2025,7 +2059,21 @@ def main() -> None:
     ap.add_argument("--api-key", default=os.environ.get("VLLM_API_KEY", "EMPTY"))
     ap.add_argument("--temperature", type=float, default=0.0)
     ap.add_argument("--workers", type=int, default=1, help="see compress.py --workers")
-    ap.add_argument("--token-budget", type=int, default=0)
+    ap.add_argument(
+        "--token-budget",
+        type=int,
+        default=0,
+        help="ceiling on prompt+output tokens in flight across workers; 0 = the "
+        "context window. Raise it for a hosted endpoint, whose capacity is not "
+        "one server's KV cache.",
+    )
+    ap.add_argument(
+        "--context-window",
+        type=int,
+        default=0,
+        help="the model's window, which decides when a document is split; 0 asks "
+        "the server, falling back to 98,304",
+    )
     ap.add_argument("--overwrite", action="store_true")
     ap.add_argument(
         "--parties-pass",
@@ -2077,11 +2125,15 @@ def main() -> None:
         for l in args.input_jsonl.read_text(encoding="utf-8").splitlines()
         if l.strip()
     ]
-    capacity = args.token_budget or c.server_token_capacity(
+    # Two different limits, kept apart: the WINDOW decides whether a document
+    # must be split and how much of it a prompt can show; the BUDGET caps the
+    # tokens in flight across workers. One number used to serve both, so a
+    # hosted run could only hold about two calls at once.
+    capacity = args.context_window or c.server_token_capacity(
         args.base_url, args.api_key or ""
     )
     if args.workers > 1:
-        c.BUDGET = c.TokenBudget(capacity)
+        c.BUDGET = c.TokenBudget(args.token_budget or capacity)
     print(
         f"stage 1 (agentic): {args.model} @ {args.base_url} "
         f"(temperature {args.temperature}, {args.workers} worker(s))"

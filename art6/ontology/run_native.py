@@ -180,6 +180,52 @@ def _route_ontocast_requests() -> None:
     print(f"stage 2 requests routed with extra_body keys {sorted(body)}", flush=True)
 
 
+def _accept_precreated_fuseki_datasets() -> None:
+    """Let a refused dataset creation pass when the dataset already exists.
+
+    OntoCast creates each dataset through Fuseki's admin API on every run and,
+    from v0.6.5, treats a 401/403 there as fatal. Our Fuseki serves the admin
+    API to localhost inside the container only, so run_ablation.sh creates the
+    datasets there first (fuseki_ds) and OntoCast's own attempt from the host
+    is always refused -- under v0.6.2 that was logged and ignored; under
+    v0.6.9 it ended stage 2 before any document (2026-10-21, 0/10 graphs).
+
+    The refusal is accepted only when the dataset demonstrably exists: it must
+    answer a SPARQL ASK. A missing dataset still fails exactly as before.
+    """
+    try:
+        from ontocast.tool.triple_manager import fuseki
+    except ImportError:
+        return
+    manager = fuseki.FusekiTripleStoreManager
+    original = manager.init_dataset
+    if getattr(original, "_art6_precreated", False):
+        return
+
+    async def init_dataset(self, dataset_name: str) -> None:
+        try:
+            await original(self, dataset_name)
+        except fuseki.FusekiAccessError:
+            import httpx
+
+            async with httpx.AsyncClient(auth=self._prepare_auth(), timeout=30.0) as c:
+                r = await c.get(
+                    f"{self.uri}/{dataset_name}/sparql",
+                    params={"query": "ASK {}"},
+                    headers={"Accept": "application/sparql-results+json"},
+                )
+            if r.status_code != 200:
+                raise
+            logging.getLogger("run_native").info(
+                "Fuseki refused creating %r but it already exists (pre-created); "
+                "continuing",
+                dataset_name,
+            )
+
+    init_dataset._art6_precreated = True  # type: ignore[attr-defined]
+    manager.init_dataset = init_dataset  # type: ignore[method-assign]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(
         description="Run `ontocast process` in-process, with a run report."
@@ -228,6 +274,7 @@ def main() -> int:
         return 2
 
     _route_ontocast_requests()
+    _accept_precreated_fuseki_datasets()
     from ontocast.cli.server import cli
 
     argv = [

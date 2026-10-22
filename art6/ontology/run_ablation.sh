@@ -65,6 +65,20 @@ CRITIC_ROUNDS="${CRITIC_ROUNDS:-1}"        # stage-1 critic rounds; 0 = no criti
 PARTIES="${PARTIES:-1}"                    # 0 = skip the parties pass
 SHACL_ROUNDS="${SHACL_ROUNDS:-3}"          # 0 = no SHACL violation agent
 FINAL_CRITIC="${FINAL_CRITIC:-1}"          # 0 = no final critic / graph fixer
+# Parallelism. All default to the sequential path, which is what keeps a local
+# vLLM run byte-reproducible (stage 1) and its KV cache uncontended. A hosted
+# endpoint is the opposite case: each call streams slowly (20-50 tokens/s on
+# OpenRouter) but calls do not compete for one server, so running documents at
+# once is nearly free. Measured 2026-10-21: one sequential validation run was
+# heading for 3-4 hours on Gemma.
+STAGE1_WORKERS="${STAGE1_WORKERS:-1}"      # documents in flight in stage 1
+STAGE1_TOKEN_BUDGET="${STAGE1_TOKEN_BUDGET:-0}"  # tokens in flight; 0 = the window
+C0_WORKERS="${C0_WORKERS:-1}"              # documents in flight in C0
+STAGE2_SHARDS="${STAGE2_SHARDS:-1}"        # concurrent OntoCast processes per arm
+STAGE2_RETRIES="${STAGE2_RETRIES:-1}"      # re-runs of documents that came back empty
+STAGE2_ALLOW_MISSING="${STAGE2_ALLOW_MISSING:-0}"  # 1 = stage 3 proceeds past them
+STAGE3_WORKERS="${STAGE3_WORKERS:-1}"      # graphs in flight in stage 3
+PARALLEL_ARMS="${PARALLEL_ARMS:-0}"        # 1 = raw and comp arms at the same time
 REPAIR_IMPL="${REPAIR_IMPL:-reconcile}"
 case "${STAGE1_IMPL}" in agentic|compress) ;; *) echo "STAGE1_IMPL must be agentic or compress" >&2; exit 2;; esac
 case "${REPAIR_IMPL}" in reconcile|new_repair) ;; *) echo "REPAIR_IMPL must be reconcile or new_repair" >&2; exit 2;; esac
@@ -194,7 +208,7 @@ phase "C0  O1 schema-light"
 t0=$(now)
 (cd "${REPO_ROOT}" && uv run python -m art6.conditions.run_conditions \
     --condition o1 --input-json "${SET_JSON}" --out-dir "${OUT_DIR}/C0" \
-    --model "${MODEL}" --base-url "${BASE_URL}" \
+    --model "${MODEL}" --base-url "${BASE_URL}" --workers "${C0_WORKERS}" \
     ${LIMIT:+--limit "${LIMIT}"}) || echo "C0 returned $?"
 echo "C0 done in $(( $(now) - t0 ))s"
 # Only mark the phase done if every input document actually produced output --
@@ -226,6 +240,7 @@ t0=$(now)
     ${SPLIT_MAX_TOKENS:+--split-max-tokens "${SPLIT_MAX_TOKENS}"} \
     ${COMPRESS_PROMPT_FILE:+--prompt-file "${COMPRESS_PROMPT_FILE}"} \
     $([[ "${STAGE1_IMPL}" == agentic ]] && echo --critic-rounds "${CRITIC_ROUNDS}") \
+    --workers "${STAGE1_WORKERS}" --token-budget "${STAGE1_TOKEN_BUDGET}" \
     $([[ "${STAGE1_IMPL}" == agentic && "${PARTIES}" == 0 ]] && echo --no-parties) \
     --parties-pass)
 (cd "${REPO_ROOT}" && uv run python -m art6.ontology.render_bundles \
@@ -252,13 +267,10 @@ run_arm() {
     # shapes SPARQL endpoint) on every document.
     fuseki_ds "growgraph--${project}--shapes"
 
-    # RESUME IS PER PHASE HERE, NOT PER DOCUMENT. run_native names its outputs
-    # from the INPUT FILE stem plus line position (input.jsonl -> input.L1 ...),
-    # so filtering the input to the undone documents renames every output and
-    # renumbers the survivors -- L8 of ten becomes L1 of three and collides with
-    # an existing file. Stage 2 is therefore all-or-nothing per arm. Stage 1 and
-    # stage 3 resume per document on their own markers, and those are the long
-    # phases; a repeated stage 2 costs ~75s per document.
+    # RESUME IS PER DOCUMENT. run_native names outputs from the input file's
+    # stem plus LINE POSITION, which used to make stage 2 all-or-nothing per
+    # arm; stage2_shards.py keeps the numbering intact while running only the
+    # documents that have no graph yet.
     local stage2_complete=1
     if done_phase "stage2_${label}"; then
         echo; echo "--- ${label} stage 2  (already done, skipping) ---"
@@ -310,11 +322,38 @@ run_arm() {
         export FACTS_SHAPES_DIR="${SHAPES_DIR}" FACTS_SHACL_INFERENCE=rdfs \
                FACTS_SHACL_ADVANCED=true FACTS_SHACL_AUTOFIX=prune FACTS_SHACL_AUTOFIX_PASSES=1
         cd "${ONTOCAST_REPO}"
-        env -u VIRTUAL_ENV PYTHONPATH="${REPO_ROOT}" \
-            uv run python -m art6.ontology.run_native \
-                --input-path "${input}" --tenant growgraph --project "${project}" \
-                --output-dir "${dir}/raw" --max-visits "${MAX_VISITS:-1}" \
-                --report "${dir}/extract_report.json" --allow-unit-loss
+        # PER-DOCUMENT RESUME, SHARDED, WITH RETRIES. Each attempt runs only the
+        # documents that have no graph yet, split over STAGE2_SHARDS concurrent
+        # OntoCast processes; see art6/ontology/stage2_shards.py for why the
+        # output names survive the split. A document whose render came back
+        # empty (a throttled provider, an unparseable reply) is simply missing
+        # after its attempt and goes round again, up to STAGE2_RETRIES times.
+        shard_tool="${REPO_ROOT}/art6/ontology/stage2_shards.py"
+        mkdir -p "${dir}/raw"
+        for attempt in $(seq 0 "${STAGE2_RETRIES}"); do
+            todo=$(python3 "${shard_tool}" missing --input "${input}" --raw-dir "${dir}/raw")
+            [[ -z "${todo}" ]] && break
+            root="${dir}/shards/attempt${attempt}"; rm -rf "${root}"
+            mapfile -t shard_dirs < <(python3 "${shard_tool}" plan --input "${input}" \
+                --raw-dir "${dir}/raw" --shards "${STAGE2_SHARDS}" --root "${root}")
+            echo "  stage 2 attempt ${attempt}: ${#shard_dirs[@]} process(es) for ${todo}"
+            pids=()
+            for sd in "${shard_dirs[@]}"; do
+                env -u VIRTUAL_ENV PYTHONPATH="${REPO_ROOT}" \
+                    uv run python -m art6.ontology.run_native \
+                        --input-path "${sd}/$(basename "${input}")" \
+                        --tenant growgraph --project "${project}" \
+                        --output-dir "${sd}/raw" --max-visits "${MAX_VISITS:-1}" \
+                        --report "${sd}/extract_report.json" --allow-unit-loss \
+                        > "${sd}/run_native.out" 2>&1 &
+                pids+=($!)
+            done
+            for pid in "${pids[@]}"; do wait "${pid}" || true; done
+            for sd in "${shard_dirs[@]}"; do
+                tail -n 3 "${sd}/run_native.out" | sed "s|^|    $(basename "${sd}"): |"
+            done
+            python3 "${shard_tool}" merge --input "${input}" --raw-dir "${dir}/raw" --root "${root}" >/dev/null
+        done
     ) || echo "${label} stage 2 returned $?"
     echo "${label} stage 2 done in $(( $(now) - t ))s"
     # Same guard as C0: only mark done if every input document actually got a
@@ -325,6 +364,13 @@ run_arm() {
     s2_got=$(ls "${dir}/raw"/*.facts.ttl 2>/dev/null | wc -l)
     if [[ "${s2_got}" -eq "${s2_expect}" ]]; then
         mark_phase "stage2_${label}"
+        stage2_complete=1
+    elif [[ "${STAGE2_ALLOW_MISSING}" == 1 && "${s2_got}" -gt 0 ]]; then
+        # Documents that still produced no graph after STAGE2_RETRIES are a
+        # result, like C0's unparseable replies: carried forward as missing
+        # output (they count against recall), not a reason to skip stage 3
+        # for the whole arm. Not marked done, so a later run can retry them.
+        echo "${label} stage 2: ${s2_got}/${s2_expect} graphs; missing: $(python3 "${REPO_ROOT}/art6/ontology/stage2_shards.py" missing --input "${input}" --raw-dir "${dir}/raw") -- continuing to stage 3 (STAGE2_ALLOW_MISSING=1)"
         stage2_complete=1
     else
         echo "${label} stage 2 incomplete: ${s2_got}/${s2_expect} -- not marking done, will resume next run"
@@ -367,6 +413,7 @@ run_arm() {
         --facts-dir "${dir}/repaired" --input-jsonl "${input}" \
         --stage1-dir "${OUT_DIR}/stage1" --original-jsonl "${INPUT_JSONL}" \
         --max-rounds "${SHACL_ROUNDS}" $([[ "${FINAL_CRITIC}" == 0 ]] && echo --no-final-critic) \
+        --workers "${STAGE3_WORKERS}" \
         --model "${MODEL}" --base-url "${BASE_URL}" \
         --temperature 0.0) || echo "${label} stage 3 returned $?"
     else
@@ -387,8 +434,17 @@ run_arm() {
     echo "${label} stage 3 done in $(( $(now) - t ))s"
 }
 
-[[ -n "${C4_ONLY}" ]] || run_arm "raw"  "${INPUT_JSONL}"          "${OUT_DIR}/C1_C2"
-run_arm "comp" "${OUT_DIR}/bundles.jsonl" "${OUT_DIR}/C3_C4"
+if [[ "${PARALLEL_ARMS}" == 1 && -z "${C4_ONLY}" ]]; then
+    # The two arms share nothing but stage 1's output and the judgments, both
+    # read-only by now, and each has its own triple-store project.
+    run_arm "raw"  "${INPUT_JSONL}"          "${OUT_DIR}/C1_C2" &
+    raw_pid=$!
+    run_arm "comp" "${OUT_DIR}/bundles.jsonl" "${OUT_DIR}/C3_C4"
+    wait "${raw_pid}" || true
+else
+    [[ -n "${C4_ONLY}" ]] || run_arm "raw"  "${INPUT_JSONL}"          "${OUT_DIR}/C1_C2"
+    run_arm "comp" "${OUT_DIR}/bundles.jsonl" "${OUT_DIR}/C3_C4"
+fi
 
 # Stage 1 states an event inventory; this is the only place on the pipeline
 # where recall has an exact denominator and needs neither gold nor a model
@@ -411,6 +467,7 @@ cat > "${OUT_DIR}/manifest.json" <<JSON
   "compress_prompt_file": "${COMPRESS_PROMPT_FILE:-<default for stage 1 impl>}",
   "stage1_impl": "${STAGE1_IMPL}",
   "stage3_impl": "${REPAIR_IMPL}",
+  "parallelism": {"stage1_workers": ${STAGE1_WORKERS}, "stage1_token_budget": ${STAGE1_TOKEN_BUDGET}, "c0_workers": ${C0_WORKERS}, "stage2_shards": ${STAGE2_SHARDS}, "stage2_retries": ${STAGE2_RETRIES}, "stage2_allow_missing": ${STAGE2_ALLOW_MISSING}, "stage3_workers": ${STAGE3_WORKERS}, "parallel_arms": ${PARALLEL_ARMS}},
   "agents": {"critic_rounds": ${CRITIC_ROUNDS}, "parties": ${PARTIES}, "shacl_rounds": ${SHACL_ROUNDS}, "final_critic": ${FINAL_CRITIC}},
   "ontocast_version": "${ONTOCAST_VERSION}",
   "llm_output_layout": "free",

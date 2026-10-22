@@ -1848,14 +1848,42 @@ def _stream_patch_text(
     fmt = {"response_format": RepairPatch} if guided else {}
     # Reasoning models reject an explicit temperature; see accepts_temperature.
     temp = {"temperature": temperature} if accepts_temperature(model) else {}
-    with client.chat.completions.stream(
-        model=model,
-        messages=messages,
-        **temp,
-        **fmt,
-        **token_kwargs,
-        **({"extra_body": routing} if routing else {}),
-    ) as stream:
+    # Wait out a throttled or restarting endpoint the way stage 1 does
+    # (compress.call_with_recovery): a 429 from a hosted provider is "slow
+    # down", not "this patch failed", and the two quick retries in call_model
+    # used to burn through it in seconds and drop the call.
+    from art6.ontology.compress import (
+        TRANSIENT_BACKOFF,
+        TRANSIENT_MAX_WAIT_SECONDS,
+        _is_transient,
+    )
+
+    waited, attempt = 0.0, 0
+    while True:
+        try:
+            stream_cm = client.chat.completions.stream(
+                model=model,
+                messages=messages,
+                **temp,
+                **fmt,
+                **token_kwargs,
+                **({"extra_body": routing} if routing else {}),
+            )
+            stream = stream_cm.__enter__()
+            break
+        except Exception as exc:
+            if not _is_transient(exc) or waited >= TRANSIENT_MAX_WAIT_SECONDS:
+                raise
+            delay = TRANSIENT_BACKOFF[min(attempt, len(TRANSIENT_BACKOFF) - 1)]
+            attempt += 1
+            waited += delay
+            print(
+                f"      {type(exc).__name__}: endpoint throttled or unreachable -- "
+                f"retrying in {delay}s (waited {waited:.0f}s)",
+                flush=True,
+            )
+            time.sleep(delay)
+    with stream_cm:
         for event in stream:
             if event.type == "chunk":
                 for choice in event.chunk.choices:

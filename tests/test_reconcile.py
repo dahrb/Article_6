@@ -481,3 +481,43 @@ def test_final_fixer_cannot_delete_a_stage1_event(tmp_path, monkeypatch):
     report, g, _ = _final(tmp_path, monkeypatch, answer, patch)
     assert (DOC.crim, RDF.type, ECHR.DomesticProceeding) in g
     assert report["stage1_disputes"][0]["reason"] == "locked by stage 1"
+
+
+# -- stage-2 sharding --------------------------------------------------------
+
+
+def test_stage2_shards_cover_only_missing_and_keep_names(tmp_path):
+    from art6.ontology import stage2_shards as s2
+
+    src = tmp_path / "input.jsonl"
+    src.write_text(
+        "".join(f'{{"case_id": "c{i}"}}\n' for i in range(1, 6)), encoding="utf-8"
+    )
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    (raw / "input.L2.facts.ttl").write_text("done")
+    assert s2.missing(src, raw) == [1, 3, 4, 5]
+
+    shards = s2.plan(src, raw, 3, tmp_path / "shards")
+    covered = sorted(n for sh in shards for n in s2.record_lines(sh / "input.jsonl"))
+    assert covered == [1, 3, 4, 5]
+    # every shard file is full length, so OntoCast's line numbers are unchanged
+    assert all(len((sh / "input.jsonl").read_text().splitlines()) == 5 for sh in shards)
+
+    # fake OntoCast output: a multi-record shard names by line, a single-record
+    # shard does not
+    for sh in shards:
+        lines = s2.record_lines(sh / "input.jsonl")
+        (sh / "raw").mkdir()
+        if len(lines) == 1:
+            (sh / "raw" / "input.facts.ttl").write_text("x")
+            (sh / "raw" / "input.run.json").write_text("{}")
+        else:
+            for n in lines:
+                (sh / "raw" / f"input.L{n}.facts.ttl").write_text("x")
+        (sh / "raw" / "extract.log").write_text(f"log {sh.name}\n")
+    assert s2.merge(src, raw, tmp_path / "shards") == 4
+    assert s2.missing(src, raw) == []
+    assert (raw / "input.L2.facts.ttl").read_text() == "done"  # never overwritten
+    assert sorted(p.name for p in raw.glob("*.run.json"))  # renamed with its line
+    assert "log" in (raw / "extract.log").read_text()

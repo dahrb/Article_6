@@ -63,10 +63,12 @@ Each graph gets `<stem>.reconcile.json`, which is also the resume marker.
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import json
 import os
 import re
 import sys
+import threading
 import time
 import unicodedata
 from dataclasses import dataclass, field
@@ -76,6 +78,7 @@ from pathlib import Path
 from openai import OpenAI
 from rdflib import RDF, Graph, Namespace, URIRef
 
+from art6.ontology import threadsafe_sparql  # noqa: F401 -- installs the parse lock
 from art6.ontology.check_stage_boundary import _date_matches
 from art6.ontology.prompt_spec import facts_instruction
 from art6.ontology.repair_facts import (
@@ -1068,6 +1071,12 @@ def main() -> None:
         help="SHACL repair loop rounds; 0 disables the loop",
     )
     ap.add_argument("--overwrite", action="store_true")
+    ap.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="graphs reconciled at once; each is independent of the others",
+    )
     args = ap.parse_args()
 
     client = None
@@ -1091,22 +1100,27 @@ def main() -> None:
 
     results, failed, resumed = [], [], 0
     t0 = time.perf_counter()
-    for f in files:
+    lock = threading.Lock()
+
+    def handle(f: Path) -> None:
+        nonlocal resumed
         key = f.name.removesuffix(".facts.ttl")
         marker = f.parent / f"{key}.reconcile.json"
         if marker.exists() and not args.overwrite:
-            resumed += 1
-            continue
+            with lock:
+                resumed += 1
+            return
         case_id = cases.get(key)
         stage1 = args.stage1_dir / f"{case_id}.compress.json" if case_id else None
         if stage1 is None or not stage1.exists():
             # Loud: a graph with no stage-1 payload cannot be reconciled, and
             # silently passing it through would read as "consistent".
-            failed.append(f.name)
+            with lock:
+                failed.append(f.name)
             print(
                 f"  {f.name}: FAILED (no stage-1 payload for {case_id!r})", flush=True
             )
-            continue
+            return
         try:
             payload = json.loads(stage1.read_text(encoding="utf-8"))["payload"]
             r = reconcile_document(
@@ -1122,14 +1136,17 @@ def main() -> None:
                 capacity=capacity,
             )
         except Exception as exc:  # noqa: BLE001 -- one document must not end the run
-            failed.append(f.name)
+            with lock:
+                failed.append(f.name)
             print(f"  {f.name}: FAILED ({type(exc).__name__}: {exc})", flush=True)
-            continue
-        results.append(r)
+            return
+        with lock:
+            results.append(r)
+            if "error" in r:
+                failed.append(f.name)
         if "error" in r:
-            failed.append(f.name)
             print(f"  {f.name}: FAILED ({r['error']})")
-            continue
+            return
         mint = r["mint"]
         print(
             f"  {f.name}: {r['status']:10} {r['stage1_events']:3} stage-1 events, "
@@ -1151,6 +1168,13 @@ def main() -> None:
             + f", SHACL {r['shacl_before']}->{r['shacl_after']}",
             flush=True,
         )
+
+    if args.workers > 1:
+        with concurrent.futures.ThreadPoolExecutor(args.workers) as pool:
+            list(pool.map(handle, files))
+    else:
+        for f in files:
+            handle(f)
 
     ok = [r for r in results if "error" not in r]
     print(

@@ -1307,11 +1307,11 @@ def main() -> None:
     global BUDGET
     # Capacity is needed on every path now, not just the parallel one: it is
     # what decides whether a document has to be split.
-    capacity = args.token_budget or server_token_capacity(
-        args.base_url, args.api_key or ""
-    )
+    # The window decides splitting; the budget caps tokens in flight. See
+    # agentic_stage1.main for why they are separate.
+    capacity = server_token_capacity(args.base_url, args.api_key or "")
     if args.workers > 1:
-        BUDGET = TokenBudget(capacity)
+        BUDGET = TokenBudget(args.token_budget or capacity)
         print(
             f"stage 1: {args.model} @ {args.base_url} "
             f"(temperature {args.temperature}, {args.workers} workers, "

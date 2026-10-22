@@ -76,7 +76,8 @@ class NormalisedProceeding(BaseModel):
         description=(
             "Where this step sits in the hierarchy, using the shared "
             "definitions' values (first instance, appeal, cassation, "
-            "investigative, administrative review, case review, reopening). "
+            "investigative, administrative review, case review, reopening, "
+            "unknown). "
             "Typed as free text so a value outside them is recorded rather "
             "than rejected at decoding: conformance is measured, not forced."
         ),

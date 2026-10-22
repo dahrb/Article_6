@@ -139,7 +139,7 @@ def test_candidates_exclude_later_dated_events():
     assert cands["e3"][:2] == ["e2", "e1"]
 
 
-def test_apply_plan_refuses_non_candidates_and_cross_track_links():
+def test_apply_plan_refuses_non_candidates_but_links_across_tracks():
     p = payload()
     cands = a.candidate_predecessors(p["events"])
     plan = {
@@ -179,7 +179,9 @@ def test_apply_plan_refuses_non_candidates_and_cross_track_links():
     p = payload()
     plan["links"] = [{"event": "e3", "predecessor": "e4", "kind": "continues"}]
     audit = a.apply_plan(p, plan, a.candidate_predecessors(p["events"]), JUDGMENT)
-    assert [r["reason"] for r in audit["links_refused"]] == ["continues across tracks"]
+    # Tracks are labels, not walls: a link may join two tracks (a challenge to a
+    # refusal, a request about a judgment), as in the annotation.
+    assert audit["links_refused"] == [] and audit["links_accepted"] == 1
     plan["links"][0]["kind"] = "during"
     assert a.apply_plan(payload(), plan, cands, JUDGMENT)["links_accepted"] == 1
 
@@ -234,6 +236,7 @@ def test_finalize_types_relations_and_points_at_roots():
         "occurs_during": 1,
         "cycles_broken": 0,
         "filings_split": 0,
+        "levels_normalised": 0,
     }
 
 
@@ -316,6 +319,37 @@ def test_two_clauses_in_one_sentence_are_two_acts():
     p = {"events": [e]}
     assert a.split_narrated_filings(p, text) == 1
     assert [x["id"] for x in p["events"]] == ["xf", "x"]
+
+
+def test_apex_courts_are_cassation_and_filings_share_their_decisions_level():
+    text = "The applicant lodged an application with the Constitutional Court. It was dismissed."
+    s = lambda t: {"text": t, "start": text.index(t), "end": text.index(t) + len(t)}
+    p = {
+        "events": [
+            {
+                "id": "e1",
+                "instance_level": "first instance",
+                "authority_span": s("lodged"),
+            },
+            {
+                "id": "e2",
+                "instance_level": "first instance",
+                "authority_span": s("Constitutional Court"),
+                "part_of": "e1",
+            },
+            {
+                "id": "e3",
+                "instance_level": "case review",
+                "authority_span": s("Constitutional Court"),
+            },
+        ]
+    }
+    assert a.normalise_levels(p) == 2
+    assert [e["instance_level"] for e in p["events"]] == [
+        "cassation",
+        "cassation",
+        "case review",
+    ]
 
 
 # -- hints, findings, fixes ---------------------------------------------------

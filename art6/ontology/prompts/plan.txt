@@ -3,46 +3,40 @@ Rights judgment, and the judgment itself. Organise the events into TRACKS and sa
 earlier event each one continues. You do not add, remove, merge or reclassify events --
 a later pass does that. You only plan the structure.
 
-## TRACKS
-
-A track is one matter carried forward through the domestic system: a prosecution from
-investigation to cassation, a civil claim from filing through every appeal and remittal,
-a run of enforcement steps on one judgment, a sequence of detention-extension orders.
-
-Applicants often pursue SEVERAL tracks at once, and the judgment interleaves them in date
-order. Separate them. Three things are NOT the same track, however close in time or however
-often the same court appears:
-
-  - proceedings against a DIFFERENT PERSON (a co-accused tried in their own case);
-  - a NEW MATTER arising later (a fresh investigation into new allegations does not
-    continue a closed case just because the applicant is the same);
-  - a PARALLEL TRACK (civil and criminal proceedings over the same facts, a damages
-    claim brought about the length of another set of proceedings, neither continuing
-    the other).
-
-Give each track a short label in your own words ("criminal proceedings against the
-applicant", "claim for compensation for detention"). Every event belongs to exactly one
-track. A track of one event is a correct answer.
-
 ## LINKS
 
-For each event that continues an earlier one, name its PREDECESSOR: the event it
-continues, reviews, appeals, enforces, or answers. The predecessor MUST be one of the ids
-listed as that event's `candidates` -- the list is everything that could have come before
-it. If none of them is what this event continues, give it no link: it heads its track.
+For each event, name its PREDECESSOR: the event IMMEDIATELY BEFORE it in procedure -- the
+one it appeals, reviews, enforces, answers, challenges or was brought because of. The
+predecessor MUST be one of the ids listed as that event's `candidates` -- the list is
+everything that could have come before it. If nothing in it is a procedural antecedent,
+give the event no link: it heads a chain of its own.
 
-Choose the IMMEDIATE predecessor, not the first event of the track:
+"Immediately before" is PROCEDURAL, not chronological, and it does not stop at the edge of
+one claim. Each of these is a link:
 
-  - an appeal continues the decision appealed against;
-  - a cassation ruling continues the appeal ruling it reviewed;
-  - a remitted first-instance hearing continues the ruling that quashed and remitted;
-  - a decision continues the filing it disposes of (a narrated filing and its decision
-    are two events, and the decision links to the filing);
+  - an appeal continues the decision appealed against; a cassation ruling the appeal
+    ruling it reviewed; a remitted hearing the ruling that quashed and remitted;
+  - a decision continues the filing it disposes of (a narrated filing and its decision are
+    two events, and the decision links to the filing);
   - each step of an authority's run of decisions in one process (seize, value, offer,
-    re-offer, award) continues the step before it;
-  - a trial continues the investigation that produced the charges; enforcement continues
-    the judgment it enforces; a court challenge continues the administrative decision it
-    contests.
+    re-offer, award; one detention extension after another) continues the step before it;
+  - a COURT CHALLENGE continues the administrative or prosecutorial decision it contests;
+  - a REQUEST continues the decision it asks to have reviewed, lifted, enforced or
+    implemented -- including when it goes to a DIFFERENT body (asking a mayor or a
+    prosecutor to act on a court's ruling, asking a council to appoint the guardian a
+    judgment requires);
+  - a step a decision REQUIRED or set in motion continues that decision (an appointment
+    ordered by a judgment, a placement made under a guardianship order, enforcement of a
+    judgment);
+  - a trial, indictment or committal continues the investigation that produced it; a
+    complaint about an act (an arrest, a search, a police operation) continues that act.
+
+Two events with no procedural relation are NOT linked, however close in time and however
+often the same court or prosecutor appears. Several events may share one predecessor, and a
+document may hold several unconnected chains -- a civil claim beside an unrelated
+prosecution, proceedings against a different person. But most judgments narrate ONE
+history whose steps answer each other: before leaving an event unlinked, ask what it
+responded to. Link only what the text supports.
 
 Name the kind of each link:
 
@@ -54,20 +48,27 @@ Name the kind of each link:
 Do NOT decide whether two events are acts of the same proceeding or two proceedings --
 that is computed afterwards from their courts and rungs. Just say what continues what.
 
-A `continues` link joins two events of the SAME track; if you find yourself linking across
-tracks, one of your tracks is wrong. A `during` link may cross tracks.
-
 Copy the words that show the link into `evidence_span`, VERBATIM from the judgment: "upheld
-it", "quashed both decisions and remitted the case", "appealed against that decision".
-Omit `evidence_span` where the link is shown only by the sequence itself.
+it", "quashed both decisions and remitted the case", "appealed against that decision",
+"asked the mayor to apply for his release". Omit `evidence_span` where the link is shown
+only by the sequence itself.
 
-THE TEST IS "THE SAME MATTER CONTINUED", NOT "THE NEXT THING THAT HAPPENED". Nearness in
-time is not continuity, and neither is sharing a court or a prosecutor. When unsure, LEAVE
-THE EVENT UNLINKED: a missing link is a gap a reader can see, a wrong one is a false
-history that reads as authoritative.
+Before you finish, look at every event you left unlinked that is not the first event of
+the document and ask what it answered.
 
-Before you finish, look at every event with no link that is not the first of its track and
-ask what came before it in this matter.
+## TRACKS
+
+Then group the events into TRACKS: one track per distinct matter carried through the
+domestic system -- a prosecution from investigation to cassation, a civil claim through
+every appeal and remittal, a run of detention orders, an administrative dispute and its
+court challenges. Give each a short label in your own words ("criminal proceedings against
+the applicant", "claim for compensation"). Every event belongs to exactly one track; a
+track of one event is a correct answer.
+
+Tracks are a LABEL for the reader, not a wall: a link may join events of two tracks where
+one matter grew out of the other (the challenge to a refusal, a request about a judgment).
+Proceedings against a different person, or a new matter that answers nothing earlier, are
+their own track AND have no link into the others.
 
 ## OUTPUT
 

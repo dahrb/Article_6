@@ -66,8 +66,8 @@ are skipped on a "no".
         that merely records an act. See CLASSIFY THE RUNG AND THE RESULT.",
       "outcome_span": "the words stating the result, IF the document states them",
       "instance_level": "first instance | appeal | cassation | investigative |
-        administrative review | case review | reopening. A judgement you make, on EVERY
-        event. See CLASSIFY THE RUNG AND THE RESULT.",
+        administrative review | case review | reopening | unknown. A judgement you make,
+        on EVERY event. See CLASSIFY THE RUNG AND THE RESULT.",
       "instance_span": "the words naming the rung, IF the document states them literally",
       "proceeding_type": "criminal | civil | administrative | constitutional | disciplinary |
         other | unknown. A judgement you make, on EVERY event. See CLASSIFY THE TRACK AND
@@ -134,13 +134,29 @@ Which rung:
 
   - a first hearing of a claim, charge or application  -> first instance
   - a review of a lower body's decision on the merits  -> appeal
-  - a review limited to points of law                  -> cassation
+  - a review limited to points of law, or ANY ruling by a supreme or constitutional
+    court on a case brought up to it                   -> cassation
   - a step inside a criminal investigation (a warrant, an arrest, a
     prosecutor's refusal, an expert order)             -> investigative
-  - an internal review by an administrative body       -> administrative review
+  - ANY decision by an administrative body -- a ministry, office, agency, council,
+    mayor, fund, welfare department, board of a public body -- whether it decides
+    first or reviews its own earlier decision         -> administrative review
   - a review of an already-decided stage by a body outside the
     ordinary appeal ladder (an extraordinary review after finality)  -> case review
   - a case reopened after a final decision             -> reopening
+  - nothing was heard or reviewed at all -- a release, a payment, a transfer between
+    institutions, an agreement between private parties -> unknown
+
+Classify by what the body DID in this case, never by its name. A tribunal or court called
+an "Appeals Board" or "Court of Appeal" that is the FIRST court to hear a challenge to an
+administrative decision is first instance; it is appeal only when it reviews another
+court's ruling. Where the procedure is unclear, follow the chain: the first court to hear
+the matter is first instance, the court reviewing it is appeal, the highest court is
+cassation.
+
+A filing takes the rung of the proceeding it institutes: an indictment or a claim lodged
+with a trial court is first instance, an appeal lodged is appeal. Both acts of one
+proceeding -- the filing and its decision -- carry the same rung.
 
 Which result:
 

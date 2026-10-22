@@ -100,6 +100,7 @@ VOCABULARY = {
         "administrative review",
         "case review",
         "reopening",
+        "unknown",
     },
     "outcome": {
         "merits decided",
@@ -504,8 +505,6 @@ def _apply_links(plan, events, candidates, track_of, index, audit) -> dict:
             reason = "predecessor is not one of the event's candidates"
         elif kind not in LINK_KINDS:
             reason = f"unknown kind {kind!r}"
-        elif kind == "continues" and track_of[eid] != track_of[pred]:
-            reason = "continues across tracks"
         elif _would_cycle(chosen, eid, pred):
             reason = "would create a cycle"
         if reason:
@@ -696,6 +695,49 @@ def split_narrated_filings(payload: dict, source: str) -> int:
     return split
 
 
+_APEX_COURT = re.compile(
+    r"\b(?:supreme|constitutional|cassation|cour de cassation|high court of cassation)\b",
+    re.IGNORECASE,
+)
+
+
+def normalise_levels(payload: dict) -> int:
+    """Two level rules the annotation guide states outright, applied after
+    linking. Returns how many levels changed.
+
+      - A supreme, constitutional or cassation court ruling on a case brought
+        up to it is cassation (guide 6.1: "cassation or supreme court"). Only
+        first instance / appeal are corrected: the model keeps case review and
+        reopening, which those courts also do. Supreme administrative courts
+        are left alone (see below).
+      - A filing takes the level of the decision that disposes of it (guide
+        3.1: both acts of one proceeding carry the same level). The decision
+        is the better-informed of the two.
+    """
+    changed = 0
+    events = _events(payload)
+    by_id = {e["id"]: e for e in events}
+    for event in events:
+        name = _text(event.get("authority_span"))
+        # A supreme ADMINISTRATIVE court is excluded: in several systems it
+        # sits at first instance and on appeal (Turkey's Council of State in
+        # 001-248393, labelled so in gold), so its name says nothing.
+        if (
+            event.get("instance_level") in ("first instance", "appeal")
+            and _APEX_COURT.search(name)
+            and "administrative" not in name.lower()
+        ):
+            event["instance_level"] = "cassation"
+            changed += 1
+    for event in events:
+        filing = by_id.get(event.get("part_of") or "")
+        level = event.get("instance_level")
+        if filing is not None and level and filing.get("instance_level") != level:
+            filing["instance_level"] = level
+            changed += 1
+    return changed
+
+
 def finalize(payload: dict, source: str | None = None) -> dict:
     """Renumber events e1..eN and turn each planned link into the ontology
     relation it is.
@@ -777,6 +819,7 @@ def finalize(payload: dict, source: str | None = None) -> dict:
     }
     counts["cycles_broken"] = broken
     counts["filings_split"] = split
+    counts["levels_normalised"] = normalise_levels(payload)
 
     used = {e.get("track") for e in events}
     tracks = [t for t in payload.get("tracks") or [] if t["id"] in used]

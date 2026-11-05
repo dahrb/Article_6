@@ -98,10 +98,18 @@ def shared_rules() -> str:
     )
 
 
-def facts_instruction() -> str:
+def facts_instruction(timeline: bool = False) -> str:
     """The OntoCast instruction: facts.txt (how to write the graph) followed by
-    the shared definitions (what goes in it)."""
-    return FACTS.read_text(encoding="utf-8").strip() + "\n\n" + shared_rules().strip()
+    the shared definitions (what goes in it). `timeline` appends the mapping
+    for the timeline extension (facts_timeline.txt), which needs the ontology
+    variant ontology/echr_timeline.ttl; off, the text is unchanged."""
+    text = FACTS.read_text(encoding="utf-8").strip() + "\n\n" + shared_rules().strip()
+    if timeline:
+        text += (
+            "\n\n"
+            + (FACTS.parent / "facts_timeline.txt").read_text(encoding="utf-8").strip()
+        )
+    return text
 
 
 def condition_prompt(base: str) -> str:

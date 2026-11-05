@@ -66,3 +66,24 @@ def test_dated_mode_adds_dated_facts_paragraphs_only():
     out = render(PAYLOAD, SOURCE, "dated+index")
     assert "born in 1960" not in out  # a bare year is not a date here
     assert "entered into force" not in out  # outside the Facts
+
+
+def test_bundle_renders_circumstances_and_the_strasbourg_application():
+    payload = {
+        **PAYLOAD,
+        "circumstances": [
+            {
+                "id": "c1",
+                "description": "He moved to Kyiv.",
+                "what_happened_span": span("He lives in Kyiv"),
+                "date_span": span("1960"),
+                "kind": "residence",
+                "gives_rise_to": "e1",
+            }
+        ],
+        "strasbourg_application": {"date_span": span("5 June 2003")},
+    }
+    out = render(payload, SOURCE, "bundle")
+    assert "CIRCUMSTANCE c1" in out and "kind: residence" in out
+    assert "gives_rise_to: e1" in out
+    assert 'STRASBOURG APPLICATION\n  lodged: "5 June 2003"' in out

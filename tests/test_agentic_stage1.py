@@ -236,6 +236,7 @@ def test_finalize_types_relations_and_points_at_roots():
         "occurs_during": 1,
         "cycles_broken": 0,
         "filings_split": 0,
+        "minor_rerouted": 0,
         "levels_normalised": 0,
     }
 
@@ -321,6 +322,36 @@ def test_two_clauses_in_one_sentence_are_two_acts():
     assert [x["id"] for x in p["events"]] == ["xf", "x"]
 
 
+def test_split_halves_are_described_by_their_own_sentences():
+    text = (
+        "In 2000 the prosecutor applied to the court. "
+        "In a judgment of 20 November 2000 the court declared him incapacitated."
+    )
+    s = lambda t: {"text": t, "start": text.index(t), "end": text.index(t) + len(t)}
+    e = {
+        "id": "x",
+        "description": "The prosecutor applied to the court.",
+        "decision_date_span": s("20 November 2000"),
+        "start_date_span": s("2000"),
+    }
+    p = {"events": [e]}
+    assert a.split_narrated_filings(p, text) == 1
+    filing, decision = p["events"]
+    assert filing["description"] == "In 2000 the prosecutor applied to the court."
+    assert decision["description"].startswith("In a judgment of 20 November 2000")
+
+
+def test_critic_rules_come_from_the_prompt_in_use(tmp_path, monkeypatch):
+    guide = tmp_path / "guide.txt"
+    guide.write_text(
+        "## FIELD RULES -- THESE OVERRIDE THE GUIDE WHERE THEY DIFFER\nnew\n"
+    )
+    assert "AN ACT IS NOT A RESULT" in a.load_sections(a.RULE_SECTIONS)
+    monkeypatch.setattr(a, "RULES_PROMPT", guide)
+    rules = a.load_sections(a.RULE_SECTIONS + a.GUIDE_SECTIONS)
+    assert "new" in rules and "AN ACT IS NOT A RESULT" not in rules
+
+
 def test_apex_courts_are_cassation_and_filings_share_their_decisions_level():
     text = "The applicant lodged an application with the Constitutional Court. It was dismissed."
     s = lambda t: {"text": t, "start": text.index(t), "end": text.index(t) + len(t)}
@@ -350,6 +381,64 @@ def test_apex_courts_are_cassation_and_filings_share_their_decisions_level():
         "cassation",
         "case review",
     ]
+
+
+def test_link_check_moves_drops_adds_and_refuses():
+    p = payload()
+    for e in p["events"]:
+        e["track"] = "T1"
+    by = {e["id"]: e for e in p["events"]}
+    by["e3"]["link"] = {"to": "e1", "kind": "continues"}  # skips e2
+    by["e2"]["link"] = {"to": "e1", "kind": "continues"}
+    cands = a.candidate_predecessors(p["events"])
+    answer = {
+        "verdicts": [
+            {
+                "event": "e3",
+                "verdict": "move",
+                "predecessor": "e2",
+                "evidence_span": "upheld that judgment",
+            },
+            {"event": "e2", "verdict": "keep"},
+            {"event": "e4", "verdict": "add", "predecessor": "e3"},  # e3 is later
+            {"event": "e1", "verdict": "drop"},  # had no link: nothing to do
+        ]
+    }
+    audit = a.apply_link_check(p, answer, cands, JUDGMENT)
+    assert by["e3"]["link"]["to"] == "e2"
+    assert by["e3"]["link"]["span"]["text"] == "upheld that judgment"
+    assert (audit["move"], audit["keep"], audit["add"], audit["drop"]) == (1, 1, 0, 0)
+    assert [r["reason_refused"] for r in audit["refused"]] == [
+        "predecessor is not one of the event's candidates"
+    ]
+    a.apply_link_check(
+        p, {"verdicts": [{"event": "e2", "verdict": "drop"}]}, cands, JUDGMENT
+    )
+    assert "link" not in by["e2"]
+
+
+def test_circumstances_are_cleaned_and_point_at_the_proceedings_root():
+    p = payload()
+    for e in p["events"]:
+        e["track"] = "T1"
+    p["tracks"] = [{"id": "T1", "label": ""}]
+    by = {e["id"]: e for e in p["events"]}
+    by["e2"]["link"] = {"to": "e1", "kind": "continues"}  # e2 part_of the filing e1
+    by["e1"].pop("decision_date_span")
+    by["e1"]["start_date_span"] = span("15 March 1999")
+    words = span("dismissed the claim")
+    p["circumstances"] = [
+        {"what_happened_span": words, "kind": "Injury", "gives_rise_to": "e2"},
+        {"what_happened_span": words, "kind": "not a kind", "gives_rise_to": "nope"},
+        {"kind": "injury"},  # its words did not verify
+    ]
+    p["strasbourg_application"] = {"what_happened_span": words}  # no date
+    a.finalize(p)
+    kept = p["circumstances"]
+    assert [c["id"] for c in kept] == ["c1", "c2"]
+    assert kept[0]["kind"] == "injury" and kept[0]["gives_rise_to"] == "e1"
+    assert kept[1]["kind"] == "other" and "gives_rise_to" not in kept[1]
+    assert "strasbourg_application" not in p
 
 
 # -- hints, findings, fixes ---------------------------------------------------
@@ -895,3 +984,65 @@ def test_retype_part_of_migrates_old_payloads():
     }
     assert a.retype_part_of(p) == 1
     assert p["events"][1]["follows"] == "e1" and p["events"][3]["part_of"] == "e3"
+
+
+def test_merge_keeps_the_survivors_place_in_the_chain():
+    # 001-188177: the appeal ruling e3 linked to its duplicate e2, which linked
+    # to the conviction e1; merging them must leave e3 -> e1, not no link.
+    text = "On 27 June 2007 the Court of Appeal upheld the conviction."
+    s = lambda t: {"text": t, "start": text.index(t), "end": text.index(t) + len(t)}
+    ev = lambda i, **k: {"id": i, "what_happened_span": s("upheld the conviction"), **k}
+    p = {
+        "events": [
+            ev("e1"),
+            ev("e2", link={"to": "e1", "kind": "continues"}),
+            ev("e3", link={"to": "e2", "kind": "continues"}),
+        ]
+    }
+    findings = [{"id": "f1", "kind": "duplicate_event", "events": ["e2", "e3"]}]
+    ops = {"ops": [{"op": "merge_events", "finding": "f1", "keep": "e3", "drop": "e2"}]}
+    a.apply_fixes(p, ops, findings, text)
+    by = {e["id"]: e for e in p["events"]}
+    assert "e2" not in by
+    assert by["e3"]["link"]["to"] == "e1"
+
+
+def test_a_decision_links_past_minor_steps_to_the_filing():
+    by_id = {
+        "e1": {"id": "e1", "significance": "major"},
+        "e2": {"id": "e2", "significance": "minor"},
+        "e3": {"id": "e3", "significance": "minor"},
+        "e4": {"id": "e4", "significance": "major"},
+    }
+    links = {
+        "e2": {"to": "e1", "kind": "continues"},
+        "e3": {"to": "e2", "kind": "continues"},
+        "e4": {"to": "e3", "kind": "continues"},
+    }
+    assert a.reroute_past_minor(links, by_id) == 1
+    assert links["e4"]["to"] == "e1"
+    assert links["e3"]["to"] == "e2"  # minor steps keep their own place
+
+
+def test_a_minor_step_heading_its_chain_stays_the_predecessor():
+    by_id = {"e1": {"id": "e1", "significance": "minor"}, "e2": {"id": "e2"}}
+    links = {"e2": {"to": "e1", "kind": "continues"}}
+    assert a.reroute_past_minor(links, by_id) == 0
+    assert links["e2"]["to"] == "e1"
+
+
+def test_agents_see_significance_and_description():
+    out = a.render_event(
+        {"id": "e1", "significance": "minor", "description": "A hearing was held."}
+    )
+    assert "[minor]" in out and "description: A hearing was held." in out
+
+
+def test_timeline_matters_only_with_a_prompt_that_offers_them(tmp_path, monkeypatch):
+    monkeypatch.setitem(a.VOCABULARY, "matter", set(a.VOCABULARY["matter"]))
+    a.enable_prompt_vocabulary(a.EXTRACT_PROMPT)
+    assert "health" not in a.VOCABULARY["matter"]
+    guide = tmp_path / "g.txt"
+    guide.write_text('"matter": [legal aid | requests | health | immigration]')
+    a.enable_prompt_vocabulary(guide)
+    assert a.TIMELINE_MATTERS <= a.VOCABULARY["matter"]

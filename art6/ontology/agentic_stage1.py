@@ -72,8 +72,10 @@ from art6.ontology import compress as c
 PROMPT_DIR = Path(__file__).resolve().parent / "prompts"
 EXTRACT_PROMPT = PROMPT_DIR / "extract.txt"
 
-# Sections of extract.txt the critic and fixer are held to. Read live from the
-# extraction prompt so the three passes can never drift onto different rules.
+# Sections of the extraction prompt the critic and fixer are held to. Read live
+# from the prompt in use (main() sets RULES_PROMPT from --prompt-file) so the three
+# passes can never drift onto different rules. A prompt can use any subset of them.
+RULES_PROMPT = EXTRACT_PROMPT
 RULE_SECTIONS = (
     "CLASSIFY THE RUNG AND THE RESULT",
     "CLASSIFY THE TRACK AND THE DIRECTION",
@@ -82,6 +84,9 @@ RULE_SECTIONS = (
     "PARTIES — EVERY ENTRY NEEDS THEM",
     "FINALITY, PENDING AND DETENTION",
 )
+# The guide-based prompt (extract_guide.txt) carries its rules in one section
+# instead; held to the same way, alongside whichever RULE_SECTIONS it has.
+GUIDE_SECTIONS = ("FIELD RULES -- THESE OVERRIDE THE GUIDE WHERE THEY DIFFER",)
 FIX_EXTRA_SECTIONS = ("THE ONE RULE", "OUTPUT")
 
 MAX_CANDIDATES = 15
@@ -145,6 +150,17 @@ VOCABULARY = {
         "unknown",
     },
 }
+# Matters only the timeline ontology variant (ontology/echr_timeline.ttl) has;
+# accepted when the extraction prompt offers them (enable_prompt_vocabulary).
+TIMELINE_MATTERS = {"health", "immigration", "enforcement"}
+
+
+def enable_prompt_vocabulary(prompt: Path) -> None:
+    """Accept the timeline-only matters if `prompt` offers them."""
+    if "| health |" in prompt.read_text(encoding="utf-8"):
+        VOCABULARY["matter"] |= TIMELINE_MATTERS
+
+
 LINK_KINDS = {"continues", "during"}
 FINDING_KINDS = {
     "missing_event",
@@ -200,6 +216,9 @@ EVENT_KEYS = {
     "parties",
     "detention",
     "description",
+    "decision_date_iso",
+    "start_date_iso",
+    "significance",
 }
 # Fields the extraction prompt used to carry and this stage now owns.
 LEGACY_LINK_KEYS = ("follows", "follows_span")
@@ -256,9 +275,9 @@ def _anchor(event: dict) -> int | None:
     return None
 
 
-def load_sections(names: tuple[str, ...], path: Path = EXTRACT_PROMPT) -> str:
+def load_sections(names: tuple[str, ...], path: Path | None = None) -> str:
     """The named `## ` sections of a prompt file, in file order."""
-    text = path.read_text(encoding="utf-8")
+    text = (path or RULES_PROMPT).read_text(encoding="utf-8")
     parts = re.split(r"(?m)^(?=## )", text)
     wanted = []
     for part in parts:
@@ -678,7 +697,6 @@ def split_narrated_filings(payload: dict, source: str) -> int:
             "matter",
             "track",
             "parties",
-            "description",
         ):
             if event.get(key):
                 filing[key] = copy.deepcopy(event[key])
@@ -686,6 +704,16 @@ def split_narrated_filings(payload: dict, source: str) -> int:
             filing["link"] = event.pop("link")
         event.pop("start_date_span")
         event.pop("institution_narrated_span", None)
+        if event.get("start_date_iso"):
+            filing["start_date_iso"] = event.pop("start_date_iso")
+        filing["significance"] = "major"
+        if event.get("description"):
+            # The model's one description may be of either act (Stanev: the
+            # decision said "the prosecutor applied"; Sawoniuk: a filing said
+            # "the jury convicted"), so each half is described by its own sentence.
+            filing["description"] = sentence["text"].strip()
+            d_lo, d_hi = sentence_at(source, decided["start"], decided["end"])
+            event["description"] = source[d_lo:d_hi].strip()
         event["link"] = {"to": filing["id"], "kind": "continues"}
         # A filing that begins later in the text than its decision is still
         # written first, so the list keeps the order the acts happened in.
@@ -738,6 +766,80 @@ def normalise_levels(payload: dict) -> int:
     return changed
 
 
+CIRCUMSTANCE_KINDS = {
+    "incident",
+    "injury",
+    "death",
+    "health",
+    "family",
+    "residence",
+    "employment",
+    "property",
+    "communication",
+    "other",
+}
+
+
+def finalize_circumstances(payload: dict, remap: dict, root: dict) -> None:
+    """Clean the timeline extension's `circumstances` (extract_permissive.txt):
+    keep entries whose own words were verified, number them c1..cN, close the
+    kind vocabulary, and point `gives_rise_to` at the renumbered event -- at
+    its proceeding's root, the node that stands for the proceeding."""
+    kept = []
+    for item in payload.get("circumstances") or []:
+        if not isinstance(item, dict) or not isinstance(
+            item.get("what_happened_span"), dict
+        ):
+            continue
+        kind = str(item.get("kind") or "").strip().lower()
+        item["kind"] = kind if kind in CIRCUMSTANCE_KINDS else "other"
+        target = remap.get(str(item.get("gives_rise_to") or ""))
+        if target:
+            item["gives_rise_to"] = root.get(target, target)
+        else:
+            item.pop("gives_rise_to", None)
+        kept.append(item)
+    for n, item in enumerate(kept, 1):
+        item["id"] = f"c{n}"
+    if "circumstances" in payload:
+        payload["circumstances"] = kept
+    app = payload.get("strasbourg_application")
+    if app is not None and not (
+        isinstance(app, dict) and isinstance(app.get("date_span"), dict)
+    ):
+        payload.pop("strasbourg_application")
+
+
+def reroute_past_minor(links: dict, by_id: dict) -> int:
+    """Point a major event's link past MINOR predecessors to the major act above.
+
+    A hearing, a questioning or a lawyer chasing progress decides nothing, so
+    the next decision does not continue it: it continues the filing or ruling
+    the minor step sat inside. The linker still lands on such steps -- in the
+    10-set review (2026-11-04) 13 of Luna's 32 missed gold links ran through a
+    minor extra step whose chain never reached the gold predecessor. Minor
+    events keep their own links, so the step stays attached where it was.
+    A minor step that heads its chain is left as the predecessor: better a
+    link to it than none. Returns how many links were moved.
+    """
+    moved = 0
+    for eid, link in links.items():
+        if by_id[eid].get("significance") == "minor":
+            continue
+        target, seen = link["to"], {eid}
+        while (
+            by_id[target].get("significance") == "minor"
+            and target in links
+            and target not in seen
+        ):
+            seen.add(target)
+            target = links[target]["to"]
+        if target != link["to"] and target != eid:
+            link["to"] = target
+            moved += 1
+    return moved
+
+
 def finalize(payload: dict, source: str | None = None) -> dict:
     """Renumber events e1..eN and turn each planned link into the ontology
     relation it is.
@@ -769,6 +871,7 @@ def finalize(payload: dict, source: str | None = None) -> dict:
     broken = break_cycles(payload)
     by_id = {e["id"]: e for e in events}
     links = {e["id"]: e.pop("link") for e in events if e.get("link")}
+    rerouted = reroute_past_minor(links, by_id)
     for event in events:
         for key in ("follows", "part_of", "occurs_during", "link_span"):
             event.pop(key, None)
@@ -813,12 +916,14 @@ def finalize(payload: dict, source: str | None = None) -> dict:
 
     for event in events:
         resolve(event["id"])
+    finalize_circumstances(payload, remap, root)
     counts = {
         rel: sum(1 for e in events if e.get(rel))
         for rel in ("follows", "part_of", "occurs_during")
     }
     counts["cycles_broken"] = broken
     counts["filings_split"] = split
+    counts["minor_rerouted"] = rerouted
     counts["levels_normalised"] = normalise_levels(payload)
 
     used = {e.get("track") for e in events}
@@ -988,7 +1093,10 @@ def render_event(event: dict, candidates: list[str] | None = None) -> str:
     lines = [
         f"EVENT {event['id']}"
         + (f"  [track {event['track']}]" if event.get("track") else "")
+        + (f"  [{event['significance']}]" if event.get("significance") else "")
     ]
+    if event.get("description"):
+        lines.append(f"  description: {event['description']}")
     for key in _DRAFT_SPANS:
         if value := _text(event.get(key)):
             lines.append(f'  {key.removesuffix("_span")}: "{value}"')
@@ -1106,7 +1214,7 @@ def _document_block(view: str, excerpt: bool) -> str:
 
 def plan_prompt(payload: dict, candidates: dict, view: str, excerpt: bool) -> str:
     return (
-        (PROMPT_DIR / "plan.txt").read_text(encoding="utf-8")
+        PLAN_PROMPT.read_text(encoding="utf-8")
         + _document_block(view, excerpt)
         + "\n\n"
         + render_draft(payload, candidates)
@@ -1118,7 +1226,7 @@ def critic_prompt(payload: dict, hints: list[dict], view: str, excerpt: bool) ->
     return (
         (PROMPT_DIR / "critic.txt").read_text(encoding="utf-8")
         + "\n\nEXTRACTION RULES\n\n"
-        + load_sections(RULE_SECTIONS)
+        + load_sections(RULE_SECTIONS + GUIDE_SECTIONS)
         + _document_block(view, excerpt)
         + "\n\nDRAFT\n"
         + render_draft(payload)
@@ -1133,7 +1241,7 @@ def fix_prompt(payload: dict, findings: list[dict], view: str, excerpt: bool) ->
     return (
         (PROMPT_DIR / "fix.txt").read_text(encoding="utf-8")
         + "\n\nEXTRACTION RULES\n\n"
-        + load_sections(FIX_EXTRA_SECTIONS + RULE_SECTIONS)
+        + load_sections(FIX_EXTRA_SECTIONS + RULE_SECTIONS + GUIDE_SECTIONS)
         + _document_block(view, excerpt)
         + "\n\nDRAFT\n"
         + render_draft(payload)
@@ -1375,6 +1483,13 @@ def apply_fixes(
                 for party in dup.get("parties") or []:
                     if _norm_name(party.get("name_span")) not in names:
                         survivor.setdefault("parties", []).append(party)
+                # A survivor linked to the duplicate would be left with a
+                # self-link once the duplicate is dropped, and lose its place in
+                # the chain -- 2026-11-04, 001-188177: an appeal ruling merged
+                # with its duplicate cut the appeal and cassation off the
+                # conviction. It inherits the duplicate's predecessor instead.
+                if survivor.get("link", {}).get("to") == drop:
+                    survivor.pop("link")
                 if (
                     not survivor.get("link")
                     and dup.get("link")
@@ -1775,6 +1890,71 @@ def constrain_candidates(payload: dict, candidates: dict) -> dict:
     return out
 
 
+LINK_CHECK_MAX_TOKENS = 8000
+
+
+def link_check_prompt(payload: dict, candidates: dict, view: str, excerpt: bool) -> str:
+    return (
+        (PROMPT_DIR / "link_check.txt").read_text(encoding="utf-8")
+        + _document_block(view, excerpt)
+        + "\n\n"
+        + render_draft(payload, candidates)
+        + "\n"
+    )
+
+
+def apply_link_check(
+    payload: dict, answer: dict | None, candidates: dict, source: str
+) -> dict:
+    """Apply the link checker's verdicts, refusing what the planner's own
+    rules refuse: a predecessor outside the candidates, a cycle, an unknown
+    kind. An event the checker does not mention keeps its link."""
+    events = _by_id(payload)
+    index = c.SpanIndex(source)
+    links = {eid: e["link"]["to"] for eid, e in events.items() if e.get("link")}
+    audit: dict = {"keep": 0, "move": 0, "drop": 0, "add": 0, "refused": []}
+    verdicts = (answer or {}).get("verdicts") if isinstance(answer, dict) else None
+    for v in verdicts or []:
+        if not isinstance(v, dict):
+            continue
+        eid = str(v.get("event") or "")
+        verdict = str(v.get("verdict") or "").strip().lower()
+        if eid not in events or verdict not in audit or verdict == "refused":
+            audit["refused"].append({**v, "reason_refused": "unknown event or verdict"})
+            continue
+        if verdict == "keep":
+            audit["keep"] += 1
+            continue
+        if verdict == "drop":
+            if eid in links:
+                events[eid].pop("link", None)
+                links.pop(eid)
+                audit["drop"] += 1
+            continue
+        pred = str(v.get("predecessor") or "")
+        kind = str(v.get("kind") or "continues").strip().lower()
+        reason = None
+        if pred not in candidates.get(eid, []):
+            reason = "predecessor is not one of the event's candidates"
+        elif kind not in LINK_KINDS:
+            reason = f"unknown kind {kind!r}"
+        elif verdict == "add" and eid in links:
+            reason = "add on an event that already has a link"
+        elif _would_cycle({k: t for k, t in links.items() if k != eid}, eid, pred):
+            reason = "would create a cycle"
+        if reason:
+            audit["refused"].append({**v, "reason_refused": reason})
+            continue
+        record = {"to": pred, "kind": kind}
+        hit = index.locate(str(v.get("evidence_span") or ""))
+        if hit:
+            record["span"] = c._located(index, hit)
+        events[eid]["link"] = record
+        links[eid] = pred
+        audit[verdict] += 1
+    return audit
+
+
 def link_prompt(payload: dict, candidates: dict, view: str, excerpt: bool) -> str:
     return (
         (PROMPT_DIR / "link.txt").read_text(encoding="utf-8")
@@ -1936,6 +2116,7 @@ def run_stage1_agents(
     capacity: int,
     parties: bool = True,
     critic_rounds: int = 1,
+    link_check: bool = False,
     raw_dir: Path | None = None,
     doc_id: str = "doc",
 ) -> dict:
@@ -1945,7 +2126,7 @@ def run_stage1_agents(
                                                             +-> targeted parties
                                                             +-> fixer
                                                             (repeat to critic_rounds)
-                -> filters -> typed links
+                -> filters -> link checker (optional) -> typed links
 
     The critic's mandatory flags route each round; see resolve_critic_flags.
     """
@@ -2167,8 +2348,38 @@ def run_stage1_agents(
         if not changed:
             break  # a further round would read the same draft
 
-    # 4. TYPED LINKS
     log["track_relation_links"] = links_from_track_relations(payload)
+
+    # 4. LINK CHECKER: every link read against the judgment once more, with the
+    # draft as it now stands. The state before it is finalized on a copy and
+    # kept, so a run measures the checker against itself.
+    if link_check and any(e.get("link") for e in _events(payload)):
+        before = copy.deepcopy(payload)
+        before_log = finalize(before, source)
+        cands = candidate_predecessors(_events(payload))
+        view, excerpt = view_for(
+            link_check_prompt(payload, cands, "", False), LINK_CHECK_MAX_TOKENS, []
+        )
+        tic()
+        answer, raw = ask_json(
+            client,
+            model,
+            link_check_prompt(payload, cands, view, excerpt),
+            label="link check",
+            temperature=temperature,
+            max_tokens=LINK_CHECK_MAX_TOKENS,
+        )
+        secs = toc()
+        log["link_check"] = {
+            "ok": answer is not None,
+            "excerpt": excerpt,
+            "seconds": secs,
+            "audit": apply_link_check(payload, answer, cands, source),
+            "raw": raw,
+            "before": {"payload": before, "finalize": before_log},
+        }
+
+    # 5. TYPED LINKS
     log["finalize"] = finalize(payload, source)
     stats.update(filters)
     return log
@@ -2221,6 +2432,7 @@ def summarise(log: dict) -> dict:
 
 
 def main() -> None:
+    global RULES_PROMPT, PLAN_PROMPT
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
@@ -2273,12 +2485,25 @@ def main() -> None:
         help="extraction prompt (default prompts/extract.txt)",
     )
     ap.add_argument(
+        "--plan-prompt",
+        type=Path,
+        default=PLAN_PROMPT,
+        help="linker prompt (default prompts/plan.txt); its LINKS section also "
+        "drives the re-linker",
+    )
+    ap.add_argument(
         "--reuse-extraction",
         type=Path,
         default=None,
         help="a stage-1 directory whose .compress.json payloads stand in for the "
         "extract call: their links are stripped and the agentic passes run on "
         "them. Isolates plan/critic/fix from extraction variance.",
+    )
+    ap.add_argument(
+        "--link-check",
+        action="store_true",
+        help="run the link checker after the critic rounds; the draft as it stood "
+        "before it is written as <doc>.prelinkcheck.json",
     )
     ap.add_argument(
         "--skip-critic",
@@ -2289,6 +2514,11 @@ def main() -> None:
 
     c.SPLIT_OUTPUT_TOKENS = args.split_max_tokens
     c.PROMPT = args.prompt_file
+    # A legacy prompt with none of the rule sections keeps extract.txt's rules.
+    PLAN_PROMPT = args.plan_prompt
+    if load_sections(RULE_SECTIONS + GUIDE_SECTIONS, args.prompt_file):
+        RULES_PROMPT = args.prompt_file
+    enable_prompt_vocabulary(args.prompt_file)
     client = OpenAI(base_url=args.base_url, api_key=args.api_key, timeout=900.0)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     wanted = {w.strip() for w in args.only.split(",") if w.strip()}
@@ -2388,6 +2618,7 @@ def main() -> None:
                 capacity=capacity,
                 parties=not args.no_parties,
                 critic_rounds=0 if args.skip_critic else args.critic_rounds,
+                link_check=args.link_check,
                 raw_dir=args.out_dir,
                 doc_id=doc_id,
             )
@@ -2401,6 +2632,16 @@ def main() -> None:
                 f"rel {a['relations']}, {len(stats.get('judges_dropped', []))} judge(s) removed "
                 f"[{time.perf_counter() - t0:.0f}s]",
                 flush=True,
+            )
+        before = (log.get("link_check") or {}).pop("before", None)
+        if before:
+            (args.out_dir / f"{doc_id}.prelinkcheck.json").write_text(
+                json.dumps(
+                    {"doc": doc_id, "stats": stats, "payload": before["payload"]},
+                    indent=1,
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
             )
         (args.out_dir / f"{doc_id}.agentic.json").write_text(
             json.dumps(log, indent=1, ensure_ascii=False, default=str), encoding="utf-8"

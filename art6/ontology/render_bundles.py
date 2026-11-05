@@ -132,6 +132,13 @@ def render(payload: dict, source: str | None = None, mode: str = "bundle") -> st
             out.append(
                 f"  description (a summary, not a quote): {event['description']}"
             )
+        for key, label in (
+            ("decision_date_iso", "decision date (ISO)"),
+            ("start_date_iso", "start date (ISO)"),
+            ("significance", "significance"),
+        ):
+            if event.get(key):
+                out.append(f"  {label}: {event[key]}")
         if mode == "evidence" and source:
             for lo, hi in evidence(event, source):
                 out.append(f'  evidence: "{source[lo:hi]}" [{lo}:{hi}]')
@@ -202,6 +209,36 @@ def render(payload: dict, source: str | None = None, mode: str = "bundle") -> st
             out.append("  adjournment:")
             for key in ("date_span", "resumption_span", "cause_span"):
                 out += _line(key.removesuffix("_span"), adjournment.get(key), "    ")
+        out.append("")
+
+    # Timeline extension (extract_permissive.txt + ontology/echr_timeline.ttl):
+    # dated occurrences no authority took, and the lodging in Strasbourg.
+    circumstances = payload.get("circumstances") or []
+    if circumstances:
+        out.append(
+            f"CIRCUMSTANCES ({len(circumstances)}) -- dated occurrences in the case's "
+            "history that are NOT steps by an authority."
+        )
+        out.append("")
+        for item in circumstances:
+            out.append(f"CIRCUMSTANCE {item.get('id', '?')}")
+            if item.get("description"):
+                out.append(
+                    f"  description (a summary, not a quote): {item['description']}"
+                )
+            out += _line("what_happened", item.get("what_happened_span"))
+            out += _line("date", item.get("date_span"))
+            out.append(f"  kind: {item.get('kind') or 'other'}")
+            for person in item.get("persons_spans") or []:
+                out += _line("concerns", person)
+            if item.get("gives_rise_to"):
+                out.append(f"  gives_rise_to: {item['gives_rise_to']}")
+            out.append("")
+    app = payload.get("strasbourg_application")
+    if app:
+        out.append("STRASBOURG APPLICATION")
+        out += _line("lodged", app.get("date_span"))
+        out += _line("what_happened", app.get("what_happened_span"))
         out.append("")
 
     persons = payload.get("persons") or []

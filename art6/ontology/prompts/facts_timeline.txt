@@ -1,0 +1,29 @@
+TIMELINE EXTENSION (ontology variant 3.8.0-timeline):
+
+    The input may carry a CIRCUMSTANCES section: dated occurrences in the case's history
+    that are NOT steps taken by an authority -- an incident, an injury, a death, a family
+    event, a move, a private contract or dismissal. Mint ONE echr:FactualCircumstance per
+    CIRCUMSTANCE block and link it from the case document with echr:hasCircumstance. On
+    each:
+        - rdfs:label: the block's description;
+        - echr:hasSupportingQuote: the `what_happened` quote, verbatim;
+        - echr:hasEventDate: the `date`, normalised exactly as for echr:hasDecisionDate
+          (xsd:date, xsd:gYearMonth or xsd:gYear at the precision the text gives);
+        - echr:hasCircumstanceKind: the matching member of echr:CircumstanceKind --
+          "incident" is echr:CircumstanceIncident, "injury" is echr:CircumstanceInjury,
+          "death" is echr:CircumstanceDeath, "health" is echr:CircumstanceHealth,
+          "family" is echr:CircumstanceFamily, "residence" is echr:CircumstanceResidence,
+          "employment" is echr:CircumstanceEmployment, "property" is
+          echr:CircumstanceProperty, "communication" is echr:CircumstanceCommunication,
+          "other" is echr:CircumstanceOther;
+        - echr:concernsParty: the echr:Party node of each person in a `concerns` line --
+          REUSE the node you minted for that person elsewhere, never a duplicate;
+        - echr:givesRiseTo: the node of the event named in `gives_rise_to`.
+    A factual circumstance is NOT a domestic event. Never give it echr:hasDecisionDate,
+    echr:hasProceedingStartDate, echr:hasCourt, echr:hasInstanceLevel, echr:hasOutcome,
+    echr:followsProceeding or echr:hasParticipation, never link it with
+    echr:hasDomesticProceeding, and never type it as echr:DomesticEvent or a subclass.
+
+    A STRASBOURG APPLICATION section becomes ONE echr:StrasbourgApplication, linked from
+    the case document with echr:hasStrasbourgApplication, carrying echr:hasEventDate (the
+    `lodged` date) and echr:hasSupportingQuote.

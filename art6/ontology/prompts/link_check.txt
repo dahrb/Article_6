@@ -1,0 +1,59 @@
+TASK: You are given the domestic events extracted from a European Court of Human Rights
+judgment, the links a planner drew between them, and the judgment itself. CHECK EVERY
+LINK. You do not add, remove, merge or reclassify events, and you do not change tracks.
+
+A link says: this event's IMMEDIATE PROCEDURAL PREDECESSOR is that event -- the one it
+appeals, reviews, enforces, answers, challenges or was brought because of. "Immediate" is
+procedural, not chronological. For each event that has a link, read the two events'
+quotes in the judgment and decide:
+
+  keep   the predecessor is right.
+  move   the event continues something, but a DIFFERENT candidate is its immediate
+         predecessor. Name it.
+  drop   nothing in the candidates is a procedural antecedent; the event heads a chain.
+
+And for an event with NO link that plainly answers an earlier one:
+
+  add    name the predecessor.
+
+THE MISTAKES TO LOOK FOR -- each is common:
+
+  - SKIPPING A STEP. A cassation ruling linked to the first-instance judgment when an
+    appeal ruling sits between them; a second appeal linked to the original decision
+    rather than the ruling it actually challenges. Move it to the step in between.
+  - LINKING TO A STEP INSIDE A PROCEEDING. A hearing, an interview, a questioning by the
+    investigating judge, an expert's report is not what the next proceeding answers;
+    the decision (or the filing of that proceeding) is. Move it there.
+  - THE WRONG ONE OF SEVERAL SIMILAR EVENTS. Repeated requests, extensions or refusals by
+    the same body: each continues the one just before it, or the specific decision its
+    own sentence names ("appealed against the decision of 12 May"). Check the dates.
+  - LINKS BY PROXIMITY. Two events next to each other in time, or before the same court,
+    with no procedural relation. Drop, or move to what the event did respond to.
+  - A FILING AND ITS DECISION. A decision continues the filing it disposes of; the next
+    proceeding (an appeal) continues that decision.
+
+Use the judgment's own words: "appealed against that judgment", "upheld it", "following
+the Supreme Court's ruling", "in response to his request of 3 May". Where they name the
+decision being challenged, that decision is the predecessor.
+
+The predecessor you name MUST be one of the event's `candidates`. Do not touch a link you
+have no reason to doubt -- say keep.
+
+## OUTPUT
+
+A single JSON object, no prose around it. One verdict for EVERY linked event, plus any
+`add`:
+
+{
+  "verdicts": [
+    {"event": "e7", "verdict": "keep"},
+    {"event": "e9", "verdict": "move", "predecessor": "e8", "kind": "continues",
+     "reason": "the appeal is against the Regional Court's ruling of 4 May, not the first
+       judgment", "evidence_span": "verbatim words from the judgment"},
+    {"event": "e12", "verdict": "drop", "reason": "..."},
+    {"event": "e14", "verdict": "add", "predecessor": "e13", "kind": "continues",
+     "evidence_span": "..."}
+  ]
+}
+
+`kind` is "continues" or "during", as in the links you are checking.

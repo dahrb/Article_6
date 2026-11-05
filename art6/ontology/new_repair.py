@@ -348,7 +348,9 @@ def _full_ontology() -> str:
     one pass that can add an event is the one pass that cannot see the full
     range of event classes available to it.
     """
-    return (REPO_ROOT / "ontology" / "echr.ttl").read_text(encoding="utf-8")
+    return Path(
+        os.environ.get("ART6_ONTOLOGY_TTL", REPO_ROOT / "ontology" / "echr.ttl")
+    ).read_text(encoding="utf-8")
 
 
 # Every raw generation, in order, when capture is on. Keeping the text is the

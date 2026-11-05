@@ -120,6 +120,16 @@ FUNCTIONAL_RELATIONS = {ECHR.partOfProceeding, ECHR.occursDuring}
 MIN_CONTAINED_QUOTE = 25
 
 
+def ontology_ttl() -> Path:
+    """The ontology the graph was built against: ART6_ONTOLOGY_TTL, else echr.ttl."""
+    return Path(
+        os.environ.get(
+            "ART6_ONTOLOGY_TTL",
+            Path(__file__).resolve().parents[2] / "ontology" / "echr.ttl",
+        )
+    )
+
+
 def norm(text: str) -> str:
     text = unicodedata.normalize("NFKC", text or "")
     text = text.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
@@ -422,9 +432,7 @@ def mint_prompt(graph: Graph, payload: dict, missing: list[str], m: Match) -> st
         "EXTRACTION INSTRUCTIONS\nThe graph below was extracted under these. They bind you too.\n\n"
         + facts_instruction()
         + "\n\nONTOLOGY\n"
-        + (Path(__file__).resolve().parents[2] / "ontology" / "echr.ttl").read_text(
-            encoding="utf-8"
-        )
+        + ontology_ttl().read_text(encoding="utf-8")
         + "\n\nGRAPH\n"
         + graph.serialize(format="turtle")
         + "\n\nMISSING ENTRIES\n"
@@ -664,9 +672,7 @@ def final_fix_prompt(graph: Graph, source_text: str, findings: list[dict]) -> st
         "EXTRACTION INSTRUCTIONS\nThe graph below was built under these. They bind you too.\n\n"
         + facts_instruction()
         + "\n\nONTOLOGY\n"
-        + (Path(__file__).resolve().parents[2] / "ontology" / "echr.ttl").read_text(
-            encoding="utf-8"
-        )
+        + ontology_ttl().read_text(encoding="utf-8")
         + "\n\nJUDGMENT\n<<<DOC\n"
         + source_text
         + "\nDOC\n\nGRAPH\n"

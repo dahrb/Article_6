@@ -5,12 +5,10 @@ import json
 import streamlit as st
 
 from art6.explorer.data import (
-    RELATIONS,
     event_rows,
     filter_rows,
     load_demo,
     span,
-    visible_links,
 )
 from art6.explorer.timeline import timeline
 
@@ -34,8 +32,7 @@ def country(case):
 
 def main():
     demo = demo_data()
-    st.title("Domestic proceedings explorer")
-    st.caption("Ten validation cases · Explore the extracted procedural history")
+    st.caption("DOMESTIC PROCEEDINGS EXPLORER · TEN VALIDATION CASES")
     datasets = demo["datasets"]
     with st.sidebar:
         st.header("Browse cases")
@@ -77,10 +74,12 @@ def main():
         f"{country(case)} · {span(meta.get('application_number_span')) or 'Application number unavailable'}"
         f" · ECtHR date: {span(meta.get('judgment_date_span')) or 'unavailable'}"
     )
-    st.link_button("Open in HUDOC", f"https://hudoc.echr.coe.int/eng?i={case_id}")
+    st.caption(
+        f"[Open source document in HUDOC](https://hudoc.echr.coe.int/eng?i={case_id})"
+    )
     if run == demo["default"]:
-        st.info(
-            "The voting export contains major events only. Choose ‘Original run’ to explore minor events too."
+        st.caption(
+            "Nine-run voting · major events only. Choose ‘Original run’ to include minor events."
         )
     with st.sidebar:
         st.header("Filter events")
@@ -99,12 +98,11 @@ def main():
                 ("court", "Court / authority"),
                 ("direction", "Outcome direction"),
                 ("level", "Instance level"),
+                ("type", "Proceeding type"),
                 ("track", "Procedural track"),
             ]:
                 add_filter(key, label)
         event_search = st.text_input("Search descriptions and quotations")
-        show_links = st.checkbox("Show procedural links", value=True)
-        show_ids = st.checkbox("Show event IDs", value=False)
     visible = filter_rows(rows, filters, event_search)
     metrics = st.columns(4)
     metrics[0].metric("Events shown", f"{len(visible)} / {len(rows)}")
@@ -119,45 +117,12 @@ def main():
     timeline_tab, table_tab, provenance_tab = st.tabs(
         ["Timeline", "Event table", "About these results"]
     )
-    selection_id = None
     with timeline_tab:
-        if any(r["bounds"] for r in visible):
-            selection = st.plotly_chart(
-                timeline(visible, rows, show_links, show_ids),
-                width="stretch",
-                key=f"timeline:{run}:{case_id}",
-                on_select="rerun",
-                selection_mode="points",
-                config={"scrollZoom": True, "displaylogo": False},
-            )
-            for point in selection.selection.points:
-                custom = point.get("customdata")
-                if custom:
-                    selection_id = custom[0]
-        else:
-            st.info(
-                "These events have no usable dates. Inspect them in the event table and details below."
-            )
-        hidden_links = sum(
-            bool(r["raw"].get(k)) for r in visible for k in RELATIONS
-        ) - len(visible_links(visible))
-        st.caption(
-            "Colour = instance level · circle = major · diamond = minor/unspecified. "
-            "Arrows run from the referenced event to the event that refers to it. "
-            "Solid = follows · dashed = part of · dotted = occurs during. "
-            "Pale bars show year/month precision; their points sit at the interval midpoint. "
-            f"{hidden_links} links have a filtered or unavailable endpoint. No replacement links are inferred."
+        st.iframe(
+            timeline(visible, rows, title=case_name(case)),
+            height=790,
+            alt="Interactive procedural timeline with event cards, connections and evidence",
         )
-        undated = [r for r in visible if not r["bounds"]]
-        if undated:
-            st.write(f"**{len(undated)} events without a usable date**")
-            st.dataframe(
-                [
-                    {k: r[k] for k in ("id", "date", "court", "description")}
-                    for r in undated
-                ],
-                hide_index=True,
-            )
     columns = (
         "id",
         "date",
@@ -202,57 +167,6 @@ def main():
         st.caption(
             "Next iteration: country → court → case links and richer cross-case exploration."
         )
-    st.divider()
-    st.subheader("Event details")
-    ids = [r["id"] for r in visible]
-    detail_key = f"detail:{run}:{case_id}"
-    selection_key = f"selection:{run}:{case_id}"
-    if selection_id in ids and selection_id != st.session_state.get(selection_key):
-        st.session_state[detail_key] = selection_id
-        st.session_state[selection_key] = selection_id
-    if st.session_state.get(detail_key) not in ids:
-        st.session_state[detail_key] = ids[0]
-    event_id = st.selectbox(
-        "Select an event (or click a timeline point)",
-        ids,
-        key=detail_key,
-        format_func=lambda key: next(
-            f"{r['id']} · {r['date']} · {r['description'][:100]}"
-            for r in visible
-            if r["id"] == key
-        ),
-    )
-    row = next(r for r in visible if r["id"] == event_id)
-    left, right = st.columns([2, 1])
-    with left:
-        st.write(row["description"] or "No description provided.")
-        st.write(f"**Court / authority:** {row['court']}")
-        st.write(f"**Track:** {row['track']} · {row['track_label']}")
-        st.write(f"**Outcome:** {row['outcome']} · **Direction:** {row['direction']}")
-        st.write(
-            f"**Date:** {row['date']} · **Level:** {row['level']} · **Significance:** {row['significance']}"
-        )
-        st.write("**Supporting quotation**")
-        if row["quote"]:
-            st.text(row["quote"])
-        else:
-            st.caption("No supporting event quotation provided in this export.")
-        parties = row["raw"].get("parties", [])
-        st.write(
-            "**Parties:** "
-            + ("; ".join(span(p.get("name_span")) for p in parties) or "Not provided")
-        )
-    with right:
-        st.write("**Extracted links**")
-        for kind, label in RELATIONS.items():
-            target = row["raw"].get(kind)
-            if target:
-                suffix = "" if target in ids else " (filtered or unavailable)"
-                st.write(f"{label}: {target}{suffix}")
-        if not any(row["raw"].get(k) for k in RELATIONS):
-            st.caption("No outgoing link provided.")
-        with st.expander("All extracted event fields"):
-            st.json(row["raw"])
 
 
 if __name__ == "__main__":

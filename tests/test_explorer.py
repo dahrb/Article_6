@@ -2,6 +2,7 @@
 
 import unittest
 from datetime import date
+from itertools import pairwise
 
 from art6.explorer.data import (
     date_bounds,
@@ -10,7 +11,7 @@ from art6.explorer.data import (
     load_demo,
     visible_links,
 )
-from art6.explorer.timeline import timeline
+from art6.explorer.timeline import build_scene, timeline
 
 
 class ExplorerDataTests(unittest.TestCase):
@@ -70,18 +71,47 @@ class ExplorerDataTests(unittest.TestCase):
                 by_id = {r["id"]: r for r in rows}
                 for source, target, kind in visible_links(rows):
                     self.assertEqual(by_id[source]["raw"][kind], target)
-                # Building every chart exercises date intervals, lane allocation,
-                # relation arrows and simultaneous dates on the real artifacts.
-                fig = timeline(rows, rows)
-                point_ids = {
-                    p[0]
-                    for trace in fig.data
-                    if trace.customdata is not None
-                    for p in trace.customdata
-                }
-                self.assertEqual(point_ids, {r["id"] for r in rows if r["bounds"]})
+                scene = build_scene(rows, rows)
+                self.assertEqual({n["id"] for n in scene["nodes"]}, set(by_id))
+                self.assertEqual(
+                    {(e["to"], e["from"], e["kind"]) for e in scene["edges"]},
+                    set(visible_links(rows)),
+                )
+                for lane in scene["lanes"]:
+                    members = [n for n in scene["nodes"] if n["track"] == lane["id"]]
+                    for left, right in pairwise(members):
+                        self.assertGreaterEqual(
+                            right["x"] - left["x"], scene["cardWidth"]
+                        )
+                for node in scene["nodes"]:
+                    self.assertEqual(node["outcome"], by_id[node["id"]]["outcome"])
+                    self.assertEqual(node["raw"], by_id[node["id"]]["raw"])
         self.assertEqual(case_sets[0], case_sets[1])
         self.assertEqual(counts, {"vote9_v9_luna": 212, "v9_luna": 265})
+
+    def test_undated_filtered_and_cyclic_events_remain_explorable(self):
+        rows = event_rows(
+            {
+                "events": [
+                    {"id": "a", "track": "T1", "follows": "b", "significance": "major"},
+                    {"id": "b", "track": "T1", "follows": "a", "significance": "minor"},
+                ]
+            }
+        )
+        scene = build_scene(rows, rows)
+        self.assertEqual(len(scene["nodes"]), 2)
+        self.assertTrue(all(n["precision"] == "undated" for n in scene["nodes"]))
+        filtered = filter_rows(rows, {"significance": ["major"]})
+        self.assertEqual(build_scene(filtered, rows)["edges"], [])
+        self.assertEqual(build_scene(filtered, rows)["nodes"][0]["raw"]["follows"], "b")
+
+    def test_extraction_text_cannot_escape_the_embedded_json(self):
+        malicious = '</script><script>alert("injected")</script>'
+        rows = event_rows({"events": [{"id": "e1", "description": malicious}]})
+        page = timeline(rows, rows, title=malicious)
+        self.assertNotIn(malicious, page)
+        self.assertIn(r"\u003c/script\u003e", page)
+        self.assertEqual(page.count("</script>"), 1)
 
 
 if __name__ == "__main__":

@@ -30,9 +30,17 @@ class ExplorerAppTests(unittest.TestCase):
         app.sidebar.text_input[0].set_value("STANEV").run()
         self.assertFalse(app.exception)
         self.assertEqual(app.sidebar.selectbox[2].value, "001-108690")
+        full_count = app.metric[0].value
         app.sidebar.multiselect[0].set_value([]).run()
         self.assertFalse(app.exception)
         self.assertTrue(app.info)
+        app.sidebar.text_input[1].set_value("no-event-matches-this").run()
+        with self.assertNoLogs("streamlit.elements.lib.policies", level="WARNING"):
+            app.sidebar.button[0].click().run()
+        self.assertFalse(app.exception)
+        self.assertEqual(app.sidebar.text_input[1].value, "")
+        self.assertTrue(app.sidebar.multiselect[0].value)
+        self.assertEqual(app.metric[0].value, full_count)
 
 
 if __name__ == "__main__":

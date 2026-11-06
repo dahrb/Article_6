@@ -47,7 +47,7 @@ def main():
             "Respondent country",
             ["All countries"] + sorted({country(c) for c in cases}),
         )
-        search = st.text_input("Search case name or ID")
+        search = st.text_input("Search case name or ID").strip()
         matches = [
             c
             for c in cases
@@ -87,9 +87,10 @@ def main():
 
         def add_filter(key, label):
             options = sorted({r[key] for r in rows})
-            filters[key] = st.multiselect(
-                label, options, default=options, key=f"{run}:{case_id}:{key}"
-            )
+            widget_key = f"{run}:{case_id}:{key}"
+            if widget_key not in st.session_state:
+                st.session_state[widget_key] = options
+            filters[key] = st.multiselect(label, options, key=widget_key)
 
         add_filter("significance", "Major / minor")
         add_filter("outcome", "Outcome")
@@ -102,13 +103,29 @@ def main():
                 ("track", "Procedural track"),
             ]:
                 add_filter(key, label)
-        event_search = st.text_input("Search descriptions and quotations")
+        query_key = f"{run}:{case_id}:query"
+        event_search = st.text_input(
+            "Search descriptions and quotations", key=query_key
+        )
+
+        def reset_filters():
+            for field in filters:
+                st.session_state[f"{run}:{case_id}:{field}"] = sorted(
+                    {r[field] for r in rows}
+                )
+            st.session_state[query_key] = ""
+
+        st.button("Reset event filters", on_click=reset_filters, width="stretch")
     visible = filter_rows(rows, filters, event_search)
     metrics = st.columns(4)
     metrics[0].metric("Events shown", f"{len(visible)} / {len(rows)}")
     metrics[1].metric("Major", sum(r["significance"] == "major" for r in visible))
     metrics[2].metric("Minor", sum(r["significance"] == "minor" for r in visible))
-    metrics[3].metric("Courts / authorities", len({r["court"] for r in visible}))
+    metrics[3].metric(
+        "Authority labels",
+        len({r["court"] for r in visible}),
+        help="Distinct extracted names. Variants and generic labels have not been resolved to unique institutions.",
+    )
     if not visible:
         st.info(
             "No events match the filters. Select more values or clear the event search."
@@ -119,7 +136,14 @@ def main():
     )
     with timeline_tab:
         st.iframe(
-            timeline(visible, rows, title=case_name(case)),
+            timeline(
+                visible,
+                rows,
+                title=case_name(case),
+                case_id=case_id,
+                run_id=run,
+                source_label=datasets[run]["label"],
+            ),
             height=790,
             alt="Interactive procedural timeline with event cards, connections and evidence",
         )

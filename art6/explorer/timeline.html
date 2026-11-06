@@ -147,6 +147,7 @@ select:focus-visible {
 .diagram {
   position: relative;
   min-width: 0;
+  min-height: 0;
   flex: 1;
   background: #fbfcfd
 }
@@ -216,6 +217,7 @@ select:focus-visible {
 .inspector {
   width: 310px;
   flex-shrink: 0;
+  overflow-wrap: anywhere;
   border-left: 1px solid #dce4ea;
   background: #fff;
   overflow: auto;
@@ -312,6 +314,27 @@ select:focus-visible {
   opacity: .6
 }
 
+.event-nav {
+  display: flex;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.event-nav button {
+  flex: 1;
+  font-size: 11px;
+}
+
+.event-nav button:disabled {
+  opacity: .45;
+  cursor: default;
+}
+
+.minimap:focus-visible {
+  outline: 2px solid #16786f;
+  outline-offset: 2px;
+}
+
 .empty-evidence {
   color: #7b8795;
   font-style: italic
@@ -343,6 +366,7 @@ select:focus-visible {
 
 .minimap {
   flex: 1;
+  min-width: 0;
   height: 56px;
   cursor: crosshair;
   background: #f8fafb;
@@ -368,14 +392,16 @@ select:focus-visible {
 }
 
 @media(max-width:900px) {
+  .workspace {
+    flex-direction: column;
+  }
+
   .inspector {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 300px;
-    z-index: 4;
-    box-shadow: -8px 0 25px #24344918
+    width: 100%;
+    height: 230px;
+    border-left: 0;
+    border-top: 1px solid #dce4ea;
+    padding: 14px 18px;
   }
 
   .toolbar strong {
@@ -396,6 +422,12 @@ select:focus-visible {
     scroll-behavior: auto !important
   }
 }
+
+@media(max-width:520px) {
+  .lane-labels {
+    display: none !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -414,7 +446,7 @@ select:focus-visible {
   <div class="diagram"><div class="viewport" id="viewport" tabindex="0" aria-label="Procedural diagram. Scroll or drag to explore; select an event for its connections and evidence."><svg id="graph" xmlns="http://www.w3.org/2000/svg" aria-label="Domestic procedural events"></svg></div><div class="lane-labels" id="lane-labels" aria-hidden="true"></div></div>
   <aside id="inspector" class="inspector" aria-label="Selected event details" hidden></aside>
  </div>
- <div class="mapbar"><div class="map-caption"><b>Case overview</b>Click to move around</div><svg id="minimap" class="minimap" xmlns="http://www.w3.org/2000/svg" aria-label="Case overview navigation" role="img"></svg></div>
+ <div class="mapbar"><div class="map-caption"><b>Case overview</b>Click or use arrow keys</div><svg id="minimap" class="minimap" xmlns="http://www.w3.org/2000/svg" aria-label="Case overview navigation. Arrow keys pan; Home returns to the beginning." role="group" tabindex="0"></svg></div>
  <div class="footer"><span id="status" aria-live="polite">Select an event to follow its connections.</span><button id="export">Download SVG</button></div>
 </div>
 <script>
@@ -427,6 +459,7 @@ const graph = document.getElementById('graph'),
   map = document.getElementById('minimap'),
   labels = document.getElementById('lane-labels');
 const byId = new Map(original.nodes.map(n => [n.id, n]));
+const contextById = new Map(original.context.map(n => [n.id, n]));
 const relation = {
   follows: ['Follows', '#6f8093', ''],
   part_of: ['Part of', '#20858d', '7 4'],
@@ -458,7 +491,13 @@ function html(tag, text = null, cls = '', parent = null) {
 }
 
 function lines(value, width, count) {
-  const words = String(value || '').split(/\s+/);
+  const words = String(value || '').split(/\s+/).flatMap(word => {
+    const letters = Array.from(word),
+      chunks = [];
+    for (let i = 0; i < letters.length; i += width) chunks.push(letters.slice(i, i + width)
+      .join(''));
+    return chunks;
+  });
   let out = [],
     line = '';
   for (const word of words) {
@@ -473,6 +512,63 @@ function lines(value, width, count) {
     out[count - 1] = out[count - 1].slice(0, width - 1) + '…';
   }
   return out;
+}
+
+function fitText(element, maxWidth) {
+  if (element.getComputedTextLength() <= maxWidth) return;
+  const full = element.textContent,
+    chars = Array.from(full);
+  let low = 0,
+    high = chars.length;
+  while (low < high) {
+    const middle = Math.ceil((low + high) / 2);
+    element.textContent = chars.slice(0, middle).join('') + '…';
+    if (element.getComputedTextLength() <= maxWidth) low = middle;
+    else high = middle - 1;
+  }
+  element.textContent = chars.slice(0, low).join('') + '…';
+  element.setAttribute('data-fulltext', full);
+}
+
+// Measure only on export, so long titles wrap without being cropped or omitted.
+function exportLines(text, maxWidth, size, weight = 400) {
+  const probe = svg('text', {
+    'font-size': size,
+    'font-weight': weight,
+    visibility: 'hidden'
+  });
+  const width = value => {
+    probe.textContent = value;
+    return probe.getComputedTextLength();
+  };
+  const result = [];
+  let line = '';
+  for (let word of String(text).split(/\s+/)) {
+    if (width((line + ' ' + word).trim()) <= maxWidth) {
+      line = (line + ' ' + word).trim();
+      continue;
+    }
+    if (line) {
+      result.push(line);
+      line = '';
+    }
+    while (width(word) > maxWidth) {
+      const chars = Array.from(word);
+      let low = 1,
+        high = chars.length;
+      while (low < high) {
+        const mid = Math.ceil((low + high) / 2);
+        if (width(chars.slice(0, mid).join('')) <= maxWidth) low = mid;
+        else high = mid - 1;
+      }
+      result.push(chars.slice(0, low).join(''));
+      word = chars.slice(low).join('');
+    }
+    line = word;
+  }
+  if (line) result.push(line);
+  probe.remove();
+  return result;
 }
 
 function multiline(parent, text, x, y, width, count, size, color, weight = 400) {
@@ -531,12 +627,14 @@ function render() {
   labels.replaceChildren();
   map.replaceChildren();
   graph.setAttribute('viewBox', `0 0 ${scene.width} ${scene.height}`);
+  graph.setAttribute('font-family',
+    'system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif');
   svg('title', {}, original.title);
   svg('desc', {},
     'Events are ordered within extracted tracks. Spacing is not elapsed time. Dates, instance levels, proceeding types and outcomes appear on each card.'
   );
   svg('style', {},
-    `.event{cursor:pointer;outline:none}.event:focus-visible .card{stroke:#0f766e;stroke-width:3}.event.dim{opacity:.20}.edge.dim{opacity:.10}.event.selected .card{stroke:#0f766e;stroke-width:2.5}.event.related .card{stroke:#8aaeb0;stroke-width:2}.edge.active{stroke-width:2.6}.event:hover .card{stroke:#647f94;stroke-width:2}.event text{pointer-events:none}`
+    `.event{cursor:pointer;outline:none}.event:focus-visible .card{stroke:#0f766e;stroke-width:3}.event.dim{opacity:.35}.edge.dim{opacity:.16}.event.selected .card{stroke:#0f766e;stroke-width:2.5}.event.related .card{stroke:#8aaeb0;stroke-width:2}.edge.active{stroke-width:2.6}.event:not(.selected):hover .card{stroke:#647f94;stroke-width:2}.event text{pointer-events:none}`
   );
   const defs = svg('defs');
   for (const [kind, style] of Object.entries(relation)) {
@@ -626,10 +724,12 @@ function render() {
       class: 'event',
       tabindex: 0,
       role: 'button',
+      'aria-pressed': 'false',
       'data-id': n.id,
       'aria-label': `${n.id}, ${n.date}, ${n.court}, ${n.level}, ${n.type}, ${n.outcome}, ${n.direction}`
     });
-    svg('title', {}, `${n.court}\n${n.description}\n${n.outcome} · ${n.direction}`, g);
+    svg('title', {},
+      `${displayDate(n)}\n${n.court}\n${n.description}\n${n.outcome} · ${n.direction}`, g);
     svg('text', {
       x: 0,
       y: -12,
@@ -722,6 +822,14 @@ function render() {
       'font-size': 9,
       fill: '#92a0ad'
     }, n.id, g);
+    for (const text of g.querySelectorAll('text')) {
+      const x = Number(text.getAttribute('x')),
+        y = Number(text.getAttribute('y'));
+      const anchor = text.getAttribute('text-anchor');
+      const maxWidth = anchor === 'middle' ? 28 : anchor === 'end' ? 32 : y === 158 ? scene
+        .cardWidth - 64 : scene.cardWidth - x - (y < 0 ? 0 : 12);
+      fitText(text, maxWidth);
+    }
     g.addEventListener('click', () => select(n.id));
     g.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -818,9 +926,14 @@ function setScale(value, keepCenter = true) {
 function focusNode(id) {
   const n = scene.nodes.find(x => x.id === id);
   if (!n) return;
+  const labelWidth = labels.clientWidth;
+  const available = viewport.clientWidth - labelWidth - 24;
+  if (scene.cardWidth * scale > available) setScale(available / scene.cardWidth, false);
+  const topPadding = Math.min(80, Math.max(28 * scale, (viewport.clientHeight - scene.cardHeight *
+    scale) / 2));
   viewport.scrollTo({
-    left: Math.max(0, n.x * scale - 190),
-    top: Math.max(0, n.y * scale - 100),
+    left: Math.max(0, n.x * scale - labels.clientWidth - 16),
+    top: Math.max(0, n.y * scale - topPadding),
     behavior: 'instant'
   });
   const element = Array.from(graph.querySelectorAll('.event')).find(e => e.dataset.id === id);
@@ -830,10 +943,17 @@ function focusNode(id) {
 }
 
 function clear() {
+  const previous = selected;
   selected = null;
   inspector.hidden = true;
   graph.querySelectorAll('.event,.edge').forEach(e => e.classList.remove('dim', 'active',
     'selected', 'related'));
+  graph.querySelectorAll('.event').forEach(el => el.setAttribute('aria-pressed', 'false'));
+  const previousNode = Array.from(graph.querySelectorAll('.event')).find(el => el.dataset.id ===
+    previous);
+  if (previousNode) previousNode.focus({
+    preventScroll: true
+  });
   status(
     'Select an event to follow its connections. Dates are shown as recorded; spacing is not elapsed time.'
   );
@@ -859,6 +979,7 @@ function select(id) {
   graph.querySelectorAll('.event').forEach(el => {
     el.classList.toggle('dim', !related.has(el.dataset.id));
     el.classList.toggle('selected', el.dataset.id === id);
+    el.setAttribute('aria-pressed', String(el.dataset.id === id));
     el.classList.toggle('related', el.dataset.id !== id && related.has(el.dataset.id));
   });
   graph.querySelectorAll('.edge').forEach(el => {
@@ -873,12 +994,31 @@ function select(id) {
   close.onclick = clear;
   html('div', `${n.id} · ${n.significance} event`, 'eyebrow', inspector);
   html('h2', n.court, '', inspector);
+  const siblings = scene.nodes.filter(node => node.track === n.track),
+    index = siblings.findIndex(node => node.id === id);
+  const navigation = html('div', null, 'event-nav', inspector);
+  for (const [label, offset] of [
+      ['← Previous event', -1],
+      ['Next event →', 1]
+    ]) {
+    const next = siblings[index + offset],
+      button = html('button', label, '', navigation);
+    button.disabled = !next;
+    if (next) button.onclick = () => {
+      select(next.id);
+      focusNode(next.id);
+    };
+  }
   html('p', n.description || 'No description provided.', '', inspector);
   for (const [label, value] of [
       ['Date', displayDate(n)],
       ['Instance', n.level_style[1]],
-      ['Type', n.type],
-      ['Outcome', n.outcome === 'unknown' ? 'Not recorded' : n.outcome],
+      ['Type', n.type === 'unknown' ? 'Not recorded' : n.type.charAt(0).toUpperCase() + n.type
+        .slice(1)
+      ],
+      ['Outcome', n.outcome === 'unknown' ? 'Not recorded' : n.outcome.charAt(0).toUpperCase() + n
+        .outcome.slice(1)
+      ],
       ['Direction', n.direction_style[1]]
     ]) {
     const fact = html('div', null, 'fact', inspector);
@@ -893,8 +1033,8 @@ function select(id) {
       connection(style[0], target);
       connections++;
     }
-    for (const other of original.nodes)
-      if (other.raw[kind] === id) {
+    for (const other of original.context)
+      if (other.links[kind] === id) {
         connection(inverse[kind], other.id);
         connections++;
       }
@@ -902,12 +1042,15 @@ function select(id) {
   if (!connections) html('p', 'No extracted connections.', 'empty-evidence', inspector);
 
   function connection(label, target) {
-    const other = byId.get(target);
+    const other = contextById.get(target),
+      visible = byId.has(target);
     const button = html('button', `${label} → ${target}`, 'connection', inspector);
-    html('small', other ? `${other.date} · ${other.court}` : 'Filtered out or unavailable', '',
+    html('small', other ?
+      `${other.date} · ${other.court}${visible?'':' · Hidden by event filters'}` :
+      'Endpoint missing from this extraction', '',
       button);
-    button.disabled = !other;
-    if (other) button.onclick = () => {
+    button.disabled = !visible;
+    if (visible) button.onclick = () => {
       select(target);
       focusNode(target);
     };
@@ -921,11 +1064,14 @@ function select(id) {
   const details = html('details', null, '', inspector);
   html('summary', 'All extracted fields', '', details);
   html('pre', JSON.stringify(n.raw, null, 2), '', details);
+  inspector.scrollTop = 0;
   status(
     `${id} selected · ${related.size-1} directly connected events highlighted · Escape to clear`);
   const placed = scene.nodes.find(node => node.id === id);
   if (wasOverview || placed.x * scale < viewport.scrollLeft + labels.clientWidth ||
-    (placed.x + scene.cardWidth) * scale > viewport.scrollLeft + viewport.clientWidth) {
+    (placed.x + scene.cardWidth) * scale > viewport.scrollLeft + viewport.clientWidth ||
+    (placed.y - 25) * scale < viewport.scrollTop ||
+    (placed.y + scene.cardHeight) * scale > viewport.scrollTop + viewport.clientHeight) {
     focusNode(id);
   }
   refreshViewport();
@@ -982,69 +1128,111 @@ map.addEventListener('click', e => {
     .clientWidth / 2, (e.clientY - box.top) / box.height * scene.height * scale - viewport
     .clientHeight / 2);
 });
+map.addEventListener('keydown', e => {
+  const moves = {
+    ArrowLeft: [-1, 0],
+    ArrowRight: [1, 0],
+    ArrowUp: [0, -1],
+    ArrowDown: [0, 1]
+  };
+  if (moves[e.key]) {
+    e.preventDefault();
+    const [x, y] = moves[e.key];
+    viewport.scrollBy(x * viewport.clientWidth * .6, y * viewport.clientHeight * .6);
+  }
+  if (e.key === 'Home') {
+    e.preventDefault();
+    viewport.scrollTo(0, 0);
+  }
+});
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') clear();
 });
 document.getElementById('export').onclick = () => {
   const clone = graph.cloneNode(true);
+  clone.querySelector('style')?.remove();
   clone.setAttribute('width', scene.width);
   clone.setAttribute('height', scene.height);
   clone.querySelectorAll('.event,.edge').forEach(e => {
     e.classList.remove('dim', 'active', 'related', 'selected');
     e.removeAttribute('tabindex');
     e.removeAttribute('role');
+    e.removeAttribute('aria-pressed');
   });
+  const maxWidth = scene.width - 40;
+  const titleLines = exportLines(original.title, maxWidth, 18, 600);
+  const track = document.getElementById('track').value;
+  const scope = track === 'all' ? 'All tracks' : `Track ${track}`;
+  const metadata = [original.caseId, original.sourceLabel, scope,
+    `${scene.nodes.length} of ${original.context.length} events`
+  ].filter(Boolean).join(' · ');
+  const metadataLines = exportLines(metadata, maxWidth, 11);
+  const noteLines = exportLines(
+    'Dates retain recorded precision. Spacing shows sequence, not elapsed time.', maxWidth, 11);
+  const headerHeight = 38 + titleLines.length * 24 + (metadataLines.length + noteLines.length) *
+    16 + 28;
   const exported = document.createElementNS(NS, 'svg');
   exported.setAttribute('width', scene.width);
-  exported.setAttribute('height', scene.height + 100);
-  exported.setAttribute('viewBox', `0 0 ${scene.width} ${scene.height + 100}`);
-  exported.setAttribute('font-family', 'system-ui, sans-serif');
+  exported.setAttribute('height', scene.height + headerHeight);
+  exported.setAttribute('viewBox', `0 0 ${scene.width} ${scene.height + headerHeight}`);
+  exported.setAttribute('font-family',
+    'system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif');
   svg('rect', {
     width: scene.width,
-    height: scene.height + 100,
+    height: scene.height + headerHeight,
     fill: '#fff'
   }, null, exported);
-  svg('text', {
-    x: 20,
-    y: 28,
-    'font-size': 18,
-    'font-weight': 600,
-    fill: '#243449'
-  }, original.title, exported);
-  svg('text', {
+  let y = 28;
+  for (const line of titleLines) {
+    svg('text', {
       x: 20,
-      y: 52,
-      'font-size': 12,
+      y,
+      'font-size': 18,
+      'font-weight': 600,
+      fill: '#243449'
+    }, line, exported);
+    y += 24;
+  }
+  y += 2;
+  for (const line of [...metadataLines, ...noteLines]) {
+    svg('text', {
+      x: 20,
+      y,
+      'font-size': 11,
       fill: '#6b7c8e'
-    },
-    'Procedural sequence within each track · Dates as recorded · Spacing is not elapsed time',
-    exported);
+    }, line, exported);
+    y += 16;
+  }
+  y += 10;
   Object.values(relation).forEach((style, i) => {
     const x = 20 + i * 180;
     svg('line', {
       x1: x,
       x2: x + 30,
-      y1: 76,
-      y2: 76,
+      y1: y,
+      y2: y,
       stroke: style[1],
       'stroke-width': 2,
       'stroke-dasharray': style[2]
     }, null, exported);
     svg('text', {
       x: x + 40,
-      y: 80,
+      y: y + 4,
       'font-size': 12,
       fill: '#526276'
     }, style[0], exported);
   });
-  clone.setAttribute('y', 100);
+  clone.setAttribute('y', headerHeight);
   exported.append(clone);
   const url = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(exported)], {
     type: 'image/svg+xml'
   }));
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'domestic-proceedings.svg';
+  a.download = [original.caseId || 'domestic-proceedings', original.runId, track === 'all' ?
+      'all-tracks' : track
+    ]
+    .filter(Boolean).map(value => value.replace(/[^a-zA-Z0-9_-]/g, '-')).join('-') + '.svg';
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 };

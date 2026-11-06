@@ -75,6 +75,21 @@ def build_scene(rows: list[dict], all_rows: list[dict]) -> dict:
     ]
     return {
         "nodes": nodes,
+        # Context is only for explaining hidden endpoints in the inspector.
+        # It never adds filtered events or replacement edges to the diagram.
+        "context": [
+            {
+                "id": r["id"],
+                "court": r["court"],
+                "date": r["date"],
+                "links": {
+                    k: r["raw"][k]
+                    for k in ("follows", "part_of", "occurs_during")
+                    if r["raw"].get(k)
+                },
+            }
+            for r in all_rows
+        ],
         "lanes": lanes,
         "edges": edges,
         "width": max((n["x"] + CARD_WIDTH + 38 for n in nodes), default=700),
@@ -87,10 +102,17 @@ def build_scene(rows: list[dict], all_rows: list[dict]) -> dict:
 
 
 def timeline(
-    rows: list[dict], all_rows: list[dict], *, title: str = "Domestic proceedings"
+    rows: list[dict],
+    all_rows: list[dict],
+    *,
+    title: str = "Domestic proceedings",
+    case_id: str = "",
+    run_id: str = "",
+    source_label: str = "",
 ) -> str:
     scene = build_scene(rows, all_rows)
     scene["title"] = title
+    scene.update(caseId=case_id, runId=run_id, sourceLabel=source_label)
     # Extraction text is data, never executable HTML. The viewer inserts it via
     # textContent; escape script delimiters as well as JS line separators here.
     data = (

@@ -123,6 +123,16 @@ data/              corpus, metadata, drawn samples
 
 ## Where to go next
 
+To explore the ten validation cases locally:
+
+```bash
+uv run --extra viz streamlit run art6/explorer/app.py
+```
+
+The [Streamlit explorer](art6/explorer/README.md) ships with saved voting and
+original-run results, searchable cases, procedural timelines, event filters and
+supporting quotations. No extraction services are needed.
+
 | you want to | read |
 |---|---|
 | run the pipeline or reproduce the ablation | [`art6/ontology/README.md`](art6/ontology/README.md) |

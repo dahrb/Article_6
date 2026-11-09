@@ -1,6 +1,6 @@
 """Stage 1, agentic: a fixed order of agents, routed by their own answers.
 
-The single-call evidence stage (compress.py) asked one model call to find
+The old single-call evidence stage asked one model call to find
 every event, classify it on five axes AND decide which earlier event it
 continues. The chain is where it failed: on gold30 the graphs carried half as
 many chains as gold (69 vs 129) at near-correct event counts, so parallel
@@ -40,7 +40,7 @@ from the agent's findings; a yes that needs evidence and has none locatable is
 read as no; a flag its own findings contradict follows the findings. Every
 decision is logged with how it was reached (see resolve_critic_flags).
 
-The output is a `.compress.json` in the shape compress.py writes, plus
+The output is a `.compress.json` (the historical name), plus
 `track`, `follows`, `part_of`, `occurs_during` and `link_span` on events and
 `tracks` / `track_relations` lists, so render_bundles, check_stage_boundary
 and every diagnostic read it unchanged. Each document also gets a
@@ -67,26 +67,15 @@ from pathlib import Path
 
 from openai import OpenAI
 
-from art6.ontology import compress as c
+from art6.ontology import extraction as c
 
 PROMPT_DIR = Path(__file__).resolve().parent / "prompts"
 EXTRACT_PROMPT = PROMPT_DIR / "extract.txt"
 
-# Sections of the extraction prompt the critic and fixer are held to. Read live
-# from the prompt in use (main() sets RULES_PROMPT from --prompt-file) so the three
-# passes can never drift onto different rules. A prompt can use any subset of them.
+# Sections of the extraction prompt the critic and fixer are held to, read live
+# from extract.txt so the three passes can never drift onto different rules.
 RULES_PROMPT = EXTRACT_PROMPT
-RULE_SECTIONS = (
-    "CLASSIFY THE RUNG AND THE RESULT",
-    "CLASSIFY THE TRACK AND THE DIRECTION",
-    "CLASSIFY THE MATTER",
-    "COVERAGE AND GRANULARITY",
-    "PARTIES — EVERY ENTRY NEEDS THEM",
-    "FINALITY, PENDING AND DETENTION",
-)
-# The guide-based prompt (extract_guide.txt) carries its rules in one section
-# instead; held to the same way, alongside whichever RULE_SECTIONS it has.
-GUIDE_SECTIONS = ("FIELD RULES -- THESE OVERRIDE THE GUIDE WHERE THEY DIFFER",)
+RULE_SECTIONS = ("FIELD RULES -- THESE OVERRIDE THE GUIDE WHERE THEY DIFFER",)
 FIX_EXTRA_SECTIONS = ("THE ONE RULE", "OUTPUT")
 
 MAX_CANDIDATES = 15
@@ -146,21 +135,13 @@ VOCABULARY = {
         "vetting",
         "disciplinary",
         "requests",
+        "health",
+        "immigration",
+        "enforcement",
         "other",
         "unknown",
     },
 }
-# Matters only the timeline ontology variant (ontology/echr_timeline.ttl) has;
-# accepted when the extraction prompt offers them (enable_prompt_vocabulary).
-TIMELINE_MATTERS = {"health", "immigration", "enforcement"}
-
-
-def enable_prompt_vocabulary(prompt: Path) -> None:
-    """Accept the timeline-only matters if `prompt` offers them."""
-    if "| health |" in prompt.read_text(encoding="utf-8"):
-        VOCABULARY["matter"] |= TIMELINE_MATTERS
-
-
 LINK_KINDS = {"continues", "during"}
 FINDING_KINDS = {
     "missing_event",
@@ -581,21 +562,6 @@ def same_proceeding(a: dict, b: dict) -> bool:
                 if name in _norm_name(one.get(key)):
                     return True
     return False
-
-
-def retype_part_of(payload: dict) -> int:
-    """Apply the filing rule to a payload finalized before it existed: any
-    part_of whose target is not a filing becomes follows (to the same target,
-    which finalize already made the proceeding's root). Returns how many."""
-    by_id = {e["id"]: e for e in _events(payload)}
-    changed = 0
-    for event in _events(payload):
-        target = event.get("part_of")
-        if target and target in by_id and not is_filing(by_id[target]):
-            event.pop("part_of")
-            event["follows"] = target
-            changed += 1
-    return changed
 
 
 def break_cycles(payload: dict) -> int:
@@ -1247,7 +1213,7 @@ def ask_json(
     max_tokens: int,
     retries: int = 1,
 ) -> tuple[dict | None, str]:
-    from art6.ontology.repair_facts import model_call_kwargs
+    from art6.ontology.graph_patch import model_call_kwargs
 
     raw = ""
     for _ in range(retries + 1):
@@ -1295,7 +1261,7 @@ def critic_prompt(payload: dict, hints: list[dict], view: str, excerpt: bool) ->
     return (
         (PROMPT_DIR / "critic.txt").read_text(encoding="utf-8")
         + "\n\nEXTRACTION RULES\n\n"
-        + load_sections(RULE_SECTIONS + GUIDE_SECTIONS)
+        + load_sections(RULE_SECTIONS)
         + _document_block(view, excerpt)
         + "\n\nDRAFT\n"
         + render_draft(payload)
@@ -1310,7 +1276,7 @@ def fix_prompt(payload: dict, findings: list[dict], view: str, excerpt: bool) ->
     return (
         (PROMPT_DIR / "fix.txt").read_text(encoding="utf-8")
         + "\n\nEXTRACTION RULES\n\n"
-        + load_sections(FIX_EXTRA_SECTIONS + RULE_SECTIONS + GUIDE_SECTIONS)
+        + load_sections(FIX_EXTRA_SECTIONS + RULE_SECTIONS)
         + _document_block(view, excerpt)
         + "\n\nDRAFT\n"
         + render_draft(payload)
@@ -1959,71 +1925,6 @@ def constrain_candidates(payload: dict, candidates: dict) -> dict:
     return out
 
 
-LINK_CHECK_MAX_TOKENS = 8000
-
-
-def link_check_prompt(payload: dict, candidates: dict, view: str, excerpt: bool) -> str:
-    return (
-        (PROMPT_DIR / "link_check.txt").read_text(encoding="utf-8")
-        + _document_block(view, excerpt)
-        + "\n\n"
-        + render_draft(payload, candidates)
-        + "\n"
-    )
-
-
-def apply_link_check(
-    payload: dict, answer: dict | None, candidates: dict, source: str
-) -> dict:
-    """Apply the link checker's verdicts, refusing what the planner's own
-    rules refuse: a predecessor outside the candidates, a cycle, an unknown
-    kind. An event the checker does not mention keeps its link."""
-    events = _by_id(payload)
-    index = c.SpanIndex(source)
-    links = {eid: e["link"]["to"] for eid, e in events.items() if e.get("link")}
-    audit: dict = {"keep": 0, "move": 0, "drop": 0, "add": 0, "refused": []}
-    verdicts = (answer or {}).get("verdicts") if isinstance(answer, dict) else None
-    for v in verdicts or []:
-        if not isinstance(v, dict):
-            continue
-        eid = str(v.get("event") or "")
-        verdict = str(v.get("verdict") or "").strip().lower()
-        if eid not in events or verdict not in audit or verdict == "refused":
-            audit["refused"].append({**v, "reason_refused": "unknown event or verdict"})
-            continue
-        if verdict == "keep":
-            audit["keep"] += 1
-            continue
-        if verdict == "drop":
-            if eid in links:
-                events[eid].pop("link", None)
-                links.pop(eid)
-                audit["drop"] += 1
-            continue
-        pred = str(v.get("predecessor") or "")
-        kind = str(v.get("kind") or "continues").strip().lower()
-        reason = None
-        if pred not in candidates.get(eid, []):
-            reason = "predecessor is not one of the event's candidates"
-        elif kind not in LINK_KINDS:
-            reason = f"unknown kind {kind!r}"
-        elif verdict == "add" and eid in links:
-            reason = "add on an event that already has a link"
-        elif _would_cycle({k: t for k, t in links.items() if k != eid}, eid, pred):
-            reason = "would create a cycle"
-        if reason:
-            audit["refused"].append({**v, "reason_refused": reason})
-            continue
-        record = {"to": pred, "kind": kind}
-        hit = index.locate(str(v.get("evidence_span") or ""))
-        if hit:
-            record["span"] = c._located(index, hit)
-        events[eid]["link"] = record
-        links[eid] = pred
-        audit[verdict] += 1
-    return audit
-
-
 def link_prompt(payload: dict, candidates: dict, view: str, excerpt: bool) -> str:
     return (
         (PROMPT_DIR / "link.txt").read_text(encoding="utf-8")
@@ -2185,7 +2086,6 @@ def run_stage1_agents(
     capacity: int,
     parties: bool = True,
     critic_rounds: int = 1,
-    link_check: bool = False,
     raw_dir: Path | None = None,
     doc_id: str = "doc",
 ) -> dict:
@@ -2419,36 +2319,7 @@ def run_stage1_agents(
 
     log["track_relation_links"] = links_from_track_relations(payload)
 
-    # 4. LINK CHECKER: every link read against the judgment once more, with the
-    # draft as it now stands. The state before it is finalized on a copy and
-    # kept, so a run measures the checker against itself.
-    if link_check and any(e.get("link") for e in _events(payload)):
-        before = copy.deepcopy(payload)
-        before_log = finalize(before, source)
-        cands = candidate_predecessors(_events(payload))
-        view, excerpt = view_for(
-            link_check_prompt(payload, cands, "", False), LINK_CHECK_MAX_TOKENS, []
-        )
-        tic()
-        answer, raw = ask_json(
-            client,
-            model,
-            link_check_prompt(payload, cands, view, excerpt),
-            label="link check",
-            temperature=temperature,
-            max_tokens=LINK_CHECK_MAX_TOKENS,
-        )
-        secs = toc()
-        log["link_check"] = {
-            "ok": answer is not None,
-            "excerpt": excerpt,
-            "seconds": secs,
-            "audit": apply_link_check(payload, answer, cands, source),
-            "raw": raw,
-            "before": {"payload": before, "finalize": before_log},
-        }
-
-    # 5. TYPED LINKS. The draft as it stood is kept, so typing rules can be
+    # 4. TYPED LINKS. The draft as it stood is kept, so typing rules can be
     # replayed offline against the same links (finalize reroots them).
     log["prefinal"] = copy.deepcopy(payload)
     log["finalize"] = finalize(payload, source)
@@ -2503,7 +2374,6 @@ def summarise(log: dict) -> dict:
 
 
 def main() -> None:
-    global RULES_PROMPT, PLAN_PROMPT
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
@@ -2513,7 +2383,9 @@ def main() -> None:
     ap.add_argument("--base-url", default="http://localhost:8001/v1")
     ap.add_argument("--api-key", default=os.environ.get("VLLM_API_KEY", "EMPTY"))
     ap.add_argument("--temperature", type=float, default=0.0)
-    ap.add_argument("--workers", type=int, default=1, help="see compress.py --workers")
+    ap.add_argument(
+        "--workers", type=int, default=1, help="documents processed at once"
+    )
     ap.add_argument(
         "--token-budget",
         type=int,
@@ -2531,11 +2403,6 @@ def main() -> None:
     )
     ap.add_argument("--overwrite", action="store_true")
     ap.add_argument(
-        "--parties-pass",
-        action="store_true",
-        help="accepted for compatibility; the parties pass is on unless --no-parties",
-    )
-    ap.add_argument(
         "--no-parties",
         action="store_true",
         help="skip the person identifier's parties pass (applicants still run)",
@@ -2549,47 +2416,10 @@ def main() -> None:
     ap.add_argument("--max-tokens", type=int, default=16000)
     ap.add_argument("--split-max-tokens", type=int, default=c.SPLIT_OUTPUT_TOKENS)
     ap.add_argument("--only", default="")
-    ap.add_argument(
-        "--prompt-file",
-        type=Path,
-        default=EXTRACT_PROMPT,
-        help="extraction prompt (default prompts/extract.txt)",
-    )
-    ap.add_argument(
-        "--plan-prompt",
-        type=Path,
-        default=PLAN_PROMPT,
-        help="linker prompt (default prompts/plan.txt); its LINKS section also "
-        "drives the re-linker",
-    )
-    ap.add_argument(
-        "--reuse-extraction",
-        type=Path,
-        default=None,
-        help="a stage-1 directory whose .compress.json payloads stand in for the "
-        "extract call: their links are stripped and the agentic passes run on "
-        "them. Isolates plan/critic/fix from extraction variance.",
-    )
-    ap.add_argument(
-        "--link-check",
-        action="store_true",
-        help="run the link checker after the critic rounds; the draft as it stood "
-        "before it is written as <doc>.prelinkcheck.json",
-    )
-    ap.add_argument(
-        "--skip-critic",
-        action="store_true",
-        help="same as --critic-rounds 0",
-    )
     args = ap.parse_args()
 
     c.SPLIT_OUTPUT_TOKENS = args.split_max_tokens
-    c.PROMPT = args.prompt_file
-    # A legacy prompt with none of the rule sections keeps extract.txt's rules.
-    PLAN_PROMPT = args.plan_prompt
-    if load_sections(RULE_SECTIONS + GUIDE_SECTIONS, args.prompt_file):
-        RULES_PROMPT = args.prompt_file
-    enable_prompt_vocabulary(args.prompt_file)
+    c.PROMPT = EXTRACT_PROMPT
     client = OpenAI(base_url=args.base_url, api_key=args.api_key, timeout=900.0)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     wanted = {w.strip() for w in args.only.split(",") if w.strip()}
@@ -2610,11 +2440,6 @@ def main() -> None:
     print(
         f"stage 1 (agentic): {args.model} @ {args.base_url} "
         f"(temperature {args.temperature}, {args.workers} worker(s))"
-        + (
-            f", reusing extraction from {args.reuse_extraction}"
-            if args.reuse_extraction
-            else ""
-        )
     )
     failures: list[str] = []
     lock = threading.Lock()
@@ -2622,35 +2447,20 @@ def main() -> None:
     def run_doc(i: int, line: str, doc_id: str) -> None:
         text = json.loads(line).get("text", "")
         t0 = time.perf_counter()
-        if args.reuse_extraction:
-            prior = args.reuse_extraction / f"{doc_id}.compress.json"
-            if not prior.exists():
-                raise FileNotFoundError(prior)
-            record = json.loads(prior.read_text(encoding="utf-8"))
-            payload = record["payload"]
-            stats = {
-                k: record["stats"].get(k, 0) for k in ("spans", "located", "dropped")
-            }
-            stats["dropped_values"] = list(record["stats"].get("dropped_values", []))
-            # Everything downstream of extraction is redone here, so take the
-            # extraction alone: no parties-pass additions, no applicants.
-            payload.pop("applicants", None)
-            stats["reused_extraction"] = str(prior)
-        else:
-            payload, stats, raw = c.compress_split(
-                client,
-                args.model,
-                text,
-                temperature=args.temperature,
-                max_tokens=args.max_tokens,
-                capacity=capacity,
-            )
-            if payload is None:
-                with lock:
-                    failures.append(doc_id)
-                print(f"  {doc_id}: FAILED ({stats.get('error')})")
-                (args.out_dir / f"{doc_id}.raw.txt").write_text(raw, encoding="utf-8")
-                return
+        payload, stats, raw = c.compress_split(
+            client,
+            args.model,
+            text,
+            temperature=args.temperature,
+            max_tokens=args.max_tokens,
+            capacity=capacity,
+        )
+        if payload is None:
+            with lock:
+                failures.append(doc_id)
+            print(f"  {doc_id}: FAILED ({stats.get('error')})")
+            (args.out_dir / f"{doc_id}.raw.txt").write_text(raw, encoding="utf-8")
+            return
         stats["legacy_link_fields_stripped"] = strip_legacy_links(payload)
         n_extracted = len(_events(payload))
 
@@ -2688,8 +2498,7 @@ def main() -> None:
                 temperature=args.temperature,
                 capacity=capacity,
                 parties=not args.no_parties,
-                critic_rounds=0 if args.skip_critic else args.critic_rounds,
-                link_check=args.link_check,
+                critic_rounds=args.critic_rounds,
                 raw_dir=args.out_dir,
                 doc_id=doc_id,
             )
@@ -2703,16 +2512,6 @@ def main() -> None:
                 f"rel {a['relations']}, {len(stats.get('judges_dropped', []))} judge(s) removed "
                 f"[{time.perf_counter() - t0:.0f}s]",
                 flush=True,
-            )
-        before = (log.get("link_check") or {}).pop("before", None)
-        if before:
-            (args.out_dir / f"{doc_id}.prelinkcheck.json").write_text(
-                json.dumps(
-                    {"doc": doc_id, "stats": stats, "payload": before["payload"]},
-                    indent=1,
-                    ensure_ascii=False,
-                ),
-                encoding="utf-8",
             )
         (args.out_dir / f"{doc_id}.agentic.json").write_text(
             json.dumps(log, indent=1, ensure_ascii=False, default=str), encoding="utf-8"

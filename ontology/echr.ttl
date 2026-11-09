@@ -21,11 +21,12 @@ entity in the factual narrative, every link direction is canonical, and controll
 vocabularies are strictly closed by explicit owl:oneOf enumerations with explicit escape 
 values (echr:LevelUnknown, echr:TypeOther, echr:OutcomeOther, etc.)."""@en ;
     dcterms:created "2026-07-24T00:00:00+00:00"^^xsd:dateTime ;
-    dcterms:modified "2026-09-08T00:00:00+00:00"^^xsd:dateTime ;
+    dcterms:modified "2026-10-22T00:00:00+00:00"^^xsd:dateTime ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     vann:preferredNamespacePrefix "echr" ;
-    owl:versionIRI <https://growgraph.dev/echr/3.7.0> ;
-    owl:versionInfo "3.7.0" .
+    owl:versionIRI <https://growgraph.dev/echr/3.8.0-timeline> ;
+    owl:versionInfo "3.8.0-timeline" ;
+    skos:note "TIMELINE VARIANT of 3.7.0 (ontology/echr.ttl, unchanged). Adds section 7: the factual circumstances around the domestic proceedings and the lodging of the Strasbourg application, so a graph can hold the whole case history up to the Court. Everything in 3.7.0 is unchanged; the additions use their own date property, so tools that read domestic events by echr:hasDecisionDate / echr:hasProceedingStartDate see the same events as before."@en .
 
 ################################################################
 # 0. Datatypes
@@ -816,6 +817,21 @@ echr:MatterRequests a echr:Matter ;
     skos:definition "An application going to the fairness or conduct of the proceeding itself, rather than to the underlying charge, claim or deprivation of liberty -- recusal of the judge, admission or replacement of counsel, an adjournment, access to the case file or the verbatim record. Petitions are included under this value. Distinct from Bail (a request specifically for release from detention, which keeps its own value) and from a request that is itself about one of this vocabulary's other substantive matters (e.g. an application for damages stays Damages)."@en ;
     skos:inScheme echr:MatterScheme .
 
+echr:MatterHealth a echr:Matter ;
+    skos:prefLabel "health or medical treatment"@en ;
+    skos:definition "A medical examination, diagnosis, treatment, hospital admission or health assessment, and a decision about one -- including medical care in detention and expert medical findings. Lets medical steps be filtered out of, or into, a procedural view."@en ;
+    skos:inScheme echr:MatterScheme .
+
+echr:MatterImmigration a echr:Matter ;
+    skos:prefLabel "immigration"@en ;
+    skos:definition "A visa, residence permit, asylum claim, expulsion or deportation, and a challenge to one. Distinct from Extradition, a surrender to another state for prosecution or punishment."@en ;
+    skos:inScheme echr:MatterScheme .
+
+echr:MatterEnforcement a echr:Matter ;
+    skos:prefLabel "enforcement of a decision"@en ;
+    skos:definition "The execution of, or failure to execute, a decision already taken: a writ of execution, bailiff proceedings, penalty payments for non-compliance, a request that an authority comply with a judgment."@en ;
+    skos:inScheme echr:MatterScheme .
+
 echr:MatterOther a echr:Matter ;
     skos:prefLabel "other"@en ;
     skos:definition "The event IS substantively about one identifiable matter, but not one of the values above. Not a catch-all for events with no substantive matter at all -- see echr:Matter's scopeNote: omit those instead."@en ;
@@ -834,6 +850,7 @@ echr:Matter owl:equivalentClass [ a owl:Class ;
         echr:MatterConviction echr:MatterInvestigation echr:MatterDamages echr:MatterCustody
         echr:MatterEmployment echr:MatterPension echr:MatterProperty echr:MatterExtradition
         echr:MatterLegalAid echr:MatterVetting echr:MatterDisciplinary echr:MatterRequests
+        echr:MatterHealth echr:MatterImmigration echr:MatterEnforcement
         echr:MatterOther echr:MatterUnknown ) ] .
 
 #---------------------------------------------------------------
@@ -909,3 +926,124 @@ echr:GenderCueScheme a skos:ConceptScheme ;
 
 echr:GenderCue owl:equivalentClass [ a owl:Class ;
     owl:oneOf ( echr:GenderCueHonorific echr:GenderCuePronoun echr:GenderCueGenderedNoun ) ] .
+
+
+################################################################
+# 7. Timeline extension (variant 3.8.0-timeline)
+################################################################
+
+echr:FactualCircumstance a owl:Class ;
+    rdfs:label "Factual Circumstance"@en ;
+    skos:definition "A dated occurrence in the history of the case, narrated in the facts, that is NOT a step taken by a domestic authority: an incident, an injury, a death, a medical finding, a family event, a move, an employment event, a dealing over property, a letter between private parties."@en ;
+    skos:scopeNote "Anything a court, prosecutor, police force, administrative or welfare body DID is an echr:DomesticEvent, not this class -- an arrest, a police search, a placement in a care home ordered by an authority, the grant of an allowance. This class holds what happened to or between people that the proceedings are about or arose from. Not a subclass of echr:DomesticEvent, so it never enters a procedural chain: it is linked to the chain only by echr:givesRiseTo."@en ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:StrasbourgApplication a owl:Class ;
+    rdfs:label "Strasbourg Application"@en ;
+    skos:definition "The lodging of the application with the European Court of Human Rights: the last event of the timeline the facts lead up to."@en ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:CircumstanceKind a owl:Class ;
+    rdfs:label "Circumstance Kind"@en ;
+    skos:definition "What kind of factual circumstance an echr:FactualCircumstance is. Closed; echr:CircumstanceOther is the escape value."@en ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasCircumstance a owl:ObjectProperty ;
+    rdfs:label "has circumstance"@en ;
+    skos:definition "Attaches a factual circumstance to the case document."@en ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:FactualCircumstance ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasStrasbourgApplication a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has Strasbourg application"@en ;
+    skos:definition "Attaches the lodging of the application with the Court to the case document."@en ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:StrasbourgApplication ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasEventDate a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has event date"@en ;
+    skos:definition "When a factual circumstance happened, or the application was lodged, as precisely as the text says."@en ;
+    skos:scopeNote "Deliberately distinct from echr:hasDecisionDate and echr:hasProceedingStartDate, which belong to domestic events."@en ;
+    rdfs:range echr:PartialDate ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasCircumstanceKind a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "has circumstance kind"@en ;
+    rdfs:domain echr:FactualCircumstance ;
+    rdfs:range echr:CircumstanceKind ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:concernsParty a owl:ObjectProperty ;
+    rdfs:label "concerns party"@en ;
+    skos:definition "A person, company or body the circumstance happened to or involved."@en ;
+    rdfs:domain echr:FactualCircumstance ;
+    rdfs:range echr:Party ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:givesRiseTo a owl:ObjectProperty ;
+    rdfs:label "gives rise to"@en ;
+    skos:definition "The domestic event this circumstance set in motion or is the subject of: an injury and the complaint about it, a death and the investigation into it, a dismissal and the employment claim."@en ;
+    rdfs:domain echr:FactualCircumstance ;
+    rdfs:range echr:DomesticEvent ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:CircumstanceIncident a echr:CircumstanceKind ;
+    skos:prefLabel "incident"@en ;
+    skos:definition "An event such as an accident, a fight, a confrontation, a demonstration, a fire, a theft."@en ;
+    skos:inScheme echr:CircumstanceScheme .
+
+echr:CircumstanceInjury a echr:CircumstanceKind ;
+    skos:prefLabel "injury"@en ;
+    skos:definition "Someone was hurt, including ill-treatment as the applicant alleges it."@en ;
+    skos:inScheme echr:CircumstanceScheme .
+
+echr:CircumstanceDeath a echr:CircumstanceKind ;
+    skos:prefLabel "death"@en ;
+    skos:inScheme echr:CircumstanceScheme .
+
+echr:CircumstanceHealth a echr:CircumstanceKind ;
+    skos:prefLabel "health"@en ;
+    skos:definition "A diagnosis, an illness, a hospital stay, a medical examination not ordered by an authority."@en ;
+    skos:inScheme echr:CircumstanceScheme .
+
+echr:CircumstanceFamily a echr:CircumstanceKind ;
+    skos:prefLabel "family"@en ;
+    skos:definition "A birth, marriage, divorce, separation, a child's move between parents."@en ;
+    skos:inScheme echr:CircumstanceScheme .
+
+echr:CircumstanceResidence a echr:CircumstanceKind ;
+    skos:prefLabel "residence"@en ;
+    skos:definition "A move, an arrival in or departure from a country, a stay somewhere."@en ;
+    skos:inScheme echr:CircumstanceScheme .
+
+echr:CircumstanceEmployment a echr:CircumstanceKind ;
+    skos:prefLabel "employment"@en ;
+    skos:definition "Hiring, dismissal, resignation, retirement, a change of post."@en ;
+    skos:inScheme echr:CircumstanceScheme .
+
+echr:CircumstanceProperty a echr:CircumstanceKind ;
+    skos:prefLabel "property"@en ;
+    skos:definition "A purchase, sale, lease, contract, loan or agreement between private parties."@en ;
+    skos:inScheme echr:CircumstanceScheme .
+
+echr:CircumstanceCommunication a echr:CircumstanceKind ;
+    skos:prefLabel "communication"@en ;
+    skos:definition "A letter, publication, broadcast or statement that is not a filing with an authority."@en ;
+    skos:inScheme echr:CircumstanceScheme .
+
+echr:CircumstanceOther a echr:CircumstanceKind ;
+    skos:prefLabel "other"@en ;
+    skos:inScheme echr:CircumstanceScheme .
+
+echr:CircumstanceScheme a skos:ConceptScheme ;
+    rdfs:label "Circumstance kind vocabulary"@en .
+
+echr:CircumstanceKind owl:equivalentClass [ a owl:Class ;
+    owl:oneOf ( echr:CircumstanceIncident echr:CircumstanceInjury echr:CircumstanceDeath
+        echr:CircumstanceHealth echr:CircumstanceFamily echr:CircumstanceResidence
+        echr:CircumstanceEmployment echr:CircumstanceProperty echr:CircumstanceCommunication
+        echr:CircumstanceOther ) ] .

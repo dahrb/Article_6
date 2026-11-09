@@ -1,7 +1,7 @@
 [project]
 name = "art-6"
 version = "0.1.0"
-description = "Collection and processing pipeline for ECHR Art. 6 case metadata and text"
+description = "Extracting the domestic procedural history of ECtHR Article 6 judgments as RDF"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -13,24 +13,13 @@ dependencies = [
     "polars>=1.40.1",
     "pycountry>=26.2.16",
     "pyshacl>=0.40.1",
+    "pyyaml>=6.0",
     "rdflib>=7.5.4",
     "requests>=2.32.5",
     "scikit-learn>=1.8.0",
 ]
 
-# Dependencies of the archived ontology/old/ code, kept out of the default
-# install:  uv sync --extra ontology
-# Note: those scripts also import `ontocast`, which is not published and was
-# previously wired to a local ../../ontocast checkout. Re-add it as a
-# [tool.uv.sources] path entry if you resurrect that code.
 [project.optional-dependencies]
-ontology = [
-    "matplotlib>=3.10.8",
-    "owlready2>=0.50",
-    "python-dotenv>=1.2.1",
-    "sentence-transformers>=5.4.1",
-]
-
 # uv sync --extra viz
 viz = [
     "matplotlib>=3.10.8",

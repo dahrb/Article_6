@@ -8,7 +8,7 @@ from typing import ClassVar
 import pytest
 
 from art6.ontology import agentic_stage1 as a
-from art6.ontology import compress as c
+from art6.ontology import extraction as c
 
 JUDGMENT = """THE FACTS
 
@@ -342,15 +342,15 @@ def test_split_halves_are_described_by_their_own_sentences():
     assert decision["description"].startswith("In a judgment of 20 November 2000")
 
 
-def test_critic_rules_come_from_the_prompt_in_use(tmp_path, monkeypatch):
+def test_critic_rules_come_from_the_extraction_prompt(tmp_path, monkeypatch):
+    assert "ONE DATE, TWO ACTS" in a.load_sections(a.RULE_SECTIONS)
     guide = tmp_path / "guide.txt"
     guide.write_text(
         "## FIELD RULES -- THESE OVERRIDE THE GUIDE WHERE THEY DIFFER\nnew\n"
     )
-    assert "AN ACT IS NOT A RESULT" in a.load_sections(a.RULE_SECTIONS)
     monkeypatch.setattr(a, "RULES_PROMPT", guide)
-    rules = a.load_sections(a.RULE_SECTIONS + a.GUIDE_SECTIONS)
-    assert "new" in rules and "AN ACT IS NOT A RESULT" not in rules
+    rules = a.load_sections(a.RULE_SECTIONS)
+    assert "new" in rules and "ONE DATE, TWO ACTS" not in rules
 
 
 def test_apex_courts_are_cassation_and_filings_share_their_decisions_level():
@@ -382,40 +382,6 @@ def test_apex_courts_are_cassation_and_filings_share_their_decisions_level():
         "cassation",
         "case review",
     ]
-
-
-def test_link_check_moves_drops_adds_and_refuses():
-    p = payload()
-    for e in p["events"]:
-        e["track"] = "T1"
-    by = {e["id"]: e for e in p["events"]}
-    by["e3"]["link"] = {"to": "e1", "kind": "continues"}  # skips e2
-    by["e2"]["link"] = {"to": "e1", "kind": "continues"}
-    cands = a.candidate_predecessors(p["events"])
-    answer = {
-        "verdicts": [
-            {
-                "event": "e3",
-                "verdict": "move",
-                "predecessor": "e2",
-                "evidence_span": "upheld that judgment",
-            },
-            {"event": "e2", "verdict": "keep"},
-            {"event": "e4", "verdict": "add", "predecessor": "e3"},  # e3 is later
-            {"event": "e1", "verdict": "drop"},  # had no link: nothing to do
-        ]
-    }
-    audit = a.apply_link_check(p, answer, cands, JUDGMENT)
-    assert by["e3"]["link"]["to"] == "e2"
-    assert by["e3"]["link"]["span"]["text"] == "upheld that judgment"
-    assert (audit["move"], audit["keep"], audit["add"], audit["drop"]) == (1, 1, 0, 0)
-    assert [r["reason_refused"] for r in audit["refused"]] == [
-        "predecessor is not one of the event's candidates"
-    ]
-    a.apply_link_check(
-        p, {"verdicts": [{"event": "e2", "verdict": "drop"}]}, cands, JUDGMENT
-    )
-    assert "link" not in by["e2"]
 
 
 def test_circumstances_are_cleaned_and_point_at_the_proceedings_root():
@@ -966,27 +932,6 @@ def test_part_of_only_targets_a_filing():
     assert p["events"][1].get("follows") == "e1" and "part_of" not in p["events"][1]
 
 
-def test_retype_part_of_migrates_old_payloads():
-    p = {
-        "events": [
-            ev("e1", "dismissed the claim", "5 June 2003"),
-            {**ev("e2", "upheld that judgment", "1 September 2003"), "part_of": "e1"},
-            ev(
-                "e3",
-                "instituted civil proceedings",
-                None,
-                start_date_span=span("15 March 1999"),
-            ),
-            {
-                **ev("e4", "was arrested by the police", "2 February 2001"),
-                "part_of": "e3",
-            },
-        ]
-    }
-    assert a.retype_part_of(p) == 1
-    assert p["events"][1]["follows"] == "e1" and p["events"][3]["part_of"] == "e3"
-
-
 def test_merge_keeps_the_survivors_place_in_the_chain():
     # 001-188177: the appeal ruling e3 linked to its duplicate e2, which linked
     # to the conviction e1; merging them must leave e3 -> e1, not no link.
@@ -1039,14 +984,11 @@ def test_agents_see_significance_and_description():
     assert "[minor]" in out and "description: A hearing was held." in out
 
 
-def test_timeline_matters_only_with_a_prompt_that_offers_them(tmp_path, monkeypatch):
-    monkeypatch.setitem(a.VOCABULARY, "matter", set(a.VOCABULARY["matter"]))
-    a.enable_prompt_vocabulary(a.EXTRACT_PROMPT)
-    assert "health" not in a.VOCABULARY["matter"]
-    guide = tmp_path / "g.txt"
-    guide.write_text('"matter": [legal aid | requests | health | immigration]')
-    a.enable_prompt_vocabulary(guide)
-    assert a.TIMELINE_MATTERS <= a.VOCABULARY["matter"]
+def test_the_extraction_prompt_offers_the_timeline_matters():
+    text = a.EXTRACT_PROMPT.read_text(encoding="utf-8")
+    for matter in ("health", "immigration", "enforcement"):
+        assert matter in a.VOCABULARY["matter"]
+        assert f"| {matter}" in text or f"{matter} |" in text
 
 
 FOLD_TEXT = (

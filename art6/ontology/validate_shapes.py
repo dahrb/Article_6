@@ -85,7 +85,7 @@ def defined_terms() -> frozenset[str]:
 
     Classes, properties, declared datatypes, and the named individuals inside
     every owl:oneOf enumeration. Anything else in the echr: namespace is
-    invented vocabulary. Mirrors repair_facts.ontology_terms(); both read the
+    invented vocabulary. Mirrors graph_patch.ontology_terms(); both read the
     live ontology, so a schema edit cannot leave a frozen allow-list behind.
     """
     g = Graph()

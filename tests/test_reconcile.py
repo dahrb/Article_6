@@ -171,7 +171,7 @@ def test_reconcile_document_without_model(tmp_path):
 
 
 def _patch(groups):
-    from art6.ontology.repair_facts import RepairGroup, RepairPatch, TripleOp
+    from art6.ontology.graph_patch import RepairGroup, RepairPatch, TripleOp
 
     return RepairPatch(
         groups=[
@@ -202,7 +202,7 @@ def _mint_ops(name, quote):
 
 
 def test_mint_is_gated_and_anchored(tmp_path, monkeypatch):
-    from art6.ontology import new_repair
+    from art6.ontology import shacl_loop
 
     source = "Later, a hearing that stage 2 dropped entirely took place."
     patch = _patch(
@@ -211,7 +211,7 @@ def test_mint_is_gated_and_anchored(tmp_path, monkeypatch):
             ("e9", [_mint_ops("ghost", "x")[0]]),  # no quote: refused whole
         ]
     )
-    monkeypatch.setattr(new_repair, "call_model", lambda *a, **k: patch)
+    monkeypatch.setattr(shacl_loop, "call_model", lambda *a, **k: patch)
     ttl = tmp_path / "bundles.L1.facts.ttl"
     ttl.write_text(_graph().serialize(format="turtle"), encoding="utf-8")
     report = r.reconcile_document(
@@ -233,10 +233,10 @@ def test_mint_is_gated_and_anchored(tmp_path, monkeypatch):
 
 
 def test_mint_reverted_when_it_places_nothing(tmp_path, monkeypatch):
-    from art6.ontology import new_repair
+    from art6.ontology import shacl_loop
 
     patch = _patch([("e5", _mint_ops("other", "words not in the judgment"))])
-    monkeypatch.setattr(new_repair, "call_model", lambda *a, **k: patch)
+    monkeypatch.setattr(shacl_loop, "call_model", lambda *a, **k: patch)
     ttl = tmp_path / "bundles.L1.facts.ttl"
     ttl.write_text(_graph().serialize(format="turtle"), encoding="utf-8")
     report = r.reconcile_document(
@@ -258,7 +258,7 @@ def test_mint_reverted_when_it_places_nothing(tmp_path, monkeypatch):
 def test_shacl_loop_runs_only_on_violations_and_cannot_undo_stage1(
     tmp_path, monkeypatch
 ):
-    from art6.ontology import new_repair
+    from art6.ontology import shacl_loop
 
     calls = []
 
@@ -268,7 +268,7 @@ def test_shacl_loop_runs_only_on_violations_and_cannot_undo_stage1(
         graph.remove((DOC.decision, ECHR.partOfProceeding, DOC.filing))
         return graph, [{"status": "applied"}]
 
-    monkeypatch.setattr(new_repair, "run_loop", fake_loop)
+    monkeypatch.setattr(shacl_loop, "run_loop", fake_loop)
     counts = iter([2, 0, 0])
     monkeypatch.setattr(r, "_violation_count", lambda g, ns: next(counts))
     ttl = tmp_path / "bundles.L1.facts.ttl"

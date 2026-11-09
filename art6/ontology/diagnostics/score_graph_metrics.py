@@ -26,9 +26,6 @@ Usage:
 
 from __future__ import annotations
 
-import argparse
-import json
-import os
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -38,7 +35,6 @@ from rdflib import Graph, Namespace, URIRef
 
 from art6.ontology.diagnostics.score_against_gold import (
     DATE_SIM_THRESHOLD,
-    Event,
     date_sim,
     prf1,
     quote_sim,
@@ -77,14 +73,6 @@ class Node:
     level: str | None = None
     matters: set[str] = field(default_factory=set)
     edges: dict[str, set] = field(default_factory=lambda: defaultdict(set))
-
-    def as_event(self) -> Event:
-        return Event(
-            body=self.body,
-            decision_date=self.decision_date,
-            start_date=self.start_date,
-            quote=self.quote,
-        )
 
     @property
     def is_filing(self) -> bool:
@@ -177,52 +165,13 @@ def load_arm_nodes(ttl_path: Path) -> list[Node] | None:
     return nodes
 
 
-CROSS_KIND_QUOTE_MIN = 0.3
-
-
-def align(gold: list[Node], arm: list[Node], cross_kind: bool | None = None) -> dict:
+def align(gold: list[Node], arm: list[Node]) -> dict:
     """1:1 bipartite alignment, same gate as score_document_date_quote.
 
-    cross_kind (default: env ALIGN_CROSS_KIND=1) adds a second pass over what
-    is left: one act recorded as a filing on one side and a decision on the
-    other ("On 3 November 2005 the applicant asked to confront M.T. His request
-    was rejected") pairs when some date of each is the SAME day/month and the
-    quotes overlap (quote_sim >= CROSS_KIND_QUOTE_MIN). The first pass never
-    pairs a filing with a decision, so such an act counted as one miss and one
-    extra, and every link at it as wrong (validation, 2026-11-05: 5-11 gold
-    follows endpoints per run)."""
-    if cross_kind is None:
-        cross_kind = os.environ.get("ALIGN_CROSS_KIND") == "1"
-    mapping = _align_same_kind(gold, arm)
-    if cross_kind:
-        mapping.update(_align_cross_kind(gold, arm, mapping))
-    return mapping
-
-
-def _align_cross_kind(gold: list[Node], arm: list[Node], done: dict) -> dict:
-    gold_used, arm_used = set(done.values()), set(done)
-    dates = lambda n: {str(v) for v in (n.decision_date, n.start_date) if v}
-    pairs = []
-    for g in gold:
-        if g.key in gold_used:
-            continue
-        for a in arm:
-            if a.key in arm_used or not (dates(g) & dates(a)):
-                continue
-            q = quote_sim(g.quote, a.quote)
-            if q >= CROSS_KIND_QUOTE_MIN:
-                pairs.append((q, str(g.key), str(a.key), g.key, a.key))
-    out = {}
-    for _, _, _, gk, ak in sorted(pairs, key=lambda t: t[:3], reverse=True):
-        if gk in gold_used or ak in arm_used:
-            continue
-        gold_used.add(gk)
-        arm_used.add(ak)
-        out[ak] = gk
-    return out
-
-
-def _align_same_kind(gold: list[Node], arm: list[Node]) -> dict:
+    A filing only ever pairs with a filing and a decision with a decision:
+    scoring stays strict, so an act recorded as the other kind counts as one
+    miss and one extra (cross-kind alignment was tried and rejected,
+    2026-11-05)."""
     pairs = []
     for gi, g in enumerate(gold):
         for ai, a in enumerate(arm):
@@ -460,42 +409,3 @@ def run(
         )
     )
     return totals
-
-
-def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--run-dir", required=True, type=Path)
-    ap.add_argument("--arms", default="C3,C4")
-    ap.add_argument("--gold-dir", type=Path, default=REPO_ROOT / "annotation/gold")
-    ap.add_argument(
-        "--exclude",
-        default=None,
-        choices=["level_investigative", "matter_investigation"],
-    )
-    ap.add_argument("--out", type=Path, default=None)
-    args = ap.parse_args()
-
-    manifest = json.loads((args.gold_dir / "manifest.json").read_text())
-    docs = manifest["documents"]
-    if docs and "line_id" not in docs[0]:
-        docs = [{**d, "line_id": f"L{i}"} for i, d in enumerate(docs, 1)]
-
-    results = {}
-    for arm in [a.strip() for a in args.arms.split(",") if a.strip()]:
-        r = run(args.run_dir, arm, docs, args.gold_dir, args.exclude)
-        results[arm] = r
-        f1 = r["f1"] if r["f1"] is not None else float("nan")
-        e = r["edges"]["follows"]
-        print(
-            f"{arm}: events F1={f1:.1%}  "
-            f"follows-edges correct={e['correct']}/{e['arm_edges']} "
-            f"(gold {e['gold_edges']})  "
-            f"chains arm={r['arm_shape']['chains']:.0f} gold={r['gold_shape']['chains']:.0f}"
-        )
-    if args.out:
-        args.out.write_text(json.dumps(results, indent=2, default=str))
-        print(f"\nwrote {args.out}")
-
-
-if __name__ == "__main__":
-    main()

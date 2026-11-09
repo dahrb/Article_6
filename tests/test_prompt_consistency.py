@@ -1,10 +1,8 @@
-"""Every mode asks for the same knowledge-graph content.
+"""Stage 1, stage 2 and the ontology agree on what the graph holds.
 
-C0 (flat baseline), C1/C2 (OntoCast on the judgment) and C3/C4 (the agentic
-evidence stage, then OntoCast) differ in method only. These tests fail when a
-mode's prompt drifts: a vocabulary value one mode can produce and another
-cannot, a shared definition one mode never sees, a field stage 1 collects that
-the graph has nowhere to put.
+These tests fail when a prompt drifts: a vocabulary value stage 1 can produce
+that the ontology or the stage-2 instruction has no place for, an ontology
+value no prompt offers, a field stage 1 collects that the graph cannot hold.
 """
 
 import re
@@ -13,8 +11,6 @@ from pathlib import Path
 import pytest
 from rdflib import RDF, Graph, Namespace
 
-from art6.conditions.run_conditions import load_condition_prompt
-from art6.conditions.schema import NormalisedDocument
 from art6.ontology import agentic_stage1 as a
 from art6.ontology import prompt_spec as ps
 from art6.ontology import reconcile as r
@@ -23,8 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ECHR = Namespace("https://growgraph.dev/echr#")
 PROMPTS = ROOT / "art6" / "ontology" / "prompts"
 EXTRACT = (PROMPTS / "extract.txt").read_text(encoding="utf-8")
-FACTS = (PROMPTS / "facts.txt").read_text(encoding="utf-8")
-C0 = load_condition_prompt("o1")
+FACTS = ps.facts_instruction()
 
 # stage-1 field -> ontology class whose members are its vocabulary
 SCHEMES = {
@@ -76,53 +71,9 @@ def test_facts_maps_every_value(field):
         )
 
 
-@pytest.mark.parametrize(
-    "field", ["instance_level", "outcome", "proceeding_type", "outcome_direction"]
-)
-def test_c0_offers_the_same_values(field):
-    i = C0.index(f'"{field}"')
-    block = re.sub(r"\s+", " ", C0[i : C0.index('\n  "', i + 1)])
-    for value in a.VOCABULARY[field]:
-        if field == "outcome" and value == "other":
-            assert "other" in block
-            continue
-        assert value in block, f"C0 {field} omits {value!r}"
-
-
-def test_c0_authority_kinds_match_the_ontology():
-    i = C0.index('"authority_kind"')
-    block = C0[i : C0.index("\n", i)]
-    offered = {
-        v.strip() for v in block.split('"authority_kind"')[1].strip(" .").split("|")
-    }
-    kinds = {
-        str(m).removeprefix(str(ECHR) + "Authority").lower()
-        for m in members("AuthorityKind")
-    }
-    assert offered == kinds
-
-
-def test_every_mode_gets_the_shared_definitions():
-    rules = ps.shared_rules()
-    facts = ps.facts_instruction()
-    assert facts.startswith(FACTS.strip()[:200]) and rules.strip() in facts
-    assert rules.strip() in C0
-    for section in ps.SHARED_SECTIONS:
-        assert f"## {section}" in facts and f"## {section}" in C0
-    # stage 1's critic and fixer are held to the same sections
-    for section in a.RULE_SECTIONS:
-        assert section in ps.SHARED_SECTIONS
-
-
-def test_no_mode_but_stage1_is_told_not_to_link():
-    assert "Do NOT link entries" in EXTRACT
-    assert "Do NOT link entries" not in ps.facts_instruction()
-    assert "Do NOT link entries" not in C0
-
-
-def test_c0_no_longer_has_its_own_entry_definition():
-    assert "ONE ENTRY PER INSTANCE" not in C0
-    assert "COVERAGE AND GRANULARITY" in C0
+def test_only_stage1_is_told_not_to_link():
+    assert "Do NOT link" in EXTRACT or "are NOT recorded here" in EXTRACT
+    assert "Do NOT link entries" not in FACTS
 
 
 def test_stage1_asks_only_for_what_the_graph_can_hold():
@@ -149,24 +100,4 @@ def test_facts_maps_what_stage1_collects(fact, mapping):
 def test_run_native_checks_against_the_composed_instruction():
     from art6.ontology.run_native import _live_facts_prompt
 
-    assert _live_facts_prompt() == ps.facts_instruction().strip()
-
-
-def test_c0_schema_accepts_old_and_new_records():
-    NormalisedDocument.model_validate({"proceedings": [{"order": 1}]})
-    doc = NormalisedDocument.model_validate(
-        {
-            "case": {"case_name": "X v. Y"},
-            "applicants": [{"name": "X", "birth_year": "1970"}],
-            "persons": [{"name": "Mr A.", "role": "lawyer", "represents": "X"}],
-            "proceedings": [
-                {"order": 1, "matter": ["requests"], "is_final": True, "part_of": None}
-            ],
-        }
-    )
-    assert doc.proceedings[0].matter == ["requests"]
-
-
-def test_a_renamed_section_fails_loudly():
-    with pytest.raises(KeyError):
-        ps.load_sections(ps.EXTRACT, ("NO SUCH SECTION",))
+    assert _live_facts_prompt() == FACTS

@@ -17,14 +17,6 @@ supporting quote's provenance.
 
 from __future__ import annotations
 
-import argparse
-import bisect
-import json
-import re
-from pathlib import Path
-
-from art6.ontology.agentic_stage1 import _ANY_DATE, facts_region, sentence_at
-
 
 def _span(value) -> str | None:
     if isinstance(value, dict) and "text" in value:
@@ -37,39 +29,11 @@ def _line(label: str, value, indent: str = "  ") -> list[str]:
     return [f"{indent}{label}: {rendered}"] if rendered else []
 
 
-# Spans that place an event in the text. Parties and persons are left out:
-# their spans are often taken from wherever the document first names someone.
-CORE_SPANS = (
-    "what_happened_span",
-    "decision_date_span",
-    "start_date_span",
-    "institution_narrated_span",
-    "outcome_span",
-    "authority_span",
-)
-
-
-def evidence(event: dict, source: str) -> list[tuple[int, int]]:
-    """The sentences holding the event's own words, merged where they touch."""
-    found = []
-    for key in CORE_SPANS:
-        value = event.get(key)
-        if isinstance(value, dict) and "start" in value:
-            found.append(sentence_at(source, value["start"], value["end"]))
-    merged: list[list[int]] = []
-    for lo, hi in sorted(set(found)):
-        if merged and lo <= merged[-1][1] + 1:
-            merged[-1][1] = max(merged[-1][1], hi)
-        else:
-            merged.append([lo, hi])
-    return [(lo, hi) for lo, hi in merged]
-
-
 def render(payload: dict, source: str | None = None, mode: str = "bundle") -> str:
-    """mode: see MODES. `source` is the judgment; needed by every mode but
-    "bundle"."""
-    if mode.startswith(("paragraphs", "dated")):
-        return render_paragraphs(payload, source or "", mode)
+    """The stage-1 digest stage 2 reads: the verified fields alone. `source`
+    and `mode` are kept for callers; only the "bundle" format remains (the
+    evidence and paragraph variants were bridge experiments, removed
+    2026-11-09)."""
     out: list[str] = []
     case = payload.get("case") or {}
     if case:
@@ -85,7 +49,7 @@ def render(payload: dict, source: str | None = None, mode: str = "bundle") -> st
 
     # Tracks are a planning device, not an ontology class: they tell stage 2
     # which events belong to one matter, and every link below stays inside one
-    # unless it is occurs_during. Absent on payloads from compress.py.
+    # unless it is occurs_during. Absent on payloads from the old single-call stage 1.
     tracks = payload.get("tracks") or []
     labels = {t.get("id"): t.get("label") or "" for t in tracks}
     if tracks:
@@ -139,9 +103,6 @@ def render(payload: dict, source: str | None = None, mode: str = "bundle") -> st
         ):
             if event.get(key):
                 out.append(f"  {label}: {event[key]}")
-        if mode == "evidence" and source:
-            for lo, hi in evidence(event, source):
-                out.append(f'  evidence: "{source[lo:hi]}" [{lo}:{hi}]')
         for key in (
             "what_happened_span",
             "authority_span",
@@ -176,7 +137,7 @@ def render(payload: dict, source: str | None = None, mode: str = "bundle") -> st
         if event.get("matter"):
             out.append(f"  matter: {', '.join(event['matter'])}")
         # Chain links. Payloads from agentic_stage1 carry them TYPED and aimed
-        # at the target proceeding's earliest act; compress.py payloads carry
+        # at the target proceeding's earliest act; old single-call payloads carry
         # an untyped `follows`, which facts.txt tells stage 2 to type itself.
         for key in ("follows", "part_of", "occurs_during"):
             if event.get(key):
@@ -287,190 +248,3 @@ def render(payload: dict, source: str | None = None, mode: str = "bundle") -> st
             if name:
                 out.append(f"  {name}" + (f" — kind: {kind}" if kind else ""))
     return "\n".join(out).strip() + "\n"
-
-
-MODES = (
-    "bundle",  # the verified fields alone
-    "evidence",  # ... plus each event's verbatim sentences
-    "paragraphs",  # the judgment's event paragraphs, verbatim, and nothing else
-    "paragraphs+index",  # ... followed by a compact index of stage 1's events
-    "paragraphs+index-nolinks",  # ... the index without stage 1's links
-    "dated+index",  # paragraphs+index, plus every dated paragraph of the Facts
-)
-
-
-def _index_line(event: dict, para_of) -> str:
-    def t(key):
-        v = event.get(key)
-        return v["text"] if isinstance(v, dict) else None
-
-    bits = [f"{event.get('id')}"]
-    if event.get("description"):
-        bits.append(event["description"])
-    for label, key in (
-        ("filed", "start_date_span"),
-        ("decided", "decision_date_span"),
-        ("by", "authority_span"),
-    ):
-        if t(key):
-            bits.append(f"{label}: {t(key)}")
-    for key in ("instance_level", "outcome", "outcome_direction"):
-        if event.get(key):
-            bits.append(f"{key}: {event[key]}")
-    if event.get("matter"):
-        bits.append("matter: " + ", ".join(event["matter"]))
-    anchor = event.get("what_happened_span")
-    if isinstance(anchor, dict):
-        bits.append(f"para {para_of(anchor['start'])}")
-    return " | ".join(bits)
-
-
-def render_paragraphs(payload: dict, source: str, mode: str) -> str:
-    """The judgment's own paragraphs that narrate an event, verbatim and in
-    order, so stage 2 reads text rather than fields. Stage 1 decides only WHICH
-    paragraphs: every one holding an event's own words, the applicants'
-    description and the case header. With an index, stage 1's events follow as
-    a checklist of what the paragraphs contain."""
-    lines = [(m.start(), m.end()) for m in re.finditer(r"[^\n]+", source)]
-    starts = [lo for lo, _ in lines]
-
-    def line_of(pos: int) -> int:
-        return max(0, bisect.bisect_right(starts, pos) - 1)
-
-    def para_of(pos: int) -> str:
-        text = source[slice(*lines[line_of(pos)])]
-        m = re.match(r"\s*\*\*(\d+)\.\*\*", text)
-        return m.group(1) if m else f"line {line_of(pos) + 1}"
-
-    keep: set[int] = set()
-    for event in payload.get("events") or []:
-        for key in CORE_SPANS:
-            v = event.get(key)
-            if isinstance(v, dict) and "start" in v:
-                keep.update(
-                    range(
-                        line_of(v["start"]), line_of(max(v["start"], v["end"] - 1)) + 1
-                    )
-                )
-    for applicant in payload.get("applicants") or []:
-        for v in applicant.values():
-            if isinstance(v, dict) and "start" in v:
-                keep.add(line_of(v["start"]))
-    for v in (payload.get("case") or {}).values():
-        if isinstance(v, dict) and "start" in v:
-            keep.add(line_of(v["start"]))
-    if mode.startswith("dated"):
-        # Stage 1's events are a floor, not a ceiling: a dated paragraph in the
-        # Facts it found nothing in is where its missed steps are.
-        lo, hi = facts_region(source)
-        for n, (a, b) in enumerate(lines):
-            if lo <= a < hi and _ANY_DATE.search(source, a, b):
-                keep.add(n)
-    out = [
-        "EXCERPT -- the paragraphs of the judgment that narrate the domestic events,",
-        "copied VERBATIM and in order; paragraphs with nothing to model are left out",
-        "and marked [...]. Character offsets refer to the full judgment.",
-        "",
-    ]
-    previous = None
-    for n in sorted(keep):
-        if previous is not None and n != previous + 1:
-            out.append("[...]")
-        lo, hi = lines[n]
-        out.append(source[lo:hi])
-        previous = n
-    if mode != "paragraphs":
-        out += [
-            "",
-            (
-                f"EVENT INDEX ({len(payload.get('events') or [])}) -- the steps a first reading "
-                "found in these paragraphs, one per line. A checklist, not a source: every "
-                "fact you model must come from the paragraphs above. Model every step listed "
-                "here, and any step the paragraphs narrate that the list missed."
-            ),
-        ]
-        for event in payload.get("events") or []:
-            line = _index_line(event, para_of)
-            if mode == "paragraphs+index":
-                for key in ("follows", "part_of", "occurs_during"):
-                    if event.get(key):
-                        line += f" | {key}: {event[key]}"
-            out.append("  " + line)
-    return "\n".join(out).strip() + "\n"
-
-
-def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--compress-dir", required=True, type=Path)
-    ap.add_argument(
-        "--source-jsonl",
-        required=True,
-        type=Path,
-        help="original input.jsonl, for the facts_user_instruction and ids",
-    )
-    ap.add_argument("--out-jsonl", required=True, type=Path)
-    ap.add_argument("--only", default="")
-    ap.add_argument("--mode", default="bundle", choices=MODES)
-    args = ap.parse_args()
-
-    wanted = {w.strip() for w in args.only.split(",") if w.strip()}
-    source_lines = [
-        l
-        for l in args.source_jsonl.read_text(encoding="utf-8").splitlines()
-        if l.strip()
-    ]
-    written = 0
-    with args.out_jsonl.open("w", encoding="utf-8") as handle:
-        for index, line in enumerate(source_lines, 1):
-            record = json.loads(line)
-            # Stage 1 names its output after the DOCUMENT when the input carries
-            # a case_id, and falls back to the positional name otherwise. Both
-            # spellings are accepted here: assuming the positional one silently
-            # skipped every document and produced an empty bundles file, which
-            # reads exactly like a compression stage that found nothing.
-            candidates = [
-                f"{record[key]}"
-                for key in ("case_id", "itemid")
-                if str(record.get(key) or "").strip()
-            ] + [f"input.L{index}"]
-            doc_id = next(
-                (
-                    c
-                    for c in candidates
-                    if (args.compress_dir / f"{c}.compress.json").exists()
-                ),
-                candidates[0],
-            )
-            if wanted and doc_id not in wanted:
-                continue
-            path = args.compress_dir / f"{doc_id}.compress.json"
-            if not path.exists():
-                print(f"  {doc_id}: no compression output, skipped")
-                continue
-            payload = json.loads(path.read_text(encoding="utf-8"))["payload"]
-            rendered = render(payload, record.get("text", ""), args.mode)
-            record["text"] = rendered
-            handle.write(json.dumps(record, ensure_ascii=False) + "\n")
-            written += 1
-            print(
-                f"  {doc_id}: {len(rendered):6,} chars "
-                f"({len(payload.get('events', [])):3} events) "
-                f"<- was {len(json.loads(line).get('text', '')):6,}"
-            )
-    print(f"\nwrote {written} record(s) to {args.out_jsonl}")
-    # A SHORT BUNDLE FILE SILENTLY MISALIGNS THE COMPARISON. Stage 2 names its
-    # outputs from the input file stem plus LINE POSITION, so if compression is
-    # missing for document 5 of ten, every later document shifts up a line and
-    # bundles.L5 is no longer the same case as input.L5. Nothing downstream
-    # would notice; the ablation would just quietly compare different judgments
-    # against each other. Fail here instead.
-    if written != len(source_lines):
-        raise SystemExit(
-            f"{len(source_lines) - written} of {len(source_lines)} document(s) have no "
-            "compression output -- refusing to write a bundle file whose line "
-            "numbering no longer matches the source"
-        )
-
-
-if __name__ == "__main__":
-    main()

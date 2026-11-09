@@ -11,7 +11,7 @@ instead of partOfProceeding; 4.1% of events were dropped outright.
 So this stage diffs the graph against the stage-1 payload and repairs the
 difference, and does nothing at all where there is none:
 
-    rewrites    the lossless structural rewrites new_repair also ran first
+    rewrites    the lossless structural rewrites the old repair stage also ran first
                 (entailed types, split shared participations, mirrored labels,
                 pruned unbuilt references) -- arithmetic, not judgement.
     match       each stage-1 event to its graph node(s), by its verbatim quote,
@@ -30,10 +30,10 @@ difference, and does nothing at all where there is none:
                 read only the digest of those decisions.
     mint        (model, one call, only if stage 1 has events the graph lacks)
                 the missing events are minted from their own digest entries,
-                applied through repair_facts.apply_patch with its evidence
+                applied through graph_patch.apply_patch with its evidence
                 guards, and the call is KEPT only if it reduced the number of
                 missing events without adding a SHACL violation.
-    shacl       (model, only if the graph has violations) new_repair's
+    shacl       (model, only if the graph has violations) shacl_loop's
                 violation loop over SHACL errors, disjoint-type conflicts and
                 duplicate nodes: graph and ontology only, no document, no new
                 evidence, at most --max-rounds rounds. Transcription runs
@@ -68,9 +68,7 @@ from openai import OpenAI
 from rdflib import RDF, Graph, Namespace, URIRef
 
 from art6.ontology import threadsafe_sparql  # noqa: F401 -- installs the parse lock
-from art6.ontology.check_stage_boundary import _date_matches
-from art6.ontology.prompt_spec import facts_instruction
-from art6.ontology.repair_facts import (
+from art6.ontology.graph_patch import (
     RepairPatch,
     _curie,
     apply_patch,
@@ -83,6 +81,7 @@ from art6.ontology.repair_facts import (
     split_multiparty_participations,
     split_shared_participations,
 )
+from art6.ontology.prompt_spec import facts_instruction
 
 ECHR = Namespace("https://growgraph.dev/echr#")
 PROMPT_DIR = Path(__file__).resolve().parent / "prompts"
@@ -188,6 +187,19 @@ def _quote_score(span: str, quotes: list[str]) -> int:
         if (span in q) or (len(q) >= MIN_CONTAINED_QUOTE and q in span):
             best = max(best, min(len(q), len(span)))
     return best
+
+
+def _date_matches(stage1_date: str, graph_date: str) -> bool:
+    """Stage 1 dates are surface text ("3 March 1999"); the graph's are typed
+    literals ("1999-03-03"). Compare on the year plus day-of-month, enough to
+    tell two events of one document apart."""
+    if not stage1_date or not graph_date:
+        return False
+    year = re.search(r"\b(\d{4})\b", stage1_date)
+    day = re.search(r"\b(\d{1,2})\b", stage1_date)
+    if not year or year.group(1) not in graph_date:
+        return False
+    return bool(day and re.search(rf"-0?{day.group(1)}\b", graph_date))
 
 
 def match_events(graph: Graph, events: list[dict]) -> Match:
@@ -365,7 +377,7 @@ def transcribe(graph: Graph, payload: dict, m: Match) -> list[dict]:
                             note("field_missing", node, pred, None, want, eid)
 
     # LINKS between matched entries -- only for payloads whose links are
-    # TYPED (agentic_stage1, which always writes `tracks`). compress.py's
+    # TYPED (agentic_stage1, which always writes `tracks`). the old single-call stage 1's
     # untyped `follows` leaves partOf vs follows to stage 2, so there is
     # nothing to hold the graph to.
     if "tracks" not in payload:
@@ -482,7 +494,7 @@ def mint_missing(
     temperature: float,
     max_tokens: int,
 ) -> tuple[Graph, dict]:
-    from art6.ontology.new_repair import call_model
+    from art6.ontology.shacl_loop import call_model
 
     prompt = mint_prompt(graph, payload, missing, m)
     t0 = time.perf_counter()
@@ -552,8 +564,8 @@ def mint_missing(
 
 def _violation_count(graph: Graph, doc_ns: str) -> int:
     """What the SHACL loop works on: SHACL errors (not warnings), disjoint-type
-    conflicts and duplicate nodes -- new_repair.Findings' violation scope."""
-    from art6.ontology.new_repair import collect_findings
+    conflicts and duplicate nodes -- shacl_loop.Findings' violation scope."""
+    from art6.ontology.shacl_loop import collect_findings
 
     return collect_findings(graph, doc_ns, None).count("violations")
 
@@ -627,7 +639,7 @@ def reconcile_document(
     elif missing:
         report["mint"] = {"called": False, "status": "no model or no source text"}
 
-    # SHACL REPAIR. The violation loop (new_repair.run_loop) over what the
+    # SHACL REPAIR. The violation loop (shacl_loop.run_loop) over what the
     # graph alone decides -- SHACL errors, disjoint-type conflicts, duplicate
     # nodes -- run only when there is something to fix. It sees the graph and
     # the ontology, never the document, and apply_patch refuses it any new
@@ -642,7 +654,7 @@ def reconcile_document(
         "violations_before": violations_before_loop,
     }
     if violations_before_loop and client is not None and max_rounds > 0:
-        from art6.ontology.new_repair import run_loop
+        from art6.ontology.shacl_loop import run_loop
 
         t0 = time.perf_counter()
         kept_before = {

@@ -143,6 +143,7 @@ def main():
                 case_id=case_id,
                 run_id=run,
                 source_label=datasets[run]["label"],
+                document=demo_data().get("documents", {}).get(case_id),
             ),
             height=790,
             alt="Interactive procedural timeline with event cards, connections and evidence",

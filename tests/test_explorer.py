@@ -11,10 +11,63 @@ from art6.explorer.data import (
     load_demo,
     visible_links,
 )
+from art6.explorer.evidence import evidence, track_summary
 from art6.explorer.timeline import build_scene, timeline
 
 
 class ExplorerDataTests(unittest.TestCase):
+    def test_evidence_requires_exact_offsets_and_preserves_unicode(self):
+        text = "😀 Before. Court dismissed it. After."
+        start = text.index("Court")
+        raw = {
+            "what_happened_span": {
+                "text": "Court dismissed it.",
+                "start": start,
+                "end": start + len("Court dismissed it."),
+            }
+        }
+        self.assertTrue(evidence(raw, text)[0]["verified"])
+        raw["what_happened_span"]["start"] += 1
+        self.assertFalse(evidence(raw, text)[0]["verified"])
+        self.assertEqual(evidence({}, text), [])
+
+    def test_saved_source_matches_event_quotations(self):
+        import hashlib
+
+        demo = load_demo()
+        self.assertEqual(len(demo["documents"]), 10)
+        for dataset in demo["datasets"].values():
+            for case in dataset["cases"]:
+                doc = demo["documents"][case["id"]]
+                self.assertEqual(
+                    hashlib.sha256(doc["text"].encode()).hexdigest(), doc["sha256"]
+                )
+                for event in case["payload"]["events"]:
+                    for item in evidence(event, doc["text"]):
+                        if item["label"] == "Event quotation":
+                            self.assertTrue(item["verified"], (case["id"], event["id"]))
+
+    def test_track_summary_does_not_order_overlapping_or_undated_outcomes(self):
+        rows = event_rows(
+            {
+                "events": [
+                    {"id": "a", "decision_date_iso": "2000", "outcome": "granted"},
+                    {
+                        "id": "b",
+                        "decision_date_iso": "2000-06-01",
+                        "outcome": "dismissed",
+                    },
+                    {"id": "c", "outcome": "upheld"},
+                ]
+            }
+        )
+        summary = track_summary(rows)
+        self.assertTrue(summary["ambiguous"])
+        self.assertIn("granted", summary["latest"])
+        self.assertIn("dismissed", summary["latest"])
+        self.assertNotIn("upheld", summary["latest"])
+        self.assertEqual(summary["undatedOutcomes"], 1)
+
     def test_partial_dates_and_invalid_dates(self):
         self.assertEqual(date_bounds("2000"), (date(2000, 1, 1), date(2000, 12, 31)))
         self.assertEqual(date_bounds("2000-02"), (date(2000, 2, 1), date(2000, 2, 29)))

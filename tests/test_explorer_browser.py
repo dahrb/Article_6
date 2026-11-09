@@ -46,7 +46,9 @@ class ExplorerBrowserTests(unittest.TestCase):
     def tearDown(self):
         self.assertEqual(self.errors, [])
 
-    def open_case(self, payload, visible_ids=None, title="Regression case"):
+    def open_case(
+        self, payload, visible_ids=None, title="Regression case", document=None
+    ):
         rows = event_rows(payload)
         visible = (
             rows if visible_ids is None else [r for r in rows if r["id"] in visible_ids]
@@ -60,9 +62,60 @@ class ExplorerBrowserTests(unittest.TestCase):
                 case_id="demo-case",
                 run_id="demo-run",
                 source_label="Original run",
+                document=document,
             )
         )
         self.page.goto(path.as_uri())
+
+    def test_source_and_chain_focus_preserve_graph_semantics(self):
+        text = "😀 Before. " * 100 + "Court dismissed it." + " After." * 100
+        start = text.index("Court")
+        payload = {
+            "events": [
+                {
+                    "id": "a",
+                    "track": "T1",
+                    "follows": "c",
+                    "what_happened_span": {
+                        "text": "Court dismissed it.",
+                        "start": start,
+                        "end": start + len("Court dismissed it."),
+                    },
+                },
+                {"id": "b", "track": "T1", "follows": "a"},
+                {"id": "c", "track": "T2", "part_of": "b"},
+                {"id": "context", "track": "T3", "occurs_during": "a"},
+            ]
+        }
+        self.open_case(
+            payload, document={"text": text, "label": "Saved extraction input"}
+        )
+        self.page.evaluate("select('a')")
+        self.page.get_by_role("button", name="Source text", exact=True).click()
+        self.assertEqual(self.page.locator("mark").inner_text(), "Court dismissed it.")
+        self.assertEqual(self.page.locator(".source-scroll").inner_text(), text)
+        self.page.set_viewport_size({"width": 740, "height": 850})
+        self.page.get_by_role("button", name="Event details", exact=True).click()
+        self.page.get_by_role("button", name="Source text", exact=True).click()
+        self.page.wait_for_function("""() => {
+            const mark = document.querySelector('mark').getBoundingClientRect();
+            const panel = document.querySelector('#inspector').getBoundingClientRect();
+            return mark.top >= panel.top && mark.bottom <= panel.bottom;
+        }""")
+        self.page.set_viewport_size({"width": 1140, "height": 900})
+        self.page.get_by_role("button", name="Focus chain", exact=True).click()
+        self.assertEqual(self.page.locator(".event").count(), 3)
+        self.assertEqual(self.page.evaluate("scene.lanes.length"), 2)
+        self.assertEqual(
+            self.page.evaluate("[...chainMembers('a')].sort()"), ["a", "b", "c"]
+        )
+        self.page.get_by_role("button", name="Restore tracks", exact=True).click()
+        self.assertEqual(self.page.locator(".event").count(), 4)
+        self.page.evaluate("select('b')")
+        self.assertEqual(self.page.locator("mark").count(), 0)
+        self.assertIn("No verified", self.page.locator("#inspector").inner_text())
+        self.open_case(payload, visible_ids={"a", "context"})
+        self.assertEqual(self.page.evaluate("[...chainMembers('a')]"), ["a"])
 
     def assert_cards_fit(self):
         overflow = self.page.evaluate("""() => [...document.querySelectorAll('.event')]

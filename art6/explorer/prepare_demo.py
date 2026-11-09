@@ -41,7 +41,31 @@ def package(root: Path) -> dict:
             raise ValueError(f"Expected the same ten validation cases in {directory}")
         expected = ids
         datasets[key] = {"label": label, "cases": cases}
-    return {"schema_version": 1, "default": "vote9_v9_luna", "datasets": datasets}
+    return {
+        "schema_version": 2,
+        "default": "vote9_v9_luna",
+        "datasets": datasets,
+        "documents": source_documents(root, expected),
+    }
+
+
+def source_documents(root: Path, expected: set[str]) -> dict:
+    source_path = root / "v9_luna" / "source.jsonl"
+    documents = {}
+    for line in source_path.read_text(encoding="utf-8").splitlines():
+        record = json.loads(line)
+        case_id, text = record["case_id"], record["text"]
+        if case_id in documents:
+            raise ValueError(f"Duplicate source case: {case_id}")
+        documents[case_id] = {
+            "text": text,
+            "sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
+            "source": "results/exp_stage1/full/v9_luna/source.jsonl",
+            "label": "Saved extraction input",
+        }
+    if set(documents) != expected:
+        raise ValueError("Source documents must match the ten validation cases")
+    return documents
 
 
 def main():
@@ -50,8 +74,23 @@ def main():
         "--results-root", type=Path, default=Path("results/exp_stage1/full")
     )
     parser.add_argument("--output", type=Path, default=DEMO_PATH)
+    parser.add_argument(
+        "--source-only",
+        action="store_true",
+        help="Add source text while preserving the packaged result snapshot",
+    )
     args = parser.parse_args()
-    result = package(args.results_root)
+    if args.source_only:
+        result = json.loads(args.output.read_text(encoding="utf-8"))
+        expected = {
+            case["id"]
+            for dataset in result["datasets"].values()
+            for case in dataset["cases"]
+        }
+        result["documents"] = source_documents(args.results_root, expected)
+        result["schema_version"] = 2
+    else:
+        result = package(args.results_root)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
         json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"

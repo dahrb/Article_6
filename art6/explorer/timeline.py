@@ -9,6 +9,7 @@ from collections import Counter
 from pathlib import Path
 
 from art6.explorer.data import visible_links
+from art6.explorer.evidence import evidence, track_summary
 
 LEVELS = {
     "investigative": ("I", "Investigative", "#2878bd"),
@@ -50,6 +51,8 @@ def build_scene(rows: list[dict], all_rows: list[dict]) -> dict:
                 "id": track,
                 "label": members[0]["track_label"],
                 "count": len(members),
+                "total": counts[track],
+                "summary": track_summary(members),
                 "y": 48 + lane_index * LANE_HEIGHT,
             }
         )
@@ -109,9 +112,13 @@ def timeline(
     case_id: str = "",
     run_id: str = "",
     source_label: str = "",
+    document: dict | None = None,
 ) -> str:
     scene = build_scene(rows, all_rows)
     scene["title"] = title
+    scene["document"] = document
+    for node in scene["nodes"]:
+        node["evidence"] = evidence(node["raw"], (document or {}).get("text", ""))
     scene.update(caseId=case_id, runId=run_id, sourceLabel=source_label)
     # Extraction text is data, never executable HTML. The viewer inserts it via
     # textContent; escape script delimiters as well as JS line separators here.

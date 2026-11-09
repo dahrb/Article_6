@@ -428,6 +428,89 @@ select:focus-visible {
     display: none !important;
   }
 }
+
+@media(min-width:901px) {
+  .inspector {
+    width: 350px;
+  }
+}
+
+.panel-tabs {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+  padding: 4px 0;
+  display: flex;
+  gap: 6px;
+  margin: 12px 0;
+}
+
+.panel-tabs button[aria-pressed="true"] {
+  background: #e4f2ec;
+  border-color: #16724f;
+  color: #12553e;
+}
+
+.source-scroll {
+  max-height: 340px;
+  overflow: auto;
+  border: 1px solid #dce5e9;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fafcfb;
+  line-height: 1.65;
+  font-size: 13px;
+  white-space: pre-wrap;
+}
+
+.source-scroll mark {
+  background: #ffe59a;
+  color: #273429;
+  border-radius: 2px;
+}
+
+.source-note {
+  font-size: 12px;
+  color: #526575;
+  line-height: 1.5;
+}
+
+.source-picker {
+  width: 100%;
+  margin: 8px 0;
+}
+
+.chain-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.lane-label b {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.lane-label .track-summary {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 11px;
+  line-height: 1.45;
+  margin-top: 8px;
+  color: #526575;
+}
+
+@media(max-width:900px) {
+  .source-scroll {
+    max-height: 150px;
+  }
+}
 </style>
 </head>
 <body>
@@ -593,8 +676,36 @@ function status(text) {
   document.getElementById('status').textContent = text;
 }
 
-function setScene(track = 'all') {
-  const chosen = original.lanes.filter(l => track === 'all' || l.id === track);
+let wholeChain = false,
+  focusedChain = null,
+  sourceTab = false;
+
+function chainMembers(id, edges = original.edges) {
+  const members = new Set([id]);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const e of edges) {
+      if (e.kind === 'occurs_during') continue;
+      if (members.has(e.from) || members.has(e.to)) {
+        for (const endpoint of [e.from, e.to]) {
+          if (!members.has(endpoint)) {
+            members.add(endpoint);
+            changed = true;
+          }
+        }
+      }
+    }
+  }
+  return members;
+}
+
+function setScene(track = 'all', focus = null) {
+  focusedChain = focus;
+  const tracks = focus ? new Set(original.nodes.filter(n => focus.has(n.id)).map(n => n.track)) :
+    null;
+  const chosen = original.lanes.filter(l => (track === 'all' || l.id === track) && (!tracks ||
+    tracks.has(l.id)));
   const offsets = new Map(chosen.map((l, i) => [l.id, 48 + i * original.laneHeight]));
   const nodes = original.nodes.filter(n => offsets.has(n.track)).map(n => ({
     ...n,
@@ -684,7 +795,16 @@ function render() {
     label.dataset.y = lane.y;
     html('small', `${lane.id} · Procedural track`, '', label);
     html('b', lane.label, '', label);
-    html('span', `${lane.count} event${lane.count===1?'':'s'}`, '', label);
+    html('span', `${lane.count} of ${lane.total} events`, '', label);
+    const summary = lane.summary;
+    html('div', summary.range, 'track-summary', label);
+    html('div', summary.levels.join(' · ') || 'Levels not recorded', 'track-summary', label);
+    html('div',
+      `${summary.ambiguous ? 'Latest dated outcomes (order uncertain)' : 'Latest dated outcome'}: ${summary.latest}`,
+      'track-summary', label);
+    if (summary.undated) html('div',
+      `${summary.undated} undated events${summary.undatedOutcomes ? ' · undated outcomes excluded' : ''}`,
+      'track-summary', label);
   }
   const positions = new Map(scene.nodes.map(n => [n.id, n]));
   scene.edges.forEach((edge, i) => {
@@ -944,6 +1064,7 @@ function focusNode(id) {
 
 function clear() {
   const previous = selected;
+  if (focusedChain) setScene(document.getElementById('track').value);
   selected = null;
   inspector.hidden = true;
   graph.querySelectorAll('.event,.edge').forEach(e => e.classList.remove('dim', 'active',
@@ -970,8 +1091,8 @@ function select(id) {
   const wasOverview = scale < .55;
   if (wasOverview) setScale(1, false);
   selected = id;
-  const related = new Set([id]);
-  for (const e of scene.edges)
+  const related = wholeChain ? chainMembers(id, scene.edges) : new Set([id]);
+  for (const e of wholeChain ? [] : scene.edges)
     if (e.from === id || e.to === id) {
       related.add(e.from);
       related.add(e.to);
@@ -983,7 +1104,8 @@ function select(id) {
     el.classList.toggle('related', el.dataset.id !== id && related.has(el.dataset.id));
   });
   graph.querySelectorAll('.edge').forEach(el => {
-    const active = el.dataset.from === id || el.dataset.to === id;
+    const active = wholeChain ? related.has(el.dataset.from) && related.has(el.dataset.to) : el
+      .dataset.from === id || el.dataset.to === id;
     el.classList.toggle('dim', !active);
     el.classList.toggle('active', active);
   });
@@ -994,9 +1116,56 @@ function select(id) {
   close.onclick = clear;
   html('div', `${n.id} · ${n.significance} event`, 'eyebrow', inspector);
   html('h2', n.court, '', inspector);
+  const controls = html('div', null, 'chain-controls', inspector);
+  const mode = html('button', wholeChain ? 'Whole chain ✓' : 'Highlight whole chain', '', controls);
+  mode.setAttribute('aria-pressed', String(wholeChain));
+  mode.onclick = () => {
+    wholeChain = !wholeChain;
+    if (!wholeChain && focusedChain) setScene(document.getElementById('track').value);
+    select(id);
+  };
+  const focus = html('button', focusedChain ? 'Restore tracks' : 'Focus chain', '', controls);
+  focus.onclick = () => {
+    wholeChain = true;
+    const members = focusedChain ? null : chainMembers(id);
+    if (members) document.getElementById('track').value = 'all';
+    setScene(document.getElementById('track').value, members);
+    select(id);
+    focusNode(id);
+  };
+  mode.title = focus.title =
+    'Follow Follows and Part of links in both directions, including branches. Occurs during is contextual; event filters apply.';
+  const tabs = html('div', null, 'panel-tabs', inspector);
+  const detailButton = html('button', 'Event details', '', tabs);
+  const sourceButton = html('button', 'Source text', '', tabs);
+  const body = html('div', null, '', inspector);
+  const sourceBody = html('div', null, '', inspector);
+
+  function switchPanel(value) {
+    sourceTab = value;
+    body.hidden = value;
+    sourceBody.hidden = !value;
+    detailButton.setAttribute('aria-pressed', String(!value));
+    sourceButton.setAttribute('aria-pressed', String(value));
+    if (value) {
+      showSource(n, sourceBody);
+      if (window.innerWidth <= 900) requestAnimationFrame(() => {
+        const passage = sourceBody.querySelector('.source-scroll');
+        const target = passage || tabs;
+        inspector.scrollTop += target.getBoundingClientRect().top - inspector
+          .getBoundingClientRect().top - (passage ? tabs.offsetHeight + 12 : 0);
+      });
+    }
+  }
+  detailButton.onclick = () => switchPanel(false);
+  sourceButton.onclick = () => switchPanel(true);
+  switchPanel(sourceTab);
+  const help = html('details', null, '', body);
+  html('summary', 'How chain focus works', '', help);
+  html('p', mode.title, 'source-note', help);
   const siblings = scene.nodes.filter(node => node.track === n.track),
     index = siblings.findIndex(node => node.id === id);
-  const navigation = html('div', null, 'event-nav', inspector);
+  const navigation = html('div', null, 'event-nav', body);
   for (const [label, offset] of [
       ['← Previous event', -1],
       ['Next event →', 1]
@@ -1009,7 +1178,7 @@ function select(id) {
       focusNode(next.id);
     };
   }
-  html('p', n.description || 'No description provided.', '', inspector);
+  html('p', n.description || 'No description provided.', '', body);
   for (const [label, value] of [
       ['Date', displayDate(n)],
       ['Instance', n.level_style[1]],
@@ -1021,11 +1190,23 @@ function select(id) {
       ],
       ['Direction', n.direction_style[1]]
     ]) {
-    const fact = html('div', null, 'fact', inspector);
+    const fact = html('div', null, 'fact', body);
     html('span', label, '', fact);
     html('span', value, '', fact);
   }
-  html('h3', 'Connections', '', inspector);
+  const trackDetails = html('details', null, '', body);
+  html('summary', 'Track summary · current event filters', '', trackDetails);
+  const lane = original.lanes.find(l => l.id === n.track),
+    summary = lane.summary;
+  html('p', `${lane.label} · ${lane.count} of ${lane.total} events`, '', trackDetails);
+  html('p', `${summary.range} · ${summary.undated} undated`, '', trackDetails);
+  html('p', `Recorded levels: ${summary.levels.join(' · ') || 'Not recorded'}`, '', trackDetails);
+  html('p',
+    `${summary.ambiguous ? 'Latest dated outcomes (order uncertain)' : 'Latest dated outcome'}: ${summary.latest}`,
+    '', trackDetails);
+  if (summary.undatedOutcomes) html('p',
+    `${summary.undatedOutcomes} undated outcomes cannot be ordered.`, '', trackDetails);
+  html('h3', 'Connections', '', body);
   let connections = 0;
   for (const [kind, style] of Object.entries(relation)) {
     const target = n.raw[kind];
@@ -1039,12 +1220,12 @@ function select(id) {
         connections++;
       }
   }
-  if (!connections) html('p', 'No extracted connections.', 'empty-evidence', inspector);
+  if (!connections) html('p', 'No extracted connections.', 'empty-evidence', body);
 
   function connection(label, target) {
     const other = contextById.get(target),
       visible = byId.has(target);
-    const button = html('button', `${label} → ${target}`, 'connection', inspector);
+    const button = html('button', `${label} → ${target}`, 'connection', body);
     html('small', other ?
       `${other.date} · ${other.court}${visible?'':' · Hidden by event filters'}` :
       'Endpoint missing from this extraction', '',
@@ -1055,18 +1236,19 @@ function select(id) {
       focusNode(target);
     };
   }
-  html('h3', 'Supporting quotation', '', inspector);
-  if (n.quote) html('blockquote', n.quote, '', inspector);
-  else html('p', 'No event quotation in this export.', 'empty-evidence', inspector);
-  html('h3', 'Parties', '', inspector);
+  html('h3', 'Supporting quotation', '', body);
+  if (n.quote) html('blockquote', n.quote, '', body);
+  else html('p', 'No event quotation in this export.', 'empty-evidence', body);
+  html('h3', 'Parties', '', body);
   html('p', (n.raw.parties || []).map(p => p.name_span?.text).filter(Boolean).join('; ') ||
-    'Not recorded', '', inspector);
-  const details = html('details', null, '', inspector);
+    'Not recorded', '', body);
+  const details = html('details', null, '', body);
   html('summary', 'All extracted fields', '', details);
   html('pre', JSON.stringify(n.raw, null, 2), '', details);
   inspector.scrollTop = 0;
   status(
-    `${id} selected · ${related.size-1} directly connected events highlighted · Escape to clear`);
+    `${id} selected · ${related.size-1} ${wholeChain ? 'chain' : 'directly connected'} events highlighted · Escape to clear`
+  );
   const placed = scene.nodes.find(node => node.id === id);
   if (wasOverview || placed.x * scale < viewport.scrollLeft + labels.clientWidth ||
     (placed.x + scene.cardWidth) * scale > viewport.scrollLeft + viewport.clientWidth ||
@@ -1075,6 +1257,61 @@ function select(id) {
     focusNode(id);
   }
   refreshViewport();
+}
+
+function showSource(n, parent) {
+  parent.replaceChildren();
+  const doc = original.document;
+  if (!doc?.text) {
+    html('p', 'Source text is not packaged for this view.', 'source-note', parent);
+    return;
+  }
+  html('h3', doc.label || 'Saved extraction input', '', parent);
+  html('p',
+    'Saved input may cover only part of the judgment. Highlights are exact source matches.',
+    'source-note', parent);
+  const spans = n.evidence || [];
+  const verified = spans.filter(e => e.verified);
+  const note = html('p', '', 'source-note', parent);
+  const picker = html('select', null, 'source-picker', parent);
+  picker.setAttribute('aria-label', 'Supporting source passage');
+  for (const [i, item] of verified.entries()) {
+    const option = html('option', item.label, '', picker);
+    option.value = String(i);
+  }
+  picker.hidden = !verified.length;
+  const content = html('div', null, 'source-scroll', parent);
+  content.tabIndex = 0;
+  content.setAttribute('aria-label', 'Saved source text');
+
+  function highlight(index) {
+    content.replaceChildren();
+    const item = verified[index];
+    note.textContent = item ?
+      `${item.label} · verified exact source offsets ${item.start}–${item.end}${!spans.some(e => e.label === 'Event quotation' && e.verified) ? ' · No verified event quotation; showing another extracted field.' : ''}` :
+      'No verified supporting span for this event. Source shown without a highlight.';
+    // Python offsets count Unicode code points, not JavaScript UTF-16 units.
+    const chars = Array.from(doc.text);
+    if (!item) {
+      content.textContent = doc.text;
+      return;
+    }
+    content.append(document.createTextNode(chars.slice(0, item.start).join('')));
+    const mark = html('mark', chars.slice(item.start, item.end).join(''), '', content);
+    content.append(document.createTextNode(chars.slice(item.end).join('')));
+    requestAnimationFrame(() => {
+      content.scrollTop += mark.getBoundingClientRect().top - content.getBoundingClientRect()
+        .top - 65;
+    });
+  }
+  picker.onchange = () => highlight(Number(picker.value));
+  highlight(0);
+  if (spans.some(e => !e.verified)) html('p',
+    'Some extracted spans could not be verified and are not highlighted.', 'source-note', parent);
+  const provenance = html('details', null, '', parent);
+  html('summary', 'Source provenance', '', provenance);
+  html('p', doc.source, 'source-note', provenance);
+  html('p', `Text SHA-256: ${doc.sha256}`, 'source-note', provenance);
 }
 for (const lane of original.lanes) {
   const opt = html('option', `${lane.id} · ${lane.label}`);
@@ -1162,7 +1399,8 @@ document.getElementById('export').onclick = () => {
   const maxWidth = scene.width - 40;
   const titleLines = exportLines(original.title, maxWidth, 18, 600);
   const track = document.getElementById('track').value;
-  const scope = track === 'all' ? 'All tracks' : `Track ${track}`;
+  const scope = focusedChain ? `Chain focus · ${scene.lanes.length} tracks` : track === 'all' ?
+    'All tracks' : `Track ${track}`;
   const metadata = [original.caseId, original.sourceLabel, scope,
     `${scene.nodes.length} of ${original.context.length} events`
   ].filter(Boolean).join(' · ');

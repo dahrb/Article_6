@@ -237,6 +237,7 @@ def test_finalize_types_relations_and_points_at_roots():
         "cycles_broken": 0,
         "filings_split": 0,
         "minor_rerouted": 0,
+        "undated_filings_folded": 0,
         "levels_normalised": 0,
     }
 
@@ -1046,3 +1047,120 @@ def test_timeline_matters_only_with_a_prompt_that_offers_them(tmp_path, monkeypa
     guide.write_text('"matter": [legal aid | requests | health | immigration]')
     a.enable_prompt_vocabulary(guide)
     assert a.TIMELINE_MATTERS <= a.VOCABULARY["matter"]
+
+
+FOLD_TEXT = (
+    "the court convicted him on 1 May 1999. The applicant appealed the conviction. "
+    "On 3 May 2000 the applicant appealed. On 9 May 2001 the Higher Court upheld the conviction. "
+    "On 2 June 2002 the Supreme Court refused leave."
+)
+
+
+def fspan(text):
+    start = FOLD_TEXT.index(text)
+    return {"text": text, "start": start, "end": start + len(text)}
+
+
+def fev(eid, what, date=None, body=None, level="first instance", **kw):
+    e = {
+        "id": eid,
+        "what_happened_span": fspan(what),
+        "instance_level": level,
+        "proceeding_type": "criminal",
+    }
+    if date:
+        e["decision_date_span"] = fspan(date)
+    if body:
+        e["authority_span"] = {"text": body, "start": 0, "end": len(body)}
+    e.update(kw)
+    return e
+
+
+def test_undated_filing_folds_into_its_decision():
+    # guide §3.1: an undated filing does not get its own event
+    p = {
+        "events": [
+            fev("p", "the court convicted him", "1 May 1999", body="District Court"),
+            fev(
+                "f",
+                "The applicant appealed the conviction.",
+                body="Higher Court",
+                level="appeal",
+                institution_narrated_span=fspan(
+                    "The applicant appealed the conviction."
+                ),
+                link={"to": "p", "kind": "continues"},
+            ),
+            fev(
+                "d",
+                "the Higher Court upheld the conviction",
+                "9 May 2001",
+                body="Higher Court",
+                level="appeal",
+                link={"to": "f", "kind": "continues"},
+            ),
+            fev(
+                "n",
+                "the Supreme Court refused leave",
+                "2 June 2002",
+                body="Supreme Court",
+                level="cassation",
+                link={"to": "f", "kind": "continues"},
+            ),
+        ]
+    }
+    assert a.fold_undated_filings(p) == 1
+    by = {e["id"]: e for e in p["events"]}
+    assert set(by) == {"p", "d", "n"}
+    assert by["d"]["link"]["to"] == "p" and by["n"]["link"]["to"] == "d"
+
+
+def test_dated_filing_keeps_its_own_event():
+    p = {
+        "events": [
+            fev(
+                "f",
+                "On 3 May 2000 the applicant appealed.",
+                body="Higher Court",
+                level="appeal",
+                institution_narrated_span=fspan(
+                    "On 3 May 2000 the applicant appealed."
+                ),
+                start_date_span=fspan("3 May 2000"),
+            ),
+            fev(
+                "d",
+                "the Higher Court upheld",
+                "9 May 2001",
+                body="Higher Court",
+                level="appeal",
+                link={"to": "f", "kind": "continues"},
+            ),
+        ]
+    }
+    assert a.fold_undated_filings(p) == 0 and len(p["events"]) == 2
+
+
+def test_hearing_dates_are_not_split_off_as_a_filing():
+    text = (
+        "During the retrial, hearings were held on 15 December 2000 and on "
+        "12 February 2001 the District Court convicted the applicant."
+    )
+    s = lambda t: {"text": t, "start": text.index(t), "end": text.index(t) + len(t)}
+    e = {
+        "id": "x",
+        "decision_date_span": s("12 February 2001"),
+        "start_date_span": s("15 December 2000"),
+    }
+    p = {"events": [e]}
+    assert a.split_narrated_filings(p, text) == 0 and len(p["events"]) == 1
+
+
+def test_a_dated_request_carrying_its_undated_answer_is_still_a_filing():
+    span = {"text": "26 March 1999", "start": 0, "end": 13}
+    assert a.is_filing({"start_date_span": span, "outcome": "merits decided"})
+    assert not a.is_filing({"decision_date_span": span, "outcome": "merits decided"})
+    assert not a.is_filing({"start_date_span": span, "decision_date_span": span})
+    assert not a.is_filing(
+        {"institution_narrated_span": span, "outcome": "merits decided"}
+    )

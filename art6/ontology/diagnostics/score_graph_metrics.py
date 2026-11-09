@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -176,8 +177,52 @@ def load_arm_nodes(ttl_path: Path) -> list[Node] | None:
     return nodes
 
 
-def align(gold: list[Node], arm: list[Node]) -> dict:
-    """1:1 bipartite alignment, same gate as score_document_date_quote."""
+CROSS_KIND_QUOTE_MIN = 0.3
+
+
+def align(gold: list[Node], arm: list[Node], cross_kind: bool | None = None) -> dict:
+    """1:1 bipartite alignment, same gate as score_document_date_quote.
+
+    cross_kind (default: env ALIGN_CROSS_KIND=1) adds a second pass over what
+    is left: one act recorded as a filing on one side and a decision on the
+    other ("On 3 November 2005 the applicant asked to confront M.T. His request
+    was rejected") pairs when some date of each is the SAME day/month and the
+    quotes overlap (quote_sim >= CROSS_KIND_QUOTE_MIN). The first pass never
+    pairs a filing with a decision, so such an act counted as one miss and one
+    extra, and every link at it as wrong (validation, 2026-11-05: 5-11 gold
+    follows endpoints per run)."""
+    if cross_kind is None:
+        cross_kind = os.environ.get("ALIGN_CROSS_KIND") == "1"
+    mapping = _align_same_kind(gold, arm)
+    if cross_kind:
+        mapping.update(_align_cross_kind(gold, arm, mapping))
+    return mapping
+
+
+def _align_cross_kind(gold: list[Node], arm: list[Node], done: dict) -> dict:
+    gold_used, arm_used = set(done.values()), set(done)
+    dates = lambda n: {str(v) for v in (n.decision_date, n.start_date) if v}
+    pairs = []
+    for g in gold:
+        if g.key in gold_used:
+            continue
+        for a in arm:
+            if a.key in arm_used or not (dates(g) & dates(a)):
+                continue
+            q = quote_sim(g.quote, a.quote)
+            if q >= CROSS_KIND_QUOTE_MIN:
+                pairs.append((q, str(g.key), str(a.key), g.key, a.key))
+    out = {}
+    for _, _, _, gk, ak in sorted(pairs, key=lambda t: t[:3], reverse=True):
+        if gk in gold_used or ak in arm_used:
+            continue
+        gold_used.add(gk)
+        arm_used.add(ak)
+        out[ak] = gk
+    return out
+
+
+def _align_same_kind(gold: list[Node], arm: list[Node]) -> dict:
     pairs = []
     for gi, g in enumerate(gold):
         for ai, a in enumerate(arm):

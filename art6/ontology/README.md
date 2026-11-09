@@ -27,7 +27,7 @@ shapes are in `ontology/`.
 |---|---|---|
 | **Ontology guidance** (stage 2) | extraction is rendered as RDF against a fixed domain ontology, with closed vocabularies, typed nodes and SHACL shapes | [OntoCast](https://growgraph.github.io/ontocast/), an external LLM-to-knowledge-graph framework, in `render_mode=facts`; invoked by `run_native.py` |
 | **Evidence stage** (stage 1) | an extractive pass returns *verbatim spans* of the source, then linking, person and critic agents — with a parallel-track agent, a targeted parties pass and a fixer triggered by the critic's flags — turn them into a checked procedural history with typed chain links; offsets are computed programmatically, and any span that cannot be located in the source is discarded. The graph stage then sees the verified evidence instead of the judgment | `agentic_stage1.py` + `render_bundles.py` |
-| **Repair stage** (stage 3) | the graph is diffed against stage 1 and transcription gaps are fixed in code; the model is called to mint events the graph lacks, to repair SHACL violations, and as a final critic and graph fixer that may not change what stage 1 decided | `reconcile.py` |
+| **Repair stage** (stage 3) | the graph is diffed against stage 1 and transcription gaps are fixed in code; the model is called only to mint events the graph lacks and to repair SHACL violations; stage 3 checks validity and never re-reads the judgment for new facts | `reconcile.py` |
 
 ### 1.2 Conditions
 
@@ -198,9 +198,6 @@ flowchart TD
         QS{"violations?"}
         SV{{"SHACL violation agent<br/>≤3 rounds"}}
         RT["restore stage-1 decisions (code)"]
-        FC{{"Final critic<br/>flags: needs_fix · stage1_dispute"}}
-        QG{"needs_fix<br/>= yes?"}
-        GF{{"Graph fixer<br/>gated per group,<br/>stage-1 triples locked"}}
         END["final counts (code)"]
     end
 
@@ -218,11 +215,8 @@ flowchart TD
     T -->|"bundle"| OC --> RC --> QM
     QM -- yes --> MI --> QS
     QM -- no --> QS
-    QS -- yes --> SV --> RT --> FC
-    QS -- no --> FC
-    FC --> QG
-    QG -- yes --> GF --> END
-    QG -- no --> END
+    QS -- yes --> SV --> RT --> END
+    QS -- no --> END
 ```
 
 | agent | runs | reads | writes | prompt |
@@ -237,8 +231,6 @@ flowchart TD
 | **OntoCast** | always | rendered bundle | the graph | `facts.txt` |
 | **Event recovery** | stage-1 events missing from the graph | graph + their digest entries | minted events, kept only if they place one and add no violation | `reconcile_mint.txt` |
 | **SHACL violation agent** | graph has violations; `SHACL_ROUNDS` ≥ 1 | graph + ontology, no judgment | patches for SHACL errors, disjoint-type conflicts, duplicates | `new_repair_loop.txt` |
-| **Final critic** | `FINAL_CRITIC=1` | judgment + finished graph | evidenced findings; flags `needs_fix`, `stage1_dispute` | `final_critic.txt` |
-| **Graph fixer** | `needs_fix = yes` | judgment + graph + findings | patch groups, each kept only if it adds no violation; stage-1 triples locked | `final_fix.txt` |
 
 **Flags are mandatory and enforced in code.** A flag that is absent, or not
 exactly `yes` / `no`, sends the answer back once with a reminder; still absent,
@@ -411,17 +403,10 @@ barely a quarter as many), a filing and its decision chained with
    word, and a violation only a stage-1 decision could clear is left standing
    and counted.
 
-7. **Final critic → graph fixer** (`FINAL_CRITIC=1`, the default). The final
-   critic reads the finished graph against the judgment for what reconcile does
-   not own — participations and their sides, representatives, which authority
-   node an event points at, dates, quotes, spurious events — and must set
-   `needs_fix` and `stage1_dispute`. On `needs_fix` the graph fixer answers its
-   findings with a patch through `apply_patch`'s evidence guards. Stage 1's
-   fields, chain links and the existence of its events are **locked**: an
-   operation on them is recorded as a `stage1_dispute` and never applied, as is
-   any disagreement the critic raises about them. Each patch group is applied on
-   its own and kept only if it adds no violation. The step is skipped, and the
-   skip logged, if the prompt would not fit the context window.
+7. **No final critic.** Stage 3 used to end with a critic that re-read the
+   judgment and a graph fixer answering its findings. It was removed on
+   2026-11-09: on the 10-set vote run it raised findings on every document and
+   landed no patch on any, and stage 3's job is validity, not new facts.
 
 A graph that already agrees with stage 1, has no violations and draws no
 final-critic findings goes through untouched apart from the lossless rewrites.
@@ -509,7 +494,6 @@ takes a few minutes:
 | `CRITIC_ROUNDS` | stage-1 critic rounds, default `1`; `0` turns off the critic and everything it routes to |
 | `PARTIES` | `0` skips the person identifier's parties pass |
 | `SHACL_ROUNDS` | SHACL violation agent rounds, default `3`; `0` turns it off |
-| `FINAL_CRITIC` | `0` turns off the final critic and graph fixer |
 | `STAGE1_IMPL` / `REPAIR_IMPL` | `compress` / `new_repair` select the previous stages |
 | `PROJECT_BASE` | triple-store project prefix, default `art6_abl_<outdir>` |
 | `FUSEKI_CONTAINER` | default `ontocast-fuseki` |
@@ -531,8 +515,7 @@ referenced:
 <out>/shapes/echr-shapes.ttl      shapes used for validation and repair
 <out>/<name>.prompt.snapshot      every agent's prompt as it was at run time:
                                   extract, plan, link, tracks, applicants,
-                                  parties, critic, fix, reconcile_mint,
-                                  final_critic, final_fix
+                                  parties, critic, fix, reconcile_mint
 <out>/compress.prompt.snapshot    single-call stage-1 prompt (STAGE1_IMPL=compress)
 <out>/facts.prompt.snapshot       stage-2 instruction as it was at run time
 <out>/input.jsonl                 documents + the live instruction, rebuilt
@@ -731,12 +714,12 @@ of each pair from any statistic that assumes independent documents.
 | [render_bundles.py](render_bundles.py) | renders verified spans as the document the graph stage sees |
 | [run_native.py](run_native.py) | stage 2: in-process invocation of OntoCast with response recovery installed |
 | [json_closers.py](json_closers.py) | rebuilds mismatched JSON container closers in a model reply (used by repair_facts.py; the three OntoCast monkeypatches this came from were removed once v0.6.2 absorbed the fix) |
-| [reconcile.py](reconcile.py) | stage 3 (default): diff each graph against its stage-1 payload and transcribe in code; event recovery (if events are missing), SHACL violation agent (if there are violations), final critic → graph fixer with stage-1 triples locked |
+| [reconcile.py](reconcile.py) | stage 3 (default): diff each graph against its stage-1 payload and transcribe in code; event recovery (if events are missing), SHACL violation agent (if there are violations) |
 | [new_repair.py](new_repair.py) | the previous stage 3 (`REPAIR_IMPL=new_repair`): deterministic rewrites, violation loop, document-reading review |
 | [repair_facts.py](repair_facts.py) | finders, patch application, and the evidence constraints on additions |
 | [validate_shapes.py](validate_shapes.py) | SHACL conformance reporting |
 | [diagnostics/](diagnostics/) | content measures, repair impact, quotation and date verification, run comparison |
-| [prompts/](prompts/) | stage 1: `extract.txt`, `plan.txt`, `link.txt`, `tracks.txt`, `applicants.txt`, `parties.txt`, `critic.txt`, `fix.txt`; stage 2: `facts.txt`; stage 3: `reconcile_mint.txt`, `new_repair_loop.txt`, `new_repair_system.txt`, `final_critic.txt`, `final_fix.txt`. Earlier versions kept for replication: `compress.txt`, `compress_v2.txt`, `compress_old.txt`, `new_repair_review_*.txt` |
+| [prompts/](prompts/) | stage 1: `extract.txt`, `plan.txt`, `link.txt`, `tracks.txt`, `applicants.txt`, `parties.txt`, `critic.txt`, `fix.txt`; stage 2: `facts.txt`; stage 3: `reconcile_mint.txt`, `new_repair_loop.txt`, `new_repair_system.txt`. Earlier versions kept for replication: `final_critic.txt`, `final_fix.txt` (stage 3's final critic and graph fixer, removed 2026-11-09), `compress.txt`, `compress_v2.txt`, `compress_old.txt`, `new_repair_review_*.txt` |
 | `../conditions/` | the no-ontology baseline: driver, comparison schema, triple projection, prompt |
 | `../../ontology/` | `echr.ttl`, `echr-shapes.ttl`, and the OntoCast configuration |
 | `../../docs/JURIX_2.md` | the experiment plan, sampling design and evaluation protocol |

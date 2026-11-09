@@ -64,7 +64,6 @@ STAGE1_IMPL="${STAGE1_IMPL:-agentic}"
 CRITIC_ROUNDS="${CRITIC_ROUNDS:-1}"        # stage-1 critic rounds; 0 = no critic
 PARTIES="${PARTIES:-1}"                    # 0 = skip the parties pass
 SHACL_ROUNDS="${SHACL_ROUNDS:-3}"          # 0 = no SHACL violation agent
-FINAL_CRITIC="${FINAL_CRITIC:-1}"          # 0 = no final critic / graph fixer
 # Parallelism. All default to the sequential path, which is what keeps a local
 # vLLM run byte-reproducible (stage 1) and its KV cache uncontended. A hosted
 # endpoint is the opposite case: each call streams slowly (20-50 tokens/s on
@@ -161,7 +160,7 @@ cp "${REPO_ROOT}/ontology/echr-shapes.ttl" "${SHAPES_DIR}/"
 (cd "${REPO_ROOT}" && uv run python -c "from art6.ontology.prompt_spec import facts_instruction; print(facts_instruction())") \
     > "${OUT_DIR}/facts.prompt.snapshot"
 cp "${SCRIPT_DIR}/prompts/compress.txt" "${OUT_DIR}/compress.prompt.snapshot"
-for p in extract plan link tracks critic fix parties applicants reconcile_mint final_critic final_fix; do
+for p in extract plan link tracks critic fix parties applicants reconcile_mint; do
     cp "${SCRIPT_DIR}/prompts/${p}.txt" "${OUT_DIR}/${p}.prompt.snapshot"
 done
 [[ -z "${COMPRESS_PROMPT_FILE}" ]] || cp "${COMPRESS_PROMPT_FILE}" "${OUT_DIR}/stage1_override.prompt.snapshot"
@@ -412,7 +411,7 @@ run_arm() {
     (cd "${REPO_ROOT}" && PYTHONUNBUFFERED=1 uv run python -m art6.ontology.reconcile \
         --facts-dir "${dir}/repaired" --input-jsonl "${input}" \
         --stage1-dir "${OUT_DIR}/stage1" --original-jsonl "${INPUT_JSONL}" \
-        --max-rounds "${SHACL_ROUNDS}" $([[ "${FINAL_CRITIC}" == 0 ]] && echo --no-final-critic) \
+        --max-rounds "${SHACL_ROUNDS}" \
         --workers "${STAGE3_WORKERS}" \
         --model "${MODEL}" --base-url "${BASE_URL}" \
         --temperature 0.0) || echo "${label} stage 3 returned $?"
@@ -468,7 +467,7 @@ cat > "${OUT_DIR}/manifest.json" <<JSON
   "stage1_impl": "${STAGE1_IMPL}",
   "stage3_impl": "${REPAIR_IMPL}",
   "parallelism": {"stage1_workers": ${STAGE1_WORKERS}, "stage1_token_budget": ${STAGE1_TOKEN_BUDGET}, "c0_workers": ${C0_WORKERS}, "stage2_shards": ${STAGE2_SHARDS}, "stage2_retries": ${STAGE2_RETRIES}, "stage2_allow_missing": ${STAGE2_ALLOW_MISSING}, "stage3_workers": ${STAGE3_WORKERS}, "parallel_arms": ${PARALLEL_ARMS}},
-  "agents": {"critic_rounds": ${CRITIC_ROUNDS}, "parties": ${PARTIES}, "shacl_rounds": ${SHACL_ROUNDS}, "final_critic": ${FINAL_CRITIC}},
+  "agents": {"critic_rounds": ${CRITIC_ROUNDS}, "parties": ${PARTIES}, "shacl_rounds": ${SHACL_ROUNDS}},
   "ontocast_version": "${ONTOCAST_VERSION}",
   "llm_output_layout": "free",
   "base_url": "${BASE_URL}",

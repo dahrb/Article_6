@@ -548,7 +548,13 @@ def is_filing(event: dict) -> bool:
     # (2026-10-22, Matko: a District Court decision with the prosecutor's
     # request in institution_narrated_span), which made it a filing and turned
     # the decision's own part_of into follows.
-    if event.get("decision_date_span") or event.get("outcome"):
+    if event.get("decision_date_span"):
+        return False
+    # ...except a request dated on itself whose answer is undated: ONE entry,
+    # the filing, still carrying the answer's outcome (extract_guide_v2 "ONE
+    # DATE, TWO ACTS"; 5 gold entries on the 10-set, e.g. Sawoniuk's "An
+    # application was made ... on 26 March 1999. It was refused.").
+    if event.get("outcome") and not isinstance(event.get("start_date_span"), dict):
         return False
     return bool(event.get("institution_narrated_span") or event.get("start_date_span"))
 
@@ -680,6 +686,15 @@ def split_narrated_filings(payload: dict, source: str) -> int:
         if s_lo <= decided["start"] < s_hi and _REPORTED_FILING.search(lead):
             out.append(event)  # "a claim brought in 1999": reported, one entry
             continue
+        clause = source[
+            s_lo : decided["start"] if s_lo <= decided["start"] < s_hi else s_hi
+        ]
+        if _HEARING_DATE.search(clause):
+            # "hearings were held on 13 September and 22 November 1999": the
+            # start date is a hearing, a step inside the proceeding, and the
+            # guide keeps hearings ending in one judgment as ONE entry (§3).
+            out.append(event)
+            continue
         sentence = {"text": source[s_lo:s_hi], "start": s_lo, "end": s_hi}
         filing = {
             "id": f"{event['id']}f",
@@ -721,6 +736,58 @@ def split_narrated_filings(payload: dict, source: str) -> int:
         split += 1
     payload["events"] = out
     return split
+
+
+_HEARING_DATE = re.compile(
+    r"\bhearings?\b|\btrial,? (?:which |that )?(?:took place|was held|lasted|ran)\b",
+    re.IGNORECASE,
+)
+
+
+def fold_undated_filings(payload: dict) -> int:
+    """Fold an undated filing into the one decision that disposes of it.
+
+    annotation_guide.txt §3.1: "AN UNDATED FILING DOES NOT GET ITS OWN EVENT.
+    'The prosecutor appealed', with no date, is narrated but undatable ...
+    Keep it inside the decision's record." Kept apart, the decision becomes
+    part_of a filing gold does not have, and both the decision's own link and
+    the next step's link miss (validation, 2026-11-05: 3 such filings in the
+    Luna run cost 4 follows). The decision takes the filing's link; anything
+    linked to the filing is linked to the decision. Returns how many folded."""
+    events = _events(payload)
+    folded: dict[str, str] = {}
+    for filing in events:
+        if not is_filing(filing) or isinstance(filing.get("start_date_span"), dict):
+            continue
+        kids = [
+            e
+            for e in events
+            if (e.get("link") or {}).get("to") == filing["id"]
+            and (e.get("link") or {}).get("kind") != "during"
+            and not is_filing(e)
+            and same_proceeding(e, filing)
+        ]
+        if len(kids) != 1:
+            continue
+        decision = kids[0]
+        if filing.get("link") and filing["link"].get("to") != decision["id"]:
+            decision["link"] = copy.deepcopy(filing["link"])
+        else:
+            decision.pop("link", None)
+        folded[filing["id"]] = decision["id"]
+    if not folded:
+        return 0
+    for event in events:
+        link = event.get("link")
+        if link and link.get("to") in folded:
+            link["to"] = folded[link["to"]]
+            if link["to"] == event["id"]:
+                event.pop("link")
+    payload["events"] = [e for e in events if e["id"] not in folded]
+    for item in payload.get("circumstances") or []:
+        if isinstance(item, dict) and item.get("gives_rise_to") in folded:
+            item["gives_rise_to"] = folded[item["gives_rise_to"]]
+    return len(folded)
 
 
 _APEX_COURT = re.compile(
@@ -854,6 +921,7 @@ def finalize(payload: dict, source: str | None = None) -> dict:
     split_narrated_filings), so links to them resolve to the filing.
     """
     split = split_narrated_filings(payload, source) if source else 0
+    folded = fold_undated_filings(payload)
     # The list is already in document order: extraction writes it that way
     # and apply_fixes inserts added events at their own position.
     events = _events(payload)
@@ -923,6 +991,7 @@ def finalize(payload: dict, source: str | None = None) -> dict:
     }
     counts["cycles_broken"] = broken
     counts["filings_split"] = split
+    counts["undated_filings_folded"] = folded
     counts["minor_rerouted"] = rerouted
     counts["levels_normalised"] = normalise_levels(payload)
 
@@ -2379,7 +2448,9 @@ def run_stage1_agents(
             "before": {"payload": before, "finalize": before_log},
         }
 
-    # 5. TYPED LINKS
+    # 5. TYPED LINKS. The draft as it stood is kept, so typing rules can be
+    # replayed offline against the same links (finalize reroots them).
+    log["prefinal"] = copy.deepcopy(payload)
     log["finalize"] = finalize(payload, source)
     stats.update(filters)
     return log

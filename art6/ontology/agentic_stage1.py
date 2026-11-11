@@ -199,7 +199,6 @@ EVENT_KEYS = {
     "description",
     "decision_date_iso",
     "start_date_iso",
-    "significance",
 }
 # Fields the extraction prompt used to carry and this stage now owns.
 LEGACY_LINK_KEYS = ("follows", "follows_span")
@@ -687,7 +686,6 @@ def split_narrated_filings(payload: dict, source: str) -> int:
         event.pop("institution_narrated_span", None)
         if event.get("start_date_iso"):
             filing["start_date_iso"] = event.pop("start_date_iso")
-        filing["significance"] = "major"
         if event.get("description"):
             # The model's one description may be of either act (Stanev: the
             # decision said "the prosecutor applied"; Sawoniuk: a filing said
@@ -843,28 +841,30 @@ def finalize_circumstances(payload: dict, remap: dict, root: dict) -> None:
         payload.pop("strasbourg_application")
 
 
-def reroute_past_minor(links: dict, by_id: dict) -> int:
-    """Point a major event's link past MINOR predecessors to the major act above.
+def is_step(event: dict) -> bool:
+    """A step that decided nothing: a hearing, a questioning, an expert report,
+    a lawyer chasing progress. Not a filing, no outcome, not pending -- the
+    field rules omit `outcome` on exactly these."""
+    return not (event.get("outcome") or event.get("pending_span") or is_filing(event))
+
+
+def reroute_past_steps(links: dict, by_id: dict) -> int:
+    """Point a decision's or filing's link past STEPS to the act above them.
 
     A hearing, a questioning or a lawyer chasing progress decides nothing, so
     the next decision does not continue it: it continues the filing or ruling
-    the minor step sat inside. The linker still lands on such steps -- in the
-    10-set review (2026-11-04) 13 of Luna's 32 missed gold links ran through a
-    minor extra step whose chain never reached the gold predecessor. Minor
-    events keep their own links, so the step stays attached where it was.
-    A minor step that heads its chain is left as the predecessor: better a
-    link to it than none. Returns how many links were moved.
+    the step sat inside (plan.txt, LINKING TO A MINOR STEP). The linker still
+    lands on such steps -- in the 10-set review (2026-11-04) 13 of Luna's 32
+    missed gold links ran through one. Steps keep their own links, so each
+    stays attached where it was. A step that heads its chain is left as the
+    predecessor: better a link to it than none. Returns how many links moved.
     """
     moved = 0
     for eid, link in links.items():
-        if by_id[eid].get("significance") == "minor":
+        if is_step(by_id[eid]):
             continue
         target, seen = link["to"], {eid}
-        while (
-            by_id[target].get("significance") == "minor"
-            and target in links
-            and target not in seen
-        ):
+        while is_step(by_id[target]) and target in links and target not in seen:
             seen.add(target)
             target = links[target]["to"]
         if target != link["to"] and target != eid:
@@ -905,7 +905,7 @@ def finalize(payload: dict, source: str | None = None) -> dict:
     broken = break_cycles(payload)
     by_id = {e["id"]: e for e in events}
     links = {e["id"]: e.pop("link") for e in events if e.get("link")}
-    rerouted = reroute_past_minor(links, by_id)
+    rerouted = reroute_past_steps(links, by_id)
     for event in events:
         for key in ("follows", "part_of", "occurs_during", "link_span"):
             event.pop(key, None)
@@ -958,7 +958,7 @@ def finalize(payload: dict, source: str | None = None) -> dict:
     counts["cycles_broken"] = broken
     counts["filings_split"] = split
     counts["undated_filings_folded"] = folded
-    counts["minor_rerouted"] = rerouted
+    counts["steps_rerouted"] = rerouted
     counts["levels_normalised"] = normalise_levels(payload)
 
     used = {e.get("track") for e in events}
@@ -1128,7 +1128,6 @@ def render_event(event: dict, candidates: list[str] | None = None) -> str:
     lines = [
         f"EVENT {event['id']}"
         + (f"  [track {event['track']}]" if event.get("track") else "")
-        + (f"  [{event['significance']}]" if event.get("significance") else "")
     ]
     if event.get("description"):
         lines.append(f"  description: {event['description']}")

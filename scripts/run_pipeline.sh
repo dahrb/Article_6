@@ -18,7 +18,10 @@
 set -uo pipefail
 OUT=$(readlink -m "$1"); SRC=$(readlink -f "$2")
 source "$(dirname "$0")/env.sh"
-RUNS=(${RUNS:-luna luna deepseek deepseek}); STEPS=" ${STEPS:-1 2 3} "; MIN_RUNS=${MIN_RUNS:-2}
+read -ra RUNS <<< "${RUNS:-luna luna deepseek deepseek}"; STEPS=" ${STEPS:-1 2 3} "; MIN_RUNS=${MIN_RUNS:-2}
+for name in "${RUNS[@]}"; do
+  [[ -n "${STAGE1_MODEL[$name]:-}" ]] || { echo "unknown run '$name' (known: ${!STAGE1_MODEL[*]})" >&2; exit 2; }
+done
 mkdir -p "$OUT"; cd "$REPO"
 log() { echo "$(date +%T) $*" | tee -a "$OUT/run.log"; }
 cost() { echo "$1 $(openrouter_usage) $(date +%T)" >> "$OUT/cost.log"; }
@@ -59,12 +62,7 @@ if [[ "$STEPS" == *" 3 "* ]]; then
     --stage1-dir "$OUT/s1" --original-jsonl "$SRC" --max-rounds 3 --workers 2 \
     --model "$MODEL" --base-url "$BASE_URL" --temperature 0.0 > "$OUT/s3.log" 2>&1
   log "stage 3 exit $?"
-  mkdir -p "$OUT/g3"; n=0
-  while IFS= read -r line; do
-    n=$((n + 1)); [[ -z "${line// }" ]] && continue
-    cid=$(python3 -c 'import json,sys; print(json.loads(sys.argv[1])["case_id"])' "$line")
-    f="$OUT/rep/bundle.L$n.facts.ttl"; [[ -f "$f" ]] && cp "$f" "$OUT/g3/$cid.facts.ttl" || log "MISSING $cid"
-  done < "$OUT/in/bundle.jsonl"
+  graphs_by_case "$OUT/in/bundle.jsonl" "$OUT/rep" "$OUT/g3" | tee -a "$OUT/run.log"
   log "stage 3: $(ls "$OUT"/g3/*.facts.ttl 2>/dev/null | wc -l) graph(s) in $OUT/g3"
   cost stage3
 fi

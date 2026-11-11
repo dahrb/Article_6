@@ -31,7 +31,7 @@ are skipped on a "no".
       the document's own words -- 'custody of the applicant's children'. The substance,
       not the track. One per distinct subject matter; omit if too varied to characterise."]
   },
-  "events": [
+  "events": [  -- PROCEDURAL events only. See PROCEDURAL OR FACTUAL.
     {
       "id": "e1",
       "order": 1,
@@ -47,7 +47,6 @@ are skipped on a "no".
         ('on 19 May' in a passage about 1998 is 1998-05-19). A judgement, not a copy.",
       "start_date_span": "the date it was begun or lodged, if separately given",
       "start_date_iso": "the same, normalised, for start_date_span",
-      "significance": "major | minor. See SIGNIFICANCE.",
       "institution_narrated_span": "words from a SEPARATE SENTENCE narrating the act of
         lodging or instituting THIS entry. See NARRATED VS REPORTED.",
       "authority_span": "the body that decided it, as named",
@@ -92,7 +91,7 @@ are skipped on a "no".
       ]
     }
   ],
-  "circumstances": [
+  "circumstances": [  -- FACTUAL events. See PROCEDURAL OR FACTUAL.
     {
       "id": "c1",
       "description": "ONE short plain sentence in your own words: what happened, to whom.",
@@ -203,33 +202,40 @@ judgment or the applicant was not a party:
     alterations", a partial award;
   - unknown ONLY for housekeeping, or where the act truly neither helps nor harms them.
 
-SIGNIFICANCE. Every event gets one tag; both kinds are kept.
+PROCEDURAL OR FACTUAL. Every dated occurrence in the history of the case is one of two
+kinds, and both are recorded:
 
-  - `major`: it moved the case or changed someone's position -- a filing that opens a
-    proceeding or an appeal, a judgment, an appeal ruling, a refusal or grant of a request,
-    a charge, an arrest, a detention, a release, a measure imposed, a decision by an
-    administrative body, an enforcement act, a placement of a person in a care home or
-    hospital by an authority.
-    ALWAYS major, whoever made it and however small it looks: ANY order, decision or
-    ruling by a court, judge, investigating judge or prosecutor that is dated in the
-    text -- a decision closing an investigation, an order excluding evidence, an order
-    to pay costs, "further orders" in the case, the case transferred to another court,
-    a decision on a request to remove a judge -- AND a party's objection to an
-    indictment, an investigative act on the ground (an inspection of the crime scene, a
-    search, a seizure), and an official report on the facts submitted to a prosecutor
-    or court.
-  - `minor`: a step INSIDE a proceeding that changed nobody's position and that no
-    authority ordered -- a lawyer asking about progress, a body forwarding documents or
-    requesting a report, a witness questioned, an amendment to a claim, a hearing
-    scheduled, held, cancelled or adjourned, a detainee moved between prisons or into a
-    prison hospital, an agreement between private parties, a medical examination that
-    decided nothing.
-  When in doubt between the two, an act by a court, judge or prosecutor is major.
+  - PROCEDURAL -> `events`: it involves an official or state-recognised body -- a court or
+    tribunal, a judge, a prosecutor, the police or another investigating body, a ministry,
+    agency, council, fund or welfare office, a public hospital or care institution acting
+    in that role, a prison or detention authority, a bailiff, AND a professional or
+    disciplinary body recognised by the state (a Bar council or its disciplinary
+    commission, a medical council). The body need not have decided anything. These are
+    ALL procedural:
+      - filings to such a body, and every decision, order, judgment or measure it took;
+      - hearings, whether scheduled, held, adjourned or cancelled; a witness, suspect or
+        expert questioned; an expert report commissioned or produced for the body;
+      - a party or lawyer asking the body about progress, chasing a reply, or supplying
+        documents, and the body forwarding a file or asking for a report;
+      - an arrest, police custody, a search, a seizure, a detention, a release, a transfer
+        between prisons or into a prison hospital;
+      - a step before a professional or disciplinary body: a complaint to it, its meeting
+        on the case, its election or appointment of someone to act in the case, its decision;
+      - an agreement that settles or withdraws a claim pending before such a body.
+  - FACTUAL -> `circumstances`: no official or state-recognised body is involved -- what
+    happened to or between people or companies: the incident complained of, an injury, an
+    illness or diagnosis no authority produced, a death, a birth, marriage or divorce, a
+    move, a hiring or dismissal by a private employer, a sale, lease, contract or loan,
+    private correspondence, a publication.
+  When in doubt: if an official or state-recognised body took part, it is procedural.
+  This overrides the guide's §3 where it folds hearings into the judgment: a hearing
+  dated on its own is its own event; a hearing on the same date as the judgment that
+  closed it stays ONE event, the judgment.
 
 Every event needs a date you can state. "On 1 and 3 April 1996" is two events if the acts
 differ and one (the first date) if they repeat. "In October and November 1993" is
 `1993-10`. An event narrated with no date at all that cannot be placed from context: keep
-it only if it is major, and omit the `_iso` fields.
+it only if it is a filing or a decision, and omit the `_iso` fields.
 
 MATTER. What the act was substantively ABOUT -- not the procedure (that is
 `proceeding_type`) and not the body. Fill it on every event that is about something; a list
@@ -287,17 +293,18 @@ date, it is an event, including what reads as background:
   - a bare-year or undated-day filing ("on an unspecified date in 2000 the prosecutor
     applied to the court") is a filing event with the year as its start date.
 
-NOT EVENTS. What a private person or company did (a bid at an auction, a private sale),
-general conditions (building works, an economic crisis), and what a party merely alleges an
-authority did: if dated, these go in `circumstances`. An agreement that settles a claim
-before a court, or a dispute that was or could have been litigated -- a termination
-agreement with payment, a debt protocol, a friendly settlement -- is an EVENT (`settled or
-withdrawn`), whoever the parties are.
+NOT EVENTS. What a private person or company did (a bid at an auction, a private sale, a
+contract, a repayment schedule agreed between companies), and what a party merely alleges
+an authority did: if dated, these go in `circumstances`. General conditions (building works,
+an economic crisis) go nowhere. An agreement that settles or withdraws a claim PENDING
+before a court or another body -- a friendly settlement, a withdrawal on payment -- is an
+EVENT (`settled or withdrawn`), whoever the parties are. So is an agreement to which an
+official or state body is itself a party -- a debt liquidation protocol with a state fund,
+a termination or settlement agreement with a public authority: the body took part.
 
 MEDICAL STEPS. An examination, treatment or diagnosis by a public hospital, prison doctor or
-expert is an event with `matter` health, and `minor` unless it decided something about
-someone (a finding of unfitness to work or to stand trial, an order for treatment or
-placement). A diagnosis or illness that no authority produced is a circumstance.
+expert is an event with `matter` health, whether or not it decided something about someone.
+A diagnosis or illness that no authority produced is a circumstance.
 
 ## CIRCUMSTANCES -- THE REST OF THE TIMELINE
 
@@ -307,9 +314,12 @@ assault, an alleged ill-treatment, an injury, a death, an illness or diagnosis, 
 marriage or divorce, a move or stay somewhere, a hiring or dismissal by a private employer,
 a sale, lease, contract or loan, a letter or publication between private parties.
 
-The test is WHO ACTED. Any court, prosecutor, police force, ministry, council, fund, welfare
-office, public hospital or care institution acting in that role -> `events`, never here. A
-private person or company, or nobody (something happened) -> `circumstances`.
+The test is the one in PROCEDURAL OR FACTUAL: did an official or state-recognised body take
+part? Yes -> `events`, never here. A private person or company, or nobody (something
+happened) -> `circumstances`. Go through the facts a second time for these: STOP AT EVERY
+DATE that is not already an event and record what happened there. The factual history
+(the incident, the injuries, the contract, the dismissal) is as much part of the record
+as the proceedings.
 
   - A change in someone's liberty or placement is ALWAYS an event, even with no actor named:
     a release from detention, a placement in or removal from an institution, a

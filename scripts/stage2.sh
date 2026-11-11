@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # stage2.sh BUNDLE_JSONL OUT_DIR PROJECT SEED_DIR SHAPES_DIR
+# Environment: STAGE2_MODEL, STAGE2_BODY (OpenRouter id and request body) replace
+# the default Gemma-on-Crusoe model; scripts/oneshot.sh uses them.
 # OntoCast (stage 2) over the bridge's bundle, 3 shards, up to 3 attempts for
 # documents that failed. Graphs are copied to OUT_DIR/<case_id>.facts.ttl; OntoCast's
 # own outputs (bundle.L<n>.*) stay in OUT_DIR/_work/raw, which stage 3 starts from.
@@ -13,8 +15,12 @@ for ds in facts ontologies shapes; do
 done
 mkdir -p "$OUT"; W="$OUT/_work"; rm -rf "$W"
 (
+  # OntoCast's own settings first, then env.sh again so the pipeline's key,
+  # model and provider body win over anything ontology_vllm.env sets.
   set -a; source <(grep -vE '^(LLM_API_KEY|FUSEKI_AUTH)=' "$REPO/ontology/ontology_vllm.env"); set +a
   source "$(dirname "$0")/env.sh"
+  # STAGE2_MODEL / STAGE2_BODY swap the model (the one-shot baselines); default Gemma on Crusoe.
+  export MODEL="${STAGE2_MODEL:-$MODEL}" ART6_EXTRA_BODY="${STAGE2_BODY:-$ART6_EXTRA_BODY}"
   export LLM_MODEL_NAME="$MODEL" LLM_BASE_URL="$BASE_URL" LLM_TEMPERATURE=0.4
   export LLM_GRAPH_FORMAT=jsonld LLM_OUTPUT_LAYOUT=free LLM_MAX_INFLIGHT=4 CHUNK_SECTION_CLASSIFIER=off \
          CHUNK_MIN_SIZE=40000 CHUNK_MAX_SIZE=45000 ONTOLOGY_CONTEXT_FIXED_ONTOLOGY_ID=echr \
@@ -34,8 +40,5 @@ mkdir -p "$OUT"; W="$OUT/_work"; rm -rf "$W"
     python3 "$T" merge --input "$IN" --raw-dir "$W/raw" --root "$root" >/dev/null
   done
 )
-n=0; while IFS= read -r line; do n=$((n+1)); [[ -z "${line// }" ]] && continue
-  cid=$(python3 -c 'import json,sys; print(json.loads(sys.argv[1])["case_id"])' "$line")
-  f="$W/raw/$(basename "$IN" .jsonl).L$n.facts.ttl"; [[ -f "$f" ]] && cp "$f" "$OUT/$cid.facts.ttl" || echo "MISSING $cid"
-done < "$IN"
+graphs_by_case "$IN" "$W/raw" "$OUT"
 echo "stage 2: $(ls "$OUT"/*.facts.ttl 2>/dev/null | wc -l) graph(s) in $OUT"

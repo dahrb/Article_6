@@ -61,12 +61,11 @@ and `cost.log` (OpenRouter usage after each stage).
 ## Scoring
 
 ```bash
-# stage-1 payloads, major events only
+# stage-1 payloads (procedural events)
 uv run python -m art6.ontology.diagnostics.score_payloads voted=results/my_run/s1
 
-# final graphs: drop minor events, then score
-uv run python -m art6.ontology.diagnostics.major_only results/my_run/g3 results/my_run/s1 results/my_run/g3_major
-uv run python -m art6.ontology.diagnostics.score_graphs final=results/my_run/g3_major
+# final graphs (procedural events; factual circumstances are not scored)
+uv run python -m art6.ontology.diagnostics.score_graphs final=results/my_run/g3
 
 # why gold events are missed, and what the extra events are
 uv run python -m art6.ontology.diagnostics.miss_audit --source cases.jsonl --extras results/my_run/s1

@@ -7,9 +7,8 @@ events (2026-11-06: 2 Luna + 2 DeepSeek runs, events kept by >= 2 of 4, link
 vote: event F1 87 -> 89, follows 58-60 -> 64-66; a fifth, same-model run made
 it worse, and weighting the stronger model's votes did not help).
 
-The vote works on MAJOR events only (`significance` != minor). Each other run
-is aligned to the BASE run with the scorer's own aligner (the base plays gold),
-then:
+The vote is over procedural events (`events`). Each other run is aligned to
+the BASE run with the scorer's own aligner (the base plays gold), then:
 
   event vote   a base event is kept if at least `min_runs` runs have it
                (the base counts as one);
@@ -17,10 +16,12 @@ then:
                walking through events the vote dropped) is the one most runs
                give; a tie keeps the base's. The link kind comes with it.
 
-The base run's MINOR events are then put back as side branches
-(with_minor): each keeps its own link when the target survived, otherwise it
-moves up to the nearest surviving ancestor. Nothing major links to a minor
-event, so major-only scores are the same with or without them.
+Factual events (`circumstances`) are pooled, not voted: there is no gold for
+them and single runs find very different sets (2026-11-10, 10-set: 0 to 13 per
+document per run). The base run's are kept, and another run's is added unless
+its words overlap one already kept or a kept event's. Its `gives_rise_to` is
+carried through the alignment. A pointer to a dropped event is removed, as is
+an `occurs_during` link to one.
 
     uv run python -m art6.ontology.vote --out DIR BASE_DIR OTHER_DIR [OTHER_DIR ...]
 """
@@ -72,35 +73,6 @@ def event_date(event: dict, kind: str) -> str | None:
     return _iso(event.get(f"{kind}_date_span"))
 
 
-def major_only(payload: dict) -> dict:
-    """The payload without minor events; links are contracted through them
-    (a -> minor -> b becomes a -> b, keeping a's own link kind)."""
-    by = {e["id"]: e for e in payload["events"]}
-    minor = {i for i, e in by.items() if e.get("significance") == "minor"}
-
-    def up(target, seen):
-        while target in minor and target not in seen:
-            seen.add(target)
-            e = by[target]
-            target = next((e[k] for k in sgm.EDGE_KINDS if e.get(k)), None)
-        return None if target in minor else target
-
-    events = []
-    for e in payload["events"]:
-        if e["id"] in minor:
-            continue
-        e = dict(e)
-        for k in sgm.EDGE_KINDS:
-            if e.get(k) in minor:
-                t = up(e[k], set())
-                if t:
-                    e[k] = t
-                else:
-                    e.pop(k)
-        events.append(e)
-    return {**payload, "events": events}
-
-
 def payload_nodes(payload: dict) -> list:
     """The payload's events as scorer nodes (score_graph_metrics.Node)."""
     out = []
@@ -143,7 +115,7 @@ def predecessor(payload: dict, eid: str, keep: set) -> tuple[str, str] | None:
 
 
 def vote(base: dict, others: list[dict], min_runs: int = 2) -> dict:
-    """Vote over MAJOR-ONLY payloads (major_only). Returns the voted base."""
+    """Vote over the procedural events. Returns the voted base."""
     base = copy.deepcopy(base)
     ids = {e["id"] for e in base["events"]}
     maps = [(o, sgm.align(payload_nodes(base), payload_nodes(o))) for o in others]
@@ -173,52 +145,79 @@ def vote(base: dict, others: list[dict], min_runs: int = 2) -> dict:
     return base
 
 
-def with_minor(voted: dict, full: dict) -> tuple[dict, int]:
-    """Put the base run's minor events back onto the voted payload as side
-    branches. A minor event keeps its link when the target survived, else
-    moves up to the nearest surviving ancestor in the base run (same kind),
-    else loses it. Circumstances and links pointing at a removed event lose
-    that pointer. Returns (payload, how many minor events were added)."""
-    by = {e["id"]: e for e in full["events"]}
-    minor = [
-        copy.deepcopy(e) for e in full["events"] if e.get("significance") == "minor"
-    ]
-    keep = {e["id"] for e in voted["events"]} | {e["id"] for e in minor}
-    for e in minor:
-        for k in ALL_LINKS:
-            target, seen = e.get(k), set()
-            while target and target not in keep and target not in seen:
-                seen.add(target)
-                up = by.get(target, {})
-                target = next((up[x] for x in LINKS if up.get(x)), None)
-            if e.get(k):
-                if target and target in keep and target != e["id"]:
-                    e[k] = target
+def _span(item: dict) -> tuple | None:
+    s = item.get("what_happened_span")
+    if not isinstance(s, dict):
+        return None
+    if isinstance(s.get("start"), int) and isinstance(s.get("end"), int):
+        return ("at", s["start"], s["end"])
+    text = " ".join(str(s.get("text") or "").lower().split())
+    return ("text", text) if text else None
+
+
+def _overlaps(a: tuple, b: tuple) -> bool:
+    if a[0] == b[0] == "at":
+        return a[1] < b[2] and b[1] < a[2]
+    if a[0] == b[0] == "text":
+        return a[1] in b[1] or b[1] in a[1]
+    return False
+
+
+def pool_circumstances(voted: dict, others: list[dict]) -> dict:
+    """Add the other runs' circumstances to the voted base's (see the module
+    docstring); renumbered c1..cN in text order."""
+    taken = [x for x in map(_span, voted["events"]) if x]
+    pooled = []
+    for run, payload in enumerate([voted, *others]):
+        m = {} if run == 0 else sgm.align(payload_nodes(voted), payload_nodes(payload))
+        for c in payload.get("circumstances") or []:
+            sp = _span(c)
+            if run and (sp is None or any(_overlaps(sp, t) for t in taken)):
+                continue
+            c = copy.deepcopy(c)
+            if run and c.get("gives_rise_to"):
+                target = m.get(c["gives_rise_to"])
+                if target:
+                    c["gives_rise_to"] = target
                 else:
-                    e.pop(k)
-    order = {e["id"]: i for i, e in enumerate(full["events"])}
-    events = sorted(voted["events"] + minor, key=lambda e: order.get(e["id"], 1e9))
-    ids = {e["id"] for e in events}
-    payload = {**full, "events": events}
-    for e in events:
+                    c.pop("gives_rise_to")
+            pooled.append(c)
+            if sp:
+                taken.append(sp)
+    pooled.sort(
+        key=lambda c: (
+            c["what_happened_span"]["start"]
+            if isinstance(c.get("what_happened_span"), dict)
+            and isinstance(c["what_happened_span"].get("start"), int)
+            else 1 << 30
+        )
+    )
+    for n, c in enumerate(pooled, 1):
+        c["id"] = f"c{n}"
+    if pooled or "circumstances" in voted:
+        voted["circumstances"] = pooled
+    return voted
+
+
+def drop_dangling(payload: dict) -> dict:
+    """Remove links and `gives_rise_to` pointers to events no longer there."""
+    ids = {e["id"] for e in payload["events"]}
+    for e in payload["events"]:
         for k in ALL_LINKS:
             if e.get(k) and e[k] not in ids:
                 e.pop(k)
     for c in payload.get("circumstances") or []:
         if c.get("gives_rise_to") and c["gives_rise_to"] not in ids:
             c.pop("gives_rise_to")
-    return payload, len(minor)
+    return payload
 
 
-def vote_document(
-    base_doc: dict, other_payloads: list[dict], min_runs: int
-) -> tuple[dict, int]:
+def vote_document(base_doc: dict, other_payloads: list[dict], min_runs: int) -> dict:
     """One document: base `.compress.json` record + the other runs' payloads ->
-    the voted record (base stats kept) and how many minor events were re-added."""
-    full = base_doc["payload"]
-    voted = vote(major_only(full), [major_only(p) for p in other_payloads], min_runs)
-    payload, n_minor = with_minor(voted, full)
-    return {**base_doc, "payload": payload}, n_minor
+    the voted record (base stats kept)."""
+    voted = vote(base_doc["payload"], other_payloads, min_runs)
+    voted = drop_dangling(pool_circumstances(voted, other_payloads))
+    return {**base_doc, "payload": voted}
 
 
 def main() -> None:
@@ -242,7 +241,7 @@ def main() -> None:
     cases = sorted(
         f.name.removesuffix(".compress.json") for f in args.base.glob("*.compress.json")
     )
-    added = missing = 0
+    missing = 0
     for case in cases:
         others = []
         for d in args.others:
@@ -254,15 +253,13 @@ def main() -> None:
         base_doc = json.loads(
             (args.base / f"{case}.compress.json").read_text(encoding="utf-8")
         )
-        doc, n = vote_document(base_doc, others, args.min_runs)
-        added += n
+        doc = vote_document(base_doc, others, args.min_runs)
         (args.out / f"{case}.compress.json").write_text(
             json.dumps(doc, ensure_ascii=False), encoding="utf-8"
         )
     print(
         f"voted {len(cases)} document(s) into {args.out} "
-        f"({len(args.others) + 1} runs, events kept by >= {args.min_runs}; "
-        f"{added} minor events re-attached"
+        f"({len(args.others) + 1} runs, events kept by >= {args.min_runs}"
         + (f"; {missing} document(s) missing from other runs" if missing else "")
         + ")"
     )

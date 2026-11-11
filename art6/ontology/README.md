@@ -26,11 +26,16 @@ Then `finalize` (code, no model) types every link:
 Every link targets the earliest act of its proceeding. Along the way it:
 - splits a filing that was folded into its decision;
 - folds an undated filing into its decision;
-- reroutes links that run past minor steps.
+- reroutes a decision's link past steps that decided nothing (hearings, questionings) to the act above them.
 
 `extract.txt` is the annotation guide with stage 1's field rules on top.
-Its rules on granularity (one date, two acts; what counts as a filing) and on
-significance (major/minor) follow the gold conventions. The critic and fixer
+Its rules on granularity (one date, two acts; what counts as a filing) follow
+the gold conventions. Every dated occurrence is either **procedural** (an official
+or state-recognised body takes part: courts, prosecutors, police, ministries,
+prisons, professional and disciplinary bodies; hearings and progress enquiries
+included) and goes in `events`, or **factual** (the incident, an injury, a
+contract, a dismissal) and goes in `circumstances`, which stage 2 writes as
+`echr:FactualCircumstance`. Only procedural events form chains and are scored. The critic and fixer
 are held to its FIELD RULES section.
 
 **Spans are proof.** The model returns text only; `extraction.py` locates each
@@ -46,8 +51,9 @@ was refused and why, and the draft before `finalize` as `prefinal`).
 4 runs (2 Luna + 2 DeepSeek) aligned to the first with the scorer's aligner.
 - An event is kept if at least 2 runs have it.
 - Each kept event's predecessor is the one most runs give; a tie keeps the base's.
-- Voting is on major events. The base run's minor events are then put back as
-  side branches, so they stay in the graph without affecting the major chain.
+- Voting is on the procedural events. Factual circumstances are pooled across
+  the runs: the base run's, plus any other run's whose words overlap neither one
+  already kept nor a kept event. Pointers to dropped events are removed.
 
 ## Bridge (`bridge.py`, `render_bundles.py`, `prompt_spec.py`)
 
@@ -93,13 +99,13 @@ Each graph gets a `<stem>.reconcile.json` report, which is also the resume marke
 
 | module | does |
 |---|---|
-| `score_payloads` | stage-1 payloads vs gold: events, `follows`, `part_of` (major only by default) |
+| `score_payloads` | stage-1 payloads vs gold: procedural events, `follows`, `part_of` |
 | `score_graphs` | final graphs vs gold: event tiers, typed edges, fields, matter, transitive `follows`, chains |
-| `major_only` | the major-events view of graphs (minor events dropped, links contracted) |
 | `miss_audit` | why each gold event is missed; what each extra event is |
 | `score_graph_metrics` | the strict aligner and edge scorer everything above uses |
 | `score_against_gold`, `field_agreement` | event tiers and per-field agreement |
 | `validate_source_quotes` | does each supporting quote occur verbatim in the judgment |
+| `score_reasonable_time` | the reasonable-time period inferred from the chain (`reasonable_time.py`) vs the Court's own (`annotation/court_periods.yaml`): MAE in months of start, end and length |
 
 Scoring is strict:
 - A filing aligns only with a filing, and a decision only with a decision.
@@ -112,3 +118,4 @@ Scoring is strict:
 | `provider.py` | OpenRouter request bodies (`ART6_EXTRA_BODY`) |
 | `llm_cache.py`, `json_closers.py`, `threadsafe_sparql.py` | response cache, JSON repair, rdflib parse lock |
 | `validate_shapes.py` | SHACL validation against `ontology/echr-shapes.ttl` (also a CLI) |
+| `reasonable_time.py` | deterministic rule: the Art. 6 § 1 period (start, end, pending) from the chain and HUDOC metadata, never from The Law |

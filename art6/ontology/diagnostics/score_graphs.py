@@ -18,8 +18,8 @@ Columns:
   chain P/R    pairwise "same chain" agreement between aligned events, with the
                number of chains asserted and (in gold)
 
-For the major-events-only numbers, run diagnostics.major_only on the graphs
-first.
+Every procedural event in the graph is scored; echr:FactualCircumstance nodes
+are not events and are not loaded.
 """
 
 from __future__ import annotations

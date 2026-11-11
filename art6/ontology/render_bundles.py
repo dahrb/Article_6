@@ -99,7 +99,6 @@ def render(payload: dict, source: str | None = None, mode: str = "bundle") -> st
         for key, label in (
             ("decision_date_iso", "decision date (ISO)"),
             ("start_date_iso", "start date (ISO)"),
-            ("significance", "significance"),
         ):
             if event.get(key):
                 out.append(f"  {label}: {event[key]}")

@@ -1,10 +1,9 @@
-"""Why each gold event is missed, and what the extra events are (strict alignment, major-only).
+"""Why each gold event is missed, and what the extra events are (strict alignment, procedural events).
 
     uv run python -m art6.ontology.diagnostics.miss_audit --source SOURCE_JSONL [--extras] [--verbose] STAGE1_DIR ...
 
 For every gold event the strict aligner leaves unmatched, find the arm event(s) whose own text
 spans cover the gold quote in the judgment, then say why they did not align:
-  minor           the covering arm event exists and aligned, but is tagged minor (dropped)
   kind            covering arm event has the gold date but as the other date kind (filing vs decision)
   date            covering arm event carries a different date (or none)
   merged          covering arm event is already aligned to another gold event (two acts in one entry)
@@ -27,7 +26,7 @@ import yaml
 
 from art6.ontology import agentic_stage1 as a
 from art6.ontology.diagnostics import score_graph_metrics as sgm
-from art6.ontology.vote import event_date, major_only, payload_nodes
+from art6.ontology.vote import event_date, payload_nodes
 
 G = Path("annotation/test")
 
@@ -100,15 +99,10 @@ def audit(d, src):
     C, rows = collections.Counter(), []
     for case in _cases(d):
         full = _load(d, case)
-        core = major_only(json.loads(json.dumps(full)))
         gy = _gold(case)
         gn = sgm.load_gold_nodes(G, case)
-        an = payload_nodes(core)
-        m = sgm.align(gn, an)
+        m = sgm.align(gn, payload_nodes(full))
         got = set(m.values())
-        mfull = sgm.align(gn, payload_nodes(json.loads(json.dumps(full))))
-        invf = {v: k for k, v in mfull.items()}
-        by = {e["id"]: e for e in full["events"]}
         src_t = text[case]
         for g in gn:
             if g.key in got:
@@ -126,12 +120,7 @@ def audit(d, src):
                     )
                     if ov > 0.3 * (hi - lo) or ov > 60:
                         cov.append(e)
-            if (
-                invf.get(g.key)
-                and by.get(str(invf[g.key]), {}).get("significance") == "minor"
-            ):
-                c = "minor"
-            elif cov:
+            if cov:
                 e = cov[0]
                 ek = (
                     "filing"
@@ -148,8 +137,6 @@ def audit(d, src):
                     for y in dates(e)
                 ):
                     c = "date"
-                elif e.get("significance") == "minor":
-                    c = "minor"
                 else:
                     c = "lost-tie"
             else:
@@ -193,7 +180,6 @@ def audit(d, src):
                     [
                         (
                             x["id"],
-                            x.get("significance"),
                             sorted(dates(x)),
                             ws(x.get("description"))[:70],
                         )
@@ -205,7 +191,7 @@ def audit(d, src):
 
 
 def extras(d, src):
-    """arm major events with no gold partner: what are they?"""
+    """arm events with no gold partner: what are they?"""
     text = {
         json.loads(l)["case_id"]: json.loads(l)["text"]
         for l in Path(src).read_text(encoding="utf-8").splitlines()
@@ -213,7 +199,7 @@ def extras(d, src):
     }
     C, rows = collections.Counter(), []
     for case in _cases(d):
-        core = major_only(_load(d, case))
+        core = _load(d, case)
         gy = _gold(case)
         gn = sgm.load_gold_nodes(G, case)
         an = payload_nodes(core)

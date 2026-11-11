@@ -18,7 +18,6 @@ def ev(eid, **extra):
         "id": eid,
         "decision_date_iso": date,
         "what_happened_span": {"text": quote, "start": 0, "end": len(quote)},
-        "significance": "major",
         **extra,
     }
 
@@ -53,12 +52,43 @@ def test_links_walk_through_events_the_vote_dropped():
     }
 
 
-def test_minor_events_are_dropped_for_the_vote_and_put_back_after():
-    hearing = ev("e4", follows="e2", significance="minor")
-    full = run(ev("e1"), ev("e2", follows="e1"), hearing, ev("e3", follows="e4"))
-    assert [e["id"] for e in v.major_only(full)["events"]] == ["e1", "e2", "e3"]
-    assert v.major_only(full)["events"][2]["follows"] == "e2"  # contracted
-    doc, added = v.vote_document({"payload": full}, [v.major_only(full)], min_runs=2)
-    by = {e["id"]: e for e in doc["payload"]["events"]}
-    assert added == 1 and by["e4"]["significance"] == "minor"
-    assert by["e4"]["follows"] == "e2" and by["e3"]["follows"] == "e2"
+def test_every_procedural_event_is_voted_and_circumstances_keep_live_pointers():
+    hearing = ev("e4", follows="e2")  # a hearing is procedural: voted like the rest
+    base = run(ev("e1"), ev("e2", follows="e1"), hearing)
+    base["circumstances"] = [
+        {"id": "c1", "gives_rise_to": "e4"},
+        {"id": "c2", "gives_rise_to": "e1"},
+    ]
+    other = run(ev("e1"), ev("e2", follows="e1"))
+    doc = v.vote_document({"payload": base}, [other], min_runs=2)
+    assert [e["id"] for e in doc["payload"]["events"]] == ["e1", "e2"]
+    assert [c.get("gives_rise_to") for c in doc["payload"]["circumstances"]] == [
+        None,
+        "e1",
+    ]
+
+
+def circ(cid, start, end, **extra):
+    return {
+        "id": cid,
+        "what_happened_span": {"text": "x", "start": start, "end": end},
+        **extra,
+    }
+
+
+def test_circumstances_are_pooled_across_runs_without_duplicates():
+    base = run(ev("e1"), ev("e2", follows="e1"))
+    base["circumstances"] = [circ("c1", 300, 340)]
+    other = run(ev("e1"), ev("e2", follows="e1"))
+    other["circumstances"] = [
+        circ("c1", 310, 330),  # the base's c1 again: skipped
+        circ("c2", 200, 250, gives_rise_to="e1"),  # new: added, pointer carried
+        circ("c3", 10, 30),  # overlaps a kept event's words: skipped
+    ]
+    doc = v.vote_document({"payload": base}, [other], min_runs=2)
+    got = doc["payload"]["circumstances"]
+    assert [(c["id"], c["what_happened_span"]["start"]) for c in got] == [
+        ("c1", 200),
+        ("c2", 300),
+    ]
+    assert got[0]["gives_rise_to"] == "e1"

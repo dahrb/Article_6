@@ -236,7 +236,7 @@ def test_finalize_types_relations_and_points_at_roots():
         "occurs_during": 1,
         "cycles_broken": 0,
         "filings_split": 0,
-        "minor_rerouted": 0,
+        "steps_rerouted": 0,
         "undated_filings_folded": 0,
         "levels_normalised": 0,
     }
@@ -953,35 +953,44 @@ def test_merge_keeps_the_survivors_place_in_the_chain():
     assert by["e3"]["link"]["to"] == "e1"
 
 
-def test_a_decision_links_past_minor_steps_to_the_filing():
+FILING = {"start_date_span": {"text": "1 May 2001"}}
+DECIDED = {"outcome": "merits decided", "decision_date_span": {"text": "9 May 2001"}}
+HEARING = {"decision_date_span": {"text": "5 May 2001"}}  # no outcome: decided nothing
+
+
+def test_a_decision_links_past_steps_to_the_filing():
     by_id = {
-        "e1": {"id": "e1", "significance": "major"},
-        "e2": {"id": "e2", "significance": "minor"},
-        "e3": {"id": "e3", "significance": "minor"},
-        "e4": {"id": "e4", "significance": "major"},
+        "e1": {"id": "e1", **FILING},
+        "e2": {"id": "e2", **HEARING},
+        "e3": {"id": "e3", **HEARING},
+        "e4": {"id": "e4", **DECIDED},
     }
     links = {
         "e2": {"to": "e1", "kind": "continues"},
         "e3": {"to": "e2", "kind": "continues"},
         "e4": {"to": "e3", "kind": "continues"},
     }
-    assert a.reroute_past_minor(links, by_id) == 1
+    assert a.reroute_past_steps(links, by_id) == 1
     assert links["e4"]["to"] == "e1"
-    assert links["e3"]["to"] == "e2"  # minor steps keep their own place
+    assert links["e3"]["to"] == "e2"  # steps keep their own place
 
 
-def test_a_minor_step_heading_its_chain_stays_the_predecessor():
-    by_id = {"e1": {"id": "e1", "significance": "minor"}, "e2": {"id": "e2"}}
+def test_a_step_heading_its_chain_stays_the_predecessor():
+    by_id = {"e1": {"id": "e1", **HEARING}, "e2": {"id": "e2", **DECIDED}}
     links = {"e2": {"to": "e1", "kind": "continues"}}
-    assert a.reroute_past_minor(links, by_id) == 0
+    assert a.reroute_past_steps(links, by_id) == 0
     assert links["e2"]["to"] == "e1"
 
 
-def test_agents_see_significance_and_description():
-    out = a.render_event(
-        {"id": "e1", "significance": "minor", "description": "A hearing was held."}
-    )
-    assert "[minor]" in out and "description: A hearing was held." in out
+def test_filings_decisions_and_pending_acts_are_not_steps():
+    assert not a.is_step(FILING) and not a.is_step(DECIDED)
+    assert not a.is_step({**HEARING, "pending_span": {"text": "pending"}})
+    assert a.is_step(HEARING)
+
+
+def test_agents_see_the_description():
+    out = a.render_event({"id": "e1", "description": "A hearing was held."})
+    assert "description: A hearing was held." in out
 
 
 def test_the_extraction_prompt_offers_the_timeline_matters():

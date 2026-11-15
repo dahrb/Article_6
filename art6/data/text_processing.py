@@ -162,7 +162,7 @@ def process_echr_document(raw_html, is_decision=False):
         r"(?:THE\s+)?FACTS(?:\s*\[\d+\])?(?:\s+.*)?|EN\s+FAIT(?:\s*\[\d+\])?(?:\s+.*)?|LES\s+FAITS(?:\s*\[\d+\])?(?:\s+.*)?|"
         r"(?:THE\s+)?PARTICULAR\s+CIRCUMSTANCES\s+OF\s+THE\s+CASES?(?:\s+.*)?|"
         r"THE\s+CIRCUMSTANCES\s+OF\s+THE\s+CASES?(?:\s+.*)?|CIRCONSTANCES\s+DE\s+L\'AFFAIRE(?:\s+.*)?|"
-        r"THE\s+LAW|EN\s+DROIT|"
+        r"(?:AS\s+TO\s+)?THE\s+LAW|EN\s+DROIT|"
         r"FOR\s+THESE\s+REAS\s*O\s*NS.*|PAR\s+CES\s+MOTIFS.*|F\s*O\s*R\s+T\s*H\s*E\s*S\s*E\s+R\s*E\s*A\s*S\s*O\s*N\s*S.*|"
         r"NOW\s+THEREFORE\s+THE\s+COMMISSION(?:\s+.*)?|"
         r"(?:D[ÉE]CIDES?|DECLARES?)\s+(?:TO\s+)?(?:STRIKE|ADJOURN|HOLD|REJECT).*|"

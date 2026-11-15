@@ -3,8 +3,10 @@
 # Environment: STAGE2_MODEL, STAGE2_BODY (OpenRouter id and request body) replace
 # the default Gemma-on-Crusoe model; scripts/oneshot.sh uses them.
 # OntoCast (stage 2) over the bridge's bundle, 3 shards, up to 3 attempts for
-# documents that failed. Graphs are copied to OUT_DIR/<case_id>.facts.ttl; OntoCast's
-# own outputs (bundle.L<n>.*) stay in OUT_DIR/_work/raw, which stage 3 starts from.
+# documents that failed or came back thinned (fewer than 80% of their events;
+# the fullest version is kept and reported as THINNED if none reaches that).
+# Graphs are copied to OUT_DIR/<case_id>.facts.ttl; OntoCast's own outputs
+# (bundle.L<n>.*) stay in OUT_DIR/_work/raw, which stage 3 starts from.
 set -uo pipefail
 source "$(dirname "$0")/env.sh"
 IN=$(readlink -f "$1"); OUT=$(readlink -m "$2"); P="$3"; SEED=$(readlink -f "$4"); SH=$(readlink -f "$5")
@@ -14,6 +16,7 @@ for ds in facts ontologies shapes; do
     --post-data "dbName=growgraph--$P--$ds&dbType=tdb2" 'http://localhost:3030/$/datasets' >/dev/null 2>&1 || true
 done
 mkdir -p "$OUT"; W="$OUT/_work"; rm -rf "$W"
+cov() { (cd "$REPO" && env -u VIRTUAL_ENV uv run --project "$REPO" python -m art6.ontology.stage2_coverage "$@"); }
 (
   # OntoCast's own settings first, then env.sh again so the pipeline's key,
   # model and provider body win over anything ontology_vllm.env sets.
@@ -38,7 +41,12 @@ mkdir -p "$OUT"; W="$OUT/_work"; rm -rf "$W"
         > "$sd/out.log" 2>&1 &
     done; wait
     python3 "$T" merge --input "$IN" --raw-dir "$W/raw" --root "$root" >/dev/null
+    # A graph that rendered far fewer events than its bundle record is set aside,
+    # so the next attempt redoes it (stage2_coverage.py).
+    thinned=$(cov thin --input "$IN" --raw-dir "$W/raw" --attempt "$attempt")
+    [[ -n "$thinned" ]] && echo "attempt $attempt: thinned graph(s) set aside for retry: $thinned"
   done
+  cov settle --input "$IN" --raw-dir "$W/raw"
 )
 graphs_by_case "$IN" "$W/raw" "$OUT"
 echo "stage 2: $(ls "$OUT"/*.facts.ttl 2>/dev/null | wc -l) graph(s) in $OUT"

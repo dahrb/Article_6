@@ -23,6 +23,12 @@ for name in "${RUNS[@]}"; do
   [[ -n "${STAGE1_MODEL[$name]:-}" ]] || { echo "unknown run '$name' (known: ${!STAGE1_MODEL[*]})" >&2; exit 2; }
 done
 mkdir -p "$OUT"; cd "$REPO"
+# Inputs are the Facts only: a Law section would hand the models the Court's reasoning.
+law=$(python3 -c 'import json,re,sys
+for l in open(sys.argv[1], encoding="utf-8"):
+    if l.strip() and re.search(r"(?m)^#*\s*(?:AS TO )?THE LAW\s*$", json.loads(l)["text"]):
+        print(json.loads(l)["case_id"])' "$SRC")
+[[ -z "$law" ]] || { echo "input has a Law section (re-cut the Facts): $law" >&2; exit 2; }
 log() { echo "$(date +%T) $*" | tee -a "$OUT/run.log"; }
 cost() { echo "$1 $(openrouter_usage) $(date +%T)" >> "$OUT/cost.log"; }
 cost start
@@ -53,6 +59,7 @@ if [[ "$STEPS" == *" 2 "* ]]; then
   bash "$(dirname "$0")/stage2.sh" "$OUT/in/bundle.jsonl" "$OUT/g2" "art6_$(basename "$OUT")" \
     "$OUT/ontology_seed" "$OUT/shapes" > "$OUT/s2.log" 2>&1
   log "$(tail -1 "$OUT/s2.log")"
+  grep -h '^THINNED' "$OUT/s2.log" | while read -r line; do log "$line"; done
   rm -rf "$OUT/rep"; cp -r "$OUT/g2/_work/raw" "$OUT/rep"
   cost stage2
 fi

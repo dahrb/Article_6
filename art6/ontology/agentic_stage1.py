@@ -988,7 +988,7 @@ _FACTS_START = re.compile(
 )
 _FACTS_END = re.compile(
     r"(?m)^[#\s]*(?:[IVX]+\.\s*)?(?:RELEVANT (?:DOMESTIC|LEGAL|INTERNATIONAL)|"
-    r"THE LAW\b|COMPLAINTS?\b|PROCEEDINGS BEFORE THE COMMISSION)"
+    r"(?:AS TO )?THE LAW\b|COMPLAINTS?\b|PROCEEDINGS BEFORE THE COMMISSION)"
 )
 _ANY_DATE = re.compile(
     rf"\b(?:\d{{1,2}}\s+)?(?:{_MONTH_RE})\s+\d{{4}}\b", re.IGNORECASE

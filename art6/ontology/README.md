@@ -119,3 +119,5 @@ Scoring is strict:
 | `llm_cache.py`, `json_closers.py`, `threadsafe_sparql.py` | response cache, JSON repair, rdflib parse lock |
 | `validate_shapes.py` | SHACL validation against `ontology/echr-shapes.ttl` (also a CLI) |
 | `reasonable_time.py` | deterministic rule: the Art. 6 § 1 period (start, end, pending) from the chain and HUDOC metadata, never from The Law |
+| `stage2_coverage.py` | stage-2 guard: a graph whose filled-in event nodes fall below 80% of its bundle's events is set aside and re-rendered by `stage2.sh`; any still short is logged `THINNED` |
+| `../baselines/openie.py` | non-LLM baseline: Stanford OpenIE triples assembled into events by a fixed rule (dated sentence with a legal-act verb); writes stage-1 payloads for `score_payloads`, with and without a naive date-order chain |

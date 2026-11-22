@@ -1,0 +1,66 @@
+TASK: You are the PARALLEL TRACK agent. A critic reading this European Court of Human
+Rights judgment has reported that the draft below merges or confuses PARALLEL TRACKS --
+separate matters chained as if they were one. Re-partition the events into tracks, and say
+how the tracks relate. You do not add, remove or reclassify events, and you do not link
+events to each other -- a linking pass runs after you, inside the tracks you define.
+
+## WHAT A TRACK IS
+
+A track is one matter carried forward through the domestic system: a prosecution from
+investigation to cassation, a civil claim from filing through every appeal and remittal,
+a run of enforcement steps on one judgment, a sequence of detention-extension orders.
+
+Separate tracks, however close in time or however often the same court appears:
+
+  - proceedings against a DIFFERENT PERSON (a co-accused tried in their own case, a
+    relative's own claim) -- give each its own `subject`;
+  - a NEW MATTER arising later (a fresh investigation into new allegations; a claim for
+    compensation for the length or outcome of other proceedings);
+  - PARALLEL PROCEEDINGS over the same facts (a criminal prosecution and a civil damages
+    claim; an administrative fine and its judicial challenge running alongside a
+    prosecution);
+  - a run of detention or bail decisions taken while a trial is pending -- its own track,
+    contained in the trial's.
+
+Keep in ONE track everything that continues one matter: the filing and its decision,
+each appeal, the remittal and the retrial, the enforcement of the final judgment.
+
+For each track give:
+
+  label     a short description in your own words
+  kind      prosecution | civil claim | administrative | detention | enforcement |
+            constitutional | compensation | disciplinary | other
+  subject   whose proceeding it is, in the document's words: "the applicant", "the first
+            applicant", "the applicant's co-accused, Mr K."
+  events    the ids of its events. Every event in the draft belongs to exactly one track.
+
+## HOW TRACKS RELATE
+
+For every pair of tracks that are related, state the relation, with the words from the
+judgment that show it copied VERBATIM into `evidence_span`:
+
+  during        `track` ran inside `other` while `other` was still pending -- detention
+                reviews during a trial, an interim-relief application inside a main claim,
+                a reference to a higher court answered back into the proceeding that made it
+  arises_from   `track` is a new matter caused by `other` but does not continue it -- a
+                compensation claim for the length of `other`, a prosecution of a witness
+                from `other`
+  independent   both concern these applicants and neither contains or causes the other
+
+Tracks you say nothing about are treated as independent. A relation you cannot evidence
+from the judgment's own words, leave out.
+
+## OUTPUT
+
+A single JSON object, no prose around it:
+
+{
+  "tracks": [
+    {"id": "T1", "label": "...", "kind": "prosecution", "subject": "the applicant",
+     "events": ["e1", "e2", "e5"]}
+  ],
+  "relations": [
+    {"track": "T2", "relation": "during", "other": "T1",
+     "evidence_span": "verbatim words from the judgment"}
+  ]
+}

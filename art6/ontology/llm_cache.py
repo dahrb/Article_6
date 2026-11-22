@@ -5,8 +5,8 @@
 
 OntoCast has its own cache behind the same env var, which covers stage 2. This
 one covers the two stages that call the endpoint directly and were therefore
-never replayable at all: stage 1 (compress.py) and stage 3 (new_repair.py via
-repair_facts._stream_patch_text). With all three on, a re-run reproduces a
+never replayable at all: stage 1 (extraction.py) and stage 3 (shacl_loop.py via
+graph_patch._stream_patch_text). With all three on, a re-run reproduces a
 result byte for byte, and a diff in the output is a diff you caused.
 
 WHAT THE KEY INCLUDES, AND THE ONE THING IT DOES NOT
@@ -126,18 +126,6 @@ def store(kind: str, key: str, value: Any) -> None:
 def stats() -> dict[str, int]:
     with _LOCK:
         return dict(_STATS)
-
-
-def summary() -> str:
-    s = stats()
-    if not enabled():
-        return "llm cache: off"
-    total = s["hits"] + s["misses"]
-    rate = f"{s['hits'] / total:.0%}" if total else "n/a"
-    return (
-        f"llm cache: {s['hits']} hit / {s['misses']} miss ({rate}), "
-        f"{s['stores']} stored -> {cache_root()}"
-    )
 
 
 MISS = _MISS

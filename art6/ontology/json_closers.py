@@ -14,7 +14,7 @@ with real error context fed back into retries. Measured across ~800 documents,
 the patch recovered 9 replies on ontocast v0.6.1 and 0 on v0.6.2.
 
 But the defect it addressed is a property of the MODEL, not of OntoCast, and
-`repair_facts.py` calls that model directly for stage-3 repair patches without
+`graph_patch.py` calls that model directly for stage-3 repair patches without
 going through ontocast at all -- so nothing upstream covers those calls. The
 recovery logic therefore outlives the patch that introduced it.
 

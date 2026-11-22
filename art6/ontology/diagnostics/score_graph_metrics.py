@@ -26,8 +26,6 @@ Usage:
 
 from __future__ import annotations
 
-import argparse
-import json
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -37,7 +35,6 @@ from rdflib import Graph, Namespace, URIRef
 
 from art6.ontology.diagnostics.score_against_gold import (
     DATE_SIM_THRESHOLD,
-    Event,
     date_sim,
     prf1,
     quote_sim,
@@ -76,14 +73,6 @@ class Node:
     level: str | None = None
     matters: set[str] = field(default_factory=set)
     edges: dict[str, set] = field(default_factory=lambda: defaultdict(set))
-
-    def as_event(self) -> Event:
-        return Event(
-            body=self.body,
-            decision_date=self.decision_date,
-            start_date=self.start_date,
-            quote=self.quote,
-        )
 
     @property
     def is_filing(self) -> bool:
@@ -141,7 +130,10 @@ def load_arm_nodes(ttl_path: Path) -> list[Node] | None:
         or graph.value(s, ECHR.hasInstanceLevel) is not None
     }
     nodes = []
-    for s in subjects:
+    # Sorted: set order follows the hash seed, and ties in the 1:1 alignment
+    # break by list position, so an unsorted walk scored the same graph
+    # differently from run to run (2026-10-22: 13 vs 15 correct part_of).
+    for s in sorted(subjects, key=str):
         court = graph.value(s, ECHR.hasCourt)
         decision_date = graph.value(s, ECHR.hasDecisionDate)
         start_date = graph.value(s, ECHR.hasProceedingStartDate)
@@ -174,7 +166,12 @@ def load_arm_nodes(ttl_path: Path) -> list[Node] | None:
 
 
 def align(gold: list[Node], arm: list[Node]) -> dict:
-    """1:1 bipartite alignment, same gate as score_document_date_quote."""
+    """1:1 bipartite alignment, same gate as score_document_date_quote.
+
+    A filing only ever pairs with a filing and a decision with a decision:
+    scoring stays strict, so an act recorded as the other kind counts as one
+    miss and one extra (cross-kind alignment was tried and rejected,
+    2026-11-05)."""
     pairs = []
     for gi, g in enumerate(gold):
         for ai, a in enumerate(arm):
@@ -412,42 +409,3 @@ def run(
         )
     )
     return totals
-
-
-def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--run-dir", required=True, type=Path)
-    ap.add_argument("--arms", default="C3,C4")
-    ap.add_argument("--gold-dir", type=Path, default=REPO_ROOT / "annotation/gold")
-    ap.add_argument(
-        "--exclude",
-        default=None,
-        choices=["level_investigative", "matter_investigation"],
-    )
-    ap.add_argument("--out", type=Path, default=None)
-    args = ap.parse_args()
-
-    manifest = json.loads((args.gold_dir / "manifest.json").read_text())
-    docs = manifest["documents"]
-    if docs and "line_id" not in docs[0]:
-        docs = [{**d, "line_id": f"L{i}"} for i, d in enumerate(docs, 1)]
-
-    results = {}
-    for arm in [a.strip() for a in args.arms.split(",") if a.strip()]:
-        r = run(args.run_dir, arm, docs, args.gold_dir, args.exclude)
-        results[arm] = r
-        f1 = r["f1"] if r["f1"] is not None else float("nan")
-        e = r["edges"]["follows"]
-        print(
-            f"{arm}: events F1={f1:.1%}  "
-            f"follows-edges correct={e['correct']}/{e['arm_edges']} "
-            f"(gold {e['gold_edges']})  "
-            f"chains arm={r['arm_shape']['chains']:.0f} gold={r['gold_shape']['chains']:.0f}"
-        )
-    if args.out:
-        args.out.write_text(json.dumps(results, indent=2, default=str))
-        print(f"\nwrote {args.out}")
-
-
-if __name__ == "__main__":
-    main()

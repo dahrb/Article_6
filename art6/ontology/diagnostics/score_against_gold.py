@@ -193,7 +193,10 @@ def load_arm(ttl_path: Path) -> list[Event] | None:
         or graph.value(s, ECHR.hasInstanceLevel) is not None
     }
     out = []
-    for s in subjects:
+    # Sorted: set order follows the hash seed, and ties in the 1:1 alignment
+    # break by list position, so an unsorted walk scored the same graph
+    # differently from run to run (2026-10-22: 13 vs 15 correct part_of).
+    for s in sorted(subjects, key=str):
         court = graph.value(s, ECHR.hasCourt)
         body = str(graph.value(court, ECHR.hasAuthorityName)) if court else None
         decision_date = graph.value(s, ECHR.hasDecisionDate)
@@ -329,12 +332,21 @@ def quote_sim(a: str | None, b: str | None) -> float:
 # over one dropped character. A high-similarity ISO string ("2004-03-16" vs
 # "2004-03-06") still catches that as effectively the same date without
 # opening the gate to genuinely different dates.
-DATE_SIM_THRESHOLD = 0.6
+#
+# The gate was 0.6 until 2026-10-22, which is far too loose on ISO strings:
+# they share most of their characters, so "2001-04-12" vs "2006-03-10" scored
+# 0.7 and events years apart aligned. That inflated event F1 by 3-6 points and
+# scrambled edge endpoints. 0.9 on a 10-character date admits exactly one
+# differing character -- the dropped digit -- and nothing more; dates at
+# different precision ("2000" vs "2000-11-20") agree via dates_match.
+DATE_SIM_THRESHOLD = 0.9
 
 
 def date_sim(a: str | None, b: str | None) -> float:
     if not a or not b:
         return 0.0
+    if dates_match(a, b):
+        return 1.0
     return SequenceMatcher(None, a, b).ratio()
 
 
@@ -386,9 +398,9 @@ def score_document_date_quote(
     (`require_authority=False, quote_floor=0.0` reproduces the original
     "date_quote" mode byte-for-byte):
 
-      DATE:      always gated on date_sim >= DATE_SIM_THRESHOLD (0.6), not
-                 exact equality and not dates_match's bare-year/year-month
-                 leniency -- a character-similarity gate on the ISO strings.
+      DATE:      always gated on date_sim >= DATE_SIM_THRESHOLD (0.9): the same
+                 date at the coarser precision (dates_match), or ISO strings
+                 one character apart (a dropped digit), and nothing looser.
       AUTHORITY: gated on authorities_match iff require_authority.
       QUOTE:     used to rank/break ties among candidates always; additionally
                  REQUIRED to clear quote_floor iff quote_floor > 0.

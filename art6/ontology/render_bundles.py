@@ -17,10 +17,6 @@ supporting quote's provenance.
 
 from __future__ import annotations
 
-import argparse
-import json
-from pathlib import Path
-
 
 def _span(value) -> str | None:
     if isinstance(value, dict) and "text" in value:
@@ -33,7 +29,11 @@ def _line(label: str, value, indent: str = "  ") -> list[str]:
     return [f"{indent}{label}: {rendered}"] if rendered else []
 
 
-def render(payload: dict) -> str:
+def render(payload: dict, source: str | None = None, mode: str = "bundle") -> str:
+    """The stage-1 digest stage 2 reads: the verified fields alone. `source`
+    and `mode` are kept for callers; only the "bundle" format remains (the
+    evidence and paragraph variants were bridge experiments, removed
+    2026-11-09)."""
     out: list[str] = []
     case = payload.get("case") or {}
     if case:
@@ -45,6 +45,35 @@ def render(payload: dict) -> str:
             "judgment_date_span",
         ):
             out += _line(key.removesuffix("_span"), case.get(key))
+        out.append("")
+
+    # Tracks are a planning device, not an ontology class: they tell stage 2
+    # which events belong to one matter, and every link below stays inside one
+    # unless it is occurs_during. Absent on payloads from the old single-call stage 1.
+    tracks = payload.get("tracks") or []
+    labels = {t.get("id"): t.get("label") or "" for t in tracks}
+    if tracks:
+        out.append(
+            f"TRACKS ({len(tracks)}) -- the separate matters these events belong to"
+        )
+        for track in tracks:
+            extra = ", ".join(
+                f"{k}: {track[k]}" for k in ("kind", "subject") if track.get(k)
+            )
+            out.append(
+                f"  {track.get('id')}: {track.get('label') or '(unlabelled)'}"
+                + (f" [{extra}]" if extra else "")
+            )
+        for rel in payload.get("track_relations") or []:
+            words = (
+                rel.get("span", {}).get("text")
+                if isinstance(rel.get("span"), dict)
+                else ""
+            )
+            out.append(
+                f"  {rel['track']} {rel['relation'].replace('_', ' ')} {rel['other']}"
+                + (f' -- "{words}"' if words else "")
+            )
         out.append("")
 
     events = payload.get("events") or []
@@ -60,6 +89,19 @@ def render(payload: dict) -> str:
     out.append("")
     for event in events:
         out.append(f"EVENT {event.get('id', '?')}")
+        if event.get("track"):
+            label = labels.get(event["track"])
+            out.append(f"  track: {event['track']}" + (f" ({label})" if label else ""))
+        if event.get("description"):
+            out.append(
+                f"  description (a summary, not a quote): {event['description']}"
+            )
+        for key, label in (
+            ("decision_date_iso", "decision date (ISO)"),
+            ("start_date_iso", "start date (ISO)"),
+        ):
+            if event.get(key):
+                out.append(f"  {label}: {event[key]}")
         for key in (
             "what_happened_span",
             "authority_span",
@@ -88,8 +130,18 @@ def render(payload: dict) -> str:
         ):
             if event.get(key):
                 out.append(f"  {key}: {event[key]}")
-        if event.get("follows"):
-            out.append(f"  follows: {event['follows']}")
+        # Matter is a list, and was never rendered before 2026-10-22: stage 2
+        # had to re-derive it from the quotes, and matter agreement on the
+        # bundle arm trailed the raw judgment's by 20-40 points.
+        if event.get("matter"):
+            out.append(f"  matter: {', '.join(event['matter'])}")
+        # Chain links. Payloads from agentic_stage1 carry them TYPED and aimed
+        # at the target proceeding's earliest act; old single-call payloads carry
+        # an untyped `follows`, which facts.txt tells stage 2 to type itself.
+        for key in ("follows", "part_of", "occurs_during"):
+            if event.get(key):
+                out.append(f"  {key}: {event[key]}")
+        out += _line("link_words", event.get("link_span"))
         for party in event.get("parties") or []:
             name, role = _span(party.get("name_span")), _span(party.get("role_span"))
             if name:
@@ -117,6 +169,36 @@ def render(payload: dict) -> str:
             out.append("  adjournment:")
             for key in ("date_span", "resumption_span", "cause_span"):
                 out += _line(key.removesuffix("_span"), adjournment.get(key), "    ")
+        out.append("")
+
+    # Timeline extension (extract_permissive.txt + ontology/echr_timeline.ttl):
+    # dated occurrences no authority took, and the lodging in Strasbourg.
+    circumstances = payload.get("circumstances") or []
+    if circumstances:
+        out.append(
+            f"CIRCUMSTANCES ({len(circumstances)}) -- dated occurrences in the case's "
+            "history that are NOT steps by an authority."
+        )
+        out.append("")
+        for item in circumstances:
+            out.append(f"CIRCUMSTANCE {item.get('id', '?')}")
+            if item.get("description"):
+                out.append(
+                    f"  description (a summary, not a quote): {item['description']}"
+                )
+            out += _line("what_happened", item.get("what_happened_span"))
+            out += _line("date", item.get("date_span"))
+            out.append(f"  kind: {item.get('kind') or 'other'}")
+            for person in item.get("persons_spans") or []:
+                out += _line("concerns", person)
+            if item.get("gives_rise_to"):
+                out.append(f"  gives_rise_to: {item['gives_rise_to']}")
+            out.append("")
+    app = payload.get("strasbourg_application")
+    if app:
+        out.append("STRASBOURG APPLICATION")
+        out += _line("lodged", app.get("date_span"))
+        out += _line("what_happened", app.get("what_happened_span"))
         out.append("")
 
     persons = payload.get("persons") or []
@@ -165,79 +247,3 @@ def render(payload: dict) -> str:
             if name:
                 out.append(f"  {name}" + (f" — kind: {kind}" if kind else ""))
     return "\n".join(out).strip() + "\n"
-
-
-def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--compress-dir", required=True, type=Path)
-    ap.add_argument(
-        "--source-jsonl",
-        required=True,
-        type=Path,
-        help="original input.jsonl, for the facts_user_instruction and ids",
-    )
-    ap.add_argument("--out-jsonl", required=True, type=Path)
-    ap.add_argument("--only", default="")
-    args = ap.parse_args()
-
-    wanted = {w.strip() for w in args.only.split(",") if w.strip()}
-    source_lines = [
-        l
-        for l in args.source_jsonl.read_text(encoding="utf-8").splitlines()
-        if l.strip()
-    ]
-    written = 0
-    with args.out_jsonl.open("w", encoding="utf-8") as handle:
-        for index, line in enumerate(source_lines, 1):
-            record = json.loads(line)
-            # Stage 1 names its output after the DOCUMENT when the input carries
-            # a case_id, and falls back to the positional name otherwise. Both
-            # spellings are accepted here: assuming the positional one silently
-            # skipped every document and produced an empty bundles file, which
-            # reads exactly like a compression stage that found nothing.
-            candidates = [
-                f"{record[key]}"
-                for key in ("case_id", "itemid")
-                if str(record.get(key) or "").strip()
-            ] + [f"input.L{index}"]
-            doc_id = next(
-                (
-                    c
-                    for c in candidates
-                    if (args.compress_dir / f"{c}.compress.json").exists()
-                ),
-                candidates[0],
-            )
-            if wanted and doc_id not in wanted:
-                continue
-            path = args.compress_dir / f"{doc_id}.compress.json"
-            if not path.exists():
-                print(f"  {doc_id}: no compression output, skipped")
-                continue
-            payload = json.loads(path.read_text(encoding="utf-8"))["payload"]
-            rendered = render(payload)
-            record["text"] = rendered
-            handle.write(json.dumps(record, ensure_ascii=False) + "\n")
-            written += 1
-            print(
-                f"  {doc_id}: {len(rendered):6,} chars "
-                f"({len(payload.get('events', [])):3} events) "
-                f"<- was {len(json.loads(line).get('text', '')):6,}"
-            )
-    print(f"\nwrote {written} record(s) to {args.out_jsonl}")
-    # A SHORT BUNDLE FILE SILENTLY MISALIGNS THE COMPARISON. Stage 2 names its
-    # outputs from the input file stem plus LINE POSITION, so if compression is
-    # missing for document 5 of ten, every later document shifts up a line and
-    # bundles.L5 is no longer the same case as input.L5. Nothing downstream
-    # would notice; the ablation would just quietly compare different judgments
-    # against each other. Fail here instead.
-    if written != len(source_lines):
-        raise SystemExit(
-            f"{len(source_lines) - written} of {len(source_lines)} document(s) have no "
-            "compression output -- refusing to write a bundle file whose line "
-            "numbering no longer matches the source"
-        )
-
-
-if __name__ == "__main__":
-    main()

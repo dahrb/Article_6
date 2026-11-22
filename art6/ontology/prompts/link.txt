@@ -1,0 +1,22 @@
+TASK: You are given the domestic events already extracted from a European Court of Human
+Rights judgment, already grouped into TRACKS (separate matters), and the judgment itself.
+Say which earlier event each one continues. The tracks are settled: do not move events
+between them, do not add, remove or reclassify events. You only link.
+
+Each event lists its `candidates`: the events that could have come before it, already
+restricted to its own track -- and, for a track that ran during another, to the events of
+the containing track as well. Choose only from that list.
+
+The rules for choosing a predecessor follow; read "track" in them as the tracks given in
+the draft below.
+
+## OUTPUT
+
+A single JSON object, no prose around it:
+
+{
+  "links": [
+    {"event": "e2", "predecessor": "e1", "kind": "continues",
+     "evidence_span": "verbatim words from the judgment"}
+  ]
+}

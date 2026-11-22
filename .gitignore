@@ -8,6 +8,8 @@ __pycache__/
 
 *.ttl
 *.txt
+# prompts are source, not output: every run snapshots them, so they must be versioned
+!art6/ontology/prompts/*.txt
 *.jsonl
 *.json
 
@@ -63,3 +65,9 @@ results/
 # rebuilt by:
 #   uv run python -m art6.data.build_ontocast_test_set
 # annotation/test/*.yaml, like gold/*.yaml, is not matched by any rule above.
+
+# Pipeline launchers are tracked too.
+!scripts/*.sh
+
+# Court reasonable-time labels: hand-drafted for now; to be regenerated reproducibly
+annotation/court_periods.yaml

@@ -34,7 +34,6 @@ standard, and agreement measured against it would not mean what it claims to.
 |---|---|
 | [`annotation_guide.txt`](annotation_guide.txt) | the standard. Grounded in `ontology/echr.ttl` v3.5.0 — every rule traces to a `skos:definition` or `skos:scopeNote` |
 | [`annotation_schema.yaml`](annotation_schema.yaml) | commented template with four worked examples; each key mapped to the triple it stands for |
-| [`evaluated_triples.yaml`](evaluated_triples.yaml) | what is scored, in which tier, and how borderline events are handled. **Scoring only — annotators do not need it** |
 | `gold/` | 20 blank templates, one per case, plus `manifest.json` |
 | `gold_text/` | the 20 source texts, byte-identical to what the pipeline was given |
 | `test/` | the 10 pilot documents, **pre-filled drafts** to correct — a different thing from the calibration set, see [`test/README.md`](test/README.md) |

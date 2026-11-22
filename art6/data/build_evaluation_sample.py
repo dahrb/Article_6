@@ -42,7 +42,7 @@ section alone while the pipeline is fed introduction+procedure+facts; it removed
 court level in disguise, removing 65% of COMMITTEE against 24% of CHAMBER.
 
 Nothing is excluded for length either. The one judgment that exceeds the stage 1
-context window is split by `compress.py` and extracted in independent passes, so
+context window is split by `extraction.py` and extracted in independent passes, so
 document length is the pipeline's concern and not the sampler's.
 
 Usage:

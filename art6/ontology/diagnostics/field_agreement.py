@@ -113,7 +113,10 @@ def load_arm(ttl_path: Path) -> list[FieldNode] | None:
         or graph.value(s, ECHR.hasInstanceLevel) is not None
     }
     nodes = []
-    for s in subjects:
+    # Sorted: set order follows the hash seed, and ties in the 1:1 alignment
+    # break by list position, so an unsorted walk scored the same graph
+    # differently from run to run (2026-10-22: 13 vs 15 correct part_of).
+    for s in sorted(subjects, key=str):
         court = graph.value(s, ECHR.hasCourt)
         decision_date = graph.value(s, ECHR.hasDecisionDate)
         start_date = graph.value(s, ECHR.hasProceedingStartDate)

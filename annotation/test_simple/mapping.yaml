@@ -1,0 +1,84 @@
+# Simplified gold for the 10-set, derived by hand from annotation/test (the
+# original gold is untouched). One entry per set of proceedings, as the Court
+# counts them in committee appendices: the act that opened it (`start`, a gold
+# id, or null when the text never narrates it), the decisions at each level
+# (`decisions`, gold ids), and `pending`. Gold events not listed are not events
+# under the simplified model. Every choice is a draft by Claude (2026-11-22),
+# for checking whether the model is viable -- not an annotation to report.
+# The reason for each non-obvious drop is in the comment.
+
+001-108690:  # Stanev v. Bulgaria
+  - {id: P1, kind: civil, label: "proceedings declaring the applicant partially incapacitated", start: 1, decisions: [2, 3]}
+  - {id: P2, kind: administrative, label: "guardianship and placement measures", start: null, decisions: [4, 5, 9]}
+    # 6 (placement agreement signed) and 7 (taken to the home): execution steps, not decisions
+  - {id: P3, kind: other, label: "request to the prosecutor to seek restoration of legal capacity", start: 8, decisions: [11, 16, 17]}
+  - {id: P4, kind: administrative, label: "request to the mayor, then judicial review of the refusal", start: 12, decisions: [14, 18]}
+    # 15 (application for judicial review): a filing inside the set
+  - {id: P5, kind: administrative, label: "request for a social allowance", start: 10, decisions: [22]}
+    # 23 (allowance later increased): not a ruling on the request
+  # dropped: 13 (request to Rila council, never decided); 19-21 (police search
+  # and return to the home): facts, not proceedings
+
+001-188177:  # Baduashvili v. Georgia
+  - {id: P1, kind: criminal, label: "criminal proceedings against the applicant", start: 3, decisions: [11, 14, 15]}
+    # start = arrest and remand (criminal "charge"); 1, 2, 4 (seizure, search
+    # warrant, inspection) and 5-10 (requests inside the investigation): steps,
+    # not decisions on the charge; 12, 13: convictions of OTHER people; 18 release
+  - {id: P2, kind: criminal, label: "complaint of ill-treatment to the Chief Prosecutor", start: 16, decisions: [17]}
+
+001-189419:  # Scholz AG v. Armenia
+  - {id: P1, kind: civil, label: "claim before the Commercial Court", start: 1, decisions: [4, 6]}
+    # 2, 3 (counterclaim, request to leave unexamined), 5: filings inside the set
+  - {id: P2, kind: civil, label: "claim before the Arbitration Tribunal", start: 7, decisions: [8]}
+  - {id: P3, kind: civil, label: "claim before the Yerevan Civil Court and District Court", start: 9, decisions: [13, 15, 17]}
+    # 10 (claim accepted for examination), 11 (transfer): procedural orders; 12, 14, 16: filings
+
+001-202468:  # M.N. and Others v. Belgium
+  - {id: P1, kind: administrative, label: "visa refusals and urgent stays before the Aliens Appeals Board", start: null, decisions: [1, 2, 3, 4, 5, 6, 23]}
+    # 23: the State's appeal on points of law against the stay of 7 October
+  - {id: P2, kind: administrative, label: "application to set aside the 13 September refusal", start: null, decisions: [17, 22]}
+  - {id: P3, kind: administrative, label: "application to set aside the 10 October refusals", start: null, decisions: [18, 24]}
+  - {id: P4, kind: administrative, label: "application to set aside the 17 October refusals", start: null, decisions: [19, 25]}
+  - {id: P5, kind: civil, label: "civil proceedings before the Brussels courts to obtain the visas", start: null, decisions: [7, 8, 10, 12, 13, 20], pending: true}
+    # pending: the State's appeal on points of law (16) is still pending
+  - {id: P6, kind: enforcement, label: "proceedings before the enforcement judge", start: 14, decisions: [21]}
+    # 15 (the State's own action, same day, same judge): folded into P6; 11 (payment order served): an execution step
+  - {id: P7, kind: administrative, label: "later visa application", start: null, decisions: [9]}
+
+001-22669:  # Klimentyev v. Russia
+  - {id: P1, kind: criminal, label: "criminal proceedings against the applicant", start: 1, decisions: [9, 10, 17, 20]}
+    # 2-8 (seizure, freezing and release of property): investigative measures;
+    # 11, 13 (detention during the retrial), 14-16, 18, 19: interim requests and orders; 21 release
+  - {id: P2, kind: administrative, label: "electoral committee's annulment of the election", start: null, decisions: [12]}
+
+001-248393:  # Erol Aksoy v. Turkiye
+  - {id: P1, kind: administrative, label: "measures taken by the Banking Board and the Fund", start: null, decisions: [1, 2, 3, 7, 8, 16]}
+    # 5, 6, 9-11, 13, 14 (setting up units, tender rounds, reserve prices): steps in one sale; 17 (handover): execution
+  - {id: P2, kind: administrative, label: "earlier challenge before the Supreme Administrative Court", start: null, decisions: [4]}
+  - {id: P3, kind: administrative, label: "annulment action before the Supreme Administrative Court (13th Chamber)", start: 12, decisions: [19, 21, 23]}
+  - {id: P4, kind: administrative, label: "annulment action before the Istanbul Administrative Court", start: 15, decisions: [18, 20, 25]}
+  - {id: P5, kind: enforcement, label: "attempts to have the annulment judgment enforced", start: null, decisions: [22, 27, 29]}
+    # 24, 26 (letters asking for enforcement), 28 (application to the Constitutional Court): filings inside the set
+
+001-248395:  # Martynovskiy v. Ukraine
+  - {id: P1, kind: disciplinary, label: "disciplinary proceedings against the applicant", start: null, decisions: [2, 3, 5]}
+    # 1 (transfer of the complaint): procedural routing; 4 (rule change by the Bar Council): not about the applicant
+  - {id: P2, kind: administrative, label: "appeal to the Kyiv District Administrative Court", start: 6, decisions: [12, 13]}
+    # 9, 11 (suspension and resumption): procedural orders
+  - {id: P3, kind: civil, label: "appeal to the Podilskyy District Court", start: 7, decisions: [8, 10]}
+
+001-58299:  # Beer and Regan v. Germany
+  - {id: P1, kind: civil, label: "first applicant's labour court action against ESA", start: 1, decisions: [4]}
+  - {id: P2, kind: civil, label: "second applicant's labour court action against ESA", start: 2, decisions: [5]}
+  - {id: P3, kind: civil, label: "second applicant's dismissal proceedings against T.I.", start: null, decisions: [3]}
+  # dropped: 6 (private settlement with company T., no domestic body)
+
+001-5878:  # Sawoniuk v. the United Kingdom
+  - {id: P1, kind: criminal, label: "war-crimes prosecution of the applicant", start: 1, decisions: [5, 6, 7]}
+    # 2-4 (bail during the trial): interim rulings inside the set
+
+001-77778:  # Matko v. Slovenia
+  - {id: P1, kind: criminal, label: "criminal proceedings against the applicant", start: 3, decisions: [9, 11, 12, 15, 16, 18, 19, 21, 22]}
+    # 8, 10, 13, 14, 17, 20: filings inside the set; 1 (the arrest of 5 April 1995) belongs to the ill-treatment facts
+  - {id: P2, kind: criminal, label: "applicant's criminal complaint against the police officers", start: 2, decisions: [7]}
+    # 5 (written complaint): a filing inside the set; 4, 6 (Ministry working group and reports): internal steps

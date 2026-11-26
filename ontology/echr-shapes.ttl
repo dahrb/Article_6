@@ -69,7 +69,7 @@ echr:DomesticEventAtomicShape a sh:NodeShape ;
         sh:path echr:hasInstanceLevel ;
         sh:maxCount 1 ;
         sh:in ( echr:LevelInvestigative echr:LevelAdministrativeReview echr:LevelFirstInstance
-                echr:LevelAppeal echr:LevelCassation
+                echr:LevelAppeal echr:LevelCassation echr:LevelConstitutional
                 echr:LevelCaseReview echr:LevelReopening
                 echr:LevelUnknown ) ;
         sh:message "hasInstanceLevel must be a single value from the closed InstanceLevel vocabulary" ;
@@ -159,6 +159,62 @@ echr:DomesticEventAtomicShape a sh:NodeShape ;
         sh:or ( [ sh:class echr:DomesticProceeding ] [ sh:class echr:AdministrativeAction ]
                 [ sh:class echr:EnforcementAction ] [ sh:class echr:ProsecutorialReview ] ) ;
         sh:message "echr:occursDuring must be a single value, pointing at a node typed as one of the four DomesticEvent subclasses" ;
+    ] ;
+    # 4.0.0 sets of proceedings
+    sh:property [
+        sh:path echr:inProceedingSet ;
+        sh:maxCount 1 ;
+        sh:class echr:ProceedingSet ;
+        sh:message "an event belongs to at most one echr:ProceedingSet" ;
+    ] ;
+    sh:property [
+        sh:path echr:reviewsDecision ;
+        sh:maxCount 1 ;
+        sh:or ( [ sh:class echr:DomesticProceeding ] [ sh:class echr:AdministrativeAction ]
+                [ sh:class echr:EnforcementAction ] [ sh:class echr:ProsecutorialReview ] ) ;
+        sh:message "echr:reviewsDecision must be a single value, pointing at a domestic event" ;
+    ] ;
+    sh:property [
+        sh:path echr:appealedBy ;
+        sh:maxCount 1 ;
+        sh:in ( echr:AppealedByApplicant echr:AppealedByOpposingParty echr:AppealedByBoth echr:AppealedByUnknown ) ;
+        sh:message "appealedBy must be a single value from the closed AppealSide vocabulary" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasAppealDate ; sh:maxCount 1 ; sh:node echr:PartialDateShape ;
+        sh:message "a decision may have at most one appeal date, typed as a partial date" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasCommunicationDate ; sh:maxCount 1 ; sh:node echr:PartialDateShape ;
+        sh:message "a decision may have at most one communication date, typed as a partial date" ;
+    ] ;
+    sh:property [
+        sh:path echr:costsBorneBy ;
+        sh:maxCount 1 ;
+        sh:in ( echr:CostsBorneByApplicant echr:CostsBorneByOpposingParty echr:CostsBorneByBoth echr:CostsBorneByUnknown ) ;
+        sh:message "costsBorneBy must be a single value from the closed CostsSide vocabulary" ;
+    ] .
+
+echr:ProceedingSetShape a sh:NodeShape ;
+    sh:targetClass echr:ProceedingSet ;
+    sh:property [
+        sh:path [ sh:inversePath echr:inProceedingSet ] ;
+        sh:minCount 1 ;
+        sh:message "a set of proceedings must hold at least one dated event (its start act or a decision)" ;
+    ] ;
+    sh:property [
+        sh:path echr:hasProceedingType ; sh:maxCount 1 ;
+        sh:message "a set of proceedings has at most one proceeding type" ;
+    ] ;
+    sh:property [
+        sh:path echr:isPending ; sh:maxCount 1 ; sh:datatype xsd:boolean ;
+        sh:message "isPending on a set must be a single boolean" ;
+    ] ;
+    sh:property [
+        sh:path echr:enforcesDecision ;
+        sh:or ( [ sh:class echr:DomesticProceeding ] [ sh:class echr:AdministrativeAction ]
+                [ sh:class echr:EnforcementAction ] [ sh:class echr:ProsecutorialReview ] ) ;
+        sh:message "echr:enforcesDecision must point at a domestic event" ;
     ] .
 
 echr:AuthorityAtomicShape a sh:NodeShape ;

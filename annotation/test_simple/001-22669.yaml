@@ -1,0 +1,103 @@
+# Set-model gold (annotation_guide.txt v3.1), DERIVED from annotation/test/001-22669.yaml
+# by art6/simple/convert_gold.py and annotation/test_simple/mapping.yaml.
+# Draft by Claude (2026-11-23) -- check before reporting. Do not edit by hand:
+# change the mapping and regenerate.
+case_id: "001-22669"
+guide_version: "3.1"
+sets:
+- id: P1
+  kind: Criminal
+  label: criminal proceedings against the applicant
+  start:
+    date: "1995-03-07"
+    body: the Nizhniy Novgorod prosecutor’s office
+    authority_kind: Prosecutorial
+    parties:
+    - name: the applicant
+      side: Responding
+    - name: another person
+      side: Responding
+    matter:
+    - Charge
+    quote: The applicant, together with another person, was charged with embezzlement and other economic
+      crimes on 7 March 1995.
+    gold_id: 1
+  decisions:
+  - id: D1
+    date: "1997-04-21"
+    body: the Nizhniy Novgorod Regional Court
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: Mixed
+    parties:
+    - name: the applicant
+      side: Responding
+    - name: the “Oka” shipyard
+      side: ThirdParty
+    matter:
+    - Conviction
+    - Damages
+    quote: On 21 April 1997 the Nizhniy Novgorod Regional Court found the applicant guilty on some of
+      the charges, and not guilty on most.
+    gold_id: 9
+  - id: D2
+    date: "1997-07"
+    body: the Supreme Court
+    authority_kind: Judicial
+    level: Cassation
+    outcome: Remitted
+    direction: FavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    matter:
+    - Conviction
+    reviews: D1
+    appealed_by: Applicant
+    quote: In July 1997 the Supreme Court quashed the conviction on the applicant’s appeal and remitted
+      the case to the Nizhniy Novgorod Regional Court.
+    gold_id: 10
+  - id: D3
+    date: "1998-05-27"
+    body: the Nizhniy Novgorod Regional Court
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Responding
+    - name: the shipyard “Oka”
+      side: ThirdParty
+    - name: “Zhanto”
+      side: ThirdParty
+    - name: “NL TOP”
+      side: ThirdParty
+    - name: “Slot”
+      side: ThirdParty
+    matter:
+    - Conviction
+    - Damages
+    reviews: D2
+    appealed_by: Unknown
+    quote: On 27 May 1998 the Nizhniy Novgorod Regional Court found the applicant guilty on charges of
+      misappropriation and embezzlement, larceny, bribery and attempt not to return money from abroad.
+    gold_id: 17
+  - id: D4
+    date: "1998-08-10"
+    body: the Supreme Court
+    authority_kind: Judicial
+    level: Cassation
+    outcome: MeritsDecided
+    direction: Mixed
+    parties:
+    - name: the applicant
+      side: Initiating
+    matter:
+    - Conviction
+    reviews: D3
+    appealed_by: Applicant
+    quote: On 10 August 1998 the Supreme Court confirmed the judgment of the Nizhniy Novgorod Regional
+      Court, with some alterations.
+    gold_id: 20

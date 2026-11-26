@@ -1,8 +1,8 @@
-"""The chain-based reasonable-time rule."""
+"""The set-based reasonable-time rule."""
 
 from datetime import date
 
-from art6.ontology import reasonable_time as rt
+from art6.evaluation import reasonable_time as rt
 
 
 def act(key, authority="Judicial", level="FirstInstance", edges=(), **kw):

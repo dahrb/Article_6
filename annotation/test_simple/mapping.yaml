@@ -6,11 +6,15 @@
 # under the simplified model. Every choice is a draft by Claude (2026-11-22),
 # for checking whether the model is viable -- not an annotation to report.
 # The reason for each non-obvious drop is in the comment.
+# 2026-11-23, guide v3: unchallenged administrative measures dropped (Stanev P2,
+# Klimentyev P2, Erol Aksoy P1); `enforces` added to enforcement sets. Set ids
+# are kept as they were, so gaps in the numbering are deliberate.
 
 001-108690:  # Stanev v. Bulgaria
   - {id: P1, kind: civil, label: "proceedings declaring the applicant partially incapacitated", start: 1, decisions: [2, 3]}
-  - {id: P2, kind: administrative, label: "guardianship and placement measures", start: null, decisions: [4, 5, 9]}
-    # 6 (placement agreement signed) and 7 (taken to the home): execution steps, not decisions
+  # guide v3: 4, 5, 9 (guardian appointed, placement, new guardian) are measures
+  # nobody asked for and nobody challenged as such -> not events (the
+  # challenges are P3 and P4); 6, 7: execution steps
   - {id: P3, kind: other, label: "request to the prosecutor to seek restoration of legal capacity", start: 8, decisions: [11, 16, 17]}
   - {id: P4, kind: administrative, label: "request to the mayor, then judicial review of the refusal", start: 12, decisions: [14, 18]}
     # 15 (application for judicial review): a filing inside the set
@@ -41,7 +45,7 @@
   - {id: P4, kind: administrative, label: "application to set aside the 17 October refusals", start: null, decisions: [19, 25]}
   - {id: P5, kind: civil, label: "civil proceedings before the Brussels courts to obtain the visas", start: null, decisions: [7, 8, 10, 12, 13, 20], pending: true}
     # pending: the State's appeal on points of law (16) is still pending
-  - {id: P6, kind: enforcement, label: "proceedings before the enforcement judge", start: 14, decisions: [21]}
+  - {id: P6, kind: enforcement, label: "proceedings before the enforcement judge", start: 14, decisions: [21], enforces: 10}
     # 15 (the State's own action, same day, same judge): folded into P6; 11 (payment order served): an execution step
   - {id: P7, kind: administrative, label: "later visa application", start: null, decisions: [9]}
 
@@ -49,15 +53,17 @@
   - {id: P1, kind: criminal, label: "criminal proceedings against the applicant", start: 1, decisions: [9, 10, 17, 20]}
     # 2-8 (seizure, freezing and release of property): investigative measures;
     # 11, 13 (detention during the retrial), 14-16, 18, 19: interim requests and orders; 21 release
-  - {id: P2, kind: administrative, label: "electoral committee's annulment of the election", start: null, decisions: [12]}
+  # guide v3: 12 (electoral committee annuls the election): an administrative
+  # measure the text never shows challenged -> not an event
 
 001-248393:  # Erol Aksoy v. Turkiye
-  - {id: P1, kind: administrative, label: "measures taken by the Banking Board and the Fund", start: null, decisions: [1, 2, 3, 7, 8, 16]}
-    # 5, 6, 9-11, 13, 14 (setting up units, tender rounds, reserve prices): steps in one sale; 17 (handover): execution
+  # guide v3: 1-3, 5-11, 13, 14, 16 (the Banking Board's and the Fund's own
+  # measures) were not asked for by the applicant and not challenged as such
+  # -> not events; 17 (handover): execution
   - {id: P2, kind: administrative, label: "earlier challenge before the Supreme Administrative Court", start: null, decisions: [4]}
   - {id: P3, kind: administrative, label: "annulment action before the Supreme Administrative Court (13th Chamber)", start: 12, decisions: [19, 21, 23]}
   - {id: P4, kind: administrative, label: "annulment action before the Istanbul Administrative Court", start: 15, decisions: [18, 20, 25]}
-  - {id: P5, kind: enforcement, label: "attempts to have the annulment judgment enforced", start: null, decisions: [22, 27, 29]}
+  - {id: P5, kind: enforcement, label: "attempts to have the annulment judgment enforced", start: null, decisions: [22, 27, 29], enforces: 21}
     # 24, 26 (letters asking for enforcement), 28 (application to the Constitutional Court): filings inside the set
 
 001-248395:  # Martynovskiy v. Ukraine

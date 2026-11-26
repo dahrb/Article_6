@@ -39,7 +39,7 @@ def build(stage1_dir: Path | None, source_jsonl: Path, out_jsonl: Path) -> int:
                         encoding="utf-8"
                     )
                 )["payload"]
-                text = render(payload, text, "bundle")
+                text = render(payload)
             fh.write(
                 json.dumps(
                     {

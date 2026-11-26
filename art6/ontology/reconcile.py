@@ -65,7 +65,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from openai import OpenAI
-from rdflib import RDF, Graph, Namespace, URIRef
+from rdflib import RDF, RDFS, XSD, Graph, Literal, Namespace, URIRef
 
 from art6.ontology import threadsafe_sparql  # noqa: F401 -- installs the parse lock
 from art6.ontology.graph_patch import (
@@ -93,6 +93,8 @@ FIELDS = {
     "outcome": (ECHR.hasOutcome, "Outcome", True),
     "outcome_direction": (ECHR.hasOutcomeDirection, "Direction", True),
     "matter": (ECHR.hasMatter, "Matter", False),
+    "appealed_by": (ECHR.appealedBy, "AppealedBy", True),
+    "costs": (ECHR.costsBorneBy, "CostsBorneBy", True),
 }
 # Rung and procedure belong to the proceeding, so every node of a split
 # entry carries them; outcome, direction and matter belong to the decision.
@@ -101,8 +103,14 @@ RELATIONS = {
     "follows": ECHR.followsProceeding,
     "part_of": ECHR.partOfProceeding,
     "occurs_during": ECHR.occursDuring,
+    "reviews": ECHR.reviewsDecision,
 }
-FUNCTIONAL_RELATIONS = {ECHR.partOfProceeding, ECHR.occursDuring}
+FUNCTIONAL_RELATIONS = {ECHR.partOfProceeding, ECHR.occursDuring, ECHR.reviewsDecision}
+# set-model dates (ontology 4.0.0): stage-1 key -> predicate
+DATE_FIELDS = {
+    "appeal_date_iso": ECHR.hasAppealDate,
+    "communication_date_iso": ECHR.hasCommunicationDate,
+}
 # A graph quote shorter than this must equal the stage-1 span to match it:
 # "gave judgment" is inside a dozen spans in one judgment.
 MIN_CONTAINED_QUOTE = 25
@@ -246,8 +254,10 @@ def match_events(graph: Graph, events: list[dict]) -> Match:
         if m.nodes.get(event["id"]):
             continue
         date = _span(event, "decision_date_span") or _span(event, "start_date_span")
+        # set-model payloads carry ISO dates only
+        iso = event.get("decision_date_iso") or event.get("start_date_iso")
         body = norm(_span(event, "authority_span"))
-        if not date or not body:
+        if not (date or iso) or not body:
             continue
         for node in nodes:
             if node in m.entry_of:
@@ -263,7 +273,7 @@ def match_events(graph: Graph, events: list[dict]) -> Match:
             )
             if (
                 g_date is not None
-                and _date_matches(date, str(g_date))
+                and (_date_matches(date, str(g_date)) if date else str(g_date) == iso)
                 and g_body
                 and (body in g_body or g_body in body)
             ):
@@ -376,10 +386,9 @@ def transcribe(graph: Graph, payload: dict, m: Match) -> list[dict]:
                             graph.add((node, pred, want))
                             note("field_missing", node, pred, None, want, eid)
 
-    # LINKS between matched entries -- only for payloads whose links are
-    # TYPED (agentic_stage1, which always writes `tracks`). the old single-call stage 1's
-    # untyped `follows` leaves partOf vs follows to stage 2, so there is
-    # nothing to hold the graph to.
+    # LINKS between matched entries: stage 1's derived `follows` and its
+    # `reviews` (a payload without `tracks` carries no typed links to hold
+    # the graph to).
     if "tracks" not in payload:
         return audit
     roots = {eid: root_node(graph, nodes) for eid, nodes in m.nodes.items()}
@@ -404,7 +413,100 @@ def transcribe(graph: Graph, payload: dict, m: Match) -> list[dict]:
                 note("link_replaced", s, pred, old, None, m.entry_of[s])
         graph.add((s, pred, o))
         note("link_added", s, pred, None, o, m.entry_of[s])
+
+    # SET-MODEL DATES (only payloads that carry them)
+    for eid, nodes in m.nodes.items():
+        for key, pred in DATE_FIELDS.items():
+            value = by_id[eid].get(key)
+            if not value:
+                continue
+            want = partial_date(value)
+            node = roots[eid]
+            if set(graph.objects(node, pred)) != {want}:
+                for old in list(graph.objects(node, pred)):
+                    graph.remove((node, pred, old))
+                graph.add((node, pred, want))
+                note("field_missing", node, pred, None, want, eid)
+
+    # SETS OF PROCEEDINGS (ontology 4.0.0): each track is one echr:ProceedingSet
+    if payload.get("set_model"):
+        audit += transcribe_sets(graph, payload, m, roots, note)
     return audit
+
+
+def partial_date(value: str) -> Literal:
+    """ "2005", "2005-11" or "2005-11-29" as the matching echr:PartialDate member."""
+    value = str(value)
+    if len(value) == 4:
+        return Literal(value, datatype=XSD.gYear)
+    if len(value) == 7:
+        return Literal(value, datatype=XSD.gYearMonth)
+    return Literal(value, datatype=XSD.date)
+
+
+def transcribe_sets(
+    graph: Graph, payload: dict, m: Match, roots: dict, note
+) -> list[dict]:
+    """Make the graph's sets agree with stage 1's tracks: one echr:ProceedingSet
+    per track (OntoCast's own node where most of the track's events point,
+    else a minted doc:set_<track>), every matched event of the track
+    echr:inProceedingSet it and nothing else, the set's type, label, pending
+    flag and echr:enforcesDecision, and echr:hasProceedingSet from the case."""
+    events = [
+        e for e in payload.get("events") or [] if isinstance(e, dict) and e.get("id")
+    ]
+    doc_ns = str(dict(graph.namespaces()).get("doc", ""))
+    case = next(iter(graph.subjects(RDF.type, ECHR.CaseDocument)), None)
+    claimed: set = set()
+    for track in payload.get("tracks") or []:
+        tid = track.get("id")
+        members = [
+            roots[e["id"]] for e in events if e.get("track") == tid and e["id"] in roots
+        ]
+        if not members:
+            continue
+        votes: dict = {}
+        for n in members:
+            for o in graph.objects(n, ECHR.inProceedingSet):
+                if o not in claimed:
+                    votes[o] = votes.get(o, 0) + 1
+        node = (
+            max(votes, key=lambda k: (votes[k], str(k)))
+            if votes
+            else URIRef(f"{doc_ns}set_{tid}")
+        )
+        claimed.add(node)
+        if (node, RDF.type, ECHR.ProceedingSet) not in graph:
+            graph.add((node, RDF.type, ECHR.ProceedingSet))
+            note("set_added", node, RDF.type, None, ECHR.ProceedingSet, tid)
+        if track.get("label") and not list(graph.objects(node, RDFS.label)):
+            graph.add((node, RDFS.label, Literal(track["label"])))
+        kind = vocabulary_iri("proceeding_type", track.get("kind") or "unknown")
+        if kind is not None and set(graph.objects(node, ECHR.hasProceedingType)) != {
+            kind
+        }:
+            graph.remove((node, ECHR.hasProceedingType, None))
+            graph.add((node, ECHR.hasProceedingType, kind))
+        pending = Literal(bool(track.get("pending")))
+        if set(graph.objects(node, ECHR.isPending)) != {pending}:
+            graph.remove((node, ECHR.isPending, None))
+            graph.add((node, ECHR.isPending, pending))
+        if case is not None and (case, ECHR.hasProceedingSet, node) not in graph:
+            graph.add((case, ECHR.hasProceedingSet, node))
+        for n in members:
+            if set(graph.objects(n, ECHR.inProceedingSet)) != {node}:
+                for old in list(graph.objects(n, ECHR.inProceedingSet)):
+                    graph.remove((n, ECHR.inProceedingSet, old))
+                graph.add((n, ECHR.inProceedingSet, node))
+                note("link_added", n, ECHR.inProceedingSet, None, node, tid)
+        target = roots.get(track.get("enforces"))
+        want = {target} if target is not None else set()
+        if set(graph.objects(node, ECHR.enforcesDecision)) != want:
+            graph.remove((node, ECHR.enforcesDecision, None))
+            for t in want:
+                graph.add((node, ECHR.enforcesDecision, t))
+                note("link_added", node, ECHR.enforcesDecision, None, t, tid)
+    return []
 
 
 # ---------------------------------------------------------------------------

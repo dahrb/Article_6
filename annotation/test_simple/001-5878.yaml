@@ -1,0 +1,69 @@
+# Set-model gold (annotation_guide.txt v3.1), DERIVED from annotation/test/001-5878.yaml
+# by art6/simple/convert_gold.py and annotation/test_simple/mapping.yaml.
+# Draft by Claude (2026-11-23) -- check before reporting. Do not edit by hand:
+# change the mapping and regenerate.
+case_id: "001-5878"
+guide_version: "3.1"
+sets:
+- id: P1
+  kind: Criminal
+  label: war-crimes prosecution of the applicant
+  start:
+    date: "1996-04-01"
+    body: the British police
+    authority_kind: Prosecutorial
+    parties:
+    - name: the applicant
+      side: Responding
+    matter:
+    - Investigation
+    quote: On 1 and 3 April 1996, the applicant was interviewed by the British police concerning his activities
+      in Domachevo during the German occupation.
+    gold_id: 1
+  decisions:
+  - id: D1
+    date: "1999-04-01"
+    body: Mr Justice Potts and a jury
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: Mixed
+    parties:
+    - name: the applicant
+      side: Responding
+    matter:
+    - Conviction
+    quote: On 1 April 1999, the jury convicted the applicant of counts 1 and 3.
+    gold_id: 5
+  - id: D2
+    date: "2000-02-10"
+    body: the Court of Appeal
+    authority_kind: Judicial
+    level: Appeal
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    matter:
+    - Conviction
+    reviews: D1
+    appealed_by: Applicant
+    quote: In its judgment of 10 February 2000, the Court of Appeal rejected the applicant’s appeal.
+    gold_id: 6
+  - id: D3
+    date: "2000-06-15"
+    body: the House of Lords
+    authority_kind: Judicial
+    level: Cassation
+    outcome: Inadmissible
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    matter:
+    - Requests
+    reviews: D2
+    appealed_by: Applicant
+    quote: On 15 June 2000, the House of Lords refused the petition for leave to appeal.
+    gold_id: 7

@@ -46,6 +46,24 @@ ONTOLOGY_TTL = Path(
 ECHR = Namespace("https://growgraph.dev/echr#")
 SH = Namespace("http://www.w3.org/ns/shacl#")
 
+# A throttled or restarting endpoint (a 429, a 502, a dropped port-forward) is
+# waited out, up to TRANSIENT_MAX_WAIT_SECONDS; a 400 is not retried.
+TRANSIENT_MAX_WAIT_SECONDS = 1800
+TRANSIENT_BACKOFF = (5, 15, 30, 60, 120, 300)
+
+
+def _is_transient(exc: Exception) -> bool:
+    """True for "the endpoint is not there", false for "the request is wrong"."""
+    if type(exc).__name__ in {
+        "APIConnectionError",
+        "APITimeoutError",
+        "InternalServerError",
+        "RateLimitError",
+    }:
+        return True
+    status = getattr(exc, "status_code", None) or getattr(exc, "status", None)
+    return status in {408, 409, 429, 500, 502, 503, 504}
+
 
 @lru_cache(maxsize=1)
 def functional_properties() -> frozenset[URIRef]:
@@ -834,7 +852,7 @@ def find_unverified_quotes(graph: Graph, source_text: str) -> list[dict]:
     """Every echr:hasSupportingQuote whose text is not in the source document.
 
     Uses the SAME check the standalone validator applies
-    (`diagnostics.validate_source_quotes.quote_verifies`), imported rather than
+    (`validate_source_quotes.quote_verifies`), imported rather than
     reimplemented so the repair pass can never disagree with the report about
     what counts as verified: curly quotes folded to straight, whitespace runs
     collapsed, and each ellipsis-delimited segment required to appear.
@@ -843,7 +861,7 @@ def find_unverified_quotes(graph: Graph, source_text: str) -> list[dict]:
     exact literal and the model cannot reproduce a long quote from memory --
     the 2026-08-23 sweep skipped repair ops for precisely that reason.
     """
-    from art6.ontology.diagnostics.validate_source_quotes import (
+    from art6.ontology.validate_source_quotes import (
         normalize,
         quote_verifies,
     )
@@ -1068,24 +1086,6 @@ def accepts_temperature(model: str) -> bool:
     return not model.lower().lstrip().startswith(_REASONING_TOKEN_PARAM_PREFIXES)
 
 
-def model_call_kwargs(
-    model: str, *, temperature: float, max_tokens: int, seed: int | None = None
-) -> dict:
-    """Sampling kwargs a given model will accept, in one place.
-
-    Every completion call in this repository goes through here so that swapping
-    a local vLLM model for a hosted one is a --model change and nothing else.
-    `seed` rides with temperature: it is a sampling control, and the families
-    that refuse a temperature have no sampling loop for it to control.
-    """
-    kwargs: dict = dict(_token_limit_kwargs(model, max_tokens))
-    if accepts_temperature(model):
-        kwargs["temperature"] = temperature
-        if seed is not None:
-            kwargs["seed"] = seed
-    return kwargs
-
-
 # A stalled generation emits legal JSON whitespace forever, so this is the
 # length of an unbroken whitespace run that is taken as proof the model has
 # stopped producing content. Sized off the measured failure: a stalled L10
@@ -1162,15 +1162,9 @@ def _stream_patch_text(
     # Reasoning models reject an explicit temperature; see accepts_temperature.
     temp = {"temperature": temperature} if accepts_temperature(model) else {}
     # Wait out a throttled or restarting endpoint the way stage 1 does
-    # (compress.call_with_recovery): a 429 from a hosted provider is "slow
+    # (TRANSIENT_BACKOFF below): a 429 from a hosted provider is "slow
     # down", not "this patch failed", and the two quick retries in call_model
     # used to burn through it in seconds and drop the call.
-    from art6.ontology.extraction import (
-        TRANSIENT_BACKOFF,
-        TRANSIENT_MAX_WAIT_SECONDS,
-        _is_transient,
-    )
-
     waited, attempt = 0.0, 0
     while True:
         try:
@@ -1491,7 +1485,7 @@ def _match_unverified_quote(
     """
     import difflib
 
-    from art6.ontology.diagnostics.validate_source_quotes import normalize
+    from art6.ontology.validate_source_quotes import normalize
 
     candidates = [q for q in unverified_quotes if q.get("subject") == subject]
     if not candidates:
@@ -1518,7 +1512,7 @@ def _quote_in_pool(graph: Graph, text: str) -> bool:
     document: every member of it was chosen by extraction, which could. See the
     QUOTE REUSE note in apply_patch.
     """
-    from art6.ontology.diagnostics.validate_source_quotes import normalize
+    from art6.ontology.validate_source_quotes import normalize
 
     wanted = normalize(unwrap_literal(text))
     if not wanted:
@@ -2106,7 +2100,7 @@ def apply_patch(
                             )
                             audit.append(record)
                             continue
-                        from art6.ontology.diagnostics.validate_source_quotes import (
+                        from art6.ontology.validate_source_quotes import (
                             normalize,
                             quote_verifies,
                         )

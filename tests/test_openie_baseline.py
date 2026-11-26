@@ -1,6 +1,7 @@
 from types import SimpleNamespace as NS
 
-from art6.baselines.openie import chained, events_from
+from art6.baselines.openie import as_doc, events_from
+from art6.model import derived_follows
 
 TEXT = (
     "The applicant lodged an appeal on 3 May 1999. "
@@ -45,8 +46,16 @@ def test_one_event_per_dated_legal_sentence():
     assert ev[1]["authority_span"]["text"] == "Supreme Court"
 
 
-def test_chain_follows_date_order_not_text_order():
+def test_chain_arm_orders_by_date_not_text_order():
     ev = events_from(doc(), TEXT)
     ev.reverse()  # text order no longer matches date order
-    out = {e["id"]: e for e in chained(ev)}
-    assert out["e2"]["follows"] == "e1" and "follows" not in out["e1"]
+    d = as_doc("x", ev, one_set=True)
+    assert len(d["sets"]) == 1
+    start = next(e for e in d["events"] if e["role"] == "start")
+    dec = next(e for e in d["events"] if e["role"] == "decision")
+    assert derived_follows(d) == {dec["id"]: start["id"]}
+
+
+def test_none_arm_gives_every_event_its_own_set():
+    d = as_doc("x", events_from(doc(), TEXT), one_set=False)
+    assert len(d["sets"]) == 2 and not derived_follows(d)

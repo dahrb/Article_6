@@ -1,0 +1,104 @@
+# Set-model gold (annotation_guide.txt v3.1), DERIVED from annotation/test/001-188177.yaml
+# by art6/simple/convert_gold.py and annotation/test_simple/mapping.yaml.
+# Draft by Claude (2026-11-23) -- check before reporting. Do not edit by hand:
+# change the mapping and regenerate.
+case_id: "001-188177"
+guide_version: "3.1"
+sets:
+- id: P1
+  kind: Criminal
+  label: criminal proceedings against the applicant
+  start:
+    date: "2005-07-27"
+    authority_kind: Unknown
+    parties:
+    - name: the applicant
+      side: Responding
+    matter:
+    - Arrest
+    - Detention
+    quote: He was arrested and remanded in custody on 27 July 2005.
+    gold_id: 3
+  decisions:
+  - id: D1
+    date: "2006-12-08"
+    body: the court of first instance
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Responding
+    matter:
+    - Conviction
+    quote: On 8 December 2006 the court of first instance convicted the applicant of aggravated murder
+      and the illegal acquisition, possession and carrying of firearms, and sentenced him to 17 years’
+      imprisonment.
+    gold_id: 11
+  - id: D2
+    date: "2007-06-27"
+    body: the Tbilisi Court of Appeal
+    authority_kind: Judicial
+    level: Appeal
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    matter:
+    - Conviction
+    reviews: D1
+    appealed_by: Applicant
+    quote: On 27 June 2007 the Tbilisi Court of Appeal upheld the applicant’s conviction.
+    gold_id: 14
+  - id: D3
+    date: "2008-02-20"
+    body: the Supreme Court
+    authority_kind: Judicial
+    level: Cassation
+    outcome: Inadmissible
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    reviews: D2
+    appealed_by: Applicant
+    quote: On 20 February 2008 the Supreme Court declared an appeal on points of law lodged by the applicant
+      inadmissible.
+    gold_id: 15
+- id: P2
+  kind: Criminal
+  label: complaint of ill-treatment to the Chief Prosecutor
+  start:
+    date: "2010-08-25"
+    body: the Chief Prosecutor
+    authority_kind: Prosecutorial
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the governor of Rustavi Prison no. 6
+      side: Responding
+    matter:
+    - Investigation
+    quote: On 25 and 26 August 2010 the applicant complained to the Chief Prosecutor that on 19 August
+      2010, directly before being transferred to Kutaisi Prison no. 2, he had been severely beaten by
+      the governor of Rustavi Prison no. 6 and had sustained serious injuries to his ribs, head and backbone.
+    gold_id: 16
+  decisions:
+  - id: D4
+    date: "2010-08-31"
+    body: the Chief Prosecutor
+    authority_kind: Prosecutorial
+    level: Investigative
+    outcome: MeritsDecided
+    direction: FavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the governor of Rustavi Prison no. 6
+      side: Responding
+    matter:
+    - Investigation
+    quote: On 31 August 2010 an investigation was opened into the applicant’s allegations.
+    gold_id: 17

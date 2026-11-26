@@ -21,11 +21,11 @@ entity in the factual narrative, every link direction is canonical, and controll
 vocabularies are strictly closed by explicit owl:oneOf enumerations with explicit escape 
 values (echr:LevelUnknown, echr:TypeOther, echr:OutcomeOther, etc.)."""@en ;
     dcterms:created "2026-07-24T00:00:00+00:00"^^xsd:dateTime ;
-    dcterms:modified "2026-10-22T00:00:00+00:00"^^xsd:dateTime ;
+    dcterms:modified "2026-11-23T00:00:00+00:00"^^xsd:dateTime ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     vann:preferredNamespacePrefix "echr" ;
-    owl:versionIRI <https://growgraph.dev/echr/3.8.0-timeline> ;
-    owl:versionInfo "3.8.0-timeline" ;
+    owl:versionIRI <https://growgraph.dev/echr/4.1.0-sets> ;
+    owl:versionInfo "4.1.0-sets" ;
     skos:note "TIMELINE VARIANT of 3.7.0 (ontology/echr.ttl, unchanged). Adds section 7: the factual circumstances around the domestic proceedings and the lodging of the Strasbourg application, so a graph can hold the whole case history up to the Court. Everything in 3.7.0 is unchanged; the additions use their own date property, so tools that read domestic events by echr:hasDecisionDate / echr:hasProceedingStartDate see the same events as before."@en .
 
 ################################################################
@@ -221,6 +221,7 @@ echr:followsProceeding a owl:ObjectProperty, owl:AsymmetricProperty, owl:Irrefle
     rdfs:range echr:DomesticEvent ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
+echr:partOfProceeding owl:deprecated true .
 echr:partOfProceeding a owl:ObjectProperty, owl:FunctionalProperty, owl:AsymmetricProperty, owl:IrreflexiveProperty ;
     rdfs:label "part of proceeding"@en ;
     skos:definition "Links an act to the proceeding it is one act of. The target is the earliest recorded act of that proceeding, which stands for the proceeding as a whole; an event carrying no echr:partOfProceeding is a proceeding in its own right. All acts of one proceeding describe the same authority and the same procedure, so they must agree on echr:hasCourt, echr:hasAuthorityKind, echr:hasInstanceLevel and echr:hasProceedingType."@en ;
@@ -229,6 +230,7 @@ echr:partOfProceeding a owl:ObjectProperty, owl:FunctionalProperty, owl:Asymmetr
     rdfs:range echr:DomesticEvent ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
+echr:occursDuring owl:deprecated true .
 echr:occursDuring a owl:ObjectProperty, owl:FunctionalProperty, owl:AsymmetricProperty, owl:IrreflexiveProperty ;
     rdfs:label "occurs during"@en ;
     skos:definition "Links a proceeding to another proceeding within whose span it ran. Distinct from echr:followsProceeding, which asserts that one proceeding came after another had been decided: a proceeding linked by echr:occursDuring began and was decided while its container was still undecided (e.g. an interim-relief application decided while the main claim is pending, or a reference to a higher court answered back into the proceeding that made it)."@en ;
@@ -261,7 +263,7 @@ echr:hasInstanceLevel a owl:ObjectProperty, owl:FunctionalProperty ;
 echr:hasProceedingType a owl:ObjectProperty, owl:FunctionalProperty ;
     rdfs:label "has proceeding type"@en ;
     skos:definition "The legal track/nature of this domestic event."@en ;
-    rdfs:domain echr:DomesticEvent ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( echr:DomesticEvent echr:ProceedingSet ) ] ;
     rdfs:range echr:ProceedingType ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
@@ -359,7 +361,7 @@ echr:hasDecisionDate a owl:DatatypeProperty, owl:FunctionalProperty ;
 echr:isPending a owl:DatatypeProperty, owl:FunctionalProperty ;
     rdfs:label "is pending"@en ;
     skos:definition "True where this domestic event was still undecided at the time of the ECHR application."@en ;
-    rdfs:domain echr:DomesticEvent ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( echr:DomesticEvent echr:ProceedingSet ) ] ;
     rdfs:range xsd:boolean ;
     rdfs:isDefinedBy <https://growgraph.dev/echr> .
 
@@ -580,6 +582,11 @@ echr:LevelReopening a echr:InstanceLevel ;
     skos:prefLabel "reopening or retrial"@en ;
     skos:inScheme echr:InstanceLevelScheme .
 
+echr:LevelConstitutional a echr:InstanceLevel ;
+    skos:prefLabel "constitutional court"@en ;
+    skos:definition "A constitutional court deciding a complaint in the set of proceedings. Added in 4.0.0; before, these were recorded as cassation."@en ;
+    skos:inScheme echr:InstanceLevelScheme .
+
 echr:LevelUnknown a echr:InstanceLevel ;
     skos:prefLabel "unknown"@en ;
     skos:inScheme echr:InstanceLevelScheme .
@@ -589,7 +596,7 @@ echr:InstanceLevelScheme a skos:ConceptScheme ;
 
 echr:InstanceLevel owl:equivalentClass [ a owl:Class ;
     owl:oneOf ( echr:LevelInvestigative echr:LevelAdministrativeReview echr:LevelFirstInstance
-        echr:LevelAppeal echr:LevelCassation echr:LevelCaseReview
+        echr:LevelAppeal echr:LevelCassation echr:LevelConstitutional echr:LevelCaseReview
         echr:LevelReopening echr:LevelUnknown ) ] .
 
 #---------------------------------------------------------------
@@ -1047,3 +1054,140 @@ echr:CircumstanceKind owl:equivalentClass [ a owl:Class ;
         echr:CircumstanceHealth echr:CircumstanceFamily echr:CircumstanceResidence
         echr:CircumstanceEmployment echr:CircumstanceProperty echr:CircumstanceCommunication
         echr:CircumstanceOther ) ] .
+
+
+################################################################
+# 8. Sets of proceedings (4.0.0, 2026-11-23)
+################################################################
+# The event layer follows the Court's own count of domestic proceedings
+# (committee-judgment appendices; Guide on Article 6, "reasonable time"):
+# a SET of proceedings is one claim, charge, complaint or application pursued
+# through its levels. Its events are its START ACT (the act that opened it:
+# an event with echr:hasProceedingStartDate and no echr:hasDecisionDate) and
+# its DECISIONS, one per level (an event with echr:hasDecisionDate).
+# Hearings, filings inside a set, procedural orders, rulings during a trial,
+# investigative measures and execution steps are not events.
+# echr:followsProceeding is DERIVED inside a set (start first, then decisions
+# by date); echr:reviewsDecision records legal dependence explicitly.
+# echr:partOfProceeding and echr:occursDuring are deprecated.
+
+echr:ProceedingSet a owl:Class ;
+    rdfs:label "Set of Proceedings"@en ;
+    skos:definition "One claim, charge, complaint or application, pursued through one or more levels until it is finally decided or still pending, as the European Court of Human Rights counts proceedings for the length of proceedings. A new claim in another court or forum is a new set; remittals and re-examinations stay in the same set; enforcement of a judgment is its own set, linked by echr:enforcesDecision."@en ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasProceedingSet a owl:ObjectProperty ;
+    rdfs:label "has proceeding set"@en ;
+    skos:definition "Attaches a set of proceedings to the case document."@en ;
+    rdfs:domain echr:CaseDocument ;
+    rdfs:range echr:ProceedingSet ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:inProceedingSet a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "in proceeding set"@en ;
+    skos:definition "Links a domestic event (a start act or a decision) to the one set of proceedings it belongs to."@en ;
+    rdfs:domain echr:DomesticEvent ;
+    rdfs:range echr:ProceedingSet ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:reviewsDecision a owl:ObjectProperty, owl:FunctionalProperty, owl:AsymmetricProperty, owl:IrreflexiveProperty ;
+    rdfs:label "reviews decision"@en ;
+    skos:definition "Links a decision to the earlier decision in the same set that it rules on: the decision appealed against, the decision reviewed on cassation or by a constitutional court, the administrative decision a court reviewed, or the decision that remitted the case for re-examination."@en ;
+    skos:scopeNote "Legal dependence, not time: two decisions of one day, or an appeal decided after an unrelated later ruling, are told apart by this link and not by their dates."@en ;
+    rdfs:domain echr:DomesticEvent ;
+    rdfs:range echr:DomesticEvent ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:enforcesDecision a owl:ObjectProperty ;
+    rdfs:label "enforces decision"@en ;
+    skos:definition "Links an enforcement set of proceedings to the decision whose enforcement it sought. The Court counts enforcement as part of the original proceedings for their length, and also assesses enforcement delay on its own; this link supports both."@en ;
+    rdfs:domain echr:ProceedingSet ;
+    rdfs:range echr:DomesticEvent ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:appealedBy a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "appealed by"@en ;
+    skos:definition "On a decision at a higher level (or a review of an administrative decision): which side brought the appeal or application it decides. Keeps the information of the filing inside the set without a separate event."@en ;
+    rdfs:domain echr:DomesticEvent ;
+    rdfs:range echr:AppealSide ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasAppealDate a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has appeal date"@en ;
+    skos:definition "The date the appeal or application this decision decides was lodged, when the text gives it."@en ;
+    rdfs:domain echr:DomesticEvent ;
+    rdfs:range echr:PartialDate ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:hasCommunicationDate a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "has communication date"@en ;
+    skos:definition "The date a decision was served on or communicated to the applicant, when the text gives it. The Court may end the period there rather than at the decision date. Renamed from hasServiceDate in 4.1.0."@en ;
+    rdfs:domain echr:DomesticEvent ;
+    rdfs:range echr:PartialDate ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:AppealSide a owl:Class ;
+    rdfs:label "Appeal Side"@en ;
+    skos:definition "Controlled vocabulary: which side brought an appeal or application."@en ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:AppealedByApplicant a echr:AppealSide ;
+    skos:prefLabel "the applicant"@en ;
+    skos:inScheme echr:AppealSideScheme .
+
+echr:AppealedByOpposingParty a echr:AppealSide ;
+    skos:prefLabel "the opposing party (the other litigant, the prosecution or the State)"@en ;
+    skos:inScheme echr:AppealSideScheme .
+
+echr:AppealedByBoth a echr:AppealSide ;
+    skos:prefLabel "both sides"@en ;
+    skos:inScheme echr:AppealSideScheme .
+
+echr:AppealedByUnknown a echr:AppealSide ;
+    skos:prefLabel "unknown"@en ;
+    skos:inScheme echr:AppealSideScheme .
+
+echr:AppealSideScheme a skos:ConceptScheme ;
+    rdfs:label "Appeal side vocabulary"@en .
+
+echr:AppealSide owl:equivalentClass [ a owl:Class ;
+    owl:oneOf ( echr:AppealedByApplicant echr:AppealedByOpposingParty echr:AppealedByBoth
+        echr:AppealedByUnknown ) ] .
+
+# 4.1.0 (2026-11-25): costs are a field on the decision, not an event of their own.
+echr:costsBorneBy a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "costs borne by"@en ;
+    skos:definition "On a decision: which side it orders to bear the costs of the proceedings, when the text says. A separate ruling only on costs is not an event; its result is recorded here, on the decision of that level."@en ;
+    rdfs:domain echr:DomesticEvent ;
+    rdfs:range echr:CostsSide ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:CostsSide a owl:Class ;
+    rdfs:label "Costs Side"@en ;
+    skos:definition "Controlled vocabulary: which side bears the costs of the proceedings."@en ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:isDefinedBy <https://growgraph.dev/echr> .
+
+echr:CostsBorneByApplicant a echr:CostsSide ;
+    skos:prefLabel "the applicant"@en ;
+    skos:inScheme echr:CostsSideScheme .
+
+echr:CostsBorneByOpposingParty a echr:CostsSide ;
+    skos:prefLabel "the opposing party (the other litigant, the prosecution or the State)"@en ;
+    skos:inScheme echr:CostsSideScheme .
+
+echr:CostsBorneByBoth a echr:CostsSide ;
+    skos:prefLabel "both sides (costs shared)"@en ;
+    skos:inScheme echr:CostsSideScheme .
+
+echr:CostsBorneByUnknown a echr:CostsSide ;
+    skos:prefLabel "unknown"@en ;
+    skos:inScheme echr:CostsSideScheme .
+
+echr:CostsSideScheme a skos:ConceptScheme ;
+    rdfs:label "Costs side vocabulary"@en .
+
+echr:CostsSide owl:equivalentClass [ a owl:Class ;
+    owl:oneOf ( echr:CostsBorneByApplicant echr:CostsBorneByOpposingParty echr:CostsBorneByBoth
+        echr:CostsBorneByUnknown ) ] .

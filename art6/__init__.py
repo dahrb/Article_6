@@ -1,20 +1,24 @@
-"""Art. 6 ECHR corpus pipeline.
+"""Art. 6 ECHR: domestic proceedings extraction.
 
-Subpackages mirror the stages of the work:
+- :mod:`art6.model` -- the set model (vocabularies, file format, validation, order)
+- :mod:`art6.stage1` -- stage 1: extraction, vote, payloads
+- :mod:`art6.ontology` -- stages 2-3: OntoCast graph construction and reconciliation
+- :mod:`art6.evaluation` -- alignment, scoring, agreement, the reasonable-time rule
+- :mod:`art6.baselines` -- the non-LLM baseline
+- :mod:`art6.data` -- HUDOC collection, metadata and sampling
+- :mod:`art6.utils` -- helpers
 
-- :mod:`art6.data` — collection and processing of HUDOC metadata and case text
-- :mod:`art6.ontology` — ontology-extraction inputs built on top of that corpus
-- :mod:`art6.utils` — helpers shared across both
-
-Every stage is runnable as a module, from any working directory::
-
-    uv run python -m art6.data.collection
-    uv run python -m art6.data.metadata_processing
-    uv run python -m art6.data.text_processing --corpus judgments
-    uv run python -m art6.data.build_ontocast_test_set
-
-Shared locations live in :mod:`art6.paths`, so the repo layout is defined in
-exactly one place.
+Every stage runs as a module (``uv run python -m art6.stage1.extract`` ...);
+shared locations live in :mod:`art6.paths`.
 """
 
-__all__ = ["data", "ontology", "paths", "utils"]
+__all__ = [
+    "baselines",
+    "data",
+    "evaluation",
+    "model",
+    "ontology",
+    "paths",
+    "stage1",
+    "utils",
+]

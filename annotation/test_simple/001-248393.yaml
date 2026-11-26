@@ -1,0 +1,212 @@
+# Set-model gold (annotation_guide.txt v3.1), DERIVED from annotation/test/001-248393.yaml
+# by art6/simple/convert_gold.py and annotation/test_simple/mapping.yaml.
+# Draft by Claude (2026-11-23) -- check before reporting. Do not edit by hand:
+# change the mapping and regenerate.
+case_id: "001-248393"
+guide_version: "3.1"
+sets:
+- id: P2
+  kind: Administrative
+  label: earlier challenge before the Supreme Administrative Court
+  decisions:
+  - id: D1
+    date: "2006-07-20"
+    body: the Supreme Administrative Court
+    authority_kind: Judicial
+    level: Appeal
+    outcome: Remitted
+    direction: FavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the Fund
+      side: Responding
+    quote: On 20 July 2006, the Supreme Administrative Court, ruling unanimously, found that the applicant
+      had a legal interest in the enforcement proceedings initiated under Law no. 6183, as he was the
+      majority shareholder of İktisat Bank, which had been transferred to the Fund.
+    gold_id: 4
+- id: P3
+  kind: Administrative
+  label: annulment action before the Supreme Administrative Court (13th Chamber)
+  start:
+    date: "2011-02-07"
+    body: the 13th Chamber of the Supreme Administrative Court
+    authority_kind: Judicial
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the Fund
+      side: Responding
+    quote: On 7 February 2011, the applicant initiated proceedings before the administrative court, contesting
+      the actions of the Fund concerning the tendering of Viva TV-Radio Viva, in which he claimed to hold
+      both direct and indirect shares.
+    gold_id: 12
+  decisions:
+  - id: D2
+    date: "2014-12-09"
+    body: the 13th Chamber of the Supreme Administrative Court
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the Fund
+      side: Responding
+    quote: On 9 December 2014, the 13th Chamber of the Supreme Administrative Court dismissed the applicant’s
+      case.
+    gold_id: 19
+  - id: D3
+    date: "2015-07-07"
+    body: the General Assembly of the Administrative Proceedings Divisions of the Supreme Administrative
+      Court ( Danıştay İdari Dava Daireleri Genel Kurulu – hereinafter “the General Assembly”)
+    authority_kind: Judicial
+    level: Appeal
+    outcome: MeritsDecided
+    direction: FavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the Fund
+      side: Responding
+    reviews: D2
+    appealed_by: Applicant
+    quote: On 7 July 2015, following an appeal by the applicant, the General Assembly of the Administrative
+      Proceedings Divisions of the Supreme Administrative Court ( Danıştay İdari Dava Daireleri Genel
+      Kurulu – hereinafter “the General Assembly”), in line with the dissenting opinion, ruled that the
+      estimated value of USD 6,000,000 had been determined on the basis of the 2009 valuation report,
+      without any new assessment of the market value.
+    gold_id: 21
+  - id: D4
+    date: "2016-01-25"
+    body: the Supreme Administrative Court
+    authority_kind: Judicial
+    level: Reopening
+    outcome: Inadmissible
+    direction: FavourableToApplicant
+    parties:
+    - name: the Fund
+      side: Initiating
+    - name: the applicant
+      side: Responding
+    reviews: D3
+    appealed_by: OpposingParty
+    quote: On 25 January 2016, the Supreme Administrative Court rejected the Fund’s request for rectification,
+      noting that the case had become final following the appeal and was no longer subject to rectification.
+    gold_id: 23
+- id: P4
+  kind: Administrative
+  label: annulment action before the Istanbul Administrative Court
+  start:
+    date: "2011-02-24"
+    body: the 6th Chamber of the İstanbul Administrative Court
+    authority_kind: Judicial
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the Fund
+      side: Responding
+    quote: On 24 February 2011, the applicant initiated proceedings before the administrative court, seeking
+      the annulment of the sale of Viva TV-Radio Viva.
+    gold_id: 15
+  decisions:
+  - id: D5
+    date: "2014-03-19"
+    body: the 6th Chamber of the İstanbul Administrative Court
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the Fund
+      side: Responding
+    quote: On 19 March 2014, the 6th Chamber of the İstanbul Administrative Court dismissed the applicant’s
+      claim, concluding that no legal irregularities had occurred in the tendering and sale procedures.
+    gold_id: 18
+  - id: D6
+    date: "2014-12-09"
+    body: the 13th Chamber of the Supreme Administrative Court
+    authority_kind: Judicial
+    level: Appeal
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the Fund
+      side: Responding
+    reviews: D5
+    appealed_by: Applicant
+    quote: On an appeal by the applicant, the 13th Chamber of the Supreme Administrative Court upheld
+      that decision on 9 December 2014.
+    gold_id: 20
+  - id: D7
+    date: "2017-06-30"
+    body: the 13 th Chamber of the Supreme Administrative Court
+    authority_kind: Judicial
+    level: Reopening
+    outcome: MeritsDecided
+    direction: FavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the Fund
+      side: Responding
+    reviews: D6
+    appealed_by: Applicant
+    quote: On 30 June 2017, the 13 th Chamber of the Supreme Administrative Court granted the request,
+      referring to the ruling of the General Assembly of 7 July 2015 which had annulled the Fund’s decision
+      of 13 January 2011 concerning the valuation of Viva TV-Radio Viva (see paragraph 29 above).
+    gold_id: 25
+- id: P5
+  kind: Administrative
+  label: attempts to have the annulment judgment enforced
+  enforces: D3
+  decisions:
+  - id: D8
+    date: "2015-10-27"
+    body: the Fund
+    authority_kind: Administrative
+    level: AdministrativeReview
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    quote: On 18 April 2016, the Fund notified the applicant of a decision taken on 27 October 2015 regarding
+      the impossibility of enforcing the judgment.
+    gold_id: 22
+  - id: D9
+    date: "2017-08-11"
+    body: the Fund
+    authority_kind: Administrative
+    level: AdministrativeReview
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    quote: On 5 September 2017, the Fund responded, stating that a decision had already been made on 11
+      August 2017 regarding the enforcement of the relevant judgment.
+    gold_id: 27
+  - id: D10
+    date: "2018-05-23"
+    body: the Constitutional Court
+    authority_kind: Judicial
+    level: Constitutional
+    outcome: Inadmissible
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    reviews: D9
+    appealed_by: Applicant
+    appeal_date: "2017-09-11"
+    quote: In a decision of 23 May 2018, the Constitutional Court observed that the final annulment judgment
+      of the 13th Chamber of the Supreme Administrative Court had been served on the applicant on 28 July
+      2017 and determined that the thirty-day time-limit for lodging an individual application had commenced
+      on that date.
+    gold_id: 29

@@ -1,0 +1,180 @@
+You read the facts of a European Court of Human Rights judgment and record the
+DOMESTIC PROCEEDINGS it narrates the way the Court itself counts them in the
+appendix of a committee judgment: each SET of proceedings, the act that
+STARTED it, and the DECISION taken at each level -- with who was involved,
+what it was about, how it ended and whether that was good or bad for the
+applicant. You also record the case's basic details and the applicants.
+
+SETS OF PROCEEDINGS
+A set is ONE claim, charge, complaint or application, followed through all its
+levels until it is finally decided or still pending.
+  Same set: first instance, appeal, cassation, constitutional complaint; a
+    re-examination after the case is sent back; a reopening that leads to the
+    case being heard again; an appeal against an administrative decision to a
+    court, inspector or tribunal.
+  New set: a new claim in another court or forum, even about the same
+    dispute; each applicant's OWN action, even if one court decided them
+    together; a civil claim lodged inside criminal proceedings; enforcement of
+    a judgment (give `enforces`); a complaint about the length of proceedings;
+    proceedings before a non-State tribunal (a church court, arbitration, a
+    sports or professional body), recorded like any other set.
+  Not a set: proceedings against or by other people only (co-accused tried
+    separately, witnesses); private agreements with no public body; laws.
+
+THE START ACT -- at most ONE per set; null if the text gives it no date.
+  Civil: the claim lodged with the court.
+  Administrative / requests: the applicant's request or application to the
+    authority (a visa, permit, benefit). If the applicant only challenges an
+    administrative decision in court, the start is that court challenge.
+  Criminal: the EARLIEST act directed at the applicant that the applicant knew
+    of or was substantially affected by -- arrest, charge, questioning as a
+    suspect, notice of an investigation opened against them.
+  Complaints: the applicant's complaint to the prosecutor or police.
+  Anything lodged after the set is open (appeals, the other side's
+  applications, counterclaims, the State's requests) is NOT a start.
+
+DECISIONS -- every ruling that decides the set at one level or sends it back:
+  judgments, dismissals, appeal / cassation / constitutional decisions
+  (including inadmissibility), a prosecutor's decision to discontinue or not to
+  prosecute, an administrative decision on the applicant's own request or one
+  the applicant had to challenge first, a settlement approved by or concluded
+  with a public body, the decision that finally fixes a criminal sentence.
+  Ask: did it decide the claim, charge or request at that level?
+  An inspector's, tribunal's or court's decision on an appeal against an
+  administrative decision `reviews` that administrative decision.
+
+NOT EVENTS -- leave out:
+  hearings, adjournments, summonses; appeals, objections, counterclaims and
+  other filings inside a set (record who appealed and when on the decision
+  instead); procedural orders (transfer, suspension, resumption, joinder,
+  accepting a case, experts, time limits, recusal); a ruling only on costs
+  (record who bears the costs in `costs` on the decision instead); rulings DURING a trial
+  that do not decide it (evidence, witnesses, no case to answer, detention or
+  bail during trial, lawyers, injunctions, stays); an appeal lodged but not
+  yet decided (set pending: true); investigative measures (searches, seizures,
+  freezing property, inspections, questioning other than as a criminal start,
+  expert reports); execution steps (payments, transfers, release, removal);
+  administrative measures nobody asked for and nobody challenged (a public
+  body's own internal steps).
+
+FIELDS (closed lists: write exactly one of the values shown)
+
+case: {"case_name", "application_number", "respondent_state", "judgment_date"}
+  -- each copied exactly from the text, or null.
+
+applicants: one entry per applicant: {"name", "birth_year", "nationality",
+  "residence", "gender": "female" | "male" | null, "quote"} -- name as the text
+  gives it; other fields only if the text states them, else null; quote = the
+  sentence that describes the applicant, copied exactly.
+
+persons: lawyers, agents and other named people who are not applicants or
+  judges: {"name", "role"} (role in a few words).
+
+sets: {"id": "P1", ..., "kind", "label", "pending", "enforces", "start"}
+  kind      Criminal | Civil | Administrative | Constitutional | Disciplinary | Other | Unknown
+  label     a few words naming it
+  pending   true only if the text says it is still pending
+  enforces  enforcement sets only: the id of the decision being enforced, else null
+  start     null, or {"date", "body", "authority_kind", "parties", "matter", "quote"}
+
+decisions: {"id": "D1", "set", "date", "body", "authority_kind", "level",
+            "outcome", "direction", "parties", "matter", "reviews",
+            "appealed_by", "appeal_date", "communication_date", "costs", "quote"}
+  date            ISO at the precision the text gives: "2005-11-29", "2005-11" or "2005"
+  body            the court or authority, as the text names it
+  authority_kind  Judicial | Prosecutorial | Administrative | Disciplinary | Unknown
+  level           Investigative | AdministrativeReview | FirstInstance | Appeal |
+                  Cassation | Constitutional | CaseReview | Reopening | Unknown
+                  (Investigative = a prosecutor, police or investigating judge;
+                   AdministrativeReview = a non-judicial public body;
+                   Cassation = a supreme court on points of law;
+                   CaseReview = supervisory or extraordinary review)
+  outcome         MeritsDecided | Inadmissible | Remitted | SettledOrWithdrawn | Other | Unknown
+  direction       how THIS decision came out for the applicant (the future
+                  Strasbourg applicant), on the claim or charge it decided:
+                  FavourableToApplicant | UnfavourableToApplicant | Mixed | Unknown
+                  Mixed = the same decision partly granted and partly refused.
+                  A remittal or inadmissibility ruling still has a direction:
+                  quashing a conviction is favourable, quashing an acquittal
+                  unfavourable, rejecting the applicant's appeal unfavourable.
+                  Never summarise the whole case.
+  reviews         the id of the earlier decision in the SAME set that this one
+                  rules on: the decision appealed against, reviewed on
+                  cassation, by a constitutional court or on supervisory
+                  review, the administrative decision a court reviewed, or the
+                  decision that sent the case back. null for the first
+                  decision of a set and when a decision merely comes next (a
+                  trial after the investigation).
+  appealed_by     when `reviews` is set: Applicant | OpposingParty | Both | Unknown
+                  (OpposingParty = the other litigant, the prosecution or the State)
+  appeal_date     when that appeal or application was lodged, if the text says, else null
+  communication_date  when the decision was served on or communicated to the
+                  applicant, if the text says, else null
+  costs           who this decision orders to bear the costs of the proceedings:
+                  Applicant | OpposingParty | Both | Unknown; null if the
+                  text says nothing about costs. A separate ruling only on
+                  costs is not a decision: put its result here, on the
+                  decision of that level it belongs to.
+
+parties (on starts and decisions): everyone on a side at THIS event,
+  [{"name", "side"}], side = Initiating (moved the body to act here: claimant,
+  prosecution, appellant) | Responding (it was brought against them:
+  defendant, accused, respondent on appeal) | ThirdParty | Unknown. The
+  deciding body and judges are never parties.
+
+matter (on starts and decisions): a list of what the event was about; [] for
+  a purely procedural ruling. Values:
+    Arrest         being apprehended or taken into custody
+    Detention      remand / pre-trial detention ordered, extended, ended
+    Bail           release pending trial asked for, granted, refused
+    Charge         being charged or indicted
+    Conviction     the trial or an appeal on the charge: conviction,
+                   acquittal, sentence
+    Investigation  a criminal investigation or a refusal to open one,
+                   and steps in it (a seizure in an investigation)
+    Damages        compensation claimed or awarded
+    Custody        custody of or guardianship over a PERSON: parental
+                   custody, child return, legal capacity or
+                   guardianship of an adult
+    Employment     dismissal, reinstatement, wages, work terms
+    Pension        pensions, social security, welfare benefits
+    Property       a dispute over the asset itself: ownership,
+                   restitution, tenancy, planning
+    Extradition    extradition, deportation, removal
+    LegalAid       legal aid or legal-aid counsel
+    Vetting        security clearance or similar vetting
+    Disciplinary   professional or employment discipline
+    Requests       applications about the conduct of the proceedings
+                   themselves (recusal, counsel, adjournment, access
+                   to the file)
+    Health         medical treatment or care
+    Immigration    visas, residence, asylum
+    Enforcement    enforcing a judgment
+    Other          about something specific not listed
+    Unknown        about one of these, but the text does not say which
+  A seizure in a criminal investigation is Investigation; confiscation as a
+  penalty is Conviction + Property. Use Other only when none of these fits.
+
+QUOTES AND DATES
+Every "quote" must be copied character for character from the text: it is
+checked by string search. Each date must be stated in or next to its quote. A
+sentence that narrates two decisions gives two decisions with the same quote.
+
+OUTPUT
+Return ONE JSON object and nothing else:
+{"case": {...}, "applicants": [...], "persons": [...],
+ "sets": [{"id": "P1", "kind": "Civil", "label": "...", "pending": false, "enforces": null,
+           "start": {"date": "2000-03-01", "body": "...", "authority_kind": "Judicial",
+                     "parties": [{"name": "the applicant", "side": "Initiating"}],
+                     "matter": ["Damages"], "quote": "..."}}],
+ "decisions": [{"id": "D1", "set": "P1", "date": "2000-11-20", "body": "...",
+                "authority_kind": "Judicial", "level": "FirstInstance",
+                "outcome": "MeritsDecided", "direction": "UnfavourableToApplicant",
+                "parties": [...], "matter": ["Damages"], "reviews": null,
+                "appealed_by": null, "appeal_date": null, "communication_date": null,
+                "costs": null,
+                "quote": "..."}]}
+
+THE TEXT
+
+{text}

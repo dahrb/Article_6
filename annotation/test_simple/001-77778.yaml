@@ -1,0 +1,220 @@
+# Set-model gold (annotation_guide.txt v3.1), DERIVED from annotation/test/001-77778.yaml
+# by art6/simple/convert_gold.py and annotation/test_simple/mapping.yaml.
+# Draft by Claude (2026-11-23) -- check before reporting. Do not edit by hand:
+# change the mapping and regenerate.
+case_id: "001-77778"
+guide_version: "3.1"
+sets:
+- id: P1
+  kind: Criminal
+  label: criminal proceedings against the applicant
+  start:
+    date: "1995-04-12"
+    body: the Slovenj Gradec Police
+    authority_kind: Prosecutorial
+    parties:
+    - name: the applicant
+      side: Responding
+    matter:
+    - Investigation
+    quote: On 12 April 1995 the Slovenj Gradec Police lodged a criminal complaint against the applicant
+      for the criminal offence of “obstructing an official in the course of his duties” under section
+      302, paragraph 4-1 of the Slovenian Criminal Code, which referred to the same incident as the applicant’s
+      criminal complaint.
+    gold_id: 3
+  decisions:
+  - id: D1
+    date: "1997-05-08"
+    body: the Slovenj Gradec District Court
+    authority_kind: Judicial
+    level: Investigative
+    outcome: MeritsDecided
+    direction: FavourableToApplicant
+    parties:
+    - name: the Public Prosecutor
+      side: Initiating
+    - name: the applicant
+      side: Responding
+    matter:
+    - Investigation
+    quote: On 8 May 1997, further to a proposal of the investigating judge, the Slovenj Gradec District
+      Court decided not to open a criminal investigation against the applicant.
+    gold_id: 9
+  - id: D2
+    date: "1997-12-04"
+    body: the Maribor Higher Court
+    authority_kind: Judicial
+    level: Appeal
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the Public Prosecutor
+      side: Initiating
+    - name: the applicant
+      side: Responding
+    matter:
+    - Investigation
+    reviews: D1
+    appealed_by: OpposingParty
+    appeal_date: "1997-05-12"
+    quote: On 4 December 1997 the Maribor Higher Court upheld her appeal finding that, despite the shortcomings
+      mentioned in the first-instance decision, there were sufficient grounds for suspicion that the applicant
+      had committed the alleged offence.
+    gold_id: 11
+  - id: D3
+    date: "1998-03-17"
+    body: the investigating judge
+    authority_kind: Judicial
+    level: Investigative
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Responding
+    matter:
+    - Investigation
+    quote: On 17 March 1998 the criminal investigation was concluded with the investigating judge’s decision
+      ordering the exclusion of certain documents from the case-file in accordance with section 83, paragraph
+      3, of the Criminal Procedure Act.
+    gold_id: 12
+  - id: D4
+    date: "1999-02-16"
+    body: the Slovenj Gradec District Court
+    authority_kind: Judicial
+    level: Investigative
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the Public Prosecutor
+      side: Responding
+    quote: His objection was rejected by the Slovenj Gradec District Court on 16 February 1999.
+    gold_id: 15
+  - id: D5
+    date: "1999-11-22"
+    body: the Slovenj Gradec District Court
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: FavourableToApplicant
+    parties:
+    - name: the Public Prosecutor
+      side: Initiating
+    - name: the applicant
+      side: Responding
+    matter:
+    - Conviction
+    quote: By a judgment of 22 November 1999 the court acquitted the applicant.
+    gold_id: 16
+  - id: D6
+    date: "2000-09-27"
+    body: the Maribor Higher Court
+    authority_kind: Judicial
+    level: Appeal
+    outcome: Remitted
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the Public Prosecutor
+      side: Initiating
+    - name: the applicant
+      side: Responding
+    matter:
+    - Conviction
+    reviews: D5
+    appealed_by: OpposingParty
+    appeal_date: "2000-01-05"
+    quote: On 5 January 2000 the Public Prosecutor appealed against the judgment and on 27 September 2000
+      the Maribor Higher Court quashed the judgment and remitted the case to a new panel for retrial.
+    gold_id: 18
+  - id: D7
+    date: "2001-02-12"
+    body: the Slovenj Gradec District Court
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the Public Prosecutor
+      side: Initiating
+    - name: the applicant
+      side: Responding
+    matter:
+    - Conviction
+    reviews: D6
+    appealed_by: OpposingParty
+    quote: By a judgment of 12 February 2001, the Slovenj Gradec District Court convicted the applicant
+      as charged and sentenced him to 3 months’ imprisonment, suspended for 3 years.
+    gold_id: 19
+  - id: D8
+    date: "2001-05-09"
+    body: the Maribor Higher Court
+    authority_kind: Judicial
+    level: Appeal
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the Public Prosecutor
+      side: Initiating
+    - name: the applicant
+      side: Initiating
+    matter:
+    - Conviction
+    reviews: D7
+    appealed_by: Both
+    appeal_date: "2001-03-12"
+    quote: On 9 May 2001 the Maribor Higher Court upheld the conviction but amended the judgment with
+      respect to the costs of the proceedings.
+    gold_id: 21
+  - id: D9
+    date: "2001-10-11"
+    body: the Slovenj Gradec District Court
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Responding
+    quote: Lastly, on 11 October 2001 the Slovenj Gradec District Court ordered the applicant to pay an
+      additional sum to cover the costs of one of the witnesses heard during the proceedings.
+    gold_id: 22
+- id: P2
+  kind: Criminal
+  label: applicant's criminal complaint against the police officers
+  start:
+    date: "1995-04-07"
+    body: the Slovenj Gradec Police
+    authority_kind: Prosecutorial
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the officers of the Special Unit
+      side: Responding
+    matter:
+    - Investigation
+    quote: On 7 April 1995 the applicant went to the Slovenj Gradec Police and made an oral complaint
+      against the officers of the Special Unit concerning the events of 5 April 1995.
+    gold_id: 2
+  decisions:
+  - id: D10
+    date: "1997-01-17"
+    body: the Public Prosecutor
+    authority_kind: Prosecutorial
+    level: Investigative
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: D.P.
+      side: Responding
+    - name: J.K.
+      side: Responding
+    - name: M.J.
+      side: Responding
+    matter:
+    - Investigation
+    quote: On 17 January 1997 the Public Prosecutor issued a decision dismissing the applicant’s criminal
+      complaint.
+    gold_id: 7

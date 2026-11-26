@@ -1,0 +1,401 @@
+# Set-model gold (annotation_guide.txt v3.1), DERIVED from annotation/test/001-202468.yaml
+# by art6/simple/convert_gold.py and annotation/test_simple/mapping.yaml.
+# Draft by Claude (2026-11-23) -- check before reporting. Do not edit by hand:
+# change the mapping and regenerate.
+case_id: "001-202468"
+guide_version: "3.1"
+sets:
+- id: P1
+  kind: Administrative
+  label: visa refusals and urgent stays before the Aliens Appeals Board
+  decisions:
+  - id: D1
+    date: "2016-09-13"
+    body: the Aliens Office
+    authority_kind: Administrative
+    level: AdministrativeReview
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    quote: On 13 September 2016 the Aliens Office, the administrative body responsible for issuing visas
+      (see paragraph 45 below), refused to grant “humanitarian visas” to the applicants and informed them
+      of its decisions by an email of 29 September 2016, transmitted through the visa department of the
+      Belgian embassy in Beirut.
+    gold_id: 1
+  - id: D2
+    date: "2016-10-07"
+    body: the Aliens Appeals Board
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: FavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    - name: the Belgian State
+      side: Responding
+    reviews: D1
+    appealed_by: Applicant
+    quote: On 7 October 2016 the Aliens Appeals Board, acting under the extremely urgent procedure, ordered
+      a stay of execution of the refusals by the Aliens Office to grant visas and instructed the Belgian
+      State to take new decisions within 48 hours, giving adequate legal grounds, that is, by giving reasons
+      which took account of the extremely dangerous situation in Syria.
+    gold_id: 2
+  - id: D3
+    date: "2016-10-10"
+    body: the Aliens Office
+    authority_kind: Administrative
+    level: AdministrativeReview
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    quote: As required by the order of the Aliens Appeals Board (see paragraph 15 above), the Aliens Office
+      issued new decisions, dated 10 October 2016, refusing to grant the visas; however, it provided the
+      same reasons as in the previous refusals.
+    gold_id: 3
+  - id: D4
+    date: "2016-10-14"
+    body: the Aliens Appeals Board
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: FavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    - name: the Belgian State
+      side: Responding
+    reviews: D3
+    appealed_by: Applicant
+    quote: By a judgment of 14 October 2016 the Aliens Appeals Board, acting under the extremely urgent
+      procedure, again ordered a stay of execution of the decision of 10 October 2016 refusing to issue
+      the visas, and instructed the Aliens Office to take new decisions, this time giving adequate legal
+      grounds, within 48 hours.
+    gold_id: 4
+  - id: D5
+    date: "2016-10-17"
+    body: the Aliens Office
+    authority_kind: Administrative
+    level: AdministrativeReview
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    quote: On 17 October 2016 the Aliens Office again took decisions refusing to issue the visas, citing
+      the same reasons as in the previous refusals.
+    gold_id: 5
+  - id: D6
+    date: "2016-10-20"
+    body: the Aliens Appeals Board
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: FavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    - name: the Belgian State
+      side: Responding
+    reviews: D5
+    appealed_by: Applicant
+    quote: By a judgment of 20 October 2016 the Aliens Appeals Board, essentially reiterating the substance
+      of its previous judgments, ordered a stay of execution of the refusal decisions of 17 October 2016.
+    gold_id: 6
+  - id: D7
+    date: "2018-02-08"
+    body: the Conseil d’État
+    authority_kind: Judicial
+    level: Cassation
+    outcome: Inadmissible
+    direction: Unknown
+    parties:
+    - name: the Belgian State
+      side: Initiating
+    - name: the applicants
+      side: Responding
+    reviews: D2
+    appealed_by: OpposingParty
+    quote: On the same date the Conseil d’État dismissed an appeal on points of law brought by the Belgian
+      State against the judgment of 7 October 2016 on the grounds that, following the lifting of the stay
+      of execution on 6 March 2017, the contested judgment no longer adversely affected the Belgian State.
+    gold_id: 23
+- id: P2
+  kind: Administrative
+  label: application to set aside the 13 September refusal
+  decisions:
+  - id: D8
+    date: "2017-03-06"
+    body: the Aliens Appeals Board
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    - name: the Belgian State
+      side: Responding
+    quote: On 6 March 2017 the Aliens Appeals Board noted that no application had been brought to have
+      the decisions of 13 September 2016 refusing to issue the visas set aside, and decided in consequence
+      to lift the stay of execution of the visa refusal decisions and the interim measures.
+    gold_id: 17
+  - id: D9
+    date: "2018-02-08"
+    body: the Conseil d’État
+    authority_kind: Judicial
+    level: Cassation
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    - name: the Belgian State
+      side: Responding
+    reviews: D8
+    appealed_by: Applicant
+    quote: On 8 February 2018 the Conseil d’État dismissed an appeal on points of law by the applicants
+      against the judgment of 6 March 2017.
+    gold_id: 22
+- id: P3
+  kind: Administrative
+  label: application to set aside the 10 October refusals
+  decisions:
+  - id: D10
+    date: "2017-03-24"
+    body: the Aliens Appeals Board
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: Inadmissible
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    - name: the Belgian State
+      side: Responding
+    quote: On 24 March 2017 the Aliens Appeals Board dismissed the application to have those decisions
+      set aside, finding that the Aliens Office’s decisions of 13 September 2016 (see paragraph 11 above)
+      had become final and that, in consequence, the applicants no longer had standing to challenge the
+      subsequent decisions.
+    gold_id: 18
+  - id: D11
+    date: "2018-05-17"
+    body: the Conseil d’État
+    authority_kind: Judicial
+    level: Cassation
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    - name: the Belgian State
+      side: Responding
+    reviews: D10
+    appealed_by: Applicant
+    quote: An administrative appeal on points of law lodged by the applicants against that judgment was
+      dismissed by the Conseil d’État on 17 May 2018.
+    gold_id: 24
+- id: P4
+  kind: Administrative
+  label: application to set aside the 17 October refusals
+  decisions:
+  - id: D12
+    date: "2017-03-24"
+    body: the Aliens Appeals Board
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: Inadmissible
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    - name: the Belgian State
+      side: Responding
+    quote: By a judgment of 24 March 2017 the Aliens Appeals Board dismissed the application to have the
+      decisions set aside and ordered that the stay of execution in respect of the visa refusal decisions
+      be lifted, together with the interim measures, based on the same reasoning as that set out in its
+      first judgment of the same date (see paragraph 22 above).
+    gold_id: 19
+  - id: D13
+    date: "2018-05-17"
+    body: the Conseil d’État
+    authority_kind: Judicial
+    level: Cassation
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    - name: the Belgian State
+      side: Responding
+    reviews: D12
+    appealed_by: Applicant
+    quote: An appeal on points of law against this judgment was dismissed by the Conseil d’État in a judgment
+      of 17 May 2018, on the same grounds as those set out in the above-cited judgment of the same date
+      (see paragraph 23 above).
+    gold_id: 25
+- id: P5
+  kind: Civil
+  label: civil proceedings before the Brussels courts to obtain the visas
+  pending: true
+  decisions:
+  - id: D14
+    date: "2016-10-25"
+    body: the acting president of the French-language TPI
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: FavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    - name: the Belgian State
+      side: Responding
+    quote: By an order of 25 October 2016, considering that the failure by the Aliens Office to comply
+      with a judgment of the Aliens Appeals Board, notwithstanding the fact that it had been immediately
+      enforceable, constituted “an unacceptable illegal action”, the acting president of the French-language
+      TPI ordered the State, as an urgent measure, to comply with the Board’s judgment of 20 October 2016,
+      that is, to issue the applicants with visas or laissez-passers , and made the order subject to a
+      penalty payment of 1,000 euros (EUR) per day of delay and per applicant.
+    gold_id: 7
+  - id: D15
+    date: "2016-11-07"
+    body: another judge acting as president of the French ‑ language TPI
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    - name: the Belgian State
+      side: Responding
+    quote: On 7 November 2016 another judge acting as president of the French ‑ language TPI declared
+      their application admissible but unfounded, considering that the Belgian authorities could not be
+      criticised for failing voluntarily to comply with a judgment by the Aliens Appeals Board, even one
+      that was immediately enforceable, if these same authorities intended to challenge the legality of
+      the judgment by pursuing an appeal procedure provided for by law.
+    gold_id: 8
+  - id: D16
+    date: "2016-12-07"
+    body: the Brussels Court of Appeal
+    authority_kind: Judicial
+    level: Appeal
+    outcome: MeritsDecided
+    direction: FavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    - name: the Belgian State
+      side: Responding
+    reviews: D15
+    appealed_by: Applicant
+    quote: On an appeal by the applicants, the Brussels Court of Appeal delivered a judgment on 7 December
+      2016 varying the order of 7 November 2016.
+    gold_id: 10
+  - id: D17
+    date: "2016-12-13"
+    body: the President of the Brussels Dutch ‑ speaking TPI
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: FavourableToApplicant
+    parties:
+    - name: the Belgian State
+      side: Initiating
+    - name: the applicants
+      side: Responding
+    quote: The Belgian State, which sought for its part a stay of execution of the Brussels Court of Appeal’s
+      judgment of 7 December 2016, lodged a unilateral action to that effect with the President of the
+      Brussels Dutch ‑ speaking TPI on 13 December 2016, but was unsuccessful (order of the same date).
+    gold_id: 12
+  - id: D18
+    date: "2016-12-14"
+    body: the court of appeal
+    authority_kind: Judicial
+    level: Appeal
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the Belgian State
+      side: Initiating
+    - name: the applicants
+      side: Responding
+    reviews: D17
+    appealed_by: OpposingParty
+    quote: However, on an appeal by the Belgian State, the court of appeal varied the decision of the
+      first-instance court in a judgment of 14 December 2016.
+    gold_id: 13
+  - id: D19
+    date: "2017-06-30"
+    body: a Dutch-language division of the Court of Appeal
+    authority_kind: Judicial
+    level: Appeal
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the Belgian State
+      side: Initiating
+    - name: the applicants
+      side: Responding
+    reviews: D18
+    appealed_by: OpposingParty
+    quote: By a judgment of 30 June 2017 a Dutch-language division of the Court of Appeal held that the
+      Aliens Appeals Boards’ judgment of 20 October 2016 was no longer operative, given that the applicants
+      had not lodged an application to have the visa refusal decisions of 13 September 2016 set aside.
+    gold_id: 20
+- id: P6
+  kind: Civil
+  label: proceedings before the enforcement judge
+  enforces: D16
+  start:
+    date: "2016-12-15"
+    body: the enforcement judge at the Brussels French-language TPI
+    authority_kind: Judicial
+    parties:
+    - name: the applicants
+      side: Initiating
+    - name: the Belgian State
+      side: Responding
+    quote: On 15 December 2016 the applicants brought an action against the Belgian State before the enforcement
+      judge at the Brussels French-language TPI, seeking to ensure that the payment order of 13 December
+      2016 was executed.
+    gold_id: 14
+  decisions:
+  - id: D20
+    date: "2017-12-20"
+    body: the enforcement judge at the Brussels French-language TPI
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: Other
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    - name: the Belgian State
+      side: Responding
+    quote: On 20 December 2017 the French-language enforcement judge, examining the action brought by
+      the applicants on 15 December 2016, found that the case had become devoid of purpose following the
+      Brussels Court of Appeal’s judgment of 30 June 2017.
+    gold_id: 21
+- id: P7
+  kind: Administrative
+  label: later visa application
+  decisions:
+  - id: D21
+    date: "2016-12"
+    body: the Belgian authorities
+    authority_kind: Administrative
+    level: AdministrativeReview
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicants
+      side: Initiating
+    quote: The applicants subsequently submitted such an application, which was rejected by the Belgian
+      authorities in December 2016 (see paragraph 34 below).
+    gold_id: 9

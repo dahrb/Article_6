@@ -1,0 +1,219 @@
+# Set-model gold (annotation_guide.txt v3.1), DERIVED from annotation/test/001-108690.yaml
+# by art6/simple/convert_gold.py and annotation/test_simple/mapping.yaml.
+# Draft by Claude (2026-11-23) -- check before reporting. Do not edit by hand:
+# change the mapping and regenerate.
+case_id: "001-108690"
+guide_version: "3.1"
+sets:
+- id: P1
+  kind: Civil
+  label: proceedings declaring the applicant partially incapacitated
+  start:
+    date: "2000"
+    body: the Ruse Regional Court ( Окръжен съд )
+    authority_kind: Judicial
+    parties:
+    - name: the Ruse regional prosecutor
+      side: Initiating
+    - name: the applicant
+      side: Responding
+    matter:
+    - Custody
+    quote: On an unspecified date in 2000, at the request of the applicant’s two relatives, the Ruse regional
+      prosecutor applied to the Ruse Regional Court ( Окръжен съд ) for a declaration of total legal incapacity
+      in respect of the applicant.
+    gold_id: 1
+  decisions:
+  - id: D1
+    date: "2000-11-20"
+    body: the Ruse Regional Court ( Окръжен съд )
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the Ruse regional prosecutor
+      side: Initiating
+    - name: the applicant
+      side: Responding
+    matter:
+    - Custody
+    quote: In a judgment of 20 November 2000, the court declared the applicant to be partially incapacitated
+      on the grounds that he had been suffering from simple schizophrenia since 1975, and that his ability
+      to manage his own affairs and interests and to realise the consequences of his own acts had been
+      impaired.
+    gold_id: 2
+  - id: D2
+    date: "2001-04-12"
+    body: the Veliko Tarnovo Court of Appeal ( Апелативен съд )
+    authority_kind: Judicial
+    level: Appeal
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the Ruse regional prosecutor
+      side: Responding
+    matter:
+    - Custody
+    reviews: D1
+    appealed_by: Applicant
+    quote: That judgment was upheld in a judgment of 12 April 2001 by the Veliko Tarnovo Court of Appeal
+      ( Апелативен съд ) on an appeal by the applicant, and was subsequently transmitted to the Ruse Municipal
+      Council on 7 June 2001 for the appointment of a guardian.
+    gold_id: 3
+- id: P3
+  kind: Other
+  label: request to the prosecutor to seek restoration of legal capacity
+  start:
+    date: "2004-11-25"
+    body: the public prosecutor’s office
+    authority_kind: Prosecutorial
+    parties:
+    - name: the applicant
+      side: Initiating
+    matter:
+    - Custody
+    quote: On 25 November 2004 the applicant, through his lawyer, asked the public prosecutor’s office
+      to apply to the Regional Court to have his legal capacity restored.
+    gold_id: 8
+  decisions:
+  - id: D3
+    date: "2005-08-10"
+    body: the public prosecutor’s office
+    authority_kind: Prosecutorial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    matter:
+    - Custody
+    quote: On 10 August 2005 the regional prosecutor refused to bring an action for restoration of the
+      applicant’s legal capacity on the grounds that, in the opinion of the doctors, the Director of the
+      Pastra social care home and the home’s social worker, the applicant was unable to cope on his own,
+      and that the home, where he could undergo medical treatment, was the most suitable place for him
+      to live.
+    gold_id: 11
+  - id: D4
+    date: "2005-10-11"
+    body: the appellate prosecutor
+    authority_kind: Prosecutorial
+    level: Appeal
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    matter:
+    - Custody
+    reviews: D3
+    appealed_by: Applicant
+    quote: Despite those objections, the regional prosecutor’s refusal was upheld on 11 October 2005 by
+      the appellate prosecutor, and subsequently on 29 November 2005 by the Chief Public Prosecutor’s
+      Office at the Supreme Court of Cassation.
+    gold_id: 16
+  - id: D5
+    date: "2005-11-29"
+    body: the Chief Public Prosecutor’s Office at the Supreme Court of Cassation
+    authority_kind: Prosecutorial
+    level: Cassation
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    matter:
+    - Custody
+    reviews: D4
+    appealed_by: Applicant
+    quote: Despite those objections, the regional prosecutor’s refusal was upheld on 11 October 2005 by
+      the appellate prosecutor, and subsequently on 29 November 2005 by the Chief Public Prosecutor’s
+      Office at the Supreme Court of Cassation.
+    gold_id: 17
+- id: P4
+  kind: Administrative
+  label: request to the mayor, then judicial review of the refusal
+  start:
+    date: "2005-09-09"
+    body: the mayor of Rila
+    authority_kind: Administrative
+    parties:
+    - name: the applicant
+      side: Initiating
+    matter:
+    - Custody
+    quote: On 9 September 2005 the applicant, through his lawyer, asked the mayor of Rila to bring a court
+      action for his release from partial guardianship.
+    gold_id: 12
+  decisions:
+  - id: D6
+    date: "2005-09-16"
+    body: the mayor of Rila
+    authority_kind: Administrative
+    level: AdministrativeReview
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    matter:
+    - Custody
+    quote: In a letter of 16 September 2005, the mayor of Rila refused his request, stating that there
+      was no basis for such an action in view of the medical certificate of 15 June 2005, the opinions
+      of the Director and the social worker, and the conclusions reached by the public prosecutor’s office.
+    gold_id: 14
+  - id: D7
+    date: "2006-03-10"
+    body: the Dupnitsa District Court
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the mayor of Rila
+      side: Responding
+    matter:
+    - Custody
+    reviews: D6
+    appealed_by: Applicant
+    appeal_date: "2005-09-28"
+    quote: The Dupnitsa District Court gave judgment on 10 March 2006.
+    gold_id: 18
+- id: P5
+  kind: Administrative
+  label: request for a social allowance
+  start:
+    date: "2005"
+    body: the Municipal Council
+    authority_kind: Administrative
+    parties:
+    - name: the applicant’s guardian
+      side: Initiating
+    - name: the applicant
+      side: Unknown
+    matter:
+    - Pension
+    quote: The case file indicates that in 2005 the applicant’s guardian asked the Municipal Council to
+      grant a social allowance to facilitate his reintegration into the community.
+    gold_id: 10
+  decisions:
+  - id: D8
+    date: "2007-02-07"
+    body: the municipal social assistance department
+    authority_kind: Administrative
+    level: AdministrativeReview
+    outcome: MeritsDecided
+    direction: FavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    matter:
+    - Pension
+    quote: On 7 February 2007 the municipal social assistance department granted the applicant a monthly
+      allowance of BGN 16.50 (approximately EUR 8).
+    gold_id: 22

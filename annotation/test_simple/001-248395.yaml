@@ -1,0 +1,172 @@
+# Set-model gold (annotation_guide.txt v3.1), DERIVED from annotation/test/001-248395.yaml
+# by art6/simple/convert_gold.py and annotation/test_simple/mapping.yaml.
+# Draft by Claude (2026-11-23) -- check before reporting. Do not edit by hand:
+# change the mapping and regenerate.
+case_id: "001-248395"
+guide_version: "3.1"
+sets:
+- id: P1
+  kind: Disciplinary
+  label: disciplinary proceedings against the applicant
+  decisions:
+  - id: D1
+    date: "2013-04-17"
+    body: the Disciplinary Chamber of the QDC of Zakarpattya
+    authority_kind: Disciplinary
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Responding
+    - name: Lawyer D.
+      side: Initiating
+    matter:
+    - Disciplinary
+    quote: On 17 April 2013, in the applicant’s absence, the Disciplinary Chamber of the QDC of Zakarpattya
+      suspended the applicant’s licence to practise as an advocate for six months for his failure to attend
+      the meeting of 7 December 2012 and violating Article 62 of the Rules of Professional Conduct.
+    gold_id: 2
+  - id: D2
+    date: "2013-05-16"
+    body: the QDC of Zakarpattya
+    authority_kind: Disciplinary
+    level: Appeal
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: Lawyer D.
+      side: Responding
+    matter:
+    - Disciplinary
+    reviews: D1
+    appealed_by: Applicant
+    quote: On 16 May the QDC of Zakarpattya upheld the decision of 17 April 2013.
+    gold_id: 3
+  - id: D3
+    date: "2016-07-22"
+    body: the HQDCB
+    authority_kind: Disciplinary
+    level: Appeal
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: Lawyer D.
+      side: Responding
+    matter:
+    - Disciplinary
+    reviews: D1
+    appealed_by: Applicant
+    quote: On 22 July 2016 the draft decision was put to vote at a HQDCB meeting where 19 out of 30 HQDCB
+      members were present.
+    gold_id: 5
+- id: P2
+  kind: Administrative
+  label: appeal to the Kyiv District Administrative Court
+  start:
+    date: "2016-10-05"
+    body: the Kyiv District Administrative Court
+    authority_kind: Judicial
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the HQDCB
+      side: Responding
+    matter:
+    - Disciplinary
+    quote: On 5 October 2016 the applicant lodged an appeal with the Kyiv District Administrative Court
+      against the decisions of the Zakarpattya Bar and the decision of the HQDCB.
+    gold_id: 6
+  decisions:
+  - id: D4
+    date: "2021-04-08"
+    body: the Kyiv District Administrative Court
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the HQDCB
+      side: Responding
+    matter:
+    - Disciplinary
+    quote: On 8 April 2021 the Kyiv District Administrative Court found that all the decisions issued
+      by the self-government bodies of the Bar against the applicant had been lawful.
+    gold_id: 12
+  - id: D5
+    date: "2021-12-09"
+    body: the Supreme Court
+    authority_kind: Judicial
+    level: Cassation
+    outcome: MeritsDecided
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the HQDCB
+      side: Responding
+    matter:
+    - Disciplinary
+    reviews: D4
+    appealed_by: Applicant
+    quote: The applicant’s appeals were rejected (final decision of the Supreme Court of 9 December 2021).
+    gold_id: 13
+- id: P3
+  kind: Civil
+  label: appeal to the Podilskyy District Court
+  start:
+    date: "2016"
+    body: the Podilskyy District Court of Kyiv
+    authority_kind: Judicial
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the HQDCB
+      side: Responding
+    matter:
+    - Disciplinary
+    quote: On an unspecified date in 2016 the applicant also lodged an appeal against the HQDCB’s decision
+      with the Podilskyy District Court of Kyiv.
+    gold_id: 7
+  decisions:
+  - id: D6
+    date: "2016-12-22"
+    body: the Podilskyy District Court of Kyiv
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: Inadmissible
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the HQDCB
+      side: Responding
+    matter:
+    - Disciplinary
+    quote: On 22 December 2016 the Podilskyy District Court decided not to examine the applicant’s appeal.
+    gold_id: 8
+  - id: D7
+    date: "2017-03-06"
+    body: the Kyiv Administrative Court of Appeal
+    authority_kind: Judicial
+    level: Appeal
+    outcome: Remitted
+    direction: FavourableToApplicant
+    parties:
+    - name: the applicant
+      side: Initiating
+    - name: the HQDCB
+      side: Responding
+    matter:
+    - Disciplinary
+    reviews: D6
+    appealed_by: Applicant
+    quote: On 6 March 2017 the Kyiv Administrative Court of Appeal quashed the decision of 22 December
+      2016.
+    gold_id: 10

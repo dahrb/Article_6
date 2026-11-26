@@ -1,8 +1,9 @@
 """Stage 1, stage 2 and the ontology agree on what the graph holds.
 
-These tests fail when a prompt drifts: a vocabulary value stage 1 can produce
-that the ontology or the stage-2 instruction has no place for, an ontology
-value no prompt offers, a field stage 1 collects that the graph cannot hold.
+These tests fail when a prompt drifts: a closed-list value stage 1 can
+produce that the ontology or the stage-2 instruction has no place for, an
+ontology value stage 1 never offers, a field stage 1 collects that the graph
+cannot hold.
 """
 
 import re
@@ -11,23 +12,25 @@ from pathlib import Path
 import pytest
 from rdflib import RDF, Graph, Namespace
 
-from art6.ontology import agentic_stage1 as a
+from art6 import model
 from art6.ontology import prompt_spec as ps
 from art6.ontology import reconcile as r
+from art6.stage1.to_payload import LEVEL, words
 
 ROOT = Path(__file__).resolve().parents[1]
 ECHR = Namespace("https://growgraph.dev/echr#")
-PROMPTS = ROOT / "art6" / "ontology" / "prompts"
-EXTRACT = (PROMPTS / "extract.txt").read_text(encoding="utf-8")
+EXTRACT = (ROOT / "art6" / "stage1" / "prompts" / "extract.txt").read_text(
+    encoding="utf-8"
+)
 FACTS = ps.facts_instruction()
 
-# stage-1 field -> ontology class whose members are its vocabulary
-SCHEMES = {
-    "instance_level": "InstanceLevel",
-    "outcome": "ProceedingOutcome",
-    "proceeding_type": "ProceedingType",
-    "outcome_direction": "OutcomeDirection",
-    "matter": "Matter",
+# payload field -> (set-model values, payload spelling, ontology class)
+FIELDS = {
+    "instance_level": (model.LEVELS, LEVEL.get, "InstanceLevel"),
+    "outcome": (model.OUTCOMES, words, "ProceedingOutcome"),
+    "proceeding_type": (model.KINDS, str.lower, "ProceedingType"),
+    "outcome_direction": (model.DIRECTIONS, words, "OutcomeDirection"),
+    "matter": (model.MATTERS, words, "Matter"),
 }
 
 
@@ -37,60 +40,61 @@ def members(cls: str) -> set:
     return set(g.subjects(RDF.type, ECHR[cls]))
 
 
-@pytest.mark.parametrize("field", list(SCHEMES))
-def test_every_ontology_value_is_reachable_from_stage1(field):
-    """Each ontology member (bar the Unknown fallbacks the code never needs
-    to emit) is the image of some stage-1 value -- a member no prompt offers
-    is a value only one arm could ever produce."""
-    reachable = {r.vocabulary_iri(field, v) for v in a.VOCABULARY[field]}
-    assert None not in reachable, "a stage-1 value has no ontology member"
-    missing = {
-        m for m in members(SCHEMES[field]) - reachable if not str(m).endswith("Unknown")
-    }
-    assert not missing, f"{field}: ontology values no prompt offers: {missing}"
+@pytest.mark.parametrize("field", list(FIELDS))
+def test_every_stage1_value_has_an_ontology_member_and_back(field):
+    values, spell, cls = FIELDS[field]
+    reachable = {r.vocabulary_iri(field, spell(v)) for v in values}
+    assert None not in reachable, f"{field}: a stage-1 value has no ontology member"
+    missing = {m for m in members(cls) - reachable if not str(m).endswith("Unknown")}
+    assert not missing, f"{field}: ontology values stage 1 never offers: {missing}"
 
 
-@pytest.mark.parametrize("field", list(SCHEMES))
-def test_extract_prompt_offers_every_value(field):
-    i = EXTRACT.index(f'"{field}":')
-    schema_line = EXTRACT[i : EXTRACT.index('",\n', i)]
-    for value in a.VOCABULARY[field]:
-        if field == "outcome_direction" and value == "unknown":
-            continue
-        assert value in schema_line, f"extract.txt {field} omits {value!r}"
-
-
-@pytest.mark.parametrize("field", list(SCHEMES))
+@pytest.mark.parametrize("field", list(FIELDS))
 def test_facts_maps_every_value(field):
-    """facts.txt tells OntoCast which IRI each value is -- on both arms."""
-    for value in a.VOCABULARY[field]:
-        iri = r.vocabulary_iri(field, value)
-        local = str(iri).removeprefix(str(ECHR))
+    """facts.txt tells OntoCast which IRI each payload value is."""
+    values, spell, _ = FIELDS[field]
+    for v in values:
+        value = spell(v)
+        local = str(r.vocabulary_iri(field, value)).removeprefix(str(ECHR))
         assert re.search(rf'"{re.escape(value)}" is echr:{local}\b', FACTS), (
             f"facts.txt has no mapping for {field} {value!r} -> echr:{local}"
         )
 
 
-def test_only_stage1_is_told_not_to_link():
-    assert "Do NOT link" in EXTRACT or "are NOT recorded here" in EXTRACT
-    assert "Do NOT link entries" not in FACTS
+@pytest.mark.parametrize(
+    "values",
+    [
+        model.KINDS,
+        model.LEVELS,
+        model.OUTCOMES,
+        model.DIRECTIONS,
+        model.AUTHORITY_KINDS,
+        model.SIDES,
+        model.APPEALED_BY,
+        model.MATTERS,
+    ],
+)
+def test_extract_prompt_offers_every_closed_value(values):
+    for v in values:
+        assert re.search(rf"\b{v}\b", EXTRACT), (
+            f"prompts/extract.txt never offers {v!r}"
+        )
 
 
-def test_stage1_asks_only_for_what_the_graph_can_hold():
-    for dropped in ('"inactivity"', '"adjournments"'):
-        assert dropped not in EXTRACT
-    assert "inactivity" not in a.EVENT_KEYS and "adjournments" not in a.EVENT_KEYS
+@pytest.mark.parametrize("field", model.DECISION_FIELDS)
+def test_extract_prompt_asks_for_every_decision_field(field):
+    assert f'"{field}"' in EXTRACT
 
 
 @pytest.mark.parametrize(
     "fact, mapping",
     [
-        ("finality", "echr:isFinalDomesticDecision"),
-        ("detention", "echr:PreTrialDetention"),
         ("pending", "echr:isPending"),
-        ("non-occurring", "echr:isNonOccurring"),
         ("case header", "echr:hasApplicationNumber"),
         ("judges", "NO JUDGE IS A PERSON OR A PARTY"),
+        ("appealed_by", "echr:appealedBy"),
+        ("costs", "echr:costsBorneBy"),
+        ("communication date", "echr:hasCommunicationDate"),
     ],
 )
 def test_facts_maps_what_stage1_collects(fact, mapping):

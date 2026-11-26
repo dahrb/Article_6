@@ -1,0 +1,102 @@
+# Set-model gold (annotation_guide.txt v3.1), DERIVED from annotation/test/001-58299.yaml
+# by art6/simple/convert_gold.py and annotation/test_simple/mapping.yaml.
+# Draft by Claude (2026-11-23) -- check before reporting. Do not edit by hand:
+# change the mapping and regenerate.
+case_id: "001-58299"
+guide_version: "3.1"
+sets:
+- id: P1
+  kind: Civil
+  label: first applicant's labour court action against ESA
+  start:
+    date: "1993-10"
+    body: the Darmstadt Labour Court ( Arbeitsgericht )
+    authority_kind: Judicial
+    parties:
+    - name: the first applicant
+      side: Initiating
+    - name: ESA
+      side: Responding
+    matter:
+    - Employment
+    quote: In October and November 1993 the applicants instituted proceedings before the Darmstadt Labour
+      Court ( Arbeitsgericht ) against ESA, arguing that, pursuant to the German Provision of Labour (Temporary
+      Staff) Act ( Arbeitnehmerüberlassungsgesetz ), they had acquired the status of employees of ESA.
+    gold_id: 1
+  decisions:
+  - id: D1
+    date: "1995-03-21"
+    body: the Darmstadt Labour Court ( Arbeitsgericht )
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: Inadmissible
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the first applicant
+      side: Initiating
+    - name: ESA
+      side: Responding
+    matter:
+    - Employment
+    quote: On 21 March 1995 the Darmstadt Labour Court, following hearings, declared the applicants’ respective
+      actions inadmissible.
+    gold_id: 4
+- id: P2
+  kind: Civil
+  label: second applicant's labour court action against ESA
+  start:
+    date: "1993-10"
+    body: the Darmstadt Labour Court ( Arbeitsgericht )
+    authority_kind: Judicial
+    parties:
+    - name: the second applicant
+      side: Initiating
+    - name: ESA
+      side: Responding
+    matter:
+    - Employment
+    quote: In October and November 1993 the applicants instituted proceedings before the Darmstadt Labour
+      Court ( Arbeitsgericht ) against ESA, arguing that, pursuant to the German Provision of Labour (Temporary
+      Staff) Act ( Arbeitnehmerüberlassungsgesetz ), they had acquired the status of employees of ESA.
+    gold_id: 2
+  decisions:
+  - id: D2
+    date: "1995-03-21"
+    body: the Darmstadt Labour Court ( Arbeitsgericht )
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: Inadmissible
+    direction: UnfavourableToApplicant
+    parties:
+    - name: the second applicant
+      side: Initiating
+    - name: ESA
+      side: Responding
+    matter:
+    - Employment
+    quote: On 21 March 1995 the Darmstadt Labour Court, following hearings, declared the applicants’ respective
+      actions inadmissible.
+    gold_id: 5
+- id: P3
+  kind: Civil
+  label: second applicant's dismissal proceedings against T.I.
+  decisions:
+  - id: D3
+    date: "1994-09-06"
+    body: the Darmstadt Labour Court
+    authority_kind: Judicial
+    level: FirstInstance
+    outcome: SettledOrWithdrawn
+    direction: FavourableToApplicant
+    parties:
+    - name: the second applicant
+      side: Initiating
+    - name: the company T.I.
+      side: Responding
+    matter:
+    - Employment
+    - Damages
+    quote: In the proceedings instituted by the second applicant against his dismissal by the company
+      T.I. (see paragraph 13 above), a settlement had been reached in the Darmstadt Labour Court on 6
+      September 1994.
+    gold_id: 3
